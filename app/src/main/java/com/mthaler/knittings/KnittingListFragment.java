@@ -36,9 +36,9 @@ public class KnittingListFragment extends ListFragment {
         // get the Crime from the adapter
         Knitting c = ((KnittingAdapter)getListAdapter()).getItem(position);
         // start an instance of CrimePagerActivity
-        //Intent i = new Intent(getActivity(), CrimePagerActivity.class);
-        //i.putExtra(CrimeFragment.EXTRA_CRIME_ID, c.getId());
-        //startActivityForResult(i, 0);
+//        Intent i = new Intent(getActivity(), CrimePagerActivity.class);
+//        i.putExtra(CrimeFragment.EXTRA_CRIME_ID, c.getId());
+//        startActivityForResult(i, 0);
     }
 
 
