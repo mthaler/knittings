@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">Knittings</string>
     <string name="knittings_title">Knittings</string>
+    <string name="new_knitting">New Knitting</string>
 </resources>

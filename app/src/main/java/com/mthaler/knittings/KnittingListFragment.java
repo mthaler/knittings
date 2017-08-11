@@ -1,13 +1,18 @@
 package com.mthaler.knittings;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -27,10 +32,20 @@ public class KnittingListFragment extends ListFragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_knitting_list, container, false);
+    public void onListItemClick(ListView l, View v, int position, long id) {
+        // get the Crime from the adapter
+        Knitting c = ((KnittingAdapter)getListAdapter()).getItem(position);
+        // start an instance of CrimePagerActivity
+        //Intent i = new Intent(getActivity(), CrimePagerActivity.class);
+        //i.putExtra(CrimeFragment.EXTRA_CRIME_ID, c.getId());
+        //startActivityForResult(i, 0);
+    }
+
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.fragment_knittings_list, menu);
     }
 
     private class KnittingAdapter extends ArrayAdapter<Knitting> {
