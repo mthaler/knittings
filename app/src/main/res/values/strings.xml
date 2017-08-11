@@ -4,6 +4,6 @@
     <string name="new_knitting">New Knitting</string>
     <string name="knitting_title_label">Title</string>
     <string name="knitting_title_hint">Enter a title for the crime.</string>
-    <string name="crime_details_label">Details</string>
-    <string name="crime_solved_label">Solved</string>
+    <string name="knitting_details_label">Details</string>
+    <string name="knitting_solved_label">Solved</string>
 </resources>
