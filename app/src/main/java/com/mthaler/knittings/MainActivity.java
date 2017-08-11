@@ -11,16 +11,4 @@ public class MainActivity extends SingleFragmentActivity {
     protected Fragment createFragment() {
         return new KnittingListFragment();
     }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        KnittingsDataSource.getInstance(this).open();
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        KnittingsDataSource.getInstance(this).close();
-    }
 }

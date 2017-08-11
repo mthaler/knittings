@@ -46,16 +46,4 @@ public class KnittingPagerActivity extends AppCompatActivity {
             }
         }
     }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        KnittingsDataSource.getInstance(this).open();
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        KnittingsDataSource.getInstance(this).close();
-    }
 }
