@@ -22,7 +22,7 @@ public class KnittingPagerActivity extends AppCompatActivity {
         mViewPager.setId(R.id.viewPager);
         setContentView(mViewPager);
 
-        final ArrayList<Knitting> knittings = Knittings.get(this).getKnittings();
+        final ArrayList<Knitting> knittings = KnittingsDataSource.getInstance(this).getAllKnittings();
 
         FragmentManager fm = getSupportFragmentManager();
         mViewPager.setAdapter(new FragmentStatePagerAdapter(fm) {
@@ -33,17 +33,29 @@ public class KnittingPagerActivity extends AppCompatActivity {
 
             @Override
             public Fragment getItem(int pos) {
-                UUID crimeId = knittings.get(pos).getId();
-                return KnittingFragment.newInstance(crimeId);
+                long knittingId = knittings.get(pos).getId();
+                return KnittingFragment.newInstance(knittingId);
             }
         });
 
-        UUID knittingId = (UUID) getIntent().getSerializableExtra(KnittingFragment.EXTRA_KNITTING_ID);
+        long knittingId = getIntent().getLongExtra(KnittingFragment.EXTRA_KNITTING_ID, -1);
         for (int i = 0; i < knittings.size(); i++) {
-            if (knittings.get(i).getId().equals(knittingId)) {
+            if (knittings.get(i).getId() == knittingId) {
                 mViewPager.setCurrentItem(i);
                 break;
             }
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        KnittingsDataSource.getInstance(this).open();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        KnittingsDataSource.getInstance(this).close();
     }
 }

@@ -15,6 +15,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 public class KnittingListFragment extends ListFragment {
 
@@ -24,7 +25,7 @@ public class KnittingListFragment extends ListFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getActivity().setTitle(R.string.knittings_title);
-        this.knittings = Knittings.get(getActivity()).getKnittings();
+        this.knittings = KnittingsDataSource.getInstance(getActivity()).getAllKnittings();
         KnittingAdapter adapter = new KnittingAdapter(knittings);
         setListAdapter(adapter);
         setHasOptionsMenu(true);
@@ -51,8 +52,7 @@ public class KnittingListFragment extends ListFragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_item_new_knitting:
-                Knitting knitting = new Knitting();
-                Knittings.get(getActivity()).addKnitting(knitting);
+                Knitting knitting = KnittingsDataSource.getInstance(getActivity()).createKnitting("", "", new Date(), null);
                 Intent intent = new Intent(getActivity(), KnittingPagerActivity.class);
                 intent.putExtra(KnittingFragment.EXTRA_KNITTING_ID, knitting.getId());
                 startActivity(intent);

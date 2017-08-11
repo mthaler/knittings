@@ -7,22 +7,21 @@ import java.util.UUID;
  * The Knitting class stores data for a single knitting
  */
 public class Knitting {
-    private final UUID id;
+    private final long id;
     private String title;
     private String description;
     private Date started;
     private Date finished;
 
-    public Knitting() {
-        // Generate unique identifier
-        id = UUID.randomUUID();
+    public Knitting(long id) {
+        this.id = id;
         title = "";
         description = "";
         started = new Date();
         finished = new Date();
     }
 
-    public UUID getId() {
+    public long getId() {
         return id;
     }
 

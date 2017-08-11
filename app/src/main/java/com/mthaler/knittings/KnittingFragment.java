@@ -21,11 +21,11 @@ public class KnittingFragment extends Fragment {
 
     Knitting knitting;
 
-    public static KnittingFragment newInstance(UUID knittingId) {
+    public static KnittingFragment newInstance(long knittingId) {
         Bundle args = new Bundle();
-        args.putSerializable(EXTRA_KNITTING_ID, knittingId);
+        args.putLong(EXTRA_KNITTING_ID, knittingId);
 
-        KnittingFragment fragment = new KnittingFragment();
+        final KnittingFragment fragment = new KnittingFragment();
         fragment.setArguments(args);
 
         return fragment;
@@ -35,8 +35,8 @@ public class KnittingFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        UUID knittingId = (UUID)getArguments().getSerializable(EXTRA_KNITTING_ID);
-        knitting = Knittings.get(getActivity()).getKnitting(knittingId);
+        final long knittingId = getArguments().getLong(EXTRA_KNITTING_ID);
+        knitting = KnittingsDataSource.getInstance(getActivity()).getKnitting(knittingId);
     }
 
     @Override
