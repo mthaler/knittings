@@ -16,8 +16,8 @@ public class Knitting {
     public Knitting() {
         // Generate unique identifier
         id = UUID.randomUUID();
-        title = "title";
-        description = "description";
+        title = "";
+        description = "";
         started = new Date();
         finished = new Date();
     }
