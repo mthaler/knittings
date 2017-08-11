@@ -2,6 +2,7 @@ package com.mthaler.knittings;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -78,12 +79,12 @@ public class KnittingFragment extends Fragment {
         buttonStarted.setText(knitting.getStarted().toString());
         buttonStarted.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-//                FragmentManager fm = getActivity()
-//                        .getSupportFragmentManager();
-//                DatePickerFragment dialog = DatePickerFragment
-//                        .newInstance(mCrime.getDate());
-//                dialog.setTargetFragment(CrimeFragment.this, REQUEST_DATE);
-//                dialog.show(fm, DIALOG_DATE);
+                FragmentManager fm = getActivity()
+                        .getSupportFragmentManager();
+                DatePickerFragment dialog = DatePickerFragment
+                        .newInstance(knitting.getStarted());
+                dialog.setTargetFragment(KnittingFragment.this, REQUEST_DATE);
+                dialog.show(fm, DIALOG_DATE);
             }
         });
 

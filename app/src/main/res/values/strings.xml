@@ -4,4 +4,5 @@
     <string name="new_knitting">New Knitting</string>
     <string name="knitting_title_hint">Enter a title for the crime.</string>
     <string name="knitting_description_hint">Enter a description</string>
+    <string name="date_picker_title">Date:</string>
 </resources>
