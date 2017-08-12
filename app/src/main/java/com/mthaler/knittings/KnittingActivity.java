@@ -14,7 +14,7 @@ public class KnittingActivity extends SingleFragmentActivity {
 
     @Override
     protected Fragment createFragment() {
-        // get the id of the knitting that should be displayed.  
+        // get the id of the knitting that should be displayed.
         final long id = getIntent().getLongExtra(KnittingFragment.EXTRA_KNITTING_ID, -1);
         // create a new knitting fragment that will be used by this activity
         return KnittingFragment.newInstance(id);
