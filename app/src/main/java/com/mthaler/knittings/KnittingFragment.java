@@ -5,6 +5,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -121,5 +122,13 @@ public class KnittingFragment extends Fragment {
             }
         });
         return v;
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        // we update the knitting in the database when onPause is called
+        // this is the case when the activity is party hidden or if an other activity is started
+        KnittingsDataSource.getInstance(getActivity()).updateKnitting(knitting);
     }
 }

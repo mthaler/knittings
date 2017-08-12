@@ -63,28 +63,30 @@ public class KnittingsDataSource {
         }
     }
 
-    public Knitting updateKnitting(long id, String newTitle, String newDescription, Date newStarted, Date newFinished) {
+    public Knitting updateKnitting(Knitting knitting) {
         SQLiteDatabase database = dbHelper.getWritableDatabase();
         try {
             ContentValues values = new ContentValues();
-            values.put(KnittingDatabaseHelper.COLUMN_TITLE, newTitle);
-            values.put(KnittingDatabaseHelper.COLUMN_DESCRIPTION, newDescription);
-            values.put(KnittingDatabaseHelper.COLUMN_STARTED, newStarted.getTime());
-            values.put(KnittingDatabaseHelper.COLUMN_FINISHED, newFinished.getTime());
+            values.put(KnittingDatabaseHelper.COLUMN_TITLE, knitting.getTitle());
+            values.put(KnittingDatabaseHelper.COLUMN_DESCRIPTION, knitting.getDescription());
+            values.put(KnittingDatabaseHelper.COLUMN_STARTED, knitting.getStarted().getTime());
+            if (knitting.getFinished() != null) {
+                values.put(KnittingDatabaseHelper.COLUMN_FINISHED, knitting.getFinished().getTime());
+            }
 
             database.update(KnittingDatabaseHelper.TABLE_KNITTINGS,
                     values,
-                    KnittingDatabaseHelper.COLUMN_ID + "=" + id,
+                    KnittingDatabaseHelper.COLUMN_ID + "=" + knitting.getId(),
                     null);
 
             Cursor cursor = database.query(KnittingDatabaseHelper.TABLE_KNITTINGS,
-                    columns, KnittingDatabaseHelper.COLUMN_ID + "=" + id, null, null, null, null);
+                    columns, KnittingDatabaseHelper.COLUMN_ID + "=" + knitting.getId(), null, null, null, null);
 
             cursor.moveToFirst();
-            final Knitting knitting = cursorToKnitting(cursor);
+            final Knitting result = cursorToKnitting(cursor);
             cursor.close();
 
-            return knitting;
+            return result;
         } finally {
             database.close();
         }
