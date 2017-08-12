@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.FileProvider;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -30,7 +31,7 @@ public class KnittingFragment extends Fragment {
 
     private static final String DIALOG_DATE = "date";
     private static final int REQUEST_DATE = 0;
-    private static final int REQUEST_PHOTO= 1;
+    private static final int REQUEST_IMAGE_CAPTURE = 1;
 
     private Knitting knitting;
     private ImageView imageView;
@@ -139,14 +140,14 @@ public class KnittingFragment extends Fragment {
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final Intent captureImage = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                final Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 final File photoFile = KnittingsDataSource.getInstance(getActivity()).getPhotoFile(knitting);
                 final PackageManager packageManager = getActivity().getPackageManager();
-                boolean canTakePhoto = photoFile != null && captureImage.resolveActivity(packageManager) != null;
+                boolean canTakePhoto = photoFile != null && takePictureIntent.resolveActivity(packageManager) != null;
                 if (canTakePhoto) {
-                    Uri uri = Uri.fromFile(photoFile);
-                    captureImage.putExtra(MediaStore.EXTRA_OUTPUT, uri);
-                    startActivityForResult(captureImage, REQUEST_PHOTO);
+                    Uri uri = FileProvider.getUriForFile(getContext(), "com.mthaler.knittings.fileprovider", photoFile);
+                    takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
+                    startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
                 }
 
             }
@@ -168,7 +169,7 @@ public class KnittingFragment extends Fragment {
         if (resultCode != Activity.RESULT_OK) {
             return;
         }
-        if (requestCode == REQUEST_PHOTO) {
+        if (requestCode == REQUEST_IMAGE_CAPTURE) {
             final File photoFile = KnittingsDataSource.getInstance(getActivity()).getPhotoFile(knitting);
             final Bitmap bitmap = PictureUtils.getScaledBitmap(photoFile.getPath(), getActivity());
             imageView.setImageBitmap(bitmap);
