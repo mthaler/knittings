@@ -63,6 +63,14 @@ public class KnittingListFragment extends ListFragment {
         }
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        this.knittings = KnittingsDataSource.getInstance(getActivity()).getAllKnittings();
+        KnittingAdapter adapter = new KnittingAdapter(knittings);
+        setListAdapter(adapter);
+    }
+
     private class KnittingAdapter extends ArrayAdapter<Knitting> {
 
         public KnittingAdapter(ArrayList<Knitting> knittings) {

@@ -95,6 +95,18 @@ public class KnittingsDataSource {
         }
     }
 
+    public void deleteKnitting(Knitting knitting) {
+        final long id = knitting.getId();
+
+        SQLiteDatabase database = dbHelper.getWritableDatabase();
+        try {
+            database.delete(KnittingDatabaseHelper.TABLE_KNITTINGS, KnittingDatabaseHelper.COLUMN_ID + "=" + id, null);
+            Log.d(LOG_TAG, "Removed knitting " + id + ": " + knitting.toString());
+        } finally {
+            database.close();
+        }
+    }
+
 
     public ArrayList<Knitting> getAllKnittings() {
         SQLiteDatabase database = dbHelper.getWritableDatabase();

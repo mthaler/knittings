@@ -2,6 +2,7 @@
     <string name="app_name">Knittings</string>
     <string name="knittings_title">Knittings</string>
     <string name="new_knitting">New Knitting</string>
+    <string name="delete_knitting">Delete Knitting</string>
     <string name="knitting_title_hint">Enter a title for the crime.</string>
     <string name="knitting_description_hint">Enter a description</string>
     <string name="date_picker_title">Date:</string>

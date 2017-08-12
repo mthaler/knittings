@@ -13,12 +13,16 @@ import android.support.v4.content.FileProvider;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import java.io.File;
+import java.util.Date;
 
 /**
  * KnittingFragment shows a single knitting
@@ -60,6 +64,7 @@ public class KnittingFragment extends Fragment {
         final long id = getArguments().getLong(EXTRA_KNITTING_ID);
         // get knitting for the given id from database
         knitting = KnittingsDataSource.getInstance(getActivity()).getKnitting(id);
+        setHasOptionsMenu(true);
     }
 
     @Override
@@ -157,11 +162,36 @@ public class KnittingFragment extends Fragment {
     }
 
     @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.fragment_knitting, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_item_delete_knitting:
+                // if photo exists, delete it
+                final File photoFile = KnittingsDataSource.getInstance(getActivity()).getPhotoFile(knitting);
+                if (photoFile.exists()) {
+                    photoFile.delete();
+                }
+                // delete database entry
+                KnittingsDataSource.getInstance(getActivity()).deleteKnitting(knitting);
+                getActivity().finish();
+                knitting = null;
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
     public void onPause() {
         super.onPause();
         // we update the knitting in the database when onPause is called
         // this is the case when the activity is party hidden or if an other activity is started
-        KnittingsDataSource.getInstance(getActivity()).updateKnitting(knitting);
+        if (knitting != null) KnittingsDataSource.getInstance(getActivity()).updateKnitting(knitting);
     }
 
     @Override
