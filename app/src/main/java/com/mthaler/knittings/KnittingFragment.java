@@ -1,6 +1,10 @@
 package com.mthaler.knittings;
 
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.text.Editable;
@@ -10,6 +14,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import java.io.File;
 
 /**
  * KnittingFragment shows a single knitting
@@ -22,7 +28,7 @@ public class KnittingFragment extends Fragment {
 
     private static final String DIALOG_DATE = "date";
     private static final int REQUEST_DATE = 0;
-
+    private static final int REQUEST_PHOTO= 1;
 
     Knitting knitting;
 
@@ -118,6 +124,25 @@ public class KnittingFragment extends Fragment {
 //                dialog.show(fm, DIALOG_DATE);
             }
         });
+
+        // initialize image view
+        final ImageView imageView = v.findViewById(R.id.imageView);
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final Intent captureImage = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                final File photoFile = KnittingsDataSource.getInstance(getActivity()).getPhotoFile(knitting);
+                final PackageManager packageManager = getActivity().getPackageManager();
+                boolean canTakePhoto = photoFile != null && captureImage.resolveActivity(packageManager) != null;
+                if (canTakePhoto) {
+                    Uri uri = Uri.fromFile(photoFile);
+                    captureImage.putExtra(MediaStore.EXTRA_OUTPUT, uri);
+                    startActivityForResult(captureImage, REQUEST_PHOTO);
+                }
+
+            }
+        });
+
         return v;
     }
 

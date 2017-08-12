@@ -57,6 +57,10 @@ public class Knitting {
         this.finished = finished;
     }
 
+    public String getPhotoFilename() {
+        return "IMG_" + id + ".jpg";
+    }
+
     @Override
     public String toString() {
         return title;

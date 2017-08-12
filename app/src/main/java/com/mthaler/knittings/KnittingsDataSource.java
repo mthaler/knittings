@@ -4,7 +4,9 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Environment;
 import android.util.Log;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -23,10 +25,11 @@ public class KnittingsDataSource {
 
     private static KnittingsDataSource sKnittingsDataSource;
 
+    private final Context context;
     private final KnittingDatabaseHelper dbHelper;
 
     private KnittingsDataSource(Context context) {
-
+        this.context = context;
         dbHelper = new KnittingDatabaseHelper(context);
     }
 
@@ -133,6 +136,15 @@ public class KnittingsDataSource {
             database.close();
         }
     }
+
+    public File getPhotoFile(Knitting knitting) {
+        File externalFilesDir = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        if (externalFilesDir == null) {
+            return null;
+        }
+        return new File(externalFilesDir, knitting.getPhotoFilename());
+    }
+
 
     private Knitting cursorToKnitting(Cursor cursor) {
         final int idIndex = cursor.getColumnIndex(KnittingDatabaseHelper.COLUMN_ID);
