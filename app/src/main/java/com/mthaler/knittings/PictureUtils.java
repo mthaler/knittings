@@ -1,7 +1,9 @@
 package com.mthaler.knittings;
 
+import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Point;
 
 public class PictureUtils {
 
@@ -27,4 +29,11 @@ public class PictureUtils {
         // Read in and create final bitmap
         return BitmapFactory.decodeFile(path, options);
     }
+
+    public static Bitmap getScaledBitmap(String path, Activity activity) {
+        final Point size = new Point();
+        activity.getWindowManager().getDefaultDisplay().getSize(size);
+        return getScaledBitmap(path, size.x, size.y);
+    }
+
 }

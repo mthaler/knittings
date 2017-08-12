@@ -1,7 +1,9 @@
 package com.mthaler.knittings;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -30,7 +32,8 @@ public class KnittingFragment extends Fragment {
     private static final int REQUEST_DATE = 0;
     private static final int REQUEST_PHOTO= 1;
 
-    Knitting knitting;
+    private Knitting knitting;
+    private ImageView imageView;
 
     /**
      * Creates a new knitting fragment and attaches the given knitting id
@@ -126,7 +129,7 @@ public class KnittingFragment extends Fragment {
         });
 
         // initialize image view
-        final ImageView imageView = v.findViewById(R.id.imageView);
+        imageView = v.findViewById(R.id.imageView);
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -152,5 +155,17 @@ public class KnittingFragment extends Fragment {
         // we update the knitting in the database when onPause is called
         // this is the case when the activity is party hidden or if an other activity is started
         KnittingsDataSource.getInstance(getActivity()).updateKnitting(knitting);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode != Activity.RESULT_OK) {
+            return;
+        }
+        if (requestCode == REQUEST_PHOTO) {
+            final File photoFile = KnittingsDataSource.getInstance(getActivity()).getPhotoFile(knitting);
+            final Bitmap bitmap = PictureUtils.getScaledBitmap(photoFile.getPath(), getActivity());
+            imageView.setImageBitmap(bitmap);
+        }
     }
 }
