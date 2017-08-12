@@ -44,7 +44,9 @@ public class KnittingsDataSource {
             values.put(KnittingDatabaseHelper.COLUMN_TITLE, title);
             values.put(KnittingDatabaseHelper.COLUMN_DESCRIPTION, description);
             values.put(KnittingDatabaseHelper.COLUMN_STARTED, started.getTime());
-            values.put(KnittingDatabaseHelper.COLUMN_FINISHED, finished.getTime());
+            if (finished != null) {
+                values.put(KnittingDatabaseHelper.COLUMN_FINISHED, finished.getTime());
+            }
 
             long insertId = database.insert(KnittingDatabaseHelper.TABLE_KNITTINGS, null, values);
 

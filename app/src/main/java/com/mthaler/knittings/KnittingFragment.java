@@ -89,7 +89,7 @@ public class KnittingFragment extends Fragment {
         });
 
         final Button buttonFinished = v.findViewById(R.id.knittings_finished);
-        buttonFinished.setText(knitting.getFinished().toString());
+        buttonFinished.setText(knitting.getFinished() != null ? knitting.getFinished().toString() : "");
         buttonFinished.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
 //                FragmentManager fm = getActivity()
