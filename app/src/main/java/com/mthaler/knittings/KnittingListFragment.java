@@ -14,6 +14,7 @@ import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -77,17 +78,16 @@ public class KnittingListFragment extends ListFragment {
             }
 
             // configure the view for this Crime
-            Knitting knitting = getItem(position);
+            final Knitting knitting = getItem(position);
 
-            TextView titleTextView =
-                    (TextView)convertView.findViewById(R.id.knitting_list_item_titleTextView);
+            final TextView titleTextView = convertView.findViewById(R.id.knitting_list_item_titleTextView);
             titleTextView.setText(knitting.getTitle());
-            TextView dateTextView =
-                    (TextView)convertView.findViewById(R.id.knitting_list_item_dateTextView);
-            dateTextView.setText(knitting.getStarted().toString());
-            CheckBox solvedCheckBox =
-                    (CheckBox)convertView.findViewById(R.id.knitting_list_item_solvedCheckBox);
-            solvedCheckBox.setChecked(true);
+
+            final TextView descriptionTextView = convertView.findViewById(R.id.knitting_list_item_descriptionTextView);
+            descriptionTextView.setText(knitting.getDescription().toString());
+
+            final TextView startedTextView = convertView.findViewById(R.id.knitting_list_item_startedTextView);
+            startedTextView.setText(DateFormat.getDateTimeInstance().format(knitting.getStarted()));
 
             return convertView;
         }
