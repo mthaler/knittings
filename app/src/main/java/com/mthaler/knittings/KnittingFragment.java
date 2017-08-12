@@ -130,6 +130,12 @@ public class KnittingFragment extends Fragment {
 
         // initialize image view
         imageView = v.findViewById(R.id.imageView);
+        // if there is a photo, display it
+        final File photoFile = KnittingsDataSource.getInstance(getActivity()).getPhotoFile(knitting);
+        if (photoFile.exists()) {
+            final Bitmap bitmap = PictureUtils.getScaledBitmap(photoFile.getPath(), getActivity());
+            imageView.setImageBitmap(bitmap);
+        }
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
