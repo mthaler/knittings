@@ -95,7 +95,7 @@ public class KnittingListFragment extends ListFragment {
             descriptionTextView.setText(knitting.getDescription().toString());
 
             final TextView startedTextView = convertView.findViewById(R.id.knitting_list_item_startedTextView);
-            startedTextView.setText(DateFormat.getDateTimeInstance().format(knitting.getStarted()));
+            startedTextView.setText(DateFormat.getDateInstance().format(knitting.getStarted()));
 
             return convertView;
         }

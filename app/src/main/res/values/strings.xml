@@ -3,8 +3,10 @@
     <string name="knittings_title">Knittings</string>
     <string name="new_knitting">New Knitting</string>
     <string name="delete_knitting">Delete Knitting</string>
-    <string name="knitting_title_hint">Enter a title for the crime.</string>
-    <string name="knitting_description_hint">Enter a description</string>
+    <string name="knitting_title_hint">Title</string>
+    <string name="knitting_description_hint">Description</string>
+    <string name="knitting_started_hint">Started</string>
+    <string name="knitting_finished_hint">Finished</string>
     <string name="date_picker_title">Date:</string>
     <string name="cab_delete">Einträge löschen</string>
     <string name="cab_change">Eintrag ändern</string>

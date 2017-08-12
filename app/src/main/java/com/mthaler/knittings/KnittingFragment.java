@@ -22,6 +22,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import java.io.File;
+import java.text.DateFormat;
 import java.util.Date;
 
 /**
@@ -106,10 +107,9 @@ public class KnittingFragment extends Fragment {
             }
         });
 
-        // initialize start date button
-        final Button buttonStarted = v.findViewById(R.id.knittings_started);
-        buttonStarted.setText(knitting.getStarted().toString());
-        buttonStarted.setOnClickListener(new View.OnClickListener() {
+        final EditText editTextgStarted = v.findViewById(R.id.knitting_started);
+        editTextgStarted.setText(DateFormat.getDateInstance().format(knitting.getStarted()));
+        editTextgStarted.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 FragmentManager fm = getActivity()
                         .getSupportFragmentManager();
@@ -121,9 +121,9 @@ public class KnittingFragment extends Fragment {
         });
 
         // initialize finish date button
-        final Button buttonFinished = v.findViewById(R.id.knittings_finished);
-        buttonFinished.setText(knitting.getFinished() != null ? knitting.getFinished().toString() : "");
-        buttonFinished.setOnClickListener(new View.OnClickListener() {
+        final EditText exitTextFinished = v.findViewById(R.id.knitting_finished);
+        exitTextFinished.setText(knitting.getFinished() != null ? knitting.getFinished().toString() : "");
+        exitTextFinished.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
 //                FragmentManager fm = getActivity()
 //                        .getSupportFragmentManager();
