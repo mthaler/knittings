@@ -13,17 +13,30 @@ import android.widget.EditText;
 
 import java.util.UUID;
 
+/**
+ * KnittingFragment shows a single knitting
+ *
+ * It is used for adding new knittings or displaying / editing existing knittings
+ */
 public class KnittingFragment extends Fragment {
+
     public static final String EXTRA_KNITTING_ID = "com.mthaler.knitting.KNITTING_ID";
 
     private static final String DIALOG_DATE = "date";
     private static final int REQUEST_DATE = 0;
 
+
     Knitting knitting;
 
-    public static KnittingFragment newInstance(long knittingId) {
+    /**
+     * Creates a new knitting fragment and attaches the given knitting id
+     *
+     * @param id knitting id
+     * @return new knitting fragment with knitting id attached
+     */
+    public static KnittingFragment newInstance(long id) {
         Bundle args = new Bundle();
-        args.putLong(EXTRA_KNITTING_ID, knittingId);
+        args.putLong(EXTRA_KNITTING_ID, id);
 
         final KnittingFragment fragment = new KnittingFragment();
         fragment.setArguments(args);
@@ -35,14 +48,18 @@ public class KnittingFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        final long knittingId = getArguments().getLong(EXTRA_KNITTING_ID);
-        knitting = KnittingsDataSource.getInstance(getActivity()).getKnitting(knittingId);
+        // get the attached knitting id
+        final long id = getArguments().getLong(EXTRA_KNITTING_ID);
+        // get knitting for the given id from database
+        knitting = KnittingsDataSource.getInstance(getActivity()).getKnitting(id);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_knitting, parent, false);
+        // crreate view
+        final View v = inflater.inflate(R.layout.fragment_knitting, parent, false);
 
+        // initialize title text field
         final EditText textFieldTitle  = v.findViewById(R.id.knitting_title);
         textFieldTitle.setText(knitting.getTitle());
         textFieldTitle.addTextChangedListener(new TextWatcher() {
@@ -59,6 +76,7 @@ public class KnittingFragment extends Fragment {
             }
         });
 
+        // initialize description text field
         final EditText textFieldDescription = v.findViewById(R.id.knitting_description);
         textFieldDescription.setText(knitting.getDescription());
         textFieldDescription.addTextChangedListener(new TextWatcher() {
@@ -75,6 +93,7 @@ public class KnittingFragment extends Fragment {
             }
         });
 
+        // initialize start date button
         final Button buttonStarted = v.findViewById(R.id.knittings_started);
         buttonStarted.setText(knitting.getStarted().toString());
         buttonStarted.setOnClickListener(new View.OnClickListener() {
@@ -88,6 +107,7 @@ public class KnittingFragment extends Fragment {
             }
         });
 
+        // initialize finish date button
         final Button buttonFinished = v.findViewById(R.id.knittings_finished);
         buttonFinished.setText(knitting.getFinished() != null ? knitting.getFinished().toString() : "");
         buttonFinished.setOnClickListener(new View.OnClickListener() {
