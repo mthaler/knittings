@@ -134,7 +134,7 @@ public class KnittingFragment extends Fragment {
 
         final EditText editTextNeedleDiameter = v.findViewById(R.id.knitting_needle_diameter);
         editTextNeedleDiameter.setText(Double.toString(knitting.getNeedleDiameter()));
-        textFieldDescription.addTextChangedListener(new TextWatcher() {
+        editTextNeedleDiameter.addTextChangedListener(new TextWatcher() {
             public void onTextChanged(CharSequence c, int start, int before, int count) {
                 try {
                     knitting.setNeedleDiameter(Double.parseDouble(c.toString()));
@@ -148,7 +148,11 @@ public class KnittingFragment extends Fragment {
             }
 
             public void afterTextChanged(Editable c) {
-                // this one too
+                try {
+                    knitting.setNeedleDiameter(Double.parseDouble(c.toString()));
+                } catch (Exception ex) {
+                    knitting.setNeedleDiameter(0.0);
+                }
             }
         });
 

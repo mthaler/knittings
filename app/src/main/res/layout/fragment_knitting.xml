@@ -12,7 +12,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="10dp">
 
-        <EditText android:id="@+id/knitting_title"
+        <android.support.design.widget.TextInputEditText android:id="@+id/knitting_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
@@ -33,7 +33,7 @@
             android:layout_marginTop="10dp"
             android:layout_weight="1">
 
-            <EditText android:id="@+id/knitting_started"
+            <android.support.design.widget.TextInputEditText android:id="@+id/knitting_started"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="16dp"
@@ -51,7 +51,7 @@
             android:layout_marginTop="10dp"
             android:layout_weight="1">
 
-            <EditText android:id="@+id/knitting_finished"
+            <android.support.design.widget.TextInputEditText android:id="@+id/knitting_finished"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="16dp"
@@ -69,11 +69,12 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="10dp">
 
-        <EditText android:id="@+id/knitting_needle_diameter"
+        <android.support.design.widget.TextInputEditText android:id="@+id/knitting_needle_diameter"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
+            android:inputType="numberDecimal"
             android:hint="@string/knitting_needle_diameter_hint" />
     </android.support.design.widget.TextInputLayout>
 
@@ -83,7 +84,7 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="10dp">
-        <EditText android:id="@+id/knitting_description"
+        <android.support.design.widget.TextInputEditText android:id="@+id/knitting_description"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginLeft="16dp"

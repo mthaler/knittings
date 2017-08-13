@@ -1,7 +1,6 @@
 package com.mthaler.knittings;
 
 import java.util.Date;
-import java.util.UUID;
 
 /**
  * The Knitting class stores data for a single knitting
