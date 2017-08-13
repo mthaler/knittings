@@ -15,11 +15,11 @@ public class KnittingsDataSource {
     private static final String LOG_TAG = KnittingsDataSource.class.getSimpleName();
 
     private String[] columns = {
-            KnittingDatabaseHelper.COLUMN_ID,
-            KnittingDatabaseHelper.COLUMN_TITLE,
-            KnittingDatabaseHelper.COLUMN_DESCRIPTION,
-            KnittingDatabaseHelper.COLUMN_STARTED,
-            KnittingDatabaseHelper.COLUMN_FINISHED
+            KnittingDatabaseHelper.KnittingTable.Cols.ID,
+            KnittingDatabaseHelper.KnittingTable.Cols.TITLE,
+            KnittingDatabaseHelper.KnittingTable.Cols.DESCRIPTION,
+            KnittingDatabaseHelper.KnittingTable.Cols.STARTED,
+            KnittingDatabaseHelper.KnittingTable.Cols.FINISHED
     };
 
 
@@ -44,17 +44,17 @@ public class KnittingsDataSource {
         SQLiteDatabase database = dbHelper.getWritableDatabase();
         try {
             ContentValues values = new ContentValues();
-            values.put(KnittingDatabaseHelper.COLUMN_TITLE, title);
-            values.put(KnittingDatabaseHelper.COLUMN_DESCRIPTION, description);
-            values.put(KnittingDatabaseHelper.COLUMN_STARTED, started.getTime());
+            values.put(KnittingDatabaseHelper.KnittingTable.Cols.TITLE, title);
+            values.put(KnittingDatabaseHelper.KnittingTable.Cols.DESCRIPTION, description);
+            values.put(KnittingDatabaseHelper.KnittingTable.Cols.STARTED, started.getTime());
             if (finished != null) {
-                values.put(KnittingDatabaseHelper.COLUMN_FINISHED, finished.getTime());
+                values.put(KnittingDatabaseHelper.KnittingTable.Cols.FINISHED, finished.getTime());
             }
 
-            long insertId = database.insert(KnittingDatabaseHelper.TABLE_KNITTINGS, null, values);
+            long insertId = database.insert(KnittingDatabaseHelper.KnittingTable.KNITTINGS, null, values);
 
-            Cursor cursor = database.query(KnittingDatabaseHelper.TABLE_KNITTINGS,
-                    columns, KnittingDatabaseHelper.COLUMN_ID + "=" + insertId, null, null, null, null);
+            Cursor cursor = database.query(KnittingDatabaseHelper.KnittingTable.KNITTINGS,
+                    columns, KnittingDatabaseHelper.KnittingTable.Cols.ID + "=" + insertId, null, null, null, null);
 
             cursor.moveToFirst();
             Knitting knittings = cursorToKnitting(cursor);
@@ -70,20 +70,20 @@ public class KnittingsDataSource {
         SQLiteDatabase database = dbHelper.getWritableDatabase();
         try {
             ContentValues values = new ContentValues();
-            values.put(KnittingDatabaseHelper.COLUMN_TITLE, knitting.getTitle());
-            values.put(KnittingDatabaseHelper.COLUMN_DESCRIPTION, knitting.getDescription());
-            values.put(KnittingDatabaseHelper.COLUMN_STARTED, knitting.getStarted().getTime());
+            values.put(KnittingDatabaseHelper.KnittingTable.Cols.TITLE, knitting.getTitle());
+            values.put(KnittingDatabaseHelper.KnittingTable.Cols.DESCRIPTION, knitting.getDescription());
+            values.put(KnittingDatabaseHelper.KnittingTable.Cols.STARTED, knitting.getStarted().getTime());
             if (knitting.getFinished() != null) {
-                values.put(KnittingDatabaseHelper.COLUMN_FINISHED, knitting.getFinished().getTime());
+                values.put(KnittingDatabaseHelper.KnittingTable.Cols.FINISHED, knitting.getFinished().getTime());
             }
 
-            database.update(KnittingDatabaseHelper.TABLE_KNITTINGS,
+            database.update(KnittingDatabaseHelper.KnittingTable.KNITTINGS,
                     values,
-                    KnittingDatabaseHelper.COLUMN_ID + "=" + knitting.getId(),
+                    KnittingDatabaseHelper.KnittingTable.Cols.ID + "=" + knitting.getId(),
                     null);
 
-            Cursor cursor = database.query(KnittingDatabaseHelper.TABLE_KNITTINGS,
-                    columns, KnittingDatabaseHelper.COLUMN_ID + "=" + knitting.getId(), null, null, null, null);
+            Cursor cursor = database.query(KnittingDatabaseHelper.KnittingTable.KNITTINGS,
+                    columns, KnittingDatabaseHelper.KnittingTable.Cols.ID + "=" + knitting.getId(), null, null, null, null);
 
             cursor.moveToFirst();
             final Knitting result = cursorToKnitting(cursor);
@@ -100,7 +100,7 @@ public class KnittingsDataSource {
 
         SQLiteDatabase database = dbHelper.getWritableDatabase();
         try {
-            database.delete(KnittingDatabaseHelper.TABLE_KNITTINGS, KnittingDatabaseHelper.COLUMN_ID + "=" + id, null);
+            database.delete(KnittingDatabaseHelper.KnittingTable.KNITTINGS, KnittingDatabaseHelper.KnittingTable.Cols.ID + "=" + id, null);
             Log.d(LOG_TAG, "Removed knitting " + id + ": " + knitting.toString());
         } finally {
             database.close();
@@ -113,7 +113,7 @@ public class KnittingsDataSource {
         try {
             final ArrayList<Knitting> knittings = new ArrayList<>();
 
-            final Cursor cursor = database.query(KnittingDatabaseHelper.TABLE_KNITTINGS, columns, null, null, null, null, null);
+            final Cursor cursor = database.query(KnittingDatabaseHelper.KnittingTable.KNITTINGS, columns, null, null, null, null, null);
 
             cursor.moveToFirst();
             Knitting knitting;
@@ -136,8 +136,8 @@ public class KnittingsDataSource {
     public Knitting getKnitting(long id) {
         SQLiteDatabase database = dbHelper.getWritableDatabase();
         try {
-            final Cursor cursor = database.query(KnittingDatabaseHelper.TABLE_KNITTINGS,
-                    columns, KnittingDatabaseHelper.COLUMN_ID + "=" + id, null, null, null, null);
+            final Cursor cursor = database.query(KnittingDatabaseHelper.KnittingTable.KNITTINGS,
+                    columns, KnittingDatabaseHelper.KnittingTable.Cols.ID + "=" + id, null, null, null, null);
 
             cursor.moveToFirst();
             final Knitting knitting = cursorToKnitting(cursor);
@@ -159,11 +159,11 @@ public class KnittingsDataSource {
 
 
     private Knitting cursorToKnitting(Cursor cursor) {
-        final int idIndex = cursor.getColumnIndex(KnittingDatabaseHelper.COLUMN_ID);
-        final int idTitle = cursor.getColumnIndex(KnittingDatabaseHelper.COLUMN_TITLE);
-        final int idDescription = cursor.getColumnIndex(KnittingDatabaseHelper.COLUMN_DESCRIPTION);
-        final int idStarted = cursor.getColumnIndex(KnittingDatabaseHelper.COLUMN_STARTED);
-        final int idFinished = cursor.getColumnIndex(KnittingDatabaseHelper.COLUMN_FINISHED);
+        final int idIndex = cursor.getColumnIndex(KnittingDatabaseHelper.KnittingTable.Cols.ID);
+        final int idTitle = cursor.getColumnIndex(KnittingDatabaseHelper.KnittingTable.Cols.TITLE);
+        final int idDescription = cursor.getColumnIndex(KnittingDatabaseHelper.KnittingTable.Cols.DESCRIPTION);
+        final int idStarted = cursor.getColumnIndex(KnittingDatabaseHelper.KnittingTable.Cols.STARTED);
+        final int idFinished = cursor.getColumnIndex(KnittingDatabaseHelper.KnittingTable.Cols.FINISHED);
 
         final long id = cursor.getLong(idIndex);
         final String title = cursor.getString(idTitle);

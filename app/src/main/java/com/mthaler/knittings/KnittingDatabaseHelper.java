@@ -12,23 +12,27 @@ public class KnittingDatabaseHelper extends SQLiteOpenHelper {
     public static final String DB_NAME = "knittings.db";
     public static final int DB_VERSION = 1;
 
-    public static final String TABLE_KNITTINGS = "knittings";
+    public static final class KnittingTable {
+        public static final String KNITTINGS = "knittings";
 
-    public static final String COLUMN_ID = "_id";
-    public static final String COLUMN_TITLE = "title";
-    public static final String COLUMN_DESCRIPTION = "description";
-    public static final String COLUMN_STARTED = "started";
-    public static final String COLUMN_FINISHED = "finished";
+        public static final class Cols {
+            public static final String ID = "_id";
+            public static final String TITLE = "title";
+            public static final String DESCRIPTION = "description";
+            public static final String STARTED = "started";
+            public static final String FINISHED = "finished";
+        }
+    }
 
     public static final String SQL_CREATE =
-            "CREATE TABLE " + TABLE_KNITTINGS +
-                    "(" + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                    COLUMN_TITLE + " TEXT NOT NULL, " +
-                    COLUMN_DESCRIPTION + " TEXT NOT NULL, " +
-                    COLUMN_STARTED + " INTEGER NOT NULL DEFAULT 0, " +
-                    COLUMN_FINISHED + " INTEGER);";
+            "CREATE TABLE " + KnittingTable.KNITTINGS +
+                    "(" + KnittingTable.Cols.ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                    KnittingTable.Cols.TITLE + " TEXT NOT NULL, " +
+                    KnittingTable.Cols.DESCRIPTION + " TEXT NOT NULL, " +
+                    KnittingTable.Cols.STARTED + " INTEGER NOT NULL DEFAULT 0, " +
+                    KnittingTable.Cols.FINISHED + " INTEGER);";
 
-    public static final String SQL_DROP = "DROP TABLE IF EXISTS " + TABLE_KNITTINGS;
+    public static final String SQL_DROP = "DROP TABLE IF EXISTS " + KnittingTable.KNITTINGS;
 
     public KnittingDatabaseHelper(Context context) {
         super(context, DB_NAME, null, DB_VERSION);
