@@ -8,5 +8,5 @@
     <string name="knitting_started_hint">Started</string>
     <string name="knitting_finished_hint">Finished</string>
     <string name="date_picker_title">Date</string>
-    <string name="knitting_needle_size">Needle Diameter</string>
+    <string name="knitting_needle_diameter_hint">Needle Diameter</string>
 </resources>

@@ -12,6 +12,7 @@ public class Knitting {
     private String description;
     private Date started;
     private Date finished;
+    private double needleDiameter;
 
     public Knitting(long id) {
         this.id = id;
@@ -55,6 +56,14 @@ public class Knitting {
 
     public void setFinished(Date finished) {
         this.finished = finished;
+    }
+
+    public double getNeedleDiameter() {
+        return needleDiameter;
+    }
+
+    public void setNeedleDiameter(double needleDiameter) {
+        this.needleDiameter = needleDiameter;
     }
 
     public String getPhotoFilename() {

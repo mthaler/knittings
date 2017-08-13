@@ -18,12 +18,10 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import java.io.File;
 import java.text.DateFormat;
-import java.util.Date;
 
 /**
  * KnittingFragment shows a single knitting
@@ -121,9 +119,9 @@ public class KnittingFragment extends Fragment {
         });
 
         // initialize finish date button
-        final EditText exitTextFinished = v.findViewById(R.id.knitting_finished);
-        exitTextFinished.setText(knitting.getFinished() != null ? knitting.getFinished().toString() : "");
-        exitTextFinished.setOnClickListener(new View.OnClickListener() {
+        final EditText editTextFinished = v.findViewById(R.id.knitting_finished);
+        editTextFinished.setText(knitting.getFinished() != null ? knitting.getFinished().toString() : "");
+        editTextFinished.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
 //                FragmentManager fm = getActivity()
 //                        .getSupportFragmentManager();
@@ -131,6 +129,26 @@ public class KnittingFragment extends Fragment {
 //                        .newInstance(mCrime.getDate());
 //                dialog.setTargetFragment(CrimeFragment.this, REQUEST_DATE);
 //                dialog.show(fm, DIALOG_DATE);
+            }
+        });
+
+        final EditText editTextNeedleDiameter = v.findViewById(R.id.knitting_needle_diameter);
+        editTextNeedleDiameter.setText(Double.toString(knitting.getNeedleDiameter()));
+        textFieldDescription.addTextChangedListener(new TextWatcher() {
+            public void onTextChanged(CharSequence c, int start, int before, int count) {
+                try {
+                    knitting.setNeedleDiameter(Double.parseDouble(c.toString()));
+                } catch (Exception ex) {
+                    knitting.setNeedleDiameter(0.0);
+                }
+            }
+
+            public void beforeTextChanged(CharSequence c, int start, int count, int after) {
+                // this space intentionally left blank
+            }
+
+            public void afterTextChanged(Editable c) {
+                // this one too
             }
         });
 

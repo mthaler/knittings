@@ -19,7 +19,8 @@ public class KnittingsDataSource {
             KnittingDatabaseHelper.KnittingTable.Cols.TITLE,
             KnittingDatabaseHelper.KnittingTable.Cols.DESCRIPTION,
             KnittingDatabaseHelper.KnittingTable.Cols.STARTED,
-            KnittingDatabaseHelper.KnittingTable.Cols.FINISHED
+            KnittingDatabaseHelper.KnittingTable.Cols.FINISHED,
+            KnittingDatabaseHelper.KnittingTable.Cols.NEEDLE_DIAMETER
     };
 
 
@@ -40,7 +41,7 @@ public class KnittingsDataSource {
         return sKnittingsDataSource;
     }
 
-    public Knitting createKnitting(String title, String description, Date started, Date finished) {
+    public Knitting createKnitting(String title, String description, Date started, Date finished, double needleDiameter) {
         SQLiteDatabase database = dbHelper.getWritableDatabase();
         try {
             ContentValues values = new ContentValues();
@@ -50,6 +51,7 @@ public class KnittingsDataSource {
             if (finished != null) {
                 values.put(KnittingDatabaseHelper.KnittingTable.Cols.FINISHED, finished.getTime());
             }
+            values.put(KnittingDatabaseHelper.KnittingTable.Cols.NEEDLE_DIAMETER, needleDiameter);
 
             long insertId = database.insert(KnittingDatabaseHelper.KnittingTable.KNITTINGS, null, values);
 
@@ -76,6 +78,7 @@ public class KnittingsDataSource {
             if (knitting.getFinished() != null) {
                 values.put(KnittingDatabaseHelper.KnittingTable.Cols.FINISHED, knitting.getFinished().getTime());
             }
+            values.put(KnittingDatabaseHelper.KnittingTable.Cols.NEEDLE_DIAMETER, knitting.getNeedleDiameter());
 
             database.update(KnittingDatabaseHelper.KnittingTable.KNITTINGS,
                     values,
@@ -164,18 +167,21 @@ public class KnittingsDataSource {
         final int idDescription = cursor.getColumnIndex(KnittingDatabaseHelper.KnittingTable.Cols.DESCRIPTION);
         final int idStarted = cursor.getColumnIndex(KnittingDatabaseHelper.KnittingTable.Cols.STARTED);
         final int idFinished = cursor.getColumnIndex(KnittingDatabaseHelper.KnittingTable.Cols.FINISHED);
+        final int idNeedleDiameter = cursor.getColumnIndex(KnittingDatabaseHelper.KnittingTable.Cols.NEEDLE_DIAMETER);
 
         final long id = cursor.getLong(idIndex);
         final String title = cursor.getString(idTitle);
         final String description = cursor.getString(idDescription);
         final Date started = new Date(cursor.getLong(idStarted));
         final Date finished = cursor.isNull(idFinished) ? null : new Date(cursor.getLong(idFinished));
+        final double needleDiameter = cursor.getDouble(idNeedleDiameter);
 
         final Knitting knitting = new Knitting(id);
         knitting.setTitle(title);
         knitting.setDescription(description);
         knitting.setStarted(started);
         knitting.setFinished(finished);
+        knitting.setNeedleDiameter(needleDiameter);
 
         return knitting;
     }
