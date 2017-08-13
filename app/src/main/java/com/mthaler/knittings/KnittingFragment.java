@@ -1,6 +1,7 @@
 package com.mthaler.knittings;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -10,6 +11,7 @@ import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.FileProvider;
+import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -193,7 +195,23 @@ public class KnittingFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_item_delete_knitting:
-                deleteKnitting();
+                AlertDialog.Builder alert = new AlertDialog.Builder(getActivity())
+                        .setTitle("Delete")
+                        .setMessage("Do you really want to delete the knitting")
+                        .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                deleteKnitting();
+                                dialogInterface.dismiss();
+                                getActivity().finish();
+                            }
+                        }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                dialogInterface.dismiss();
+                            }
+                        });
+                alert.show();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -241,7 +259,6 @@ public class KnittingFragment extends Fragment {
         }
         // delete database entry
         KnittingsDataSource.getInstance(getActivity()).deleteKnitting(knitting);
-        getActivity().finish();
         knitting = null;
     }
 }
