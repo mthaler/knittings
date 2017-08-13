@@ -34,11 +34,13 @@ public class KnittingFragment extends Fragment {
     public static final String EXTRA_KNITTING_ID = "com.mthaler.knitting.KNITTING_ID";
 
     private static final String DIALOG_DATE = "date";
-    private static final int REQUEST_DATE = 0;
-    private static final int REQUEST_IMAGE_CAPTURE = 1;
+    private static final int REQUEST_STARTED = 0;
+    private static final int REQUEST_FINISHED = 1;
+    private static final int REQUEST_IMAGE_CAPTURE = 2;
 
     private Knitting knitting;
     private EditText editTextStarted;
+    private EditText editTextFinished;
     private ImageView imageView;
 
     /**
@@ -111,26 +113,22 @@ public class KnittingFragment extends Fragment {
         editTextStarted.setText(DateFormat.getDateInstance().format(knitting.getStarted()));
         editTextStarted.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                FragmentManager fm = getActivity()
-                        .getSupportFragmentManager();
-                DatePickerFragment dialog = DatePickerFragment
-                        .newInstance(knitting.getStarted());
-                dialog.setTargetFragment(KnittingFragment.this, REQUEST_DATE);
+                final FragmentManager fm = getActivity().getSupportFragmentManager();
+                final DatePickerFragment dialog = DatePickerFragment.newInstance(knitting.getStarted());
+                dialog.setTargetFragment(KnittingFragment.this, REQUEST_STARTED);
                 dialog.show(fm, DIALOG_DATE);
             }
         });
 
         // initialize finish date button
-        final EditText editTextFinished = v.findViewById(R.id.knitting_finished);
-        editTextFinished.setText(knitting.getFinished() != null ? knitting.getFinished().toString() : "");
+        editTextFinished = v.findViewById(R.id.knitting_finished);
+        editTextFinished.setText(knitting.getFinished() != null ? DateFormat.getDateInstance().format(knitting.getFinished()) : "");
         editTextFinished.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-//                FragmentManager fm = getActivity()
-//                        .getSupportFragmentManager();
-//                DatePickerFragment dialog = DatePickerFragment
-//                        .newInstance(mCrime.getDate());
-//                dialog.setTargetFragment(CrimeFragment.this, REQUEST_DATE);
-//                dialog.show(fm, DIALOG_DATE);
+                final FragmentManager fm = getActivity().getSupportFragmentManager();
+                final DatePickerFragment dialog = DatePickerFragment.newInstance(knitting.getFinished() != null ? knitting.getFinished() : new Date());
+                dialog.setTargetFragment(KnittingFragment.this, REQUEST_FINISHED);
+                dialog.show(fm, DIALOG_DATE);
             }
         });
 
@@ -219,14 +217,18 @@ public class KnittingFragment extends Fragment {
         if (resultCode != Activity.RESULT_OK) {
             return;
         }
-        if (requestCode == REQUEST_IMAGE_CAPTURE) {
-            final File photoFile = KnittingsDataSource.getInstance(getActivity()).getPhotoFile(knitting);
-            final Bitmap bitmap = PictureUtils.getScaledBitmap(photoFile.getPath(), getActivity());
-            imageView.setImageBitmap(bitmap);
-        } else if (requestCode == REQUEST_DATE) {
+        if (requestCode == REQUEST_STARTED) {
             Date date = (Date)data.getSerializableExtra(DatePickerFragment.EXTRA_DATE);
             knitting.setStarted(date);
             editTextStarted.setText(DateFormat.getDateInstance().format(knitting.getStarted()));
+        } else if (requestCode == REQUEST_FINISHED) {
+            Date date = (Date)data.getSerializableExtra(DatePickerFragment.EXTRA_DATE);
+            knitting.setFinished(date);
+            editTextFinished.setText(DateFormat.getDateInstance().format(knitting.getFinished()));
+        } else if (requestCode == REQUEST_IMAGE_CAPTURE) {
+            final File photoFile = KnittingsDataSource.getInstance(getActivity()).getPhotoFile(knitting);
+            final Bitmap bitmap = PictureUtils.getScaledBitmap(photoFile.getPath(), getActivity());
+            imageView.setImageBitmap(bitmap);
         }
     }
 }
