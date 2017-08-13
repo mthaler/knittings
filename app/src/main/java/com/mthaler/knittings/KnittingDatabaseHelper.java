@@ -5,6 +5,9 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+/**
+ * Database helper class that defines our tables, columns and methods to create and drop tables
+ */
 public class KnittingDatabaseHelper extends SQLiteOpenHelper {
 
     private static final String LOG_TAG = KnittingDatabaseHelper.class.getSimpleName();
@@ -12,6 +15,9 @@ public class KnittingDatabaseHelper extends SQLiteOpenHelper {
     public static final String DB_NAME = "knittings.db";
     public static final int DB_VERSION = 1;
 
+    /**
+     * Class that defines the knittings database table schema
+     */
     public static final class KnittingTable {
         public static final String KNITTINGS = "knittings";
 
