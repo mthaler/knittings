@@ -22,6 +22,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import java.io.File;
 import java.text.DateFormat;
+import java.util.Date;
 
 /**
  * KnittingFragment shows a single knitting
@@ -37,6 +38,7 @@ public class KnittingFragment extends Fragment {
     private static final int REQUEST_IMAGE_CAPTURE = 1;
 
     private Knitting knitting;
+    private EditText editTextStarted;
     private ImageView imageView;
 
     /**
@@ -105,9 +107,9 @@ public class KnittingFragment extends Fragment {
             }
         });
 
-        final EditText editTextgStarted = v.findViewById(R.id.knitting_started);
-        editTextgStarted.setText(DateFormat.getDateInstance().format(knitting.getStarted()));
-        editTextgStarted.setOnClickListener(new View.OnClickListener() {
+        editTextStarted = v.findViewById(R.id.knitting_started);
+        editTextStarted.setText(DateFormat.getDateInstance().format(knitting.getStarted()));
+        editTextStarted.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 FragmentManager fm = getActivity()
                         .getSupportFragmentManager();
@@ -221,6 +223,10 @@ public class KnittingFragment extends Fragment {
             final File photoFile = KnittingsDataSource.getInstance(getActivity()).getPhotoFile(knitting);
             final Bitmap bitmap = PictureUtils.getScaledBitmap(photoFile.getPath(), getActivity());
             imageView.setImageBitmap(bitmap);
+        } else if (requestCode == REQUEST_DATE) {
+            Date date = (Date)data.getSerializableExtra(DatePickerFragment.EXTRA_DATE);
+            knitting.setStarted(date);
+            editTextStarted.setText(DateFormat.getDateInstance().format(knitting.getStarted()));
         }
     }
 }
