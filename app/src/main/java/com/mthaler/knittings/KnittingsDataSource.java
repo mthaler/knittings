@@ -44,7 +44,7 @@ public class KnittingsDataSource {
     public Knitting createKnitting(String title, String description, Date started, Date finished, double needleDiameter) {
         SQLiteDatabase database = dbHelper.getWritableDatabase();
         try {
-            ContentValues values = new ContentValues();
+            final ContentValues values = new ContentValues();
             values.put(KnittingDatabaseHelper.KnittingTable.Cols.TITLE, title);
             values.put(KnittingDatabaseHelper.KnittingTable.Cols.DESCRIPTION, description);
             values.put(KnittingDatabaseHelper.KnittingTable.Cols.STARTED, started.getTime());
@@ -53,13 +53,13 @@ public class KnittingsDataSource {
             }
             values.put(KnittingDatabaseHelper.KnittingTable.Cols.NEEDLE_DIAMETER, needleDiameter);
 
-            long insertId = database.insert(KnittingDatabaseHelper.KnittingTable.KNITTINGS, null, values);
+            final long id = database.insert(KnittingDatabaseHelper.KnittingTable.KNITTINGS, null, values);
 
-            Cursor cursor = database.query(KnittingDatabaseHelper.KnittingTable.KNITTINGS,
-                    columns, KnittingDatabaseHelper.KnittingTable.Cols.ID + "=" + insertId, null, null, null, null);
+            final Cursor cursor = database.query(KnittingDatabaseHelper.KnittingTable.KNITTINGS,
+                    columns, KnittingDatabaseHelper.KnittingTable.Cols.ID + "=" + id, null, null, null, null);
 
             cursor.moveToFirst();
-            Knitting knittings = cursorToKnitting(cursor);
+            final Knitting knittings = cursorToKnitting(cursor);
             cursor.close();
 
             return knittings;
@@ -71,7 +71,7 @@ public class KnittingsDataSource {
     public Knitting updateKnitting(Knitting knitting) {
         SQLiteDatabase database = dbHelper.getWritableDatabase();
         try {
-            ContentValues values = new ContentValues();
+            final ContentValues values = new ContentValues();
             values.put(KnittingDatabaseHelper.KnittingTable.Cols.TITLE, knitting.getTitle());
             values.put(KnittingDatabaseHelper.KnittingTable.Cols.DESCRIPTION, knitting.getDescription());
             values.put(KnittingDatabaseHelper.KnittingTable.Cols.STARTED, knitting.getStarted().getTime());
@@ -85,7 +85,7 @@ public class KnittingsDataSource {
                     KnittingDatabaseHelper.KnittingTable.Cols.ID + "=" + knitting.getId(),
                     null);
 
-            Cursor cursor = database.query(KnittingDatabaseHelper.KnittingTable.KNITTINGS,
+            final Cursor cursor = database.query(KnittingDatabaseHelper.KnittingTable.KNITTINGS,
                     columns, KnittingDatabaseHelper.KnittingTable.Cols.ID + "=" + knitting.getId(), null, null, null, null);
 
             cursor.moveToFirst();
