@@ -193,15 +193,7 @@ public class KnittingFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_item_delete_knitting:
-                // if photo exists, delete it
-                final File photoFile = KnittingsDataSource.getInstance(getActivity()).getPhotoFile(knitting);
-                if (photoFile.exists()) {
-                    photoFile.delete();
-                }
-                // delete database entry
-                KnittingsDataSource.getInstance(getActivity()).deleteKnitting(knitting);
-                getActivity().finish();
-                knitting = null;
+                deleteKnitting();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -234,5 +226,22 @@ public class KnittingFragment extends Fragment {
             final Bitmap bitmap = PictureUtils.getScaledBitmap(photoFile.getPath(), getActivity());
             imageView.setImageBitmap(bitmap);
         }
+    }
+
+    /**
+     * Deletes the displayed knitting
+     *
+     * The method will delete the knitting from the database and also remove the photo if it exists
+     */
+    private void deleteKnitting() {
+        // if photo exists, delete it
+        final File photoFile = KnittingsDataSource.getInstance(getActivity()).getPhotoFile(knitting);
+        if (photoFile.exists()) {
+            photoFile.delete();
+        }
+        // delete database entry
+        KnittingsDataSource.getInstance(getActivity()).deleteKnitting(knitting);
+        getActivity().finish();
+        knitting = null;
     }
 }
