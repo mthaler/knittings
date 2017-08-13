@@ -53,7 +53,7 @@ public class KnittingListFragment extends ListFragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_item_new_knitting:
-                Knitting knitting = KnittingsDataSource.getInstance(getActivity()).createKnitting("", "", new Date(), null, 0.0);
+                Knitting knitting = KnittingsDataSource.getInstance(getActivity()).createKnitting("", "", new Date(), null, 0.0, 0.0);
                 Intent intent = new Intent(getActivity(), KnittingActivity.class);
                 intent.putExtra(KnittingFragment.EXTRA_KNITTING_ID, knitting.getId());
                 startActivity(intent);

@@ -158,6 +158,30 @@ public class KnittingFragment extends Fragment {
             }
         });
 
+        final EditText editTextSize = v.findViewById(R.id.knitting_size);
+        editTextSize.setText(Double.toString(knitting.getSize()));
+        editTextSize.addTextChangedListener(new TextWatcher() {
+            public void onTextChanged(CharSequence c, int start, int before, int count) {
+                try {
+                    knitting.setSize(Double.parseDouble(c.toString()));
+                } catch (Exception ex) {
+                    knitting.setSize(0.0);
+                }
+            }
+
+            public void beforeTextChanged(CharSequence c, int start, int count, int after) {
+                // this space intentionally left blank
+            }
+
+            public void afterTextChanged(Editable c) {
+                try {
+                    knitting.setSize(Double.parseDouble(c.toString()));
+                } catch (Exception ex) {
+                    knitting.setSize(0.0);
+                }
+            }
+        });
+
         // initialize image view
         imageView = v.findViewById(R.id.imageView);
         // if there is a photo, display it

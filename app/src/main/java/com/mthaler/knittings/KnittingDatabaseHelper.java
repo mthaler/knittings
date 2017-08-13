@@ -28,6 +28,7 @@ public class KnittingDatabaseHelper extends SQLiteOpenHelper {
             public static final String STARTED = "started";
             public static final String FINISHED = "finished";
             public static final String NEEDLE_DIAMETER = "needle_diameter";
+            public static final String SIZE = "size";
         }
     }
 
@@ -38,7 +39,8 @@ public class KnittingDatabaseHelper extends SQLiteOpenHelper {
                     KnittingTable.Cols.DESCRIPTION + " TEXT NOT NULL, " +
                     KnittingTable.Cols.STARTED + " INTEGER NOT NULL DEFAULT 0, " +
                     KnittingTable.Cols.FINISHED + " INTEGER, " +
-                    KnittingTable.Cols.NEEDLE_DIAMETER + " REAL NOT NULL DEFAULT 0.0 " + ");";
+                    KnittingTable.Cols.NEEDLE_DIAMETER + " REAL NOT NULL DEFAULT 0.0, " +
+                    KnittingTable.Cols.SIZE + " REAL NOT NULL DEFAULT 0.0"  + ");";
 
     public static final String SQL_DROP = "DROP TABLE IF EXISTS " + KnittingTable.KNITTINGS;
 
