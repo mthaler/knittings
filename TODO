@@ -3,3 +3,6 @@ TODO:
 - make entries in knittings list look nicer
 - it should be possible to add photos of knittings
 - using floating button to add new knittings
+- fix started and finished date input
+- fix needle diameter input
+- add confirmation dialog when deleting knittings
