@@ -2,8 +2,6 @@ package com.mthaler.knittings;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -26,6 +24,7 @@ public class KnittingActivity extends AppCompatActivity {
         setContentView(R.layout.activity_knitting);
         final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         // get the id of the knitting that should be displayed.
         final long id = getIntent().getLongExtra(KnittingFragment.EXTRA_KNITTING_ID, -1);
@@ -71,13 +70,4 @@ public class KnittingActivity extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
         }
     }
-
-
-
-//    private Fragment createFragment() {
-//        // get the id of the knitting that should be displayed.
-//        final long id = getIntent().getLongExtra(KnittingFragment.EXTRA_KNITTING_ID, -1);
-//        // create a new knitting fragment that will be used by this activity
-//        return KnittingFragment.newInstance(id);
-//    }
 }

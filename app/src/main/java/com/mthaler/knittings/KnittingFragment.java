@@ -50,32 +50,6 @@ public class KnittingFragment extends Fragment implements KnittingDetailsView {
     private EditText editTextSize;
     private ImageView imageView;
 
-    /**
-     * Creates a new knitting fragment and attaches the given knitting id
-     *
-     * @param id knitting id
-     * @return new knitting fragment with knitting id attached
-     */
-    public static KnittingFragment newInstance(long id) {
-        Bundle args = new Bundle();
-        args.putLong(EXTRA_KNITTING_ID, id);
-
-        final KnittingFragment fragment = new KnittingFragment();
-        fragment.setArguments(args);
-
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-//        // get the attached knitting id
-//        final long id = getArguments().getLong(EXTRA_KNITTING_ID);
-//        // get knitting for the given id from database
-//        knitting = KnittingsDataSource.getInstance(getActivity()).getKnitting(id);
-    }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
         // crreate view
