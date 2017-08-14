@@ -41,8 +41,8 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_item_new_knitting:
-                KnittingListFragment frag = (KnittingListFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_knitting_list);
-                frag.createNewKnitting();
+                final KnittingListView knittingListView = (KnittingListView) getSupportFragmentManager().findFragmentById(R.id.fragment_knitting_list);
+                knittingListView.createNewKnitting();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

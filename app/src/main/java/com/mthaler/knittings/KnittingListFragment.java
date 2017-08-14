@@ -18,7 +18,7 @@ import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class KnittingListFragment extends ListFragment {
+public class KnittingListFragment extends ListFragment implements KnittingListView {
 
     private ArrayList<Knitting> knittings;
 
