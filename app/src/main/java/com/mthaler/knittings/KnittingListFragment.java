@@ -49,7 +49,7 @@ public class KnittingListFragment extends ListFragment implements KnittingListVi
         setListAdapter(adapter);
     }
 
-    public void createNewKnitting() {
+    public void addKnitting() {
         Knitting knitting = KnittingsDataSource.getInstance(getActivity()).createKnitting("", "", new Date(), null, 0.0, 0.0);
         Intent intent = new Intent(getActivity(), KnittingActivity.class);
         intent.putExtra(KnittingFragment.EXTRA_KNITTING_ID, knitting.getId());
