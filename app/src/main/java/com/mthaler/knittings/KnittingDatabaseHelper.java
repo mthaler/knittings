@@ -30,19 +30,19 @@ public class KnittingDatabaseHelper extends SQLiteOpenHelper {
             public static final String NEEDLE_DIAMETER = "needle_diameter";
             public static final String SIZE = "size";
         }
+
+        public static final String SQL_CREATE =
+                "CREATE TABLE " + KnittingTable.KNITTINGS +
+                        "(" + KnittingTable.Cols.ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                        KnittingTable.Cols.TITLE + " TEXT NOT NULL, " +
+                        KnittingTable.Cols.DESCRIPTION + " TEXT NOT NULL, " +
+                        KnittingTable.Cols.STARTED + " INTEGER NOT NULL DEFAULT 0, " +
+                        KnittingTable.Cols.FINISHED + " INTEGER, " +
+                        KnittingTable.Cols.NEEDLE_DIAMETER + " REAL NOT NULL DEFAULT 0.0, " +
+                        KnittingTable.Cols.SIZE + " REAL NOT NULL DEFAULT 0.0"  + ");";
+
+        public static final String SQL_DROP = "DROP TABLE IF EXISTS " + KnittingTable.KNITTINGS;
     }
-
-    public static final String SQL_CREATE =
-            "CREATE TABLE " + KnittingTable.KNITTINGS +
-                    "(" + KnittingTable.Cols.ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                    KnittingTable.Cols.TITLE + " TEXT NOT NULL, " +
-                    KnittingTable.Cols.DESCRIPTION + " TEXT NOT NULL, " +
-                    KnittingTable.Cols.STARTED + " INTEGER NOT NULL DEFAULT 0, " +
-                    KnittingTable.Cols.FINISHED + " INTEGER, " +
-                    KnittingTable.Cols.NEEDLE_DIAMETER + " REAL NOT NULL DEFAULT 0.0, " +
-                    KnittingTable.Cols.SIZE + " REAL NOT NULL DEFAULT 0.0"  + ");";
-
-    public static final String SQL_DROP = "DROP TABLE IF EXISTS " + KnittingTable.KNITTINGS;
 
     public KnittingDatabaseHelper(Context context) {
         super(context, DB_NAME, null, DB_VERSION);
@@ -52,17 +52,17 @@ public class KnittingDatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         try {
-            Log.d(LOG_TAG, "Table created with: " + SQL_CREATE);
-            db.execSQL(SQL_CREATE);
+            db.execSQL(KnittingTable.SQL_CREATE);
+            Log.d(LOG_TAG, "Knitting table created with: " + KnittingTable.SQL_CREATE);
         } catch (Exception ex) {
-            Log.e(LOG_TAG, "Could not create table: " + ex.getMessage());
+            Log.e(LOG_TAG, "Could not create knitting table with: " +KnittingTable.SQL_CREATE +": " + ex.getMessage());
         }
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        Log.d(LOG_TAG, "Table with version number " + oldVersion + " will be dropped.");
-        db.execSQL(SQL_DROP);
+        Log.d(LOG_TAG, "Knitting table with version number " + oldVersion + " will be dropped.");
+        db.execSQL(KnittingTable.SQL_DROP);
         onCreate(db);
     }
 }
