@@ -44,6 +44,16 @@ public class KnittingDatabaseHelper extends SQLiteOpenHelper {
         public static final String SQL_DROP = "DROP TABLE IF EXISTS " + KnittingTable.KNITTINGS;
     }
 
+    public static final class PhotoTable {
+        public static final String KNITTINGS = "photos";
+
+        public static final class Cols {
+            public static final String ID = "_id";
+            public static final String PREVIEW = "preview";
+            public static final String STARTED = "filename";
+        }
+    }
+
     public KnittingDatabaseHelper(Context context) {
         super(context, DB_NAME, null, DB_VERSION);
         Log.d(LOG_TAG, "KnittingDatabaseHelper created database: " + getDatabaseName());
