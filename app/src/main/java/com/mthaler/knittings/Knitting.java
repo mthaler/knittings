@@ -1,6 +1,8 @@
 package com.mthaler.knittings;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * The Knitting class stores data for a single knitting
@@ -13,6 +15,7 @@ public class Knitting {
     private Date finished;
     private double needleDiameter;
     private double size;
+    private final List<Photo> photos;
 
     public Knitting(long id) {
         this.id = id;
@@ -22,6 +25,7 @@ public class Knitting {
         finished = null;
         needleDiameter = 0.0;
         size = 0.0;
+        photos = new ArrayList<>();
     }
 
     public long getId() {
@@ -78,6 +82,14 @@ public class Knitting {
 
     public String getPhotoFilename() {
         return "IMG_" + id + ".jpg";
+    }
+
+    public List<Photo> getPhotos() {
+        return photos;
+    }
+    
+    public void addPhoto(Photo photo) {
+        photos.add(photo);
     }
 
     @Override
