@@ -1,7 +1,6 @@
 package com.mthaler.knittings;
 
 import android.app.Activity;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -11,17 +10,15 @@ import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.FileProvider;
-import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
+
 import java.io.File;
 import java.text.DateFormat;
 import java.util.Date;
@@ -42,10 +39,10 @@ public class KnittingFragment extends Fragment implements KnittingDetailsView {
 
     private Knitting knitting = new Knitting(-1);
 
-    private EditText textFieldTitle;
-    private EditText textFieldDescription;
-    private EditText editTextStarted;
-    private EditText editTextFinished;
+    private EditText editTextTitle;
+    private EditText editTextDescription;
+    private TextView textViewStarted;
+    private TextView textViewFinished;
     private EditText editTextNeedleDiameter;
     private EditText editTextSize;
     private ImageView imageView;
@@ -56,8 +53,8 @@ public class KnittingFragment extends Fragment implements KnittingDetailsView {
         final View v = inflater.inflate(R.layout.fragment_knitting, parent, false);
 
         // initialize title text field
-        textFieldTitle  = v.findViewById(R.id.knitting_title);
-        textFieldTitle.addTextChangedListener(new TextWatcher() {
+        editTextTitle = v.findViewById(R.id.knitting_title);
+        editTextTitle.addTextChangedListener(new TextWatcher() {
             public void onTextChanged(CharSequence c, int start, int before, int count) {
                 knitting.setTitle(c.toString());
             }
@@ -72,8 +69,8 @@ public class KnittingFragment extends Fragment implements KnittingDetailsView {
         });
 
         // initialize description text field
-        textFieldDescription = v.findViewById(R.id.knitting_description);
-        textFieldDescription.addTextChangedListener(new TextWatcher() {
+        editTextDescription = v.findViewById(R.id.knitting_description);
+        editTextDescription.addTextChangedListener(new TextWatcher() {
             public void onTextChanged(CharSequence c, int start, int before, int count) {
                 knitting.setDescription(c.toString());
             }
@@ -87,8 +84,8 @@ public class KnittingFragment extends Fragment implements KnittingDetailsView {
             }
         });
 
-        editTextStarted = v.findViewById(R.id.knitting_started);
-        editTextStarted.setOnClickListener(new View.OnClickListener() {
+        textViewStarted = v.findViewById(R.id.knitting_started);
+        textViewStarted.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 final FragmentManager fm = getActivity().getSupportFragmentManager();
                 final DatePickerFragment dialog = DatePickerFragment.newInstance(knitting.getStarted());
@@ -98,8 +95,8 @@ public class KnittingFragment extends Fragment implements KnittingDetailsView {
         });
 
         // initialize finish date button
-        editTextFinished = v.findViewById(R.id.knitting_finished);
-        editTextFinished.setOnClickListener(new View.OnClickListener() {
+        textViewFinished = v.findViewById(R.id.knitting_finished);
+        textViewFinished.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 final FragmentManager fm = getActivity().getSupportFragmentManager();
                 final DatePickerFragment dialog = DatePickerFragment.newInstance(knitting.getFinished() != null ? knitting.getFinished() : new Date());
@@ -191,11 +188,11 @@ public class KnittingFragment extends Fragment implements KnittingDetailsView {
         if (requestCode == REQUEST_STARTED) {
             Date date = (Date)data.getSerializableExtra(DatePickerFragment.EXTRA_DATE);
             knitting.setStarted(date);
-            editTextStarted.setText(DateFormat.getDateInstance().format(knitting.getStarted()));
+            textViewStarted.setText(DateFormat.getDateInstance().format(knitting.getStarted()));
         } else if (requestCode == REQUEST_FINISHED) {
             Date date = (Date)data.getSerializableExtra(DatePickerFragment.EXTRA_DATE);
             knitting.setFinished(date);
-            editTextFinished.setText(DateFormat.getDateInstance().format(knitting.getFinished()));
+            textViewFinished.setText(DateFormat.getDateInstance().format(knitting.getFinished()));
         } else if (requestCode == REQUEST_IMAGE_CAPTURE) {
             final File photoFile = KnittingsDataSource.getInstance(getActivity()).getPhotoFile(knitting);
             final Bitmap bitmap = PictureUtils.getScaledBitmap(photoFile.getPath(), getActivity());
@@ -206,10 +203,10 @@ public class KnittingFragment extends Fragment implements KnittingDetailsView {
     @Override
     public void init(Knitting knitting) {
         this.knitting = knitting;
-        textFieldTitle.setText(knitting.getTitle());
-        textFieldDescription.setText(knitting.getDescription());
-        editTextStarted.setText(DateFormat.getDateInstance().format(knitting.getStarted()));
-        editTextFinished.setText(knitting.getFinished() != null ? DateFormat.getDateInstance().format(knitting.getFinished()) : "");
+        editTextTitle.setText(knitting.getTitle());
+        editTextDescription.setText(knitting.getDescription());
+        textViewStarted.setText(DateFormat.getDateInstance().format(knitting.getStarted()));
+        textViewFinished.setText(knitting.getFinished() != null ? DateFormat.getDateInstance().format(knitting.getFinished()) : "");
         editTextNeedleDiameter.setText(Double.toString(knitting.getNeedleDiameter()));
         editTextSize.setText(Double.toString(knitting.getSize()));
         // if there is a photo, display it
