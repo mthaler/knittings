@@ -29,7 +29,6 @@ public class KnittingListFragment extends ListFragment {
         this.knittings = KnittingsDataSource.getInstance(getActivity()).getAllKnittings();
         KnittingAdapter adapter = new KnittingAdapter(knittings);
         setListAdapter(adapter);
-        setHasOptionsMenu(true);
     }
 
     @Override
@@ -42,33 +41,19 @@ public class KnittingListFragment extends ListFragment {
         startActivityForResult(i, 0);
     }
 
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.fragment_knittings_list, menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.menu_item_new_knitting:
-                Knitting knitting = KnittingsDataSource.getInstance(getActivity()).createKnitting("", "", new Date(), null, 0.0, 0.0);
-                Intent intent = new Intent(getActivity(), KnittingActivity.class);
-                intent.putExtra(KnittingFragment.EXTRA_KNITTING_ID, knitting.getId());
-                startActivity(intent);
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
-
     @Override
     public void onResume() {
         super.onResume();
         this.knittings = KnittingsDataSource.getInstance(getActivity()).getAllKnittings();
         KnittingAdapter adapter = new KnittingAdapter(knittings);
         setListAdapter(adapter);
+    }
+
+    public void createNewKnitting() {
+        Knitting knitting = KnittingsDataSource.getInstance(getActivity()).createKnitting("", "", new Date(), null, 0.0, 0.0);
+        Intent intent = new Intent(getActivity(), KnittingActivity.class);
+        intent.putExtra(KnittingFragment.EXTRA_KNITTING_ID, knitting.getId());
+        startActivity(intent);
     }
 
     private class KnittingAdapter extends ArrayAdapter<Knitting> {
