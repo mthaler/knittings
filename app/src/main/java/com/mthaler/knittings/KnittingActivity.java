@@ -31,7 +31,7 @@ public class KnittingActivity extends AppCompatActivity {
         final Knitting knitting = KnittingsDataSource.getInstance(this.getApplicationContext()).getKnitting(id);
 
         // init knitting
-        KnittingDetailsView knittingDetailsView = (KnittingDetailsView) getSupportFragmentManager().findFragmentById(R.id.fragment_knitting);
+        final KnittingDetailsView knittingDetailsView = (KnittingDetailsView) getSupportFragmentManager().findFragmentById(R.id.fragment_knitting);
         knittingDetailsView.init(knitting);
 
     }
@@ -54,7 +54,8 @@ public class KnittingActivity extends AppCompatActivity {
                         .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
-                                //fragment.deleteKnitting();
+                                final KnittingDetailsView knittingDetailsView = (KnittingDetailsView) getSupportFragmentManager().findFragmentById(R.id.fragment_knitting);
+                                knittingDetailsView.deleteKnitting();
                                 dialogInterface.dismiss();
                                 finish();
                             }
