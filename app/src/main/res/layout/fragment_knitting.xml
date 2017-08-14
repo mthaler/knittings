@@ -48,12 +48,13 @@
             android:layout_marginTop="10dp"
             android:layout_weight="1">
 
-            <TextView android:id="@+id/knitting_started"
+            <android.support.design.widget.TextInputEditText android:id="@+id/knitting_started"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
                 android:layout_weight="1"
+                android:editable="false"
                 android:hint="@string/knitting_started_hint"
                 style="@android:style/Widget.DeviceDefault.Light.Spinner" />
         </android.support.design.widget.TextInputLayout>
@@ -66,11 +67,12 @@
             android:layout_marginTop="10dp"
             android:layout_weight="1">
 
-            <TextView android:id="@+id/knitting_finished"
+            <android.support.design.widget.TextInputEditText android:id="@+id/knitting_finished"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
+                android:editable="false"
                 android:hint="@string/knitting_finished_hint"
                 style="@android:style/Widget.DeviceDefault.Light.Spinner"/>
         </android.support.design.widget.TextInputLayout>
@@ -113,6 +115,7 @@
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
                 android:inputType="numberDecimal"
+                android:editable="false"
                 android:hint="@string/knitting_size_hint" />
         </android.support.design.widget.TextInputLayout>
 
