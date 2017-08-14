@@ -27,9 +27,13 @@ public class KnittingActivity extends AppCompatActivity {
         final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        // get the id of the knitting that should be displayed.
+        final long id = getIntent().getLongExtra(KnittingFragment.EXTRA_KNITTING_ID, -1);
+        final Knitting knitting = KnittingsDataSource.getInstance(this.getApplicationContext()).getKnitting(id);
+
         // init knitting
-        KnittingDetailsView frag = (KnittingDetailsView) getSupportFragmentManager().findFragmentById(R.id.fragment_knitting);
-        //
+        KnittingDetailsView knittingDetailsView = (KnittingDetailsView) getSupportFragmentManager().findFragmentById(R.id.fragment_knitting);
+        knittingDetailsView.init(knitting);
 
     }
 
