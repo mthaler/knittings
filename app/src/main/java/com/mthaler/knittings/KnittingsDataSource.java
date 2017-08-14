@@ -154,6 +154,32 @@ public class KnittingsDataSource {
         return new File(externalFilesDir, knitting.getPhotoFilename());
     }
 
+    public ArrayList<Photo> getAllPhotos(Knitting knitting) {
+        SQLiteDatabase database = dbHelper.getWritableDatabase();
+        try {
+            final ArrayList<Photo> photos = new ArrayList<>();
+
+            final String whereClause = KnittingDatabaseHelper.PhotoTable.Cols.KNITTING_ID + " = ?";
+            final String[] whereArgs = { Double.toString(knitting.getId()) };
+            final Cursor cursor = database.query(KnittingDatabaseHelper.PhotoTable.PHOTOS, KnittingDatabaseHelper.PhotoTable.Columns, whereClause, whereArgs, null, null, null);
+
+            cursor.moveToFirst();
+            Photo photo;
+
+            while(!cursor.isAfterLast()) {
+                photo = cursorToPhoto(cursor);
+                photos.add(photo);
+                Log.d(LOG_TAG, "ID: " + photo.getId() + ", Inhalt: " + photo.toString());
+                cursor.moveToNext();
+            }
+
+            cursor.close();
+
+            return photos;
+        } finally {
+            database.close();
+        }
+    }
 
     private Knitting cursorToKnitting(Cursor cursor) {
         final int idIndex = cursor.getColumnIndex(KnittingDatabaseHelper.KnittingTable.Cols.ID);

@@ -29,8 +29,6 @@ public class KnittingDatabaseHelper extends SQLiteOpenHelper {
             public static final String FINISHED = "finished";
             public static final String NEEDLE_DIAMETER = "needle_diameter";
             public static final String SIZE = "size";
-
-
         }
 
         public static final String[] Columns = {
@@ -65,6 +63,13 @@ public class KnittingDatabaseHelper extends SQLiteOpenHelper {
             public static final String PREVIEW = "preview";
             public static final String KNITTING_ID = "knitting_id";
         }
+
+        public static final String[] Columns = {
+                Cols.ID,
+                Cols.FILENAME,
+                Cols.PREVIEW,
+                Cols.KNITTING_ID
+        };
 
         public static final String SQL_CREATE =
                 "CREATE TABLE " + PHOTOS +
@@ -103,7 +108,7 @@ public class KnittingDatabaseHelper extends SQLiteOpenHelper {
         Log.d(LOG_TAG, "Knitting table with version number " + oldVersion + " will be dropped.");
         db.execSQL(KnittingTable.SQL_DROP);
         Log.d(LOG_TAG, "Photo table with version number " + oldVersion + " will be dropped.");
-        db.execSQL(KnittingTable.SQL_DROP);
+        db.execSQL(PhotoTable.SQL_DROP);
         onCreate(db);
     }
 }
