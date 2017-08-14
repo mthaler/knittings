@@ -29,29 +29,52 @@ public class KnittingDatabaseHelper extends SQLiteOpenHelper {
             public static final String FINISHED = "finished";
             public static final String NEEDLE_DIAMETER = "needle_diameter";
             public static final String SIZE = "size";
+
+
         }
 
-        public static final String SQL_CREATE =
-                "CREATE TABLE " + KnittingTable.KNITTINGS +
-                        "(" + KnittingTable.Cols.ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                        KnittingTable.Cols.TITLE + " TEXT NOT NULL, " +
-                        KnittingTable.Cols.DESCRIPTION + " TEXT NOT NULL, " +
-                        KnittingTable.Cols.STARTED + " INTEGER NOT NULL DEFAULT 0, " +
-                        KnittingTable.Cols.FINISHED + " INTEGER, " +
-                        KnittingTable.Cols.NEEDLE_DIAMETER + " REAL NOT NULL DEFAULT 0.0, " +
-                        KnittingTable.Cols.SIZE + " REAL NOT NULL DEFAULT 0.0"  + ");";
+        public static final String[] Columns = {
+            Cols.ID,
+            Cols.TITLE,
+            Cols.DESCRIPTION,
+            Cols.STARTED,
+            Cols.FINISHED,
+            Cols.NEEDLE_DIAMETER,
+            Cols.SIZE
+        };
 
-        public static final String SQL_DROP = "DROP TABLE IF EXISTS " + KnittingTable.KNITTINGS;
+        public static final String SQL_CREATE =
+                "CREATE TABLE " + KNITTINGS +
+                        "(" + Cols.ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                        Cols.TITLE + " TEXT NOT NULL, " +
+                        Cols.DESCRIPTION + " TEXT NOT NULL, " +
+                        Cols.STARTED + " INTEGER NOT NULL DEFAULT 0, " +
+                        Cols.FINISHED + " INTEGER, " +
+                        Cols.NEEDLE_DIAMETER + " REAL NOT NULL DEFAULT 0.0, " +
+                        Cols.SIZE + " REAL NOT NULL DEFAULT 0.0"  + ");";
+
+        public static final String SQL_DROP = "DROP TABLE IF EXISTS " + KNITTINGS;
     }
 
     public static final class PhotoTable {
-        public static final String KNITTINGS = "photos";
+        public static final String PHOTOS = "photos";
 
         public static final class Cols {
             public static final String ID = "_id";
             public static final String PREVIEW = "preview";
-            public static final String STARTED = "filename";
+            public static final String FILENAME = "filename";
+            public static final String KNITTING_ID = "knitting_id";
         }
+
+        public static final String SQL_CREATE =
+                "CREATE TABLE " + PHOTOS +
+                        "(" + Cols.ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                        Cols.PREVIEW + " BLOB, " +
+                        Cols.FILENAME + " TEXT NOT NULL, " +
+                        Cols.KNITTING_ID + " INTEGER NOT NULL, " +
+                        "FOREIGN KEY(" + Cols.KNITTING_ID + ") REFERENCES " + KnittingTable.KNITTINGS + "(" + KnittingTable.Cols.ID + "));";
+
+        public static final String SQL_DROP = "DROP TABLE IF EXISTS " + PHOTOS;
     }
 
     public KnittingDatabaseHelper(Context context) {
@@ -65,13 +88,21 @@ public class KnittingDatabaseHelper extends SQLiteOpenHelper {
             db.execSQL(KnittingTable.SQL_CREATE);
             Log.d(LOG_TAG, "Knitting table created with: " + KnittingTable.SQL_CREATE);
         } catch (Exception ex) {
-            Log.e(LOG_TAG, "Could not create knitting table with: " +KnittingTable.SQL_CREATE +": " + ex.getMessage());
+            Log.e(LOG_TAG, "Could not create knitting table with: " + KnittingTable.SQL_CREATE + ": " + ex.getMessage());
+        }
+        try {
+            db.execSQL(PhotoTable.SQL_CREATE);
+            Log.d(LOG_TAG, "Photo table created with: " + PhotoTable.SQL_CREATE);
+        } catch (Exception ex) {
+            Log.e(LOG_TAG, "Could not create photo table with: " + PhotoTable.SQL_CREATE + ": " + ex.getMessage());
         }
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         Log.d(LOG_TAG, "Knitting table with version number " + oldVersion + " will be dropped.");
+        db.execSQL(KnittingTable.SQL_DROP);
+        Log.d(LOG_TAG, "Photo table with version number " + oldVersion + " will be dropped.");
         db.execSQL(KnittingTable.SQL_DROP);
         onCreate(db);
     }
