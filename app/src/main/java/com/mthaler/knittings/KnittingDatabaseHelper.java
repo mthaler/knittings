@@ -61,16 +61,16 @@ public class KnittingDatabaseHelper extends SQLiteOpenHelper {
 
         public static final class Cols {
             public static final String ID = "_id";
-            public static final String PREVIEW = "preview";
             public static final String FILENAME = "filename";
+            public static final String PREVIEW = "preview";
             public static final String KNITTING_ID = "knitting_id";
         }
 
         public static final String SQL_CREATE =
                 "CREATE TABLE " + PHOTOS +
                         "(" + Cols.ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                        Cols.PREVIEW + " BLOB, " +
                         Cols.FILENAME + " TEXT NOT NULL, " +
+                        Cols.PREVIEW + " BLOB, " +
                         Cols.KNITTING_ID + " INTEGER NOT NULL, " +
                         "FOREIGN KEY(" + Cols.KNITTING_ID + ") REFERENCES " + KnittingTable.KNITTINGS + "(" + KnittingTable.Cols.ID + "));";
 

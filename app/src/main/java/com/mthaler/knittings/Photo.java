@@ -12,11 +12,13 @@ public class Photo {
 
     private final long id;
     private final File filename;
+    private final long knittingID;
     private Bitmap preview;
 
-    public Photo(long id, File filename) {
+    public Photo(long id, File filename, long knittingID) {
         this.id = id;
         this.filename = filename;
+        this.knittingID = knittingID;
     }
 
     public long getId() {
@@ -25,6 +27,10 @@ public class Photo {
 
     public File getFilename() {
         return filename;
+    }
+
+    public long getKnittingID() {
+        return knittingID;
     }
 
     public Bitmap getPreview() {

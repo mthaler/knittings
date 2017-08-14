@@ -4,6 +4,8 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Environment;
 import android.util.Log;
 import java.io.File;
@@ -179,6 +181,26 @@ public class KnittingsDataSource {
         knitting.setSize(size);
 
         return knitting;
+    }
+
+    private Photo cursorToPhoto(Cursor cursor) {
+        final int idIndex = cursor.getColumnIndex(KnittingDatabaseHelper.PhotoTable.Cols.ID);
+        final int idPreview = cursor.getColumnIndex(KnittingDatabaseHelper.PhotoTable.Cols.PREVIEW);
+        final int idFilename = cursor.getColumnIndex(KnittingDatabaseHelper.PhotoTable.Cols.FILENAME);
+        final int idKnittingIndex = cursor.getColumnIndex(KnittingDatabaseHelper.PhotoTable.Cols.KNITTING_ID);
+
+        final long id = cursor.getLong(idIndex);
+        final String filename = cursor.getString(idFilename);
+        final byte[] previewBytes = cursor.isNull(idPreview) ? null : cursor.getBlob(idPreview);
+        final long knittingID = cursor.getLong(idKnittingIndex);
+
+        final Photo photo = new Photo(id, new File(filename), knittingID);
+        if (previewBytes != null) {
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            Bitmap preview  = BitmapFactory.decodeByteArray(previewBytes, 0, previewBytes.length, options);
+            photo.setPreview(preview);
+        }
+        return photo;
     }
 }
 
