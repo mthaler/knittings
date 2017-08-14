@@ -19,7 +19,7 @@ public class Knitting {
         title = "";
         description = "";
         started = new Date();
-        finished = new Date();
+        finished = null;
         needleDiameter = 0.0;
         size = 0.0;
     }

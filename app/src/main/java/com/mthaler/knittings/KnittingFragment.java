@@ -31,7 +31,7 @@ import java.util.Date;
  *
  * It is used for adding new knittings or displaying / editing existing knittings
  */
-public class KnittingFragment extends Fragment {
+public class KnittingFragment extends Fragment implements KnittingDetailsView {
 
     public static final String EXTRA_KNITTING_ID = "com.mthaler.knitting.KNITTING_ID";
 
@@ -40,9 +40,14 @@ public class KnittingFragment extends Fragment {
     private static final int REQUEST_FINISHED = 1;
     private static final int REQUEST_IMAGE_CAPTURE = 2;
 
-    private Knitting knitting;
+    private Knitting knitting = new Knitting(-1);
+
+    private EditText textFieldTitle;
+    private EditText textFieldDescription;
     private EditText editTextStarted;
     private EditText editTextFinished;
+    private EditText editTextNeedleDiameter;
+    private EditText editTextSize;
     private ImageView imageView;
 
     /**
@@ -65,11 +70,10 @@ public class KnittingFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // get the attached knitting id
-        final long id = getArguments().getLong(EXTRA_KNITTING_ID);
-        // get knitting for the given id from database
-        knitting = KnittingsDataSource.getInstance(getActivity()).getKnitting(id);
-        setHasOptionsMenu(true);
+//        // get the attached knitting id
+//        final long id = getArguments().getLong(EXTRA_KNITTING_ID);
+//        // get knitting for the given id from database
+//        knitting = KnittingsDataSource.getInstance(getActivity()).getKnitting(id);
     }
 
     @Override
@@ -78,8 +82,7 @@ public class KnittingFragment extends Fragment {
         final View v = inflater.inflate(R.layout.fragment_knitting, parent, false);
 
         // initialize title text field
-        final EditText textFieldTitle  = v.findViewById(R.id.knitting_title);
-        textFieldTitle.setText(knitting.getTitle());
+        textFieldTitle  = v.findViewById(R.id.knitting_title);
         textFieldTitle.addTextChangedListener(new TextWatcher() {
             public void onTextChanged(CharSequence c, int start, int before, int count) {
                 knitting.setTitle(c.toString());
@@ -95,8 +98,7 @@ public class KnittingFragment extends Fragment {
         });
 
         // initialize description text field
-        final EditText textFieldDescription = v.findViewById(R.id.knitting_description);
-        textFieldDescription.setText(knitting.getDescription());
+        textFieldDescription = v.findViewById(R.id.knitting_description);
         textFieldDescription.addTextChangedListener(new TextWatcher() {
             public void onTextChanged(CharSequence c, int start, int before, int count) {
                 knitting.setDescription(c.toString());
@@ -112,7 +114,6 @@ public class KnittingFragment extends Fragment {
         });
 
         editTextStarted = v.findViewById(R.id.knitting_started);
-        editTextStarted.setText(DateFormat.getDateInstance().format(knitting.getStarted()));
         editTextStarted.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 final FragmentManager fm = getActivity().getSupportFragmentManager();
@@ -124,7 +125,6 @@ public class KnittingFragment extends Fragment {
 
         // initialize finish date button
         editTextFinished = v.findViewById(R.id.knitting_finished);
-        editTextFinished.setText(knitting.getFinished() != null ? DateFormat.getDateInstance().format(knitting.getFinished()) : "");
         editTextFinished.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 final FragmentManager fm = getActivity().getSupportFragmentManager();
@@ -134,8 +134,7 @@ public class KnittingFragment extends Fragment {
             }
         });
 
-        final EditText editTextNeedleDiameter = v.findViewById(R.id.knitting_needle_diameter);
-        editTextNeedleDiameter.setText(Double.toString(knitting.getNeedleDiameter()));
+        editTextNeedleDiameter = v.findViewById(R.id.knitting_needle_diameter);
         editTextNeedleDiameter.addTextChangedListener(new TextWatcher() {
             public void onTextChanged(CharSequence c, int start, int before, int count) {
                 try {
@@ -158,8 +157,7 @@ public class KnittingFragment extends Fragment {
             }
         });
 
-        final EditText editTextSize = v.findViewById(R.id.knitting_size);
-        editTextSize.setText(Double.toString(knitting.getSize()));
+        editTextSize = v.findViewById(R.id.knitting_size);
         editTextSize.addTextChangedListener(new TextWatcher() {
             public void onTextChanged(CharSequence c, int start, int before, int count) {
                 try {
@@ -184,12 +182,6 @@ public class KnittingFragment extends Fragment {
 
         // initialize image view
         imageView = v.findViewById(R.id.imageView);
-        // if there is a photo, display it
-        final File photoFile = KnittingsDataSource.getInstance(getActivity()).getPhotoFile(knitting);
-        if (photoFile.exists()) {
-            final Bitmap bitmap = PictureUtils.getScaledBitmap(photoFile.getPath(), getActivity());
-            imageView.setImageBitmap(bitmap);
-        }
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -207,39 +199,6 @@ public class KnittingFragment extends Fragment {
         });
 
         return v;
-    }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.fragment_knitting, menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.menu_item_delete_knitting:
-                AlertDialog.Builder alert = new AlertDialog.Builder(getActivity())
-                        .setTitle("Delete")
-                        .setMessage("Do you really want to delete the knitting")
-                        .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                deleteKnitting();
-                                dialogInterface.dismiss();
-                                getActivity().finish();
-                            }
-                        }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                dialogInterface.dismiss();
-                            }
-                        });
-                alert.show();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
     }
 
     @Override
@@ -270,12 +229,29 @@ public class KnittingFragment extends Fragment {
         }
     }
 
+    @Override
+    public void init(Knitting knitting) {
+        this.knitting = knitting;
+        textFieldTitle.setText(knitting.getTitle());
+        textFieldDescription.setText(knitting.getDescription());
+        editTextStarted.setText(DateFormat.getDateInstance().format(knitting.getStarted()));
+        editTextFinished.setText(knitting.getFinished() != null ? DateFormat.getDateInstance().format(knitting.getFinished()) : "");
+        editTextNeedleDiameter.setText(Double.toString(knitting.getNeedleDiameter()));
+        editTextSize.setText(Double.toString(knitting.getSize()));
+        // if there is a photo, display it
+        final File photoFile = KnittingsDataSource.getInstance(getActivity()).getPhotoFile(knitting);
+        if (photoFile.exists()) {
+            final Bitmap bitmap = PictureUtils.getScaledBitmap(photoFile.getPath(), getActivity());
+            imageView.setImageBitmap(bitmap);
+        }
+    }
+
     /**
      * Deletes the displayed knitting
      *
      * The method will delete the knitting from the database and also remove the photo if it exists
      */
-    private void deleteKnitting() {
+    public void deleteKnitting() {
         // if photo exists, delete it
         final File photoFile = KnittingsDataSource.getInstance(getActivity()).getPhotoFile(knitting);
         if (photoFile.exists()) {
