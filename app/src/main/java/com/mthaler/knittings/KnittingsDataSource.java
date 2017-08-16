@@ -257,6 +257,44 @@ public class KnittingsDataSource {
     }
 
     /**
+     * Updates a photo in the database
+     *
+     * @param photo photo that should be updated
+     * @return updated photo
+     */
+    public Photo updatePhoto(Photo photo) {
+        SQLiteDatabase database = dbHelper.getWritableDatabase();
+        try {
+            final ContentValues values = new ContentValues();
+            values.put(KnittingDatabaseHelper.PhotoTable.Cols.FILENAME, photo.getFilename().getPath());
+            values.put(KnittingDatabaseHelper.PhotoTable.Cols.KNITTING_ID, photo.getKnittingID());
+            final Bitmap preview = photo.getPreview();
+            if (preview != null) {
+                final int byteCount = preview.getByteCount();
+                final ByteBuffer buffer = ByteBuffer.allocate(byteCount);
+                preview.copyPixelsToBuffer(buffer);
+                values.put(KnittingDatabaseHelper.PhotoTable.Cols.PREVIEW, buffer.array());
+            }
+
+            database.update(KnittingDatabaseHelper.PhotoTable.PHOTOS,
+                    values,
+                    KnittingDatabaseHelper.PhotoTable.Cols.ID + "=" + photo.getId(),
+                    null);
+
+            final Cursor cursor = database.query(KnittingDatabaseHelper.PhotoTable.PHOTOS,
+                    KnittingDatabaseHelper.PhotoTable.Columns, KnittingDatabaseHelper.PhotoTable.Cols.ID + "=" + photo.getId(), null, null, null, null);
+
+            cursor.moveToFirst();
+            final Photo result = cursorToPhoto(cursor);
+            cursor.close();
+
+            return result;
+        } finally {
+            database.close();
+        }
+    }
+
+    /**
      * Delete all photos for the given knitting
      *
      * @param knitting knitting to delete photos for
