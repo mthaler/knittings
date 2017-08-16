@@ -181,6 +181,20 @@ public class KnittingsDataSource {
         }
     }
 
+    public void deleteAllPhotos(Knitting knitting) {
+        final long id = knitting.getId();
+
+        SQLiteDatabase database = dbHelper.getWritableDatabase();
+        try {
+            final String whereClause = KnittingDatabaseHelper.PhotoTable.Cols.KNITTING_ID + "= ?";
+            final String[] whereArgs = new String[] { Long.toString(id) };
+            database.delete(KnittingDatabaseHelper.PhotoTable.PHOTOS, whereClause, whereArgs);
+            Log.d(LOG_TAG, "Removed knitting " + id + ": " + knitting.toString());
+        } finally {
+            database.close();
+        }
+    }
+
     private Knitting cursorToKnitting(Cursor cursor) {
         final int idIndex = cursor.getColumnIndex(KnittingDatabaseHelper.KnittingTable.Cols.ID);
         final int idTitle = cursor.getColumnIndex(KnittingDatabaseHelper.KnittingTable.Cols.TITLE);
