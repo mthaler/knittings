@@ -33,6 +33,17 @@ public class KnittingsDataSource {
         return sKnittingsDataSource;
     }
 
+    /**
+     * Creates a new knitting and adds it to the database
+     *
+     * @param title title
+     * @param description description
+     * @param started started date
+     * @param finished finished date
+     * @param needleDiameter needle diameter
+     * @param size size of knitting
+     * @return new knitting
+     */
     public Knitting createKnitting(String title, String description, Date started, Date finished, double needleDiameter, double size) {
         SQLiteDatabase database = dbHelper.getWritableDatabase();
         try {
@@ -61,6 +72,12 @@ public class KnittingsDataSource {
         }
     }
 
+    /**
+     * Updates a knitting in the database
+     *
+     * @param knitting knitting that should be updated
+     * @return updated knitting
+     */
     public Knitting updateKnitting(Knitting knitting) {
         SQLiteDatabase database = dbHelper.getWritableDatabase();
         try {
@@ -92,6 +109,11 @@ public class KnittingsDataSource {
         }
     }
 
+    /**
+     * Deletes the given knitting from the database
+     *
+     * @param knitting knitting that should be deleted
+     */
     public void deleteKnitting(Knitting knitting) {
         final long id = knitting.getId();
 
@@ -104,7 +126,11 @@ public class KnittingsDataSource {
         }
     }
 
-
+    /**
+     * Returns all knittings from the database
+     *
+     * @return all knittings from database
+     */
     public ArrayList<Knitting> getAllKnittings() {
         SQLiteDatabase database = dbHelper.getWritableDatabase();
         try {
@@ -130,6 +156,12 @@ public class KnittingsDataSource {
         }
     }
 
+    /**
+     * Gets the knitting with the given id from the database
+     *
+     * @param id id of the knitting that should be read from database
+     * @return knitting for the given id
+     */
     public Knitting getKnitting(long id) {
         SQLiteDatabase database = dbHelper.getWritableDatabase();
         try {
@@ -154,6 +186,12 @@ public class KnittingsDataSource {
         return new File(externalFilesDir, knitting.getPhotoFilename());
     }
 
+    /**
+     * Get all photos for the given knitting
+     *
+     * @param knitting knitting to get photos for
+     * @return list of photos for the given knitting
+     */
     public ArrayList<Photo> getAllPhotos(Knitting knitting) {
         SQLiteDatabase database = dbHelper.getWritableDatabase();
         try {
@@ -181,6 +219,11 @@ public class KnittingsDataSource {
         }
     }
 
+    /**
+     * Delete all photos for the given knitting
+     *
+     * @param knitting knitting to delete photos for
+     */
     public void deleteAllPhotos(Knitting knitting) {
         final long id = knitting.getId();
 
