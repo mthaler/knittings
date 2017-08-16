@@ -1,5 +1,6 @@
 package com.mthaler.knittings;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -77,7 +78,8 @@ public class Knitting {
     }
 
     public String getPhotoFilename() {
-        return "IMG_" + id + ".jpg";
+        String timeStamp = new SimpleDateFormat("yyyy_MM_dd_HH_mm_ss").format(new Date());
+        return "IMG_" + timeStamp + ".jpg";
     }
 
     @Override

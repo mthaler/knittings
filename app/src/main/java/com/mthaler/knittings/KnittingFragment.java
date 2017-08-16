@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.nfc.Tag;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
@@ -12,15 +13,19 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.content.FileProvider;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.io.File;
+import java.io.IOException;
 import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -46,6 +51,7 @@ public class KnittingFragment extends Fragment implements KnittingDetailsView {
     private EditText editTextNeedleDiameter;
     private EditText editTextSize;
     private ImageView imageView;
+    private File currentPhotoPath;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
@@ -152,12 +158,30 @@ public class KnittingFragment extends Fragment implements KnittingDetailsView {
         });
 
         // initialize image view
-        imageView = v.findViewById(R.id.imageView);
-        imageView.setOnClickListener(new View.OnClickListener() {
+//        imageView = v.findViewById(R.id.imageView);
+//        imageView.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                final Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//                final File photoFile = KnittingsDataSource.getInstance(getActivity()).getPhotoFile(knitting);
+//                final PackageManager packageManager = getActivity().getPackageManager();
+//                boolean canTakePhoto = photoFile != null && takePictureIntent.resolveActivity(packageManager) != null;
+//                if (canTakePhoto) {
+//                    Uri uri = FileProvider.getUriForFile(getContext(), "com.mthaler.knittings.fileprovider", photoFile);
+//                    takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
+//                    startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+//                }
+//
+//            }
+//        });
+
+        final Button buttonTakePhoto = v.findViewById(R.id.buttonTakePhoto);
+        buttonTakePhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 final Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 final File photoFile = KnittingsDataSource.getInstance(getActivity()).getPhotoFile(knitting);
+                currentPhotoPath = photoFile;
                 final PackageManager packageManager = getActivity().getPackageManager();
                 boolean canTakePhoto = photoFile != null && takePictureIntent.resolveActivity(packageManager) != null;
                 if (canTakePhoto) {
@@ -165,7 +189,6 @@ public class KnittingFragment extends Fragment implements KnittingDetailsView {
                     takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
                     startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
                 }
-
             }
         });
 
@@ -194,9 +217,10 @@ public class KnittingFragment extends Fragment implements KnittingDetailsView {
             knitting.setFinished(date);
             textViewFinished.setText(DateFormat.getDateInstance().format(knitting.getFinished()));
         } else if (requestCode == REQUEST_IMAGE_CAPTURE) {
-            final File photoFile = KnittingsDataSource.getInstance(getActivity()).getPhotoFile(knitting);
+            final File photoFile = currentPhotoPath;
             final Bitmap bitmap = PictureUtils.getScaledBitmap(photoFile.getPath(), getActivity());
-            imageView.setImageBitmap(bitmap);
+            // add photo to database
+            KnittingsDataSource.getInstance(getActivity()).createPhoto(currentPhotoPath, knitting.getId(), null);
         }
     }
 
@@ -210,11 +234,12 @@ public class KnittingFragment extends Fragment implements KnittingDetailsView {
         editTextNeedleDiameter.setText(Double.toString(knitting.getNeedleDiameter()));
         editTextSize.setText(Double.toString(knitting.getSize()));
         // if there is a photo, display it
-        final File photoFile = KnittingsDataSource.getInstance(getActivity()).getPhotoFile(knitting);
-        if (photoFile.exists()) {
-            final Bitmap bitmap = PictureUtils.getScaledBitmap(photoFile.getPath(), getActivity());
-            imageView.setImageBitmap(bitmap);
-        }
+        Log.d("sql", "" + KnittingsDataSource.getInstance(getActivity()).getAllPhotos(knitting));
+//        final File photoFile = KnittingsDataSource.getInstance(getActivity()).getPhotoFile(knitting);
+//        if (photoFile.exists()) {
+//            final Bitmap bitmap = PictureUtils.getScaledBitmap(photoFile.getPath(), getActivity());
+//            imageView.setImageBitmap(bitmap);
+//        }
     }
 
     /**
