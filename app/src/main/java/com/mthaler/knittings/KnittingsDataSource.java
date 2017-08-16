@@ -9,6 +9,7 @@ import android.graphics.BitmapFactory;
 import android.os.Environment;
 import android.util.Log;
 import java.io.File;
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -214,6 +215,42 @@ public class KnittingsDataSource {
             cursor.close();
 
             return photos;
+        } finally {
+            database.close();
+        }
+    }
+
+    /**
+     * Creates a new photo and adds it to the database
+     *
+     * @param filename filename of the photo
+     * @param knittingID id of the knitting this photo belongs to
+     * @param preview preview of the photo. Might be null
+     * @return new photo
+     */
+    public Photo createPhoto(File filename, long knittingID, Bitmap preview) {
+        SQLiteDatabase database = dbHelper.getWritableDatabase();
+        try {
+            final ContentValues values = new ContentValues();
+            values.put(KnittingDatabaseHelper.PhotoTable.Cols.FILENAME, filename.getPath());
+            values.put(KnittingDatabaseHelper.PhotoTable.Cols.KNITTING_ID, knittingID);
+            if (preview != null) {
+                final int byteCount = preview.getByteCount();
+                final ByteBuffer buffer = ByteBuffer.allocate(byteCount);
+                preview.copyPixelsToBuffer(buffer);
+                values.put(KnittingDatabaseHelper.PhotoTable.Cols.PREVIEW, buffer.array());
+            }
+
+            final long id = database.insert(KnittingDatabaseHelper.PhotoTable.PHOTOS, null, values);
+
+            final Cursor cursor = database.query(KnittingDatabaseHelper.PhotoTable.PHOTOS,
+                    KnittingDatabaseHelper.PhotoTable.Columns, KnittingDatabaseHelper.PhotoTable.Cols.ID + "=" + id, null, null, null, null);
+
+            cursor.moveToFirst();
+            final Photo photo = cursorToPhoto(cursor);
+            cursor.close();
+
+            return photo;
         } finally {
             database.close();
         }
