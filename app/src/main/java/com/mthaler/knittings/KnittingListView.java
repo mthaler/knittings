@@ -2,5 +2,5 @@ package com.mthaler.knittings;
 
 public interface KnittingListView {
 
-    public void addKnitting();
+    void addKnitting();
 }

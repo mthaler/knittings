@@ -1,8 +1,6 @@
 package com.mthaler.knittings;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 /**
  * The Knitting class stores data for a single knitting
