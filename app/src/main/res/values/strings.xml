@@ -10,4 +10,7 @@
     <string name="date_picker_title">Date</string>
     <string name="knitting_needle_diameter_hint">Needle Diameter</string>
     <string name="knitting_size_hint">Size</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
