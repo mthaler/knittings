@@ -173,6 +173,25 @@ public class KnittingsDataSource {
     }
 
     /**
+     * Gets the photo with the given id from the database
+     *
+     * @param id id of the photo that should be read from database
+     * @return photo for the given id
+     */
+    public Photo getPhoto(long id) {
+        try (SQLiteDatabase database = dbHelper.getWritableDatabase()) {
+            final Cursor cursor = database.query(KnittingDatabaseHelper.PhotoTable.PHOTOS,
+                    KnittingDatabaseHelper.PhotoTable.Columns, KnittingDatabaseHelper.PhotoTable.Cols.ID + "=" + id, null, null, null, null);
+
+            cursor.moveToFirst();
+            final Photo photo = cursorToPhoto(cursor);
+            cursor.close();
+
+            return photo;
+        }
+    }
+
+    /**
      * Get all photos for the given knitting
      *
      * @param knitting knitting to get photos for

@@ -7,6 +7,8 @@ import android.util.Log;
 
 public class PhotoActivity extends AppCompatActivity {
 
+    public static final String EXTRA_PHOTO_ID = "com.mthaler.knitting.PHOTO_ID";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -16,7 +18,11 @@ public class PhotoActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         // get the id of the knitting that should be displayed.
-        final long id = getIntent().getLongExtra("id", -1);
-        Log.d("PhotoActivity", "Photo id: " + id);
+        final long id = getIntent().getLongExtra(EXTRA_PHOTO_ID, -1);
+        final Photo photo = KnittingsDataSource.getInstance(this).getPhoto(id);
+
+        // init knitting
+        final PhotoDetailsView photoDetailsView = (PhotoDetailsView) getSupportFragmentManager().findFragmentById(R.id.fragment_photo);
+        photoDetailsView.init(photo);
     }
 }
