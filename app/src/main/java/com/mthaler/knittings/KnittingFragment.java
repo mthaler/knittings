@@ -254,4 +254,9 @@ public class KnittingFragment extends Fragment implements KnittingDetailsView {
         KnittingsDataSource.getInstance(getActivity()).deleteKnitting(knitting);
         knitting = null;
     }
+
+    @Override
+    public Knitting getKnitting() {
+        return knitting;
+    }
 }

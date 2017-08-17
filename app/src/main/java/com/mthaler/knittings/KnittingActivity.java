@@ -23,14 +23,22 @@ public class KnittingActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_knitting);
         final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        // get the id of the knitting that should be displayed.
-        final long id = getIntent().getLongExtra(EXTRA_KNITTING_ID, -1);
-        final Knitting knitting = KnittingsDataSource.getInstance(this.getApplicationContext()).getKnitting(id);
+        Knitting knitting;
+        if (savedInstanceState != null) {
+            final long id = savedInstanceState.getLong(EXTRA_KNITTING_ID);
+            knitting = KnittingsDataSource.getInstance(this.getApplicationContext()).getKnitting(id);
+        } else {
+            // get the id of the knitting that should be displayed.
+            final long id = getIntent().getLongExtra(EXTRA_KNITTING_ID, -1);
+                knitting = KnittingsDataSource.getInstance(this.getApplicationContext()).getKnitting(id);
+        }
+
 
         // init knitting
         final KnittingDetailsView knittingDetailsView = (KnittingDetailsView) getSupportFragmentManager().findFragmentById(R.id.fragment_knitting);
@@ -72,5 +80,16 @@ public class KnittingActivity extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        final KnittingDetailsView knittingDetailsView = (KnittingDetailsView) getSupportFragmentManager().findFragmentById(R.id.fragment_knitting);
+        final Knitting knitting = knittingDetailsView.getKnitting();
+        if (knitting != null) {
+            outState.putLong(EXTRA_KNITTING_ID, knitting.getId());
+        }
+        // call superclass to save any view hierarchy
+        super.onSaveInstanceState(outState);
     }
 }
