@@ -61,6 +61,7 @@ public class KnittingDatabaseHelper extends SQLiteOpenHelper {
             public static final String ID = "_id";
             public static final String FILENAME = "filename";
             public static final String PREVIEW = "preview";
+            public static final String DESCRIPTION = "description";
             public static final String KNITTING_ID = "knitting_id";
         }
 
@@ -68,6 +69,7 @@ public class KnittingDatabaseHelper extends SQLiteOpenHelper {
                 Cols.ID,
                 Cols.FILENAME,
                 Cols.PREVIEW,
+                Cols.DESCRIPTION,
                 Cols.KNITTING_ID
         };
 
@@ -76,6 +78,7 @@ public class KnittingDatabaseHelper extends SQLiteOpenHelper {
                         "(" + Cols.ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                         Cols.FILENAME + " TEXT NOT NULL, " +
                         Cols.PREVIEW + " BLOB, " +
+                        Cols.DESCRIPTION + " TEXT NOT NULL, " +
                         Cols.KNITTING_ID + " INTEGER NOT NULL, " +
                         "FOREIGN KEY(" + Cols.KNITTING_ID + ") REFERENCES " + KnittingTable.KNITTINGS + "(" + KnittingTable.Cols.ID + "));";
 

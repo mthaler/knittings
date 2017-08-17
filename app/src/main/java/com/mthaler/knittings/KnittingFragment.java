@@ -216,7 +216,7 @@ public class KnittingFragment extends Fragment implements KnittingDetailsView {
             final File photoFile = currentPhotoPath;
             final Bitmap bitmap = PictureUtils.getScaledBitmap(photoFile.getPath(), getActivity());
             // add photo to database
-            KnittingsDataSource.getInstance(getActivity()).createPhoto(currentPhotoPath, knitting.getId(), null);
+            KnittingsDataSource.getInstance(getActivity()).createPhoto(currentPhotoPath, knitting.getId(), null, "");
         }
     }
 

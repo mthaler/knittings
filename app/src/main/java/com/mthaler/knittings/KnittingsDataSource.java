@@ -229,11 +229,12 @@ public class KnittingsDataSource {
      * @param preview preview of the photo. Might be null
      * @return new photo
      */
-    public Photo createPhoto(File filename, long knittingID, Bitmap preview) {
+    public Photo createPhoto(File filename, long knittingID, Bitmap preview, String description) {
         try (SQLiteDatabase database = dbHelper.getWritableDatabase()) {
             final ContentValues values = new ContentValues();
             values.put(KnittingDatabaseHelper.PhotoTable.Cols.FILENAME, filename.getAbsolutePath());
             values.put(KnittingDatabaseHelper.PhotoTable.Cols.KNITTING_ID, knittingID);
+            values.put(KnittingDatabaseHelper.PhotoTable.Cols.DESCRIPTION, description);
             if (preview != null) {
                 final int byteCount = preview.getByteCount();
                 final ByteBuffer buffer = ByteBuffer.allocate(byteCount);
@@ -265,6 +266,7 @@ public class KnittingsDataSource {
             final ContentValues values = new ContentValues();
             values.put(KnittingDatabaseHelper.PhotoTable.Cols.FILENAME, photo.getFilename().getAbsolutePath());
             values.put(KnittingDatabaseHelper.PhotoTable.Cols.KNITTING_ID, photo.getKnittingID());
+            values.put(KnittingDatabaseHelper.PhotoTable.Cols.KNITTING_ID, photo.getDescription());
             final Bitmap preview = photo.getPreview();
             if (preview != null) {
                 final int byteCount = preview.getByteCount();
@@ -338,13 +340,15 @@ public class KnittingsDataSource {
         final int idPreview = cursor.getColumnIndex(KnittingDatabaseHelper.PhotoTable.Cols.PREVIEW);
         final int idFilename = cursor.getColumnIndex(KnittingDatabaseHelper.PhotoTable.Cols.FILENAME);
         final int idKnittingIndex = cursor.getColumnIndex(KnittingDatabaseHelper.PhotoTable.Cols.KNITTING_ID);
+        final int idDescription = cursor.getColumnIndex(KnittingDatabaseHelper.PhotoTable.Cols.DESCRIPTION);
 
         final long id = cursor.getLong(idIndex);
         final String filename = cursor.getString(idFilename);
         final byte[] previewBytes = cursor.isNull(idPreview) ? null : cursor.getBlob(idPreview);
         final long knittingID = cursor.getLong(idKnittingIndex);
+        final String description = cursor.getString(idDescription);
 
-        final Photo photo = new Photo(id, new File(filename), knittingID);
+        final Photo photo = new Photo(id, new File(filename), knittingID, description);
         if (previewBytes != null) {
             BitmapFactory.Options options = new BitmapFactory.Options();
             Bitmap preview  = BitmapFactory.decodeByteArray(previewBytes, 0, previewBytes.length, options);
