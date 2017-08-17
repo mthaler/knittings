@@ -18,6 +18,8 @@ import android.view.MenuItem;
  */
 public class KnittingActivity extends AppCompatActivity {
 
+    public static final String EXTRA_KNITTING_ID = "com.mthaler.knitting.KNITTING_ID";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,7 +29,7 @@ public class KnittingActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         // get the id of the knitting that should be displayed.
-        final long id = getIntent().getLongExtra(KnittingFragment.EXTRA_KNITTING_ID, -1);
+        final long id = getIntent().getLongExtra(EXTRA_KNITTING_ID, -1);
         final Knitting knitting = KnittingsDataSource.getInstance(this.getApplicationContext()).getKnitting(id);
 
         // init knitting

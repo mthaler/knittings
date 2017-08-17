@@ -38,8 +38,6 @@ import java.util.List;
  */
 public class KnittingFragment extends Fragment implements KnittingDetailsView {
 
-    public static final String EXTRA_KNITTING_ID = "com.mthaler.knitting.KNITTING_ID";
-
     private static final String DIALOG_DATE = "date";
     private static final int REQUEST_STARTED = 0;
     private static final int REQUEST_FINISHED = 1;
