@@ -23,7 +23,7 @@ public class KnittingsDataSource {
     private final KnittingDatabaseHelper dbHelper;
 
     private KnittingsDataSource(Context context) {
-        this.context = context;
+        this.context = context.getApplicationContext();
         dbHelper = new KnittingDatabaseHelper(context);
     }
 
