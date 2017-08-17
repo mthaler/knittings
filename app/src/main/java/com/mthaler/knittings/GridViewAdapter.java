@@ -8,15 +8,14 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import java.util.ArrayList;
+import java.util.List;
 
 public class GridViewAdapter extends ArrayAdapter {
     private Context context;
     private int layoutResourceId;
-    private ArrayList<Photo> data = new ArrayList<>();
+    private List<Photo> data;
 
-    public GridViewAdapter(Context context, int layoutResourceId, ArrayList data) {
+    public GridViewAdapter(Context context, int layoutResourceId, List<Photo> data) {
         super(context, layoutResourceId, data);
         this.layoutResourceId = layoutResourceId;
         this.context = context;
@@ -40,7 +39,7 @@ public class GridViewAdapter extends ArrayAdapter {
         }
 
         Photo item = data.get(position);
-        //holder.image.setImageBitmap(item.getImage());
+        holder.image.setImageBitmap(PictureUtils.getScaledBitmap(item.getFilename().getAbsolutePath(), 400, 400));
         return row;
     }
 

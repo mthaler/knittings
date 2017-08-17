@@ -19,6 +19,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -27,6 +28,7 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 /**
  * KnittingFragment shows a single knitting
@@ -50,7 +52,7 @@ public class KnittingFragment extends Fragment implements KnittingDetailsView {
     private TextView textViewFinished;
     private EditText editTextNeedleDiameter;
     private EditText editTextSize;
-    private ImageView imageView;
+    private GridView gridView;
     private File currentPhotoPath;
 
     @Override
@@ -157,6 +159,8 @@ public class KnittingFragment extends Fragment implements KnittingDetailsView {
             }
         });
 
+        gridView = (GridView) v.findViewById(R.id.gridView);
+
         // initialize image view
 //        imageView = v.findViewById(R.id.imageView);
 //        imageView.setOnClickListener(new View.OnClickListener() {
@@ -233,8 +237,9 @@ public class KnittingFragment extends Fragment implements KnittingDetailsView {
         textViewFinished.setText(knitting.getFinished() != null ? DateFormat.getDateInstance().format(knitting.getFinished()) : "");
         editTextNeedleDiameter.setText(Double.toString(knitting.getNeedleDiameter()));
         editTextSize.setText(Double.toString(knitting.getSize()));
-        // if there is a photo, display it
-        Log.d("sql", "" + KnittingsDataSource.getInstance(getActivity()).getAllPhotos(knitting));
+        final List<Photo> photos = KnittingsDataSource.getInstance(getActivity()).getAllPhotos(knitting);
+        GridViewAdapter gridAdapter = new GridViewAdapter(getActivity(), R.layout.grid_item_layout, photos);
+        gridView.setAdapter(gridAdapter);
 //        final File photoFile = KnittingsDataSource.getInstance(getActivity()).getPhotoFile(knitting);
 //        if (photoFile.exists()) {
 //            final Bitmap bitmap = PictureUtils.getScaledBitmap(photoFile.getPath(), getActivity());

@@ -213,7 +213,7 @@ public class KnittingsDataSource {
     public Photo createPhoto(File filename, long knittingID, Bitmap preview) {
         try (SQLiteDatabase database = dbHelper.getWritableDatabase()) {
             final ContentValues values = new ContentValues();
-            values.put(KnittingDatabaseHelper.PhotoTable.Cols.FILENAME, filename.getPath());
+            values.put(KnittingDatabaseHelper.PhotoTable.Cols.FILENAME, filename.getAbsolutePath());
             values.put(KnittingDatabaseHelper.PhotoTable.Cols.KNITTING_ID, knittingID);
             if (preview != null) {
                 final int byteCount = preview.getByteCount();
@@ -244,7 +244,7 @@ public class KnittingsDataSource {
     public Photo updatePhoto(Photo photo) {
         try (SQLiteDatabase database = dbHelper.getWritableDatabase()) {
             final ContentValues values = new ContentValues();
-            values.put(KnittingDatabaseHelper.PhotoTable.Cols.FILENAME, photo.getFilename().getPath());
+            values.put(KnittingDatabaseHelper.PhotoTable.Cols.FILENAME, photo.getFilename().getAbsolutePath());
             values.put(KnittingDatabaseHelper.PhotoTable.Cols.KNITTING_ID, photo.getKnittingID());
             final Bitmap preview = photo.getPreview();
             if (preview != null) {
