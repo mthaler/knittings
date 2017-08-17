@@ -165,6 +165,7 @@ public class KnittingFragment extends Fragment implements KnittingDetailsView {
                 //Create intent
                 final Intent intent = new Intent(getActivity(), PhotoActivity.class);
                 intent.putExtra(PhotoActivity.EXTRA_PHOTO_ID, photo.getId());
+                intent.putExtra(KnittingActivity.EXTRA_KNITTING_ID, knitting.getId());
 
                 //Start details activity
                 startActivity(intent);
