@@ -3,7 +3,7 @@ package com.mthaler.knittings;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
+import android.view.Menu;
 
 public class PhotoActivity extends AppCompatActivity {
 
@@ -24,5 +24,12 @@ public class PhotoActivity extends AppCompatActivity {
         // init knitting
         final PhotoDetailsView photoDetailsView = (PhotoDetailsView) getSupportFragmentManager().findFragmentById(R.id.fragment_photo);
         photoDetailsView.init(photo);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.photo, menu);
+        return true;
     }
 }
