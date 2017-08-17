@@ -213,10 +213,12 @@ public class KnittingFragment extends Fragment implements KnittingDetailsView {
             knitting.setFinished(date);
             textViewFinished.setText(DateFormat.getDateInstance().format(knitting.getFinished()));
         } else if (requestCode == REQUEST_IMAGE_CAPTURE) {
-            final File photoFile = currentPhotoPath;
-            final Bitmap bitmap = PictureUtils.getScaledBitmap(photoFile.getPath(), getActivity());
             // add photo to database
             KnittingsDataSource.getInstance(getActivity()).createPhoto(currentPhotoPath, knitting.getId(), null, "");
+            // update grid view
+            final List<Photo> photos = KnittingsDataSource.getInstance(getActivity()).getAllPhotos(knitting);
+            final GridViewAdapter gridAdapter = new GridViewAdapter(getActivity(), R.layout.grid_item_layout, photos);
+            gridView.setAdapter(gridAdapter);
         }
     }
 
@@ -230,13 +232,8 @@ public class KnittingFragment extends Fragment implements KnittingDetailsView {
         editTextNeedleDiameter.setText(Double.toString(knitting.getNeedleDiameter()));
         editTextSize.setText(Double.toString(knitting.getSize()));
         final List<Photo> photos = KnittingsDataSource.getInstance(getActivity()).getAllPhotos(knitting);
-        GridViewAdapter gridAdapter = new GridViewAdapter(getActivity(), R.layout.grid_item_layout, photos);
+        final GridViewAdapter gridAdapter = new GridViewAdapter(getActivity(), R.layout.grid_item_layout, photos);
         gridView.setAdapter(gridAdapter);
-//        final File photoFile = KnittingsDataSource.getInstance(getActivity()).getPhotoFile(knitting);
-//        if (photoFile.exists()) {
-//            final Bitmap bitmap = PictureUtils.getScaledBitmap(photoFile.getPath(), getActivity());
-//            imageView.setImageBitmap(bitmap);
-//        }
     }
 
     /**
