@@ -292,6 +292,20 @@ public class KnittingsDataSource {
     }
 
     /**
+     * Deletes the given photo from the database
+     *
+     * @param photo photo that should be deleted
+     */
+    public void deletePhoto(Photo photo) {
+        final long id = photo.getId();
+
+        try (SQLiteDatabase database = dbHelper.getWritableDatabase()) {
+            database.delete(KnittingDatabaseHelper.PhotoTable.PHOTOS, KnittingDatabaseHelper.PhotoTable.Cols.ID + "=" + id, null);
+            Log.d(LOG_TAG, "Removed photo " + id + ": " + photo.toString());
+        }
+    }
+
+    /**
      * Delete all photos for the given knitting
      *
      * @param knitting knitting to delete photos for
