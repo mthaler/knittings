@@ -5,6 +5,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -25,21 +26,35 @@ public class GridViewAdapter extends ArrayAdapter<Photo> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View row = convertView;
-        ViewHolder holder = null;
+        ViewHolder h;
 
         if (row == null) {
             LayoutInflater inflater = ((Activity) context).getLayoutInflater();
             row = inflater.inflate(layoutResourceId, parent, false);
-            holder = new ViewHolder();
-            holder.imageTitle = row.findViewById(R.id.text);
-            holder.image = row.findViewById(R.id.image);
-            row.setTag(holder);
+            h = new ViewHolder();
+            h.imageTitle = row.findViewById(R.id.text);
+            h.image = row.findViewById(R.id.image);
+            row.setTag(h);
         } else {
-            holder = (ViewHolder) row.getTag();
+            h = (ViewHolder) row.getTag();
         }
 
-        Photo item = data.get(position);
-        holder.image.setImageBitmap(PictureUtils.getScaledBitmap(item.getFilename().getAbsolutePath(), 400, 400));
+        final ViewHolder holder = h;
+
+        final Photo item = data.get(position);
+        // we use a view tree observer to get the width and the height of the image view and scale the image accordingly reduce memory usage
+        final ViewTreeObserver viewTreeObserver = holder.image.getViewTreeObserver();
+        viewTreeObserver.addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+            @Override
+            public boolean onPreDraw() {
+            holder.image.getViewTreeObserver().removeOnPreDrawListener(this);
+            final int width = holder.image.getMeasuredWidth();
+            final int height = holder.image.getMeasuredHeight();
+            holder.image.setImageBitmap(PictureUtils.getScaledBitmap(item.getFilename().getAbsolutePath(), width, height));
+            return true;
+            }
+        });
+
         return row;
     }
 
