@@ -8,7 +8,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Environment;
 import android.util.Log;
-
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.nio.ByteBuffer;
@@ -89,6 +88,9 @@ public class KnittingsDataSource {
             }
             values.put(KnittingDatabaseHelper.KnittingTable.Cols.NEEDLE_DIAMETER, knitting.getNeedleDiameter());
             values.put(KnittingDatabaseHelper.KnittingTable.Cols.SIZE, knitting.getSize());
+            if (knitting.getDefaultPhoto() != null) {
+                values.put(KnittingDatabaseHelper.KnittingTable.Cols.DEFAULT_PHOTO_ID, knitting.getDefaultPhoto().getId());
+            }
 
             database.update(KnittingDatabaseHelper.KnittingTable.KNITTINGS,
                     values,
@@ -331,6 +333,7 @@ public class KnittingsDataSource {
         final int idFinished = cursor.getColumnIndex(KnittingDatabaseHelper.KnittingTable.Cols.FINISHED);
         final int idNeedleDiameter = cursor.getColumnIndex(KnittingDatabaseHelper.KnittingTable.Cols.NEEDLE_DIAMETER);
         final int idSize = cursor.getColumnIndex(KnittingDatabaseHelper.KnittingTable.Cols.SIZE);
+        final int idDefaultPhoto = cursor.getColumnIndex(KnittingDatabaseHelper.KnittingTable.Cols.DEFAULT_PHOTO_ID);
 
         final long id = cursor.getLong(idIndex);
         final String title = cursor.getString(idTitle);
@@ -340,6 +343,12 @@ public class KnittingsDataSource {
         final double needleDiameter = cursor.getDouble(idNeedleDiameter);
         final double size = cursor.getDouble(idSize);
 
+        Photo defaultPhoto = null;
+        if (!cursor.isNull(idDefaultPhoto)) {
+            final long defaultPhotoID = cursor.getLong(idDefaultPhoto);
+            defaultPhoto = getPhoto(defaultPhotoID);
+        }
+
         final Knitting knitting = new Knitting(id);
         knitting.setTitle(title);
         knitting.setDescription(description);
@@ -347,6 +356,9 @@ public class KnittingsDataSource {
         knitting.setFinished(finished);
         knitting.setNeedleDiameter(needleDiameter);
         knitting.setSize(size);
+        if (defaultPhoto != null) {
+            knitting.setDefaultPhoto(defaultPhoto);
+        }
 
         return knitting;
     }
