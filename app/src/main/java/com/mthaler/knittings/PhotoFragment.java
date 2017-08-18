@@ -9,9 +9,13 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.EditText;
 import android.widget.ImageView;
 
+/**
+ * PhotoFragment displays a photo and the description
+ */
 public class PhotoFragment extends Fragment implements PhotoDetailsView {
 
     private Photo photo;
@@ -21,11 +25,11 @@ public class PhotoFragment extends Fragment implements PhotoDetailsView {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
-        // crreate view
         final View v = inflater.inflate(R.layout.fragment_photo, parent, false);
 
         imageView = (ImageView) v.findViewById(R.id.image);
 
+        // initialize description edit text
         editTextDescription = v.findViewById(R.id.photo_description);
         editTextDescription.addTextChangedListener(new TextWatcher() {
             public void onTextChanged(CharSequence c, int start, int before, int count) {
@@ -55,7 +59,18 @@ public class PhotoFragment extends Fragment implements PhotoDetailsView {
     @Override
     public void init(Photo photo) {
         this.photo = photo;
-        imageView.setImageBitmap(PictureUtils.getScaledBitmap(photo.getFilename().getAbsolutePath(), getActivity()));
+        // we use a view tree observer to get the width and the height of the image view and scale the image accordingly reduce memory usage
+        final ViewTreeObserver viewTreeObserver = imageView.getViewTreeObserver();
+        viewTreeObserver.addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+            @Override
+            public boolean onPreDraw() {
+                PhotoFragment.this.imageView.getViewTreeObserver().removeOnPreDrawListener(this);
+                final int width = imageView.getMeasuredWidth();
+                final int height = imageView.getMeasuredHeight();
+                imageView.setImageBitmap(PictureUtils.getScaledBitmap(PhotoFragment.this.photo.getFilename().getAbsolutePath(), width, height));
+                return true;
+            }
+        });
         editTextDescription.setText(photo.getDescription());
     }
 
