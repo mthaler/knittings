@@ -362,7 +362,8 @@ public class KnittingsDataSource {
         final long knittingID = cursor.getLong(idKnittingIndex);
         final String description = cursor.getString(idDescription);
 
-        final Photo photo = new Photo(id, new File(filename), knittingID, description);
+        final Photo photo = new Photo(id, new File(filename), knittingID);
+        photo.setDescription(description);
         if (previewBytes != null) {
             BitmapFactory.Options options = new BitmapFactory.Options();
             Bitmap preview  = BitmapFactory.decodeByteArray(previewBytes, 0, previewBytes.length, options);

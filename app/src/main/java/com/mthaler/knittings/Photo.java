@@ -14,13 +14,13 @@ public class Photo {
     private final File filename;
     private final long knittingID;
     private Bitmap preview;
-    private final String description;
+    private String description;
 
-    public Photo(long id, File filename, long knittingID, String description) {
+    public Photo(long id, File filename, long knittingID) {
         this.id = id;
         this.filename = filename;
         this.knittingID = knittingID;
-        this.description = description;
+        this.description = "";
     }
 
     public long getId() {
@@ -45,5 +45,19 @@ public class Photo {
 
     public String getDescription() {
         return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    @Override
+    public String toString() {
+        return "Photo{" +
+                "id=" + id +
+                ", filename=" + filename +
+                ", knittingID=" + knittingID +
+                ", description='" + description + '\'' +
+                '}';
     }
 }
