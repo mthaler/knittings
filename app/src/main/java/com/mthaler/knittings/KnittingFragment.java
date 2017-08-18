@@ -224,6 +224,16 @@ public class KnittingFragment extends Fragment implements KnittingDetailsView {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        if (knitting != null) {
+            final List<Photo> photos = KnittingsDataSource.getInstance(getActivity()).getAllPhotos(knitting);
+            final GridViewAdapter gridAdapter = new GridViewAdapter(getActivity(), R.layout.grid_item_layout, photos);
+            gridView.setAdapter(gridAdapter);
+        }
+    }
+
+    @Override
     public void init(Knitting knitting) {
         this.knitting = knitting;
         editTextTitle.setText(knitting.getTitle());
