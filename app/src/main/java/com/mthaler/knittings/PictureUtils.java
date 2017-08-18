@@ -7,33 +7,40 @@ import android.graphics.Point;
 
 public class PictureUtils {
 
-    public static Bitmap getScaledBitmap(String path, int destWidth, int destHeight) {
-        // Read in the dimensions of the image on disk
-        BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inJustDecodeBounds = true;
-        BitmapFactory.decodeFile(path, options);
-        final float srcWidth = options.outWidth;
-        final float srcHeight = options.outHeight;
-        // Figure out how much to scale down by
+    public static int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
+        // Raw height and width of image
+        final int height = options.outHeight;
+        final int width = options.outWidth;
         int inSampleSize = 1;
-        if (srcHeight > destHeight || srcWidth > destWidth) {
-            if (srcWidth > srcHeight) {
-                inSampleSize = Math.round(srcHeight / destHeight);
-            } else {
-                inSampleSize = Math.round(srcWidth / destWidth);
+
+        if (height > reqHeight || width > reqWidth) {
+
+            final int halfHeight = height / 2;
+            final int halfWidth = width / 2;
+
+            // Calculate the largest inSampleSize value that is a power of 2 and keeps both
+            // height and width larger than the requested height and width.
+            while ((halfHeight / inSampleSize) >= reqHeight
+                    && (halfWidth / inSampleSize) >= reqWidth) {
+                inSampleSize *= 2;
             }
         }
-        options = new BitmapFactory.Options();
-        options.inSampleSize = inSampleSize;
 
-        // Read in and create final bitmap
+        return inSampleSize;
+    }
+
+    public static Bitmap decodeSampledBitmapFromPath(String path, int reqWidth, int reqHeight) {
+
+        // First decode with inJustDecodeBounds=true to check dimensions
+        final BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(path, options);
+
+        // Calculate inSampleSize
+        options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
+
+        // Decode bitmap with inSampleSize set
+        options.inJustDecodeBounds = false;
         return BitmapFactory.decodeFile(path, options);
     }
-
-    public static Bitmap getScaledBitmap(String path, Activity activity) {
-        final Point size = new Point();
-        activity.getWindowManager().getDefaultDisplay().getSize(size);
-        return getScaledBitmap(path, size.x, size.y);
-    }
-
 }

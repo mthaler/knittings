@@ -50,7 +50,7 @@ public class GridViewAdapter extends ArrayAdapter<Photo> {
             holder.image.getViewTreeObserver().removeOnPreDrawListener(this);
             final int width = holder.image.getMeasuredWidth();
             final int height = holder.image.getMeasuredHeight();
-            holder.image.setImageBitmap(PictureUtils.getScaledBitmap(item.getFilename().getAbsolutePath(), width, height));
+            holder.image.setImageBitmap(PictureUtils.decodeSampledBitmapFromPath(item.getFilename().getAbsolutePath(), width, height));
             return true;
             }
         });

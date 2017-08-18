@@ -209,7 +209,7 @@ public class KnittingFragment extends Fragment implements KnittingDetailsView {
             textViewFinished.setText(DateFormat.getDateInstance().format(knitting.getFinished()));
         } else if (requestCode == REQUEST_IMAGE_CAPTURE) {
             // add photo to database
-            Bitmap preview = PictureUtils.getScaledBitmap(currentPhotoPath.getAbsolutePath(), 200, 200);
+            Bitmap preview = PictureUtils.decodeSampledBitmapFromPath(currentPhotoPath.getAbsolutePath(), 200, 200);
             KnittingsDataSource.getInstance(getActivity()).createPhoto(currentPhotoPath, knitting.getId(), preview, "");
             // update grid view
             final List<Photo> photos = KnittingsDataSource.getInstance(getActivity()).getAllPhotos(knitting);

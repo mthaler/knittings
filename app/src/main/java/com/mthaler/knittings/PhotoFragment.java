@@ -65,7 +65,7 @@ public class PhotoFragment extends Fragment implements PhotoDetailsView {
                 PhotoFragment.this.imageView.getViewTreeObserver().removeOnPreDrawListener(this);
                 final int width = imageView.getMeasuredWidth();
                 final int height = imageView.getMeasuredHeight();
-                imageView.setImageBitmap(PictureUtils.getScaledBitmap(PhotoFragment.this.photo.getFilename().getAbsolutePath(), width, height));
+                imageView.setImageBitmap(PictureUtils.decodeSampledBitmapFromPath(PhotoFragment.this.photo.getFilename().getAbsolutePath(), width, height));
                 return true;
             }
         });
