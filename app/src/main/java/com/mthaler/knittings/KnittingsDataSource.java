@@ -241,11 +241,11 @@ public class KnittingsDataSource {
             values.put(KnittingDatabaseHelper.PhotoTable.Cols.FILENAME, filename.getAbsolutePath());
             values.put(KnittingDatabaseHelper.PhotoTable.Cols.KNITTING_ID, knittingID);
             values.put(KnittingDatabaseHelper.PhotoTable.Cols.DESCRIPTION, description);
-            if (preview != null) {
-                ByteArrayOutputStream out = new ByteArrayOutputStream();
-                preview.compress(Bitmap.CompressFormat.JPEG, 90, out);
-                final byte[] previewBytes = out.toByteArray();
+            final byte[] previewBytes = Photo.getBytes(preview);
+            if (previewBytes != null) {
                 values.put(KnittingDatabaseHelper.PhotoTable.Cols.PREVIEW, previewBytes);
+            } else {
+                values.putNull(KnittingDatabaseHelper.PhotoTable.Cols.PREVIEW);
             }
 
             final long id = database.insert(KnittingDatabaseHelper.PhotoTable.PHOTOS, null, values);
@@ -273,12 +273,11 @@ public class KnittingsDataSource {
             values.put(KnittingDatabaseHelper.PhotoTable.Cols.FILENAME, photo.getFilename().getAbsolutePath());
             values.put(KnittingDatabaseHelper.PhotoTable.Cols.KNITTING_ID, photo.getKnittingID());
             values.put(KnittingDatabaseHelper.PhotoTable.Cols.DESCRIPTION, photo.getDescription());
-            final Bitmap preview = photo.getPreview();
-            if (preview != null) {
-                final int byteCount = preview.getByteCount();
-                final ByteBuffer buffer = ByteBuffer.allocate(byteCount);
-                preview.copyPixelsToBuffer(buffer);
-                values.put(KnittingDatabaseHelper.PhotoTable.Cols.PREVIEW, buffer.array());
+            final byte[] previewBytes = Photo.getBytes(photo.getPreview());
+            if (previewBytes != null) {
+                values.put(KnittingDatabaseHelper.PhotoTable.Cols.PREVIEW, previewBytes);
+            } else {
+                values.putNull(KnittingDatabaseHelper.PhotoTable.Cols.PREVIEW);
             }
 
             database.update(KnittingDatabaseHelper.PhotoTable.PHOTOS,

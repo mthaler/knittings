@@ -2,6 +2,7 @@ package com.mthaler.knittings;
 
 import android.graphics.Bitmap;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 
 /**
@@ -49,6 +50,16 @@ public class Photo {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public static byte[] getBytes(Bitmap preview) {
+        if (preview != null) {
+            ByteArrayOutputStream out = new ByteArrayOutputStream();
+            preview.compress(Bitmap.CompressFormat.JPEG, 90, out);
+            return out.toByteArray();
+        } else {
+            return null;
+        }
     }
 
     @Override

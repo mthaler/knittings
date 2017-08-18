@@ -7,6 +7,7 @@ import android.support.v4.app.ListFragment;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import java.text.DateFormat;
@@ -76,6 +77,11 @@ public class KnittingListFragment extends ListFragment implements KnittingListVi
 
             final TextView startedTextView = convertView.findViewById(R.id.knitting_list_item_startedTextView);
             startedTextView.setText(DateFormat.getDateInstance().format(knitting.getStarted()));
+
+            if (knitting.getDefaultPhoto() != null && knitting.getDefaultPhoto().getPreview() != null) {
+                final ImageView photoView = convertView.findViewById(R.id.knitting_list_item_photoImageView);
+                photoView.setImageBitmap(knitting.getDefaultPhoto().getPreview());
+            }
 
             return convertView;
         }
