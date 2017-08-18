@@ -1,5 +1,7 @@
 package com.mthaler.knittings;
 
+import android.graphics.Bitmap;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
@@ -65,7 +67,21 @@ public class PhotoFragment extends Fragment implements PhotoDetailsView {
                 PhotoFragment.this.imageView.getViewTreeObserver().removeOnPreDrawListener(this);
                 final int width = imageView.getMeasuredWidth();
                 final int height = imageView.getMeasuredHeight();
-                imageView.setImageBitmap(PictureUtils.decodeSampledBitmapFromPath(PhotoFragment.this.photo.getFilename().getAbsolutePath(), width, height));
+                // loading and scaling the bitmap is expensive, use async task to do the work
+                final AsyncTask<String, Void, Bitmap> scaleBitmapTask = new AsyncTask<String, Void, Bitmap>() {
+                    @Override
+                    protected Bitmap doInBackground(String... strings) {
+                        return PictureUtils.decodeSampledBitmapFromPath(strings[0], width, height);
+                    }
+
+                    @Override
+                    protected void onPostExecute(Bitmap bitmap) {
+                        if (bitmap != null) {
+                            imageView.setImageBitmap(bitmap);
+                        }
+                    }
+                };
+                scaleBitmapTask.execute(PhotoFragment.this.photo.getFilename().getAbsolutePath());
                 return true;
             }
         });
