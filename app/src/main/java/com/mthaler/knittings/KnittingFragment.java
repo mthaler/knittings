@@ -3,6 +3,7 @@ package com.mthaler.knittings;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -208,7 +209,8 @@ public class KnittingFragment extends Fragment implements KnittingDetailsView {
             textViewFinished.setText(DateFormat.getDateInstance().format(knitting.getFinished()));
         } else if (requestCode == REQUEST_IMAGE_CAPTURE) {
             // add photo to database
-            KnittingsDataSource.getInstance(getActivity()).createPhoto(currentPhotoPath, knitting.getId(), null, "");
+            Bitmap preview = PictureUtils.getScaledBitmap(currentPhotoPath.getAbsolutePath(), 200, 200);
+            KnittingsDataSource.getInstance(getActivity()).createPhoto(currentPhotoPath, knitting.getId(), preview, "");
             // update grid view
             final List<Photo> photos = KnittingsDataSource.getInstance(getActivity()).getAllPhotos(knitting);
             final GridViewAdapter gridAdapter = new GridViewAdapter(getActivity(), R.layout.grid_item_layout, photos);

@@ -8,6 +8,8 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Environment;
 import android.util.Log;
+
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
@@ -236,10 +238,10 @@ public class KnittingsDataSource {
             values.put(KnittingDatabaseHelper.PhotoTable.Cols.KNITTING_ID, knittingID);
             values.put(KnittingDatabaseHelper.PhotoTable.Cols.DESCRIPTION, description);
             if (preview != null) {
-                final int byteCount = preview.getByteCount();
-                final ByteBuffer buffer = ByteBuffer.allocate(byteCount);
-                preview.copyPixelsToBuffer(buffer);
-                values.put(KnittingDatabaseHelper.PhotoTable.Cols.PREVIEW, buffer.array());
+                ByteArrayOutputStream out = new ByteArrayOutputStream();
+                preview.compress(Bitmap.CompressFormat.JPEG, 90, out);
+                final byte[] previewBytes = out.toByteArray();
+                values.put(KnittingDatabaseHelper.PhotoTable.Cols.PREVIEW, previewBytes);
             }
 
             final long id = database.insert(KnittingDatabaseHelper.PhotoTable.PHOTOS, null, values);
