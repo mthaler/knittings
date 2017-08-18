@@ -51,7 +51,7 @@ public class KnittingDatabaseHelper extends SQLiteOpenHelper {
                         Cols.STARTED + " INTEGER NOT NULL DEFAULT 0, " +
                         Cols.FINISHED + " INTEGER, " +
                         Cols.NEEDLE_DIAMETER + " REAL NOT NULL DEFAULT 0.0, " +
-                        Cols.SIZE + " REAL NOT NULL DEFAULT 0.0" +
+                        Cols.SIZE + " REAL NOT NULL DEFAULT 0.0, " +
                         Cols.DEFAULT_PHOTO_ID + " INTEGER, " +
                         "FOREIGN KEY(" + Cols.DEFAULT_PHOTO_ID + ") REFERENCES " + PhotoTable.PHOTOS + "(" + PhotoTable.Cols.ID + "));";
 
