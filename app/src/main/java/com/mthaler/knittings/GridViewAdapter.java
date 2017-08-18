@@ -41,21 +41,31 @@ public class GridViewAdapter extends ArrayAdapter<Photo> {
 
         final ViewHolder holder = h;
 
-        final Photo item = data.get(position);
-        // we use a view tree observer to get the width and the height of the image view and scale the image accordingly reduce memory usage
-        final ViewTreeObserver viewTreeObserver = holder.image.getViewTreeObserver();
-        viewTreeObserver.addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
-            @Override
-            public boolean onPreDraw() {
-            holder.image.getViewTreeObserver().removeOnPreDrawListener(this);
-            final int width = holder.image.getMeasuredWidth();
-            final int height = holder.image.getMeasuredHeight();
-            holder.image.setImageBitmap(PictureUtils.decodeSampledBitmapFromPath(item.getFilename().getAbsolutePath(), width, height));
-            return true;
-            }
-        });
+        if (position < getCount() - 1) {
+            final Photo item = data.get(position);
+            // we use a view tree observer to get the width and the height of the image view and scale the image accordingly reduce memory usage
+            final ViewTreeObserver viewTreeObserver = holder.image.getViewTreeObserver();
+            viewTreeObserver.addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+                @Override
+                public boolean onPreDraw() {
+                    holder.image.getViewTreeObserver().removeOnPreDrawListener(this);
+                    final int width = holder.image.getMeasuredWidth();
+                    final int height = holder.image.getMeasuredHeight();
+                    holder.image.setImageBitmap(PictureUtils.decodeSampledBitmapFromPath(item.getFilename().getAbsolutePath(), width, height));
+                    return true;
+                }
+            });
+        } else {
+            holder.image.setImageResource(R.drawable.ic_add_photo);
+        }
 
         return row;
+    }
+
+    @Override
+    public int getCount() {
+        // add an additional element used to display add photo icon
+        return super.getCount() + 1;
     }
 
     static class ViewHolder {

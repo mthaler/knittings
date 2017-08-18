@@ -155,31 +155,27 @@ public class KnittingFragment extends Fragment implements KnittingDetailsView {
         gridView = v.findViewById(R.id.gridView);
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-                final Photo photo = (Photo) parent.getItemAtPosition(position);
-                //Create intent
-                final Intent intent = new Intent(getActivity(), PhotoActivity.class);
-                intent.putExtra(PhotoActivity.EXTRA_PHOTO_ID, photo.getId());
-                intent.putExtra(KnittingActivity.EXTRA_KNITTING_ID, knitting.getId());
+                if (position < gridView.getAdapter().getCount() - 1) {
+                    final Photo photo = (Photo) parent.getItemAtPosition(position);
+                    //Create intent
+                    final Intent intent = new Intent(getActivity(), PhotoActivity.class);
+                    intent.putExtra(PhotoActivity.EXTRA_PHOTO_ID, photo.getId());
+                    intent.putExtra(KnittingActivity.EXTRA_KNITTING_ID, knitting.getId());
 
-                //Start details activity
-                startActivity(intent);
-            }
-        });
-
-        final Button buttonTakePhoto = v.findViewById(R.id.buttonTakePhoto);
-        buttonTakePhoto.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-            final Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-            final File photoFile = KnittingsDataSource.getInstance(getActivity()).getPhotoFile(knitting);
-            currentPhotoPath = photoFile;
-            final PackageManager packageManager = getActivity().getPackageManager();
-            boolean canTakePhoto = photoFile != null && takePictureIntent.resolveActivity(packageManager) != null;
-            if (canTakePhoto) {
-                Uri uri = FileProvider.getUriForFile(getContext(), "com.mthaler.knittings.fileprovider", photoFile);
-                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
-                startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
-            }
+                    //Start details activity
+                    startActivity(intent);
+                } else {
+                    final Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    final File photoFile = KnittingsDataSource.getInstance(getActivity()).getPhotoFile(knitting);
+                    currentPhotoPath = photoFile;
+                    final PackageManager packageManager = getActivity().getPackageManager();
+                    boolean canTakePhoto = photoFile != null && takePictureIntent.resolveActivity(packageManager) != null;
+                    if (canTakePhoto) {
+                        Uri uri = FileProvider.getUriForFile(getContext(), "com.mthaler.knittings.fileprovider", photoFile);
+                        takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
+                        startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+                    }
+                }
             }
         });
 

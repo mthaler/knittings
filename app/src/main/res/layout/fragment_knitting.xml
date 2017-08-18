@@ -135,10 +135,4 @@
         android:focusable="true"
         android:clickable="true"/>
 
-    <Button
-        android:id="@+id/buttonTakePhoto"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Take Photo" />
-
 </LinearLayout>
