@@ -33,6 +33,8 @@ public class PhotoFragment extends Fragment implements PhotoDetailsView {
 
     @Override
     public void deletePhoto() {
-
+        // delete database entry
+        KnittingsDataSource.getInstance(getActivity()).deletePhoto(photo);
+        photo = null;
     }
 }

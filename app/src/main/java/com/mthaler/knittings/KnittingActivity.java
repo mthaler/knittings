@@ -36,9 +36,8 @@ public class KnittingActivity extends AppCompatActivity {
         } else {
             // get the id of the knitting that should be displayed.
             final long id = getIntent().getLongExtra(EXTRA_KNITTING_ID, -1);
-                knitting = KnittingsDataSource.getInstance(this.getApplicationContext()).getKnitting(id);
+            knitting = KnittingsDataSource.getInstance(this.getApplicationContext()).getKnitting(id);
         }
-
 
         // init knitting
         final KnittingDetailsView knittingDetailsView = (KnittingDetailsView) getSupportFragmentManager().findFragmentById(R.id.fragment_knitting);
