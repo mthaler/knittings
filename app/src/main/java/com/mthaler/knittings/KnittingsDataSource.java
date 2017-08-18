@@ -90,6 +90,8 @@ public class KnittingsDataSource {
             values.put(KnittingDatabaseHelper.KnittingTable.Cols.SIZE, knitting.getSize());
             if (knitting.getDefaultPhoto() != null) {
                 values.put(KnittingDatabaseHelper.KnittingTable.Cols.DEFAULT_PHOTO_ID, knitting.getDefaultPhoto().getId());
+            } else {
+                values.putNull(KnittingDatabaseHelper.KnittingTable.Cols.DEFAULT_PHOTO_ID);
             }
 
             database.update(KnittingDatabaseHelper.KnittingTable.KNITTINGS,

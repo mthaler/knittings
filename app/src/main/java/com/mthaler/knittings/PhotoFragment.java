@@ -90,6 +90,12 @@ public class PhotoFragment extends Fragment implements PhotoDetailsView {
 
     @Override
     public void deletePhoto() {
+        // check if the photo is used as default photo
+        Knitting knitting = KnittingsDataSource.getInstance(getActivity()).getKnitting(photo.getKnittingID());
+        if (knitting.getDefaultPhoto() != null && knitting.getDefaultPhoto().getId() == photo.getId()) {
+            knitting.setDefaultPhoto(null);
+            KnittingsDataSource.getInstance(getActivity()).updateKnitting(knitting);
+        }
         // delete database entry
         KnittingsDataSource.getInstance(getActivity()).deletePhoto(photo);
         photo = null;
