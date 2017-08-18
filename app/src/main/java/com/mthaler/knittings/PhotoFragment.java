@@ -1,7 +1,5 @@
 package com.mthaler.knittings;
 
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
@@ -27,7 +25,7 @@ public class PhotoFragment extends Fragment implements PhotoDetailsView {
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
         final View v = inflater.inflate(R.layout.fragment_photo, parent, false);
 
-        imageView = (ImageView) v.findViewById(R.id.image);
+        imageView = v.findViewById(R.id.image);
 
         // initialize description edit text
         editTextDescription = v.findViewById(R.id.photo_description);
