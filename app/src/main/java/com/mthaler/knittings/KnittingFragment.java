@@ -243,11 +243,8 @@ public class KnittingFragment extends Fragment implements KnittingDetailsView {
      * The method will delete the knitting from the database and also remove the photo if it exists
      */
     public void deleteKnitting() {
-        // if photo exists, delete it
-        final File photoFile = KnittingsDataSource.getInstance(getActivity()).getPhotoFile(knitting);
-        if (photoFile.exists()) {
-            photoFile.delete();
-        }
+        // delete all photos from the database
+        KnittingsDataSource.getInstance(getActivity()).deleteAllPhotos(knitting);
         // delete database entry
         KnittingsDataSource.getInstance(getActivity()).deleteKnitting(knitting);
         knitting = null;
