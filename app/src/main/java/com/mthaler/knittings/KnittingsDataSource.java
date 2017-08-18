@@ -266,7 +266,7 @@ public class KnittingsDataSource {
             final ContentValues values = new ContentValues();
             values.put(KnittingDatabaseHelper.PhotoTable.Cols.FILENAME, photo.getFilename().getAbsolutePath());
             values.put(KnittingDatabaseHelper.PhotoTable.Cols.KNITTING_ID, photo.getKnittingID());
-            values.put(KnittingDatabaseHelper.PhotoTable.Cols.KNITTING_ID, photo.getDescription());
+            values.put(KnittingDatabaseHelper.PhotoTable.Cols.DESCRIPTION, photo.getDescription());
             final Bitmap preview = photo.getPreview();
             if (preview != null) {
                 final int byteCount = preview.getByteCount();
