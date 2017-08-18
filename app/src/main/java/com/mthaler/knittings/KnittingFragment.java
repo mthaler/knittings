@@ -206,7 +206,11 @@ public class KnittingFragment extends Fragment implements KnittingDetailsView {
         } else if (requestCode == REQUEST_IMAGE_CAPTURE) {
             // add photo to database
             Bitmap preview = PictureUtils.decodeSampledBitmapFromPath(currentPhotoPath.getAbsolutePath(), 200, 200);
-            KnittingsDataSource.getInstance(getActivity()).createPhoto(currentPhotoPath, knitting.getId(), preview, "");
+            Photo photo = KnittingsDataSource.getInstance(getActivity()).createPhoto(currentPhotoPath, knitting.getId(), preview, "");
+            // add first photo as default photo
+            if (knitting.getDefaultPhoto() == null) {
+                knitting.setDefaultPhoto(photo);
+            }
             // update grid view
             final List<Photo> photos = KnittingsDataSource.getInstance(getActivity()).getAllPhotos(knitting);
             final GridViewAdapter gridAdapter = new GridViewAdapter(getActivity(), R.layout.grid_item_layout, photos);
