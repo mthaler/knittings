@@ -31,6 +31,9 @@ import java.util.List;
  */
 public class KnittingFragment extends Fragment implements KnittingDetailsView {
 
+    public static final String CURRENT_PHOTO_PATH = "current_photo_path";
+    public static final String KNITTING_ID = "knitting_id";
+
     private static final String DIALOG_DATE = "date";
     private static final int REQUEST_STARTED = 0;
     private static final int REQUEST_FINISHED = 1;
@@ -51,6 +54,15 @@ public class KnittingFragment extends Fragment implements KnittingDetailsView {
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
         // crreate view
         final View v = inflater.inflate(R.layout.fragment_knitting, parent, false);
+
+        if (savedInstanceState != null) {
+            if (savedInstanceState.containsKey(CURRENT_PHOTO_PATH)) {
+                currentPhotoPath = new File(savedInstanceState.getString(CURRENT_PHOTO_PATH));
+            }
+            if (savedInstanceState.containsKey(KNITTING_ID)) {
+                knitting = KnittingsDataSource.getInstance(getActivity()).getKnitting(savedInstanceState.getLong(KNITTING_ID));
+            }
+        }
 
         // initialize title text field
         editTextTitle = v.findViewById(R.id.knitting_title);
@@ -227,6 +239,17 @@ public class KnittingFragment extends Fragment implements KnittingDetailsView {
             final GridViewAdapter gridAdapter = new GridViewAdapter(getActivity(), R.layout.grid_item_layout, photos);
             gridView.setAdapter(gridAdapter);
         }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        if (currentPhotoPath != null) {
+            outState.putString(CURRENT_PHOTO_PATH, currentPhotoPath.getAbsolutePath());
+        }
+        if (knitting != null) {
+            outState.putLong(KNITTING_ID, knitting.getId());
+        }
+        super.onSaveInstanceState(outState);
     }
 
     @Override
