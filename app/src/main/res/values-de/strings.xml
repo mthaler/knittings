@@ -22,4 +22,9 @@
     <string name="delete_knitting_dialog_question">Strickerei wirklich löschen?</string>
     <string name="delete_knitting_dialog_delete_button">Löschen</string>
     <string name="delete_knitting_dialog_cancel_button">Abbrechen</string>
+    <!-- delete photo dialog -->
+    <string name="delete_photo_dialog_title">Löschen</string>
+    <string name="delete_photo_dialog_question">Foto wirklich löschen?</string>
+    <string name="delete_photo_dialog_delete_button">Löschen</string>
+    <string name="delete_photo_dialog_cancel_button">Abbrechen</string>
 </resources>
