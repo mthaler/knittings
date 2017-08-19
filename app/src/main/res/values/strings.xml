@@ -1,15 +1,19 @@
 <resources>
+    <!-- application -->
     <string name="app_name">Knittings</string>
+    <!-- knittings list -->
     <string name="knittings_title">Knittings</string>
-    <string name="new_knitting">New Knitting</string>
+    <!-- knitting details -->
     <string name="delete_knitting">Delete Knitting</string>
     <string name="knitting_title_hint">Title</string>
     <string name="knitting_description_hint">Description</string>
     <string name="knitting_started_hint">Started</string>
     <string name="knitting_finished_hint">Finished</string>
-    <string name="date_picker_title">Date</string>
     <string name="knitting_needle_diameter_hint">Needle Diameter</string>
     <string name="knitting_size_hint">Size</string>
+    <!-- date picker -->
+    <string name="date_picker_title">Date</string>
+    <!-- photo details -->
     <string name="photo_description_hint">Description</string>
     <string name="delete_photo">Delete Photo</string>
 </resources>

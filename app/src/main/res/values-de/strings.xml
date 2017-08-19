@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- application -->
+    <string name="app_name">Strickereien</string>
+    <!-- knittings list -->
+    <string name="knittings_title">Strickereien</string>
+    <!-- knitting details -->
+    <string name="delete_knitting">Strickerei löschen</string>
+    <string name="knitting_title_hint">Titel</string>
+    <string name="knitting_description_hint">Beschreibung</string>
+    <string name="knitting_started_hint">Angefangen</string>
+    <string name="knitting_finished_hint">Fertig</string>
+    <string name="knitting_needle_diameter_hint">Nadel</string>
+    <string name="knitting_size_hint">Größe</string>
+    <!-- date picker -->
+    <string name="date_picker_title">Datum</string>
+    <!-- photo details -->
+    <string name="photo_description_hint">Beschreibung</string>
+    <string name="delete_photo">Foto löschen</string>
+</resources>
