@@ -1,10 +1,8 @@
 package com.mthaler.knittings;
 
-import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
-import android.graphics.Point;
 import android.media.ExifInterface;
 
 import java.io.IOException;
