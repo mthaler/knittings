@@ -56,6 +56,7 @@
                 android:layout_weight="1"
                 android:editable="false"
                 android:hint="@string/knitting_started_hint"
+                android:drawableLeft="@drawable/ic_date"
                 style="@android:style/Widget.DeviceDefault.Light.Spinner" />
         </android.support.design.widget.TextInputLayout>
 
@@ -74,6 +75,7 @@
                 android:layout_marginRight="16dp"
                 android:editable="false"
                 android:hint="@string/knitting_finished_hint"
+                android:drawableLeft="@drawable/ic_date"
                 style="@android:style/Widget.DeviceDefault.Light.Spinner"/>
         </android.support.design.widget.TextInputLayout>
 
