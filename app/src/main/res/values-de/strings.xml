@@ -17,4 +17,9 @@
     <!-- photo details -->
     <string name="photo_description_hint">Beschreibung</string>
     <string name="delete_photo">Foto löschen</string>
+    <!-- delete knittings dialog -->
+    <string name="delete_knitting_dialog_title">Löschen</string>
+    <string name="delete_knitting_dialog_question">Strickerei wirklich löschen?</string>
+    <string name="delete_knitting_dialog_delete_button">Löschen</string>
+    <string name="delete_knitting_dialog_cancel_button">Abbrechen</string>
 </resources>

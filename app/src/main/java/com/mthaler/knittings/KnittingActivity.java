@@ -58,9 +58,9 @@ public class KnittingActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.menu_item_delete_knitting:
                 AlertDialog.Builder alert = new AlertDialog.Builder(this)
-                        .setTitle("Delete")
-                        .setMessage("Do you really want to delete the knitting")
-                        .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+                        .setTitle(R.string.delete_knitting_dialog_title)
+                        .setMessage(R.string.delete_knitting_dialog_question)
+                        .setPositiveButton(R.string.delete_knitting_dialog_delete_button, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 final KnittingDetailsView knittingDetailsView = (KnittingDetailsView) getSupportFragmentManager().findFragmentById(R.id.fragment_knitting);
@@ -68,7 +68,7 @@ public class KnittingActivity extends AppCompatActivity {
                                 dialogInterface.dismiss();
                                 finish();
                             }
-                        }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        }).setNegativeButton(R.string.delete_knitting_dialog_cancel_button, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 dialogInterface.dismiss();
