@@ -2,6 +2,7 @@ package com.mthaler.knittings;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,7 +52,11 @@ public class GridViewAdapter extends ArrayAdapter<Photo> {
                     holder.image.getViewTreeObserver().removeOnPreDrawListener(this);
                     final int width = holder.image.getMeasuredWidth();
                     final int height = holder.image.getMeasuredHeight();
-                    holder.image.setImageBitmap(PictureUtils.decodeSampledBitmapFromPath(item.getFilename().getAbsolutePath(), width, height));
+                    final String filename = item.getFilename().getAbsolutePath();
+                    final int orientation = PictureUtils.getOrientation(filename);
+                    final Bitmap photo = PictureUtils.decodeSampledBitmapFromPath(filename, width, height);
+                    final Bitmap rotatedPhoto = PictureUtils.rotateBitmap(photo, orientation);
+                    holder.image.setImageBitmap(rotatedPhoto);
                     return true;
                 }
             });

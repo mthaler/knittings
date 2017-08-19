@@ -204,8 +204,10 @@ public class KnittingFragment extends Fragment implements KnittingDetailsView {
             textViewFinished.setText(DateFormat.getDateInstance().format(knitting.getFinished()));
         } else if (requestCode == REQUEST_IMAGE_CAPTURE) {
             // add photo to database
-            Bitmap preview = PictureUtils.decodeSampledBitmapFromPath(currentPhotoPath.getAbsolutePath(), 200, 200);
-            Photo photo = KnittingsDataSource.getInstance(getActivity()).createPhoto(currentPhotoPath, knitting.getId(), preview, "");
+            final int orientation = PictureUtils.getOrientation(currentPhotoPath.getAbsolutePath());
+            final Bitmap preview = PictureUtils.decodeSampledBitmapFromPath(currentPhotoPath.getAbsolutePath(), 200, 200);
+            final Bitmap rotatedPreview = PictureUtils.rotateBitmap(preview, orientation);
+            Photo photo = KnittingsDataSource.getInstance(getActivity()).createPhoto(currentPhotoPath, knitting.getId(), rotatedPreview, "");
             // add first photo as default photo
             if (knitting.getDefaultPhoto() == null) {
                 knitting.setDefaultPhoto(photo);

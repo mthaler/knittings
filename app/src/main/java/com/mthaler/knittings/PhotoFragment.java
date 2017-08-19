@@ -70,8 +70,11 @@ public class PhotoFragment extends Fragment implements PhotoDetailsView {
                 // loading and scaling the bitmap is expensive, use async task to do the work
                 final AsyncTask<String, Void, Bitmap> scaleBitmapTask = new AsyncTask<String, Void, Bitmap>() {
                     @Override
-                    protected Bitmap doInBackground(String... strings) {
-                        return PictureUtils.decodeSampledBitmapFromPath(strings[0], width, height);
+                    protected Bitmap doInBackground(String... args) {
+                        final String path = args[0];
+                        final int orientation = PictureUtils.getOrientation(path);
+                        final Bitmap photo = PictureUtils.decodeSampledBitmapFromPath(path, width, height);
+                        return PictureUtils.rotateBitmap(photo, orientation);
                     }
 
                     @Override
