@@ -57,6 +57,7 @@ public class GridViewAdapter extends ArrayAdapter<Photo> {
                     final Bitmap photo = PictureUtils.decodeSampledBitmapFromPath(filename, width, height);
                     final Bitmap rotatedPhoto = PictureUtils.rotateBitmap(photo, orientation);
                     holder.image.setImageBitmap(rotatedPhoto);
+                    holder.imageTitle.setText(item.getDescription());
                     return true;
                 }
             });
