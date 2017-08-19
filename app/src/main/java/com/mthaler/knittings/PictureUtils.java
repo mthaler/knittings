@@ -4,6 +4,9 @@ import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Point;
+import android.media.ExifInterface;
+
+import java.io.IOException;
 
 public class PictureUtils {
 
@@ -42,5 +45,20 @@ public class PictureUtils {
         // Decode bitmap with inSampleSize set
         options.inJustDecodeBounds = false;
         return BitmapFactory.decodeFile(path, options);
+    }
+
+    /**
+     * Returns the orientation of a photo
+     *
+     * @param path filename of the photo
+     * @return orientation
+     */
+    public static int getOrientation(String path) {
+        try {
+            final ExifInterface exif = new ExifInterface(path);
+            return exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_UNDEFINED);
+        } catch (IOException ex) {
+            return ExifInterface.ORIENTATION_UNDEFINED;
+        }
     }
 }
