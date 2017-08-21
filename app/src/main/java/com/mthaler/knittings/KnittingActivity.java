@@ -43,6 +43,10 @@ public class KnittingActivity extends AppCompatActivity {
         final KnittingDetailsView knittingDetailsView = (KnittingDetailsView) getSupportFragmentManager().findFragmentById(R.id.fragment_knitting);
         knittingDetailsView.init(knitting);
 
+        // init photo gallery
+        final PhotoGalleryFragment photoGalleryFragment = (PhotoGalleryFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_photo_gallery);
+        photoGalleryFragment.init(knitting);
+
     }
 
     @Override
