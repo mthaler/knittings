@@ -4,11 +4,9 @@
     android:layout_height="wrap_content">
     <ImageView
         android:id="@+id/knitting_list_item_photoImageView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:layout_alignParentLeft="true"
-        android:layout_alignTop="@+id/knitting_list_item_titleTextView"
-        android:layout_alignBottom="@+id/knitting_list_item_descriptionTextView"
         android:padding="4dp"/>
     <TextView android:id="@+id/knitting_list_item_startedTextView"
         android:layout_width="wrap_content"
