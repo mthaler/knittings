@@ -1,6 +1,5 @@
 package com.mthaler.knittings;
 
-
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -15,14 +14,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
-
 import java.io.File;
-import java.text.DateFormat;
-import java.util.Date;
 import java.util.List;
 
-
-public class PhotoGalleryFragment extends Fragment implements PhotoGalleryView {
+public class PhotoGalleryFragment extends Fragment {
 
     public static final String CURRENT_PHOTO_PATH = "current_photo_path";
     public static final String KNITTING_ID = "knitting_id";
@@ -32,6 +27,14 @@ public class PhotoGalleryFragment extends Fragment implements PhotoGalleryView {
 
     private GridView gridView;
     private File currentPhotoPath;
+
+    public static PhotoGalleryFragment newInstance(Knitting knitting) {
+        final PhotoGalleryFragment fragment = new PhotoGalleryFragment();
+        Bundle args = new Bundle();
+        args.putLong(KNITTING_ID, knitting.getId());
+        fragment.setArguments(args);
+        return fragment;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -46,9 +49,15 @@ public class PhotoGalleryFragment extends Fragment implements PhotoGalleryView {
             if (savedInstanceState.containsKey(KNITTING_ID)) {
                 knitting = KnittingsDataSource.getInstance(getActivity()).getKnitting(savedInstanceState.getLong(KNITTING_ID));
             }
+        } else {
+            final long knittingID = getArguments().getLong(KNITTING_ID);
+            knitting = KnittingsDataSource.getInstance(getActivity()).getKnitting(knittingID);
         }
 
         gridView = v.findViewById(R.id.gridView);
+        final List<Photo> photos = KnittingsDataSource.getInstance(getActivity()).getAllPhotos(knitting);
+        final GridViewAdapter gridAdapter = new GridViewAdapter(getActivity(), R.layout.grid_item_layout, photos);
+        gridView.setAdapter(gridAdapter);
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
             if (position < gridView.getAdapter().getCount() - 1) {
@@ -119,13 +128,5 @@ public class PhotoGalleryFragment extends Fragment implements PhotoGalleryView {
             outState.putLong(KNITTING_ID, knitting.getId());
         }
         super.onSaveInstanceState(outState);
-    }
-
-    @Override
-    public void init(Knitting knitting) {
-        this.knitting = knitting;
-        final List<Photo> photos = KnittingsDataSource.getInstance(getActivity()).getAllPhotos(knitting);
-        final GridViewAdapter gridAdapter = new GridViewAdapter(getActivity(), R.layout.grid_item_layout, photos);
-        gridView.setAdapter(gridAdapter);
     }
 }

@@ -2,33 +2,25 @@ package com.mthaler.knittings;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.content.FileProvider;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.TextView;
-import java.io.File;
 import java.text.DateFormat;
 import java.util.Date;
-import java.util.List;
 
 /**
  * KnittingFragment shows a single knitting
  *
  * It is used for adding new knittings or displaying / editing existing knittings
  */
-public class KnittingFragment extends Fragment implements KnittingDetailsView {
+public class KnittingFragment extends Fragment {
 
     public static final String KNITTING_ID = "knitting_id";
 
@@ -38,12 +30,17 @@ public class KnittingFragment extends Fragment implements KnittingDetailsView {
 
     private Knitting knitting = new Knitting(-1);
 
-    private EditText editTextTitle;
-    private EditText editTextDescription;
     private TextView textViewStarted;
     private TextView textViewFinished;
-    private EditText editTextNeedleDiameter;
     private EditText editTextSize;
+
+    public static KnittingFragment newInstance(Knitting knitting) {
+        final KnittingFragment fragment = new KnittingFragment();
+        Bundle args = new Bundle();
+        args.putLong(KNITTING_ID, knitting.getId());
+        fragment.setArguments(args);
+        return fragment;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
@@ -54,10 +51,14 @@ public class KnittingFragment extends Fragment implements KnittingDetailsView {
             if (savedInstanceState.containsKey(KNITTING_ID)) {
                 knitting = KnittingsDataSource.getInstance(getActivity()).getKnitting(savedInstanceState.getLong(KNITTING_ID));
             }
+        } else {
+            final long knittingID = getArguments().getLong(KNITTING_ID);
+            knitting = KnittingsDataSource.getInstance(getActivity()).getKnitting(knittingID);
         }
 
         // initialize title text field
-        editTextTitle = v.findViewById(R.id.knitting_title);
+        final EditText  editTextTitle = v.findViewById(R.id.knitting_title);
+        editTextTitle.setText(knitting.getTitle());
         editTextTitle.addTextChangedListener(new TextWatcher() {
             public void onTextChanged(CharSequence c, int start, int before, int count) {
                 knitting.setTitle(c.toString());
@@ -73,7 +74,8 @@ public class KnittingFragment extends Fragment implements KnittingDetailsView {
         });
 
         // initialize description text field
-        editTextDescription = v.findViewById(R.id.knitting_description);
+        final EditText editTextDescription = v.findViewById(R.id.knitting_description);
+        editTextDescription.setText(knitting.getDescription());
         editTextDescription.addTextChangedListener(new TextWatcher() {
             public void onTextChanged(CharSequence c, int start, int before, int count) {
                 knitting.setDescription(c.toString());
@@ -89,6 +91,7 @@ public class KnittingFragment extends Fragment implements KnittingDetailsView {
         });
 
         textViewStarted = v.findViewById(R.id.knitting_started);
+        textViewStarted.setText(DateFormat.getDateInstance().format(knitting.getStarted()));
         textViewStarted.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 final FragmentManager fm = getActivity().getSupportFragmentManager();
@@ -100,6 +103,7 @@ public class KnittingFragment extends Fragment implements KnittingDetailsView {
 
         // initialize finish date button
         textViewFinished = v.findViewById(R.id.knitting_finished);
+        textViewFinished.setText(knitting.getFinished() != null ? DateFormat.getDateInstance().format(knitting.getFinished()) : "");
         textViewFinished.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 final FragmentManager fm = getActivity().getSupportFragmentManager();
@@ -109,7 +113,8 @@ public class KnittingFragment extends Fragment implements KnittingDetailsView {
             }
         });
 
-        editTextNeedleDiameter = v.findViewById(R.id.knitting_needle_diameter);
+        final EditText editTextNeedleDiameter = v.findViewById(R.id.knitting_needle_diameter);
+        editTextNeedleDiameter.setText(Double.toString(knitting.getNeedleDiameter()));
         editTextNeedleDiameter.addTextChangedListener(new TextWatcher() {
             public void onTextChanged(CharSequence c, int start, int before, int count) {
                 try {
@@ -132,7 +137,8 @@ public class KnittingFragment extends Fragment implements KnittingDetailsView {
             }
         });
 
-        editTextSize = v.findViewById(R.id.knitting_size);
+        final EditText editTextSize = v.findViewById(R.id.knitting_size);
+        editTextSize.setText(Double.toString(knitting.getSize()));
         editTextSize.addTextChangedListener(new TextWatcher() {
             public void onTextChanged(CharSequence c, int start, int before, int count) {
                 try {
@@ -190,17 +196,6 @@ public class KnittingFragment extends Fragment implements KnittingDetailsView {
         super.onSaveInstanceState(outState);
     }
 
-    @Override
-    public void init(Knitting knitting) {
-        this.knitting = knitting;
-        editTextTitle.setText(knitting.getTitle());
-        editTextDescription.setText(knitting.getDescription());
-        textViewStarted.setText(DateFormat.getDateInstance().format(knitting.getStarted()));
-        textViewFinished.setText(knitting.getFinished() != null ? DateFormat.getDateInstance().format(knitting.getFinished()) : "");
-        editTextNeedleDiameter.setText(Double.toString(knitting.getNeedleDiameter()));
-        editTextSize.setText(Double.toString(knitting.getSize()));
-    }
-
     /**
      * Deletes the displayed knitting
      *
@@ -212,10 +207,5 @@ public class KnittingFragment extends Fragment implements KnittingDetailsView {
         // delete database entry
         KnittingsDataSource.getInstance(getActivity()).deleteKnitting(knitting);
         knitting = null;
-    }
-
-    @Override
-    public Knitting getKnitting() {
-        return knitting;
     }
 }

@@ -4,12 +4,13 @@ import android.graphics.Bitmap;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.Serializable;
 
 /**
  * The photo class represents a photo. It has an id (used in the database), a filename and an
  * optional preview that can be displayed in the knittings list
  */
-public class Photo {
+public class Photo implements Serializable {
 
     private final long id;
     private final File filename;
