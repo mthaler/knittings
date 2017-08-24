@@ -28,6 +28,8 @@ public class KnittingActivity extends AppCompatActivity {
 
     public static final String EXTRA_KNITTING_ID = "com.mthaler.knitting.KNITTING_ID";
 
+    private KnittingFragment knittingFragment;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,24 +68,23 @@ public class KnittingActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_item_delete_knitting:
-//                AlertDialog.Builder alert = new AlertDialog.Builder(this)
-//                        .setTitle(R.string.delete_knitting_dialog_title)
-//                        .setMessage(R.string.delete_knitting_dialog_question)
-//                        .setPositiveButton(R.string.delete_knitting_dialog_delete_button, new DialogInterface.OnClickListener() {
-//                            @Override
-//                            public void onClick(DialogInterface dialogInterface, int i) {
-//                                final KnittingDetailsView knittingDetailsView = (KnittingDetailsView) getSupportFragmentManager().findFragmentById(R.id.fragment_knitting);
-//                                knittingDetailsView.deleteKnitting();
-//                                dialogInterface.dismiss();
-//                                finish();
-//                            }
-//                        }).setNegativeButton(R.string.delete_knitting_dialog_cancel_button, new DialogInterface.OnClickListener() {
-//                            @Override
-//                            public void onClick(DialogInterface dialogInterface, int i) {
-//                                dialogInterface.dismiss();
-//                            }
-//                        });
-//                alert.show();
+                AlertDialog.Builder alert = new AlertDialog.Builder(this)
+                        .setTitle(R.string.delete_knitting_dialog_title)
+                        .setMessage(R.string.delete_knitting_dialog_question)
+                        .setPositiveButton(R.string.delete_knitting_dialog_delete_button, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                knittingFragment.deleteKnitting();
+                                dialogInterface.dismiss();
+                                finish();
+                            }
+                        }).setNegativeButton(R.string.delete_knitting_dialog_cancel_button, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                dialogInterface.dismiss();
+                            }
+                        });
+                alert.show();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -92,18 +93,17 @@ public class KnittingActivity extends AppCompatActivity {
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-//        final KnittingDetailsView knittingDetailsView = (KnittingDetailsView) getSupportFragmentManager().findFragmentById(R.id.fragment_knitting);
-//        final Knitting knitting = knittingDetailsView.getKnitting();
-//        if (knitting != null) {
-//            outState.putLong(EXTRA_KNITTING_ID, knitting.getId());
-//        }
+        final Knitting knitting = knittingFragment.getKnitting();
+        if (knitting != null) {
+            outState.putLong(EXTRA_KNITTING_ID, knitting.getId());
+        }
         // call superclass to save any view hierarchy
         super.onSaveInstanceState(outState);
     }
 
     private void setupViewPager(ViewPager viewPager, Knitting knitting) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        final KnittingFragment knittingFragment = KnittingFragment.newInstance(knitting);
+        knittingFragment = KnittingFragment.newInstance(knitting);
         adapter.addFragment(knittingFragment, "Details");
         final PhotoGalleryFragment photoGalleryFragment = PhotoGalleryFragment.newInstance(knitting);
         adapter.addFragment(photoGalleryFragment, "Photos");

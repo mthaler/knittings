@@ -196,6 +196,10 @@ public class KnittingFragment extends Fragment {
         super.onSaveInstanceState(outState);
     }
 
+
+    public Knitting getKnitting() {
+        return knitting;
+    }
     /**
      * Deletes the displayed knitting
      *
