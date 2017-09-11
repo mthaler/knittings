@@ -44,7 +44,7 @@ public class KnittingsDataSource {
      * @param size size of knitting
      * @return new knitting
      */
-    public Knitting createKnitting(String title, String description, Date started, Date finished, double needleDiameter, double size) {
+    public Knitting createKnitting(String title, String description, Date started, Date finished, double needleDiameter, double size, double rating) {
         try (SQLiteDatabase database = dbHelper.getWritableDatabase()) {
             final ContentValues values = new ContentValues();
             values.put(KnittingDatabaseHelper.KnittingTable.Cols.TITLE, title);
@@ -55,6 +55,7 @@ public class KnittingsDataSource {
             }
             values.put(KnittingDatabaseHelper.KnittingTable.Cols.NEEDLE_DIAMETER, needleDiameter);
             values.put(KnittingDatabaseHelper.KnittingTable.Cols.SIZE, size);
+            values.put(KnittingDatabaseHelper.KnittingTable.Cols.RATING, rating);
 
             final long id = database.insert(KnittingDatabaseHelper.KnittingTable.KNITTINGS, null, values);
 
@@ -91,6 +92,7 @@ public class KnittingsDataSource {
             } else {
                 values.putNull(KnittingDatabaseHelper.KnittingTable.Cols.DEFAULT_PHOTO_ID);
             }
+            values.put(KnittingDatabaseHelper.KnittingTable.Cols.RATING, knitting.getRating());
 
             database.update(KnittingDatabaseHelper.KnittingTable.KNITTINGS,
                     values,
@@ -333,6 +335,7 @@ public class KnittingsDataSource {
         final int idNeedleDiameter = cursor.getColumnIndex(KnittingDatabaseHelper.KnittingTable.Cols.NEEDLE_DIAMETER);
         final int idSize = cursor.getColumnIndex(KnittingDatabaseHelper.KnittingTable.Cols.SIZE);
         final int idDefaultPhoto = cursor.getColumnIndex(KnittingDatabaseHelper.KnittingTable.Cols.DEFAULT_PHOTO_ID);
+        final int idRating = cursor.getColumnIndex(KnittingDatabaseHelper.KnittingTable.Cols.RATING);
 
         final long id = cursor.getLong(idIndex);
         final String title = cursor.getString(idTitle);
@@ -341,6 +344,7 @@ public class KnittingsDataSource {
         final Date finished = cursor.isNull(idFinished) ? null : new Date(cursor.getLong(idFinished));
         final double needleDiameter = cursor.getDouble(idNeedleDiameter);
         final double size = cursor.getDouble(idSize);
+        final double rating = cursor.getDouble(idRating);
 
         Photo defaultPhoto = null;
         if (!cursor.isNull(idDefaultPhoto)) {
@@ -358,6 +362,7 @@ public class KnittingsDataSource {
         if (defaultPhoto != null) {
             knitting.setDefaultPhoto(defaultPhoto);
         }
+        knitting.setRating(rating);
 
         return knitting;
     }

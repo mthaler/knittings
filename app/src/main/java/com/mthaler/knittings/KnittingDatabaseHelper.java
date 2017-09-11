@@ -30,6 +30,7 @@ public class KnittingDatabaseHelper extends SQLiteOpenHelper {
             public static final String NEEDLE_DIAMETER = "needle_diameter";
             public static final String SIZE = "size";
             public static final String DEFAULT_PHOTO_ID = "default_photo_id";
+            public static final String RATING = "rating";
         }
 
         public static final String[] Columns = {
@@ -40,7 +41,8 @@ public class KnittingDatabaseHelper extends SQLiteOpenHelper {
             Cols.FINISHED,
             Cols.NEEDLE_DIAMETER,
             Cols.SIZE,
-            Cols.DEFAULT_PHOTO_ID
+            Cols.DEFAULT_PHOTO_ID,
+            Cols.RATING
         };
 
         public static final String SQL_CREATE =
@@ -53,6 +55,7 @@ public class KnittingDatabaseHelper extends SQLiteOpenHelper {
                         Cols.NEEDLE_DIAMETER + " REAL NOT NULL DEFAULT 0.0, " +
                         Cols.SIZE + " REAL NOT NULL DEFAULT 0.0, " +
                         Cols.DEFAULT_PHOTO_ID + " INTEGER, " +
+                        Cols.RATING + " REAL NOT NULL DEFAULT 0.0, " +
                         "FOREIGN KEY(" + Cols.DEFAULT_PHOTO_ID + ") REFERENCES " + PhotoTable.PHOTOS + "(" + PhotoTable.Cols.ID + "));";
 
         public static final String SQL_DROP = "DROP TABLE IF EXISTS " + KNITTINGS;
