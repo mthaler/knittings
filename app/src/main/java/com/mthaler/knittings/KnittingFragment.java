@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import java.text.DateFormat;
 import java.util.Date;
@@ -158,6 +159,15 @@ public class KnittingFragment extends Fragment {
                 } catch (Exception ex) {
                     knitting.setSize(0.0);
                 }
+            }
+        });
+
+        final RatingBar ratingBar = v.findViewById(R.id.ratingBar);
+        ratingBar.setRating((float)knitting.getRating());
+        ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+            @Override
+            public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
+                knitting.setRating(rating);
             }
         });
 
