@@ -10,9 +10,9 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,6 +27,7 @@ import java.util.List;
 public class KnittingActivity extends AppCompatActivity {
 
     public static final String EXTRA_KNITTING_ID = "com.mthaler.knitting.KNITTING_ID";
+    public static final String LOG_TAG = KnittingActivity.class.getSimpleName();
 
     private KnittingFragment knittingFragment;
 
@@ -42,10 +43,12 @@ public class KnittingActivity extends AppCompatActivity {
         Knitting knitting;
         if (savedInstanceState != null) {
             final long id = savedInstanceState.getLong(EXTRA_KNITTING_ID);
+            Log.d(LOG_TAG, "Got knitting id from saved instance state: " + id);
             knitting = KnittingsDataSource.getInstance(this.getApplicationContext()).getKnitting(id);
         } else {
             // get the id of the knitting that should be displayed.
             final long id = getIntent().getLongExtra(EXTRA_KNITTING_ID, -1);
+            Log.d(LOG_TAG, "Got knitting id from extra: " + id);
             knitting = KnittingsDataSource.getInstance(this.getApplicationContext()).getKnitting(id);
         }
 
@@ -94,8 +97,10 @@ public class KnittingActivity extends AppCompatActivity {
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         final Knitting knitting = knittingFragment.getKnitting();
+        Log.d(LOG_TAG, "Saving instance state for knitting " + knitting);
         if (knitting != null) {
             outState.putLong(EXTRA_KNITTING_ID, knitting.getId());
+            Log.d(LOG_TAG, "Wrote knitting id " + knitting.getId() + " to out state");
         }
         // call superclass to save any view hierarchy
         super.onSaveInstanceState(outState);
@@ -111,8 +116,8 @@ public class KnittingActivity extends AppCompatActivity {
     }
 
     class ViewPagerAdapter extends FragmentPagerAdapter {
-        private final List<Fragment> mFragmentList = new ArrayList<>();
-        private final List<String> mFragmentTitleList = new ArrayList<>();
+        private final List<Fragment> fragmentList = new ArrayList<>();
+        private final List<String> fragmentTitleList = new ArrayList<>();
 
         public ViewPagerAdapter(FragmentManager manager) {
             super(manager);
@@ -120,22 +125,22 @@ public class KnittingActivity extends AppCompatActivity {
 
         @Override
         public Fragment getItem(int position) {
-            return mFragmentList.get(position);
+            return fragmentList.get(position);
         }
 
         @Override
         public int getCount() {
-            return mFragmentList.size();
+            return fragmentList.size();
         }
 
         public void addFragment(Fragment fragment, String title) {
-            mFragmentList.add(fragment);
-            mFragmentTitleList.add(title);
+            fragmentList.add(fragment);
+            fragmentTitleList.add(title);
         }
 
         @Override
         public CharSequence getPageTitle(int position) {
-            return mFragmentTitleList.get(position);
+            return fragmentTitleList.get(position);
         }
     }
 }
