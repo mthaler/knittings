@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.wifi.WifiManager;
 import android.os.Environment;
 import android.util.Log;
 import java.io.File;
@@ -45,6 +46,8 @@ public class KnittingsDataSource {
      * @return new knitting
      */
     public Knitting createKnitting(String title, String description, Date started, Date finished, double needleDiameter, double size, double rating) {
+        Log.d(LOG_TAG, "Creating knitting, title: " + title + ", description: " + description + ", started: " + started + ", finished: " +
+                finished + ", needle diameter: " + needleDiameter + ", size: " + size + ", rating: " + rating);
         try (SQLiteDatabase database = dbHelper.getWritableDatabase()) {
             final ContentValues values = new ContentValues();
             values.put(KnittingDatabaseHelper.KnittingTable.Cols.TITLE, title);
@@ -77,6 +80,7 @@ public class KnittingsDataSource {
      * @return updated knitting
      */
     public Knitting updateKnitting(Knitting knitting) {
+        Log.d(LOG_TAG, "Updating knitting " + knitting);
         try (SQLiteDatabase database = dbHelper.getWritableDatabase()) {
             final ContentValues values = new ContentValues();
             values.put(KnittingDatabaseHelper.KnittingTable.Cols.TITLE, knitting.getTitle());
@@ -88,6 +92,7 @@ public class KnittingsDataSource {
             values.put(KnittingDatabaseHelper.KnittingTable.Cols.NEEDLE_DIAMETER, knitting.getNeedleDiameter());
             values.put(KnittingDatabaseHelper.KnittingTable.Cols.SIZE, knitting.getSize());
             if (knitting.getDefaultPhoto() != null) {
+                Log.d(LOG_TAG, "Default photo: " + knitting.getDefaultPhoto());
                 values.put(KnittingDatabaseHelper.KnittingTable.Cols.DEFAULT_PHOTO_ID, knitting.getDefaultPhoto().getId());
             } else {
                 values.putNull(KnittingDatabaseHelper.KnittingTable.Cols.DEFAULT_PHOTO_ID);
@@ -120,7 +125,7 @@ public class KnittingsDataSource {
 
         try (SQLiteDatabase database = dbHelper.getWritableDatabase()) {
             database.delete(KnittingDatabaseHelper.KnittingTable.KNITTINGS, KnittingDatabaseHelper.KnittingTable.Cols.ID + "=" + id, null);
-            Log.d(LOG_TAG, "Removed knitting " + id + ": " + knitting.toString());
+            Log.d(LOG_TAG, "Deleted knitting " + id + ": " + knitting.toString());
         }
     }
 
@@ -141,7 +146,7 @@ public class KnittingsDataSource {
             while (!cursor.isAfterLast()) {
                 knitting = cursorToKnitting(cursor);
                 knittings.add(knitting);
-                Log.d(LOG_TAG, "ID: " + knitting.getId() + ", Inhalt: " + knitting.toString());
+                Log.d(LOG_TAG, "Read knitting " + knitting.getId() + ", default photo: " + knitting.getDefaultPhoto());
                 cursor.moveToNext();
             }
 
@@ -158,6 +163,7 @@ public class KnittingsDataSource {
      * @return knitting for the given id
      */
     public Knitting getKnitting(long id) {
+        Log.d(LOG_TAG, "Getting knitting for id " + id);
         try (SQLiteDatabase database = dbHelper.getWritableDatabase()) {
             final Cursor cursor = database.query(KnittingDatabaseHelper.KnittingTable.KNITTINGS,
                     KnittingDatabaseHelper.KnittingTable.Columns, KnittingDatabaseHelper.KnittingTable.Cols.ID + "=" + id, null, null, null, null);
@@ -185,6 +191,7 @@ public class KnittingsDataSource {
      * @return photo for the given id
      */
     public Photo getPhoto(long id) {
+        Log.d(LOG_TAG, "Getting photo for id " + id);
         try (SQLiteDatabase database = dbHelper.getWritableDatabase()) {
             final Cursor cursor = database.query(KnittingDatabaseHelper.PhotoTable.PHOTOS,
                     KnittingDatabaseHelper.PhotoTable.Columns, KnittingDatabaseHelper.PhotoTable.Cols.ID + "=" + id, null, null, null, null);
@@ -217,7 +224,7 @@ public class KnittingsDataSource {
             while (!cursor.isAfterLast()) {
                 photo = cursorToPhoto(cursor);
                 photos.add(photo);
-                Log.d(LOG_TAG, "ID: " + photo.getId() + ", Inhalt: " + photo.toString());
+                Log.d(LOG_TAG, "Read photo " + photo);
                 cursor.moveToNext();
             }
 
@@ -236,6 +243,7 @@ public class KnittingsDataSource {
      * @return new photo
      */
     public Photo createPhoto(File filename, long knittingID, Bitmap preview, String description) {
+        Log.d(LOG_TAG, "Creating photo for " + filename + ", knitting id: " + knittingID + ", preview: " + preview + ", description: " + description);
         try (SQLiteDatabase database = dbHelper.getWritableDatabase()) {
             final ContentValues values = new ContentValues();
             values.put(KnittingDatabaseHelper.PhotoTable.Cols.FILENAME, filename.getAbsolutePath());
@@ -268,6 +276,7 @@ public class KnittingsDataSource {
      * @return updated photo
      */
     public Photo updatePhoto(Photo photo) {
+        Log.d(LOG_TAG, "Updating photo " + photo);
         try (SQLiteDatabase database = dbHelper.getWritableDatabase()) {
             final ContentValues values = new ContentValues();
             values.put(KnittingDatabaseHelper.PhotoTable.Cols.FILENAME, photo.getFilename().getAbsolutePath());
@@ -306,7 +315,7 @@ public class KnittingsDataSource {
 
         try (SQLiteDatabase database = dbHelper.getWritableDatabase()) {
             database.delete(KnittingDatabaseHelper.PhotoTable.PHOTOS, KnittingDatabaseHelper.PhotoTable.Cols.ID + "=" + id, null);
-            Log.d(LOG_TAG, "Removed photo " + id + ": " + photo.toString());
+            Log.d(LOG_TAG, "Deleted photo " + id + ": " + photo.toString());
         }
     }
 
