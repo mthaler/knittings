@@ -26,4 +26,6 @@
     <string name="delete_photo_dialog_question">Do you really want to delete the photo?</string>
     <string name="delete_photo_dialog_delete_button">Delete</string>
     <string name="delete_photo_dialog_cancel_button">Cancel</string>
+    <string name="rating">Rating:</string>
+    <string name="photo">Photo</string>
 </resources>

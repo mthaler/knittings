@@ -20,8 +20,8 @@ import java.util.List;
 
 public class PhotoGalleryFragment extends Fragment {
 
-    public static final String CURRENT_PHOTO_PATH = "current_photo_path";
-    public static final String KNITTING_ID = "knitting_id";
+    private static final String CURRENT_PHOTO_PATH = "current_photo_path";
+    private static final String KNITTING_ID = "knitting_id";
     private static final int REQUEST_IMAGE_CAPTURE = 0;
     private static final String LOG_TAG = PhotoGalleryFragment.class.getSimpleName();
 

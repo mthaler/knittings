@@ -12,8 +12,8 @@ public class KnittingDatabaseHelper extends SQLiteOpenHelper {
 
     private static final String LOG_TAG = KnittingDatabaseHelper.class.getSimpleName();
 
-    public static final String DB_NAME = "knittings.db";
-    public static final int DB_VERSION = 1;
+    private static final String DB_NAME = "knittings.db";
+    private static final int DB_VERSION = 1;
 
     /**
      * Class that defines the knittings database table schema

@@ -24,7 +24,7 @@ import java.util.Date;
  */
 public class KnittingFragment extends Fragment {
 
-    public static final String KNITTING_ID = "knitting_id";
+    private static final String KNITTING_ID = "knitting_id";
 
     private static final String DIALOG_DATE = "date";
     private static final int REQUEST_STARTED = 0;

@@ -27,7 +27,7 @@ import java.util.List;
 public class KnittingActivity extends AppCompatActivity {
 
     public static final String EXTRA_KNITTING_ID = "com.mthaler.knitting.KNITTING_ID";
-    public static final String LOG_TAG = KnittingActivity.class.getSimpleName();
+    private static final String LOG_TAG = KnittingActivity.class.getSimpleName();
 
     private KnittingFragment knittingFragment;
 

@@ -9,7 +9,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:scaleType="centerInside" />
+        android:scaleType="centerInside"
+        android:contentDescription="@string/photo"/>
 
     <android.support.design.widget.TextInputLayout
         android:id="@+id/photo_description_input_layout_name"

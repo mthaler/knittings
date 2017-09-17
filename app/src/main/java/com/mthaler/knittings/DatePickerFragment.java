@@ -16,7 +16,7 @@ import java.util.GregorianCalendar;
 public class DatePickerFragment extends DialogFragment {
     public static final String EXTRA_DATE = "com.mthaler.knittings.DATE";
 
-    Date mDate;
+    private Date date;
 
     public static DatePickerFragment newInstance(Date date) {
         Bundle args = new Bundle();
@@ -33,7 +33,7 @@ public class DatePickerFragment extends DialogFragment {
             return;
 
         Intent i = new Intent();
-        i.putExtra(EXTRA_DATE, mDate);
+        i.putExtra(EXTRA_DATE, date);
 
         getTargetFragment()
                 .onActivityResult(getTargetRequestCode(), resultCode, i);
@@ -41,10 +41,10 @@ public class DatePickerFragment extends DialogFragment {
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        mDate = (Date)getArguments().getSerializable(EXTRA_DATE);
+        date = (Date)getArguments().getSerializable(EXTRA_DATE);
 
         Calendar calendar = Calendar.getInstance();
-        calendar.setTime(mDate);
+        calendar.setTime(date);
         int year = calendar.get(Calendar.YEAR);
         int month = calendar.get(Calendar.MONTH);
         int day = calendar.get(Calendar.DAY_OF_MONTH);
@@ -55,10 +55,10 @@ public class DatePickerFragment extends DialogFragment {
         DatePicker datePicker = v.findViewById(R.id.dialog_date_datePicker);
         datePicker.init(year, month, day, new DatePicker.OnDateChangedListener() {
             public void onDateChanged(DatePicker view, int year, int month, int day) {
-                mDate = new GregorianCalendar(year, month, day).getTime();
+                date = new GregorianCalendar(year, month, day).getTime();
 
                 // update argument to preserve selected value on rotation
-                getArguments().putSerializable(EXTRA_DATE, mDate);
+                getArguments().putSerializable(EXTRA_DATE, date);
             }
         });
 

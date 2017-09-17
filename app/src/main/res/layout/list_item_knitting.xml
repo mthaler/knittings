@@ -7,7 +7,8 @@
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_alignParentLeft="true"
-        android:padding="4dp"/>
+        android:padding="4dp"
+        android:contentDescription="@string/photo"/>
     <TextView android:id="@+id/knitting_list_item_startedTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
