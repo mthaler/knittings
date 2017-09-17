@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,32 +30,36 @@ public class KnittingFragment extends Fragment {
     private static final int REQUEST_STARTED = 0;
     private static final int REQUEST_FINISHED = 1;
 
+    private static final String LOG_TAG = KnittingFragment.class.getSimpleName();
+
     private Knitting knitting = new Knitting(-1);
 
     private TextView textViewStarted;
     private TextView textViewFinished;
-    private EditText editTextSize;
 
     public static KnittingFragment newInstance(Knitting knitting) {
         final KnittingFragment fragment = new KnittingFragment();
         Bundle args = new Bundle();
         args.putLong(KNITTING_ID, knitting.getId());
         fragment.setArguments(args);
+        Log.d(LOG_TAG, "Created new KnittingFragment with knitting id: " + knitting.getId());
         return fragment;
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
-        // crreate view
+        // create view
         final View v = inflater.inflate(R.layout.fragment_knitting, parent, false);
 
         if (savedInstanceState != null) {
             if (savedInstanceState.containsKey(KNITTING_ID)) {
                 knitting = KnittingsDataSource.getInstance(getActivity()).getKnitting(savedInstanceState.getLong(KNITTING_ID));
+                Log.d(LOG_TAG, "Set knitting: " + knitting.getId());
             }
         } else {
             final long knittingID = getArguments().getLong(KNITTING_ID);
             knitting = KnittingsDataSource.getInstance(getActivity()).getKnitting(knittingID);
+            Log.d(LOG_TAG, "Set knitting: " + knitting.getId());
         }
 
         // initialize title text field
@@ -63,6 +68,7 @@ public class KnittingFragment extends Fragment {
         editTextTitle.addTextChangedListener(new TextWatcher() {
             public void onTextChanged(CharSequence c, int start, int before, int count) {
                 knitting.setTitle(c.toString());
+                KnittingsDataSource.getInstance(getActivity()).updateKnitting(knitting);
             }
 
             public void beforeTextChanged(CharSequence c, int start, int count, int after) {
@@ -80,6 +86,7 @@ public class KnittingFragment extends Fragment {
         editTextDescription.addTextChangedListener(new TextWatcher() {
             public void onTextChanged(CharSequence c, int start, int before, int count) {
                 knitting.setDescription(c.toString());
+                KnittingsDataSource.getInstance(getActivity()).updateKnitting(knitting);
             }
 
             public void beforeTextChanged(CharSequence c, int start, int count, int after) {
@@ -123,6 +130,7 @@ public class KnittingFragment extends Fragment {
                 } catch (Exception ex) {
                     knitting.setNeedleDiameter(0.0);
                 }
+                KnittingsDataSource.getInstance(getActivity()).updateKnitting(knitting);
             }
 
             public void beforeTextChanged(CharSequence c, int start, int count, int after) {
@@ -135,6 +143,7 @@ public class KnittingFragment extends Fragment {
                 } catch (Exception ex) {
                     knitting.setNeedleDiameter(0.0);
                 }
+                KnittingsDataSource.getInstance(getActivity()).updateKnitting(knitting);
             }
         });
 
@@ -147,6 +156,7 @@ public class KnittingFragment extends Fragment {
                 } catch (Exception ex) {
                     knitting.setSize(0.0);
                 }
+                KnittingsDataSource.getInstance(getActivity()).updateKnitting(knitting);
             }
 
             public void beforeTextChanged(CharSequence c, int start, int count, int after) {
@@ -159,6 +169,7 @@ public class KnittingFragment extends Fragment {
                 } catch (Exception ex) {
                     knitting.setSize(0.0);
                 }
+                KnittingsDataSource.getInstance(getActivity()).updateKnitting(knitting);
             }
         });
 
@@ -168,18 +179,11 @@ public class KnittingFragment extends Fragment {
             @Override
             public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
                 knitting.setRating(rating);
+                KnittingsDataSource.getInstance(getActivity()).updateKnitting(knitting);
             }
         });
 
         return v;
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        // we update the knitting in the database when onPause is called
-        // this is the case when the activity is party hidden or if an other activity is started
-        if (knitting != null) KnittingsDataSource.getInstance(getActivity()).updateKnitting(knitting);
     }
 
     @Override
@@ -191,10 +195,12 @@ public class KnittingFragment extends Fragment {
             Date date = (Date)data.getSerializableExtra(DatePickerFragment.EXTRA_DATE);
             knitting.setStarted(date);
             textViewStarted.setText(DateFormat.getDateInstance().format(knitting.getStarted()));
+            KnittingsDataSource.getInstance(getActivity()).updateKnitting(knitting);
         } else if (requestCode == REQUEST_FINISHED) {
             Date date = (Date)data.getSerializableExtra(DatePickerFragment.EXTRA_DATE);
             knitting.setFinished(date);
             textViewFinished.setText(DateFormat.getDateInstance().format(knitting.getFinished()));
+            KnittingsDataSource.getInstance(getActivity()).updateKnitting(knitting);
         }
     }
 
