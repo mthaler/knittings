@@ -6,7 +6,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.wifi.WifiManager;
 import android.os.Environment;
 import android.util.Log;
 import java.io.File;
@@ -80,7 +79,7 @@ public class KnittingsDataSource {
      * @return updated knitting
      */
     public Knitting updateKnitting(Knitting knitting) {
-        Log.d(LOG_TAG, "Updating knitting " + knitting);
+        Log.d(LOG_TAG, "Updating knitting " + knitting + ", default photo: " + knitting.getDefaultPhoto());
         try (SQLiteDatabase database = dbHelper.getWritableDatabase()) {
             final ContentValues values = new ContentValues();
             values.put(KnittingDatabaseHelper.KnittingTable.Cols.TITLE, knitting.getTitle());
