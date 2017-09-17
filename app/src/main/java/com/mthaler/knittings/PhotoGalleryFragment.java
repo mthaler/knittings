@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.FileProvider;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +23,7 @@ public class PhotoGalleryFragment extends Fragment {
     public static final String CURRENT_PHOTO_PATH = "current_photo_path";
     public static final String KNITTING_ID = "knitting_id";
     private static final int REQUEST_IMAGE_CAPTURE = 0;
+    private static final String PHOTO_GALLERY_FRAGMENT_TAG = "PhotoGalleryFragment";
 
     private Knitting knitting = new Knitting(-1);
 
@@ -33,6 +35,7 @@ public class PhotoGalleryFragment extends Fragment {
         Bundle args = new Bundle();
         args.putLong(KNITTING_ID, knitting.getId());
         fragment.setArguments(args);
+        Log.d(PHOTO_GALLERY_FRAGMENT_TAG, "Created new PhotoGalleryFragment with knitting id: " + knitting.getId());
         return fragment;
     }
 
@@ -45,13 +48,16 @@ public class PhotoGalleryFragment extends Fragment {
         if (savedInstanceState != null) {
             if (savedInstanceState.containsKey(CURRENT_PHOTO_PATH)) {
                 currentPhotoPath = new File(savedInstanceState.getString(CURRENT_PHOTO_PATH));
+                Log.d(PHOTO_GALLERY_FRAGMENT_TAG, "Set current photo path: " + currentPhotoPath);
             }
             if (savedInstanceState.containsKey(KNITTING_ID)) {
                 knitting = KnittingsDataSource.getInstance(getActivity()).getKnitting(savedInstanceState.getLong(KNITTING_ID));
+                Log.d(PHOTO_GALLERY_FRAGMENT_TAG, "Set knitting: " + knitting);
             }
         } else {
             final long knittingID = getArguments().getLong(KNITTING_ID);
             knitting = KnittingsDataSource.getInstance(getActivity()).getKnitting(knittingID);
+            Log.d(PHOTO_GALLERY_FRAGMENT_TAG, "Set knitting: " + knitting);
         }
 
         gridView = v.findViewById(R.id.gridView);
@@ -66,6 +72,7 @@ public class PhotoGalleryFragment extends Fragment {
                 final Intent intent = new Intent(getActivity(), PhotoActivity.class);
                 intent.putExtra(PhotoActivity.EXTRA_PHOTO_ID, photo.getId());
                 intent.putExtra(KnittingActivity.EXTRA_KNITTING_ID, knitting.getId());
+                Log.d(PHOTO_GALLERY_FRAGMENT_TAG, "Created PhotoActivity intent");
 
                 //Start details activity
                 startActivity(intent);
@@ -73,11 +80,13 @@ public class PhotoGalleryFragment extends Fragment {
                 final Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 final File photoFile = KnittingsDataSource.getInstance(getActivity()).getPhotoFile(knitting);
                 currentPhotoPath = photoFile;
+                Log.d(PHOTO_GALLERY_FRAGMENT_TAG, "Set current photo path: " + currentPhotoPath);
                 final PackageManager packageManager = getActivity().getPackageManager();
                 boolean canTakePhoto = photoFile != null && takePictureIntent.resolveActivity(packageManager) != null;
                 if (canTakePhoto) {
                     Uri uri = FileProvider.getUriForFile(getContext(), "com.mthaler.knittings.fileprovider", photoFile);
                     takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
+                    Log.d(PHOTO_GALLERY_FRAGMENT_TAG, "Created take picture intent");
                     startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
                 }
             }
@@ -94,13 +103,17 @@ public class PhotoGalleryFragment extends Fragment {
         }
         if (requestCode == REQUEST_IMAGE_CAPTURE) {
             // add photo to database
+            Log.d(PHOTO_GALLERY_FRAGMENT_TAG, "Received result for take photo intent");
             final int orientation = PictureUtils.getOrientation(currentPhotoPath.getAbsolutePath());
             final Bitmap preview = PictureUtils.decodeSampledBitmapFromPath(currentPhotoPath.getAbsolutePath(), 200, 200);
             final Bitmap rotatedPreview = PictureUtils.rotateBitmap(preview, orientation);
-            Photo photo = KnittingsDataSource.getInstance(getActivity()).createPhoto(currentPhotoPath, knitting.getId(), rotatedPreview, "");
+            final Photo photo = KnittingsDataSource.getInstance(getActivity()).createPhoto(currentPhotoPath, knitting.getId(), rotatedPreview, "");
+            Log.d(PHOTO_GALLERY_FRAGMENT_TAG, "Created new photo from " + currentPhotoPath + ", knitting id " + knitting.getId());
             // add first photo as default photo
             if (knitting.getDefaultPhoto() == null) {
+                Log.d(PHOTO_GALLERY_FRAGMENT_TAG, "Set " + photo + " as default photo");
                 knitting.setDefaultPhoto(photo);
+                KnittingsDataSource.getInstance(getActivity()).updateKnitting(knitting);
             }
             // update grid view
             final List<Photo> photos = KnittingsDataSource.getInstance(getActivity()).getAllPhotos(knitting);
