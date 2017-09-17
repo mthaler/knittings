@@ -46,7 +46,7 @@
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="10dp"
-            android:layout_weight="1">
+            android:layout_weight="3">
 
             <android.support.design.widget.TextInputEditText android:id="@+id/knitting_started"
                 android:layout_width="match_parent"
@@ -66,7 +66,7 @@
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="10dp"
-            android:layout_weight="1">
+            android:layout_weight="3">
 
             <android.support.design.widget.TextInputEditText android:id="@+id/knitting_finished"
                 android:layout_width="match_parent"
@@ -79,20 +79,13 @@
                 style="@android:style/Widget.DeviceDefault.Light.Spinner"/>
         </android.support.design.widget.TextInputLayout>
 
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
         <android.support.design.widget.TextInputLayout
             android:id="@+id/knitting_needle_diameter_input_layout_name"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="10dp"
-            android:layout_weight="1">
+            android:layout_weight="2">
 
             <android.support.design.widget.TextInputEditText android:id="@+id/knitting_needle_diameter"
                 android:layout_width="match_parent"
@@ -109,7 +102,7 @@
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="10dp"
-            android:layout_weight="1">
+            android:layout_weight="2">
 
             <android.support.design.widget.TextInputEditText android:id="@+id/knitting_size"
                 android:layout_width="match_parent"
