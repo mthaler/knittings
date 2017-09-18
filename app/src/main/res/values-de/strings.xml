@@ -27,4 +27,7 @@
     <string name="delete_photo_dialog_question">Foto wirklich löschen?</string>
     <string name="delete_photo_dialog_delete_button">Löschen</string>
     <string name="delete_photo_dialog_cancel_button">Abbrechen</string>
+
+    <string name="rating">Bewertung:</string>
+    <string name="photo">Foto</string>
 </resources>
