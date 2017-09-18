@@ -3,6 +3,7 @@ package com.mthaler.knittings;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -62,7 +63,20 @@ public class GridViewAdapter extends ArrayAdapter<Photo> {
                 }
             });
         } else {
-            holder.image.setImageResource(R.drawable.ic_add_photo);
+            // we use a view tree observer to get the width and the height of the image view and scale the image accordingly reduce memory usage
+            final ViewTreeObserver viewTreeObserver = holder.image.getViewTreeObserver();
+            viewTreeObserver.addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+                @Override
+                public boolean onPreDraw() {
+                    holder.image.getViewTreeObserver().removeOnPreDrawListener(this);
+                    final int width = holder.image.getMeasuredWidth();
+                    final int height = holder.image.getMeasuredHeight();
+                    final Bitmap img = BitmapFactory.decodeResource(GridViewAdapter.this.context.getResources(), R.drawable.add_photo);
+                    final Bitmap scaled = PictureUtils.resize(img, width, width);
+                    holder.image.setImageBitmap(scaled);
+                    return true;
+                }
+            });
         }
 
         return row;
