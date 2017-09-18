@@ -32,7 +32,7 @@ public class KnittingFragment extends Fragment {
 
     private static final String LOG_TAG = KnittingFragment.class.getSimpleName();
 
-    private Knitting knitting = new Knitting(-1);
+    private Knitting knitting;
 
     private TextView textViewStarted;
     private TextView textViewFinished;

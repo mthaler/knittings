@@ -25,7 +25,7 @@ public class PhotoGalleryFragment extends Fragment {
     private static final int REQUEST_IMAGE_CAPTURE = 0;
     private static final String LOG_TAG = PhotoGalleryFragment.class.getSimpleName();
 
-    private Knitting knitting = new Knitting(-1);
+    private Knitting knitting = null;
 
     private GridView gridView;
     private File currentPhotoPath;

@@ -103,6 +103,16 @@ public class Knitting {
 
     @Override
     public String toString() {
-        return title;
+        return "Knitting{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", description='" + description + '\'' +
+                ", started=" + started +
+                ", finished=" + finished +
+                ", needleDiameter=" + needleDiameter +
+                ", size=" + size +
+                ", defaultPhoto=" + defaultPhoto +
+                ", rating=" + rating +
+                '}';
     }
 }

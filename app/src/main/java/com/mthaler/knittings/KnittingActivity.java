@@ -34,23 +34,21 @@ public class KnittingActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.d(LOG_TAG, "onCreate called");
 
         setContentView(R.layout.activity_knitting);
         final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        Knitting knitting;
-        if (savedInstanceState != null) {
-            final long id = savedInstanceState.getLong(EXTRA_KNITTING_ID);
-            Log.d(LOG_TAG, "Got knitting id from saved instance state: " + id);
-            knitting = KnittingsDataSource.getInstance(this.getApplicationContext()).getKnitting(id);
-        } else {
-            // get the id of the knitting that should be displayed.
-            final long id = getIntent().getLongExtra(EXTRA_KNITTING_ID, -1);
+        // get the id of the knitting that should be displayed.
+        final long id = getIntent().getLongExtra(EXTRA_KNITTING_ID, -1);
+        if (id != -1) {
             Log.d(LOG_TAG, "Got knitting id from extra: " + id);
-            knitting = KnittingsDataSource.getInstance(this.getApplicationContext()).getKnitting(id);
+        } else {
+            Log.e(LOG_TAG, "Got invalid knitting id -1");
         }
+        final Knitting knitting = KnittingsDataSource.getInstance(this.getApplicationContext()).getKnitting(id);
 
         final ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
         setupViewPager(viewPager, knitting);
@@ -93,19 +91,7 @@ public class KnittingActivity extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
         }
     }
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        final Knitting knitting = knittingFragment.getKnitting();
-        Log.d(LOG_TAG, "Saving instance state for knitting " + knitting);
-        if (knitting != null) {
-            outState.putLong(EXTRA_KNITTING_ID, knitting.getId());
-            Log.d(LOG_TAG, "Wrote knitting id " + knitting.getId() + " to out state");
-        }
-        // call superclass to save any view hierarchy
-        super.onSaveInstanceState(outState);
-    }
-
+    
     private void setupViewPager(ViewPager viewPager, Knitting knitting) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         knittingFragment = KnittingFragment.newInstance(knitting);
