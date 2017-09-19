@@ -6,4 +6,8 @@
         android:icon="@drawable/ic_menu_delete"
         android:title="@string/delete_photo"
         app:showAsAction="ifRoom|withText"/>
+    <item
+        android:id="@+id/menu_item_set_main_photo"
+        android:title="@string/set_main_photo"
+        app:showAsAction="never|withText"/>
 </menu>

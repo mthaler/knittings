@@ -15,7 +15,8 @@
     <string name="date_picker_title">Date</string>
     <!-- photo details -->
     <string name="photo_description_hint">Description</string>
-    <string name="delete_photo">Delete Photo</string>
+    <string name="delete_photo">Delete photo</string>
+    <string name="set_main_photo">Set main photo</string>
     <!-- delete knittings dialog -->
     <string name="delete_knitting_dialog_title">Delete</string>
     <string name="delete_knitting_dialog_question">Do you really want to delete the knitting?</string>

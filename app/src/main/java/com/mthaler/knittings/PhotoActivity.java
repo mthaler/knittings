@@ -3,6 +3,8 @@ package com.mthaler.knittings;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.annotation.Nullable;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -65,6 +67,10 @@ public class PhotoActivity extends AppCompatActivity {
                             }
                         });
                 alert.show();
+                return true;
+            case R.id.menu_item_set_main_photo:
+                CoordinatorLayout layout = (CoordinatorLayout)findViewById(R.id.photo_activity_layout);
+                Snackbar.make(layout, "Used as main photo", Snackbar.LENGTH_SHORT).show();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
