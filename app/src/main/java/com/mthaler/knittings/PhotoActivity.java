@@ -9,12 +9,14 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
 public class PhotoActivity extends AppCompatActivity {
 
     public static final String EXTRA_PHOTO_ID = "com.mthaler.knitting.PHOTO_ID";
+    public static final String LOG_TAG = PhotoActivity.class.getSimpleName();
 
     private long parentKnittingID;
 
@@ -69,6 +71,12 @@ public class PhotoActivity extends AppCompatActivity {
                 alert.show();
                 return true;
             case R.id.menu_item_set_main_photo:
+                final PhotoDetailsView photoDetailsView = (PhotoDetailsView) getSupportFragmentManager().findFragmentById(R.id.fragment_photo);
+                final Photo photo = photoDetailsView.getPhoto();
+                final Knitting knitting = KnittingsDataSource.getInstance(this).getKnitting(photo.getKnittingID());
+                knitting.setDefaultPhoto(photo);
+                KnittingsDataSource.getInstance(this).updateKnitting(knitting);
+                Log.d(LOG_TAG, "Set " + photo + " as default photo");
                 CoordinatorLayout layout = (CoordinatorLayout)findViewById(R.id.photo_activity_layout);
                 Snackbar.make(layout, "Used as main photo", Snackbar.LENGTH_SHORT).show();
                 return true;

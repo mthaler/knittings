@@ -103,4 +103,9 @@ public class PhotoFragment extends Fragment implements PhotoDetailsView {
         KnittingsDataSource.getInstance(getActivity()).deletePhoto(photo);
         photo = null;
     }
+
+    @Override
+    public Photo getPhoto() {
+        return photo;
+    }
 }
