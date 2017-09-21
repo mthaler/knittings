@@ -70,7 +70,6 @@ public class GridViewAdapter extends ArrayAdapter<Photo> {
                 public boolean onPreDraw() {
                     holder.image.getViewTreeObserver().removeOnPreDrawListener(this);
                     final int width = holder.image.getMeasuredWidth();
-                    final int height = holder.image.getMeasuredHeight();
                     final Bitmap img = BitmapFactory.decodeResource(GridViewAdapter.this.context.getResources(), R.drawable.add_photo);
                     final Bitmap scaled = PictureUtils.resize(img, width, width);
                     holder.image.setImageBitmap(scaled);
