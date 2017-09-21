@@ -1,6 +1,7 @@
 TODO:
 - make sure everything still works if device is rotated
 - make entries in knittings list look nicer
-- fix needle diameter input
 - make sure everything is translated
 - KnittingDetails view crashes when rotated during taking photos
+- Ratings not visible in landscape mode on Nexus One
+- Knitting details are lost when a new knitting is created, details are added and a photo is taken
