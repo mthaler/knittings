@@ -99,6 +99,13 @@ public class KnittingActivity extends AppCompatActivity {
         final PhotoGalleryFragment photoGalleryFragment = PhotoGalleryFragment.newInstance(knitting);
         adapter.addFragment(photoGalleryFragment, "Photos");
         viewPager.setAdapter(adapter);
+        viewPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
+            @Override
+            public void onPageSelected(int position) {
+                Log.d(LOG_TAG, "Page selected: " + position);
+            }
+        });
+
     }
 
     class ViewPagerAdapter extends FragmentPagerAdapter {
