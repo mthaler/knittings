@@ -142,4 +142,20 @@ public class PhotoGalleryFragment extends Fragment {
         }
         super.onSaveInstanceState(outState);
     }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (knitting != null) {
+            if (isVisibleToUser) {
+                // the fragment became visible because the user selected it in the view pager
+                // get current knitting from database
+                knitting = KnittingsDataSource.getInstance(getActivity()).getKnitting(knitting.getId());
+            } else {
+                // the fragment became invisible because the user selected another tab in the view pager
+                // save current knitting to database
+                KnittingsDataSource.getInstance(getActivity()).updateKnitting(knitting);
+            }
+        }
+    }
 }
