@@ -4,4 +4,4 @@ TODO:
 - make sure everything is translated
 - KnittingDetails view crashes when rotated during taking photos
 - Ratings not visible in landscape mode on Nexus One
-- Knitting details are lost when a new knitting is created, details are added and a photo is taken
+- Add categories: Socken, Pullover etc. Make it possible to define different colors for category. Use these colos in knitting list as background
