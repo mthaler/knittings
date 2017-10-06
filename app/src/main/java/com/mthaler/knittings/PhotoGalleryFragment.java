@@ -71,7 +71,7 @@ public class PhotoGalleryFragment extends Fragment {
                 //Create intent
                 final Intent intent = new Intent(getActivity(), PhotoActivity.class);
                 intent.putExtra(PhotoActivity.Companion.getEXTRA_PHOTO_ID(), photo.getId());
-                intent.putExtra(KnittingActivity.EXTRA_KNITTING_ID, knitting.getId());
+                intent.putExtra(KnittingActivity.Companion.getEXTRA_KNITTING_ID(), knitting.getId());
                 Log.d(LOG_TAG, "Created PhotoActivity intent");
 
                 //Start details activity

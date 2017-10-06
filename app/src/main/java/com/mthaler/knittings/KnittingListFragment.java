@@ -33,7 +33,7 @@ public class KnittingListFragment extends ListFragment implements KnittingListVi
         Knitting c = ((KnittingAdapter)getListAdapter()).getItem(position);
         // start an instance of CrimePagerActivity
         Intent i = new Intent(getActivity(), KnittingActivity.class);
-        i.putExtra(KnittingActivity.EXTRA_KNITTING_ID, c.getId());
+        i.putExtra(KnittingActivity.Companion.getEXTRA_KNITTING_ID(), c.getId());
         startActivityForResult(i, 0);
     }
 
@@ -48,7 +48,7 @@ public class KnittingListFragment extends ListFragment implements KnittingListVi
     public void addKnitting() {
         Knitting knitting = KnittingsDataSource.getInstance(getActivity()).createKnitting("", "", new Date(), null, 0.0, 0.0, 0.0);
         Intent intent = new Intent(getActivity(), KnittingActivity.class);
-        intent.putExtra(KnittingActivity.EXTRA_KNITTING_ID, knitting.getId());
+        intent.putExtra(KnittingActivity.Companion.getEXTRA_KNITTING_ID(), knitting.getId());
         startActivity(intent);
     }
 
