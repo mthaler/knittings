@@ -248,7 +248,7 @@ public class KnittingsDataSource {
             values.put(KnittingDatabaseHelper.PhotoTable.Cols.FILENAME, filename.getAbsolutePath());
             values.put(KnittingDatabaseHelper.PhotoTable.Cols.KNITTING_ID, knittingID);
             values.put(KnittingDatabaseHelper.PhotoTable.Cols.DESCRIPTION, description);
-            final byte[] previewBytes = Photo.getBytes(preview);
+            final byte[] previewBytes = Photo.Companion.getBytes(preview);
             if (previewBytes != null) {
                 values.put(KnittingDatabaseHelper.PhotoTable.Cols.PREVIEW, previewBytes);
             } else {
@@ -281,7 +281,7 @@ public class KnittingsDataSource {
             values.put(KnittingDatabaseHelper.PhotoTable.Cols.FILENAME, photo.getFilename().getAbsolutePath());
             values.put(KnittingDatabaseHelper.PhotoTable.Cols.KNITTING_ID, photo.getKnittingID());
             values.put(KnittingDatabaseHelper.PhotoTable.Cols.DESCRIPTION, photo.getDescription());
-            final byte[] previewBytes = Photo.getBytes(photo.getPreview());
+            final byte[] previewBytes = Photo.Companion.getBytes(photo.getPreview());
             if (previewBytes != null) {
                 values.put(KnittingDatabaseHelper.PhotoTable.Cols.PREVIEW, previewBytes);
             } else {
