@@ -51,17 +51,17 @@ public class PhotoGalleryFragment extends Fragment {
                 Log.d(LOG_TAG, "Set current photo path: " + currentPhotoPath);
             }
             if (savedInstanceState.containsKey(KNITTING_ID)) {
-                knitting = KnittingsDataSource.getInstance(getActivity()).getKnitting(savedInstanceState.getLong(KNITTING_ID));
+                knitting = KnittingsDataSource.Companion.getInstance(getActivity()).getKnitting(savedInstanceState.getLong(KNITTING_ID));
                 Log.d(LOG_TAG, "Set knitting: " + knitting);
             }
         } else {
             final long knittingID = getArguments().getLong(KNITTING_ID);
-            knitting = KnittingsDataSource.getInstance(getActivity()).getKnitting(knittingID);
+            knitting = KnittingsDataSource.Companion.getInstance(getActivity()).getKnitting(knittingID);
             Log.d(LOG_TAG, "Set knitting: " + knitting);
         }
 
         gridView = v.findViewById(R.id.gridView);
-        final List<Photo> photos = KnittingsDataSource.getInstance(getActivity()).getAllPhotos(knitting);
+        final List<Photo> photos = KnittingsDataSource.Companion.getInstance(getActivity()).getAllPhotos(knitting);
         final GridViewAdapter gridAdapter = new GridViewAdapter(getActivity(), R.layout.grid_item_layout, photos);
         gridView.setAdapter(gridAdapter);
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -78,7 +78,7 @@ public class PhotoGalleryFragment extends Fragment {
                 startActivity(intent);
             } else {
                 final Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                final File photoFile = KnittingsDataSource.getInstance(getActivity()).getPhotoFile(knitting);
+                final File photoFile = KnittingsDataSource.Companion.getInstance(getActivity()).getPhotoFile(knitting);
                 currentPhotoPath = photoFile;
                 Log.d(LOG_TAG, "Set current photo path: " + currentPhotoPath);
                 final PackageManager packageManager = getActivity().getPackageManager();
@@ -107,16 +107,16 @@ public class PhotoGalleryFragment extends Fragment {
             final int orientation = PictureUtils.INSTANCE.getOrientation(currentPhotoPath.getAbsolutePath());
             final Bitmap preview = PictureUtils.INSTANCE.decodeSampledBitmapFromPath(currentPhotoPath.getAbsolutePath(), 200, 200);
             final Bitmap rotatedPreview = PictureUtils.INSTANCE.rotateBitmap(preview, orientation);
-            final Photo photo = KnittingsDataSource.getInstance(getActivity()).createPhoto(currentPhotoPath, knitting.getId(), rotatedPreview, "");
+            final Photo photo = KnittingsDataSource.Companion.getInstance(getActivity()).createPhoto(currentPhotoPath, knitting.getId(), rotatedPreview, "");
             Log.d(LOG_TAG, "Created new photo from " + currentPhotoPath + ", knitting id " + knitting.getId());
             // add first photo as default photo
             if (knitting.getDefaultPhoto() == null) {
                 Log.d(LOG_TAG, "Set " + photo + " as default photo");
                 knitting.setDefaultPhoto(photo);
-                KnittingsDataSource.getInstance(getActivity()).updateKnitting(knitting);
+                KnittingsDataSource.Companion.getInstance(getActivity()).updateKnitting(knitting);
             }
             // update grid view
-            final List<Photo> photos = KnittingsDataSource.getInstance(getActivity()).getAllPhotos(knitting);
+            final List<Photo> photos = KnittingsDataSource.Companion.getInstance(getActivity()).getAllPhotos(knitting);
             final GridViewAdapter gridAdapter = new GridViewAdapter(getActivity(), R.layout.grid_item_layout, photos);
             gridView.setAdapter(gridAdapter);
         }
@@ -126,7 +126,7 @@ public class PhotoGalleryFragment extends Fragment {
     public void onResume() {
         super.onResume();
         if (knitting != null) {
-            final List<Photo> photos = KnittingsDataSource.getInstance(getActivity()).getAllPhotos(knitting);
+            final List<Photo> photos = KnittingsDataSource.Companion.getInstance(getActivity()).getAllPhotos(knitting);
             final GridViewAdapter gridAdapter = new GridViewAdapter(getActivity(), R.layout.grid_item_layout, photos);
             gridView.setAdapter(gridAdapter);
         }
@@ -150,11 +150,11 @@ public class PhotoGalleryFragment extends Fragment {
             if (isVisibleToUser) {
                 // the fragment became visible because the user selected it in the view pager
                 // get current knitting from database
-                knitting = KnittingsDataSource.getInstance(getActivity()).getKnitting(knitting.getId());
+                knitting = KnittingsDataSource.Companion.getInstance(getActivity()).getKnitting(knitting.getId());
             } else {
                 // the fragment became invisible because the user selected another tab in the view pager
                 // save current knitting to database
-                KnittingsDataSource.getInstance(getActivity()).updateKnitting(knitting);
+                KnittingsDataSource.Companion.getInstance(getActivity()).updateKnitting(knitting);
             }
         }
     }

@@ -51,7 +51,7 @@ class PhotoFragment : Fragment(), PhotoDetailsView {
         super.onPause()
         // we update the photo in the database when onPause is called
         // this is the case when the activity is party hidden or if an other activity is started
-        if (photo != null) KnittingsDataSource.getInstance(activity).updatePhoto(photo)
+        if (photo != null) KnittingsDataSource.getInstance(activity).updatePhoto(photo!!)
     }
 
     override fun init(photo: Photo) {
@@ -93,7 +93,7 @@ class PhotoFragment : Fragment(), PhotoDetailsView {
             KnittingsDataSource.getInstance(activity).updateKnitting(knitting)
         }
         // delete database entry
-        KnittingsDataSource.getInstance(activity).deletePhoto(photo)
+        KnittingsDataSource.getInstance(activity).deletePhoto(photo!!)
         photo = null
     }
 

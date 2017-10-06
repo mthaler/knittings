@@ -51,7 +51,7 @@ class KnittingFragment : Fragment() {
         editTextTitle.addTextChangedListener(object : TextWatcher {
             override fun onTextChanged(c: CharSequence, start: Int, before: Int, count: Int) {
                 knitting!!.title = c.toString()
-                KnittingsDataSource.getInstance(activity).updateKnitting(knitting)
+                KnittingsDataSource.getInstance(activity).updateKnitting(knitting!!)
             }
 
             override fun beforeTextChanged(c: CharSequence, start: Int, count: Int, after: Int) {
@@ -69,7 +69,7 @@ class KnittingFragment : Fragment() {
         editTextDescription.addTextChangedListener(object : TextWatcher {
             override fun onTextChanged(c: CharSequence, start: Int, before: Int, count: Int) {
                 knitting!!.description = c.toString()
-                KnittingsDataSource.getInstance(activity).updateKnitting(knitting)
+                KnittingsDataSource.getInstance(activity).updateKnitting(knitting!!)
             }
 
             override fun beforeTextChanged(c: CharSequence, start: Int, count: Int, after: Int) {
@@ -110,7 +110,7 @@ class KnittingFragment : Fragment() {
                     knitting!!.needleDiameter = 0.0
                 }
 
-                KnittingsDataSource.getInstance(activity).updateKnitting(knitting)
+                KnittingsDataSource.getInstance(activity).updateKnitting(knitting!!)
             }
 
             override fun beforeTextChanged(c: CharSequence, start: Int, count: Int, after: Int) {
@@ -124,7 +124,7 @@ class KnittingFragment : Fragment() {
                     knitting!!.needleDiameter = 0.0
                 }
 
-                KnittingsDataSource.getInstance(activity).updateKnitting(knitting)
+                KnittingsDataSource.getInstance(activity).updateKnitting(knitting!!)
             }
         })
 
@@ -138,7 +138,7 @@ class KnittingFragment : Fragment() {
                     knitting!!.size = 0.0
                 }
 
-                KnittingsDataSource.getInstance(activity).updateKnitting(knitting)
+                KnittingsDataSource.getInstance(activity).updateKnitting(knitting!!)
             }
 
             override fun beforeTextChanged(c: CharSequence, start: Int, count: Int, after: Int) {
@@ -152,7 +152,7 @@ class KnittingFragment : Fragment() {
                     knitting!!.size = 0.0
                 }
 
-                KnittingsDataSource.getInstance(activity).updateKnitting(knitting)
+                KnittingsDataSource.getInstance(activity).updateKnitting(knitting!!)
             }
         })
 
@@ -160,7 +160,7 @@ class KnittingFragment : Fragment() {
         ratingBar.rating = knitting!!.rating.toFloat()
         ratingBar.onRatingBarChangeListener = RatingBar.OnRatingBarChangeListener { ratingBar, rating, fromUser ->
             knitting!!.rating = rating.toDouble()
-            KnittingsDataSource.getInstance(activity).updateKnitting(knitting)
+            KnittingsDataSource.getInstance(activity).updateKnitting(knitting!!)
         }
 
         return v
@@ -174,12 +174,12 @@ class KnittingFragment : Fragment() {
             val date = data!!.getSerializableExtra(DatePickerFragment.EXTRA_DATE) as Date
             knitting!!.started = date
             textViewStarted!!.text = DateFormat.getDateInstance().format(knitting!!.started)
-            KnittingsDataSource.getInstance(activity).updateKnitting(knitting)
+            KnittingsDataSource.getInstance(activity).updateKnitting(knitting!!)
         } else if (requestCode == REQUEST_FINISHED) {
             val date = data!!.getSerializableExtra(DatePickerFragment.EXTRA_DATE) as Date
             knitting!!.finished = date
             textViewFinished!!.text = DateFormat.getDateInstance().format(knitting!!.finished)
-            KnittingsDataSource.getInstance(activity).updateKnitting(knitting)
+            KnittingsDataSource.getInstance(activity).updateKnitting(knitting!!)
         }
     }
 
@@ -197,9 +197,9 @@ class KnittingFragment : Fragment() {
      */
     fun deleteKnitting() {
         // delete all photos from the database
-        KnittingsDataSource.getInstance(activity).deleteAllPhotos(knitting)
+        KnittingsDataSource.getInstance(activity).deleteAllPhotos(knitting!!)
         // delete database entry
-        KnittingsDataSource.getInstance(activity).deleteKnitting(knitting)
+        KnittingsDataSource.getInstance(activity).deleteKnitting(knitting!!)
         knitting = null
     }
 
@@ -213,7 +213,7 @@ class KnittingFragment : Fragment() {
             } else {
                 // the fragment became invisible because the user selected another tab in the view pager
                 // save current knitting to database
-                KnittingsDataSource.getInstance(activity).updateKnitting(knitting)
+                KnittingsDataSource.getInstance(activity).updateKnitting(knitting!!)
             }
         }
     }
