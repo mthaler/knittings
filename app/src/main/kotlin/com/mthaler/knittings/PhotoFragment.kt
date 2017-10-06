@@ -20,19 +20,19 @@ class PhotoFragment : Fragment(), PhotoDetailsView {
 
     private var photo: Photo? = null
 
-    private var imageView: ImageView? = null
-    private var editTextDescription: EditText? = null
+    private lateinit var imageView: ImageView
+    private lateinit var editTextDescription: EditText
 
-    override fun onCreateView(inflater: LayoutInflater?, parent: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val v = inflater!!.inflate(R.layout.fragment_photo, parent, false)
+    override fun onCreateView(inflater: LayoutInflater, parent: ViewGroup?, savedInstanceState: Bundle?): View? {
+        val v = inflater.inflate(R.layout.fragment_photo, parent, false)
 
         imageView = v.findViewById(R.id.image)
 
         // initialize description edit text
         editTextDescription = v.findViewById(R.id.photo_description)
-        editTextDescription!!.addTextChangedListener(object : TextWatcher {
+        editTextDescription.addTextChangedListener(object : TextWatcher {
             override fun onTextChanged(c: CharSequence, start: Int, before: Int, count: Int) {
-                photo!!.description = c.toString()
+                photo?.description = c.toString()
             }
 
             override fun beforeTextChanged(c: CharSequence, start: Int, count: Int, after: Int) {
@@ -57,12 +57,12 @@ class PhotoFragment : Fragment(), PhotoDetailsView {
     override fun init(photo: Photo) {
         this.photo = photo
         // we use a view tree observer to get the width and the height of the image view and scale the image accordingly reduce memory usage
-        val viewTreeObserver = imageView!!.viewTreeObserver
+        val viewTreeObserver = imageView.viewTreeObserver
         viewTreeObserver.addOnPreDrawListener(object : ViewTreeObserver.OnPreDrawListener {
             override fun onPreDraw(): Boolean {
-                this@PhotoFragment.imageView!!.viewTreeObserver.removeOnPreDrawListener(this)
-                val width = imageView!!.measuredWidth
-                val height = imageView!!.measuredHeight
+                imageView.viewTreeObserver.removeOnPreDrawListener(this)
+                val width = imageView.measuredWidth
+                val height = imageView.measuredHeight
                 // loading and scaling the bitmap is expensive, use async task to do the work
                 val scaleBitmapTask = object : AsyncTask<String, Void, Bitmap>() {
                     override fun doInBackground(vararg args: String): Bitmap {
@@ -74,7 +74,7 @@ class PhotoFragment : Fragment(), PhotoDetailsView {
 
                     override fun onPostExecute(bitmap: Bitmap?) {
                         if (bitmap != null) {
-                            imageView!!.setImageBitmap(bitmap)
+                            imageView.setImageBitmap(bitmap)
                         }
                     }
                 }
@@ -82,7 +82,7 @@ class PhotoFragment : Fragment(), PhotoDetailsView {
                 return true
             }
         })
-        editTextDescription!!.setText(photo.description)
+        editTextDescription.setText(photo.description)
     }
 
     override fun deletePhoto() {
@@ -97,7 +97,5 @@ class PhotoFragment : Fragment(), PhotoDetailsView {
         photo = null
     }
 
-    override fun getPhoto(): Photo? {
-        return photo
-    }
+    override fun getPhoto(): Photo?  = photo
 }
