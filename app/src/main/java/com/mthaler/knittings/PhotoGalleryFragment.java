@@ -104,9 +104,9 @@ public class PhotoGalleryFragment extends Fragment {
         if (requestCode == REQUEST_IMAGE_CAPTURE) {
             // add photo to database
             Log.d(LOG_TAG, "Received result for take photo intent");
-            final int orientation = PictureUtils.getOrientation(currentPhotoPath.getAbsolutePath());
-            final Bitmap preview = PictureUtils.decodeSampledBitmapFromPath(currentPhotoPath.getAbsolutePath(), 200, 200);
-            final Bitmap rotatedPreview = PictureUtils.rotateBitmap(preview, orientation);
+            final int orientation = PictureUtils.INSTANCE.getOrientation(currentPhotoPath.getAbsolutePath());
+            final Bitmap preview = PictureUtils.INSTANCE.decodeSampledBitmapFromPath(currentPhotoPath.getAbsolutePath(), 200, 200);
+            final Bitmap rotatedPreview = PictureUtils.INSTANCE.rotateBitmap(preview, orientation);
             final Photo photo = KnittingsDataSource.getInstance(getActivity()).createPhoto(currentPhotoPath, knitting.getId(), rotatedPreview, "");
             Log.d(LOG_TAG, "Created new photo from " + currentPhotoPath + ", knitting id " + knitting.getId());
             // add first photo as default photo

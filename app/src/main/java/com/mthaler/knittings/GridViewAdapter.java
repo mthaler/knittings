@@ -54,9 +54,9 @@ public class GridViewAdapter extends ArrayAdapter<Photo> {
                     final int width = holder.image.getMeasuredWidth();
                     final int height = holder.image.getMeasuredHeight();
                     final String filename = item.getFilename().getAbsolutePath();
-                    final int orientation = PictureUtils.getOrientation(filename);
-                    final Bitmap photo = PictureUtils.decodeSampledBitmapFromPath(filename, width, height);
-                    final Bitmap rotatedPhoto = PictureUtils.rotateBitmap(photo, orientation);
+                    final int orientation = PictureUtils.INSTANCE.getOrientation(filename);
+                    final Bitmap photo = PictureUtils.INSTANCE.decodeSampledBitmapFromPath(filename, width, height);
+                    final Bitmap rotatedPhoto = PictureUtils.INSTANCE.rotateBitmap(photo, orientation);
                     holder.image.setImageBitmap(rotatedPhoto);
                     holder.imageTitle.setText(item.getDescription());
                     return true;
@@ -71,7 +71,7 @@ public class GridViewAdapter extends ArrayAdapter<Photo> {
                     holder.image.getViewTreeObserver().removeOnPreDrawListener(this);
                     final int width = holder.image.getMeasuredWidth();
                     final Bitmap img = BitmapFactory.decodeResource(GridViewAdapter.this.context.getResources(), R.drawable.add_photo);
-                    final Bitmap scaled = PictureUtils.resize(img, width, width);
+                    final Bitmap scaled = PictureUtils.INSTANCE.resize(img, width, width);
                     holder.image.setImageBitmap(scaled);
                     return true;
                 }
