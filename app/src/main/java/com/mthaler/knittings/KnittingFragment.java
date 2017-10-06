@@ -103,7 +103,7 @@ public class KnittingFragment extends Fragment {
         textViewStarted.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 final FragmentManager fm = getActivity().getSupportFragmentManager();
-                final DatePickerFragment dialog = DatePickerFragment.newInstance(knitting.getStarted());
+                final DatePickerFragment dialog = DatePickerFragment.Companion.newInstance(knitting.getStarted());
                 dialog.setTargetFragment(KnittingFragment.this, REQUEST_STARTED);
                 dialog.show(fm, DIALOG_DATE);
             }
@@ -115,7 +115,7 @@ public class KnittingFragment extends Fragment {
         textViewFinished.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 final FragmentManager fm = getActivity().getSupportFragmentManager();
-                final DatePickerFragment dialog = DatePickerFragment.newInstance(knitting.getFinished() != null ? knitting.getFinished() : new Date());
+                final DatePickerFragment dialog = DatePickerFragment.Companion.newInstance(knitting.getFinished() != null ? knitting.getFinished() : new Date());
                 dialog.setTargetFragment(KnittingFragment.this, REQUEST_FINISHED);
                 dialog.show(fm, DIALOG_DATE);
             }
@@ -192,12 +192,12 @@ public class KnittingFragment extends Fragment {
             return;
         }
         if (requestCode == REQUEST_STARTED) {
-            Date date = (Date)data.getSerializableExtra(DatePickerFragment.EXTRA_DATE);
+            Date date = (Date)data.getSerializableExtra(DatePickerFragment.Companion.getEXTRA_DATE());
             knitting.setStarted(date);
             textViewStarted.setText(DateFormat.getDateInstance().format(knitting.getStarted()));
             KnittingsDataSource.getInstance(getActivity()).updateKnitting(knitting);
         } else if (requestCode == REQUEST_FINISHED) {
-            Date date = (Date)data.getSerializableExtra(DatePickerFragment.EXTRA_DATE);
+            Date date = (Date)data.getSerializableExtra(DatePickerFragment.Companion.getEXTRA_DATE());
             knitting.setFinished(date);
             textViewFinished.setText(DateFormat.getDateInstance().format(knitting.getFinished()));
             KnittingsDataSource.getInstance(getActivity()).updateKnitting(knitting);
