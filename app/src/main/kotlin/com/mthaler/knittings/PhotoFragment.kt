@@ -32,7 +32,7 @@ class PhotoFragment : Fragment(), PhotoDetailsView {
         editTextDescription = v.findViewById(R.id.photo_description)
         editTextDescription.addTextChangedListener(object : TextWatcher {
             override fun onTextChanged(c: CharSequence, start: Int, before: Int, count: Int) {
-                photo?.description = c.toString()
+                photo = photo?.copy(description = c.toString())
             }
 
             override fun beforeTextChanged(c: CharSequence, start: Int, count: Int, after: Int) {

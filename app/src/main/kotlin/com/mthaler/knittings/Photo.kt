@@ -10,22 +10,7 @@ import java.io.Serializable
  * The photo class represents a photo. It has an id (used in the database), a filename and an
  * optional preview that can be displayed in the knittings list
  */
-class Photo(val id: Long, val filename: File, val knittingID: Long) : Serializable {
-    var preview: Bitmap? = null
-    var description: String? = null
-
-    init {
-        this.description = ""
-    }
-
-    override fun toString(): String {
-        return "Photo{" +
-                "id=" + id +
-                ", filename=" + filename +
-                ", knittingID=" + knittingID +
-                ", description='" + description + '\'' +
-                '}'
-    }
+data class Photo(val id: Long, val filename: File, val knittingID: Long, val description: String = "", val preview: Bitmap? = null) : Serializable {
 
     companion object {
 

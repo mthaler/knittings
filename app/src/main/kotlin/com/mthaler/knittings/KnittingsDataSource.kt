@@ -371,14 +371,14 @@ class KnittingsDataSource private constructor(context: Context) {
         val knittingID = cursor.getLong(idKnittingIndex)
         val description = cursor.getString(idDescription)
 
-        val photo = Photo(id, File(filename), knittingID)
-        photo.description = description
+        val photo = Photo(id, File(filename), knittingID, description)
         if (previewBytes != null) {
             val options = BitmapFactory.Options()
             val preview = BitmapFactory.decodeByteArray(previewBytes, 0, previewBytes.size, options)
-            photo.preview = preview
+            return photo.copy(preview = preview)
+        } else {
+            return photo
         }
-        return photo
     }
 
     companion object {
