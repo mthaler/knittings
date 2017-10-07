@@ -17,17 +17,20 @@ import android.widget.AdapterView
 import android.widget.GridView
 import java.io.File
 
+/**
+ * A fragment that displays a list of photos using a grid
+ */
 class PhotoGalleryFragment : Fragment() {
 
     private var knitting: Knitting? = null
 
-    private var gridView: GridView? = null
+    private lateinit var gridView: GridView
     private var currentPhotoPath: File? = null
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
-        val v = inflater!!.inflate(R.layout.fragment_photo_gallery, container, false)
+        val v = inflater.inflate(R.layout.fragment_photo_gallery, container, false)
 
         if (savedInstanceState != null) {
             if (savedInstanceState.containsKey(CURRENT_PHOTO_PATH)) {
@@ -47,9 +50,9 @@ class PhotoGalleryFragment : Fragment() {
         gridView = v.findViewById(R.id.gridView)
         val photos = KnittingsDataSource.getInstance(activity).getAllPhotos(knitting!!)
         val gridAdapter = GridViewAdapter(activity, R.layout.grid_item_layout, photos)
-        gridView!!.adapter = gridAdapter
-        gridView!!.onItemClickListener = AdapterView.OnItemClickListener { parent, v, position, id ->
-            if (position < gridView!!.adapter.count - 1) {
+        gridView.adapter = gridAdapter
+        gridView.onItemClickListener = AdapterView.OnItemClickListener { parent, v, position, id ->
+            if (position < gridView.adapter.count - 1) {
                 val photo = parent.getItemAtPosition(position) as Photo
                 //Create intent
                 val intent = Intent(activity, PhotoActivity::class.java)
@@ -108,7 +111,7 @@ class PhotoGalleryFragment : Fragment() {
         if (knitting != null) {
             val photos = KnittingsDataSource.getInstance(activity).getAllPhotos(knitting!!)
             val gridAdapter = GridViewAdapter(activity, R.layout.grid_item_layout, photos)
-            gridView!!.adapter = gridAdapter
+            gridView.adapter = gridAdapter
         }
     }
 
