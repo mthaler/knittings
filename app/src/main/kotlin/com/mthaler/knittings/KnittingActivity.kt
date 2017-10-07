@@ -61,6 +61,7 @@ class KnittingActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.menu_item_delete_knitting -> {
+                // show alert asking user to confirm that knitting should be deleted
                 alert {
                     title = resources.getString(R.string.delete_knitting_dialog_title)
                     message = resources.getString(R.string.delete_knitting_dialog_question)
