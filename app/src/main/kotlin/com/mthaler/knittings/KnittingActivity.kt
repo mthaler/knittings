@@ -1,18 +1,17 @@
 package com.mthaler.knittings
 
-import android.content.DialogInterface
 import android.os.Bundle
 import android.support.design.widget.TabLayout
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
 import android.support.v4.view.ViewPager
-import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import org.jetbrains.anko.alert
 import java.util.ArrayList
 
 /**
@@ -62,15 +61,15 @@ class KnittingActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.menu_item_delete_knitting -> {
-                val alert = AlertDialog.Builder(this)
-                        .setTitle(R.string.delete_knitting_dialog_title)
-                        .setMessage(R.string.delete_knitting_dialog_question)
-                        .setPositiveButton(R.string.delete_knitting_dialog_delete_button) { dialogInterface, i ->
-                            knittingFragment!!.deleteKnitting()
-                            dialogInterface.dismiss()
-                            finish()
-                        }.setNegativeButton(R.string.delete_knitting_dialog_cancel_button) { dialogInterface, i -> dialogInterface.dismiss() }
-                alert.show()
+                alert {
+                    title = resources.getString(R.string.delete_knitting_dialog_title)
+                    message = resources.getString(R.string.delete_knitting_dialog_question)
+                    positiveButton(resources.getString(R.string.delete_knitting_dialog_delete_button)) {
+                        knittingFragment!!.deleteKnitting()
+                        finish()
+                    }
+                    negativeButton(resources.getString(R.string.delete_knitting_dialog_cancel_button)) {}
+                }.show()
                 return true
             }
             else -> return super.onOptionsItemSelected(item)
