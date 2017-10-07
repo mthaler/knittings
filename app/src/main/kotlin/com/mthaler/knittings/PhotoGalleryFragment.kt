@@ -2,9 +2,6 @@ package com.mthaler.knittings
 
 import android.app.Activity
 import android.content.Intent
-import android.content.pm.PackageManager
-import android.graphics.Bitmap
-import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.support.v4.app.Fragment
@@ -16,6 +13,7 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.GridView
 import java.io.File
+import org.jetbrains.anko.support.v4.startActivity
 
 /**
  * A fragment that displays a list of photos using a grid
@@ -53,15 +51,9 @@ class PhotoGalleryFragment : Fragment() {
         gridView.adapter = gridAdapter
         gridView.onItemClickListener = AdapterView.OnItemClickListener { parent, v, position, id ->
             if (position < gridView.adapter.count - 1) {
+                // photo clicked, show photo in photo activity
                 val photo = parent.getItemAtPosition(position) as Photo
-                //Create intent
-                val intent = Intent(activity, PhotoActivity::class.java)
-                intent.putExtra(PhotoActivity.EXTRA_PHOTO_ID, photo.id)
-                intent.putExtra(KnittingActivity.EXTRA_KNITTING_ID, knitting!!.id)
-                Log.d(LOG_TAG, "Created PhotoActivity intent")
-
-                //Start details activity
-                startActivity(intent)
+                startActivity<PhotoActivity>(PhotoActivity.EXTRA_PHOTO_ID to photo.id, KnittingActivity.EXTRA_KNITTING_ID to knitting!!.id)
             } else {
                 val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
                 val photoFile = KnittingsDataSource.getInstance(activity).getPhotoFile(knitting!!)
@@ -102,7 +94,7 @@ class PhotoGalleryFragment : Fragment() {
             // update grid view
             val photos = KnittingsDataSource.getInstance(activity).getAllPhotos(knitting!!)
             val gridAdapter = GridViewAdapter(activity, R.layout.grid_item_layout, photos)
-            gridView!!.adapter = gridAdapter
+            gridView.adapter = gridAdapter
         }
     }
 
