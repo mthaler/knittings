@@ -24,15 +24,14 @@ import java.util.Date
  */
 class KnittingFragment : Fragment() {
 
-    var knitting: Knitting? = null
-        private set
+    private var knitting: Knitting? = null
 
-    private var textViewStarted: TextView? = null
-    private var textViewFinished: TextView? = null
+    private lateinit var textViewStarted: TextView
+    private lateinit var textViewFinished: TextView
 
-    override fun onCreateView(inflater: LayoutInflater?, parent: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, parent: ViewGroup?, savedInstanceState: Bundle?): View? {
         // create view
-        val v = inflater!!.inflate(R.layout.fragment_knitting, parent, false)
+        val v = inflater.inflate(R.layout.fragment_knitting, parent, false)
 
         if (savedInstanceState != null) {
             if (savedInstanceState.containsKey(KNITTING_ID)) {
@@ -82,8 +81,8 @@ class KnittingFragment : Fragment() {
         })
 
         textViewStarted = v.findViewById(R.id.knitting_started)
-        textViewStarted!!.text = DateFormat.getDateInstance().format(knitting!!.started)
-        textViewStarted!!.setOnClickListener {
+        textViewStarted.text = DateFormat.getDateInstance().format(knitting!!.started)
+        textViewStarted.setOnClickListener {
             val fm = activity.supportFragmentManager
             val dialog = DatePickerFragment.newInstance(knitting!!.started)
             dialog.setTargetFragment(this@KnittingFragment, REQUEST_STARTED)
@@ -92,8 +91,8 @@ class KnittingFragment : Fragment() {
 
         // initialize finish date button
         textViewFinished = v.findViewById(R.id.knitting_finished)
-        textViewFinished!!.text = if (knitting!!.finished != null) DateFormat.getDateInstance().format(knitting!!.finished) else ""
-        textViewFinished!!.setOnClickListener {
+        textViewFinished.text = if (knitting!!.finished != null) DateFormat.getDateInstance().format(knitting!!.finished) else ""
+        textViewFinished.setOnClickListener {
             val fm = activity.supportFragmentManager
             val dialog = DatePickerFragment.newInstance(if (knitting!!.finished != null) knitting!!.finished else Date())
             dialog.setTargetFragment(this@KnittingFragment, REQUEST_FINISHED)
@@ -173,12 +172,12 @@ class KnittingFragment : Fragment() {
         if (requestCode == REQUEST_STARTED) {
             val date = data!!.getSerializableExtra(DatePickerFragment.EXTRA_DATE) as Date
             knitting!!.started = date
-            textViewStarted!!.text = DateFormat.getDateInstance().format(knitting!!.started)
+            textViewStarted.text = DateFormat.getDateInstance().format(knitting!!.started)
             KnittingsDataSource.getInstance(activity).updateKnitting(knitting!!)
         } else if (requestCode == REQUEST_FINISHED) {
             val date = data!!.getSerializableExtra(DatePickerFragment.EXTRA_DATE) as Date
             knitting!!.finished = date
-            textViewFinished!!.text = DateFormat.getDateInstance().format(knitting!!.finished)
+            textViewFinished.text = DateFormat.getDateInstance().format(knitting!!.finished)
             KnittingsDataSource.getInstance(activity).updateKnitting(knitting!!)
         }
     }
