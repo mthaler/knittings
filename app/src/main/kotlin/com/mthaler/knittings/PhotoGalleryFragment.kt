@@ -13,7 +13,7 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.GridView
 import java.io.File
-import org.jetbrains.anko.support.v4.startActivity
+import org.jetbrains.anko.support.v4.*
 
 /**
  * A fragment that displays a list of photos using a grid
@@ -55,6 +55,7 @@ class PhotoGalleryFragment : Fragment() {
                 val photo = parent.getItemAtPosition(position) as Photo
                 startActivity<PhotoActivity>(PhotoActivity.EXTRA_PHOTO_ID to photo.id, KnittingActivity.EXTRA_KNITTING_ID to knitting!!.id)
             } else {
+                // take photo icon clicked, start camera activity
                 val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
                 val photoFile = KnittingsDataSource.getInstance(activity).getPhotoFile(knitting!!)
                 currentPhotoPath = photoFile

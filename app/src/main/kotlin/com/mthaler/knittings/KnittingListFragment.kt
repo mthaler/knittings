@@ -1,7 +1,5 @@
 package com.mthaler.knittings
 
-
-import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.ListFragment
 import android.view.View
@@ -13,6 +11,7 @@ import android.widget.TextView
 import java.text.DateFormat
 import java.util.ArrayList
 import java.util.Date
+import org.jetbrains.anko.support.v4.*
 
 class KnittingListFragment : ListFragment(), KnittingListView {
 
@@ -27,12 +26,10 @@ class KnittingListFragment : ListFragment(), KnittingListView {
     }
 
     override fun onListItemClick(l: ListView?, v: View?, position: Int, id: Long) {
-        // get the Crime from the adapter
+        // get current knitting
         val c = (listAdapter as KnittingAdapter).getItem(position)
-        // start an instance of CrimePagerActivity
-        val i = Intent(activity, KnittingActivity::class.java)
-        i.putExtra(KnittingActivity.EXTRA_KNITTING_ID, c!!.id)
-        startActivityForResult(i, 0)
+        // start knitting activity
+        startActivity<KnittingActivity>(KnittingActivity.EXTRA_KNITTING_ID to c!!.id)
     }
 
     override fun onResume() {
@@ -43,10 +40,9 @@ class KnittingListFragment : ListFragment(), KnittingListView {
     }
 
     override fun addKnitting() {
+        // start knitting activity with newly created knitting
         val knitting = KnittingsDataSource.getInstance(activity).createKnitting("", "", Date(), null, 0.0, 0.0, 0.0)
-        val intent = Intent(activity, KnittingActivity::class.java)
-        intent.putExtra(KnittingActivity.EXTRA_KNITTING_ID, knitting.id)
-        startActivity(intent)
+        startActivity<KnittingActivity>(KnittingActivity.EXTRA_KNITTING_ID to knitting.id)
     }
 
     private inner class KnittingAdapter(knittings: ArrayList<Knitting>) : ArrayAdapter<Knitting>(activity, android.R.layout.simple_list_item_1, knittings) {
