@@ -18,7 +18,7 @@ import android.widget.ImageView
  */
 class PhotoFragment : Fragment(), PhotoDetailsView {
 
-    private var photo: Photo? = null
+    override var photo: Photo? = null
 
     private lateinit var imageView: ImageView
     private lateinit var editTextDescription: EditText
@@ -96,6 +96,4 @@ class PhotoFragment : Fragment(), PhotoDetailsView {
         KnittingsDataSource.getInstance(activity).deletePhoto(photo!!)
         photo = null
     }
-
-    override fun getPhoto(): Photo?  = photo
 }

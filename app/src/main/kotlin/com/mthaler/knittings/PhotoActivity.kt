@@ -59,7 +59,7 @@ class PhotoActivity : AppCompatActivity() {
             R.id.menu_item_set_main_photo -> {
                 val photoDetailsView = supportFragmentManager.findFragmentById(R.id.fragment_photo) as PhotoDetailsView
                 val photo = photoDetailsView.photo
-                val knitting = KnittingsDataSource.getInstance(this).getKnitting(photo.knittingID)
+                val knitting = KnittingsDataSource.getInstance(this).getKnitting(photo!!.knittingID)
                 knitting.defaultPhoto = photo
                 KnittingsDataSource.getInstance(this).updateKnitting(knitting)
                 Log.d(LOG_TAG, "Set $photo as default photo")
