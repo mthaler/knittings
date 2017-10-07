@@ -99,15 +99,15 @@ class KnittingsDataSource private constructor(context: Context) {
             val values = ContentValues()
             values.put(KnittingDatabaseHelper.KnittingTable.Cols.TITLE, knitting.title)
             values.put(KnittingDatabaseHelper.KnittingTable.Cols.DESCRIPTION, knitting.description)
-            values.put(KnittingDatabaseHelper.KnittingTable.Cols.STARTED, knitting.started.time)
+            values.put(KnittingDatabaseHelper.KnittingTable.Cols.STARTED, knitting.started!!.time)
             if (knitting.finished != null) {
-                values.put(KnittingDatabaseHelper.KnittingTable.Cols.FINISHED, knitting.finished.time)
+                values.put(KnittingDatabaseHelper.KnittingTable.Cols.FINISHED, knitting.finished!!.time)
             }
             values.put(KnittingDatabaseHelper.KnittingTable.Cols.NEEDLE_DIAMETER, knitting.needleDiameter)
             values.put(KnittingDatabaseHelper.KnittingTable.Cols.SIZE, knitting.size)
             if (knitting.defaultPhoto != null) {
                 Log.d(LOG_TAG, "Default photo: " + knitting.defaultPhoto)
-                values.put(KnittingDatabaseHelper.KnittingTable.Cols.DEFAULT_PHOTO_ID, knitting.defaultPhoto.id)
+                values.put(KnittingDatabaseHelper.KnittingTable.Cols.DEFAULT_PHOTO_ID, knitting.defaultPhoto!!.id)
             } else {
                 values.putNull(KnittingDatabaseHelper.KnittingTable.Cols.DEFAULT_PHOTO_ID)
             }

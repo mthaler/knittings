@@ -88,7 +88,7 @@ class PhotoFragment : Fragment(), PhotoDetailsView {
     override fun deletePhoto() {
         // check if the photo is used as default photo
         val knitting = KnittingsDataSource.getInstance(activity).getKnitting(photo!!.knittingID)
-        if (knitting.defaultPhoto != null && knitting.defaultPhoto.id == photo!!.id) {
+        if (knitting.defaultPhoto != null && knitting.defaultPhoto!!.id == photo!!.id) {
             knitting.defaultPhoto = null
             KnittingsDataSource.getInstance(activity).updateKnitting(knitting)
         }

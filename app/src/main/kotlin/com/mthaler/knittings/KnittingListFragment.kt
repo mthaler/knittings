@@ -71,9 +71,9 @@ class KnittingListFragment : ListFragment(), KnittingListView {
             val startedTextView = convertView.findViewById<TextView>(R.id.knitting_list_item_startedTextView)
             startedTextView.text = DateFormat.getDateInstance().format(knitting.started)
 
-            if (knitting.defaultPhoto != null && knitting.defaultPhoto.preview != null) {
+            if (knitting.defaultPhoto != null && knitting.defaultPhoto!!.preview != null) {
                 val photoView = convertView.findViewById<ImageView>(R.id.knitting_list_item_photoImageView)
-                photoView.setImageBitmap(knitting.defaultPhoto.preview)
+                photoView.setImageBitmap(knitting.defaultPhoto!!.preview)
             }
 
             return convertView
