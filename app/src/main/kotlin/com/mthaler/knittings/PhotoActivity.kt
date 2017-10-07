@@ -74,7 +74,7 @@ class PhotoActivity : AppCompatActivity() {
     override fun getSupportParentActivityIntent(): Intent? {
         // add the knitting id so the parent activity can properly restore itself
         val intent = super.getSupportParentActivityIntent()
-        intent!!.putExtra(KnittingActivity.EXTRA_KNITTING_ID, parentKnittingID)
+        intent?.putExtra(KnittingActivity.EXTRA_KNITTING_ID, parentKnittingID)
         return intent
     }
 
