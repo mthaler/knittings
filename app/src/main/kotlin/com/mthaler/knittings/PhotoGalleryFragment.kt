@@ -1,6 +1,7 @@
 package com.mthaler.knittings
 
 import android.app.Activity
+import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
 import android.provider.MediaStore
@@ -11,7 +12,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
+import android.widget.Button
 import android.widget.GridView
+import org.jetbrains.anko.find
 import java.io.File
 import org.jetbrains.anko.support.v4.*
 
@@ -55,19 +58,28 @@ class PhotoGalleryFragment : Fragment() {
                 val photo = parent.getItemAtPosition(position) as Photo
                 startActivity<PhotoActivity>(PhotoActivity.EXTRA_PHOTO_ID to photo.id, KnittingActivity.EXTRA_KNITTING_ID to knitting!!.id)
             } else {
-                // take photo icon clicked, start camera activity
-                val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-                val photoFile = KnittingsDataSource.getInstance(activity).getPhotoFile(knitting!!)
-                currentPhotoPath = photoFile
-                Log.d(LOG_TAG, "Set current photo path: " + currentPhotoPath!!)
-                val packageManager = activity.packageManager
-                val canTakePhoto = photoFile != null && takePictureIntent.resolveActivity(packageManager) != null
-                if (canTakePhoto) {
-                    val uri = FileProvider.getUriForFile(context, "com.mthaler.knittings.fileprovider", photoFile)
-                    takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, uri)
-                    Log.d(LOG_TAG, "Created take picture intent")
-                    startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE)
+                // take photo icon clicked, ask user if photo should be taken or imported from gallery
+                val b = AlertDialog.Builder(activity)
+                val layout = inflater.inflate(R.layout.dialog_take_photo, parent, false)
+                val buttonTakePhoto = layout.find<Button>(R.id.button_take_photo)
+                b.setView(layout)
+                val d = b.create()
+                buttonTakePhoto.setOnClickListener {
+                    d.dismiss()
+                    val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+                    val photoFile = KnittingsDataSource.getInstance(activity).getPhotoFile(knitting!!)
+                    currentPhotoPath = photoFile
+                    Log.d(LOG_TAG, "Set current photo path: " + currentPhotoPath!!)
+                    val packageManager = activity.packageManager
+                    val canTakePhoto = photoFile != null && takePictureIntent.resolveActivity(packageManager) != null
+                    if (canTakePhoto) {
+                        val uri = FileProvider.getUriForFile(context, "com.mthaler.knittings.fileprovider", photoFile)
+                        takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, uri)
+                        Log.d(LOG_TAG, "Created take picture intent")
+                        startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE)
+                    }
                 }
+                d.show()
             }
         }
 
