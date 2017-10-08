@@ -66,7 +66,7 @@ class PhotoGalleryFragment : Fragment() {
                 val buttonTakePhoto = layout.find<Button>(R.id.button_take_photo)
                 val buttonImportPhoto = layout.find<Button>(R.id.buttom_import_photo)
                 b.setView(layout)
-                b.setNegativeButton("Cancel") { diag, i -> diag.dismiss()}
+                b.setNegativeButton(R.string.dialog_button_cancel) { diag, i -> diag.dismiss()}
                 val d = b.create()
                 buttonTakePhoto.setOnClickListener {
                     d.dismiss()

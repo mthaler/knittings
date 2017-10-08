@@ -18,16 +18,16 @@
     <string name="photo_description_hint">Beschreibung</string>
     <string name="delete_photo">Foto löschen</string>
     <string name="set_main_photo">Als Vorschau verwenden</string>
+    <!-- dialogs -->
+    <string name="dialog_button_cancel">Abbrechen</string>
     <!-- delete knittings dialog -->
     <string name="delete_knitting_dialog_title">Löschen</string>
     <string name="delete_knitting_dialog_question">Strickerei wirklich löschen?</string>
     <string name="delete_knitting_dialog_delete_button">Löschen</string>
-    <string name="delete_knitting_dialog_cancel_button">Abbrechen</string>
     <!-- delete photo dialog -->
     <string name="delete_photo_dialog_title">Löschen</string>
     <string name="delete_photo_dialog_question">Foto wirklich löschen?</string>
     <string name="delete_photo_dialog_delete_button">Löschen</string>
-    <string name="delete_photo_dialog_cancel_button">Abbrechen</string>
 
     <string name="rating">Bewertung:</string>
     <string name="photo">Foto</string>

@@ -52,7 +52,7 @@ class PhotoActivity : AppCompatActivity() {
                         photoDetailsView.deletePhoto()
                         finish()
                     }
-                    negativeButton(resources.getString(R.string.delete_photo_dialog_cancel_button)) {}
+                    negativeButton(resources.getString(R.string.dialog_button_cancel)) {}
                 }.show()
                 return true
             }

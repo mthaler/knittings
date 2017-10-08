@@ -69,7 +69,7 @@ class KnittingActivity : AppCompatActivity() {
                         knittingFragment!!.deleteKnitting()
                         finish()
                     }
-                    negativeButton(resources.getString(R.string.delete_knitting_dialog_cancel_button)) {}
+                    negativeButton(resources.getString(R.string.dialog_button_cancel)) {}
                 }.show()
                 return true
             }
