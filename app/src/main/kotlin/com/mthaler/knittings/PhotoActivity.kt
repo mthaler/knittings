@@ -11,6 +11,7 @@ import android.support.v7.widget.Toolbar
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import org.jetbrains.anko.alert
 
 class PhotoActivity : AppCompatActivity() {
 
@@ -44,16 +45,17 @@ class PhotoActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.menu_item_delete_photo -> {
-                val alert = AlertDialog.Builder(this)
-                        .setTitle(R.string.delete_photo_dialog_title)
-                        .setMessage(R.string.delete_photo_dialog_question)
-                        .setPositiveButton(R.string.delete_photo_dialog_delete_button) { dialogInterface, i ->
-                            val photoDetailsView = supportFragmentManager.findFragmentById(R.id.fragment_photo) as PhotoDetailsView
-                            photoDetailsView.deletePhoto()
-                            dialogInterface.dismiss()
-                            finish()
-                        }.setNegativeButton(R.string.delete_photo_dialog_cancel_button) { dialogInterface, i -> dialogInterface.dismiss() }
-                alert.show()
+                // show alert asking user to confirm that photo should be deleted
+                alert {
+                    title = resources.getString(R.string.delete_photo_dialog_title)
+                    message = resources.getString(R.string.delete_photo_dialog_question)
+                    positiveButton(resources.getString(R.string.delete_photo_dialog_delete_button)) {
+                        val photoDetailsView = supportFragmentManager.findFragmentById(R.id.fragment_photo) as PhotoDetailsView
+                        photoDetailsView.deletePhoto()
+                        finish()
+                    }
+                    negativeButton(resources.getString(R.string.delete_photo_dialog_cancel_button)) {}
+                }.show()
                 return true
             }
             R.id.menu_item_set_main_photo -> {
