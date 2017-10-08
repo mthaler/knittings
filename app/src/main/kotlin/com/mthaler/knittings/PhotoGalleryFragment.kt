@@ -3,7 +3,6 @@ package com.mthaler.knittings
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.Intent
-import android.graphics.Bitmap
 import android.os.Bundle
 import android.provider.MediaStore
 import android.support.v4.app.Fragment
@@ -18,8 +17,6 @@ import android.widget.GridView
 import org.jetbrains.anko.find
 import org.jetbrains.anko.support.v4.*
 import android.widget.Toast
-import android.graphics.BitmapFactory
-import android.media.ExifInterface
 import java.io.*
 import java.util.*
 
@@ -126,27 +123,7 @@ class PhotoGalleryFragment : Fragment() {
             try {
                 Log.d(LOG_TAG, "Received result for import photo intent")
                 val imageUri = data!!.getData()
-                val chunkSize = 1024  // We'll read in one kB at a time
-                val imageData = ByteArray(chunkSize)
-
-                var `in`: InputStream? = null
-                var out: OutputStream? = null
-                try {
-                    `in` = activity.getContentResolver().openInputStream(imageUri)
-                    out = FileOutputStream(currentPhotoPath)  // I'm assuming you already have the File object for where you're writing to
-
-                    var bytesRead: Int = `in`.read(imageData)
-                    while (bytesRead > 0) {
-                        out.write(Arrays.copyOfRange(imageData, 0, Math.max(0, bytesRead)))
-                        bytesRead = `in`.read(imageData)
-                    }
-
-                } catch (ex: Exception) {
-                    Log.e(LOG_TAG, "Something went wrong.", ex)
-                } finally {
-                    `in`?.close()
-                    out?.close()
-                }
+                PictureUtils.copy(imageUri, currentPhotoPath!!, activity)
                 val orientation = PictureUtils.getOrientation(currentPhotoPath!!.absolutePath)
                 val preview = PictureUtils.decodeSampledBitmapFromPath(currentPhotoPath!!.absolutePath, 200, 200)
                 val rotatedPreview = PictureUtils.rotateBitmap(preview, orientation)

@@ -6,10 +6,13 @@ import android.graphics.BitmapFactory
 import android.graphics.Matrix
 import android.net.Uri
 import android.support.media.ExifInterface
-import java.io.IOException
-import java.io.InputStream
+import android.util.Log
+import java.io.*
+import java.util.*
 
 object PictureUtils {
+
+    val LOG_TAG = PictureUtils::class.java.simpleName
 
     fun calculateInSampleSize(options: BitmapFactory.Options, reqWidth: Int, reqHeight: Int): Int {
         // Raw height and width of image
@@ -151,6 +154,29 @@ object PictureUtils {
             return Bitmap.createScaledBitmap(image, finalWidth, finalHeight, true)
         } else {
             return image
+        }
+    }
+
+    fun copy(src: Uri, dst: File, context: Context) {
+        val chunkSize = 1024  // We'll read in one kB at a time
+        val imageData = ByteArray(chunkSize)
+        var `in`: InputStream? = null
+        var out: OutputStream? = null
+        try {
+            `in` = context.getContentResolver().openInputStream(src)
+            out = FileOutputStream(dst)  // I'm assuming you already have the File object for where you're writing to
+
+            var bytesRead: Int = `in`.read(imageData)
+            while (bytesRead > 0) {
+                out.write(Arrays.copyOfRange(imageData, 0, Math.max(0, bytesRead)))
+                bytesRead = `in`.read(imageData)
+            }
+
+        } catch (ex: Exception) {
+            Log.e(LOG_TAG, "Could not copy data", ex)
+        } finally {
+            `in`?.close()
+            out?.close()
         }
     }
 }
