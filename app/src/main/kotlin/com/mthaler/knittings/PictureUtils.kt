@@ -1,11 +1,13 @@
 package com.mthaler.knittings
 
+import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Matrix
-import android.media.ExifInterface
-
+import android.net.Uri
+import android.support.media.ExifInterface
 import java.io.IOException
+import java.io.InputStream
 
 object PictureUtils {
 
@@ -59,7 +61,37 @@ object PictureUtils {
             ex.printStackTrace()
             return ExifInterface.ORIENTATION_UNDEFINED
         }
+    }
 
+    /**
+     * Returns the orientation of a photo
+     *
+     * @param uri uri of the photo
+     * @return orientation
+     */
+    fun getOrientation(uri: Uri, context: Context): Int {
+        var inputStream: InputStream? = null
+        try {
+            inputStream = context.getContentResolver().openInputStream(uri)
+            val exif = ExifInterface(inputStream)
+            return exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_UNDEFINED)
+        } catch (ex: IOException) {
+            ex.printStackTrace()
+            return ExifInterface.ORIENTATION_UNDEFINED
+        } finally {
+            if (inputStream != null) {
+                inputStream.close()
+            }
+        }
+    }
+
+    fun setOrientation(path: String, orientation: Int) {
+        try {
+            val exif = ExifInterface(path)
+            exif.setAttribute(ExifInterface.TAG_ORIENTATION, orientation.toString())
+        } catch (ex: IOException) {
+            ex.printStackTrace()
+        }
     }
 
     /**

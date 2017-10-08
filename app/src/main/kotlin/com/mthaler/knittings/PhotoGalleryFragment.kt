@@ -126,15 +126,21 @@ class PhotoGalleryFragment : Fragment() {
             try {
                 Log.d(LOG_TAG, "Received result for import photo intent")
                 val imageUri = data!!.getData()
+                // get orientation
+                val orientation = PictureUtils.getOrientation(imageUri, activity)
+                Log.d(LOG_TAG, "Image orientation: " + orientation)
                 val imageStream = activity.getContentResolver().openInputStream(imageUri)
                 val selectedImage = BitmapFactory.decodeStream(imageStream)
                 // save photo
                 val out = FileOutputStream(currentPhotoPath)
                 selectedImage.compress(Bitmap.CompressFormat.JPEG, 90, out)
                 out.close()
+                // set orientation
+                PictureUtils.setOrientation(currentPhotoPath.toString(), orientation)
                 // create preview
                 val preview = PictureUtils.resize(selectedImage, 200, 200)
-                val photo = KnittingsDataSource.getInstance(activity).createPhoto(currentPhotoPath!!, knitting!!.id, preview, "")
+                val rotatedPreview = PictureUtils.rotateBitmap(preview, orientation)
+                val photo = KnittingsDataSource.getInstance(activity).createPhoto(currentPhotoPath!!, knitting!!.id, rotatedPreview, "")
                 Log.d(LOG_TAG, "Created new photo from " + currentPhotoPath + ", knitting id " + knitting!!.id)
                 // add first photo as default photo
                 if (knitting!!.defaultPhoto == null) {
