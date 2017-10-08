@@ -33,7 +33,8 @@
         android:layout_toLeftOf="@id/knitting_list_item_startedTextView"
         android:layout_toRightOf="@+id/knitting_list_item_photoImageView"
         android:ellipsize="end"
-        android:maxLines="1"
+        android:maxLines="2"
+        android:lines="2"
         android:paddingLeft="4dp"
         android:paddingRight="4dp"
         android:paddingTop="4dp" />
