@@ -63,6 +63,7 @@ class PhotoGalleryFragment : Fragment() {
                 val layout = inflater.inflate(R.layout.dialog_take_photo, parent, false)
                 val buttonTakePhoto = layout.find<Button>(R.id.button_take_photo)
                 b.setView(layout)
+                b.setNegativeButton("Cancel") { diag, i -> diag.dismiss()}
                 val d = b.create()
                 buttonTakePhoto.setOnClickListener {
                     d.dismiss()

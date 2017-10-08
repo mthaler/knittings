@@ -6,7 +6,12 @@
 
     <Button
         android:id="@+id/button_take_photo"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Take photo"/>
+    <Button
+        android:id="@+id/buttom_import_from_gallery"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Import from gallery"/>
 </LinearLayout>
