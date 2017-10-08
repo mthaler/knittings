@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:text="Take photo"/>
     <Button
-        android:id="@+id/buttom_import_from_gallery"
+        android:id="@+id/buttom_import_photo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Import from gallery"/>

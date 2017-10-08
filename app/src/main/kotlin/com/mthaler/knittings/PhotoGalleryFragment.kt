@@ -3,6 +3,7 @@ package com.mthaler.knittings
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.Intent
+import android.graphics.Bitmap
 import android.os.Bundle
 import android.provider.MediaStore
 import android.support.v4.app.Fragment
@@ -17,6 +18,10 @@ import android.widget.GridView
 import org.jetbrains.anko.find
 import java.io.File
 import org.jetbrains.anko.support.v4.*
+import android.widget.Toast
+import android.graphics.BitmapFactory
+import java.io.FileNotFoundException
+import java.io.FileOutputStream
 
 /**
  * A fragment that displays a list of photos using a grid
@@ -62,23 +67,31 @@ class PhotoGalleryFragment : Fragment() {
                 val b = AlertDialog.Builder(activity)
                 val layout = inflater.inflate(R.layout.dialog_take_photo, parent, false)
                 val buttonTakePhoto = layout.find<Button>(R.id.button_take_photo)
+                val buttonImportPhoto = layout.find<Button>(R.id.buttom_import_photo)
                 b.setView(layout)
                 b.setNegativeButton("Cancel") { diag, i -> diag.dismiss()}
                 val d = b.create()
                 buttonTakePhoto.setOnClickListener {
                     d.dismiss()
                     val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-                    val photoFile = KnittingsDataSource.getInstance(activity).getPhotoFile(knitting!!)
-                    currentPhotoPath = photoFile
+                    currentPhotoPath = KnittingsDataSource.getInstance(activity).getPhotoFile(knitting!!)
                     Log.d(LOG_TAG, "Set current photo path: " + currentPhotoPath!!)
                     val packageManager = activity.packageManager
-                    val canTakePhoto = photoFile != null && takePictureIntent.resolveActivity(packageManager) != null
+                    val canTakePhoto = currentPhotoPath != null && takePictureIntent.resolveActivity(packageManager) != null
                     if (canTakePhoto) {
-                        val uri = FileProvider.getUriForFile(context, "com.mthaler.knittings.fileprovider", photoFile)
+                        val uri = FileProvider.getUriForFile(context, "com.mthaler.knittings.fileprovider", currentPhotoPath)
                         takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, uri)
                         Log.d(LOG_TAG, "Created take picture intent")
                         startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE)
                     }
+                }
+                buttonImportPhoto.setOnClickListener {
+                    d.dismiss()
+                    currentPhotoPath = KnittingsDataSource.getInstance(activity).getPhotoFile(knitting!!)
+                    Log.d(LOG_TAG, "Set current photo path: " + currentPhotoPath!!)
+                    val photoPickerIntent = Intent(Intent.ACTION_PICK)
+                    photoPickerIntent.type = "image/*"
+                    startActivityForResult(photoPickerIntent, REQUEST_IMAGE_IMPORT)
                 }
                 d.show()
             }
@@ -109,6 +122,36 @@ class PhotoGalleryFragment : Fragment() {
             val photos = KnittingsDataSource.getInstance(activity).getAllPhotos(knitting!!)
             val gridAdapter = GridViewAdapter(activity, R.layout.grid_item_layout, photos)
             gridView.adapter = gridAdapter
+        } else if (requestCode == REQUEST_IMAGE_IMPORT) {
+            try {
+                Log.d(LOG_TAG, "Received result for import photo intent")
+                val imageUri = data!!.getData()
+                val imageStream = activity.getContentResolver().openInputStream(imageUri)
+                val selectedImage = BitmapFactory.decodeStream(imageStream)
+                // save photo
+                val out = FileOutputStream(currentPhotoPath)
+                selectedImage.compress(Bitmap.CompressFormat.JPEG, 90, out)
+                out.close()
+                // create preview
+                val preview = PictureUtils.resize(selectedImage, 200, 200)
+                val photo = KnittingsDataSource.getInstance(activity).createPhoto(currentPhotoPath!!, knitting!!.id, preview, "")
+                Log.d(LOG_TAG, "Created new photo from " + currentPhotoPath + ", knitting id " + knitting!!.id)
+                // add first photo as default photo
+                if (knitting!!.defaultPhoto == null) {
+                    Log.d(LOG_TAG, "Set $photo as default photo")
+                    knitting!!.defaultPhoto = photo
+                    KnittingsDataSource.getInstance(activity).updateKnitting(knitting!!)
+                }
+                // update grid view
+                val photos = KnittingsDataSource.getInstance(activity).getAllPhotos(knitting!!)
+                val gridAdapter = GridViewAdapter(activity, R.layout.grid_item_layout, photos)
+                gridView.adapter = gridAdapter
+            } catch (e: FileNotFoundException) {
+                e.printStackTrace()
+                Toast.makeText(activity, "Something went wrong", Toast.LENGTH_LONG).show()
+            }
+
+
         }
     }
 
@@ -151,6 +194,7 @@ class PhotoGalleryFragment : Fragment() {
         private val CURRENT_PHOTO_PATH = "current_photo_path"
         private val KNITTING_ID = "knitting_id"
         private val REQUEST_IMAGE_CAPTURE = 0
+        private val REQUEST_IMAGE_IMPORT = 1
         private val LOG_TAG = PhotoGalleryFragment::class.java.simpleName
 
         fun newInstance(knitting: Knitting): PhotoGalleryFragment {
