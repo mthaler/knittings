@@ -15,7 +15,7 @@ import org.jetbrains.anko.support.v4.*
 
 class KnittingListFragment : ListFragment(), KnittingListView {
 
-    private var knittings: ArrayList<Knitting> = ArrayList<Knitting>()
+    private var knittings: ArrayList<Knitting> = ArrayList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

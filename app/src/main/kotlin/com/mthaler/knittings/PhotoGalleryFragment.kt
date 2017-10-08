@@ -18,7 +18,6 @@ import org.jetbrains.anko.find
 import org.jetbrains.anko.support.v4.*
 import android.widget.Toast
 import java.io.*
-import java.util.*
 
 /**
  * A fragment that displays a list of photos using a grid
@@ -122,7 +121,7 @@ class PhotoGalleryFragment : Fragment() {
         } else if (requestCode == REQUEST_IMAGE_IMPORT) {
             try {
                 Log.d(LOG_TAG, "Received result for import photo intent")
-                val imageUri = data!!.getData()
+                val imageUri = data!!.data
                 PictureUtils.copy(imageUri, currentPhotoPath!!, activity)
                 val orientation = PictureUtils.getOrientation(currentPhotoPath!!.absolutePath)
                 val preview = PictureUtils.decodeSampledBitmapFromPath(currentPhotoPath!!.absolutePath, 200, 200)

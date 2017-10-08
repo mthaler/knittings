@@ -12,7 +12,7 @@ import java.util.*
 
 object PictureUtils {
 
-    val LOG_TAG = PictureUtils::class.java.simpleName
+    private val LOG_TAG = PictureUtils::class.java.simpleName
 
     fun calculateInSampleSize(options: BitmapFactory.Options, reqWidth: Int, reqHeight: Int): Int {
         // Raw height and width of image
@@ -75,7 +75,7 @@ object PictureUtils {
     fun getOrientation(uri: Uri, context: Context): Int {
         var inputStream: InputStream? = null
         try {
-            inputStream = context.getContentResolver().openInputStream(uri)
+            inputStream = context.contentResolver.openInputStream(uri)
             val exif = ExifInterface(inputStream)
             return exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_UNDEFINED)
         } catch (ex: IOException) {
@@ -163,7 +163,7 @@ object PictureUtils {
         var `in`: InputStream? = null
         var out: OutputStream? = null
         try {
-            `in` = context.getContentResolver().openInputStream(src)
+            `in` = context.contentResolver.openInputStream(src)
             out = FileOutputStream(dst)  // I'm assuming you already have the File object for where you're writing to
 
             var bytesRead: Int = `in`.read(imageData)
