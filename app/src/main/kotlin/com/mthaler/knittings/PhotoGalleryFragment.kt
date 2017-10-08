@@ -16,12 +16,12 @@ import android.widget.AdapterView
 import android.widget.Button
 import android.widget.GridView
 import org.jetbrains.anko.find
-import java.io.File
 import org.jetbrains.anko.support.v4.*
 import android.widget.Toast
 import android.graphics.BitmapFactory
-import java.io.FileNotFoundException
-import java.io.FileOutputStream
+import android.media.ExifInterface
+import java.io.*
+import java.util.*
 
 /**
  * A fragment that displays a list of photos using a grid
@@ -126,19 +126,29 @@ class PhotoGalleryFragment : Fragment() {
             try {
                 Log.d(LOG_TAG, "Received result for import photo intent")
                 val imageUri = data!!.getData()
-                // get orientation
-                val orientation = PictureUtils.getOrientation(imageUri, activity)
-                Log.d(LOG_TAG, "Image orientation: " + orientation)
-                val imageStream = activity.getContentResolver().openInputStream(imageUri)
-                val selectedImage = BitmapFactory.decodeStream(imageStream)
-                // save photo
-                val out = FileOutputStream(currentPhotoPath)
-                selectedImage.compress(Bitmap.CompressFormat.JPEG, 90, out)
-                out.close()
-                // set orientation
-                PictureUtils.setOrientation(currentPhotoPath.toString(), orientation)
-                // create preview
-                val preview = PictureUtils.resize(selectedImage, 200, 200)
+                val chunkSize = 1024  // We'll read in one kB at a time
+                val imageData = ByteArray(chunkSize)
+
+                var `in`: InputStream? = null
+                var out: OutputStream? = null
+                try {
+                    `in` = activity.getContentResolver().openInputStream(imageUri)
+                    out = FileOutputStream(currentPhotoPath)  // I'm assuming you already have the File object for where you're writing to
+
+                    var bytesRead: Int = `in`.read(imageData)
+                    while (bytesRead > 0) {
+                        out.write(Arrays.copyOfRange(imageData, 0, Math.max(0, bytesRead)))
+                        bytesRead = `in`.read(imageData)
+                    }
+
+                } catch (ex: Exception) {
+                    Log.e(LOG_TAG, "Something went wrong.", ex)
+                } finally {
+                    `in`?.close()
+                    out?.close()
+                }
+                val orientation = PictureUtils.getOrientation(currentPhotoPath!!.absolutePath)
+                val preview = PictureUtils.decodeSampledBitmapFromPath(currentPhotoPath!!.absolutePath, 200, 200)
                 val rotatedPreview = PictureUtils.rotateBitmap(preview, orientation)
                 val photo = KnittingsDataSource.getInstance(activity).createPhoto(currentPhotoPath!!, knitting!!.id, rotatedPreview, "")
                 Log.d(LOG_TAG, "Created new photo from " + currentPhotoPath + ", knitting id " + knitting!!.id)

@@ -135,7 +135,6 @@ object PictureUtils {
     }
 
     fun resize(image: Bitmap, maxWidth: Int, maxHeight: Int): Bitmap {
-        var image = image
         if (maxHeight > 0 && maxWidth > 0) {
             val width = image.width
             val height = image.height
@@ -149,8 +148,7 @@ object PictureUtils {
             } else {
                 finalHeight = (maxWidth.toFloat() / ratioBitmap).toInt()
             }
-            image = Bitmap.createScaledBitmap(image, finalWidth, finalHeight, true)
-            return image
+            return Bitmap.createScaledBitmap(image, finalWidth, finalHeight, true)
         } else {
             return image
         }
