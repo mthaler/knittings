@@ -2,6 +2,7 @@
 <resources>
     <!-- application -->
     <string name="app_name">Strickereien</string>
+    <string name="about">Info</string>
     <!-- knittings list -->
     <string name="knittings_title">Strickereien</string>
     <!-- knitting details -->

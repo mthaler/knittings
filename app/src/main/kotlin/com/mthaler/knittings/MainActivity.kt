@@ -6,6 +6,8 @@ import android.os.Bundle
 import android.support.v7.widget.Toolbar
 import android.view.Menu
 import android.view.MenuItem
+import org.jetbrains.anko.*
+import com.mthaler.knittings.BuildConfig;
 
 /**
  * The main activity that gets displayed when the app is started.
@@ -36,10 +38,13 @@ class MainActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-        //            case R.id.menu_item_new_knitting:
-        //                final KnittingListView knittingListView = (KnittingListView) getSupportFragmentManager().findFragmentById(R.id.fragment_knitting_list);
-        //                knittingListView.addKnitting();
-        //                return true;
+            R.id.menu_item_about -> {
+                alert("Idea and concept: Ulrike Jordan,\n\nProgramming: Michael Thaler") {
+                    title = resources.getString(R.string.app_name) + " " + BuildConfig.VERSION_NAME
+                    positiveButton("OK") {}
+                }.show()
+                return super.onOptionsItemSelected(item)
+            }
             else -> return super.onOptionsItemSelected(item)
         }
     }
