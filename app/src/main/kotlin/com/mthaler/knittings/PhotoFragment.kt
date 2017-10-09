@@ -12,6 +12,7 @@ import android.view.ViewGroup
 import android.view.ViewTreeObserver
 import android.widget.EditText
 import android.widget.ImageView
+import com.mthaler.knittings.model.Photo
 
 /**
  * PhotoFragment displays a photo and the description

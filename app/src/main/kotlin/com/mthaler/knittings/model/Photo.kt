@@ -1,4 +1,4 @@
-package com.mthaler.knittings
+package com.mthaler.knittings.model
 
 import android.graphics.Bitmap
 

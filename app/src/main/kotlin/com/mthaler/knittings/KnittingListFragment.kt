@@ -8,6 +8,7 @@ import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.ListView
 import android.widget.TextView
+import com.mthaler.knittings.model.Knitting
 import java.text.DateFormat
 import java.util.ArrayList
 import java.util.Date

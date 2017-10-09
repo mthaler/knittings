@@ -3,11 +3,12 @@ package com.mthaler.knittings
 import android.content.ContentValues
 import android.content.Context
 import android.database.Cursor
-import android.database.sqlite.SQLiteDatabase
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Environment
 import android.util.Log
+import com.mthaler.knittings.model.Knitting
+import com.mthaler.knittings.model.Photo
 import java.io.File
 import java.util.ArrayList
 import java.util.Date

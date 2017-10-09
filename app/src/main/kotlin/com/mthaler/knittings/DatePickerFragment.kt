@@ -16,13 +16,11 @@ class DatePickerFragment : DialogFragment() {
     private var date: Date? = null
 
     private fun sendResult(resultCode: Int) {
-        if (targetFragment == null)
-            return
-
-        val i = Intent()
-        i.putExtra(EXTRA_DATE, date)
-
-        targetFragment.onActivityResult(targetRequestCode, resultCode, i)
+        if (targetFragment != null) {
+            val i = Intent()
+            i.putExtra(EXTRA_DATE, date)
+            targetFragment.onActivityResult(targetRequestCode, resultCode, i)
+        }
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {

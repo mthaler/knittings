@@ -9,6 +9,7 @@ import android.view.ViewTreeObserver
 import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.TextView
+import com.mthaler.knittings.model.Photo
 
 class GridViewAdapter(context: Context, private val layoutResourceId: Int, private val data: List<Photo>) : ArrayAdapter<Photo>(context, layoutResourceId, data) {
 

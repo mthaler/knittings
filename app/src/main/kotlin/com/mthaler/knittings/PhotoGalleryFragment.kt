@@ -7,7 +7,6 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.support.v4.app.Fragment
 import android.support.v4.content.FileProvider
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,6 +16,8 @@ import android.widget.GridView
 import org.jetbrains.anko.find
 import org.jetbrains.anko.support.v4.*
 import android.widget.Toast
+import com.mthaler.knittings.model.Knitting
+import com.mthaler.knittings.model.Photo
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.debug
 import java.io.*
