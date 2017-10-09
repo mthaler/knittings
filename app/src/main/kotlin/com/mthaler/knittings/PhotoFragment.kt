@@ -88,9 +88,8 @@ class PhotoFragment : Fragment(), PhotoDetailsView {
     override fun deletePhoto() {
         // check if the photo is used as default photo
         val knitting = KnittingsDataSource.getInstance(activity).getKnitting(photo!!.knittingID)
-        if (knitting.defaultPhoto != null && knitting.defaultPhoto!!.id == photo!!.id) {
-            knitting.defaultPhoto = null
-            KnittingsDataSource.getInstance(activity).updateKnitting(knitting)
+        if (knitting.defaultPhoto != null && knitting.defaultPhoto.id == photo!!.id) {
+            KnittingsDataSource.getInstance(activity).updateKnitting(knitting.copy(defaultPhoto = null))
         }
         // delete database entry
         KnittingsDataSource.getInstance(activity).deletePhoto(photo!!)

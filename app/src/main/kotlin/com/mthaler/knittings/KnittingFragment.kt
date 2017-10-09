@@ -6,13 +6,14 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.RatingBar
 import android.widget.TextView
+import org.jetbrains.anko.AnkoLogger
+import org.jetbrains.anko.debug
 import java.text.DateFormat
 import java.util.Date
 
@@ -21,7 +22,7 @@ import java.util.Date
  *
  * It is used for adding new knittings or displaying / editing existing knittings
  */
-class KnittingFragment : Fragment() {
+class KnittingFragment : Fragment(), AnkoLogger {
 
     private var knitting: Knitting? = null
 
@@ -35,12 +36,12 @@ class KnittingFragment : Fragment() {
         if (savedInstanceState != null) {
             if (savedInstanceState.containsKey(KNITTING_ID)) {
                 knitting = KnittingsDataSource.getInstance(activity).getKnitting(savedInstanceState.getLong(KNITTING_ID))
-                Log.d(LOG_TAG, "Set knitting: " + knitting!!.id)
+                debug("Set knitting: " + knitting)
             }
         } else {
             val knittingID = arguments.getLong(KNITTING_ID)
             knitting = KnittingsDataSource.getInstance(activity).getKnitting(knittingID)
-            Log.d(LOG_TAG, "Set knitting: " + knitting!!.id)
+            debug("Set knitting: " + knitting)
         }
 
         // initialize title text field
@@ -48,7 +49,7 @@ class KnittingFragment : Fragment() {
         editTextTitle.setText(knitting!!.title)
         editTextTitle.addTextChangedListener(object : TextWatcher {
             override fun onTextChanged(c: CharSequence, start: Int, before: Int, count: Int) {
-                knitting!!.title = c.toString()
+                knitting = knitting?.copy(title = c.toString())
                 KnittingsDataSource.getInstance(activity).updateKnitting(knitting!!)
             }
 
@@ -66,7 +67,7 @@ class KnittingFragment : Fragment() {
         editTextDescription.setText(knitting!!.description)
         editTextDescription.addTextChangedListener(object : TextWatcher {
             override fun onTextChanged(c: CharSequence, start: Int, before: Int, count: Int) {
-                knitting!!.description = c.toString()
+                knitting = knitting?.copy(description = c.toString())
                 KnittingsDataSource.getInstance(activity).updateKnitting(knitting!!)
             }
 
@@ -103,11 +104,10 @@ class KnittingFragment : Fragment() {
         editTextNeedleDiameter.addTextChangedListener(object : TextWatcher {
             override fun onTextChanged(c: CharSequence, start: Int, before: Int, count: Int) {
                 try {
-                    knitting!!.needleDiameter = java.lang.Double.parseDouble(c.toString())
+                    knitting = knitting?.copy(needleDiameter = java.lang.Double.parseDouble(c.toString()))
                 } catch (ex: Exception) {
-                    knitting!!.needleDiameter = 0.0
+                    knitting = knitting?.copy(needleDiameter = 0.0)
                 }
-
                 KnittingsDataSource.getInstance(activity).updateKnitting(knitting!!)
             }
 
@@ -117,11 +117,10 @@ class KnittingFragment : Fragment() {
 
             override fun afterTextChanged(c: Editable) {
                 try {
-                    knitting!!.needleDiameter = java.lang.Double.parseDouble(c.toString())
+                    knitting = knitting?.copy(needleDiameter = java.lang.Double.parseDouble(c.toString()))
                 } catch (ex: Exception) {
-                    knitting!!.needleDiameter = 0.0
+                    knitting = knitting?.copy(needleDiameter = 0.0)
                 }
-
                 KnittingsDataSource.getInstance(activity).updateKnitting(knitting!!)
             }
         })
@@ -131,11 +130,10 @@ class KnittingFragment : Fragment() {
         editTextSize.addTextChangedListener(object : TextWatcher {
             override fun onTextChanged(c: CharSequence, start: Int, before: Int, count: Int) {
                 try {
-                    knitting!!.size = java.lang.Double.parseDouble(c.toString())
+                    knitting = knitting?.copy(size = java.lang.Double.parseDouble(c.toString()))
                 } catch (ex: Exception) {
-                    knitting!!.size = 0.0
+                    knitting = knitting?.copy(size = 0.0)
                 }
-
                 KnittingsDataSource.getInstance(activity).updateKnitting(knitting!!)
             }
 
@@ -145,11 +143,10 @@ class KnittingFragment : Fragment() {
 
             override fun afterTextChanged(c: Editable) {
                 try {
-                    knitting!!.size = java.lang.Double.parseDouble(c.toString())
+                    knitting = knitting?.copy(size = java.lang.Double.parseDouble(c.toString()))
                 } catch (ex: Exception) {
-                    knitting!!.size = 0.0
+                    knitting = knitting?.copy(size = 0.0)
                 }
-
                 KnittingsDataSource.getInstance(activity).updateKnitting(knitting!!)
             }
         })
@@ -157,7 +154,7 @@ class KnittingFragment : Fragment() {
         val ratingBar = v.findViewById<RatingBar>(R.id.ratingBar)
         ratingBar.rating = knitting!!.rating.toFloat()
         ratingBar.onRatingBarChangeListener = RatingBar.OnRatingBarChangeListener { ratingBar, rating, fromUser ->
-            knitting!!.rating = rating.toDouble()
+            knitting = knitting?.copy(rating = rating.toDouble())
             KnittingsDataSource.getInstance(activity).updateKnitting(knitting!!)
         }
 
@@ -170,13 +167,13 @@ class KnittingFragment : Fragment() {
         }
         if (requestCode == REQUEST_STARTED) {
             val date = data!!.getSerializableExtra(DatePickerFragment.EXTRA_DATE) as Date
-            knitting!!.started = date
-            textViewStarted.text = DateFormat.getDateInstance().format(knitting!!.started)
+            knitting = knitting?.copy(started = date)
+            textViewStarted.text = DateFormat.getDateInstance().format(date)
             KnittingsDataSource.getInstance(activity).updateKnitting(knitting!!)
         } else if (requestCode == REQUEST_FINISHED) {
             val date = data!!.getSerializableExtra(DatePickerFragment.EXTRA_DATE) as Date
-            knitting!!.finished = date
-            textViewFinished.text = DateFormat.getDateInstance().format(knitting!!.finished)
+            knitting = knitting?.copy(finished = date)
+            textViewFinished.text = DateFormat.getDateInstance().format(date)
             KnittingsDataSource.getInstance(activity).updateKnitting(knitting!!)
         }
     }
@@ -216,7 +213,7 @@ class KnittingFragment : Fragment() {
         }
     }
 
-    companion object {
+    companion object: AnkoLogger {
 
         private val KNITTING_ID = "knitting_id"
 
@@ -224,14 +221,12 @@ class KnittingFragment : Fragment() {
         private val REQUEST_STARTED = 0
         private val REQUEST_FINISHED = 1
 
-        private val LOG_TAG = KnittingFragment::class.java.simpleName
-
         fun newInstance(knitting: Knitting): KnittingFragment {
             val fragment = KnittingFragment()
             val args = Bundle()
             args.putLong(KNITTING_ID, knitting.id)
             fragment.arguments = args
-            Log.d(LOG_TAG, "Created new KnittingFragment with knitting id: " + knitting.id)
+            debug("Created new KnittingFragment with knitting id: " + knitting.id)
             return fragment
         }
     }

@@ -60,8 +60,7 @@ class PhotoActivity : AppCompatActivity() {
                 val photoDetailsView = supportFragmentManager.findFragmentById(R.id.fragment_photo) as PhotoDetailsView
                 val photo = photoDetailsView.photo
                 val knitting = KnittingsDataSource.getInstance(this).getKnitting(photo!!.knittingID)
-                knitting.defaultPhoto = photo
-                KnittingsDataSource.getInstance(this).updateKnitting(knitting)
+                KnittingsDataSource.getInstance(this).updateKnitting(knitting.copy(defaultPhoto = photo))
                 Log.d(LOG_TAG, "Set $photo as default photo")
                 val layout = findViewById(R.id.photo_activity_layout) as CoordinatorLayout
                 Snackbar.make(layout, "Used as main photo", Snackbar.LENGTH_SHORT).show()

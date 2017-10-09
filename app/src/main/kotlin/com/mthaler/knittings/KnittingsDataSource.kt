@@ -342,20 +342,7 @@ class KnittingsDataSource private constructor(context: Context) {
             val defaultPhotoID = cursor.getLong(idDefaultPhoto)
             defaultPhoto = getPhoto(defaultPhotoID)
         }
-
-        val knitting = Knitting(id)
-        knitting.title = title
-        knitting.description = description
-        knitting.started = started
-        knitting.finished = finished
-        knitting.needleDiameter = needleDiameter
-        knitting.size = size
-        if (defaultPhoto != null) {
-            knitting.defaultPhoto = defaultPhoto
-        }
-        knitting.rating = rating
-
-        return knitting
+        return Knitting(id, title = title, description = description, started = started, finished = finished, needleDiameter = needleDiameter, size = size, rating = rating, defaultPhoto = defaultPhoto)
     }
 
     private fun cursorToPhoto(cursor: Cursor): Photo {
