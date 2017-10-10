@@ -2,13 +2,26 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
+    <!-- image it left of everything else -->
     <ImageView
         android:id="@+id/knitting_list_item_photoImageView"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="72dp"
+        android:layout_height="72dp"
         android:layout_alignParentLeft="true"
-        android:padding="4dp"
-        android:contentDescription="@string/photo"/>
+        android:layout_margin="4dp"
+        android:contentDescription="@string/photo"
+        android:scaleType="centerCrop"/>
+    <!--first line, title right of image -->
+    <TextView android:id="@+id/knitting_list_item_titleTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/knitting_list_item_photoImageView"
+        android:textStyle="bold"
+        android:textColor="@color/knitting_list_item_title"
+        android:paddingLeft="4dp"
+        android:paddingRight="4dp"
+        android:paddingTop="4dp"/>
+    <!-- first line, start date right of title, aligned to right -->
     <TextView android:id="@+id/knitting_list_item_startedTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -16,26 +29,18 @@
         android:layout_alignParentRight="true"
         android:textColor="@color/knitting_list_item_started"
         android:padding="4dp" />
-    <TextView android:id="@+id/knitting_list_item_titleTextView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_toLeftOf="@id/knitting_list_item_startedTextView"
-        android:layout_toRightOf="@+id/knitting_list_item_photoImageView"
-        android:textStyle="bold"
-        android:textColor="@color/knitting_list_item_title"
-        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-        android:paddingLeft="4dp"
-        android:paddingRight="4dp" />
+    <!-- second line, description, two lines -->
     <TextView android:id="@+id/knitting_list_item_descriptionTextView"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/knitting_list_item_titleTextView"
         android:layout_toLeftOf="@id/knitting_list_item_startedTextView"
         android:layout_toRightOf="@+id/knitting_list_item_photoImageView"
+        android:gravity="top"
         android:ellipsize="end"
         android:maxLines="2"
         android:lines="2"
         android:paddingLeft="4dp"
         android:paddingRight="4dp"
-        android:paddingTop="4dp" />
+        android:textColor="@color/knitting_list_item_description"/>
 </RelativeLayout>

@@ -4,6 +4,7 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
     <color name="knitting_list_item_title">#000000</color>
+    <color name="knitting_list_item_description">#000000</color>
     <color name="knitting_list_item_started">#303F9F</color>
     <color name="blue">#00abea</color>
     <color name="white">#ffffff</color>
