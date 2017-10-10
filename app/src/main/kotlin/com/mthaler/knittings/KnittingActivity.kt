@@ -8,11 +8,13 @@ import android.support.v4.app.FragmentPagerAdapter
 import android.support.v4.view.ViewPager
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import com.mthaler.knittings.model.Knitting
+import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.alert
+import org.jetbrains.anko.debug
+import org.jetbrains.anko.warn
 import java.util.ArrayList
 
 /**
@@ -23,13 +25,13 @@ import java.util.ArrayList
  *
  * The id of the knitting that should be displayed must be passed when the activity is started
  */
-class KnittingActivity : AppCompatActivity() {
+class KnittingActivity : AppCompatActivity(), AnkoLogger {
 
     private var knittingFragment: KnittingFragment? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Log.d(LOG_TAG, "onCreate called")
+        debug("onCreate called")
 
         setContentView(R.layout.activity_knitting)
         val toolbar = findViewById(R.id.toolbar) as Toolbar
@@ -39,9 +41,9 @@ class KnittingActivity : AppCompatActivity() {
         // get the id of the knitting that should be displayed.
         val id = intent.getLongExtra(EXTRA_KNITTING_ID, -1L)
         if (id != -1L) {
-            Log.d(LOG_TAG, "Got knitting id from extra: " + id)
+            debug("Got knitting id from extra: " + id)
         } else {
-            Log.e(LOG_TAG, "Got invalid knitting id -1")
+            warn("Got invalid knitting id -1")
         }
         val knitting = KnittingsDataSource.getInstance(this.applicationContext).getKnitting(id)
 
@@ -87,7 +89,7 @@ class KnittingActivity : AppCompatActivity() {
         viewPager.adapter = adapter
         viewPager.addOnPageChangeListener(object : ViewPager.SimpleOnPageChangeListener() {
             override fun onPageSelected(position: Int) {
-                Log.d(LOG_TAG, "Page selected: " + position)
+               debug("Page selected: " + position)
             }
         })
 
@@ -110,8 +112,6 @@ class KnittingActivity : AppCompatActivity() {
     }
 
     companion object {
-
         val EXTRA_KNITTING_ID = "com.mthaler.knitting.KNITTING_ID"
-        private val LOG_TAG = KnittingActivity::class.java.simpleName
     }
 }

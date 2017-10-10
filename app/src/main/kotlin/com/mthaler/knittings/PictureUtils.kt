@@ -7,12 +7,12 @@ import android.graphics.Matrix
 import android.net.Uri
 import android.support.media.ExifInterface
 import android.util.Log
+import org.jetbrains.anko.AnkoLogger
+import org.jetbrains.anko.error
 import java.io.*
 import java.util.*
 
-object PictureUtils {
-
-    private val LOG_TAG = PictureUtils::class.java.simpleName
+object PictureUtils : AnkoLogger {
 
     fun calculateInSampleSize(options: BitmapFactory.Options, reqWidth: Int, reqHeight: Int): Int {
         // Raw height and width of image
@@ -173,7 +173,7 @@ object PictureUtils {
             }
 
         } catch (ex: Exception) {
-            Log.e(LOG_TAG, "Could not copy data", ex)
+            error("Could not copy data", ex)
         } finally {
             `in`?.close()
             out?.close()
