@@ -3,12 +3,14 @@ package com.mthaler.knittings
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
-import android.util.Log
+import org.jetbrains.anko.AnkoLogger
+import org.jetbrains.anko.debug
+import org.jetbrains.anko.error
 
 /**
  * Database helper class that defines our tables, columns and methods to create and drop tables
  */
-class KnittingDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DB_NAME, null, DB_VERSION) {
+class KnittingDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DB_NAME, null, DB_VERSION), AnkoLogger {
 
     /**
      * Class that defines the knittings database table schema
@@ -70,38 +72,35 @@ class KnittingDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DB_NA
     }
 
     init {
-        Log.d(LOG_TAG, "KnittingDatabaseHelper created database: " + databaseName)
+        debug("KnittingDatabaseHelper created database: " + databaseName)
     }
 
     override fun onCreate(db: SQLiteDatabase) {
         try {
             db.execSQL(KnittingTable.SQL_CREATE)
-            Log.d(LOG_TAG, "Knitting table created with: " + KnittingTable.SQL_CREATE)
+            debug("Knitting table created with: " + KnittingTable.SQL_CREATE)
         } catch (ex: Exception) {
-            Log.e(LOG_TAG, "Could not create knitting table with: " + KnittingTable.SQL_CREATE + ": " + ex.message)
+            error("Could not create knitting table with: " + KnittingTable.SQL_CREATE, ex)
         }
 
         try {
             db.execSQL(PhotoTable.SQL_CREATE)
-            Log.d(LOG_TAG, "Photo table created with: " + PhotoTable.SQL_CREATE)
+            debug("Photo table created with: " + PhotoTable.SQL_CREATE)
         } catch (ex: Exception) {
-            Log.e(LOG_TAG, "Could not create photo table with: " + PhotoTable.SQL_CREATE + ": " + ex.message)
+            error("Could not create photo table with: " + PhotoTable.SQL_CREATE, ex)
         }
 
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
-        Log.d(LOG_TAG, "Knitting table with version number $oldVersion will be dropped.")
+        debug("Knitting table with version number $oldVersion will be dropped.")
         db.execSQL(KnittingTable.SQL_DROP)
-        Log.d(LOG_TAG, "Photo table with version number $oldVersion will be dropped.")
+        debug("Photo table with version number $oldVersion will be dropped.")
         db.execSQL(PhotoTable.SQL_DROP)
         onCreate(db)
     }
 
     companion object {
-
-        private val LOG_TAG = KnittingDatabaseHelper::class.java.simpleName
-
         private val DB_NAME = "knittings.db"
         private val DB_VERSION = 1
     }
