@@ -11,10 +11,21 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.mthaler.knittings.model.Photo
 
+/**
+ * An adapter that creates the views to display photos in a grid view
+ */
 class GridViewAdapter(context: Context, private val layoutResourceId: Int, private val data: List<Photo>) : ArrayAdapter<Photo>(context, layoutResourceId, data) {
 
+    /**
+     * Creates a view for the item at the given position in the list
+     *
+     * @param position position of the item in the list
+     * @param convertView the old view to reuse, if possible
+     * @param parent the parent that this view will eventually be attached to, never null
+     */
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-        var row = convertView
+
+        var row: View? = convertView
         val h: ViewHolder
 
         if (row == null) {
