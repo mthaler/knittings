@@ -19,6 +19,8 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        // add toolbar to activity
         val toolbar = findViewById(R.id.toolbar) as Toolbar
         setSupportActionBar(toolbar)
 
@@ -43,7 +45,7 @@ class MainActivity : AppCompatActivity() {
                     title = resources.getString(R.string.app_name) + " " + BuildConfig.VERSION_NAME
                     positiveButton("OK") {}
                 }.show()
-                return super.onOptionsItemSelected(item)
+                return true;
             }
             else -> return super.onOptionsItemSelected(item)
         }

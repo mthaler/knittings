@@ -26,6 +26,7 @@
                 android:resource="@xml/file_paths" />
         </provider>
 
+        <!-- we define our own toolbar in MainActivity, use theme without toolbar -->
         <activity
             android:name=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
