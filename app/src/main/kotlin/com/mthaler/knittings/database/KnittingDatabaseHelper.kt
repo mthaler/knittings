@@ -1,4 +1,4 @@
-package com.mthaler.knittings
+package com.mthaler.knittings.database
 
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase

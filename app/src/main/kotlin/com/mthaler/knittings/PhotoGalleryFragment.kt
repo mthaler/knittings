@@ -16,6 +16,7 @@ import android.widget.GridView
 import org.jetbrains.anko.find
 import org.jetbrains.anko.support.v4.*
 import android.widget.Toast
+import com.mthaler.knittings.database.KnittingsDataSource
 import com.mthaler.knittings.model.Knitting
 import com.mthaler.knittings.model.Photo
 import org.jetbrains.anko.AnkoLogger

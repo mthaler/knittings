@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.view.Menu
 import android.view.MenuItem
+import com.mthaler.knittings.database.KnittingsDataSource
 import com.mthaler.knittings.model.Knitting
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.alert

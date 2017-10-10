@@ -1,4 +1,4 @@
-package com.mthaler.knittings
+package com.mthaler.knittings.database
 
 import android.content.ContentValues
 import android.content.Context

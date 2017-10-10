@@ -12,6 +12,7 @@ import android.view.ViewGroup
 import android.view.ViewTreeObserver
 import android.widget.EditText
 import android.widget.ImageView
+import com.mthaler.knittings.database.KnittingsDataSource
 import com.mthaler.knittings.model.Photo
 
 /**
