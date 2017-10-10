@@ -1,11 +1,13 @@
 package com.mthaler.knittings
 
+import android.app.AlertDialog
 import android.support.design.widget.FloatingActionButton
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.widget.Toolbar
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.TextView
 import org.jetbrains.anko.*
 import com.mthaler.knittings.BuildConfig;
 
@@ -41,10 +43,13 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.menu_item_about -> {
-                alert("Idea and concept: Ulrike Jordan,\n\nProgramming: Michael Thaler") {
-                    title = resources.getString(R.string.app_name) + " " + BuildConfig.VERSION_NAME
-                    positiveButton("OK") {}
-                }.show()
+                val v = layoutInflater.inflate(R.layout.dialog_about, null)
+                val appName = v.find<TextView>(R.id.about_app_name)
+                appName.text = (appName.text.toString() + " " + BuildConfig.VERSION_NAME)
+                val b = AlertDialog.Builder(this)
+                b.setView(v)
+                b.setPositiveButton(android.R.string.ok ) { diag, i -> diag.dismiss()}
+                b.create().show()
                 return true;
             }
             else -> return super.onOptionsItemSelected(item)
