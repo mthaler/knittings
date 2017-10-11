@@ -1,7 +1,5 @@
 package com.mthaler.knittings
 
-import android.graphics.Bitmap
-import android.os.AsyncTask
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.text.Editable
@@ -14,6 +12,8 @@ import android.widget.EditText
 import android.widget.ImageView
 import com.mthaler.knittings.database.KnittingsDataSource
 import com.mthaler.knittings.model.Photo
+import org.jetbrains.anko.doAsync
+import org.jetbrains.anko.uiThread
 
 /**
  * PhotoFragment displays a photo and the description
@@ -66,21 +66,17 @@ class PhotoFragment : Fragment(), PhotoDetailsView {
                 val width = imageView.measuredWidth
                 val height = imageView.measuredHeight
                 // loading and scaling the bitmap is expensive, use async task to do the work
-                val scaleBitmapTask = object : AsyncTask<String, Void, Bitmap>() {
-                    override fun doInBackground(vararg args: String): Bitmap {
-                        val path = args[0]
-                        val orientation = PictureUtils.getOrientation(path)
-                        val photo = PictureUtils.decodeSampledBitmapFromPath(path, width, height)
-                        return PictureUtils.rotateBitmap(photo, orientation)
-                    }
-
-                    override fun onPostExecute(bitmap: Bitmap?) {
-                        if (bitmap != null) {
-                            imageView.setImageBitmap(bitmap)
+                val path = photo.filename.absolutePath
+                doAsync {
+                    val orientation = PictureUtils.getOrientation(path)
+                    val scaled = PictureUtils.decodeSampledBitmapFromPath(path, width, height)
+                    val rotated = PictureUtils.rotateBitmap(scaled, orientation)
+                    uiThread {
+                        if (rotated != null) {
+                            imageView.setImageBitmap(rotated)
                         }
                     }
                 }
-                scaleBitmapTask.execute(this@PhotoFragment.photo!!.filename.absolutePath)
                 return true
             }
         })
