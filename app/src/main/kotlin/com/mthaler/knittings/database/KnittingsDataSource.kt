@@ -9,11 +9,13 @@ import android.os.Environment
 import android.util.Log
 import com.mthaler.knittings.model.Knitting
 import com.mthaler.knittings.model.Photo
+import org.jetbrains.anko.AnkoLogger
+import org.jetbrains.anko.debug
 import java.io.File
 import java.util.ArrayList
 import java.util.Date
 
-class KnittingsDataSource private constructor(context: Context) {
+class KnittingsDataSource private constructor(context: Context): AnkoLogger {
 
     private val context: Context
     private val dbHelper: KnittingDatabaseHelper
@@ -35,7 +37,7 @@ class KnittingsDataSource private constructor(context: Context) {
             while (!cursor.isAfterLast) {
                 knitting = cursorToKnitting(cursor)
                 knittings.add(knitting)
-                Log.d(LOG_TAG, "Read knitting " + knitting.id + ", default photo: " + knitting.defaultPhoto)
+                debug("Read knitting " + knitting.id + ", default photo: " + knitting.defaultPhoto)
                 cursor.moveToNext()
             }
 
@@ -61,7 +63,7 @@ class KnittingsDataSource private constructor(context: Context) {
      * @return new knitting
      */
     fun createKnitting(title: String, description: String, started: Date, finished: Date?, needleDiameter: Double, size: Double, rating: Double): Knitting {
-        Log.d(LOG_TAG, "Creating knitting, title: " + title + ", description: " + description + ", started: " + started + ", finished: " +
+        debug("Creating knitting, title: " + title + ", description: " + description + ", started: " + started + ", finished: " +
                 finished + ", needle diameter: " + needleDiameter + ", size: " + size + ", rating: " + rating)
         dbHelper.writableDatabase.use { database ->
             val values = ContentValues()
@@ -95,7 +97,7 @@ class KnittingsDataSource private constructor(context: Context) {
      * @return updated knitting
      */
     fun updateKnitting(knitting: Knitting): Knitting {
-        Log.d(LOG_TAG, "Updating knitting " + knitting + ", default photo: " + knitting.defaultPhoto)
+        debug("Updating knitting " + knitting + ", default photo: " + knitting.defaultPhoto)
         dbHelper.writableDatabase.use { database ->
             val values = ContentValues()
             values.put(KnittingDatabaseHelper.KnittingTable.Cols.TITLE, knitting.title)
@@ -107,7 +109,7 @@ class KnittingsDataSource private constructor(context: Context) {
             values.put(KnittingDatabaseHelper.KnittingTable.Cols.NEEDLE_DIAMETER, knitting.needleDiameter)
             values.put(KnittingDatabaseHelper.KnittingTable.Cols.SIZE, knitting.size)
             if (knitting.defaultPhoto != null) {
-                Log.d(LOG_TAG, "Default photo: " + knitting.defaultPhoto)
+                debug("Default photo: " + knitting.defaultPhoto)
                 values.put(KnittingDatabaseHelper.KnittingTable.Cols.DEFAULT_PHOTO_ID, knitting.defaultPhoto!!.id)
             } else {
                 values.putNull(KnittingDatabaseHelper.KnittingTable.Cols.DEFAULT_PHOTO_ID)
@@ -139,7 +141,7 @@ class KnittingsDataSource private constructor(context: Context) {
 
         dbHelper.writableDatabase.use { database ->
             database.delete(KnittingDatabaseHelper.KnittingTable.KNITTINGS, KnittingDatabaseHelper.KnittingTable.Cols.ID + "=" + id, null)
-            Log.d(LOG_TAG, "Deleted knitting " + id + ": " + knitting.toString())
+            debug("Deleted knitting " + id + ": " + knitting.toString())
         }
     }
 
@@ -150,7 +152,7 @@ class KnittingsDataSource private constructor(context: Context) {
      * @return knitting for the given id
      */
     fun getKnitting(id: Long): Knitting {
-        Log.d(LOG_TAG, "Getting knitting for id " + id)
+        debug("Getting knitting for id " + id)
         dbHelper.writableDatabase.use { database ->
             val cursor = database.query(KnittingDatabaseHelper.KnittingTable.KNITTINGS,
                     KnittingDatabaseHelper.KnittingTable.Columns, KnittingDatabaseHelper.KnittingTable.Cols.ID + "=" + id, null, null, null, null)
@@ -175,7 +177,7 @@ class KnittingsDataSource private constructor(context: Context) {
      * @return photo for the given id
      */
     fun getPhoto(id: Long): Photo {
-        Log.d(LOG_TAG, "Getting photo for id " + id)
+        debug("Getting photo for id " + id)
         dbHelper.writableDatabase.use { database ->
             val cursor = database.query(KnittingDatabaseHelper.PhotoTable.PHOTOS,
                     KnittingDatabaseHelper.PhotoTable.Columns, KnittingDatabaseHelper.PhotoTable.Cols.ID + "=" + id, null, null, null, null)
@@ -208,7 +210,7 @@ class KnittingsDataSource private constructor(context: Context) {
             while (!cursor.isAfterLast) {
                 photo = cursorToPhoto(cursor)
                 photos.add(photo)
-                Log.d(LOG_TAG, "Read photo " + photo)
+                debug("Read photo " + photo)
                 cursor.moveToNext()
             }
 
@@ -227,7 +229,7 @@ class KnittingsDataSource private constructor(context: Context) {
      * @return new photo
      */
     fun createPhoto(filename: File, knittingID: Long, preview: Bitmap, description: String): Photo {
-        Log.d(LOG_TAG, "Creating photo for $filename, knitting id: $knittingID, preview: $preview, description: $description")
+        debug("Creating photo for $filename, knitting id: $knittingID, preview: $preview, description: $description")
         dbHelper.writableDatabase.use { database ->
             val values = ContentValues()
             values.put(KnittingDatabaseHelper.PhotoTable.Cols.FILENAME, filename.absolutePath)
@@ -260,7 +262,7 @@ class KnittingsDataSource private constructor(context: Context) {
      * @return updated photo
      */
     fun updatePhoto(photo: Photo): Photo {
-        Log.d(LOG_TAG, "Updating photo " + photo)
+        debug("Updating photo " + photo)
         dbHelper.writableDatabase.use { database ->
             val values = ContentValues()
             values.put(KnittingDatabaseHelper.PhotoTable.Cols.FILENAME, photo.filename.absolutePath)
@@ -298,7 +300,7 @@ class KnittingsDataSource private constructor(context: Context) {
 
         dbHelper.writableDatabase.use { database ->
             database.delete(KnittingDatabaseHelper.PhotoTable.PHOTOS, KnittingDatabaseHelper.PhotoTable.Cols.ID + "=" + id, null)
-            Log.d(LOG_TAG, "Deleted photo " + id + ": " + photo.toString())
+            debug("Deleted photo " + id + ": " + photo.toString())
         }
     }
 
@@ -314,7 +316,7 @@ class KnittingsDataSource private constructor(context: Context) {
             val whereClause = KnittingDatabaseHelper.PhotoTable.Cols.KNITTING_ID + "= ?"
             val whereArgs = arrayOf(java.lang.Long.toString(id))
             database.delete(KnittingDatabaseHelper.PhotoTable.PHOTOS, whereClause, whereArgs)
-            Log.d(LOG_TAG, "Removed knitting " + id + ": " + knitting.toString())
+            debug("Removed knitting " + id + ": " + knitting.toString())
         }
     }
 
@@ -370,8 +372,6 @@ class KnittingsDataSource private constructor(context: Context) {
     }
 
     companion object {
-
-        private val LOG_TAG = KnittingsDataSource::class.java.simpleName
 
         private var sKnittingsDataSource: KnittingsDataSource? = null
 
