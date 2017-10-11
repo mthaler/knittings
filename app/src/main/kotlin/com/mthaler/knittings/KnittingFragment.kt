@@ -180,6 +180,14 @@ class KnittingFragment : Fragment(), AnkoLogger {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        if (knitting != null) {
+            // get knitting from database because it could have changed
+            knitting = KnittingsDataSource.getInstance(activity).getKnitting(knitting!!.id)
+        }
+    }
+
     override fun onSaveInstanceState(outState: Bundle?) {
         if (knitting != null) {
             outState!!.putLong(KNITTING_ID, knitting!!.id)

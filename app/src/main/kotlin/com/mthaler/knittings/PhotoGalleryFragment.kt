@@ -153,6 +153,8 @@ class PhotoGalleryFragment : Fragment(), AnkoLogger {
     override fun onResume() {
         super.onResume()
         if (knitting != null) {
+            // get knitting from database because it could have changed
+            knitting = KnittingsDataSource.getInstance(activity).getKnitting(knitting!!.id)
             val photos = KnittingsDataSource.getInstance(activity).getAllPhotos(knitting!!)
             val gridAdapter = GridViewAdapter(activity, R.layout.grid_item_layout, photos)
             gridView.adapter = gridAdapter
