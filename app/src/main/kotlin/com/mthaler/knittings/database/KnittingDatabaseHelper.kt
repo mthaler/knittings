@@ -36,18 +36,6 @@ class KnittingDatabaseHelper(context: Context) : ManagedSQLiteOpenHelper(context
 
         val Columns = arrayOf(Cols.ID, Cols.TITLE, Cols.DESCRIPTION, Cols.STARTED, Cols.FINISHED, Cols.NEEDLE_DIAMETER, Cols.SIZE, Cols.DEFAULT_PHOTO_ID, Cols.RATING)
 
-        val SQL_CREATE = "CREATE TABLE " + KNITTINGS +
-                "(" + Cols.ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                Cols.TITLE + " TEXT NOT NULL, " +
-                Cols.DESCRIPTION + " TEXT NOT NULL, " +
-                Cols.STARTED + " INTEGER NOT NULL DEFAULT 0, " +
-                Cols.FINISHED + " INTEGER, " +
-                Cols.NEEDLE_DIAMETER + " REAL NOT NULL DEFAULT 0.0, " +
-                Cols.SIZE + " REAL NOT NULL DEFAULT 0.0, " +
-                Cols.DEFAULT_PHOTO_ID + " INTEGER, " +
-                Cols.RATING + " REAL NOT NULL DEFAULT 0.0, " +
-                "FOREIGN KEY(" + Cols.DEFAULT_PHOTO_ID + ") REFERENCES " + PhotoTable.PHOTOS + "(" + PhotoTable.Cols.ID + "));"
-
         val SQL_DROP = "DROP TABLE IF EXISTS " + KNITTINGS
 
         object Cols {
@@ -107,10 +95,10 @@ class KnittingDatabaseHelper(context: Context) : ManagedSQLiteOpenHelper(context
 
     override fun onCreate(db: SQLiteDatabase) {
         try {
-            db.execSQL(KnittingTable.SQL_CREATE)
-            debug("Knitting table created with: " + KnittingTable.SQL_CREATE)
+            KnittingTable.create(db)
+            debug("Knitting table created")
         } catch (ex: Exception) {
-            error("Could not create knitting table with: " + KnittingTable.SQL_CREATE, ex)
+            error("Could not create knitting table", ex)
         }
 
         try {
