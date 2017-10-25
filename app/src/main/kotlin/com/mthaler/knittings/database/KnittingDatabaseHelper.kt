@@ -3,7 +3,7 @@ package com.mthaler.knittings.database
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import org.jetbrains.anko.AnkoLogger
-import org.jetbrains.anko.db.ManagedSQLiteOpenHelper
+import org.jetbrains.anko.db.*
 import org.jetbrains.anko.debug
 import org.jetbrains.anko.error
 
@@ -60,6 +60,20 @@ class KnittingDatabaseHelper(context: Context) : ManagedSQLiteOpenHelper(context
             val SIZE = "size"
             val DEFAULT_PHOTO_ID = "default_photo_id"
             val RATING = "rating"
+        }
+
+        fun create(db: SQLiteDatabase) {
+            db.createTable(KNITTINGS, true,
+                    Cols.ID to INTEGER + PRIMARY_KEY + AUTOINCREMENT,
+                    Cols.TITLE to TEXT + NOT_NULL,
+                    Cols.DESCRIPTION to TEXT + NOT_NULL,
+                    Cols.STARTED to INTEGER + NOT_NULL + DEFAULT("0"),
+                    Cols.FINISHED to INTEGER,
+                    Cols.NEEDLE_DIAMETER to REAL + NOT_NULL + DEFAULT("0.0"),
+                    Cols.SIZE to REAL + NOT_NULL + DEFAULT("0.0"),
+                    Cols.DEFAULT_PHOTO_ID to INTEGER,
+                    Cols.RATING to REAL + NOT_NULL + DEFAULT("0.0"),
+                    FOREIGN_KEY(Cols.DEFAULT_PHOTO_ID, PhotoTable.PHOTOS, PhotoTable.Cols.ID))
         }
     }
 
