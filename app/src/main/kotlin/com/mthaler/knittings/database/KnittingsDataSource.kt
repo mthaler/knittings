@@ -48,7 +48,7 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
 
     init {
         this.context = context.applicationContext
-        dbHelper = KnittingDatabaseHelper(context)
+        dbHelper = context.database
     }
 
     /**

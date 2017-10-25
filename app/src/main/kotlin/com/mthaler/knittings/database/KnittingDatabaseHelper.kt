@@ -2,15 +2,31 @@ package com.mthaler.knittings.database
 
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
-import android.database.sqlite.SQLiteOpenHelper
 import org.jetbrains.anko.AnkoLogger
+import org.jetbrains.anko.db.ManagedSQLiteOpenHelper
 import org.jetbrains.anko.debug
 import org.jetbrains.anko.error
 
 /**
  * Database helper class that defines our tables, columns and methods to create and drop tables
  */
-class KnittingDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DB_NAME, null, DB_VERSION), AnkoLogger {
+class KnittingDatabaseHelper(context: Context) : ManagedSQLiteOpenHelper(context, DB_NAME, null, DB_VERSION), AnkoLogger {
+
+    companion object {
+        private val DB_NAME = "knittings.db"
+        private val DB_VERSION = 1
+
+        private var instance: KnittingDatabaseHelper? = null;
+
+        @Synchronized
+        fun getInstance(ctx: Context): KnittingDatabaseHelper {
+            if (instance == null) {
+                instance = KnittingDatabaseHelper(ctx.getApplicationContext())
+            }
+            return instance!!
+        }
+
+    }
 
     /**
      * Class that defines the knittings database table schema
@@ -99,9 +115,8 @@ class KnittingDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DB_NA
         db.execSQL(PhotoTable.SQL_DROP)
         onCreate(db)
     }
-
-    companion object {
-        private val DB_NAME = "knittings.db"
-        private val DB_VERSION = 1
-    }
 }
+
+// Access property for Context
+val Context.database: KnittingDatabaseHelper
+    get() = KnittingDatabaseHelper.getInstance(getApplicationContext())
