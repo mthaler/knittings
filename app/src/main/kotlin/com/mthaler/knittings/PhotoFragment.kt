@@ -53,7 +53,7 @@ class PhotoFragment : Fragment(), PhotoDetailsView {
         super.onPause()
         // we update the photo in the database when onPause is called
         // this is the case when the activity is party hidden or if an other activity is started
-        if (photo != null) KnittingsDataSource.getInstance(activity).updatePhoto(photo!!)
+        if (photo != null) KnittingsDataSource.getInstance(activity!!).updatePhoto(photo!!)
     }
 
     override fun init(photo: Photo) {
@@ -85,12 +85,12 @@ class PhotoFragment : Fragment(), PhotoDetailsView {
 
     override fun deletePhoto() {
         // check if the photo is used as default photo
-        val knitting = KnittingsDataSource.getInstance(activity).getKnitting(photo!!.knittingID)
+        val knitting = KnittingsDataSource.getInstance(activity!!).getKnitting(photo!!.knittingID)
         if (knitting.defaultPhoto != null && knitting.defaultPhoto.id == photo!!.id) {
-            KnittingsDataSource.getInstance(activity).updateKnitting(knitting.copy(defaultPhoto = null))
+            KnittingsDataSource.getInstance(activity!!).updateKnitting(knitting.copy(defaultPhoto = null))
         }
         // delete database entry
-        KnittingsDataSource.getInstance(activity).deletePhoto(photo!!)
+        KnittingsDataSource.getInstance(activity!!).deletePhoto(photo!!)
         photo = null
     }
 }

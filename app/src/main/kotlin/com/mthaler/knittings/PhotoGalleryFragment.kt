@@ -43,18 +43,18 @@ class PhotoGalleryFragment : Fragment(), AnkoLogger {
                 debug("Set current photo path: " + currentPhotoPath)
             }
             if (savedInstanceState.containsKey(KNITTING_ID)) {
-                knitting = KnittingsDataSource.getInstance(activity).getKnitting(savedInstanceState.getLong(KNITTING_ID))
+                knitting = KnittingsDataSource.getInstance(activity!!).getKnitting(savedInstanceState.getLong(KNITTING_ID))
                 debug("Set knitting: " + knitting)
             }
         } else {
-            val knittingID = arguments.getLong(KNITTING_ID)
-            knitting = KnittingsDataSource.getInstance(activity).getKnitting(knittingID)
+            val knittingID = arguments!!.getLong(KNITTING_ID)
+            knitting = KnittingsDataSource.getInstance(activity!!).getKnitting(knittingID)
             debug("Set knitting: " + knitting)
         }
 
         gridView = v.findViewById(R.id.gridView)
-        val photos = KnittingsDataSource.getInstance(activity).getAllPhotos(knitting!!)
-        val gridAdapter = GridViewAdapter(activity, R.layout.grid_item_layout, photos)
+        val photos = KnittingsDataSource.getInstance(activity!!).getAllPhotos(knitting!!)
+        val gridAdapter = GridViewAdapter(activity!!, R.layout.grid_item_layout, photos)
         gridView.adapter = gridAdapter
         gridView.onItemClickListener = AdapterView.OnItemClickListener { parent, v, position, id ->
             if (position < gridView.adapter.count - 1) {
@@ -73,12 +73,12 @@ class PhotoGalleryFragment : Fragment(), AnkoLogger {
                 buttonTakePhoto.setOnClickListener {
                     d.dismiss()
                     val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-                    currentPhotoPath = KnittingsDataSource.getInstance(activity).getPhotoFile(knitting!!)
+                    currentPhotoPath = KnittingsDataSource.getInstance(activity!!).getPhotoFile(knitting!!)
                     debug("Set current photo path: " + currentPhotoPath)
-                    val packageManager = activity.packageManager
+                    val packageManager = activity!!.packageManager
                     val canTakePhoto = currentPhotoPath != null && takePictureIntent.resolveActivity(packageManager) != null
                     if (canTakePhoto) {
-                        val uri = FileProvider.getUriForFile(context, "com.mthaler.knittings.fileprovider", currentPhotoPath)
+                        val uri = FileProvider.getUriForFile(context!!, "com.mthaler.knittings.fileprovider", currentPhotoPath!!)
                         takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, uri)
                         debug("Created take picture intent")
                         startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE)
@@ -86,7 +86,7 @@ class PhotoGalleryFragment : Fragment(), AnkoLogger {
                 }
                 buttonImportPhoto.setOnClickListener {
                     d.dismiss()
-                    currentPhotoPath = KnittingsDataSource.getInstance(activity).getPhotoFile(knitting!!)
+                    currentPhotoPath = KnittingsDataSource.getInstance(activity!!).getPhotoFile(knitting!!)
                     debug("Set current photo path: " + currentPhotoPath)
                     val photoPickerIntent = Intent(Intent.ACTION_PICK)
                     photoPickerIntent.type = "image/*"
@@ -109,37 +109,37 @@ class PhotoGalleryFragment : Fragment(), AnkoLogger {
             val orientation = PictureUtils.getOrientation(currentPhotoPath!!.absolutePath)
             val preview = PictureUtils.decodeSampledBitmapFromPath(currentPhotoPath!!.absolutePath, 200, 200)
             val rotatedPreview = PictureUtils.rotateBitmap(preview, orientation)
-            val photo = KnittingsDataSource.getInstance(activity).createPhoto(currentPhotoPath!!, knitting!!.id, rotatedPreview, "")
+            val photo = KnittingsDataSource.getInstance(activity!!).createPhoto(currentPhotoPath!!, knitting!!.id, rotatedPreview, "")
             debug("Created new photo from " + currentPhotoPath + ", knitting id " + knitting?.id)
             // add first photo as default photo
             if (knitting!!.defaultPhoto == null) {
                 debug("Set $photo as default photo")
                 knitting = knitting?.copy(defaultPhoto = photo)
-                KnittingsDataSource.getInstance(activity).updateKnitting(knitting!!)
+                KnittingsDataSource.getInstance(activity!!).updateKnitting(knitting!!)
             }
             // update grid view
-            val photos = KnittingsDataSource.getInstance(activity).getAllPhotos(knitting!!)
-            val gridAdapter = GridViewAdapter(activity, R.layout.grid_item_layout, photos)
+            val photos = KnittingsDataSource.getInstance(activity!!).getAllPhotos(knitting!!)
+            val gridAdapter = GridViewAdapter(activity!!, R.layout.grid_item_layout, photos)
             gridView.adapter = gridAdapter
         } else if (requestCode == REQUEST_IMAGE_IMPORT) {
             try {
                 debug("Received result for import photo intent")
                 val imageUri = data!!.data
-                PictureUtils.copy(imageUri, currentPhotoPath!!, activity)
+                PictureUtils.copy(imageUri, currentPhotoPath!!, activity!!)
                 val orientation = PictureUtils.getOrientation(currentPhotoPath!!.absolutePath)
                 val preview = PictureUtils.decodeSampledBitmapFromPath(currentPhotoPath!!.absolutePath, 200, 200)
                 val rotatedPreview = PictureUtils.rotateBitmap(preview, orientation)
-                val photo = KnittingsDataSource.getInstance(activity).createPhoto(currentPhotoPath!!, knitting!!.id, rotatedPreview, "")
+                val photo = KnittingsDataSource.getInstance(activity!!).createPhoto(currentPhotoPath!!, knitting!!.id, rotatedPreview, "")
                 debug("Created new photo from " + currentPhotoPath + ", knitting id " + knitting?.id)
                 // add first photo as default photo
                 if (knitting!!.defaultPhoto == null) {
                     debug("Set $photo as default photo")
                     knitting = knitting?.copy(defaultPhoto = photo)
-                    KnittingsDataSource.getInstance(activity).updateKnitting(knitting!!)
+                    KnittingsDataSource.getInstance(activity!!).updateKnitting(knitting!!)
                 }
                 // update grid view
-                val photos = KnittingsDataSource.getInstance(activity).getAllPhotos(knitting!!)
-                val gridAdapter = GridViewAdapter(activity, R.layout.grid_item_layout, photos)
+                val photos = KnittingsDataSource.getInstance(activity!!).getAllPhotos(knitting!!)
+                val gridAdapter = GridViewAdapter(activity!!, R.layout.grid_item_layout, photos)
                 gridView.adapter = gridAdapter
             } catch (e: FileNotFoundException) {
                 e.printStackTrace()
@@ -154,19 +154,19 @@ class PhotoGalleryFragment : Fragment(), AnkoLogger {
         super.onResume()
         if (knitting != null) {
             // get knitting from database because it could have changed
-            knitting = KnittingsDataSource.getInstance(activity).getKnitting(knitting!!.id)
-            val photos = KnittingsDataSource.getInstance(activity).getAllPhotos(knitting!!)
-            val gridAdapter = GridViewAdapter(activity, R.layout.grid_item_layout, photos)
+            knitting = KnittingsDataSource.getInstance(activity!!).getKnitting(knitting!!.id)
+            val photos = KnittingsDataSource.getInstance(activity!!).getAllPhotos(knitting!!)
+            val gridAdapter = GridViewAdapter(activity!!, R.layout.grid_item_layout, photos)
             gridView.adapter = gridAdapter
         }
     }
 
-    override fun onSaveInstanceState(outState: Bundle?) {
+    override fun onSaveInstanceState(outState: Bundle) {
         if (currentPhotoPath != null) {
-            outState!!.putString(CURRENT_PHOTO_PATH, currentPhotoPath!!.absolutePath)
+            outState.putString(CURRENT_PHOTO_PATH, currentPhotoPath!!.absolutePath)
         }
         if (knitting != null) {
-            outState!!.putLong(KNITTING_ID, knitting!!.id)
+            outState.putLong(KNITTING_ID, knitting!!.id)
         }
         super.onSaveInstanceState(outState)
     }
@@ -177,11 +177,11 @@ class PhotoGalleryFragment : Fragment(), AnkoLogger {
             if (isVisibleToUser) {
                 // the fragment became visible because the user selected it in the view pager
                 // get current knitting from database
-                knitting = KnittingsDataSource.getInstance(activity).getKnitting(knitting!!.id)
+                knitting = KnittingsDataSource.getInstance(activity!!).getKnitting(knitting!!.id)
             } else {
                 // the fragment became invisible because the user selected another tab in the view pager
                 // save current knitting to database
-                KnittingsDataSource.getInstance(activity).updateKnitting(knitting!!)
+                KnittingsDataSource.getInstance(activity!!).updateKnitting(knitting!!)
             }
         }
     }

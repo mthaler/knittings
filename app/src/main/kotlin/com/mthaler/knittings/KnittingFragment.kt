@@ -37,12 +37,12 @@ class KnittingFragment : Fragment(), AnkoLogger {
 
         if (savedInstanceState != null) {
             if (savedInstanceState.containsKey(KNITTING_ID)) {
-                knitting = KnittingsDataSource.getInstance(activity).getKnitting(savedInstanceState.getLong(KNITTING_ID))
+                knitting = KnittingsDataSource.getInstance(activity!!).getKnitting(savedInstanceState.getLong(KNITTING_ID))
                 debug("Set knitting: " + knitting)
             }
         } else {
-            val knittingID = arguments.getLong(KNITTING_ID)
-            knitting = KnittingsDataSource.getInstance(activity).getKnitting(knittingID)
+            val knittingID = arguments!!.getLong(KNITTING_ID)
+            knitting = KnittingsDataSource.getInstance(activity!!).getKnitting(knittingID)
             debug("Set knitting: " + knitting)
         }
 
@@ -52,7 +52,7 @@ class KnittingFragment : Fragment(), AnkoLogger {
         editTextTitle.addTextChangedListener(object : TextWatcher {
             override fun onTextChanged(c: CharSequence, start: Int, before: Int, count: Int) {
                 knitting = knitting?.copy(title = c.toString())
-                KnittingsDataSource.getInstance(activity).updateKnitting(knitting!!)
+                KnittingsDataSource.getInstance(activity!!).updateKnitting(knitting!!)
             }
 
             override fun beforeTextChanged(c: CharSequence, start: Int, count: Int, after: Int) {
@@ -70,7 +70,7 @@ class KnittingFragment : Fragment(), AnkoLogger {
         editTextDescription.addTextChangedListener(object : TextWatcher {
             override fun onTextChanged(c: CharSequence, start: Int, before: Int, count: Int) {
                 knitting = knitting?.copy(description = c.toString())
-                KnittingsDataSource.getInstance(activity).updateKnitting(knitting!!)
+                KnittingsDataSource.getInstance(activity!!).updateKnitting(knitting!!)
             }
 
             override fun beforeTextChanged(c: CharSequence, start: Int, count: Int, after: Int) {
@@ -85,7 +85,7 @@ class KnittingFragment : Fragment(), AnkoLogger {
         textViewStarted = v.findViewById(R.id.knitting_started)
         textViewStarted.text = DateFormat.getDateInstance().format(knitting!!.started)
         textViewStarted.setOnClickListener {
-            val fm = activity.supportFragmentManager
+            val fm = activity!!.supportFragmentManager
             val dialog = DatePickerFragment.newInstance(knitting!!.started)
             dialog.setTargetFragment(this@KnittingFragment, REQUEST_STARTED)
             dialog.show(fm, DIALOG_DATE)
@@ -95,7 +95,7 @@ class KnittingFragment : Fragment(), AnkoLogger {
         textViewFinished = v.findViewById(R.id.knitting_finished)
         textViewFinished.text = if (knitting!!.finished != null) DateFormat.getDateInstance().format(knitting!!.finished) else ""
         textViewFinished.setOnClickListener {
-            val fm = activity.supportFragmentManager
+            val fm = activity!!.supportFragmentManager
             val dialog = DatePickerFragment.newInstance(if (knitting!!.finished != null) knitting!!.finished else Date())
             dialog.setTargetFragment(this@KnittingFragment, REQUEST_FINISHED)
             dialog.show(fm, DIALOG_DATE)
@@ -110,7 +110,7 @@ class KnittingFragment : Fragment(), AnkoLogger {
                 } catch (ex: Exception) {
                     knitting = knitting?.copy(needleDiameter = 0.0)
                 }
-                KnittingsDataSource.getInstance(activity).updateKnitting(knitting!!)
+                KnittingsDataSource.getInstance(activity!!).updateKnitting(knitting!!)
             }
 
             override fun beforeTextChanged(c: CharSequence, start: Int, count: Int, after: Int) {
@@ -123,7 +123,7 @@ class KnittingFragment : Fragment(), AnkoLogger {
                 } catch (ex: Exception) {
                     knitting = knitting?.copy(needleDiameter = 0.0)
                 }
-                KnittingsDataSource.getInstance(activity).updateKnitting(knitting!!)
+                KnittingsDataSource.getInstance(activity!!).updateKnitting(knitting!!)
             }
         })
 
@@ -136,7 +136,7 @@ class KnittingFragment : Fragment(), AnkoLogger {
                 } catch (ex: Exception) {
                     knitting = knitting?.copy(size = 0.0)
                 }
-                KnittingsDataSource.getInstance(activity).updateKnitting(knitting!!)
+                KnittingsDataSource.getInstance(activity!!).updateKnitting(knitting!!)
             }
 
             override fun beforeTextChanged(c: CharSequence, start: Int, count: Int, after: Int) {
@@ -149,7 +149,7 @@ class KnittingFragment : Fragment(), AnkoLogger {
                 } catch (ex: Exception) {
                     knitting = knitting?.copy(size = 0.0)
                 }
-                KnittingsDataSource.getInstance(activity).updateKnitting(knitting!!)
+                KnittingsDataSource.getInstance(activity!!).updateKnitting(knitting!!)
             }
         })
 
@@ -157,7 +157,7 @@ class KnittingFragment : Fragment(), AnkoLogger {
         ratingBar.rating = knitting!!.rating.toFloat()
         ratingBar.onRatingBarChangeListener = RatingBar.OnRatingBarChangeListener { ratingBar, rating, fromUser ->
             knitting = knitting?.copy(rating = rating.toDouble())
-            KnittingsDataSource.getInstance(activity).updateKnitting(knitting!!)
+            KnittingsDataSource.getInstance(activity!!).updateKnitting(knitting!!)
         }
 
         return v
@@ -171,12 +171,12 @@ class KnittingFragment : Fragment(), AnkoLogger {
             val date = data!!.getSerializableExtra(DatePickerFragment.EXTRA_DATE) as Date
             knitting = knitting?.copy(started = date)
             textViewStarted.text = DateFormat.getDateInstance().format(date)
-            KnittingsDataSource.getInstance(activity).updateKnitting(knitting!!)
+            KnittingsDataSource.getInstance(activity!!).updateKnitting(knitting!!)
         } else if (requestCode == REQUEST_FINISHED) {
             val date = data!!.getSerializableExtra(DatePickerFragment.EXTRA_DATE) as Date
             knitting = knitting?.copy(finished = date)
             textViewFinished.text = DateFormat.getDateInstance().format(date)
-            KnittingsDataSource.getInstance(activity).updateKnitting(knitting!!)
+            KnittingsDataSource.getInstance(activity!!).updateKnitting(knitting!!)
         }
     }
 
@@ -184,13 +184,13 @@ class KnittingFragment : Fragment(), AnkoLogger {
         super.onResume()
         if (knitting != null) {
             // get knitting from database because it could have changed
-            knitting = KnittingsDataSource.getInstance(activity).getKnitting(knitting!!.id)
+            knitting = KnittingsDataSource.getInstance(activity!!).getKnitting(knitting!!.id)
         }
     }
 
-    override fun onSaveInstanceState(outState: Bundle?) {
+    override fun onSaveInstanceState(outState: Bundle) {
         if (knitting != null) {
-            outState!!.putLong(KNITTING_ID, knitting!!.id)
+            outState.putLong(KNITTING_ID, knitting!!.id)
         }
         super.onSaveInstanceState(outState)
     }
@@ -202,9 +202,9 @@ class KnittingFragment : Fragment(), AnkoLogger {
      */
     fun deleteKnitting() {
         // delete all photos from the database
-        KnittingsDataSource.getInstance(activity).deleteAllPhotos(knitting!!)
+        KnittingsDataSource.getInstance(activity!!).deleteAllPhotos(knitting!!)
         // delete database entry
-        KnittingsDataSource.getInstance(activity).deleteKnitting(knitting!!)
+        KnittingsDataSource.getInstance(activity!!).deleteKnitting(knitting!!)
         knitting = null
     }
 
@@ -214,11 +214,11 @@ class KnittingFragment : Fragment(), AnkoLogger {
             if (isVisibleToUser) {
                 // the fragment became visible because the user selected it in the view pager
                 // get current knitting from database
-                knitting = KnittingsDataSource.getInstance(activity).getKnitting(knitting!!.id)
+                knitting = KnittingsDataSource.getInstance(activity!!).getKnitting(knitting!!.id)
             } else {
                 // the fragment became invisible because the user selected another tab in the view pager
                 // save current knitting to database
-                KnittingsDataSource.getInstance(activity).updateKnitting(knitting!!)
+                KnittingsDataSource.getInstance(activity!!).updateKnitting(knitting!!)
             }
         }
     }

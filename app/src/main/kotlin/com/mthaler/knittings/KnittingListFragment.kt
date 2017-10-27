@@ -21,8 +21,8 @@ class KnittingListFragment : ListFragment(), KnittingListView {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        activity.setTitle(R.string.knittings_title)
-        this.knittings = KnittingsDataSource.getInstance(activity).allKnittings
+        activity!!.setTitle(R.string.knittings_title)
+        this.knittings = KnittingsDataSource.getInstance(activity!!).allKnittings
         val adapter = KnittingAdapter(knittings)
         listAdapter = adapter
     }
@@ -36,14 +36,14 @@ class KnittingListFragment : ListFragment(), KnittingListView {
 
     override fun onResume() {
         super.onResume()
-        this.knittings = KnittingsDataSource.getInstance(activity).allKnittings
+        this.knittings = KnittingsDataSource.getInstance(activity!!).allKnittings
         val adapter = KnittingAdapter(knittings)
         listAdapter = adapter
     }
 
     override fun addKnitting() {
         // start knitting activity with newly created knitting
-        val knitting = KnittingsDataSource.getInstance(activity).createKnitting("", "", Date(), null, 0.0, 0.0, 0.0)
+        val knitting = KnittingsDataSource.getInstance(activity!!).createKnitting("", "", Date(), null, 0.0, 0.0, 0.0)
         startActivity<KnittingActivity>(KnittingActivity.EXTRA_KNITTING_ID to knitting.id)
     }
 
@@ -53,7 +53,7 @@ class KnittingListFragment : ListFragment(), KnittingListView {
             var convertView = convertView
             // if we weren't given a view, inflate one
             if (null == convertView) {
-                convertView = activity.layoutInflater
+                convertView = activity!!.layoutInflater
                         .inflate(R.layout.list_item_knitting, null)
             }
 
