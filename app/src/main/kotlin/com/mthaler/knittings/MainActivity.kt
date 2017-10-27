@@ -23,10 +23,10 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         // add toolbar to activity
-        val toolbar = findViewById(R.id.toolbar) as Toolbar
+        val toolbar = find<Toolbar>(R.id.toolbar) as Toolbar
         setSupportActionBar(toolbar)
 
-        val fab = findViewById(R.id.fab_create_add_knitting) as FloatingActionButton
+        val fab = find<FloatingActionButton>(R.id.fab_create_add_knitting)
         fab.setOnClickListener {
             val knittingListView = supportFragmentManager.findFragmentById(R.id.fragment_knitting_list) as KnittingListView
             knittingListView.addKnitting()

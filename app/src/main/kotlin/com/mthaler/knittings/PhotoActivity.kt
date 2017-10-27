@@ -12,6 +12,7 @@ import com.mthaler.knittings.database.KnittingsDataSource
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.alert
 import org.jetbrains.anko.debug
+import org.jetbrains.anko.find
 
 /**
  * Activity that displays a photo and allow to delete the photo and use photo as preview in knitting list
@@ -23,7 +24,7 @@ class PhotoActivity : AppCompatActivity(), AnkoLogger {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_photo)
-        val toolbar = findViewById(R.id.toolbar) as Toolbar
+        val toolbar = find<Toolbar>(R.id.toolbar) as Toolbar
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
@@ -68,7 +69,7 @@ class PhotoActivity : AppCompatActivity(), AnkoLogger {
                 val knitting = KnittingsDataSource.getInstance(this).getKnitting(photo!!.knittingID)
                 KnittingsDataSource.getInstance(this).updateKnitting(knitting.copy(defaultPhoto = photo))
                 debug("Set $photo as default photo")
-                val layout = findViewById(R.id.photo_activity_layout) as CoordinatorLayout
+                val layout = find<CoordinatorLayout>(R.id.photo_activity_layout)
                 Snackbar.make(layout, "Used as main photo", Snackbar.LENGTH_SHORT).show()
                 return true
             }

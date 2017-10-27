@@ -12,10 +12,7 @@ import android.view.Menu
 import android.view.MenuItem
 import com.mthaler.knittings.database.KnittingsDataSource
 import com.mthaler.knittings.model.Knitting
-import org.jetbrains.anko.AnkoLogger
-import org.jetbrains.anko.alert
-import org.jetbrains.anko.debug
-import org.jetbrains.anko.warn
+import org.jetbrains.anko.*
 import java.util.ArrayList
 
 /**
@@ -35,7 +32,7 @@ class KnittingActivity : AppCompatActivity(), AnkoLogger {
         debug("onCreate called")
 
         setContentView(R.layout.activity_knitting)
-        val toolbar = findViewById(R.id.toolbar) as Toolbar
+        val toolbar = find<Toolbar>(R.id.toolbar) as Toolbar
         setSupportActionBar(toolbar)
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
 
@@ -48,10 +45,10 @@ class KnittingActivity : AppCompatActivity(), AnkoLogger {
         }
         val knitting = KnittingsDataSource.getInstance(this.applicationContext).getKnitting(id)
 
-        val viewPager = findViewById(R.id.viewpager) as ViewPager
+        val viewPager = find<ViewPager>(R.id.viewpager) as ViewPager
         setupViewPager(viewPager, knitting)
 
-        val tabLayout = findViewById(R.id.tabs) as TabLayout
+        val tabLayout = find<TabLayout>(R.id.tabs) as TabLayout
         tabLayout.setupWithViewPager(viewPager)
     }
 
