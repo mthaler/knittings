@@ -9,6 +9,7 @@ import android.support.v7.widget.Toolbar
 import android.view.Menu
 import android.view.MenuItem
 import com.mthaler.knittings.database.KnittingsDataSource
+import com.mthaler.knittings.database.datasource
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.alert
 import org.jetbrains.anko.debug
@@ -30,7 +31,7 @@ class PhotoActivity : AppCompatActivity(), AnkoLogger {
 
         // get the id of the knitting that should be displayed.
         val id = intent.getLongExtra(EXTRA_PHOTO_ID, -1)
-        val photo = KnittingsDataSource.getInstance(this).getPhoto(id)
+        val photo = datasource.getPhoto(id)
 
         // save parent knitting id
         parentKnittingID = intent.getLongExtra(KnittingActivity.EXTRA_KNITTING_ID, -1)
@@ -66,8 +67,8 @@ class PhotoActivity : AppCompatActivity(), AnkoLogger {
                 // set as default photo
                 val photoDetailsView = supportFragmentManager.findFragmentById(R.id.fragment_photo) as PhotoDetailsView
                 val photo = photoDetailsView.photo
-                val knitting = KnittingsDataSource.getInstance(this).getKnitting(photo!!.knittingID)
-                KnittingsDataSource.getInstance(this).updateKnitting(knitting.copy(defaultPhoto = photo))
+                val knitting = datasource.getKnitting(photo!!.knittingID)
+                datasource.updateKnitting(knitting.copy(defaultPhoto = photo))
                 debug("Set $photo as default photo")
                 val layout = find<CoordinatorLayout>(R.id.photo_activity_layout)
                 Snackbar.make(layout, "Used as main photo", Snackbar.LENGTH_SHORT).show()

@@ -6,7 +6,6 @@ import android.database.Cursor
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Environment
-import android.util.Log
 import com.mthaler.knittings.model.Knitting
 import com.mthaler.knittings.model.Photo
 import org.jetbrains.anko.AnkoLogger
@@ -14,6 +13,7 @@ import org.jetbrains.anko.debug
 import java.io.File
 import java.util.ArrayList
 import java.util.Date
+import android.support.v4.app.Fragment
 
 class KnittingsDataSource private constructor(context: Context): AnkoLogger {
 
@@ -375,12 +375,22 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
 
         private var sKnittingsDataSource: KnittingsDataSource? = null
 
-        fun getInstance(c: Context): KnittingsDataSource {
+        fun getInstance(c: Context?): KnittingsDataSource {
             if (sKnittingsDataSource == null) {
-                sKnittingsDataSource = KnittingsDataSource(c)
+                if (c == null) {
+                    throw IllegalArgumentException("context must not be null")
+                } else {
+                    sKnittingsDataSource = KnittingsDataSource(c)
+                }
             }
             return sKnittingsDataSource!!
         }
     }
 }
 
+// Access property for Context
+val Context.datasource: KnittingsDataSource
+    get() = KnittingsDataSource.getInstance(getApplicationContext())
+
+val Fragment.datasource: KnittingsDataSource
+    get() = KnittingsDataSource.getInstance(this.activity)

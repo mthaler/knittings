@@ -9,6 +9,7 @@ import android.widget.ImageView
 import android.widget.ListView
 import android.widget.TextView
 import com.mthaler.knittings.database.KnittingsDataSource
+import com.mthaler.knittings.database.datasource
 import com.mthaler.knittings.model.Knitting
 import java.text.DateFormat
 import java.util.ArrayList
@@ -22,7 +23,7 @@ class KnittingListFragment : ListFragment(), KnittingListView {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         activity!!.setTitle(R.string.knittings_title)
-        this.knittings = KnittingsDataSource.getInstance(activity!!).allKnittings
+        this.knittings = datasource.allKnittings
         val adapter = KnittingAdapter(knittings)
         listAdapter = adapter
     }
@@ -36,14 +37,14 @@ class KnittingListFragment : ListFragment(), KnittingListView {
 
     override fun onResume() {
         super.onResume()
-        this.knittings = KnittingsDataSource.getInstance(activity!!).allKnittings
+        this.knittings = datasource.allKnittings
         val adapter = KnittingAdapter(knittings)
         listAdapter = adapter
     }
 
     override fun addKnitting() {
         // start knitting activity with newly created knitting
-        val knitting = KnittingsDataSource.getInstance(activity!!).createKnitting("", "", Date(), null, 0.0, 0.0, 0.0)
+        val knitting = datasource.createKnitting("", "", Date(), null, 0.0, 0.0, 0.0)
         startActivity<KnittingActivity>(KnittingActivity.EXTRA_KNITTING_ID to knitting.id)
     }
 

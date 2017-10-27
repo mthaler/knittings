@@ -11,6 +11,7 @@ import android.view.ViewTreeObserver
 import android.widget.EditText
 import android.widget.ImageView
 import com.mthaler.knittings.database.KnittingsDataSource
+import com.mthaler.knittings.database.datasource
 import com.mthaler.knittings.model.Photo
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
@@ -53,7 +54,7 @@ class PhotoFragment : Fragment(), PhotoDetailsView {
         super.onPause()
         // we update the photo in the database when onPause is called
         // this is the case when the activity is party hidden or if an other activity is started
-        if (photo != null) KnittingsDataSource.getInstance(activity!!).updatePhoto(photo!!)
+        if (photo != null) datasource.updatePhoto(photo!!)
     }
 
     override fun init(photo: Photo) {
@@ -85,12 +86,12 @@ class PhotoFragment : Fragment(), PhotoDetailsView {
 
     override fun deletePhoto() {
         // check if the photo is used as default photo
-        val knitting = KnittingsDataSource.getInstance(activity!!).getKnitting(photo!!.knittingID)
+        val knitting = datasource.getKnitting(photo!!.knittingID)
         if (knitting.defaultPhoto != null && knitting.defaultPhoto.id == photo!!.id) {
-            KnittingsDataSource.getInstance(activity!!).updateKnitting(knitting.copy(defaultPhoto = null))
+            datasource.updateKnitting(knitting.copy(defaultPhoto = null))
         }
         // delete database entry
-        KnittingsDataSource.getInstance(activity!!).deletePhoto(photo!!)
+        datasource.deletePhoto(photo!!)
         photo = null
     }
 }

@@ -11,6 +11,7 @@ import android.support.v7.widget.Toolbar
 import android.view.Menu
 import android.view.MenuItem
 import com.mthaler.knittings.database.KnittingsDataSource
+import com.mthaler.knittings.database.datasource
 import com.mthaler.knittings.model.Knitting
 import org.jetbrains.anko.*
 import java.util.ArrayList
@@ -43,7 +44,7 @@ class KnittingActivity : AppCompatActivity(), AnkoLogger {
         } else {
             warn("Got invalid knitting id -1")
         }
-        val knitting = KnittingsDataSource.getInstance(this.applicationContext).getKnitting(id)
+        val knitting = datasource.getKnitting(id)
 
         val viewPager = find<ViewPager>(R.id.viewpager) as ViewPager
         setupViewPager(viewPager, knitting)
