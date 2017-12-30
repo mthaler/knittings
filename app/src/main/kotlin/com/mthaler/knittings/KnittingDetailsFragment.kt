@@ -17,8 +17,6 @@ import java.text.DateFormat
  */
 class KnittingDetailsFragment : Fragment(), AnkoLogger {
 
-    private var knitting: Knitting? = null
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
@@ -49,16 +47,16 @@ class KnittingDetailsFragment : Fragment(), AnkoLogger {
             textViewDescription.setText(knitting.description)
 
             val textViewStarted = v.findViewById<TextView>(R.id.knitting_started2)
-            textViewStarted.text = DateFormat.getDateInstance().format(knitting.started)
+            textViewStarted.text = "Started: " + DateFormat.getDateInstance().format(knitting.started)
 
             val textViewFinished = v.findViewById<TextView>(R.id.knitting_finished2)
-            textViewFinished.text = if (knitting.finished != null) DateFormat.getDateInstance().format(knitting.finished) else ""
+            textViewFinished.text = "Finished: " + if (knitting.finished != null) DateFormat.getDateInstance().format(knitting.finished) else ""
 
             val textViewNeedleDiameter = v.findViewById<TextView>(R.id.knitting_needle_diameter2)
-            textViewNeedleDiameter.setText(java.lang.Double.toString(knitting.needleDiameter))
+            textViewNeedleDiameter.setText("Needle: " + java.lang.Double.toString(knitting.needleDiameter))
 
             val textViewSize = v.findViewById<TextView>(R.id.knitting_size2)
-            textViewSize.setText(java.lang.Double.toString(knitting.size))
+            textViewSize.setText("Size: " + java.lang.Double.toString(knitting.size))
 
             val ratingBar = v.findViewById<RatingBar>(R.id.ratingBar2)
             ratingBar.rating = knitting.rating.toFloat()
