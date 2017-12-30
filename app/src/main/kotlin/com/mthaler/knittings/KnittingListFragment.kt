@@ -32,7 +32,7 @@ class KnittingListFragment : ListFragment(), KnittingListView {
         // get current knitting
         val c = (listAdapter as KnittingAdapter).getItem(position)
         // start knitting activity
-        startActivity<KnittingActivity>(KnittingActivity.EXTRA_KNITTING_ID to c!!.id)
+        startActivity<KnittingDetailsActivity>(KnittingDetailsActivity.EXTRA_KNITTING_ID to c!!.id)
     }
 
     override fun onResume() {

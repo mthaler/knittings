@@ -12,7 +12,6 @@ import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.RatingBar
 import android.widget.TextView
-import com.mthaler.knittings.database.KnittingsDataSource
 import com.mthaler.knittings.database.datasource
 import com.mthaler.knittings.model.Knitting
 import org.jetbrains.anko.AnkoLogger
