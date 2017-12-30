@@ -51,8 +51,11 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".KnittingActivity" />
         </activity>
-        <activity android:name=".KnittingDetailsActivity" android:theme="@style/AppTheme.NoActionBar">
-        </activity>
+        <activity
+            android:name=".KnittingDetailsActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".EditKnittingDetailsActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
     </application>
 
 </manifest>

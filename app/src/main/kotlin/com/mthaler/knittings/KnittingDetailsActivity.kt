@@ -5,6 +5,8 @@ import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
 import org.jetbrains.anko.AnkoLogger
 import com.mthaler.knittings.database.datasource
+import java.util.*
+import org.jetbrains.anko.startActivity
 
 /**
  * Activity that displays knitting details (name, description, start time etc.)
@@ -26,13 +28,14 @@ class KnittingDetailsActivity : AppCompatActivity(), AnkoLogger {
             } else {
                 error("Could not get knitting details fragment")
             }
+
+            // start edit knitting details fragment if the user clicks the floating action button
+            val fab = findViewById<FloatingActionButton>(R.id.edit_knitting_details)
+            fab.setOnClickListener {
+                startActivity< EditKnittingDetailsActivity>(EditKnittingDetailsActivity.EXTRA_KNITTING_ID to id)
+            }
         } else {
             error("Could not get knitting id")
-        }
-
-        // start edit knitting details fragment if the user clicks the floating action button
-        val fab = findViewById<FloatingActionButton>(R.id.edit_knitting_details)
-        fab.setOnClickListener {
         }
     }
 

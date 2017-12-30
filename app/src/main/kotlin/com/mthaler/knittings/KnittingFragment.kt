@@ -5,7 +5,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.text.Editable
-import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -54,14 +53,6 @@ class KnittingFragment : Fragment(), AnkoLogger {
                 knitting = knitting?.copy(title = c.toString())
                 datasource.updateKnitting(knitting!!)
             }
-
-            override fun beforeTextChanged(c: CharSequence, start: Int, count: Int, after: Int) {
-                // this space intentionally left blank
-            }
-
-            override fun afterTextChanged(c: Editable) {
-                // this one too
-            }
         })
 
         // initialize description text field
@@ -71,14 +62,6 @@ class KnittingFragment : Fragment(), AnkoLogger {
             override fun onTextChanged(c: CharSequence, start: Int, before: Int, count: Int) {
                 knitting = knitting?.copy(description = c.toString())
                 datasource.updateKnitting(knitting!!)
-            }
-
-            override fun beforeTextChanged(c: CharSequence, start: Int, count: Int, after: Int) {
-                // this space intentionally left blank
-            }
-
-            override fun afterTextChanged(c: Editable) {
-                // this one too
             }
         })
 
@@ -113,10 +96,6 @@ class KnittingFragment : Fragment(), AnkoLogger {
                 datasource.updateKnitting(knitting!!)
             }
 
-            override fun beforeTextChanged(c: CharSequence, start: Int, count: Int, after: Int) {
-                // this space intentionally left blank
-            }
-
             override fun afterTextChanged(c: Editable) {
                 try {
                     knitting = knitting?.copy(needleDiameter = java.lang.Double.parseDouble(c.toString()))
@@ -137,10 +116,6 @@ class KnittingFragment : Fragment(), AnkoLogger {
                     knitting = knitting?.copy(size = 0.0)
                 }
                 datasource.updateKnitting(knitting!!)
-            }
-
-            override fun beforeTextChanged(c: CharSequence, start: Int, count: Int, after: Int) {
-                // this space intentionally left blank
             }
 
             override fun afterTextChanged(c: Editable) {
