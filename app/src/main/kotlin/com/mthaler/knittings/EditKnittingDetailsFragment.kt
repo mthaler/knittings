@@ -90,6 +90,24 @@ class EditKnittingDetailsFragment : Fragment() {
         }
     }
 
+    /**
+     * Deletes the displayed knitting
+     *
+     * The method will delete the knitting from the database and also remove the photo if it exists
+     */
+    fun deleteKnitting() {
+        val knitting = this.knitting
+        if (knitting != null) {
+            // delete all photos from the database
+            datasource.deleteAllPhotos(knitting)
+            // delete database entry
+            datasource.deleteKnitting(knitting)
+            this.knitting = null
+        }
+
+    }
+
+
     companion object {
         private val KNITTING_ID = "knitting_id"
 
