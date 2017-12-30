@@ -44,12 +44,14 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
         </activity>
-        <activity android:name=".PhotoActivity"
-                  android:theme="@style/AppTheme.NoActionBar">
+        <activity
+            android:name=".PhotoActivity"
+            android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".KnittingActivity" />
         </activity>
+        <activity android:name=".KnittingDetailsActivity"></activity>
     </application>
 
 </manifest>
