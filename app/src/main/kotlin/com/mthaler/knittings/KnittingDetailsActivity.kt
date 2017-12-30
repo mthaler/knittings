@@ -3,9 +3,11 @@ package com.mthaler.knittings
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
+import android.support.v7.widget.Toolbar
+import android.view.Menu
 import org.jetbrains.anko.AnkoLogger
 import com.mthaler.knittings.database.datasource
-import java.util.*
+import org.jetbrains.anko.find
 import org.jetbrains.anko.startActivity
 
 /**
@@ -16,6 +18,10 @@ class KnittingDetailsActivity : AppCompatActivity(), AnkoLogger {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_knitting_details)
+
+        val toolbar = find<Toolbar>(R.id.toolbar) as Toolbar
+        setSupportActionBar(toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         // get the id of the knitting that should be displayed.
         val id = intent.getLongExtra(KnittingDetailsActivity.EXTRA_KNITTING_ID, -1L)
@@ -37,6 +43,12 @@ class KnittingDetailsActivity : AppCompatActivity(), AnkoLogger {
         } else {
             error("Could not get knitting id")
         }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        menuInflater.inflate(R.menu.knitting_details, menu)
+        return true
     }
 
     companion object {
