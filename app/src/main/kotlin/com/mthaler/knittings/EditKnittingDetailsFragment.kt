@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
+import android.widget.RatingBar
 import android.widget.TextView
 import com.mthaler.knittings.database.datasource
 import com.mthaler.knittings.model.Knitting
@@ -62,7 +63,6 @@ class EditKnittingDetailsFragment : Fragment() {
             dialog.show(fm, DIALOG_DATE)
         }
 
-
         return v
     }
 
@@ -78,6 +78,15 @@ class EditKnittingDetailsFragment : Fragment() {
             textViewStarted.text = DateFormat.getDateInstance().format(knitting.started)
 
             textViewFinished.text = if (knitting!!.finished != null) DateFormat.getDateInstance().format(knitting!!.finished) else ""
+
+            val editTextNeedleDiameter = v.findViewById<EditText>(R.id.knitting_needle_diameter)
+            editTextNeedleDiameter.setText(java.lang.Double.toString(knitting.needleDiameter))
+
+            val editTextSize = v.findViewById<EditText>(R.id.knitting_size)
+            editTextSize.setText(java.lang.Double.toString(knitting.size))
+
+            val ratingBar = v.findViewById<RatingBar>(R.id.ratingBar)
+            ratingBar.rating = knitting.rating.toFloat()
         }
     }
 
