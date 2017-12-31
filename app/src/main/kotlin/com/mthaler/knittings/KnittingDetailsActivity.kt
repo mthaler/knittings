@@ -1,16 +1,15 @@
 package com.mthaler.knittings
 
+import android.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
 import android.support.v7.widget.Toolbar
 import android.view.Menu
 import android.view.MenuItem
-import org.jetbrains.anko.AnkoLogger
+import android.widget.Button
 import com.mthaler.knittings.database.datasource
-import org.jetbrains.anko.alert
-import org.jetbrains.anko.find
-import org.jetbrains.anko.startActivity
+import org.jetbrains.anko.*
 
 /**
  * Activity that displays knitting details (name, description, start time etc.)
@@ -58,6 +57,18 @@ class KnittingDetailsActivity : AppCompatActivity(), AnkoLogger {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
+            R.id.menu_item_add_photo -> {
+                // take photo icon clicked, ask user if photo should be taken or imported from gallery
+                val b = AlertDialog.Builder(this)
+                val layout = layoutInflater.inflate(R.layout.dialog_take_photo, null)
+                val buttonTakePhoto = layout.find<Button>(R.id.button_take_photo)
+                val buttonImportPhoto = layout.find<Button>(R.id.buttom_import_photo)
+                b.setView(layout)
+                b.setNegativeButton(R.string.dialog_button_cancel) { diag, i -> diag.dismiss()}
+                val d = b.create()
+                d.show()
+                return true
+            }
             R.id.menu_item_delete_knitting -> {
                 // show alert asking user to confirm that knitting should be deleted
                 alert {
