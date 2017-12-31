@@ -46,55 +46,9 @@ class PhotoGalleryFragment : Fragment(), AnkoLogger {
                 knitting = datasource.getKnitting(savedInstanceState.getLong(KNITTING_ID))
                 debug("Set knitting: " + knitting)
             }
-        } else {
-            val knittingID = arguments!!.getLong(KNITTING_ID)
-            knitting = datasource.getKnitting(knittingID)
-            debug("Set knitting: " + knitting)
         }
-
+        
         gridView = v.findViewById(R.id.gridView)
-        val photos = datasource.getAllPhotos(knitting!!)
-        val gridAdapter = GridViewAdapter(activity!!, R.layout.grid_item_layout, photos)
-        gridView.adapter = gridAdapter
-        gridView.onItemClickListener = AdapterView.OnItemClickListener { parent, v, position, id ->
-            if (position < gridView.adapter.count - 1) {
-                // photo clicked, show photo in photo activity
-                val photo = parent.getItemAtPosition(position) as Photo
-                startActivity<PhotoActivity>(PhotoActivity.EXTRA_PHOTO_ID to photo.id, KnittingActivity.EXTRA_KNITTING_ID to knitting!!.id)
-            } else {
-                // take photo icon clicked, ask user if photo should be taken or imported from gallery
-                val b = AlertDialog.Builder(activity)
-                val layout = inflater.inflate(R.layout.dialog_take_photo, parent, false)
-                val buttonTakePhoto = layout.find<Button>(R.id.button_take_photo)
-                val buttonImportPhoto = layout.find<Button>(R.id.buttom_import_photo)
-                b.setView(layout)
-                b.setNegativeButton(R.string.dialog_button_cancel) { diag, i -> diag.dismiss()}
-                val d = b.create()
-                buttonTakePhoto.setOnClickListener {
-                    d.dismiss()
-                    val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-                    currentPhotoPath = datasource.getPhotoFile(knitting!!)
-                    debug("Set current photo path: " + currentPhotoPath)
-                    val packageManager = activity!!.packageManager
-                    val canTakePhoto = currentPhotoPath != null && takePictureIntent.resolveActivity(packageManager) != null
-                    if (canTakePhoto) {
-                        val uri = FileProvider.getUriForFile(context!!, "com.mthaler.knittings.fileprovider", currentPhotoPath!!)
-                        takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, uri)
-                        debug("Created take picture intent")
-                        startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE)
-                    }
-                }
-                buttonImportPhoto.setOnClickListener {
-                    d.dismiss()
-                    currentPhotoPath = datasource.getPhotoFile(knitting!!)
-                    debug("Set current photo path: " + currentPhotoPath)
-                    val photoPickerIntent = Intent(Intent.ACTION_PICK)
-                    photoPickerIntent.type = "image/*"
-                    startActivityForResult(photoPickerIntent, REQUEST_IMAGE_IMPORT)
-                }
-                d.show()
-            }
-        }
 
         return v
     }
@@ -171,17 +125,47 @@ class PhotoGalleryFragment : Fragment(), AnkoLogger {
         super.onSaveInstanceState(outState)
     }
 
-    override fun setUserVisibleHint(isVisibleToUser: Boolean) {
-        super.setUserVisibleHint(isVisibleToUser)
-        if (knitting != null) {
-            if (isVisibleToUser) {
-                // the fragment became visible because the user selected it in the view pager
-                // get current knitting from database
-                knitting = datasource.getKnitting(knitting!!.id)
+    fun init(knitting: Knitting) {
+        val photos = datasource.getAllPhotos(knitting!!)
+        val gridAdapter = GridViewAdapter(activity!!, R.layout.grid_item_layout, photos)
+        gridView.adapter = gridAdapter
+        gridView.onItemClickListener = AdapterView.OnItemClickListener { parent, v, position, id ->
+            if (position < gridView.adapter.count - 1) {
+                // photo clicked, show photo in photo activity
+                val photo = parent.getItemAtPosition(position) as Photo
+                startActivity<PhotoActivity>(PhotoActivity.EXTRA_PHOTO_ID to photo.id, KnittingActivity.EXTRA_KNITTING_ID to knitting!!.id)
             } else {
-                // the fragment became invisible because the user selected another tab in the view pager
-                // save current knitting to database
-                datasource.updateKnitting(knitting!!)
+                // take photo icon clicked, ask user if photo should be taken or imported from gallery
+                val b = AlertDialog.Builder(activity)
+                val layout = layoutInflater.inflate(R.layout.dialog_take_photo, parent, false)
+                val buttonTakePhoto = layout.find<Button>(R.id.button_take_photo)
+                val buttonImportPhoto = layout.find<Button>(R.id.buttom_import_photo)
+                b.setView(layout)
+                b.setNegativeButton(R.string.dialog_button_cancel) { diag, i -> diag.dismiss()}
+                val d = b.create()
+                buttonTakePhoto.setOnClickListener {
+                    d.dismiss()
+                    val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+                    currentPhotoPath = datasource.getPhotoFile(knitting!!)
+                    debug("Set current photo path: " + currentPhotoPath)
+                    val packageManager = activity!!.packageManager
+                    val canTakePhoto = currentPhotoPath != null && takePictureIntent.resolveActivity(packageManager) != null
+                    if (canTakePhoto) {
+                        val uri = FileProvider.getUriForFile(context!!, "com.mthaler.knittings.fileprovider", currentPhotoPath!!)
+                        takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, uri)
+                        debug("Created take picture intent")
+                        startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE)
+                    }
+                }
+                buttonImportPhoto.setOnClickListener {
+                    d.dismiss()
+                    currentPhotoPath = datasource.getPhotoFile(knitting!!)
+                    debug("Set current photo path: " + currentPhotoPath)
+                    val photoPickerIntent = Intent(Intent.ACTION_PICK)
+                    photoPickerIntent.type = "image/*"
+                    startActivityForResult(photoPickerIntent, REQUEST_IMAGE_IMPORT)
+                }
+                d.show()
             }
         }
     }

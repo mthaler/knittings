@@ -15,7 +15,6 @@ import android.widget.Button
 import android.widget.Toast
 import com.mthaler.knittings.database.datasource
 import org.jetbrains.anko.*
-import org.jetbrains.anko.support.v4.startActivity
 import java.io.File
 import java.io.FileNotFoundException
 
@@ -67,7 +66,7 @@ class KnittingDetailsActivity : AppCompatActivity(), AnkoLogger {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.menu_item_show_gallery -> {
-                startActivity<PhotoGalleryActivity>()
+                startActivity<PhotoGalleryActivity>(PhotoGalleryActivity.EXTRA_KNITTING_ID to knittingID)
                 return true
             }
             R.id.menu_item_add_photo -> {
