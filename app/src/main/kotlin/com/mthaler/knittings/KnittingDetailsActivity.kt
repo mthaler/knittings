@@ -15,6 +15,7 @@ import android.widget.Button
 import android.widget.Toast
 import com.mthaler.knittings.database.datasource
 import org.jetbrains.anko.*
+import org.jetbrains.anko.support.v4.startActivity
 import java.io.File
 import java.io.FileNotFoundException
 
@@ -65,6 +66,10 @@ class KnittingDetailsActivity : AppCompatActivity(), AnkoLogger {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
+            R.id.menu_item_show_gallery -> {
+                startActivity<PhotoGalleryActivity>()
+                return true
+            }
             R.id.menu_item_add_photo -> {
                 // take photo icon clicked, ask user if photo should be taken or imported from gallery
                 val b = AlertDialog.Builder(this)
