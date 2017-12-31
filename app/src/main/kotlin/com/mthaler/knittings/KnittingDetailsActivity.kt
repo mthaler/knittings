@@ -5,8 +5,10 @@ import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
 import android.support.v7.widget.Toolbar
 import android.view.Menu
+import android.view.MenuItem
 import org.jetbrains.anko.AnkoLogger
 import com.mthaler.knittings.database.datasource
+import org.jetbrains.anko.alert
 import org.jetbrains.anko.find
 import org.jetbrains.anko.startActivity
 
@@ -14,6 +16,8 @@ import org.jetbrains.anko.startActivity
  * Activity that displays knitting details (name, description, start time etc.)
  */
 class KnittingDetailsActivity : AppCompatActivity(), AnkoLogger {
+
+    private var knittingID: Long = -1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,6 +44,7 @@ class KnittingDetailsActivity : AppCompatActivity(), AnkoLogger {
             fab.setOnClickListener {
                 startActivity< EditKnittingDetailsActivity>(EditKnittingDetailsActivity.EXTRA_KNITTING_ID to id)
             }
+            knittingID = id
         } else {
             error("Could not get knitting id")
         }
@@ -49,6 +54,29 @@ class KnittingDetailsActivity : AppCompatActivity(), AnkoLogger {
         // Inflate the menu; this adds items to the action bar if it is present.
         menuInflater.inflate(R.menu.knitting_details, menu)
         return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.menu_item_delete_knitting -> {
+                // show alert asking user to confirm that knitting should be deleted
+                alert {
+                    title = resources.getString(R.string.delete_knitting_dialog_title)
+                    message = resources.getString(R.string.delete_knitting_dialog_question)
+                    positiveButton(resources.getString(R.string.delete_knitting_dialog_delete_button)) {
+                        val knitting = datasource.getKnitting(knittingID)
+                        // delete all photos from the database
+                        datasource.deleteAllPhotos(knitting)
+                        // delete database entry
+                        datasource.deleteKnitting(knitting)
+                        finish()
+                    }
+                    negativeButton(resources.getString(R.string.dialog_button_cancel)) {}
+                }.show()
+                return true
+            }
+            else -> return super.onOptionsItemSelected(item)
+        }
     }
 
     companion object {
