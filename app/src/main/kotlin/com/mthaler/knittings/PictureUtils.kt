@@ -6,7 +6,6 @@ import android.graphics.BitmapFactory
 import android.graphics.Matrix
 import android.net.Uri
 import android.support.media.ExifInterface
-import android.util.Log
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.error
 import java.io.*

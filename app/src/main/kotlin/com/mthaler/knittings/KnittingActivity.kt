@@ -32,7 +32,7 @@ class KnittingActivity : AppCompatActivity(), AnkoLogger {
         debug("onCreate called")
 
         setContentView(R.layout.activity_knitting)
-        val toolbar = find<Toolbar>(R.id.toolbar) as Toolbar
+        val toolbar = find<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
 
@@ -45,10 +45,10 @@ class KnittingActivity : AppCompatActivity(), AnkoLogger {
         }
         val knitting = datasource.getKnitting(id)
 
-        val viewPager = find<ViewPager>(R.id.viewpager) as ViewPager
+        val viewPager = find<ViewPager>(R.id.viewpager)
         setupViewPager(viewPager, knitting)
 
-        val tabLayout = find<TabLayout>(R.id.tabs) as TabLayout
+        val tabLayout = find<TabLayout>(R.id.tabs)
         tabLayout.setupWithViewPager(viewPager)
     }
 

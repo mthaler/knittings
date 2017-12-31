@@ -16,10 +16,11 @@ class DatePickerFragment : DialogFragment() {
     private var date: Date? = null
 
     private fun sendResult(resultCode: Int) {
-        if (targetFragment != null) {
+        val tf = targetFragment
+        if (tf != null) {
             val i = Intent()
             i.putExtra(EXTRA_DATE, date)
-            targetFragment!!.onActivityResult(targetRequestCode, resultCode, i)
+            tf.onActivityResult(targetRequestCode, resultCode, i)
         }
     }
 

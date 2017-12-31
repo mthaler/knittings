@@ -2,15 +2,12 @@ package com.mthaler.knittings
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewTreeObserver
 import android.widget.EditText
 import android.widget.ImageView
-import com.mthaler.knittings.database.KnittingsDataSource
 import com.mthaler.knittings.database.datasource
 import com.mthaler.knittings.model.Photo
 import org.jetbrains.anko.doAsync
@@ -36,14 +33,6 @@ class PhotoFragment : Fragment(), PhotoDetailsView {
         editTextDescription.addTextChangedListener(object : TextWatcher {
             override fun onTextChanged(c: CharSequence, start: Int, before: Int, count: Int) {
                 photo = photo?.copy(description = c.toString())
-            }
-
-            override fun beforeTextChanged(c: CharSequence, start: Int, count: Int, after: Int) {
-                // this space intentionally left blank
-            }
-
-            override fun afterTextChanged(c: Editable) {
-                // this one too
             }
         })
 

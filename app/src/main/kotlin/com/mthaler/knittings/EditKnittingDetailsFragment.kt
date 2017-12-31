@@ -150,7 +150,7 @@ class EditKnittingDetailsFragment : Fragment() {
 
             textViewStarted.text = DateFormat.getDateInstance().format(knitting.started)
 
-            textViewFinished.text = if (knitting.finished != null) DateFormat.getDateInstance().format(knitting!!.finished) else ""
+            textViewFinished.text = if (knitting.finished != null) DateFormat.getDateInstance().format(knitting.finished) else ""
 
             val editTextNeedleDiameter = v.findViewById<EditText>(R.id.knitting_needle_diameter)
             editTextNeedleDiameter.setText(java.lang.Double.toString(knitting.needleDiameter))

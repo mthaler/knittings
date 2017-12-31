@@ -126,14 +126,14 @@ class PhotoGalleryFragment : Fragment(), AnkoLogger {
     }
 
     fun init(knitting: Knitting) {
-        val photos = datasource.getAllPhotos(knitting!!)
+        val photos = datasource.getAllPhotos(knitting)
         val gridAdapter = GridViewAdapter(activity!!, R.layout.grid_item_layout, photos)
         gridView.adapter = gridAdapter
         gridView.onItemClickListener = AdapterView.OnItemClickListener { parent, v, position, id ->
             if (position < gridView.adapter.count - 1) {
                 // photo clicked, show photo in photo activity
                 val photo = parent.getItemAtPosition(position) as Photo
-                startActivity<PhotoActivity>(PhotoActivity.EXTRA_PHOTO_ID to photo.id, KnittingActivity.EXTRA_KNITTING_ID to knitting!!.id)
+                startActivity<PhotoActivity>(PhotoActivity.EXTRA_PHOTO_ID to photo.id, KnittingActivity.EXTRA_KNITTING_ID to knitting.id)
             } else {
                 // take photo icon clicked, ask user if photo should be taken or imported from gallery
                 val b = AlertDialog.Builder(activity)
@@ -146,7 +146,7 @@ class PhotoGalleryFragment : Fragment(), AnkoLogger {
                 buttonTakePhoto.setOnClickListener {
                     d.dismiss()
                     val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-                    currentPhotoPath = datasource.getPhotoFile(knitting!!)
+                    currentPhotoPath = datasource.getPhotoFile(knitting)
                     debug("Set current photo path: " + currentPhotoPath)
                     val packageManager = activity!!.packageManager
                     val canTakePhoto = currentPhotoPath != null && takePictureIntent.resolveActivity(packageManager) != null
@@ -159,7 +159,7 @@ class PhotoGalleryFragment : Fragment(), AnkoLogger {
                 }
                 buttonImportPhoto.setOnClickListener {
                     d.dismiss()
-                    currentPhotoPath = datasource.getPhotoFile(knitting!!)
+                    currentPhotoPath = datasource.getPhotoFile(knitting)
                     debug("Set current photo path: " + currentPhotoPath)
                     val photoPickerIntent = Intent(Intent.ACTION_PICK)
                     photoPickerIntent.type = "image/*"

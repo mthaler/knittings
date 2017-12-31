@@ -16,12 +16,12 @@ class KnittingDatabaseHelper(context: Context) : ManagedSQLiteOpenHelper(context
         private val DB_NAME = "knittings.db"
         private val DB_VERSION = 1
 
-        private var instance: KnittingDatabaseHelper? = null;
+        private var instance: KnittingDatabaseHelper? = null
 
         @Synchronized
         fun getInstance(ctx: Context): KnittingDatabaseHelper {
             if (instance == null) {
-                instance = KnittingDatabaseHelper(ctx.getApplicationContext())
+                instance = KnittingDatabaseHelper(ctx.applicationContext)
             }
             return instance!!
         }
@@ -121,4 +121,4 @@ class KnittingDatabaseHelper(context: Context) : ManagedSQLiteOpenHelper(context
 
 // Access property for Context
 val Context.database: KnittingDatabaseHelper
-    get() = KnittingDatabaseHelper.getInstance(getApplicationContext())
+    get() = KnittingDatabaseHelper.getInstance(applicationContext)

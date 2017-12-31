@@ -7,7 +7,7 @@ import android.text.Editable
  */
 interface TextWatcher : android.text.TextWatcher {
 
-    override fun beforeTextChanged(c: CharSequence, start: Int, count: Int, after: Int) {}
+    override fun beforeTextChanged(c: CharSequence, start: Int, count: Int, after: Int) = Unit
 
-    override fun afterTextChanged(c: Editable) {}
+    override fun afterTextChanged(c: Editable) = Unit
 }

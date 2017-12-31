@@ -75,10 +75,7 @@ class GridViewAdapter(context: Context, private val layoutResourceId: Int, priva
         return row
     }
 
-    override fun getCount(): Int {
-        // add an additional element used to display add photo icon
-        return super.getCount() + 1
-    }
+    override fun getCount(): Int = super.getCount() + 1
 
     internal class ViewHolder {
         var imageTitle: TextView? = null

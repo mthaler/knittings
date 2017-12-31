@@ -9,7 +9,6 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.TextView
 import org.jetbrains.anko.*
-import com.mthaler.knittings.BuildConfig;
 
 /**
  * The main activity that gets displayed when the app is started.
@@ -23,7 +22,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         // add toolbar to activity
-        val toolbar = find<Toolbar>(R.id.toolbar) as Toolbar
+        val toolbar = find<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
 
         val fab = find<FloatingActionButton>(R.id.fab_create_add_knitting)
@@ -50,7 +49,7 @@ class MainActivity : AppCompatActivity() {
                 b.setView(v)
                 b.setPositiveButton(android.R.string.ok ) { diag, i -> diag.dismiss()}
                 b.create().show()
-                return true;
+                return true
             }
             else -> return super.onOptionsItemSelected(item)
         }

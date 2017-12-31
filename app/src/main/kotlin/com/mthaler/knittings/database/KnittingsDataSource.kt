@@ -17,7 +17,7 @@ import android.support.v4.app.Fragment
 
 class KnittingsDataSource private constructor(context: Context): AnkoLogger {
 
-    private val context: Context
+    private val context: Context = context.applicationContext
     private val dbHelper: KnittingDatabaseHelper
 
     /**
@@ -47,7 +47,6 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
         }
 
     init {
-        this.context = context.applicationContext
         dbHelper = context.database
     }
 
@@ -102,15 +101,15 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
             val values = ContentValues()
             values.put(KnittingDatabaseHelper.KnittingTable.Cols.TITLE, knitting.title)
             values.put(KnittingDatabaseHelper.KnittingTable.Cols.DESCRIPTION, knitting.description)
-            values.put(KnittingDatabaseHelper.KnittingTable.Cols.STARTED, knitting.started!!.time)
+            values.put(KnittingDatabaseHelper.KnittingTable.Cols.STARTED, knitting.started.time)
             if (knitting.finished != null) {
-                values.put(KnittingDatabaseHelper.KnittingTable.Cols.FINISHED, knitting.finished!!.time)
+                values.put(KnittingDatabaseHelper.KnittingTable.Cols.FINISHED, knitting.finished.time)
             }
             values.put(KnittingDatabaseHelper.KnittingTable.Cols.NEEDLE_DIAMETER, knitting.needleDiameter)
             values.put(KnittingDatabaseHelper.KnittingTable.Cols.SIZE, knitting.size)
             if (knitting.defaultPhoto != null) {
                 debug("Default photo: " + knitting.defaultPhoto)
-                values.put(KnittingDatabaseHelper.KnittingTable.Cols.DEFAULT_PHOTO_ID, knitting.defaultPhoto!!.id)
+                values.put(KnittingDatabaseHelper.KnittingTable.Cols.DEFAULT_PHOTO_ID, knitting.defaultPhoto.id)
             } else {
                 values.putNull(KnittingDatabaseHelper.KnittingTable.Cols.DEFAULT_PHOTO_ID)
             }
@@ -390,7 +389,7 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
 
 // Access property for Context
 val Context.datasource: KnittingsDataSource
-    get() = KnittingsDataSource.getInstance(getApplicationContext())
+    get() = KnittingsDataSource.getInstance(applicationContext)
 
 val Fragment.datasource: KnittingsDataSource
     get() = KnittingsDataSource.getInstance(this.activity)

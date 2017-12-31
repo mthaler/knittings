@@ -10,7 +10,6 @@ import android.widget.ListView
 import android.widget.TextView
 import com.mthaler.knittings.database.datasource
 import com.mthaler.knittings.model.Knitting
-import org.jetbrains.anko.startActivity
 import java.text.DateFormat
 import java.util.ArrayList
 import java.util.Date
@@ -70,9 +69,9 @@ class KnittingListFragment : ListFragment(), KnittingListView {
             val startedTextView = convertView.findViewById<TextView>(R.id.knitting_list_item_startedTextView)
             startedTextView.text = DateFormat.getDateInstance().format(knitting.started)
 
-            if (knitting.defaultPhoto != null && knitting.defaultPhoto!!.preview != null) {
+            if (knitting.defaultPhoto != null && knitting.defaultPhoto.preview != null) {
                 val photoView = convertView.findViewById<ImageView>(R.id.knitting_list_item_photoImageView)
-                photoView.setImageBitmap(knitting.defaultPhoto!!.preview)
+                photoView.setImageBitmap(knitting.defaultPhoto.preview)
             }
 
             return convertView

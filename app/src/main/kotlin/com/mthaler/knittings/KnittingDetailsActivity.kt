@@ -30,7 +30,7 @@ class KnittingDetailsActivity : AppCompatActivity(), AnkoLogger {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_knitting_details)
 
-        val toolbar = find<Toolbar>(R.id.toolbar) as Toolbar
+        val toolbar = find<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
         //supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
@@ -147,7 +147,7 @@ class KnittingDetailsActivity : AppCompatActivity(), AnkoLogger {
             val preview = PictureUtils.decodeSampledBitmapFromPath(currentPhotoPath!!.absolutePath, 200, 200)
             val rotatedPreview = PictureUtils.rotateBitmap(preview, orientation)
             val photo = datasource.createPhoto(currentPhotoPath!!,knittingID, rotatedPreview, "")
-            debug("Created new photo from " + currentPhotoPath + ", knitting id " + knittingID)
+            debug("Created new photo from $currentPhotoPath, knitting id $knittingID")
             // add first photo as default photo
             val knitting = datasource.getKnitting(knittingID)
             if (knitting.defaultPhoto == null) {
@@ -163,10 +163,10 @@ class KnittingDetailsActivity : AppCompatActivity(), AnkoLogger {
                 val preview = PictureUtils.decodeSampledBitmapFromPath(currentPhotoPath!!.absolutePath, 200, 200)
                 val rotatedPreview = PictureUtils.rotateBitmap(preview, orientation)
                 val photo = datasource.createPhoto(currentPhotoPath!!, knittingID, rotatedPreview, "")
-                debug("Created new photo from " + currentPhotoPath + ", knitting id " + knittingID)
+                debug("Created new photo from $currentPhotoPath, knitting id $knittingID")
                 // add first photo as default photo
                 val knitting = datasource.getKnitting(knittingID)
-                if (knitting!!.defaultPhoto == null) {
+                if (knitting.defaultPhoto == null) {
                     debug("Set $photo as default photo")
                     datasource.updateKnitting(knitting.copy(defaultPhoto = photo))
                 }
