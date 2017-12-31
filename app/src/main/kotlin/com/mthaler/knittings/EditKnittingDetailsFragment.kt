@@ -2,6 +2,7 @@ package com.mthaler.knittings
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.text.Editable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -32,6 +33,7 @@ class EditKnittingDetailsFragment : Fragment() {
                 if (knitting0 != null) {
                     val knitting1 = knitting0.copy(title = c.toString())
                     datasource.updateKnitting(knitting1)
+                    knitting = knitting1
                 }
             }
         })
@@ -43,6 +45,7 @@ class EditKnittingDetailsFragment : Fragment() {
                 if (knitting0 != null) {
                     val knitting1 = knitting0.copy(description = c.toString())
                     datasource.updateKnitting(knitting1)
+                    knitting = knitting1
                 }
             }
         })
@@ -62,6 +65,36 @@ class EditKnittingDetailsFragment : Fragment() {
             dialog.setTargetFragment(this, REQUEST_FINISHED)
             dialog.show(fm, DIALOG_DATE)
         }
+
+        val editTextNeedleDiameter = v.findViewById<EditText>(R.id.knitting_needle_diameter)
+        editTextNeedleDiameter.addTextChangedListener(object : TextWatcher {
+            override fun onTextChanged(c: CharSequence, start: Int, before: Int, count: Int) {
+                val knitting0 = knitting
+                if (knitting0 != null) {
+                    try {
+                        val knitting1 = knitting0.copy(needleDiameter = java.lang.Double.parseDouble(c.toString()))
+                        datasource.updateKnitting(knitting1)
+                        knitting = knitting1
+                    } catch (ex: Exception) {}
+
+                }
+            }
+
+            override fun afterTextChanged(c: Editable) {
+                val knitting0 = knitting
+                if (knitting0 != null) {
+                    val knitting0 = knitting
+                    if (knitting0 != null) {
+                        try {
+                            val knitting1 = knitting0.copy(needleDiameter = java.lang.Double.parseDouble(c.toString()))
+                            datasource.updateKnitting(knitting1)
+                            knitting = knitting1
+                        } catch (ex: Exception) {}
+
+                    }
+                }
+            }
+        })
 
         return v
     }
