@@ -10,6 +10,7 @@ import android.widget.ListView
 import android.widget.TextView
 import com.mthaler.knittings.database.datasource
 import com.mthaler.knittings.model.Knitting
+import org.jetbrains.anko.startActivity
 import java.text.DateFormat
 import java.util.ArrayList
 import java.util.Date
@@ -44,7 +45,7 @@ class KnittingListFragment : ListFragment(), KnittingListView {
     override fun addKnitting() {
         // start knitting activity with newly created knitting
         val knitting = datasource.createKnitting("", "", Date(), null, 0.0, 0.0, 0.0)
-        startActivity<KnittingActivity>(KnittingActivity.EXTRA_KNITTING_ID to knitting.id)
+        startActivity< EditKnittingDetailsActivity>(EditKnittingDetailsActivity.EXTRA_KNITTING_ID to knitting.id)
     }
 
     private inner class KnittingAdapter(knittings: ArrayList<Knitting>) : ArrayAdapter<Knitting>(activity, android.R.layout.simple_list_item_1, knittings) {
