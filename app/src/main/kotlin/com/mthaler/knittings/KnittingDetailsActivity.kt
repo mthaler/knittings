@@ -1,15 +1,22 @@
 package com.mthaler.knittings
 
+import android.app.Activity
 import android.app.AlertDialog
+import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.provider.MediaStore
 import android.support.design.widget.FloatingActionButton
+import android.support.v4.content.FileProvider
 import android.support.v7.widget.Toolbar
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Button
+import android.widget.Toast
 import com.mthaler.knittings.database.datasource
 import org.jetbrains.anko.*
+import java.io.File
+import java.io.FileNotFoundException
 
 /**
  * Activity that displays knitting details (name, description, start time etc.)
@@ -17,6 +24,7 @@ import org.jetbrains.anko.*
 class KnittingDetailsActivity : AppCompatActivity(), AnkoLogger {
 
     private var knittingID: Long = -1
+    private var currentPhotoPath: File? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -66,6 +74,30 @@ class KnittingDetailsActivity : AppCompatActivity(), AnkoLogger {
                 b.setView(layout)
                 b.setNegativeButton(R.string.dialog_button_cancel) { diag, i -> diag.dismiss()}
                 val d = b.create()
+                buttonTakePhoto.setOnClickListener {
+                    d.dismiss()
+                    val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+                    val knitting = datasource.getKnitting(knittingID)
+                    currentPhotoPath = datasource.getPhotoFile(knitting)
+                    debug("Set current photo path: " + currentPhotoPath)
+                    val packageManager = packageManager
+                    val canTakePhoto = currentPhotoPath != null && takePictureIntent.resolveActivity(packageManager) != null
+                    if (canTakePhoto) {
+                        val uri = FileProvider.getUriForFile(this, "com.mthaler.knittings.fileprovider", currentPhotoPath!!)
+                        takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, uri)
+                        debug("Created take picture intent")
+                        startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE)
+                    }
+                }
+                buttonImportPhoto.setOnClickListener {
+                    d.dismiss()
+                    val knitting = datasource.getKnitting(knittingID)
+                    currentPhotoPath = datasource.getPhotoFile(knitting)
+                    debug("Set current photo path: " + currentPhotoPath)
+                    val photoPickerIntent = Intent(Intent.ACTION_PICK)
+                    photoPickerIntent.type = "image/*"
+                    startActivityForResult(photoPickerIntent, REQUEST_IMAGE_IMPORT)
+                }
                 d.show()
                 return true
             }
@@ -90,7 +122,50 @@ class KnittingDetailsActivity : AppCompatActivity(), AnkoLogger {
         }
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (resultCode != Activity.RESULT_OK) {
+            return
+        }
+        if (requestCode == REQUEST_IMAGE_CAPTURE) {
+            // add photo to database
+            debug("Received result for take photo intent")
+            val orientation = PictureUtils.getOrientation(currentPhotoPath!!.absolutePath)
+            val preview = PictureUtils.decodeSampledBitmapFromPath(currentPhotoPath!!.absolutePath, 200, 200)
+            val rotatedPreview = PictureUtils.rotateBitmap(preview, orientation)
+            val photo = datasource.createPhoto(currentPhotoPath!!,knittingID, rotatedPreview, "")
+            debug("Created new photo from " + currentPhotoPath + ", knitting id " + knittingID)
+            // add first photo as default photo
+            val knitting = datasource.getKnitting(knittingID)
+            if (knitting.defaultPhoto == null) {
+                debug("Set $photo as default photo")
+                datasource.updateKnitting(knitting.copy(defaultPhoto = photo))
+            }
+        } else if (requestCode == REQUEST_IMAGE_IMPORT) {
+            try {
+                debug("Received result for import photo intent")
+                val imageUri = data!!.data
+                PictureUtils.copy(imageUri, currentPhotoPath!!, this)
+                val orientation = PictureUtils.getOrientation(currentPhotoPath!!.absolutePath)
+                val preview = PictureUtils.decodeSampledBitmapFromPath(currentPhotoPath!!.absolutePath, 200, 200)
+                val rotatedPreview = PictureUtils.rotateBitmap(preview, orientation)
+                val photo = datasource.createPhoto(currentPhotoPath!!, knittingID, rotatedPreview, "")
+                debug("Created new photo from " + currentPhotoPath + ", knitting id " + knittingID)
+                // add first photo as default photo
+                val knitting = datasource.getKnitting(knittingID)
+                if (knitting!!.defaultPhoto == null) {
+                    debug("Set $photo as default photo")
+                    datasource.updateKnitting(knitting.copy(defaultPhoto = photo))
+                }
+            } catch (e: FileNotFoundException) {
+                e.printStackTrace()
+                Toast.makeText(this, "Something went wrong", Toast.LENGTH_LONG).show()
+            }
+        }
+    }
+
     companion object {
         val EXTRA_KNITTING_ID = "com.mthaler.knitting.KNITTING_ID"
+        private val REQUEST_IMAGE_CAPTURE = 0
+        private val REQUEST_IMAGE_IMPORT = 1
     }
 }
