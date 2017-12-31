@@ -47,7 +47,7 @@ class PhotoGalleryFragment : Fragment(), AnkoLogger {
                 debug("Set knitting: " + knitting)
             }
         }
-        
+
         gridView = v.findViewById(R.id.gridView)
 
         return v

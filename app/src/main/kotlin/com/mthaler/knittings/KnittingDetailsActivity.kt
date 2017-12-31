@@ -32,10 +32,10 @@ class KnittingDetailsActivity : AppCompatActivity(), AnkoLogger {
 
         val toolbar = find<Toolbar>(R.id.toolbar) as Toolbar
         setSupportActionBar(toolbar)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        //supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         // get the id of the knitting that should be displayed.
-        val id = intent.getLongExtra(KnittingDetailsActivity.EXTRA_KNITTING_ID, -1L)
+        val id = if (savedInstanceState != null) savedInstanceState.getLong(EXTRA_KNITTING_ID) else intent.getLongExtra(KnittingDetailsActivity.EXTRA_KNITTING_ID, -1L)
         if (id != -1L) {
             // initialize the knitting details fragment with the knitting it should display
             val fragment = supportFragmentManager.findFragmentById(R.id.fragment_knitting_details) as KnittingDetailsFragment
@@ -55,6 +55,11 @@ class KnittingDetailsActivity : AppCompatActivity(), AnkoLogger {
         } else {
             error("Could not get knitting id")
         }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        outState.putLong(EXTRA_KNITTING_ID, knittingID)
+        super.onSaveInstanceState(outState)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
