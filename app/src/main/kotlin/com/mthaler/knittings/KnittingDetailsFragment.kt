@@ -2,6 +2,7 @@ package com.mthaler.knittings
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v4.view.ViewPager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -40,6 +41,10 @@ class KnittingDetailsFragment : Fragment(), AnkoLogger {
     fun init(knitting: Knitting) {
         val v = view
         if (v != null) {
+            val viewPager = v.findViewById<ViewPager>(R.id.view_pager)
+            val adapter = ImageAdapter(context!!, datasource.getAllPhotos(knitting!!)) //Here we are defining the Imageadapter object
+            viewPager.adapter = adapter // Here we are passing and setting the adapter for the images
+
             val textViewTitle = v.findViewById<TextView>(R.id. knitting_title2)
             textViewTitle.setText(knitting.title)
 

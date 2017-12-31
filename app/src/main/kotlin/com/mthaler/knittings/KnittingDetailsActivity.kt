@@ -156,10 +156,13 @@ class KnittingDetailsActivity : AppCompatActivity(), AnkoLogger {
                     debug("Set $photo as default photo")
                     datasource.updateKnitting(knitting.copy(defaultPhoto = photo))
                 }
+
             } catch (e: FileNotFoundException) {
                 e.printStackTrace()
                 Toast.makeText(this, "Something went wrong", Toast.LENGTH_LONG).show()
             }
+
+
         }
     }
 
