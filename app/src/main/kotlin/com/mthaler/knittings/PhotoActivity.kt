@@ -26,7 +26,7 @@ class PhotoActivity : AppCompatActivity(), AnkoLogger {
         setContentView(R.layout.activity_photo)
         val toolbar = find<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        //supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         // get the id of the knitting that should be displayed.
         val id = intent.getLongExtra(EXTRA_PHOTO_ID, -1)

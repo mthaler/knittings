@@ -126,6 +126,7 @@ class PhotoGalleryFragment : Fragment(), AnkoLogger {
     }
 
     fun init(knitting: Knitting) {
+        this.knitting = knitting
         val photos = datasource.getAllPhotos(knitting)
         val gridAdapter = GridViewAdapter(activity!!, R.layout.grid_item_layout, photos)
         gridView.adapter = gridAdapter
