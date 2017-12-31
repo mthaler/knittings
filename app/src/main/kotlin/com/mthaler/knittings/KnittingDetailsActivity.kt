@@ -37,15 +37,6 @@ class KnittingDetailsActivity : AppCompatActivity(), AnkoLogger {
         // get the id of the knitting that should be displayed.
         val id = if (savedInstanceState != null) savedInstanceState.getLong(EXTRA_KNITTING_ID) else intent.getLongExtra(KnittingDetailsActivity.EXTRA_KNITTING_ID, -1L)
         if (id != -1L) {
-            // initialize the knitting details fragment with the knitting it should display
-            val fragment = supportFragmentManager.findFragmentById(R.id.fragment_knitting_details) as KnittingDetailsFragment
-            if (fragment != null) {
-                val knitting = datasource.getKnitting(id)
-                fragment.init(knitting)
-            } else {
-                error("Could not get knitting details fragment")
-            }
-
             // start edit knitting details fragment if the user clicks the floating action button
             val fab = findViewById<FloatingActionButton>(R.id.edit_knitting_details)
             fab.setOnClickListener {
@@ -60,6 +51,20 @@ class KnittingDetailsActivity : AppCompatActivity(), AnkoLogger {
     override fun onSaveInstanceState(outState: Bundle) {
         outState.putLong(EXTRA_KNITTING_ID, knittingID)
         super.onSaveInstanceState(outState)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (knittingID != -1L) {
+            // initialize the knitting details fragment with the knitting it should display
+            val fragment = supportFragmentManager.findFragmentById(R.id.fragment_knitting_details) as KnittingDetailsFragment
+            if (fragment != null) {
+                val knitting = datasource.getKnitting(knittingID)
+                fragment.init(knitting)
+            } else {
+                error("Could not get knitting details fragment")
+            }
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

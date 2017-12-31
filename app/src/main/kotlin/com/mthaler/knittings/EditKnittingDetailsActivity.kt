@@ -14,7 +14,7 @@ class EditKnittingDetailsActivity : AppCompatActivity() {
 
         val toolbar = find<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
-        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+        //supportActionBar!!.setDisplayHomeAsUpEnabled(true)
 
         // get the id of the knitting that should be displayed.
         val id = intent.getLongExtra(EditKnittingDetailsActivity.EXTRA_KNITTING_ID, -1L)

@@ -96,6 +96,46 @@ class EditKnittingDetailsFragment : Fragment() {
             }
         })
 
+        val editTextSize = v.findViewById<EditText>(R.id.knitting_size)
+        editTextSize.addTextChangedListener(object : TextWatcher {
+            override fun onTextChanged(c: CharSequence, start: Int, before: Int, count: Int) {
+                val knitting0 = knitting
+                if (knitting0 != null) {
+                    try {
+                        val knitting1 = knitting0.copy(size = java.lang.Double.parseDouble(c.toString()))
+                        datasource.updateKnitting(knitting1)
+                        knitting = knitting1
+                    } catch (ex: Exception) {}
+
+                }
+            }
+
+            override fun afterTextChanged(c: Editable) {
+                val knitting0 = knitting
+                if (knitting0 != null) {
+                    val knitting0 = knitting
+                    if (knitting0 != null) {
+                        try {
+                            val knitting1 = knitting0.copy(size = java.lang.Double.parseDouble(c.toString()))
+                            datasource.updateKnitting(knitting1)
+                            knitting = knitting1
+                        } catch (ex: Exception) {}
+
+                    }
+                }
+            }
+        })
+
+        val ratingBar = v.findViewById<RatingBar>(R.id.ratingBar)
+        ratingBar.onRatingBarChangeListener = RatingBar.OnRatingBarChangeListener { ratingBar, rating, fromUser ->
+            val knitting0 = knitting
+            if (knitting0 != null) {
+                val knitting1 = knitting0.copy(rating = rating.toDouble())
+                datasource.updateKnitting(knitting1)
+                knitting = knitting1
+            }
+        }
+
         return v
     }
 
@@ -110,7 +150,7 @@ class EditKnittingDetailsFragment : Fragment() {
 
             textViewStarted.text = DateFormat.getDateInstance().format(knitting.started)
 
-            textViewFinished.text = if (knitting!!.finished != null) DateFormat.getDateInstance().format(knitting!!.finished) else ""
+            textViewFinished.text = if (knitting.finished != null) DateFormat.getDateInstance().format(knitting!!.finished) else ""
 
             val editTextNeedleDiameter = v.findViewById<EditText>(R.id.knitting_needle_diameter)
             editTextNeedleDiameter.setText(java.lang.Double.toString(knitting.needleDiameter))
@@ -120,26 +160,10 @@ class EditKnittingDetailsFragment : Fragment() {
 
             val ratingBar = v.findViewById<RatingBar>(R.id.ratingBar)
             ratingBar.rating = knitting.rating.toFloat()
+
+            this.knitting = knitting
         }
     }
-
-    /**
-     * Deletes the displayed knitting
-     *
-     * The method will delete the knitting from the database and also remove the photo if it exists
-     */
-    fun deleteKnitting() {
-        val knitting = this.knitting
-        if (knitting != null) {
-            // delete all photos from the database
-            datasource.deleteAllPhotos(knitting)
-            // delete database entry
-            datasource.deleteKnitting(knitting)
-            this.knitting = null
-        }
-
-    }
-
 
     companion object {
         private val KNITTING_ID = "knitting_id"
