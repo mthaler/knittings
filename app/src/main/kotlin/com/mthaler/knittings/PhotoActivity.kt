@@ -1,6 +1,5 @@
 package com.mthaler.knittings
 
-import android.content.Intent
 import android.support.design.widget.CoordinatorLayout
 import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
@@ -19,8 +18,6 @@ import org.jetbrains.anko.find
  */
 class PhotoActivity : AppCompatActivity(), AnkoLogger {
 
-    private var parentKnittingID: Long = 0
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_photo)
@@ -31,9 +28,6 @@ class PhotoActivity : AppCompatActivity(), AnkoLogger {
         // get the id of the knitting that should be displayed.
         val id = intent.getLongExtra(EXTRA_PHOTO_ID, -1)
         val photo = datasource.getPhoto(id)
-
-        // save parent knitting id
-        parentKnittingID = intent.getLongExtra(KnittingActivity.EXTRA_KNITTING_ID, -1)
 
         // init photo view
         val photoDetailsView = supportFragmentManager.findFragmentById(R.id.fragment_photo) as PhotoDetailsView
@@ -77,14 +71,8 @@ class PhotoActivity : AppCompatActivity(), AnkoLogger {
         }
     }
 
-    override fun getSupportParentActivityIntent(): Intent? {
-        // add the knitting id so the parent activity can properly restore itself
-        val intent = super.getSupportParentActivityIntent()
-        intent?.putExtra(KnittingActivity.EXTRA_KNITTING_ID, parentKnittingID)
-        return intent
-    }
-
     companion object {
         val EXTRA_PHOTO_ID = "com.mthaler.knitting.PHOTO_ID"
+        val EXTRA_KNITTING_ID = "com.mthaler.knitting.KNITTING_ID"
     }
 }

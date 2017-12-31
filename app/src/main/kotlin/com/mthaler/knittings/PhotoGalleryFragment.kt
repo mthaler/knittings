@@ -134,7 +134,7 @@ class PhotoGalleryFragment : Fragment(), AnkoLogger {
             if (position < gridView.adapter.count - 1) {
                 // photo clicked, show photo in photo activity
                 val photo = parent.getItemAtPosition(position) as Photo
-                startActivity<PhotoActivity>(PhotoActivity.EXTRA_PHOTO_ID to photo.id, KnittingActivity.EXTRA_KNITTING_ID to knitting.id)
+                startActivity<PhotoActivity>(PhotoActivity.EXTRA_PHOTO_ID to photo.id, PhotoActivity.EXTRA_KNITTING_ID to knitting.id)
             } else {
                 // take photo icon clicked, ask user if photo should be taken or imported from gallery
                 val b = AlertDialog.Builder(activity)
