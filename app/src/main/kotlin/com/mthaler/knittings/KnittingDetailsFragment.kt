@@ -45,25 +45,25 @@ class KnittingDetailsFragment : Fragment(), AnkoLogger {
             val adapter = ImageAdapter(context!!, datasource.getAllPhotos(knitting)) //Here we are defining the Imageadapter object
             viewPager.adapter = adapter // Here we are passing and setting the adapter for the images
 
-            val textViewTitle = v.findViewById<TextView>(R.id. knitting_title2)
+            val textViewTitle = v.findViewById<TextView>(R.id.knitting_title)
             textViewTitle.text = knitting.title
 
-            val textViewDescription = v.findViewById<TextView>(R.id. knitting_description2)
+            val textViewDescription = v.findViewById<TextView>(R.id.knitting_description)
             textViewDescription.text = knitting.description
 
-            val textViewStarted = v.findViewById<TextView>(R.id.knitting_started2)
+            val textViewStarted = v.findViewById<TextView>(R.id.knitting_started)
             textViewStarted.text = "Started: ${DateFormat.getDateInstance().format(knitting.started)}"
 
-            val textViewFinished = v.findViewById<TextView>(R.id.knitting_finished2)
+            val textViewFinished = v.findViewById<TextView>(R.id.knitting_finished)
             textViewFinished.text = "Finished: ${if (knitting.finished != null) DateFormat.getDateInstance().format(knitting.finished) else ""}"
 
-            val textViewNeedleDiameter = v.findViewById<TextView>(R.id.knitting_needle_diameter2)
+            val textViewNeedleDiameter = v.findViewById<TextView>(R.id.knitting_needle_diameter)
             textViewNeedleDiameter.text = "Needle: ${java.lang.Double.toString(knitting.needleDiameter)}"
 
-            val textViewSize = v.findViewById<TextView>(R.id.knitting_size2)
+            val textViewSize = v.findViewById<TextView>(R.id.knitting_size)
             textViewSize.text = "Size: ${java.lang.Double.toString(knitting.size)}"
 
-            val ratingBar = v.findViewById<RatingBar>(R.id.ratingBar2)
+            val ratingBar = v.findViewById<RatingBar>(R.id.ratingBar)
             ratingBar.rating = knitting.rating.toFloat()
         }
     }
