@@ -25,6 +25,7 @@ class MainActivity : AppCompatActivity() {
         val toolbar = find<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
 
+        // set on click handler of floating action button that creates a new knitting
         val fab = find<FloatingActionButton>(R.id.fab_create_add_knitting)
         fab.setOnClickListener {
             val knittingListView = supportFragmentManager.findFragmentById(R.id.fragment_knitting_list) as KnittingListView
@@ -42,16 +43,23 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.menu_item_about -> {
-                val v = layoutInflater.inflate(R.layout.dialog_about, null)
-                val appName = v.find<TextView>(R.id.about_app_name)
-                appName.text = (appName.text.toString() + " " + BuildConfig.VERSION_NAME)
-                val b = AlertDialog.Builder(this)
-                b.setView(v)
-                b.setPositiveButton(android.R.string.ok ) { diag, i -> diag.dismiss()}
-                b.create().show()
+                showAboutDialog()
                 return true
             }
             else -> return super.onOptionsItemSelected(item)
         }
+    }
+
+    /**
+     * Shows the about dialog that displays the app name, version and some additional information
+     */
+    private fun showAboutDialog() {
+        val v = layoutInflater.inflate(R.layout.dialog_about, null)
+        val appName = v.find<TextView>(R.id.about_app_name)
+        appName.text = (appName.text.toString() + " " + BuildConfig.VERSION_NAME)
+        val b = AlertDialog.Builder(this)
+        b.setView(v)
+        b.setPositiveButton(android.R.string.ok ) { diag, i -> diag.dismiss()}
+        b.create().show()
     }
 }
