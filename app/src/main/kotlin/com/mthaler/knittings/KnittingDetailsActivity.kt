@@ -101,14 +101,12 @@ class KnittingDetailsActivity : AppCompatActivity(), AnkoLogger, CanTakePhoto {
         if (resultCode != Activity.RESULT_OK) {
             return
         }
-        if (requestCode == KnittingDetailsActivity.REQUEST_IMAGE_CAPTURE || requestCode == REQUEST_IMAGE_IMPORT) {
+        if (requestCode == CanTakePhoto.REQUEST_IMAGE_CAPTURE || requestCode == CanTakePhoto.REQUEST_IMAGE_IMPORT) {
             onActivityResult(this, knittingID, requestCode, resultCode, data)
         }
     }
 
     companion object {
         val EXTRA_KNITTING_ID = "com.mthaler.knitting.KNITTING_ID"
-        val REQUEST_IMAGE_CAPTURE = 0
-        val REQUEST_IMAGE_IMPORT = 1
     }
 }

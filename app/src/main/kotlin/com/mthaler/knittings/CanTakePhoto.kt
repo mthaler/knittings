@@ -40,7 +40,7 @@ interface CanTakePhoto : AnkoLogger {
                 val uri = FileProvider.getUriForFile(context, "com.mthaler.knittings.fileprovider", currentPhotoPath!!)
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, uri)
                 debug("Created take picture intent")
-                startActivityForResult(takePictureIntent, KnittingDetailsActivity.REQUEST_IMAGE_CAPTURE)
+                startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE)
             }
         }
         buttonImportPhoto.setOnClickListener {
@@ -50,14 +50,14 @@ interface CanTakePhoto : AnkoLogger {
             debug("Set current photo path: " + currentPhotoPath)
             val photoPickerIntent = Intent(Intent.ACTION_PICK)
             photoPickerIntent.type = "image/*"
-            startActivityForResult(photoPickerIntent, KnittingDetailsActivity.REQUEST_IMAGE_IMPORT)
+            startActivityForResult(photoPickerIntent, REQUEST_IMAGE_IMPORT)
         }
         d.show()
         return true
     }
 
     fun onActivityResult(context: Context, knittingID: Long, requestCode: Int, resultCode: Int, data: Intent?) {
-        if (requestCode == KnittingDetailsActivity.REQUEST_IMAGE_CAPTURE) {
+        if (requestCode == REQUEST_IMAGE_CAPTURE) {
             // add photo to database
             debug("Received result for take photo intent")
             val orientation = PictureUtils.getOrientation(currentPhotoPath!!.absolutePath)
@@ -71,7 +71,7 @@ interface CanTakePhoto : AnkoLogger {
                 debug("Set $photo as default photo")
                 context.datasource.updateKnitting(knitting.copy(defaultPhoto = photo))
             }
-        } else if (requestCode == KnittingDetailsActivity.REQUEST_IMAGE_IMPORT) {
+        } else if (requestCode == REQUEST_IMAGE_IMPORT) {
             try {
                 debug("Received result for import photo intent")
                 val imageUri = data!!.data
@@ -92,5 +92,10 @@ interface CanTakePhoto : AnkoLogger {
                 Toast.makeText(context, "Something went wrong", Toast.LENGTH_LONG).show()
             }
         }
+    }
+
+    companion object {
+        val REQUEST_IMAGE_CAPTURE = 0
+        val REQUEST_IMAGE_IMPORT = 1
     }
 }
