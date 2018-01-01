@@ -7,9 +7,11 @@ import android.provider.MediaStore
 import android.support.v4.content.FileProvider
 import android.view.LayoutInflater
 import android.widget.Button
+import android.widget.Toast
 import org.jetbrains.anko.*
 import com.mthaler.knittings.database.datasource
 import java.io.File
+import java.io.FileNotFoundException
 
 interface CanTakePhoto : AnkoLogger {
 
@@ -52,5 +54,43 @@ interface CanTakePhoto : AnkoLogger {
         }
         d.show()
         return true
+    }
+
+    fun onActivityResult(context: Context, knittingID: Long, requestCode: Int, resultCode: Int, data: Intent?) {
+        if (requestCode == KnittingDetailsActivity.REQUEST_IMAGE_CAPTURE) {
+            // add photo to database
+            debug("Received result for take photo intent")
+            val orientation = PictureUtils.getOrientation(currentPhotoPath!!.absolutePath)
+            val preview = PictureUtils.decodeSampledBitmapFromPath(currentPhotoPath!!.absolutePath, 200, 200)
+            val rotatedPreview = PictureUtils.rotateBitmap(preview, orientation)
+            val photo = context.datasource.createPhoto(currentPhotoPath!!,knittingID, rotatedPreview, "")
+            debug("Created new photo from $currentPhotoPath, knitting id $knittingID")
+            // add first photo as default photo
+            val knitting = context.datasource.getKnitting(knittingID)
+            if (knitting.defaultPhoto == null) {
+                debug("Set $photo as default photo")
+                context.datasource.updateKnitting(knitting.copy(defaultPhoto = photo))
+            }
+        } else if (requestCode == KnittingDetailsActivity.REQUEST_IMAGE_IMPORT) {
+            try {
+                debug("Received result for import photo intent")
+                val imageUri = data!!.data
+                PictureUtils.copy(imageUri, currentPhotoPath!!, context)
+                val orientation = PictureUtils.getOrientation(currentPhotoPath!!.absolutePath)
+                val preview = PictureUtils.decodeSampledBitmapFromPath(currentPhotoPath!!.absolutePath, 200, 200)
+                val rotatedPreview = PictureUtils.rotateBitmap(preview, orientation)
+                val photo = context.datasource.createPhoto(currentPhotoPath!!, knittingID, rotatedPreview, "")
+                debug("Created new photo from $currentPhotoPath, knitting id $knittingID")
+                // add first photo as default photo
+                val knitting = context.datasource.getKnitting(knittingID)
+                if (knitting.defaultPhoto == null) {
+                    debug("Set $photo as default photo")
+                    context.datasource.updateKnitting(knitting.copy(defaultPhoto = photo))
+                }
+            } catch (e: FileNotFoundException) {
+                e.printStackTrace()
+                Toast.makeText(context, "Something went wrong", Toast.LENGTH_LONG).show()
+            }
+        }
     }
 }
