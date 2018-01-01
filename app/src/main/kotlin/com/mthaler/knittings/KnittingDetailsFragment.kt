@@ -42,8 +42,14 @@ class KnittingDetailsFragment : Fragment(), AnkoLogger {
         val v = view
         if (v != null) {
             val viewPager = v.findViewById<ViewPager>(R.id.view_pager)
-            val adapter = ImageAdapter(context!!, datasource.getAllPhotos(knitting)) //Here we are defining the Imageadapter object
-            viewPager.adapter = adapter // Here we are passing and setting the adapter for the images
+            val photos = datasource.getAllPhotos(knitting)
+            if (photos.size > 0) {
+                viewPager.visibility = View.VISIBLE
+                val adapter = ImageAdapter(context!!, photos) //Here we are defining the Imageadapter object
+                viewPager.adapter = adapter // Here we are passing and setting the adapter for the images
+            } else {
+                viewPager.visibility = View.GONE
+            }
 
             val textViewTitle = v.findViewById<TextView>(R.id.knitting_title)
             textViewTitle.text = knitting.title
