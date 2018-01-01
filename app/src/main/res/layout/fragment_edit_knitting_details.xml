@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
-        
+
         <android.support.design.widget.TextInputLayout
             android:id="@+id/knitting_title_input_layout_name"
             android:layout_width="match_parent"

@@ -2,6 +2,13 @@
     <!-- application -->
     <string name="app_name">Knittings</string>
     <string name="about">About</string>
+
+    <!-- activities -->
+    <string name="activity_knitting_details">Knitting Details</string>
+    <string name="activity_edit_knitting_details">Edit Knitting Details</string>
+    <string name="activity_photo_gallery">Photos</string>
+    <string name="activity_photo">Edit Photo</string>
+
     <!-- knittings list -->
     <string name="knittings_title">Knittings</string>
     <!-- knitting details -->
