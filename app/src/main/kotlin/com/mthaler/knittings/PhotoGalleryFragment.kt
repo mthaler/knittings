@@ -177,14 +177,5 @@ class PhotoGalleryFragment : Fragment(), AnkoLogger {
         private val KNITTING_ID = "knitting_id"
         private val REQUEST_IMAGE_CAPTURE = 0
         private val REQUEST_IMAGE_IMPORT = 1
-
-        fun newInstance(knitting: Knitting): PhotoGalleryFragment {
-            val fragment = PhotoGalleryFragment()
-            val args = Bundle()
-            args.putLong(KNITTING_ID, knitting.id)
-            fragment.arguments = args
-            debug("Created new PhotoGalleryFragment with knitting id: " + knitting.id)
-            return fragment
-        }
     }
 }
