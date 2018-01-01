@@ -27,28 +27,10 @@ class EditKnittingDetailsFragment : Fragment() {
         val v = inflater.inflate(R.layout.fragment_edit_knitting_details, container, false)
 
         val editTextTitle = v.findViewById<EditText>(R.id.knitting_title)
-        editTextTitle.addTextChangedListener(object : TextWatcher {
-            override fun onTextChanged(c: CharSequence, start: Int, before: Int, count: Int) {
-                val knitting0 = knitting
-                if (knitting0 != null) {
-                    val knitting1 = knitting0.copy(title = c.toString())
-                    datasource.updateKnitting(knitting1)
-                    knitting = knitting1
-                }
-            }
-        })
+        editTextTitle.addTextChangedListener(createTextWatcher { c, knitting -> knitting.copy(title = c.toString()) })
 
         val editTextDescription = v.findViewById<EditText>(R.id.knitting_description)
-        editTextDescription.addTextChangedListener(object : TextWatcher {
-            override fun onTextChanged(c: CharSequence, start: Int, before: Int, count: Int) {
-                val knitting0 = knitting
-                if (knitting0 != null) {
-                    val knitting1 = knitting0.copy(description = c.toString())
-                    datasource.updateKnitting(knitting1)
-                    knitting = knitting1
-                }
-            }
-        })
+        editTextDescription.addTextChangedListener(createTextWatcher{ c, knitting -> knitting.copy(description = c.toString()) })
 
         textViewStarted = v.findViewById(R.id.knitting_started)
         textViewStarted.setOnClickListener {
@@ -67,64 +49,10 @@ class EditKnittingDetailsFragment : Fragment() {
         }
 
         val editTextNeedleDiameter = v.findViewById<EditText>(R.id.knitting_needle_diameter)
-        editTextNeedleDiameter.addTextChangedListener(object : TextWatcher {
-            override fun onTextChanged(c: CharSequence, start: Int, before: Int, count: Int) {
-                val knitting0 = knitting
-                if (knitting0 != null) {
-                    try {
-                        val knitting1 = knitting0.copy(needleDiameter = java.lang.Double.parseDouble(c.toString()))
-                        datasource.updateKnitting(knitting1)
-                        knitting = knitting1
-                    } catch (ex: Exception) {}
-
-                }
-            }
-
-            override fun afterTextChanged(c: Editable) {
-                val knitting0 = knitting
-                if (knitting0 != null) {
-                    val knitting0 = knitting
-                    if (knitting0 != null) {
-                        try {
-                            val knitting1 = knitting0.copy(needleDiameter = java.lang.Double.parseDouble(c.toString()))
-                            datasource.updateKnitting(knitting1)
-                            knitting = knitting1
-                        } catch (ex: Exception) {}
-
-                    }
-                }
-            }
-        })
+        editTextNeedleDiameter.addTextChangedListener(createTextWatcher { c, knitting -> knitting.copy(needleDiameter = java.lang.Double.parseDouble(c.toString())) })
 
         val editTextSize = v.findViewById<EditText>(R.id.knitting_size)
-        editTextSize.addTextChangedListener(object : TextWatcher {
-            override fun onTextChanged(c: CharSequence, start: Int, before: Int, count: Int) {
-                val knitting0 = knitting
-                if (knitting0 != null) {
-                    try {
-                        val knitting1 = knitting0.copy(size = java.lang.Double.parseDouble(c.toString()))
-                        datasource.updateKnitting(knitting1)
-                        knitting = knitting1
-                    } catch (ex: Exception) {}
-
-                }
-            }
-
-            override fun afterTextChanged(c: Editable) {
-                val knitting0 = knitting
-                if (knitting0 != null) {
-                    val knitting0 = knitting
-                    if (knitting0 != null) {
-                        try {
-                            val knitting1 = knitting0.copy(size = java.lang.Double.parseDouble(c.toString()))
-                            datasource.updateKnitting(knitting1)
-                            knitting = knitting1
-                        } catch (ex: Exception) {}
-
-                    }
-                }
-            }
-        })
+        editTextSize.addTextChangedListener(createTextWatcher { c, knitting -> knitting.copy(size = java.lang.Double.parseDouble(c.toString())) })
 
         val ratingBar = v.findViewById<RatingBar>(R.id.ratingBar)
         ratingBar.onRatingBarChangeListener = RatingBar.OnRatingBarChangeListener { ratingBar, rating, fromUser ->
@@ -162,6 +90,28 @@ class EditKnittingDetailsFragment : Fragment() {
             ratingBar.rating = knitting.rating.toFloat()
 
             this.knitting = knitting
+        }
+    }
+
+    /**
+     * Creates a textwatcher that updates the knitting using the given update function
+     *
+     * @param updateKnitting function to updated the knitting
+     */
+    private fun createTextWatcher(updateKnitting: (CharSequence, Knitting) -> Knitting): TextWatcher {
+        return object : TextWatcher {
+            override fun afterTextChanged(c: Editable) {
+                val knitting0 = knitting
+                if (knitting0 != null) {
+                    try {
+                        val knitting1 = updateKnitting(c, knitting0)
+                        datasource.updateKnitting(knitting1)
+                        knitting = knitting1
+                    } catch(ex: Exception) {
+                    }
+
+                }
+            }
         }
     }
 
