@@ -10,22 +10,15 @@ import android.widget.ListView
 import android.widget.TextView
 import com.mthaler.knittings.database.datasource
 import com.mthaler.knittings.model.Knitting
+import org.jetbrains.anko.AnkoLogger
 import java.text.DateFormat
 import java.util.ArrayList
 import java.util.Date
 import org.jetbrains.anko.support.v4.*
 
-class KnittingListFragment : ListFragment(), KnittingListView {
+class KnittingListFragment : ListFragment(), KnittingListView, AnkoLogger {
 
     private var knittings: ArrayList<Knitting> = ArrayList()
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        activity!!.setTitle(R.string.knittings_title)
-        this.knittings = datasource.allKnittings
-        val adapter = KnittingAdapter(knittings)
-        listAdapter = adapter
-    }
 
     override fun onListItemClick(l: ListView?, v: View?, position: Int, id: Long) {
         // get current knitting
