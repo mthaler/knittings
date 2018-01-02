@@ -43,32 +43,44 @@ class PhotoActivity : AppCompatActivity(), AnkoLogger {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.menu_item_delete_photo -> {
-                // show alert asking user to confirm that photo should be deleted
-                alert {
-                    title = resources.getString(R.string.delete_photo_dialog_title)
-                    message = resources.getString(R.string.delete_photo_dialog_question)
-                    positiveButton(resources.getString(R.string.delete_photo_dialog_delete_button)) {
-                        val photoDetailsView = supportFragmentManager.findFragmentById(R.id.fragment_photo) as PhotoDetailsView
-                        photoDetailsView.deletePhoto()
-                        finish()
-                    }
-                    negativeButton(resources.getString(R.string.dialog_button_cancel)) {}
-                }.show()
+                showDeletePhotoDialog()
                 return true
             }
             R.id.menu_item_set_main_photo -> {
-                // set as default photo
-                val photoDetailsView = supportFragmentManager.findFragmentById(R.id.fragment_photo) as PhotoDetailsView
-                val photo = photoDetailsView.photo
-                val knitting = datasource.getKnitting(photo!!.knittingID)
-                datasource.updateKnitting(knitting.copy(defaultPhoto = photo))
-                debug("Set $photo as default photo")
-                val layout = find<CoordinatorLayout>(R.id.photo_activity_layout)
-                Snackbar.make(layout, "Used as main photo", Snackbar.LENGTH_SHORT).show()
+                setDefaultPhoto()
                 return true
             }
             else -> return super.onOptionsItemSelected(item)
         }
+    }
+
+    /**
+     * how alert asking user to confirm that photo should be deleted
+     */
+    private fun showDeletePhotoDialog() {
+        alert {
+            title = resources.getString(R.string.delete_photo_dialog_title)
+            message = resources.getString(R.string.delete_photo_dialog_question)
+            positiveButton(resources.getString(R.string.delete_photo_dialog_delete_button)) {
+                val photoDetailsView = supportFragmentManager.findFragmentById(R.id.fragment_photo) as PhotoDetailsView
+                photoDetailsView.deletePhoto()
+                finish()
+            }
+            negativeButton(resources.getString(R.string.dialog_button_cancel)) {}
+        }.show()
+    }
+
+    /**
+     * Sets the current photo as the default photo used as preview for knittings list
+     */
+    private fun setDefaultPhoto() {
+        val photoDetailsView = supportFragmentManager.findFragmentById(R.id.fragment_photo) as PhotoDetailsView
+        val photo = photoDetailsView.photo
+        val knitting = datasource.getKnitting(photo!!.knittingID)
+        datasource.updateKnitting(knitting.copy(defaultPhoto = photo))
+        debug("Set $photo as default photo")
+        val layout = find<CoordinatorLayout>(R.id.photo_activity_layout)
+        Snackbar.make(layout, "Used as main photo", Snackbar.LENGTH_SHORT).show()
     }
 
     companion object {
