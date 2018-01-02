@@ -17,6 +17,7 @@ import java.io.File
  */
 class KnittingDetailsActivity : AppCompatActivity(), AnkoLogger, CanTakePhoto {
 
+    // id of the displayed knitting
     private var knittingID: Long = -1
     override var currentPhotoPath: File? = null
 
@@ -28,7 +29,8 @@ class KnittingDetailsActivity : AppCompatActivity(), AnkoLogger, CanTakePhoto {
         setSupportActionBar(toolbar)
         //supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        // get the id of the knitting that should be displayed.
+        // get the id of the knitting that should be displayed. If the application was destroyed because e.g. the device configuration changed
+        // because the device was rotated we use the knitting id from the saved instance state. Otherwise we use the id passed to the intent
         val id = if (savedInstanceState != null) savedInstanceState.getLong(EXTRA_KNITTING_ID) else intent.getLongExtra(KnittingDetailsActivity.EXTRA_KNITTING_ID, -1L)
         if (id != -1L) {
             // start edit knitting details fragment if the user clicks the floating action button
@@ -40,11 +42,25 @@ class KnittingDetailsActivity : AppCompatActivity(), AnkoLogger, CanTakePhoto {
         } else {
             error("Could not get knitting id")
         }
+        // restore current photo path
+        if (savedInstanceState != null && savedInstanceState.containsKey(CURRENT_PHOTO_PATH)) {
+            currentPhotoPath = File(savedInstanceState.getString(CURRENT_PHOTO_PATH))
+        }
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        outState.putLong(EXTRA_KNITTING_ID, knittingID)
-        super.onSaveInstanceState(outState)
+    /**
+     * This method is called if the activity gets destroyed because e.g. the device configuration changes because the device is rotated
+     * We need to store instance variables because they are not automatically restored
+     *
+     * @param savedInstanceState saved instance state
+     */
+    override fun onSaveInstanceState(savedInstanceState: Bundle) {
+        savedInstanceState.putLong(EXTRA_KNITTING_ID, knittingID)
+        val p = currentPhotoPath
+        if (p != null) {
+            savedInstanceState.putString(CURRENT_PHOTO_PATH, p.absolutePath)
+        }
+        super.onSaveInstanceState(savedInstanceState)
     }
 
     override fun onResume() {
@@ -77,20 +93,7 @@ class KnittingDetailsActivity : AppCompatActivity(), AnkoLogger, CanTakePhoto {
                 return takePhoto(this, layoutInflater, knittingID)
             }
             R.id.menu_item_delete_knitting -> {
-                // show alert asking user to confirm that knitting should be deleted
-                alert {
-                    title = resources.getString(R.string.delete_knitting_dialog_title)
-                    message = resources.getString(R.string.delete_knitting_dialog_question)
-                    positiveButton(resources.getString(R.string.delete_knitting_dialog_delete_button)) {
-                        val knitting = datasource.getKnitting(knittingID)
-                        // delete all photos from the database
-                        datasource.deleteAllPhotos(knitting)
-                        // delete database entry
-                        datasource.deleteKnitting(knitting)
-                        finish()
-                    }
-                    negativeButton(resources.getString(R.string.dialog_button_cancel)) {}
-                }.show()
+                showDeleteDialog()
                 return true
             }
             else -> return super.onOptionsItemSelected(item)
@@ -106,7 +109,28 @@ class KnittingDetailsActivity : AppCompatActivity(), AnkoLogger, CanTakePhoto {
         }
     }
 
+    /**
+     * Displays a dialog that asks the user to confirm that the knitting should be deleted
+     */
+    private fun showDeleteDialog() {
+        // show alert asking user to confirm that knitting should be deleted
+        alert {
+            title = resources.getString(R.string.delete_knitting_dialog_title)
+            message = resources.getString(R.string.delete_knitting_dialog_question)
+            positiveButton(resources.getString(R.string.delete_knitting_dialog_delete_button)) {
+                val knitting = datasource.getKnitting(knittingID)
+                // delete all photos from the database
+                datasource.deleteAllPhotos(knitting)
+                // delete database entry
+                datasource.deleteKnitting(knitting)
+                finish()
+            }
+            negativeButton(resources.getString(R.string.dialog_button_cancel)) {}
+        }.show()
+    }
+
     companion object {
         val EXTRA_KNITTING_ID = "com.mthaler.knitting.KNITTING_ID"
+        val CURRENT_PHOTO_PATH = "com.mthaler.knitting.CURRENT_PHOTO_PATH"
     }
 }
