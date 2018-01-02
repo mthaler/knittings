@@ -18,20 +18,8 @@ import java.text.DateFormat
  */
 class KnittingDetailsFragment : Fragment(), AnkoLogger {
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
-        // Inflate the layout for this fragment
-        val v = inflater.inflate(R.layout.fragment_knitting_details, container, false)
-
-        if (savedInstanceState != null) {
-            if (savedInstanceState.containsKey(KNITTING_ID)) {
-                val knitting = datasource.getKnitting(savedInstanceState.getLong(KNITTING_ID))
-                init(knitting)
-            }
-        }
-
-        return v
-    }
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
+            inflater.inflate(R.layout.fragment_knitting_details, container, false)
 
     /**
      * Initializes the fragment with the given knitting
@@ -72,9 +60,5 @@ class KnittingDetailsFragment : Fragment(), AnkoLogger {
             val ratingBar = v.findViewById<RatingBar>(R.id.ratingBar)
             ratingBar.rating = knitting.rating.toFloat()
         }
-    }
-
-    companion object: AnkoLogger {
-        val KNITTING_ID = "knitting_id"
     }
 }
