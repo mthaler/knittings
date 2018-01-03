@@ -13,7 +13,13 @@ import org.jetbrains.anko.error
 class KnittingDatabaseHelper(context: Context) : ManagedSQLiteOpenHelper(context, DB_NAME, null, DB_VERSION), AnkoLogger {
 
     companion object {
-        private val DB_NAME = "knittings.db"
+        // Use different database name for testing. This is an ugly hack, but I didn't find another way to do this
+        private val DB_NAME = try {
+            Class.forName("android.support.test.espresso.Espresso")
+            "knittings_test.db"
+        } catch (_: ClassNotFoundException) {
+            "knittings.db"
+        }
         private val DB_VERSION = 1
 
         private var instance: KnittingDatabaseHelper? = null
