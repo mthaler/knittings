@@ -32,4 +32,8 @@
 
     <string name="rating">Bewertung:</string>
     <string name="photo">Foto</string>
+
+    <!-- take photo dialog -->
+    <string name="take_photo">Foto mit Kamera aufnehmen</string>
+    <string name="import_from_gallery">Bild aus Gallerie importieren</string>
 </resources>

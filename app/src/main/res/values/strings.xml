@@ -39,4 +39,8 @@
 
     <string name="rating">Rating:</string>
     <string name="photo">Photo</string>
+
+    <!-- take photo dialog -->
+    <string name="take_photo">Take photo</string>
+    <string name="import_from_gallery">Import from gallery</string>
 </resources>
