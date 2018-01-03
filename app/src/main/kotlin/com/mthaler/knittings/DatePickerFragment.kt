@@ -25,27 +25,22 @@ class DatePickerFragment : DialogFragment() {
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val args = arguments
-        // initialize date
-        date = if (args != null && args.containsKey(EXTRA_DATE)) args.getSerializable(EXTRA_DATE) as Date else Date()
+        date = arguments!!.getSerializable(EXTRA_DATE) as Date
 
-        // get year, month and day from date
         val calendar = Calendar.getInstance()
         calendar.time = date
         val year = calendar.get(Calendar.YEAR)
         val month = calendar.get(Calendar.MONTH)
         val day = calendar.get(Calendar.DAY_OF_MONTH)
 
-        val v = layoutInflater.inflate(R.layout.dialog_date, null)
+        val v = activity!!.layoutInflater.inflate(R.layout.dialog_date, null)
 
         val datePicker = v.findViewById<DatePicker>(R.id.dialog_date_datePicker)
         datePicker.init(year, month, day) { view, year, month, day ->
             date = GregorianCalendar(year, month, day).time
 
             // update argument to preserve selected value on rotation
-            if (args != null) {
-                args.putSerializable(EXTRA_DATE, date)
-            }
+            arguments!!.putSerializable(EXTRA_DATE, date)
         }
 
         return AlertDialog.Builder(activity)
