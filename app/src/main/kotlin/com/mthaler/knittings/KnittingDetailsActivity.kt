@@ -119,8 +119,6 @@ class KnittingDetailsActivity : AppCompatActivity(), AnkoLogger, CanTakePhoto {
             message = resources.getString(R.string.delete_knitting_dialog_question)
             positiveButton(resources.getString(R.string.delete_knitting_dialog_delete_button)) {
                 val knitting = datasource.getKnitting(knittingID)
-                // delete all photos from the database
-                datasource.deleteAllPhotos(knitting)
                 // delete database entry
                 datasource.deleteKnitting(knitting)
                 finish()

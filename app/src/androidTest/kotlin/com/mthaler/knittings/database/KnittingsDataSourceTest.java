@@ -5,10 +5,12 @@ import android.support.test.InstrumentationRegistry;
 import android.support.test.filters.LargeTest;
 import android.support.test.runner.AndroidJUnit4;
 import com.mthaler.knittings.model.Knitting;
+import com.mthaler.knittings.model.Photo;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
 import static org.junit.Assert.*;
@@ -63,8 +65,27 @@ public class KnittingsDataSourceTest {
     }
 
     @Test
-    public void testDeleteKnittingWithPhoto() {
-
+    public void testCreatePhoto() {
+        // Context of the app under test.
+        Context ctx = InstrumentationRegistry.getTargetContext();
+        KnittingsDataSource ds = KnittingsDataSource.Companion.getInstance(ctx);
+        assertTrue(ds.getAllKnittings().isEmpty());
+        Knitting knitting1 = ds.createKnitting("test knitting 1", "first test knitting", new Date(), null, 3.0, 42.0, 4.0);
+        Knitting knitting2 = ds.createKnitting("test knitting 2", "second test knitting", new Date(), null, 4.0, 43.0, 5.0);
+        Knitting knitting3 = ds.createKnitting("test knitting 3", "third test knitting", new Date(), null, 2.0, 39.0, 3.0);
+        assertEquals(3, ds.getAllKnittings().size());
+        assertTrue(ds.getAllPhotos().isEmpty());
+        Photo photo = ds.createPhoto(new File("/path/to/photo"), knitting2.getId(), null, "test");
+        assertEquals(1, ds.getAllPhotos().size());
+        ArrayList<Photo> photos = new ArrayList<>();
+        photos.add(photo);
+        assertEquals(photos, ds.getAllPhotos());
+        assertTrue(ds.getAllPhotos(knitting1).isEmpty());
+        assertEquals(1, ds.getAllPhotos(knitting2).size());
+        assertEquals(photos, ds.getAllPhotos(knitting2));
+        assertTrue(ds.getAllPhotos(knitting3).isEmpty());
+        ds.deleteKnitting(knitting2);
+        assertTrue(ds.getAllPhotos().isEmpty());
     }
 
     private void deleteAllKnittings() {

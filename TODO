@@ -7,3 +7,4 @@ TODO:
 - Add categories: Socken, Pullover etc. Make it possible to define different colors for category. Use these colos in knitting list as background
 - Add needle and size to list, similar to Ortovox Bergtouren App
 - Add test build flavor and chose database name depending on build flavor
+- delete photo file when photo is deleted from database

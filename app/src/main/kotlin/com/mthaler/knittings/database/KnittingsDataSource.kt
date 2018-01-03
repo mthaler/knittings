@@ -46,6 +46,32 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
             return knittings
         }
 
+    /**
+     * Returns all knittings from the database
+     *
+     * @return all knittings from database
+     */
+    val allPhotos: ArrayList<Photo>
+        get() = dbHelper.writableDatabase.use { database ->
+            val photos = ArrayList<Photo>()
+
+            val cursor = database.query(KnittingDatabaseHelper.PhotoTable.PHOTOS, KnittingDatabaseHelper.PhotoTable.Columns, null, null, null, null, null)
+
+            cursor.moveToFirst()
+            var photo: Photo
+
+            while (!cursor.isAfterLast) {
+                photo = cursorToPhoto(cursor)
+                photos.add(photo)
+                debug("Read photo " + photo.id + " filename: " + photo.filename)
+                cursor.moveToNext()
+            }
+
+            cursor.close()
+
+            return photos
+        }
+
     init {
         dbHelper = context.database
     }
@@ -131,13 +157,14 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
     }
 
     /**
-     * Deletes the given knitting from the database
+     * Deletes the given knitting from the database. All photos for the deleted knitting are also deleted
      *
      * @param knitting knitting that should be deleted
      */
     fun deleteKnitting(knitting: Knitting) {
         val id = knitting.id
-
+        // delete all photos from the database
+        deleteAllPhotos(knitting)
         dbHelper.writableDatabase.use { database ->
             database.delete(KnittingDatabaseHelper.KnittingTable.KNITTINGS, KnittingDatabaseHelper.KnittingTable.Cols.ID + "=" + id, null)
             debug("Deleted knitting " + id + ": " + knitting.toString())
@@ -227,7 +254,7 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
      * @param preview preview of the photo. Might be null
      * @return new photo
      */
-    fun createPhoto(filename: File, knittingID: Long, preview: Bitmap, description: String): Photo {
+    fun createPhoto(filename: File, knittingID: Long, preview: Bitmap?, description: String): Photo {
         debug("Creating photo for $filename, knitting id: $knittingID, preview: $preview, description: $description")
         dbHelper.writableDatabase.use { database ->
             val values = ContentValues()
