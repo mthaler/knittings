@@ -47,4 +47,8 @@
     <!-- knitting details menu -->
     <string name="show_gallery">Show gallery</string>
     <string name="add_photo">Add photo</string>
+
+    <!-- about dialog -->
+    <string name="idea_and_concept">Idea and concept: Ulrike Jordan</string>
+    <string name="programming">Programming: Michael Thaler</string>
 </resources>

@@ -16,7 +16,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="Idea and concept: Ulrike Jordan"
+        android:text="@string/idea_and_concept"
         android:textSize="18dp"
         android:textColor="@color/about_text_color"
         android:padding="8dp"/>
@@ -25,7 +25,7 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:textSize="18dp"
-        android:text="Programming: Michael Thaler"
+        android:text="@string/programming"
         android:textColor="@color/about_text_color"
         android:padding="8dp"/>
 </LinearLayout>
