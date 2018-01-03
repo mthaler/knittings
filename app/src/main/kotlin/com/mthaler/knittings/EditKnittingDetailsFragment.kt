@@ -1,5 +1,7 @@
 package com.mthaler.knittings
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.text.Editable
@@ -9,6 +11,7 @@ import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.RatingBar
 import android.widget.TextView
+import com.mthaler.knittings.database.KnittingsDataSource
 import com.mthaler.knittings.database.datasource
 import com.mthaler.knittings.model.Knitting
 import java.text.DateFormat
@@ -21,8 +24,7 @@ class EditKnittingDetailsFragment : Fragment() {
     private lateinit var textViewStarted: TextView
     private lateinit var textViewFinished: TextView
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
         val v = inflater.inflate(R.layout.fragment_edit_knitting_details, container, false)
 
@@ -36,8 +38,8 @@ class EditKnittingDetailsFragment : Fragment() {
         textViewStarted.setOnClickListener {
             val fm = activity!!.supportFragmentManager
             val dialog = DatePickerFragment.newInstance(knitting!!.started)
-            dialog.setTargetFragment(this, EditKnittingDetailsFragment.REQUEST_STARTED)
-            dialog.show(fm, EditKnittingDetailsFragment.DIALOG_DATE)
+            dialog.setTargetFragment(this, REQUEST_STARTED)
+            dialog.show(fm, DIALOG_DATE)
         }
 
         textViewFinished = v.findViewById(R.id.knitting_finished)
@@ -65,6 +67,35 @@ class EditKnittingDetailsFragment : Fragment() {
         }
 
         return v
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (resultCode != Activity.RESULT_OK) {
+            return
+        }
+        if (requestCode == REQUEST_STARTED) {
+            val date = data!!.getSerializableExtra(DatePickerFragment.EXTRA_DATE) as Date
+            val knitting0 = knitting
+            if (knitting0 != null) {
+                val knitting1 = knitting0.copy(started = date)
+                knitting = knitting1
+                datasource.updateKnitting(knitting1)
+                textViewStarted.text = DateFormat.getDateInstance().format(date)
+            }
+        } else if (requestCode == REQUEST_FINISHED) {
+            val date = data!!.getSerializableExtra(DatePickerFragment.EXTRA_DATE) as Date
+            val knitting0 = knitting
+            if (knitting0 != null) {
+                val knitting1 = knitting0.copy(finished = date)
+                knitting = knitting1
+                datasource.updateKnitting(knitting1)
+                textViewFinished.text = DateFormat.getDateInstance().format(date)
+            }
+
+            knitting = knitting?.copy(finished = date)
+            textViewFinished.text = DateFormat.getDateInstance().format(date)
+            KnittingsDataSource.getInstance(activity!!).updateKnitting(knitting!!)
+        }
     }
 
     fun init(knitting: Knitting) {
