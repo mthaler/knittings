@@ -6,4 +6,4 @@ TODO:
 - Ratings not visible in landscape mode on Nexus One
 - Add categories: Socken, Pullover etc. Make it possible to define different colors for category. Use these colos in knitting list as background
 - Add needle and size to list, similar to Ortovox Bergtouren App
-- Scale images in swipe gallery, the gallery is really slow
+- Add test build flavor and chose database name depending on build flavor
