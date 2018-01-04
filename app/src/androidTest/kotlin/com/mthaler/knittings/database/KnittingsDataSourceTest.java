@@ -141,6 +141,21 @@ public class KnittingsDataSourceTest {
         assertEquals(photos2, ds.getAllPhotos());
     }
 
+    @Test
+    public void testGetPhoto() {
+        Context ctx = InstrumentationRegistry.getTargetContext();
+        KnittingsDataSource ds = KnittingsDataSource.Companion.getInstance(ctx);
+        assertTrue(ds.getAllKnittings().isEmpty());
+        assertTrue(ds.getAllPhotos().isEmpty());
+        Knitting knitting = ds.createKnitting("test knitting 1", "first test knitting", new Date(), null, 3.0, 42.0, 4.0);
+        assertEquals(1, ds.getAllKnittings().size());
+        assertTrue(ds.getAllPhotos().isEmpty());
+        Photo photo = ds.createPhoto(new File("/path/to/photo"), knitting.getId(), null, "test");
+        assertEquals(1, ds.getAllPhotos().size());
+        Photo result = ds.getPhoto(photo.getId());
+        assertEquals(photo, result);
+    }
+
     private void deleteAllKnittings() {
         Context ctx = InstrumentationRegistry.getTargetContext();
         KnittingsDataSource ds = KnittingsDataSource.Companion.getInstance(ctx);
