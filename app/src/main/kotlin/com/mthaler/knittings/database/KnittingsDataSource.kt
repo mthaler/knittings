@@ -322,8 +322,17 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
      * @param photo photo that should be deleted
      */
     fun deletePhoto(photo: Photo) {
+        // delete photo file
+        if (photo.filename.exists()) {
+            if(photo.filename.delete()) {
+                debug("Deleted photo ${photo.filename}")
+            } else {
+                error("Could not delete ${photo.filename}")
+            }
+        } else {
+            error("Could not delete ${photo.filename}, file does not exist")
+        }
         val id = photo.id
-
         dbHelper.writableDatabase.use { database ->
             database.delete(KnittingDatabaseHelper.PhotoTable.PHOTOS, KnittingDatabaseHelper.PhotoTable.Cols.ID + "=" + id, null)
             debug("Deleted photo " + id + ": " + photo.toString())
