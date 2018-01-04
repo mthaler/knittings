@@ -44,12 +44,22 @@
             android:orientation="horizontal"
             android:baselineAligned="false">
 
-            <android.support.design.widget.TextInputLayout
-                android:id="@+id/knitting_started_input_layout_name"
+            <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:layout_weight="1">
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_marginBottom="8dp"
+                    android:layout_weight="1"
+                    android:text="@string/knitting_started_hint"
+                    android:textSize="11sp"/>
 
                 <TextView android:id="@+id/knitting_started"
                     android:layout_width="match_parent"
@@ -57,25 +67,35 @@
                     android:layout_marginLeft="16dp"
                     android:layout_marginRight="16dp"
                     android:layout_weight="1"
-                    android:hint="@string/knitting_started_hint"
+                    android:textColor="@color/black"
                     android:drawableLeft="@drawable/ic_date" />
-            </android.support.design.widget.TextInputLayout>
+            </LinearLayout>
 
-            <android.support.design.widget.TextInputLayout
-                android:id="@+id/knitting_finished_input_layout_name"
+            <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:layout_weight="1">
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_marginBottom="8dp"
+                    android:layout_weight="1"
+                    android:text="@string/knitting_finished_hint"
+                    android:textSize="11sp"/>
 
                 <TextView android:id="@+id/knitting_finished"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="16dp"
                     android:layout_marginRight="16dp"
-                    android:hint="@string/knitting_finished_hint"
+                    android:textColor="@color/black"
                     android:drawableLeft="@drawable/ic_date" />
-            </android.support.design.widget.TextInputLayout>
+            </LinearLayout>
 
         </LinearLayout>
 
