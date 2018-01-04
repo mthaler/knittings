@@ -84,6 +84,20 @@ public class KnittingsDataSourceTest {
     }
 
     @Test
+    public void testGetKnitting() {
+        Context ctx = InstrumentationRegistry.getTargetContext();
+        KnittingsDataSource ds = KnittingsDataSource.Companion.getInstance(ctx);
+        assertTrue(ds.getAllKnittings().isEmpty());
+        Knitting knitting1 = ds.createKnitting("test knitting 1", "first test knitting", new Date(), null, 3.0, 42.0, 4.0);
+        Knitting knitting2 = ds.createKnitting("test knitting 2", "second test knitting", new Date(), null, 4.0, 43.0, 5.0);
+        Knitting knitting3 = ds.createKnitting("test knitting 3", "third test knitting", new Date(), null, 2.0, 39.0, 3.0);
+        assertEquals(3, ds.getAllKnittings().size());
+        assertEquals(knitting1, ds.getKnitting(knitting1.getId()));
+        assertEquals(knitting2, ds.getKnitting(knitting2.getId()));
+        assertEquals(knitting3, ds.getKnitting(knitting3.getId()));
+    }
+
+    @Test
     public void testCreatePhoto() {
         // Context of the app under test.
         Context ctx = InstrumentationRegistry.getTargetContext();
