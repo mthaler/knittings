@@ -14,6 +14,7 @@ import java.io.File
 import java.util.ArrayList
 import java.util.Date
 import android.support.v4.app.Fragment
+import org.jetbrains.anko.error
 
 class KnittingsDataSource private constructor(context: Context): AnkoLogger {
 
