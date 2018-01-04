@@ -31,7 +31,6 @@ public class KnittingsDataSourceTest {
 
     @Test
     public void testAddKnitting() {
-        // Context of the app under test.
         Context ctx = InstrumentationRegistry.getTargetContext();
         KnittingsDataSource ds = KnittingsDataSource.Companion.getInstance(ctx);
         assertTrue(ds.getAllKnittings().isEmpty());
@@ -48,7 +47,6 @@ public class KnittingsDataSourceTest {
 
     @Test
     public void testDeleteKnitting() {
-        // Context of the app under test.
         Context ctx = InstrumentationRegistry.getTargetContext();
         KnittingsDataSource ds = KnittingsDataSource.Companion.getInstance(ctx);
         assertTrue(ds.getAllKnittings().isEmpty());
@@ -60,6 +58,27 @@ public class KnittingsDataSourceTest {
         assertEquals(2, ds.getAllKnittings().size());
         ArrayList<Knitting> knittings = new ArrayList<>();
         knittings.add(knitting1);
+        knittings.add(knitting3);
+        assertEquals(knittings, ds.getAllKnittings());
+    }
+
+    @Test
+    public void testUpdateKnitting() {
+        Context ctx = InstrumentationRegistry.getTargetContext();
+        KnittingsDataSource ds = KnittingsDataSource.Companion.getInstance(ctx);
+        assertTrue(ds.getAllKnittings().isEmpty());
+        Knitting knitting1 = ds.createKnitting("test knitting 1", "first test knitting", new Date(), null, 3.0, 42.0, 4.0);
+        Knitting knitting2 = ds.createKnitting("test knitting 2", "second test knitting", new Date(), null, 4.0, 43.0, 5.0);
+        Knitting knitting3 = ds.createKnitting("test knitting 3", "third test knitting", new Date(), null, 2.0, 39.0, 3.0);
+        assertEquals(3, ds.getAllKnittings().size());
+        Knitting updated = knitting2.copy(knitting2.getId(), knitting2.getTitle(), "Updated knitting", knitting2.getStarted(), knitting2.getFinished(),
+                knitting2.getNeedleDiameter(), knitting2.getSize(), knitting2.getDefaultPhoto(), knitting2.getRating());
+        Knitting result = ds.updateKnitting(updated);
+        assertEquals(updated, result);
+        assertEquals(3, ds.getAllKnittings().size());
+        ArrayList<Knitting> knittings = new ArrayList<>();
+        knittings.add(knitting1);
+        knittings.add(updated);
         knittings.add(knitting3);
         assertEquals(knittings, ds.getAllKnittings());
     }
