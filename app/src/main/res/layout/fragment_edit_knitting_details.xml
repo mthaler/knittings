@@ -59,7 +59,7 @@
                     android:layout_marginBottom="8dp"
                     android:layout_weight="1"
                     android:text="@string/knitting_started_hint"
-                    android:textSize="11sp"/>
+                    style="@style/Base.TextAppearance.AppCompat.Caption"/>
 
                 <TextView android:id="@+id/knitting_started"
                     android:layout_width="match_parent"
@@ -86,7 +86,7 @@
                     android:layout_marginBottom="8dp"
                     android:layout_weight="1"
                     android:text="@string/knitting_finished_hint"
-                    android:textSize="11sp"/>
+                    style="@style/Base.TextAppearance.AppCompat.Caption"/>
 
                 <TextView android:id="@+id/knitting_finished"
                     android:layout_width="match_parent"
