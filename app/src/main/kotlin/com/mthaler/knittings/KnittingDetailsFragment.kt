@@ -46,16 +46,16 @@ class KnittingDetailsFragment : Fragment(), AnkoLogger {
             textViewDescription.text = knitting.description
 
             val textViewStarted = v.findViewById<TextView>(R.id.knitting_started)
-            textViewStarted.text = "Started: ${DateFormat.getDateInstance().format(knitting.started)}"
+            textViewStarted.text = getString(R.string.knitting_details_started, DateFormat.getDateInstance().format(knitting.started))
 
             val textViewFinished = v.findViewById<TextView>(R.id.knitting_finished)
-            textViewFinished.text = "Finished: ${if (knitting.finished != null) DateFormat.getDateInstance().format(knitting.finished) else ""}"
+            textViewFinished.text = getString(R.string.knitting_details_finished, if (knitting.finished != null) DateFormat.getDateInstance().format(knitting.finished) else "")
 
             val textViewNeedleDiameter = v.findViewById<TextView>(R.id.knitting_needle_diameter)
-            textViewNeedleDiameter.text = "Needle: ${java.lang.Double.toString(knitting.needleDiameter)}"
+            textViewNeedleDiameter.text = getString(R.string.knitting_details_needle, knitting.needleDiameter)
 
             val textViewSize = v.findViewById<TextView>(R.id.knitting_size)
-            textViewSize.text = "Size: ${java.lang.Double.toString(knitting.size)}"
+            textViewSize.text = getString(R.string.knitting_details_size, knitting.size)
 
             val ratingBar = v.findViewById<RatingBar>(R.id.ratingBar)
             ratingBar.rating = knitting.rating.toFloat()

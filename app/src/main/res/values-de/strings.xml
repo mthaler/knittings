@@ -44,4 +44,10 @@
     <!-- about dialog -->
     <string name="idea_and_concept">Idee und Konzept: Ulrike Jordan</string>
     <string name="programming">Programmierung: Michael Thaler</string>
+
+    <!-- knitting details -->
+    <string name="knitting_details_started">Angefangen: %1$s</string>
+    <string name="knitting_details_finished">Fertig: %1$s</string>
+    <string name="knitting_details_needle">Nadel: %1$.1f</string>
+    <string name="knitting_details_size">Größe: %1$.1f</string>
 </resources>
