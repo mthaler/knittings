@@ -26,7 +26,7 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
      * @return all knittings from database
      */
     val allKnittings: ArrayList<Knitting>
-        get() = dbHelper.writableDatabase.use { database ->
+        get() = dbHelper.readableDatabase.use { database ->
             val knittings = ArrayList<Knitting>()
 
             val cursor = database.query(KnittingDatabaseHelper.KnittingTable.KNITTINGS, KnittingDatabaseHelper.KnittingTable.Columns, null, null, null, null, null)
@@ -52,7 +52,7 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
      * @return all knittings from database
      */
     val allPhotos: ArrayList<Photo>
-        get() = dbHelper.writableDatabase.use { database ->
+        get() = dbHelper.readableDatabase.use { database ->
             val photos = ArrayList<Photo>()
 
             val cursor = database.query(KnittingDatabaseHelper.PhotoTable.PHOTOS, KnittingDatabaseHelper.PhotoTable.Columns, null, null, null, null, null)
@@ -179,7 +179,7 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
      */
     fun getKnitting(id: Long): Knitting {
         debug("Getting knitting for id " + id)
-        dbHelper.writableDatabase.use { database ->
+        dbHelper.readableDatabase.use { database ->
             val cursor = database.query(KnittingDatabaseHelper.KnittingTable.KNITTINGS,
                     KnittingDatabaseHelper.KnittingTable.Columns, KnittingDatabaseHelper.KnittingTable.Cols.ID + "=" + id, null, null, null, null)
 
@@ -204,7 +204,7 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
      */
     fun getPhoto(id: Long): Photo {
         debug("Getting photo for id " + id)
-        dbHelper.writableDatabase.use { database ->
+        dbHelper.readableDatabase.use { database ->
             val cursor = database.query(KnittingDatabaseHelper.PhotoTable.PHOTOS,
                     KnittingDatabaseHelper.PhotoTable.Columns, KnittingDatabaseHelper.PhotoTable.Cols.ID + "=" + id, null, null, null, null)
 
@@ -223,7 +223,7 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
      * @return list of photos for the given knitting
      */
     fun getAllPhotos(knitting: Knitting): ArrayList<Photo> {
-        dbHelper.writableDatabase.use { database ->
+        dbHelper.readableDatabase.use { database ->
             val photos = ArrayList<Photo>()
 
             val whereClause = KnittingDatabaseHelper.PhotoTable.Cols.KNITTING_ID + " = ?"
