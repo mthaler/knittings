@@ -99,7 +99,6 @@ public class KnittingsDataSourceTest {
 
     @Test
     public void testCreatePhoto() {
-        // Context of the app under test.
         Context ctx = InstrumentationRegistry.getTargetContext();
         KnittingsDataSource ds = KnittingsDataSource.Companion.getInstance(ctx);
         assertTrue(ds.getAllKnittings().isEmpty());
@@ -119,6 +118,27 @@ public class KnittingsDataSourceTest {
         assertTrue(ds.getAllPhotos(knitting3).isEmpty());
         ds.deleteKnitting(knitting2);
         assertTrue(ds.getAllPhotos().isEmpty());
+    }
+
+    @Test
+    public void testUpdatePhoto() {
+        Context ctx = InstrumentationRegistry.getTargetContext();
+        KnittingsDataSource ds = KnittingsDataSource.Companion.getInstance(ctx);
+        assertTrue(ds.getAllKnittings().isEmpty());
+        assertTrue(ds.getAllPhotos().isEmpty());
+        Knitting knitting = ds.createKnitting("test knitting 1", "first test knitting", new Date(), null, 3.0, 42.0, 4.0);
+        assertEquals(1, ds.getAllKnittings().size());
+        assertTrue(ds.getAllPhotos().isEmpty());
+        Photo photo = ds.createPhoto(new File("/path/to/photo"), knitting.getId(), null, "test");
+        assertEquals(1, ds.getAllPhotos().size());
+        ArrayList<Photo> photos = new ArrayList<>();
+        photos.add(photo);
+        assertEquals(photos, ds.getAllPhotos());
+        Photo updated = photo.copy(photo.getId(), photo.getFilename(), photo.getKnittingID(), "updated description", photo.getPreview());
+        ds.updatePhoto(updated);
+        ArrayList<Photo> photos2 = new ArrayList<>();
+        photos2.add(updated);
+        assertEquals(photos2, ds.getAllPhotos());
     }
 
     private void deleteAllKnittings() {
