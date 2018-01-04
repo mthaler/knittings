@@ -322,16 +322,7 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
      * @param photo photo that should be deleted
      */
     fun deletePhoto(photo: Photo) {
-        // delete photo file
-        if (photo.filename.exists()) {
-            if(photo.filename.delete()) {
-                debug("Deleted photo ${photo.filename}")
-            } else {
-                error("Could not delete ${photo.filename}")
-            }
-        } else {
-            error("Could not delete ${photo.filename}, file does not exist")
-        }
+        deletePhotoFile(photo.filename)
         val id = photo.id
         dbHelper.writableDatabase.use { database ->
             database.delete(KnittingDatabaseHelper.PhotoTable.PHOTOS, KnittingDatabaseHelper.PhotoTable.Cols.ID + "=" + id, null)
@@ -345,8 +336,10 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
      * @param knitting knitting to delete photos for
      */
     fun deleteAllPhotos(knitting: Knitting) {
+        for(photo in getAllPhotos(knitting)) {
+            deletePhotoFile(photo.filename)
+        }
         val id = knitting.id
-
         dbHelper.writableDatabase.use { database ->
             val whereClause = KnittingDatabaseHelper.PhotoTable.Cols.KNITTING_ID + "= ?"
             val whereArgs = arrayOf(java.lang.Long.toString(id))
@@ -403,6 +396,18 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
             return photo.copy(preview = preview)
         } else {
             return photo
+        }
+    }
+
+    private fun deletePhotoFile(file: File) {
+        if (file.exists()) {
+            if(file.delete()) {
+                debug("Deleted photo $file")
+            } else {
+                error("Could not delete $file")
+            }
+        } else {
+            error("Could not delete $file}, file does not exist")
         }
     }
 
