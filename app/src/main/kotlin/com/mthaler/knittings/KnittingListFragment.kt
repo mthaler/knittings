@@ -17,8 +17,6 @@ import org.jetbrains.anko.support.v4.*
 
 class KnittingListFragment : ListFragment(), KnittingListView, AnkoLogger {
 
-    private var knittings: ArrayList<Knitting> = ArrayList()
-
     override fun onListItemClick(l: ListView?, v: View?, position: Int, id: Long) {
         // get current knitting
         val c = (listAdapter as KnittingAdapter).getItem(position)
@@ -28,7 +26,8 @@ class KnittingListFragment : ListFragment(), KnittingListView, AnkoLogger {
 
     override fun onResume() {
         super.onResume()
-        this.knittings = datasource.allKnittings
+        val knittings = datasource.allKnittings
+        knittings.sortByDescending { x -> x.started }
         val adapter = KnittingAdapter(knittings)
         listAdapter = adapter
     }
