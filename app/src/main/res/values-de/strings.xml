@@ -5,9 +5,9 @@
     <string name="about">Info</string>
 
     <!-- activities -->
-    <string name="activity_knitting_details">Knitting Details</string>
+    <string name="activity_knitting_details">Übersicht</string>
     <string name="activity_edit_knitting_details">Edit Knitting Details</string>
-    <string name="activity_photo_gallery">Photos</string>
+    <string name="activity_photo_gallery">Galerie</string>
     <string name="activity_photo">Edit Photo</string>
 
     <!-- knittings list -->
