@@ -30,6 +30,7 @@ class KnittingDetailsFragment : Fragment(), AnkoLogger {
         val v = view
         if (v != null) {
             val viewPager = v.findViewById<ViewPager>(R.id.view_pager)
+            viewPager.offscreenPageLimit = 3
             val photos = datasource.getAllPhotos(knitting)
             if (photos.size > 0) {
                 viewPager.visibility = View.VISIBLE

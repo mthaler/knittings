@@ -8,6 +8,8 @@ import android.view.ViewGroup
 import android.view.ViewTreeObserver
 import android.widget.ImageView
 import com.mthaler.knittings.model.Photo
+import org.jetbrains.anko.doAsync
+import org.jetbrains.anko.uiThread
 
 class ImageAdapter(val context: Context, private val data: List<Photo>) : PagerAdapter() {
 
@@ -25,10 +27,14 @@ class ImageAdapter(val context: Context, private val data: List<Photo>) : PagerA
                 val width = imageView.measuredWidth
                 val height = imageView.measuredHeight
                 val filename = data[position].filename.absolutePath
-                val orientation = PictureUtils.getOrientation(filename)
-                val photo = PictureUtils.decodeSampledBitmapFromPath(filename, width, height)
-                val rotatedPhoto = PictureUtils.rotateBitmap(photo, orientation)
-                imageView.setImageBitmap(rotatedPhoto)
+                doAsync {
+                    val orientation = PictureUtils.getOrientation(filename)
+                    val photo = PictureUtils.decodeSampledBitmapFromPath(filename, width, height)
+                    val rotatedPhoto = PictureUtils.rotateBitmap(photo, orientation)
+                    uiThread {
+                        imageView.setImageBitmap(rotatedPhoto)
+                    }
+                }
                 return true
             }
         })
