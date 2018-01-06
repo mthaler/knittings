@@ -40,21 +40,24 @@ class GridViewAdapter(context: Context, private val layoutResourceId: Int, priva
 
         val item = data[position]
         // we use a view tree observer to get the width and the height of the image view and scale the image accordingly reduce memory usage
-        val viewTreeObserver = h.image!!.viewTreeObserver
-        viewTreeObserver.addOnPreDrawListener(object : ViewTreeObserver.OnPreDrawListener {
-            override fun onPreDraw(): Boolean {
-                h.image!!.viewTreeObserver.removeOnPreDrawListener(this)
-                val width = h.image!!.measuredWidth
-                val height = h.image!!.measuredHeight
-                val filename = item.filename.absolutePath
-                val orientation = PictureUtils.getOrientation(filename)
-                val photo = PictureUtils.decodeSampledBitmapFromPath(filename, width, height)
-                val rotatedPhoto = PictureUtils.rotateBitmap(photo, orientation)
-                h.image!!.setImageBitmap(rotatedPhoto)
-                h.imageTitle!!.text = item.description
-                return true
-            }
-        })
+        val imageView = h.image
+        if (imageView != null) {
+            val viewTreeObserver = imageView.viewTreeObserver
+            viewTreeObserver.addOnPreDrawListener(object : ViewTreeObserver.OnPreDrawListener {
+                override fun onPreDraw(): Boolean {
+                    imageView.viewTreeObserver.removeOnPreDrawListener(this)
+                    val width = imageView.measuredWidth
+                    val height = imageView.measuredHeight
+                    val filename = item.filename.absolutePath
+                    val orientation = PictureUtils.getOrientation(filename)
+                    val photo = PictureUtils.decodeSampledBitmapFromPath(filename, width, height)
+                    val rotatedPhoto = PictureUtils.rotateBitmap(photo, orientation)
+                    imageView.setImageBitmap(rotatedPhoto)
+                    h.imageTitle!!.text = item.description
+                    return true
+                }
+            })
+        }
 
         return row
     }
