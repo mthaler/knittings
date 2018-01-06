@@ -12,6 +12,8 @@ import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.alert
 import org.jetbrains.anko.debug
 import org.jetbrains.anko.find
+import android.support.v4.view.ViewPager
+import org.jetbrains.anko.error
 
 /**
  * Activity that displays a photo and allow to delete the photo and use photo as preview in knitting list
@@ -29,9 +31,18 @@ class PhotoActivity : AppCompatActivity(), AnkoLogger {
         val id = intent.getLongExtra(EXTRA_PHOTO_ID, -1)
         val photo = datasource.getPhoto(id)
 
-        // init photo view
-        val photoDetailsView = supportFragmentManager.findFragmentById(R.id.fragment_photo) as PhotoDetailsView
-        photoDetailsView.init(photo)
+        val knitting = datasource.getKnitting(photo.knittingID)
+        val photos = datasource.getAllPhotos(knitting)
+        val currentPhoto = photos.indexOfFirst { p -> p.id == id }
+
+        val pager = find<ViewPager>(R.id.pager)
+        val pagerAdapter = PhotoPagerAdapter(getSupportFragmentManager(), datasource.getAllPhotos(knitting))
+        pager.setAdapter(pagerAdapter)
+        if (currentPhoto >= 0) {
+            pager.currentItem = currentPhoto
+        }
+
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -62,8 +73,18 @@ class PhotoActivity : AppCompatActivity(), AnkoLogger {
             title = resources.getString(R.string.delete_photo_dialog_title)
             message = resources.getString(R.string.delete_photo_dialog_question)
             positiveButton(resources.getString(R.string.delete_photo_dialog_delete_button)) {
-                val photoDetailsView = supportFragmentManager.findFragmentById(R.id.fragment_photo) as PhotoDetailsView
-                photoDetailsView.deletePhoto()
+                val pager = find<ViewPager>(R.id.pager)
+                val adapter = pager.adapter as PhotoPagerAdapter
+                if (adapter != null) {
+                    val frag = adapter.getPhotoFragment()
+                    if (frag != null) {
+                        frag.deletePhoto()
+                    } else {
+                        error("Photo fragment null")
+                    }
+                } else {
+                    error("Photo fragment null")
+                }
                 finish()
             }
             negativeButton(resources.getString(R.string.dialog_button_cancel)) {}
@@ -74,14 +95,27 @@ class PhotoActivity : AppCompatActivity(), AnkoLogger {
      * Sets the current photo as the default photo used as preview for knittings list
      */
     private fun setDefaultPhoto() {
-        val photoDetailsView = supportFragmentManager.findFragmentById(R.id.fragment_photo) as PhotoDetailsView
-        val photo = photoDetailsView.photo
-        val knitting = datasource.getKnitting(photo!!.knittingID)
-        datasource.updateKnitting(knitting.copy(defaultPhoto = photo))
-        debug("Set $photo as default photo")
-        val layout = find<CoordinatorLayout>(R.id.photo_activity_layout)
-        Snackbar.make(layout, "Used as main photo", Snackbar.LENGTH_SHORT).show()
+        val pager = find<ViewPager>(R.id.pager)
+        val adapter = pager.adapter as PhotoPagerAdapter
+        if (adapter != null) {
+            val frag = adapter.getPhotoFragment()
+            if (frag != null) {
+                val photo = frag.photo
+                val knitting = datasource.getKnitting(photo!!.knittingID)
+                datasource.updateKnitting(knitting.copy(defaultPhoto = photo))
+                debug("Set $photo as default photo")
+                val layout = find<CoordinatorLayout>(R.id.photo_activity_layout)
+                Snackbar.make(layout, "Used as main photo", Snackbar.LENGTH_SHORT).show()
+            } else {
+                error("Photo fragment null")
+            }
+        } else {
+            error("Adapter null")
+        }
+
     }
+
+
 
     companion object {
         val EXTRA_PHOTO_ID = "com.mthaler.knitting.PHOTO_ID"
