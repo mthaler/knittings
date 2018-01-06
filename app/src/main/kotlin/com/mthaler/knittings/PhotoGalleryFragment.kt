@@ -41,11 +41,13 @@ class PhotoGalleryFragment : Fragment(), AnkoLogger {
 
     override fun onResume() {
         super.onResume()
-        if (knitting != null) {
+        val k = knitting
+        val a = activity
+        if (k != null && a != null) {
             // get knitting from database because it could have changed
-            knitting = datasource.getKnitting(knitting!!.id)
-            val photos = datasource.getAllPhotos(knitting!!)
-            val gridAdapter = GridViewAdapter(activity!!, R.layout.grid_item_layout, photos)
+            knitting = datasource.getKnitting(k.id)
+            val photos = datasource.getAllPhotos(k)
+            val gridAdapter = GridViewAdapter(a, R.layout.grid_item_layout, photos)
             gridView.adapter = gridAdapter
         }
     }
