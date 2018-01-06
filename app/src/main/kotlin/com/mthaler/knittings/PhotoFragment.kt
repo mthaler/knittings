@@ -57,9 +57,7 @@ class PhotoFragment : Fragment(), PhotoDetailsView {
                         val scaled = PictureUtils.decodeSampledBitmapFromPath(path, width, height)
                         val rotated = PictureUtils.rotateBitmap(scaled, orientation)
                         uiThread {
-                            if (rotated != null) {
-                                imageView.setImageBitmap(rotated)
-                            }
+                            imageView.setImageBitmap(rotated)
                         }
                     }
                     return true
