@@ -2,17 +2,22 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:showDividers="middle"
+    android:divider="?android:dividerHorizontal" >
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/add_photo"
         android:id="@+id/textView"
-        android:gravity="center"
+        android:gravity="left"
         android:textColor="#ffffff"
         android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textStyle="normal"
         android:background="@color/colorPrimaryDark"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
         android:paddingTop="8dp"
         android:paddingBottom="8dp" />
 
@@ -20,10 +25,20 @@
         android:id="@+id/button_take_photo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="left"
+        style="?android:attr/borderlessButtonStyle"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@color/black"
+        android:padding="16dp"
         android:text="@string/take_photo" />
     <Button
         android:id="@+id/buttom_import_photo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="left"
+        style="?android:attr/borderlessButtonStyle"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@color/black"
+        android:padding="16dp"
         android:text="@string/import_from_gallery"/>
 </LinearLayout>
