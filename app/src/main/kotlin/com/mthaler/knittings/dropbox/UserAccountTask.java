@@ -16,7 +16,7 @@ public class UserAccountTask extends AsyncTask<Void, Void, FullAccount>  {
         void onError(Exception error);
     }
 
-    UserAccountTask(DbxClientV2 dbxClient, TaskDelegate delegate){
+    public UserAccountTask(DbxClientV2 dbxClient, TaskDelegate delegate){
         this.dbxClient =dbxClient;
         this.delegate = delegate;
     }
