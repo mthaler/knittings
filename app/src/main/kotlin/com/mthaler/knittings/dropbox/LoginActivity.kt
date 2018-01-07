@@ -32,7 +32,7 @@ class LoginActivity : AppCompatActivity() {
         val accessToken = Auth.getOAuth2Token() //generate Access Token
         if (accessToken != null) {
             //Store accessToken in SharedPreferences
-            val prefs = getSharedPreferences("com.mthaler.dropboxtest2", MODE_PRIVATE)
+            val prefs = getSharedPreferences("com.mthaler.knittings", MODE_PRIVATE)
             prefs.edit().putString("access-token", accessToken).apply()
 
             //Proceed to MainActivity

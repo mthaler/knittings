@@ -18,7 +18,7 @@ public class UploadTask extends AsyncTask {
     private File file;
     private Context context;
 
-    UploadTask(DbxClientV2 dbxClient, File file, Context context) {
+    public UploadTask(DbxClientV2 dbxClient, File file, Context context) {
         this.dbxClient = dbxClient;
         this.file = file;
         this.context = context;
