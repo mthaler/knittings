@@ -40,6 +40,7 @@ dependencies {
     compile "org.jetbrains.anko:anko-commons:$anko_version"
     compile "org.jetbrains.anko:anko-support-v4-commons:$anko_version"
     compile "org.jetbrains.anko:anko-sqlite:$anko_version"
+    compile 'com.dropbox.core:dropbox-core-sdk:3.0.5'
 }
 repositories {
     mavenCentral()
