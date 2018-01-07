@@ -64,6 +64,21 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".KnittingDetailsActivity" />
         </activity>
+        <activity
+            android:name="com.dropbox.core.android.AuthActivity"
+            android:configChanges="orientation|keyboard"
+            android:launchMode="singleTask">
+            <intent-filter>
+
+                <!-- Insert your app key after “db-  ...” -->
+                <data android:scheme="db-6ybf7tgqdbhf641" />
+
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>
