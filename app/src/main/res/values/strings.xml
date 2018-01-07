@@ -57,4 +57,11 @@
     <string name="knitting_details_finished">Finished: %1$s</string>
     <string name="knitting_details_needle">Needle: %1$.1f</string>
     <string name="knitting_details_size">Size: %1$.1f</string>
+
+    <!-- Change this to your app key -->
+    <string name="APP_KEY">6ybf7tgqdbhf641</string>
+
+    <!-- Strings related to login -->
+    <string name="sign_in">Sign in</string>
+    <string name="title_activity_login">Sign in</string>
 </resources>
