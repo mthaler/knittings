@@ -12,6 +12,7 @@ import android.support.v7.widget.Toolbar
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.TextView
+import com.mthaler.knittings.dropbox.DropboxExportActivity
 import org.jetbrains.anko.*
 
 /**
@@ -68,6 +69,15 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 showAboutDialog()
                 return true
             }
+//            R.id.menu_item_export_to_dropbox -> {
+//                val photos = datasource.allPhotos
+//                if (!photos.isEmpty()) {
+//                    val photo = photos[0]
+//                    val file = photo.filename
+//                    UploadTask(DropboxClient.getClient(ACCESS_TOKEN), file, applicationContext).execute()
+//                }
+//                return true
+//            }
             else -> return super.onOptionsItemSelected(item)
         }
     }
@@ -75,23 +85,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         // Handle navigation view item clicks here.
         when (item.itemId) {
-            R.id.nav_camera -> {
-                // Handle the camera action
-            }
-            R.id.nav_gallery -> {
-
-            }
-            R.id.nav_slideshow -> {
-
-            }
-            R.id.nav_manage -> {
-
-            }
-            R.id.nav_share -> {
-
-            }
-            R.id.nav_send -> {
-
+            R.id.nav_dropbox_export -> {
+                startActivity<DropboxExportActivity>()
             }
         }
 

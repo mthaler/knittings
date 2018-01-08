@@ -4,7 +4,7 @@ import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.widget.Toast
+import android.widget.TextView
 import com.dropbox.core.v2.users.FullAccount
 import com.mthaler.knittings.R
 
@@ -62,6 +62,10 @@ class DropboxExportActivity : AppCompatActivity() {
     }
 
     private fun updateUI(account: FullAccount) {
-        Toast.makeText(this, "Sucessfully logged in: " + account.email, Toast.LENGTH_SHORT).show();
+        val name = findViewById<TextView>(R.id.name_textView)
+        val email = findViewById<TextView>(R.id.email_textView)
+
+        name.text = account.name.displayName
+        email.text = account.email
     }
 }
