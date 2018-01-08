@@ -5,6 +5,10 @@ import android.content.Intent
 import android.support.design.widget.FloatingActionButton
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.design.widget.NavigationView
+import android.support.v4.view.GravityCompat
+import android.support.v4.widget.DrawerLayout
+import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.widget.Toolbar
 import android.util.Log
 import android.view.Menu
@@ -24,7 +28,7 @@ import org.jetbrains.anko.*
  * It displays a list of knittings. The user can add new knittings or
  * edit existing ones
  */
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
     private var ACCESS_TOKEN: String? = null
 
@@ -42,6 +46,15 @@ class MainActivity : AppCompatActivity() {
             val knittingListView = supportFragmentManager.findFragmentById(R.id.fragment_knitting_list) as KnittingListView
             knittingListView.addKnitting()
         }
+
+        val drawer_layout = findViewById<DrawerLayout>(R.id.drawer_layout)
+        val toggle = ActionBarDrawerToggle(
+                this, drawer_layout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
+        drawer_layout.addDrawerListener(toggle)
+        toggle.syncState()
+
+        val nav_view = findViewById<NavigationView>(R.id.nav_view)
+        nav_view.setNavigationItemSelectedListener(this)
 
         if (!tokenExists()) {
             val intent = Intent(this@MainActivity, LoginActivity::class.java)
@@ -76,6 +89,34 @@ class MainActivity : AppCompatActivity() {
             }
             else -> return super.onOptionsItemSelected(item)
         }
+    }
+
+    override fun onNavigationItemSelected(item: MenuItem): Boolean {
+        // Handle navigation view item clicks here.
+        when (item.itemId) {
+            R.id.nav_camera -> {
+                // Handle the camera action
+            }
+            R.id.nav_gallery -> {
+
+            }
+            R.id.nav_slideshow -> {
+
+            }
+            R.id.nav_manage -> {
+
+            }
+            R.id.nav_share -> {
+
+            }
+            R.id.nav_send -> {
+
+            }
+        }
+
+        val drawer_layout = findViewById<DrawerLayout>(R.id.drawer_layout)
+        drawer_layout.closeDrawer(GravityCompat.START)
+        return true
     }
 
     /**
