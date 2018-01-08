@@ -9,7 +9,8 @@ import com.dropbox.core.android.Auth
 import android.widget.TextView
 import com.dropbox.core.v2.users.FullAccount
 import android.util.Log
-
+import kotlinx.android.synthetic.main.activity_user.*
+import com.mthaler.knittings.database.datasource
 
 class UserActivity : DropboxActivity() {
 
@@ -27,6 +28,17 @@ class UserActivity : DropboxActivity() {
                 Auth.startOAuth2Authentication(this@UserActivity, getString(R.string.APP_KEY))
             }
         })
+
+        export_button.setOnClickListener(object: View.OnClickListener {
+            override fun onClick(v: View) {
+                val photos = datasource.allPhotos
+                if (!photos.isEmpty()) {
+                    val photo = photos[0]
+                    val file = photo.filename
+                    UploadTask(DropboxClientFactory.getClient(), file, applicationContext).execute()
+                }
+            }
+        })
     }
 
     override fun onResume() {
@@ -37,15 +49,13 @@ class UserActivity : DropboxActivity() {
             findViewById<View>(R.id.email_text).visibility = View.VISIBLE
             findViewById<View>(R.id.name_text).visibility = View.VISIBLE
             findViewById<View>(R.id.type_text).visibility = View.VISIBLE
-            findViewById<View>(R.id.files_button).isEnabled = true
-            findViewById<View>(R.id.open_with).isEnabled = true
+            findViewById<View>(R.id.export_button).isEnabled = true
         } else {
             findViewById<View>(R.id.login_button).visibility = View.VISIBLE
             findViewById<View>(R.id.email_text).visibility = View.GONE
             findViewById<View>(R.id.name_text).visibility = View.GONE
             findViewById<View>(R.id.type_text).visibility = View.GONE
-            findViewById<View>(R.id.files_button).isEnabled = false
-            findViewById<View>(R.id.open_with).isEnabled = false
+            findViewById<View>(R.id.export_button).isEnabled = false
         }
     }
 
