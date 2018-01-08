@@ -13,6 +13,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.TextView
 import com.mthaler.knittings.dropbox.DropboxExportActivity
+import com.mthaler.knittings.dropbox.UserActivity
 import org.jetbrains.anko.*
 
 /**
@@ -86,7 +87,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         // Handle navigation view item clicks here.
         when (item.itemId) {
             R.id.nav_dropbox_export -> {
-                startActivity<DropboxExportActivity>()
+                //startActivity<DropboxExportActivity>()
+                startActivity<UserActivity>()
             }
         }
 

@@ -81,7 +81,11 @@
             </intent-filter>
         </activity>
         <activity android:name=".dropbox.LoginActivity" />
-        <activity android:name=".dropbox.DropboxExportActivity" android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
+            android:name=".dropbox.DropboxExportActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".dropbox.UserActivity"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>
