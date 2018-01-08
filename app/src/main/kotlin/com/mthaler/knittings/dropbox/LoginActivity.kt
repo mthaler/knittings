@@ -18,6 +18,8 @@ class LoginActivity : AppCompatActivity() {
         val SignInButton = findViewById<Button>(R.id.sign_in_button)
         SignInButton.setOnClickListener(object : View.OnClickListener {
             override fun onClick(view: View) {
+                val ctx = applicationContext
+                val s = getString(R.string.APP_KEY)
                 Auth.startOAuth2Authentication(applicationContext, getString(R.string.APP_KEY))
             }
         })
