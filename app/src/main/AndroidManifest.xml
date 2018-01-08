@@ -80,7 +80,8 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity android:name=".dropbox.LoginActivity"></activity>
+        <activity android:name=".dropbox.LoginActivity" />
+        <activity android:name=".dropbox.DropboxExportActivity"></activity>
     </application>
 
 </manifest>
