@@ -12,7 +12,7 @@ import android.support.v7.widget.Toolbar
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.TextView
-import com.mthaler.knittings.dropbox.UserActivity
+import com.mthaler.knittings.dropbox.DropboxExportActivity
 import org.jetbrains.anko.*
 
 /**
@@ -78,7 +78,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         when (item.itemId) {
             R.id.nav_dropbox_export -> {
                 //startActivity<DropboxExportActivity>()
-                startActivity<UserActivity>()
+                startActivity<DropboxExportActivity>()
             }
         }
 

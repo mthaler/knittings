@@ -80,7 +80,7 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity android:name=".dropbox.UserActivity"
+        <activity android:name=".dropbox.DropboxExportActivity"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 

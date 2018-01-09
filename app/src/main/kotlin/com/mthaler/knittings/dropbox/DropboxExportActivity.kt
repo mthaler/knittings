@@ -9,14 +9,14 @@ import com.dropbox.core.android.Auth
 import android.widget.TextView
 import com.dropbox.core.v2.users.FullAccount
 import android.util.Log
-import kotlinx.android.synthetic.main.activity_user.*
+import kotlinx.android.synthetic.main.activity_dropbox_export.*
 import com.mthaler.knittings.database.datasource
 
-class UserActivity : AbstractDropboxActivity() {
+class DropboxExportActivity : AbstractDropboxActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_user)
+        setContentView(R.layout.activity_dropbox_export)
 
         val toolbar = findViewById<Toolbar>(R.id.app_bar)
         setSupportActionBar(toolbar)
@@ -25,7 +25,7 @@ class UserActivity : AbstractDropboxActivity() {
 
         loginButton.setOnClickListener(object : View.OnClickListener {
             override fun onClick(v: View) {
-                Auth.startOAuth2Authentication(this@UserActivity, getString(R.string.APP_KEY))
+                Auth.startOAuth2Authentication(this@DropboxExportActivity, getString(R.string.APP_KEY))
             }
         })
 
