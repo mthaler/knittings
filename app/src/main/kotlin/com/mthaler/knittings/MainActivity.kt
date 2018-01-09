@@ -12,7 +12,6 @@ import android.support.v7.widget.Toolbar
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.TextView
-import com.mthaler.knittings.dropbox.DropboxExportActivity
 import com.mthaler.knittings.dropbox.UserActivity
 import org.jetbrains.anko.*
 
@@ -70,15 +69,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 showAboutDialog()
                 return true
             }
-//            R.id.menu_item_export_to_dropbox -> {
-//                val photos = datasource.allPhotos
-//                if (!photos.isEmpty()) {
-//                    val photo = photos[0]
-//                    val file = photo.filename
-//                    UploadTask(DropboxClient.getClient(ACCESS_TOKEN), file, applicationContext).execute()
-//                }
-//                return true
-//            }
             else -> return super.onOptionsItemSelected(item)
         }
     }
