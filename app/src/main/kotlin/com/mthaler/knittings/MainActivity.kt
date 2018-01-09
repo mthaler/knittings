@@ -1,19 +1,18 @@
 package com.mthaler.knittings
 
 import android.app.AlertDialog
-import android.support.design.widget.FloatingActionButton
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.design.widget.NavigationView
 import android.support.v4.view.GravityCompat
-import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.ActionBarDrawerToggle
-import android.support.v7.widget.Toolbar
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.TextView
 import com.mthaler.knittings.dropbox.DropboxExportActivity
 import org.jetbrains.anko.*
+import kotlinx.android.synthetic.main.app_bar_main.*
+import kotlinx.android.synthetic.main.activity_main.*
 
 /**
  * The main activity that gets displayed when the app is started.
@@ -27,28 +26,23 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         setContentView(R.layout.activity_main)
 
         // add toolbar to activity
-        val toolbar = find<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
 
         // set on click handler of floating action button that creates a new knitting
-        val fab = find<FloatingActionButton>(R.id.fab_create_add_knitting)
-        fab.setOnClickListener {
+        fab_create_add_knitting.setOnClickListener {
             val knittingListView = supportFragmentManager.findFragmentById(R.id.fragment_knitting_list) as KnittingListView
             knittingListView.addKnitting()
         }
 
-        val drawer_layout = findViewById<DrawerLayout>(R.id.drawer_layout)
         val toggle = ActionBarDrawerToggle(
                 this, drawer_layout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
         drawer_layout.addDrawerListener(toggle)
         toggle.syncState()
 
-        val nav_view = findViewById<NavigationView>(R.id.nav_view)
         nav_view.setNavigationItemSelectedListener(this)
     }
 
     override fun onBackPressed() {
-        val drawer_layout = findViewById<DrawerLayout>(R.id.drawer_layout)
         if (drawer_layout.isDrawerOpen(GravityCompat.START)) {
             drawer_layout.closeDrawer(GravityCompat.START)
         } else {
@@ -82,7 +76,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
         }
 
-        val drawer_layout = findViewById<DrawerLayout>(R.id.drawer_layout)
         drawer_layout.closeDrawer(GravityCompat.START)
         return true
     }
