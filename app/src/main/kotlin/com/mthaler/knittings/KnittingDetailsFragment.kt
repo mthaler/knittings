@@ -2,16 +2,14 @@ package com.mthaler.knittings
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.support.v4.view.ViewPager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.RatingBar
-import android.widget.TextView
 import com.mthaler.knittings.database.datasource
 import com.mthaler.knittings.model.Knitting
 import org.jetbrains.anko.AnkoLogger
 import java.text.DateFormat
+import kotlinx.android.synthetic.main.fragment_knitting_details.*
 
 /**
  * Fragment that displays knitting details (name, description, start time etc.)
@@ -29,36 +27,22 @@ class KnittingDetailsFragment : Fragment(), AnkoLogger {
     fun init(knitting: Knitting) {
         val v = view
         if (v != null) {
-            val viewPager = v.findViewById<ViewPager>(R.id.view_pager)
-            viewPager.offscreenPageLimit = 3
+            view_pager.offscreenPageLimit = 3
             val photos = datasource.getAllPhotos(knitting)
             if (photos.size > 0) {
-                viewPager.visibility = View.VISIBLE
+                view_pager.visibility = View.VISIBLE
                 val adapter = ImageAdapter(context!!, photos) //Here we are defining the Imageadapter object
-                viewPager.adapter = adapter // Here we are passing and setting the adapter for the images
+                view_pager.adapter = adapter // Here we are passing and setting the adapter for the images
             } else {
-                viewPager.visibility = View.GONE
+                view_pager.visibility = View.GONE
             }
 
-            val textViewTitle = v.findViewById<TextView>(R.id.knitting_title)
-            textViewTitle.text = knitting.title
-
-            val textViewDescription = v.findViewById<TextView>(R.id.knitting_description)
-            textViewDescription.text = knitting.description
-
-            val textViewStarted = v.findViewById<TextView>(R.id.knitting_started)
-            textViewStarted.text = getString(R.string.knitting_details_started, DateFormat.getDateInstance().format(knitting.started))
-
-            val textViewFinished = v.findViewById<TextView>(R.id.knitting_finished)
-            textViewFinished.text = getString(R.string.knitting_details_finished, if (knitting.finished != null) DateFormat.getDateInstance().format(knitting.finished) else "")
-
-            val textViewNeedleDiameter = v.findViewById<TextView>(R.id.knitting_needle_diameter)
-            textViewNeedleDiameter.text = getString(R.string.knitting_details_needle, knitting.needleDiameter)
-
-            val textViewSize = v.findViewById<TextView>(R.id.knitting_size)
-            textViewSize.text = getString(R.string.knitting_details_size, knitting.size)
-
-            val ratingBar = v.findViewById<RatingBar>(R.id.ratingBar)
+            knitting_title.text = knitting.title
+            knitting_description.text = knitting.description
+            knitting_started.text = getString(R.string.knitting_details_started, DateFormat.getDateInstance().format(knitting.started))
+            knitting_finished.text = getString(R.string.knitting_details_finished, if (knitting.finished != null) DateFormat.getDateInstance().format(knitting.finished) else "")
+            knitting_needle_diameter.text = getString(R.string.knitting_details_needle, knitting.needleDiameter)
+            knitting_size.text = getString(R.string.knitting_details_size, knitting.size)
             ratingBar.rating = knitting.rating.toFloat()
         }
     }
