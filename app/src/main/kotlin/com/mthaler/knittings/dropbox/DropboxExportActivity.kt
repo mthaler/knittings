@@ -1,12 +1,9 @@
 package com.mthaler.knittings.dropbox
 
 import android.os.Bundle
-import android.support.v7.widget.Toolbar
 import android.view.View
-import android.widget.Button
 import com.mthaler.knittings.R
 import com.dropbox.core.android.Auth
-import android.widget.TextView
 import kotlinx.android.synthetic.main.activity_dropbox_export.*
 import com.mthaler.knittings.database.datasource
 import org.jetbrains.anko.doAsync
@@ -18,12 +15,9 @@ class DropboxExportActivity : AbstractDropboxActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dropbox_export)
 
-        val toolbar = findViewById<Toolbar>(R.id.app_bar)
         setSupportActionBar(toolbar)
 
-        val loginButton = findViewById<Button>(R.id.login_button)
-
-        loginButton.setOnClickListener(object : View.OnClickListener {
+        login_button.setOnClickListener(object : View.OnClickListener {
             override fun onClick(v: View) {
                 Auth.startOAuth2Authentication(this@DropboxExportActivity, getString(R.string.APP_KEY))
             }
@@ -45,17 +39,17 @@ class DropboxExportActivity : AbstractDropboxActivity() {
         super.onResume()
 
         if (hasToken()) {
-            findViewById<View>(R.id.login_button).visibility = View.GONE
-            findViewById<View>(R.id.email_text).visibility = View.VISIBLE
-            findViewById<View>(R.id.name_text).visibility = View.VISIBLE
-            findViewById<View>(R.id.type_text).visibility = View.VISIBLE
-            findViewById<View>(R.id.export_button).isEnabled = true
+            login_button.visibility = View.GONE
+            email_text.visibility = View.VISIBLE
+            name_text.visibility = View.VISIBLE
+            type_text.visibility = View.VISIBLE
+            export_button.isEnabled = true
         } else {
-            findViewById<View>(R.id.login_button).visibility = View.VISIBLE
-            findViewById<View>(R.id.email_text).visibility = View.GONE
-            findViewById<View>(R.id.name_text).visibility = View.GONE
-            findViewById<View>(R.id.type_text).visibility = View.GONE
-            findViewById<View>(R.id.export_button).isEnabled = false
+            login_button.visibility = View.VISIBLE
+            email_text.visibility = View.GONE
+            name_text.visibility = View.GONE
+            type_text.visibility = View.GONE
+            export_button.isEnabled = false
         }
     }
 
@@ -63,9 +57,9 @@ class DropboxExportActivity : AbstractDropboxActivity() {
         doAsync {
             val account = DropboxClientFactory.getClient().users().getCurrentAccount();
             uiThread {
-                (findViewById<View>(R.id.email_text) as TextView).text = account.email
-                (findViewById<View>(R.id.name_text) as TextView).text = account.name.displayName
-                (findViewById<View>(R.id.type_text) as TextView).text = account.accountType.name
+                email_text.text = account.email
+                name_text.text = account.name.displayName
+                type_text.text = account.accountType.name
             }
         }
     }
