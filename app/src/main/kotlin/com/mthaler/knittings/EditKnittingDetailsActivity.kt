@@ -2,9 +2,8 @@ package com.mthaler.knittings
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.support.v7.widget.Toolbar
 import com.mthaler.knittings.database.datasource
-import org.jetbrains.anko.find
+import kotlinx.android.synthetic.main.activity_edit_knitting_details.*
 
 class EditKnittingDetailsActivity : AppCompatActivity() {
 
@@ -12,7 +11,6 @@ class EditKnittingDetailsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_edit_knitting_details)
 
-        val toolbar = find<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
         //supportActionBar!!.setDisplayHomeAsUpEnabled(true)
 
