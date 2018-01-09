@@ -12,7 +12,7 @@ import android.util.Log
 import kotlinx.android.synthetic.main.activity_user.*
 import com.mthaler.knittings.database.datasource
 
-class UserActivity : DropboxActivity() {
+class UserActivity : AbstractDropboxActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

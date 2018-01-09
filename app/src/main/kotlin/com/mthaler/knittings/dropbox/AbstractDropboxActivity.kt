@@ -7,7 +7,7 @@ import com.dropbox.core.android.Auth
  * Base class for Activities that require auth tokens
  * Will redirect to auth flow if needed
  */
-abstract class DropboxActivity : AppCompatActivity() {
+abstract class AbstractDropboxActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
