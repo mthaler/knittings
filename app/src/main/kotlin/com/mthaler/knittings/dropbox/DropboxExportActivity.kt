@@ -7,10 +7,10 @@ import android.widget.Button
 import com.mthaler.knittings.R
 import com.dropbox.core.android.Auth
 import android.widget.TextView
-import com.dropbox.core.v2.users.FullAccount
-import android.util.Log
 import kotlinx.android.synthetic.main.activity_dropbox_export.*
 import com.mthaler.knittings.database.datasource
+import org.jetbrains.anko.doAsync
+import org.jetbrains.anko.uiThread
 
 class DropboxExportActivity : AbstractDropboxActivity() {
 
@@ -60,16 +60,13 @@ class DropboxExportActivity : AbstractDropboxActivity() {
     }
 
     override fun loadData() {
-        GetCurrentAccountTask(DropboxClientFactory.getClient(), object : GetCurrentAccountTask.Callback {
-            override fun onComplete(result: FullAccount) {
-                (findViewById<View>(R.id.email_text) as TextView).text = result.email
-                (findViewById<View>(R.id.name_text) as TextView).text = result.name.displayName
-                (findViewById<View>(R.id.type_text) as TextView).text = result.accountType.name
+        doAsync {
+            val account = DropboxClientFactory.getClient().users().getCurrentAccount();
+            uiThread {
+                (findViewById<View>(R.id.email_text) as TextView).text = account.email
+                (findViewById<View>(R.id.name_text) as TextView).text = account.name.displayName
+                (findViewById<View>(R.id.type_text) as TextView).text = account.accountType.name
             }
-
-            override fun onError(e: Exception) {
-                Log.e(javaClass.name, "Failed to get account details.", e)
-            }
-        }).execute()
+        }
     }
 }
