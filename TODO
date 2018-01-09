@@ -6,5 +6,5 @@ TODO:
 - Ratings not visible in landscape mode on Nexus One
 - Add categories: Socken, Pullover etc. Make it possible to define different colors for category. Use these colos in knitting list as background
 - Add needle and size to list, similar to Ortovox Bergtouren App
-- Add test build flavor and chose database name depending on build flavor
-- delete photo file when photo is deleted from database
+- use Kotlin Android extensions everywhere instead of findViewById
+- put toolbar in its own file and include it instead of defining it everywhere
