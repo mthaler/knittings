@@ -4,13 +4,12 @@ import android.app.Activity
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.support.design.widget.FloatingActionButton
-import android.support.v7.widget.Toolbar
 import android.view.Menu
 import android.view.MenuItem
 import com.mthaler.knittings.database.datasource
 import org.jetbrains.anko.*
 import java.io.File
+import kotlinx.android.synthetic.main.activity_knitting_details.*
 
 /**
  * Activity that displays knitting details (name, description, start time etc.)
@@ -25,7 +24,6 @@ class KnittingDetailsActivity : AppCompatActivity(), AnkoLogger, CanTakePhoto {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_knitting_details)
 
-        val toolbar = find<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
         //supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
@@ -34,8 +32,7 @@ class KnittingDetailsActivity : AppCompatActivity(), AnkoLogger, CanTakePhoto {
         val id = if (savedInstanceState != null) savedInstanceState.getLong(EXTRA_KNITTING_ID) else intent.getLongExtra(KnittingDetailsActivity.EXTRA_KNITTING_ID, -1L)
         if (id != -1L) {
             // start edit knitting details fragment if the user clicks the floating action button
-            val fab = findViewById<FloatingActionButton>(R.id.edit_knitting_details)
-            fab.setOnClickListener {
+            edit_knitting_details.setOnClickListener {
                 startActivity< EditKnittingDetailsActivity>(EditKnittingDetailsActivity.EXTRA_KNITTING_ID to id)
             }
             knittingID = id
