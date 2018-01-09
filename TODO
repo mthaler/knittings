@@ -8,3 +8,4 @@ TODO:
 - Add needle and size to list, similar to Ortovox Bergtouren App
 - use Kotlin Android extensions everywhere instead of findViewById
 - put toolbar in its own file and include it instead of defining it everywhere
+- check if WLAN is available before dropbox export
