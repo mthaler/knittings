@@ -20,6 +20,11 @@ fun Knitting.toJSON(): JSONObject {
     result.put("needleDiameter", needleDiameter)
     result.put("size", size)
     result.put("rating", rating)
+    if (defaultPhoto != null) {
+        result.put("defaultPhoto", defaultPhoto.toJSON())
+    } else {
+        result.put("defaultPhoto", JSONObject.NULL)
+    }
     return result
 }
 
