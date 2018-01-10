@@ -42,7 +42,7 @@ dependencies {
     compile "org.jetbrains.anko:anko-sqlite:$anko_version"
     compile 'com.dropbox.core:dropbox-core-sdk:3.0.5'
     testCompile 'junit:junit:4.12'
-    testCompile 'org.json:json:20140107'
+    testCompile 'org.json:json:20080701'
 }
 repositories {
     mavenCentral()
