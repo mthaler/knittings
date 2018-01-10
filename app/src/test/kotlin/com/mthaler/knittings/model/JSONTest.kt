@@ -2,6 +2,7 @@ package com.mthaler.knittings.model
 
 import org.junit.Assert.*
 import org.junit.Test
+import java.io.File
 import java.util.*
 
 class JSONTest {
@@ -21,5 +22,15 @@ class JSONTest {
         assertEquals(3.0, j0.getDouble("needleDiameter"), 0.000001)
         assertEquals(41.0, j0.getDouble("size"), 0.000001)
         assertEquals(5.0, j0.getDouble("rating"), 0.000001)
+    }
+
+    @Test
+    fun testPhotoToJSON() {
+        val p0 = Photo(42, File("/tmp/photo1.jpg"), 43, "socks", null)
+        val j0 = p0.toJSON()
+        assertEquals(42, j0.getLong("id"))
+        assertEquals("/tmp/photo1.jpg", j0.getString("filename"))
+        assertEquals(43, j0.getLong("knittingID"))
+        assertEquals("socks", j0.getString("description"))
     }
 }
