@@ -24,7 +24,7 @@ class DropboxExportActivity : AbstractDropboxActivity() {
 
         export_button.setOnClickListener(object: View.OnClickListener {
             override fun onClick(v: View) {
-                UploadTask(DropboxClientFactory.getClient(), applicationContext).execute()
+                UploadTask(DropboxClientFactory.getClient(), applicationContext, progressBar).execute()
             }
         })
     }
