@@ -5,7 +5,6 @@ import android.view.View
 import com.mthaler.knittings.R
 import com.dropbox.core.android.Auth
 import kotlinx.android.synthetic.main.activity_dropbox_export.*
-import com.mthaler.knittings.database.datasource
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
 
@@ -25,12 +24,7 @@ class DropboxExportActivity : AbstractDropboxActivity() {
 
         export_button.setOnClickListener(object: View.OnClickListener {
             override fun onClick(v: View) {
-                val photos = datasource.allPhotos
-                if (!photos.isEmpty()) {
-                    val photo = photos[0]
-                    val file = photo.filename
-                    UploadTask(DropboxClientFactory.getClient(), file, applicationContext).execute()
-                }
+                UploadTask(DropboxClientFactory.getClient(), applicationContext).execute()
             }
         })
     }

@@ -8,29 +8,35 @@ import com.dropbox.core.DbxException
 import com.dropbox.core.v2.DbxClientV2
 import com.dropbox.core.v2.files.WriteMode
 import com.mthaler.knittings.database.KnittingsDataSource
-import java.io.File
 import java.io.FileInputStream
 import java.io.IOException
 import com.mthaler.knittings.model.dbToJSON
 import java.io.ByteArrayInputStream
 
-class UploadTask(private val dbxClient: DbxClientV2, private val file: File, private val context: Context) : AsyncTask<Any, Any?, Any?>() {
+class UploadTask(private val dbxClient: DbxClientV2, private val context: Context) : AsyncTask<Any, Any?, Any?>() {
 
     override fun doInBackground(params: Array<Any>): Any? {
         try {
             val ds = KnittingsDataSource.getInstance(context)
-            val dbJSON = dbToJSON(ds.allKnittings, ds.allPhotos)
+            val knittings = ds.allKnittings
+            val photos = ds.allPhotos
+            val dbJSON = dbToJSON(knittings, photos)
             val s = dbJSON.toString(2)
             val dbInputStream = ByteArrayInputStream(s.toByteArray())
-            // Upload to Dropbox
+            // upload database to dropbox
             dbxClient.files().uploadBuilder("/" + "db.json") //Path in the user's Dropbox to save the file.
                     .withMode(WriteMode.OVERWRITE) //always overwrite existing file
                     .uploadAndFinish(dbInputStream)
-            // Upload to Dropbox
-//            val inputStream = FileInputStream(file)
-//            dbxClient.files().uploadBuilder("/" + file.name) //Path in the user's Dropbox to save the file.
-//                    .withMode(WriteMode.OVERWRITE) //always overwrite existing file
-//                    .uploadAndFinish(inputStream)
+            // upload photos to dropbox
+            val count = photos.size
+            for ((index, photo) in photos.withIndex()) {
+                publishProgress((index / count.toFloat() * 100).toInt())
+                val file = photo.filename
+                val inputStream = FileInputStream(file)
+                dbxClient.files().uploadBuilder("/" + file.name) //Path in the user's Dropbox to save the file.
+                    .withMode(WriteMode.OVERWRITE) //always overwrite existing file
+                    .uploadAndFinish(inputStream)
+            }
             Log.d("Upload Status", "Success")
         } catch (e: DbxException) {
             e.printStackTrace()
