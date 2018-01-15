@@ -21,7 +21,7 @@ fun Knitting.toJSON(): JSONObject {
     result.put("size", size)
     result.put("rating", rating)
     if (defaultPhoto != null) {
-        result.put("defaultPhoto", defaultPhoto.toJSON())
+        result.put("defaultPhoto", defaultPhoto.id)
     } else {
         result.put("defaultPhoto", JSONObject.NULL)
     }
@@ -50,5 +50,12 @@ fun photosToJSON(photos: List<Photo>): JSONArray {
     for(photo in photos) {
         result.put(photo.toJSON())
     }
+    return result
+}
+
+fun dbToJSON(knittings: List<Knitting>, photos: List<Photo>): JSONObject {
+    val result = JSONObject()
+    result.put("knittings", knittingsToJSON(knittings))
+    result.put("photos", photosToJSON(photos))
     return result
 }

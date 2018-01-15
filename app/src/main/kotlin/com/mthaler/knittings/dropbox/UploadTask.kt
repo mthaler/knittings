@@ -11,18 +11,15 @@ import com.mthaler.knittings.database.KnittingsDataSource
 import java.io.File
 import java.io.FileInputStream
 import java.io.IOException
-import com.mthaler.knittings.model.knittingsToJSON
-import org.json.JSONObject
+import com.mthaler.knittings.model.dbToJSON
 import java.io.ByteArrayInputStream
 
 class UploadTask(private val dbxClient: DbxClientV2, private val file: File, private val context: Context) : AsyncTask<Any, Any?, Any?>() {
 
     override fun doInBackground(params: Array<Any>): Any? {
         try {
-            val knittings = KnittingsDataSource.getInstance(context).allKnittings
-            val knittingsJSON = knittingsToJSON(knittings)
-            val dbJSON = JSONObject()
-            dbJSON.put("knittings", knittingsJSON)
+            val ds = KnittingsDataSource.getInstance(context)
+            val dbJSON = dbToJSON(ds.allKnittings, ds.allPhotos)
             val s = dbJSON.toString(2)
             val dbInputStream = ByteArrayInputStream(s.toByteArray())
             // Upload to Dropbox
