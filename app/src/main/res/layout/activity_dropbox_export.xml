@@ -53,14 +53,30 @@
             android:id="@+id/export_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Export to Dropbox"/>
+            android:layout_marginTop="30dp"
+            android:text="Export to Dropbox" />
+
+        <TextView
+            android:id="@+id/export_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:text="Exporting files:"
+            android:visibility="gone" />
 
         <ProgressBar
             android:id="@+id/progressBar"
             style="@style/Widget.AppCompat.ProgressBar.Horizontal"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:visibility="gone" />
 
-
+        <Button
+            style="@style/ButtonStyle"
+            android:id="@+id/cancel_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Cancel export"
+            android:visibility="gone" />
     </LinearLayout>
 </LinearLayout>

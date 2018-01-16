@@ -3,7 +3,6 @@ package com.mthaler.knittings.dropbox
 import android.content.Context
 import android.os.AsyncTask
 import android.util.Log
-import android.widget.ProgressBar
 import android.widget.Toast
 import com.dropbox.core.DbxException
 import com.dropbox.core.v2.DbxClientV2
@@ -14,7 +13,10 @@ import java.io.IOException
 import com.mthaler.knittings.model.dbToJSON
 import java.io.ByteArrayInputStream
 
-class UploadTask(private val dbxClient: DbxClientV2, private val context: Context, private val progressBar: ProgressBar) : AsyncTask<Any, Int?, Any?>() {
+class UploadTask(private val dbxClient: DbxClientV2,
+                 private val context: Context,
+                 private val updateProgress: (Int) -> Unit,
+                 private val setMode: (Boolean) -> Unit) : AsyncTask<Any, Int?, Any?>() {
 
     override fun doInBackground(params: Array<Any>): Any? {
         try {
@@ -51,13 +53,19 @@ class UploadTask(private val dbxClient: DbxClientV2, private val context: Contex
 
     override fun onProgressUpdate(vararg values: Int?) {
         super.onProgressUpdate(*values)
-        progressBar.setProgress(values[0]!!)
+        updateProgress(values[0]!!)
     }
 
     override fun onPostExecute(o: Any?) {
         super.onPostExecute(o)
-        progressBar.setProgress(100)
-        Toast.makeText(context, "Image uploaded successfully", Toast.LENGTH_SHORT).show()
+        updateProgress(100)
+        setMode(false)
+        Toast.makeText(context, "Export finished", Toast.LENGTH_SHORT).show()
+    }
+
+    override fun onCancelled() {
+        super.onCancelled()
+        setMode(false)
     }
 }
 

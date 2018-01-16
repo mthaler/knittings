@@ -1,5 +1,6 @@
 package com.mthaler.knittings.dropbox
 
+import android.os.AsyncTask
 import android.os.Bundle
 import android.view.View
 import com.mthaler.knittings.R
@@ -9,6 +10,8 @@ import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
 
 class DropboxExportActivity : AbstractDropboxActivity() {
+
+    private var exportTask: AsyncTask<Any, Int?, Any?>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,7 +27,14 @@ class DropboxExportActivity : AbstractDropboxActivity() {
 
         export_button.setOnClickListener(object: View.OnClickListener {
             override fun onClick(v: View) {
-                UploadTask(DropboxClientFactory.getClient(), applicationContext, progressBar).execute()
+                exportTask = UploadTask(DropboxClientFactory.getClient(), applicationContext, progressBar::setProgress, ::setMode).execute()
+                setMode(true)
+            }
+        })
+
+        cancel_button.setOnClickListener(object: View.OnClickListener {
+            override fun onClick(v: View) {
+                exportTask?.cancel(true)
             }
         })
     }
@@ -55,6 +65,21 @@ class DropboxExportActivity : AbstractDropboxActivity() {
                 name_text.text = account.name.displayName
                 type_text.text = account.accountType.name
             }
+        }
+    }
+
+    private fun setMode(exporting: Boolean) {
+        if (exporting) {
+            export_button.visibility = View.GONE
+            export_text.visibility = View.VISIBLE
+            progressBar.visibility = View.VISIBLE
+            cancel_button.visibility = View.VISIBLE
+        } else {
+            export_button.visibility = View.VISIBLE
+            export_text.visibility = View.GONE
+            progressBar.visibility = View.GONE
+            progressBar.progress = 0
+            cancel_button.visibility = View.GONE
         }
     }
 }
