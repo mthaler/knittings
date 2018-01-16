@@ -1,5 +1,6 @@
 package com.mthaler.knittings.dropbox
 
+import android.content.Context
 import android.os.AsyncTask
 import android.os.Bundle
 import android.view.View
@@ -8,6 +9,7 @@ import com.dropbox.core.android.Auth
 import kotlinx.android.synthetic.main.activity_dropbox_export.*
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
+import android.net.ConnectivityManager
 
 class DropboxExportActivity : AbstractDropboxActivity() {
 
@@ -27,6 +29,10 @@ class DropboxExportActivity : AbstractDropboxActivity() {
 
         export_button.setOnClickListener(object: View.OnClickListener {
             override fun onClick(v: View) {
+                val cm = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+                val activeNetwork = cm.activeNetworkInfo
+                val isWiFi = activeNetwork.type == ConnectivityManager.TYPE_WIFI
+                // todo: display dialog asking user if dropbox export should be done if there is no WIFI
                 exportTask = UploadTask(DropboxClientFactory.getClient(), applicationContext, progressBar::setProgress, ::setMode).execute()
                 setMode(true)
             }
