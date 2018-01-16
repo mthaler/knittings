@@ -15,9 +15,7 @@ class PhotoPagerAdapter(fm: FragmentManager, val photos: List<Photo>) : Fragment
         return PhotoFragment.newInstance(photo.id)
     }
 
-    override fun getCount(): Int {
-        return photos.size
-    }
+    override fun getCount(): Int = photos.size
 
     override fun setPrimaryItem(container: ViewGroup, position: Int, item: Any) {
         _photoFragment = item as PhotoFragment

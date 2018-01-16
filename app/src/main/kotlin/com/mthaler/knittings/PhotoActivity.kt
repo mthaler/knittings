@@ -32,8 +32,8 @@ class PhotoActivity : AppCompatActivity(), AnkoLogger {
         val currentPhoto = photos.indexOfFirst { p -> p.id == id }
 
         pager.offscreenPageLimit = 3
-        val pagerAdapter = PhotoPagerAdapter(getSupportFragmentManager(), datasource.getAllPhotos(knitting))
-        pager.setAdapter(pagerAdapter)
+        val pagerAdapter = PhotoPagerAdapter(supportFragmentManager, datasource.getAllPhotos(knitting))
+        pager.adapter = pagerAdapter
         if (currentPhoto >= 0) {
             pager.currentItem = currentPhoto
         }

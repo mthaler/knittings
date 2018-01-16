@@ -94,7 +94,7 @@ class PhotoFragment : Fragment() {
             bundle.putLong(EXTRA_PHOTO_ID, photoID)
 
             val fragment = PhotoFragment()
-            fragment.setArguments(bundle)
+            fragment.arguments = bundle
 
             return fragment
         }
