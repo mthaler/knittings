@@ -21,28 +21,18 @@ class DropboxExportActivity : AbstractDropboxActivity() {
 
         setSupportActionBar(toolbar)
 
-        login_button.setOnClickListener(object : View.OnClickListener {
-            override fun onClick(v: View) {
-                Auth.startOAuth2Authentication(this@DropboxExportActivity, getString(R.string.APP_KEY))
-            }
-        })
+        login_button.setOnClickListener { Auth.startOAuth2Authentication(this@DropboxExportActivity, getString(R.string.APP_KEY)) }
 
-        export_button.setOnClickListener(object: View.OnClickListener {
-            override fun onClick(v: View) {
-                val cm = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-                val activeNetwork = cm.activeNetworkInfo
-                val isWiFi = activeNetwork.type == ConnectivityManager.TYPE_WIFI
-                // todo: display dialog asking user if dropbox export should be done if there is no WIFI
-                exportTask = UploadTask(DropboxClientFactory.getClient(), applicationContext, progressBar::setProgress, ::setMode).execute()
-                setMode(true)
-            }
-        })
+        export_button.setOnClickListener {
+            val cm = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+            val activeNetwork = cm.activeNetworkInfo
+            val isWiFi = activeNetwork.type == ConnectivityManager.TYPE_WIFI
+            // todo: display dialog asking user if dropbox export should be done if there is no WIFI
+            exportTask = UploadTask(DropboxClientFactory.getClient(), applicationContext, progressBar::setProgress, ::setMode).execute()
+            setMode(true)
+        }
 
-        cancel_button.setOnClickListener(object: View.OnClickListener {
-            override fun onClick(v: View) {
-                exportTask?.cancel(true)
-            }
-        })
+        cancel_button.setOnClickListener { exportTask?.cancel(true) }
     }
 
     override fun onResume() {

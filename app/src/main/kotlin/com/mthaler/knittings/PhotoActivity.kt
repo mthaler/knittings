@@ -48,16 +48,16 @@ class PhotoActivity : AppCompatActivity(), AnkoLogger {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
+        return when (item.itemId) {
             R.id.menu_item_delete_photo -> {
                 showDeletePhotoDialog()
-                return true
+                true
             }
             R.id.menu_item_set_main_photo -> {
                 setDefaultPhoto()
-                return true
+                true
             }
-            else -> return super.onOptionsItemSelected(item)
+            else -> super.onOptionsItemSelected(item)
         }
     }
 

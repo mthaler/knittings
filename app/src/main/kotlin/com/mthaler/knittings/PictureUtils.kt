@@ -56,12 +56,12 @@ object PictureUtils : AnkoLogger {
      * @return orientation
      */
     fun getOrientation(path: String): Int {
-        try {
+        return try {
             val exif = ExifInterface(path)
-            return exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_UNDEFINED)
+            exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_UNDEFINED)
         } catch (ex: IOException) {
             ex.printStackTrace()
-            return ExifInterface.ORIENTATION_UNDEFINED
+            ExifInterface.ORIENTATION_UNDEFINED
         }
     }
 
@@ -125,13 +125,13 @@ object PictureUtils : AnkoLogger {
             ExifInterface.ORIENTATION_ROTATE_270 -> matrix.setRotate(-90f)
             else -> return bitmap
         }
-        try {
+        return try {
             val rotated = Bitmap.createBitmap(bitmap, 0, 0, bitmap.width, bitmap.height, matrix, true)
             bitmap.recycle()
-            return rotated
+            rotated
         } catch (ex: OutOfMemoryError) {
             ex.printStackTrace()
-            return bitmap
+            bitmap
         }
 
     }

@@ -64,4 +64,10 @@
     <!-- Strings related to login -->
     <string name="sign_in">Anmelden</string>
     <string name="title_activity_login">Anmelden</string>
+
+    <!-- DropboxExportActivity -->
+    <string name="dropbox_login">An Dropbox anmelden</string>
+    <string name="dropbox_export">Nach Dropbox exportieren</string>
+    <string name="dropbox_export_files">Exportiere Dateien:</string>
+    <string name="dropbox_cancel_export">Export abbrechen</string>
 </resources>

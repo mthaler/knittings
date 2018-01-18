@@ -67,4 +67,10 @@
     <!-- Strings related to login -->
     <string name="sign_in">Sign in</string>
     <string name="title_activity_login">Sign in</string>
+
+    <!-- DropboxExportActivity -->
+    <string name="dropbox_login">Login with Dropbox</string>
+    <string name="dropbox_export">Export to Dropbox</string>
+    <string name="dropbox_export_files">Exporting files:</string>
+    <string name="dropbox_cancel_export">Cancel export</string>
 </resources>
