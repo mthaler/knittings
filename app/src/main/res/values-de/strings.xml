@@ -4,6 +4,9 @@
     <string name="app_name">Strickereien</string>
     <string name="about">Info</string>
 
+    <string name="navigation_drawer_open">Navigationsleiste öffnen</string>
+    <string name="navigation_drawer_close">Navigationsleiste schließen</string>
+
     <!-- activities -->
     <string name="activity_knitting_details">Übersicht</string>
     <string name="activity_edit_knitting_details">Edit Knitting Details</string>
@@ -57,4 +60,8 @@
     <string name="knitting_details_finished">Fertig: %1$s</string>
     <string name="knitting_details_needle">Nadel: %1$.1f</string>
     <string name="knitting_details_size">Größe: %1$.1f</string>
+
+    <!-- Strings related to login -->
+    <string name="sign_in">Anmelden</string>
+    <string name="title_activity_login">Anmelden</string>
 </resources>
