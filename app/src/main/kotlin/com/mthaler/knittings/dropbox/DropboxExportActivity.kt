@@ -10,6 +10,7 @@ import kotlinx.android.synthetic.main.activity_dropbox_export.*
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
 import android.net.ConnectivityManager
+import org.jetbrains.anko.alert
 
 class DropboxExportActivity : AbstractDropboxActivity() {
 
@@ -27,9 +28,21 @@ class DropboxExportActivity : AbstractDropboxActivity() {
             val cm = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
             val activeNetwork = cm.activeNetworkInfo
             val isWiFi = activeNetwork.type == ConnectivityManager.TYPE_WIFI
-            // todo: display dialog asking user if dropbox export should be done if there is no WIFI
-            exportTask = UploadTask(DropboxClientFactory.getClient(), applicationContext, progressBar::setProgress, ::setMode).execute()
-            setMode(true)
+            if (!isWiFi) {
+                alert {
+                    title = resources.getString(R.string.dropbox_export)
+                    message = resources.getString(R.string.dropbox_export_no_wifi_question)
+                    positiveButton(resources.getString(R.string.dropbox_export_dialog_export_button)) {
+                        exportTask = UploadTask(DropboxClientFactory.getClient(), applicationContext, progressBar::setProgress, ::setMode).execute()
+                        setMode(true)
+                        finish()
+                    }
+                    negativeButton(resources.getString(R.string.dialog_button_cancel)) {}
+                }.show()
+            } else  {
+                exportTask = UploadTask(DropboxClientFactory.getClient(), applicationContext, progressBar::setProgress, ::setMode).execute()
+                setMode(true)
+            }
         }
 
         cancel_button.setOnClickListener { exportTask?.cancel(true) }
