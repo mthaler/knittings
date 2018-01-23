@@ -19,8 +19,11 @@ class DropboxExportFragment : AbstractDropboxFragment() {
     private var exportTask: AsyncTask<Any, Int?, Any?>? = null
 
     override fun onCreateView(inflater: LayoutInflater, parent: ViewGroup?, savedInstanceState: Bundle?): View? {
+        return inflater.inflate(R.layout.fragment_dropbox_export, parent, false)
+    }
 
-        val v = inflater.inflate(R.layout.fragment_dropbox_export, parent, false)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         login_button.setOnClickListener { Auth.startOAuth2Authentication(context, getString(R.string.APP_KEY)) }
 
@@ -45,8 +48,24 @@ class DropboxExportFragment : AbstractDropboxFragment() {
         }
 
         cancel_button.setOnClickListener { exportTask?.cancel(true) }
+    }
 
-        return v;
+    override fun onResume() {
+        super.onResume()
+
+        if (hasToken()) {
+            login_button.visibility = View.GONE
+            email_text.visibility = View.VISIBLE
+            name_text.visibility = View.VISIBLE
+            type_text.visibility = View.VISIBLE
+            export_button.isEnabled = true
+        } else {
+            login_button.visibility = View.VISIBLE
+            email_text.visibility = View.GONE
+            name_text.visibility = View.GONE
+            type_text.visibility = View.GONE
+            export_button.isEnabled = false
+        }
     }
 
     override fun loadData() {
