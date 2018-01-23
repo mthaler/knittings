@@ -18,6 +18,13 @@ class DropboxExportFragment : AbstractDropboxFragment() {
 
     private var exportTask: AsyncTask<Any, Int?, Any?>? = null
 
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        // Retain this fragment across configuration changes.
+        setRetainInstance(true)
+    }
+
     override fun onCreateView(inflater: LayoutInflater, parent: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_dropbox_export, parent, false)
     }
