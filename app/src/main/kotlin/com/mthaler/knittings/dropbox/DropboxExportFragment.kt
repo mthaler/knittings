@@ -17,7 +17,7 @@ import org.jetbrains.anko.uiThread
 class DropboxExportFragment : AbstractDropboxFragment() {
 
     private var exportTask: AsyncTask<Any, Int?, Any?>? = null
-
+    private var exporting = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -66,6 +66,7 @@ class DropboxExportFragment : AbstractDropboxFragment() {
             name_text.visibility = View.VISIBLE
             type_text.visibility = View.VISIBLE
             export_button.isEnabled = true
+            setMode(exporting)
         } else {
             login_button.visibility = View.VISIBLE
             email_text.visibility = View.GONE
@@ -104,6 +105,7 @@ class DropboxExportFragment : AbstractDropboxFragment() {
             progressBar.progress = 0
             cancel_button.visibility = View.GONE
         }
+        this.exporting = exporting
     }
 
     companion object {
