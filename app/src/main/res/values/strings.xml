@@ -72,4 +72,7 @@
     <string name="dropbox_cancel_export">Cancel export</string>
     <string name="dropbox_export_no_wifi_question">No WIFI connection, do you really want to export to Dropbox?</string>
     <string name="dropbox_export_dialog_export_button">Export</string>
+
+    <!-- navigation drawer -->
+    <string name="export">Export</string>
 </resources>

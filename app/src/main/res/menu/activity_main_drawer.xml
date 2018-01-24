@@ -3,11 +3,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:showIn="navigation_view">
 
-    <item android:title="Export">
+    <item android:title="@string/export">
         <menu>
             <item
                 android:id="@+id/nav_dropbox_export"
-                android:title="Export to Dropbox" />
+                android:title="@string/dropbox_export" />
         </menu>
     </item>
 

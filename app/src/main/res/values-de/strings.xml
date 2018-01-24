@@ -72,4 +72,7 @@
     <string name="dropbox_cancel_export">Export abbrechen</string>
     <string name="dropbox_export_no_wifi_question">Keine WIFI Verbindung, Daten wirklich zur Dropbox exportieren?</string>
     <string name="dropbox_export_dialog_export_button">Exportieren</string>
+
+    <!-- navigation drawer -->
+    <string name="export">Exportieren</string>
 </resources>
