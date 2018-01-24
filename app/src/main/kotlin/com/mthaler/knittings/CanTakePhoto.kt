@@ -59,32 +59,42 @@ interface CanTakePhoto : AnkoLogger {
         if (requestCode == REQUEST_IMAGE_CAPTURE) {
             // add photo to database
             debug("Received result for take photo intent")
-            val orientation = PictureUtils.getOrientation(currentPhotoPath!!.absolutePath)
-            val preview = PictureUtils.decodeSampledBitmapFromPath(currentPhotoPath!!.absolutePath, 200, 200)
-            val rotatedPreview = PictureUtils.rotateBitmap(preview, orientation)
-            val photo = context.datasource.createPhoto(currentPhotoPath!!,knittingID, rotatedPreview, "")
-            debug("Created new photo from $currentPhotoPath, knitting id $knittingID")
-            // add first photo as default photo
-            val knitting = context.datasource.getKnitting(knittingID)
-            if (knitting.defaultPhoto == null) {
-                debug("Set $photo as default photo")
-                context.datasource.updateKnitting(knitting.copy(defaultPhoto = photo))
-            }
-        } else if (requestCode == REQUEST_IMAGE_IMPORT) {
-            try {
-                debug("Received result for import photo intent")
-                val imageUri = data!!.data
-                PictureUtils.copy(imageUri, currentPhotoPath!!, context)
-                val orientation = PictureUtils.getOrientation(currentPhotoPath!!.absolutePath)
-                val preview = PictureUtils.decodeSampledBitmapFromPath(currentPhotoPath!!.absolutePath, 200, 200)
+            val path = currentPhotoPath
+            if (path != null) {
+                val orientation = PictureUtils.getOrientation(path.absolutePath)
+                val preview = PictureUtils.decodeSampledBitmapFromPath(path.absolutePath, 200, 200)
                 val rotatedPreview = PictureUtils.rotateBitmap(preview, orientation)
-                val photo = context.datasource.createPhoto(currentPhotoPath!!, knittingID, rotatedPreview, "")
-                debug("Created new photo from $currentPhotoPath, knitting id $knittingID")
+                val photo = context.datasource.createPhoto(path,knittingID, rotatedPreview, "")
+                debug("Created new photo from $path, knitting id $knittingID")
                 // add first photo as default photo
                 val knitting = context.datasource.getKnitting(knittingID)
                 if (knitting.defaultPhoto == null) {
                     debug("Set $photo as default photo")
                     context.datasource.updateKnitting(knitting.copy(defaultPhoto = photo))
+                }
+            } else {
+                error("Current photo path null")
+            }
+        } else if (requestCode == REQUEST_IMAGE_IMPORT) {
+            try {
+                debug("Received result for import photo intent")
+                val path = currentPhotoPath
+                if (path != null) {
+                    val imageUri = data!!.data
+                    PictureUtils.copy(imageUri, path, context)
+                    val orientation = PictureUtils.getOrientation(path.absolutePath)
+                    val preview = PictureUtils.decodeSampledBitmapFromPath(path.absolutePath, 200, 200)
+                    val rotatedPreview = PictureUtils.rotateBitmap(preview, orientation)
+                    val photo = context.datasource.createPhoto(path, knittingID, rotatedPreview, "")
+                    debug("Created new photo from $path, knitting id $knittingID")
+                    // add first photo as default photo
+                    val knitting = context.datasource.getKnitting(knittingID)
+                    if (knitting.defaultPhoto == null) {
+                        debug("Set $photo as default photo")
+                        context.datasource.updateKnitting(knitting.copy(defaultPhoto = photo))
+                    }
+                } else {
+                    error("Current photo path null")
                 }
             } catch (e: FileNotFoundException) {
                 e.printStackTrace()
