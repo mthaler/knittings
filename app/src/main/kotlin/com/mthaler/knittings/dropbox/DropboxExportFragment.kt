@@ -10,11 +10,13 @@ import android.view.ViewGroup
 import com.dropbox.core.android.Auth
 import com.mthaler.knittings.R
 import kotlinx.android.synthetic.main.fragment_dropbox_export.*
+import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.support.v4.alert
 import org.jetbrains.anko.uiThread
+import org.jetbrains.anko.wtf
 
-class DropboxExportFragment : AbstractDropboxFragment() {
+class DropboxExportFragment : AbstractDropboxFragment(), AnkoLogger {
 
     private var exportTask: AsyncTask<Any, Int?, Any?>? = null
     private var exporting = false
@@ -34,22 +36,27 @@ class DropboxExportFragment : AbstractDropboxFragment() {
         login_button.setOnClickListener { Auth.startOAuth2Authentication(context, AppKey) }
 
         export_button.setOnClickListener {
-            val cm = context!!.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-            val activeNetwork = cm.activeNetworkInfo
-            val isWiFi = activeNetwork.type == ConnectivityManager.TYPE_WIFI
-            if (!isWiFi) {
-                alert {
-                    title = resources.getString(R.string.dropbox_export)
-                    message = resources.getString(R.string.dropbox_export_no_wifi_question)
-                    positiveButton(resources.getString(R.string.dropbox_export_dialog_export_button)) {
-                        exportTask = UploadTask(DropboxClientFactory.getClient(), context!!.applicationContext, progressBar::setProgress, ::setMode).execute()
-                        setMode(true)
-                    }
-                    negativeButton(resources.getString(R.string.dialog_button_cancel)) {}
-                }.show()
-            } else  {
-                exportTask = UploadTask(DropboxClientFactory.getClient(), context!!.applicationContext, progressBar::setProgress, ::setMode).execute()
-                setMode(true)
+            val ctx = context
+            if (ctx != null) {
+                val cm = ctx.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+                val activeNetwork = cm.activeNetworkInfo
+                val isWiFi = activeNetwork.type == ConnectivityManager.TYPE_WIFI
+                if (!isWiFi) {
+                    alert {
+                        title = resources.getString(R.string.dropbox_export)
+                        message = resources.getString(R.string.dropbox_export_no_wifi_question)
+                        positiveButton(resources.getString(R.string.dropbox_export_dialog_export_button)) {
+                            exportTask = UploadTask(DropboxClientFactory.getClient(), ctx.applicationContext, progressBar::setProgress, ::setMode).execute()
+                            setMode(true)
+                        }
+                        negativeButton(resources.getString(R.string.dialog_button_cancel)) {}
+                    }.show()
+                } else  {
+                    exportTask = UploadTask(DropboxClientFactory.getClient(), ctx.applicationContext, progressBar::setProgress, ::setMode).execute()
+                    setMode(true)
+                }
+            } else {
+                wtf("context null")
             }
         }
 
