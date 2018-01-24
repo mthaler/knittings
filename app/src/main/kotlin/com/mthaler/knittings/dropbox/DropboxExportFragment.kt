@@ -22,17 +22,16 @@ class DropboxExportFragment : AbstractDropboxFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         // Retain this fragment across configuration changes.
-        setRetainInstance(true)
+        retainInstance = true
     }
 
-    override fun onCreateView(inflater: LayoutInflater, parent: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_dropbox_export, parent, false)
-    }
+    override fun onCreateView(inflater: LayoutInflater, parent: ViewGroup?, savedInstanceState: Bundle?): View? =
+            inflater.inflate(R.layout.fragment_dropbox_export, parent, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        login_button.setOnClickListener { Auth.startOAuth2Authentication(context, getString(R.string.APP_KEY)) }
+        login_button.setOnClickListener { Auth.startOAuth2Authentication(context, AppKey) }
 
         export_button.setOnClickListener {
             val cm = context!!.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
@@ -116,5 +115,7 @@ class DropboxExportFragment : AbstractDropboxFragment() {
             val pre = "KMGTPE"[exp - 1]
             return String.format("%.1f %sB", bytes / Math.pow(unit.toDouble(), exp.toDouble()), pre)
         }
+
+        private val AppKey = "6ybf7tgqdbhf641"
     }
 }

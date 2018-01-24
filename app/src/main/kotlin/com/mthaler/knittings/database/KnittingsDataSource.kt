@@ -336,7 +336,7 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
      *
      * @param knitting knitting to delete photos for
      */
-    fun deleteAllPhotos(knitting: Knitting) {
+    private fun deleteAllPhotos(knitting: Knitting) {
         for(photo in getAllPhotos(knitting)) {
             deletePhotoFile(photo.filename)
         }

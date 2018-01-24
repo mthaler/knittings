@@ -62,7 +62,7 @@ class KnittingListFragment : ListFragment(), KnittingListView, AnkoLogger {
 
             val photoView = convertView.findViewById<ImageView>(R.id.knitting_list_item_photoImageView)
             // the list item views are reused, we always need to set bitmap, otherwise the previous bitmap is used
-            if (knitting.defaultPhoto != null && knitting.defaultPhoto.preview != null) {
+            if (knitting.defaultPhoto?.preview != null) {
                 photoView.setImageBitmap(knitting.defaultPhoto.preview)
             } else {
                 photoView.setImageBitmap(null)
