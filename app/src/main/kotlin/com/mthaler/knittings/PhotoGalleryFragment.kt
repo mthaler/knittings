@@ -53,8 +53,9 @@ class PhotoGalleryFragment : Fragment(), AnkoLogger {
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
-        if (knitting != null) {
-            outState.putLong(KNITTING_ID, knitting!!.id)
+        val k = knitting
+        if (k != null) {
+            outState.putLong(KNITTING_ID, k.id)
         }
         super.onSaveInstanceState(outState)
     }

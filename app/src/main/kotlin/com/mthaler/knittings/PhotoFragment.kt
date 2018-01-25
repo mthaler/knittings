@@ -25,8 +25,9 @@ class PhotoFragment : Fragment() {
 
         val v = inflater.inflate(R.layout.fragment_photo, parent, false)
 
-        if (arguments != null) {
-            val id = arguments!!.getLong(EXTRA_PHOTO_ID, -1L)
+        val args = arguments
+        if (args != null) {
+            val id = args.getLong(EXTRA_PHOTO_ID, -1L)
             if (id != -1L) {
                 photo = datasource.getPhoto(id)
             }
@@ -55,7 +56,7 @@ class PhotoFragment : Fragment() {
         })
 
         val editTextDescription = v.findViewById<EditText>(R.id.photo_description)
-        editTextDescription.setText(photo!!.description)
+        editTextDescription.setText(photo?.description ?: "")
         editTextDescription.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(c: Editable) {
                 val p0 = photo
