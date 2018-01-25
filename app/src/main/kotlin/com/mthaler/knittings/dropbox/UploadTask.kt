@@ -26,6 +26,7 @@ class UploadTask(private val dbxClient: DbxClientV2,
             val dbJSON = dbToJSON(knittings, photos)
             val s = dbJSON.toString(2)
             val dbInputStream = ByteArrayInputStream(s.toByteArray())
+
             // upload database to dropbox
             dbxClient.files().uploadBuilder("/" + "db.json") //Path in the user's Dropbox to save the file.
                     .withMode(WriteMode.OVERWRITE) //always overwrite existing file
