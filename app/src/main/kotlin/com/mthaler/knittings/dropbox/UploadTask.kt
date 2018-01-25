@@ -12,6 +12,8 @@ import java.io.FileInputStream
 import java.io.IOException
 import com.mthaler.knittings.model.dbToJSON
 import java.io.ByteArrayInputStream
+import com.mthaler.knittings.utils.FileUtils.createDateTimeDirectoryName
+import java.util.*
 
 class UploadTask(private val dbxClient: DbxClientV2,
                  private val context: Context,
@@ -27,8 +29,12 @@ class UploadTask(private val dbxClient: DbxClientV2,
             val s = dbJSON.toString(2)
             val dbInputStream = ByteArrayInputStream(s.toByteArray())
 
+            // create directory containing current date & time
+            val dir = createDateTimeDirectoryName(Date())
+            dbxClient.files().createFolderV2("/" + dir)
+
             // upload database to dropbox
-            dbxClient.files().uploadBuilder("/" + "db.json") //Path in the user's Dropbox to save the file.
+            dbxClient.files().uploadBuilder("/" + dir  + "/db.json") //Path in the user's Dropbox to save the file.
                     .withMode(WriteMode.OVERWRITE) //always overwrite existing file
                     .uploadAndFinish(dbInputStream)
             // upload photos to dropbox
@@ -38,7 +44,7 @@ class UploadTask(private val dbxClient: DbxClientV2,
                 publishProgress((index / count.toFloat() * 100).toInt())
                 val file = photo.filename
                 val inputStream = FileInputStream(file)
-                dbxClient.files().uploadBuilder("/" + file.name) //Path in the user's Dropbox to save the file.
+                dbxClient.files().uploadBuilder("/" + dir + "/" + file.name) //Path in the user's Dropbox to save the file.
                     .withMode(WriteMode.OVERWRITE) //always overwrite existing file
                     .uploadAndFinish(inputStream)
             }
