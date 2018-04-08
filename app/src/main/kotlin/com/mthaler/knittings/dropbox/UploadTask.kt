@@ -31,10 +31,10 @@ class UploadTask(private val dbxClient: DbxClientV2,
 
             // create directory containing current date & time
             val dir = createDateTimeDirectoryName(Date())
-            dbxClient.files().createFolderV2("/" + dir)
+            dbxClient.files().createFolderV2("/$dir")
 
             // upload database to dropbox
-            dbxClient.files().uploadBuilder("/" + dir  + "/db.json") //Path in the user's Dropbox to save the file.
+            dbxClient.files().uploadBuilder("/$dir/db.json") //Path in the user's Dropbox to save the file.
                     .withMode(WriteMode.OVERWRITE) //always overwrite existing file
                     .uploadAndFinish(dbInputStream)
             // upload photos to dropbox

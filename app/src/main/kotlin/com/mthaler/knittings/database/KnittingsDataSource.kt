@@ -179,7 +179,7 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
      * @return knitting for the given id
      */
     fun getKnitting(id: Long): Knitting {
-        debug("Getting knitting for id " + id)
+        debug("Getting knitting for id $id")
         dbHelper.readableDatabase.use { database ->
             val cursor = database.query(KnittingDatabaseHelper.KnittingTable.KNITTINGS,
                     KnittingDatabaseHelper.KnittingTable.Columns, KnittingDatabaseHelper.KnittingTable.Cols.ID + "=" + id, null, null, null, null)
@@ -204,7 +204,7 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
      * @return photo for the given id
      */
     fun getPhoto(id: Long): Photo {
-        debug("Getting photo for id " + id)
+        debug("Getting photo for id $id")
         dbHelper.readableDatabase.use { database ->
             val cursor = database.query(KnittingDatabaseHelper.PhotoTable.PHOTOS,
                     KnittingDatabaseHelper.PhotoTable.Columns, KnittingDatabaseHelper.PhotoTable.Cols.ID + "=" + id, null, null, null, null)
@@ -237,7 +237,7 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
             while (!cursor.isAfterLast) {
                 photo = cursorToPhoto(cursor)
                 photos.add(photo)
-                debug("Read photo " + photo)
+                debug("Read photo $photo")
                 cursor.moveToNext()
             }
 
@@ -289,7 +289,7 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
      * @return updated photo
      */
     fun updatePhoto(photo: Photo): Photo {
-        debug("Updating photo " + photo)
+        debug("Updating photo $photo")
         dbHelper.writableDatabase.use { database ->
             val values = ContentValues()
             values.put(KnittingDatabaseHelper.PhotoTable.Cols.FILENAME, photo.filename.absolutePath)
