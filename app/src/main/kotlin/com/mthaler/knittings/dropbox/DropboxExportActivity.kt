@@ -5,6 +5,9 @@ import com.mthaler.knittings.R
 import kotlinx.android.synthetic.main.activity_dropbox_export.*
 import android.support.v7.app.AppCompatActivity
 
+/**
+ * Activity that handles Dropbox export
+ */
 class DropboxExportActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {

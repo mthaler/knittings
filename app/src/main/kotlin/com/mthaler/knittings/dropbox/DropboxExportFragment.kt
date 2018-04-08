@@ -15,7 +15,11 @@ import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.support.v4.alert
 import org.jetbrains.anko.uiThread
 import org.jetbrains.anko.wtf
+import com.mthaler.knittings.utils.StringUtils.formatBytes
 
+/**
+ * Fragment used for Dropbox export
+ */
 class DropboxExportFragment : AbstractDropboxFragment(), AnkoLogger {
 
     private var exportTask: AsyncTask<Any, Int?, Any?>? = null
@@ -91,9 +95,9 @@ class DropboxExportFragment : AbstractDropboxFragment(), AnkoLogger {
                 email_text.text = account.email
                 name_text.text = account.name.displayName
                 type_text.text = account.accountType.name
-                max_space_text.text = "Max: " + humanReadableByteCount(spaceUsage.allocation.individualValue.allocated)
-                used_space_text.text = "Used: " + humanReadableByteCount(spaceUsage.used)
-                free_space_text.text = "Free: " + humanReadableByteCount(spaceUsage.allocation.individualValue.allocated - spaceUsage.used)
+                max_space_text.text = "Max: " + formatBytes(spaceUsage.allocation.individualValue.allocated)
+                used_space_text.text = "Used: " + formatBytes(spaceUsage.used)
+                free_space_text.text = "Free: " + formatBytes(spaceUsage.allocation.individualValue.allocated - spaceUsage.used)
             }
         }
     }
@@ -115,14 +119,6 @@ class DropboxExportFragment : AbstractDropboxFragment(), AnkoLogger {
     }
 
     companion object {
-        fun humanReadableByteCount(bytes: Long): String {
-            val unit = 1024
-            if (bytes < unit) return bytes.toString() + " B"
-            val exp = (Math.log(bytes.toDouble()) / Math.log(unit.toDouble())).toInt()
-            val pre = "KMGTPE"[exp - 1]
-            return String.format("%.1f %sB", bytes / Math.pow(unit.toDouble(), exp.toDouble()), pre)
-        }
-
         private val AppKey = "6ybf7tgqdbhf641"
     }
 }
