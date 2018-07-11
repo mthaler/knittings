@@ -20,7 +20,7 @@ class KnittingDatabaseHelper(context: Context) : ManagedSQLiteOpenHelper(context
         } catch (_: ClassNotFoundException) {
             "knittings.db"
         }
-        private val DB_VERSION = 1
+        private val DB_VERSION = 2
 
         private var instance: KnittingDatabaseHelper? = null
 
@@ -40,7 +40,7 @@ class KnittingDatabaseHelper(context: Context) : ManagedSQLiteOpenHelper(context
     object KnittingTable {
         val KNITTINGS = "knittings"
 
-        val Columns = arrayOf(Cols.ID, Cols.TITLE, Cols.DESCRIPTION, Cols.STARTED, Cols.FINISHED, Cols.NEEDLE_DIAMETER, Cols.SIZE, Cols.DEFAULT_PHOTO_ID, Cols.RATING)
+        val Columns = arrayOf(Cols.ID, Cols.TITLE, Cols.DESCRIPTION, Cols.STARTED, Cols.FINISHED, Cols.NEEDLE_DIAMETER, Cols.SIZE, Cols.DEFAULT_PHOTO_ID, Cols.RATING, Cols.DURATION)
 
         val SQL_DROP = "DROP TABLE IF EXISTS $KNITTINGS"
 
@@ -54,6 +54,7 @@ class KnittingDatabaseHelper(context: Context) : ManagedSQLiteOpenHelper(context
             val SIZE = "size"
             val DEFAULT_PHOTO_ID = "default_photo_id"
             val RATING = "rating"
+            val DURATION = "duration"
         }
 
         fun create(db: SQLiteDatabase) {
@@ -67,8 +68,11 @@ class KnittingDatabaseHelper(context: Context) : ManagedSQLiteOpenHelper(context
                     Cols.SIZE to REAL + NOT_NULL + DEFAULT("0.0"),
                     Cols.DEFAULT_PHOTO_ID to INTEGER,
                     Cols.RATING to REAL + NOT_NULL + DEFAULT("0.0"),
+                    Cols.DURATION to INTEGER,
                     FOREIGN_KEY(Cols.DEFAULT_PHOTO_ID, PhotoTable.PHOTOS, PhotoTable.Cols.ID))
         }
+
+        val SQL_ADD_DURATION = "ALTER TABLE " + KNITTINGS + " ADD COLUMN " + Cols.DURATION + " INTEGER"
     }
 
     object PhotoTable {
@@ -76,13 +80,15 @@ class KnittingDatabaseHelper(context: Context) : ManagedSQLiteOpenHelper(context
 
         val Columns = arrayOf(Cols.ID, Cols.FILENAME, Cols.PREVIEW, Cols.DESCRIPTION, Cols.KNITTING_ID)
 
-        val SQL_CREATE = "CREATE TABLE " + PHOTOS +
-                "(" + Cols.ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                Cols.FILENAME + " TEXT NOT NULL, " +
-                Cols.PREVIEW + " BLOB, " +
-                Cols.DESCRIPTION + " TEXT NOT NULL, " +
-                Cols.KNITTING_ID + " INTEGER NOT NULL, " +
-                "FOREIGN KEY(" + Cols.KNITTING_ID + ") REFERENCES " + KnittingTable.KNITTINGS + "(" + KnittingTable.Cols.ID + "));"
+        fun create(db: SQLiteDatabase) {
+            db.createTable(PHOTOS, true,
+                    Cols.ID to INTEGER + PRIMARY_KEY + AUTOINCREMENT,
+                    Cols.FILENAME to TEXT + NOT_NULL,
+                    Cols.PREVIEW to BLOB,
+                    Cols.DESCRIPTION to TEXT + NOT_NULL,
+                    Cols.KNITTING_ID to INTEGER + NOT_NULL,
+                    FOREIGN_KEY(Cols.KNITTING_ID, KnittingTable.KNITTINGS, KnittingTable.Cols.ID))
+        }
 
         val SQL_DROP = "DROP TABLE IF EXISTS $PHOTOS"
 
@@ -108,20 +114,20 @@ class KnittingDatabaseHelper(context: Context) : ManagedSQLiteOpenHelper(context
         }
 
         try {
-            db.execSQL(PhotoTable.SQL_CREATE)
-            debug("Photo table created with: " + PhotoTable.SQL_CREATE)
+            PhotoTable.create(db)
+            debug("Photo table created")
         } catch (ex: Exception) {
-            error("Could not create photo table with: " + PhotoTable.SQL_CREATE, ex)
+            error("Could not create photo table", ex)
         }
 
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
-        debug("Knitting table with version number $oldVersion will be dropped.")
-        db.execSQL(KnittingTable.SQL_DROP)
-        debug("Photo table with version number $oldVersion will be dropped.")
-        db.execSQL(PhotoTable.SQL_DROP)
-        onCreate(db)
+        if (oldVersion < 2) {
+            debug("Updating knitting table from $oldVersion to $newVersion")
+            db.execSQL(KnittingTable.SQL_ADD_DURATION)
+            debug("Added duration colomn to knitting table")
+        }
     }
 }
 
