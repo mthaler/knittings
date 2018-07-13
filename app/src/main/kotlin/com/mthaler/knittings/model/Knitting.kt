@@ -14,7 +14,8 @@ data class Knitting(val id: Long,
                     val needleDiameter: Double = 0.0,
                     val size: Double = 0.0,
                     val defaultPhoto: Photo? = null,
-                    val rating: Double = 0.0) {
+                    val rating: Double = 0.0,
+                    val duration: Long = 0L) {
 
     val photoFilename: String
         get() {

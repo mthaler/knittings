@@ -2,10 +2,8 @@ package com.mthaler.knittings.database
 
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
-import org.jetbrains.anko.AnkoLogger
+import org.jetbrains.anko.*
 import org.jetbrains.anko.db.*
-import org.jetbrains.anko.debug
-import org.jetbrains.anko.error
 
 /**
  * Database helper class that defines our tables, columns and methods to create and drop tables
@@ -68,11 +66,11 @@ class KnittingDatabaseHelper(context: Context) : ManagedSQLiteOpenHelper(context
                     Cols.SIZE to REAL + NOT_NULL + DEFAULT("0.0"),
                     Cols.DEFAULT_PHOTO_ID to INTEGER,
                     Cols.RATING to REAL + NOT_NULL + DEFAULT("0.0"),
-                    Cols.DURATION to INTEGER,
+                    Cols.DURATION to INTEGER + NOT_NULL + DEFAULT("0"),
                     FOREIGN_KEY(Cols.DEFAULT_PHOTO_ID, PhotoTable.PHOTOS, PhotoTable.Cols.ID))
         }
 
-        val SQL_ADD_DURATION = "ALTER TABLE " + KNITTINGS + " ADD COLUMN " + Cols.DURATION + " INTEGER"
+        val SQL_ADD_DURATION = "ALTER TABLE " + KNITTINGS + " ADD COLUMN " + Cols.DURATION + " INTEGER NOT NULL DEFAULT 0"
     }
 
     object PhotoTable {
@@ -124,9 +122,9 @@ class KnittingDatabaseHelper(context: Context) : ManagedSQLiteOpenHelper(context
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
         if (oldVersion < 2) {
-            debug("Updating knitting table from $oldVersion to $newVersion")
+            info("Updating knitting table from $oldVersion to $newVersion")
             db.execSQL(KnittingTable.SQL_ADD_DURATION)
-            debug("Added duration colomn to knitting table")
+            info("Added duration colomn to knitting table")
         }
     }
 }

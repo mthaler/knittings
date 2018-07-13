@@ -102,6 +102,7 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
             values.put(KnittingDatabaseHelper.KnittingTable.Cols.NEEDLE_DIAMETER, needleDiameter)
             values.put(KnittingDatabaseHelper.KnittingTable.Cols.SIZE, size)
             values.put(KnittingDatabaseHelper.KnittingTable.Cols.RATING, rating)
+            values.put(KnittingDatabaseHelper.KnittingTable.Cols.DURATION, 0L)
 
             val id = database.insert(KnittingDatabaseHelper.KnittingTable.KNITTINGS, null, values)
 
@@ -141,6 +142,7 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
                 values.putNull(KnittingDatabaseHelper.KnittingTable.Cols.DEFAULT_PHOTO_ID)
             }
             values.put(KnittingDatabaseHelper.KnittingTable.Cols.RATING, knitting.rating)
+            values.put(KnittingDatabaseHelper.KnittingTable.Cols.DURATION, knitting.duration)
 
             database.update(KnittingDatabaseHelper.KnittingTable.KNITTINGS,
                     values,
@@ -359,6 +361,7 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
         val idSize = cursor.getColumnIndex(KnittingDatabaseHelper.KnittingTable.Cols.SIZE)
         val idDefaultPhoto = cursor.getColumnIndex(KnittingDatabaseHelper.KnittingTable.Cols.DEFAULT_PHOTO_ID)
         val idRating = cursor.getColumnIndex(KnittingDatabaseHelper.KnittingTable.Cols.RATING)
+        val idDuration = cursor.getColumnIndex(KnittingDatabaseHelper.KnittingTable.Cols.DURATION)
 
         val id = cursor.getLong(idIndex)
         val title = cursor.getString(idTitle)
@@ -368,13 +371,15 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
         val needleDiameter = cursor.getDouble(idNeedleDiameter)
         val size = cursor.getDouble(idSize)
         val rating = cursor.getDouble(idRating)
+        val duration = cursor.getLong(idDuration)
 
         var defaultPhoto: Photo? = null
         if (!cursor.isNull(idDefaultPhoto)) {
             val defaultPhotoID = cursor.getLong(idDefaultPhoto)
             defaultPhoto = getPhoto(defaultPhotoID)
         }
-        return Knitting(id, title = title, description = description, started = started, finished = finished, needleDiameter = needleDiameter, size = size, rating = rating, defaultPhoto = defaultPhoto)
+        return Knitting(id, title = title, description = description, started = started, finished = finished, needleDiameter = needleDiameter,
+                size = size, rating = rating, defaultPhoto = defaultPhoto, duration = duration)
     }
 
     private fun cursorToPhoto(cursor: Cursor): Photo {
