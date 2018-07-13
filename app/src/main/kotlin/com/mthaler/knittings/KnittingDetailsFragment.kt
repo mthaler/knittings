@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.mthaler.knittings.database.datasource
 import com.mthaler.knittings.model.Knitting
+import com.mthaler.knittings.utils.TimeUtils
 import org.jetbrains.anko.AnkoLogger
 import java.text.DateFormat
 import kotlinx.android.synthetic.main.fragment_knitting_details.*
@@ -43,6 +44,7 @@ class KnittingDetailsFragment : Fragment(), AnkoLogger {
             knitting_finished.text = getString(R.string.knitting_details_finished, if (knitting.finished != null) DateFormat.getDateInstance().format(knitting.finished) else "")
             knitting_needle_diameter.text = getString(R.string.knitting_details_needle, knitting.needleDiameter)
             knitting_size.text = getString(R.string.knitting_details_size, knitting.size)
+            knitting_duration.text = getString(R.string.knitting_details_duration, TimeUtils.formatDuration(knitting.duration))
             ratingBar.rating = knitting.rating.toFloat()
         }
     }

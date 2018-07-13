@@ -22,6 +22,7 @@
     <string name="knitting_finished_hint">Finished</string>
     <string name="knitting_needle_diameter_hint">Needle Diameter</string>
     <string name="knitting_size_hint">Size</string>
+    <string name="knitting_duration_hint">Duration</string>
     <!-- date picker -->
     <string name="date_picker_title">Date</string>
     <!-- photo details -->
@@ -60,6 +61,7 @@
     <string name="knitting_details_finished">Finished: %1$s</string>
     <string name="knitting_details_needle">Needle: %1$.1f</string>
     <string name="knitting_details_size">Size: %1$.1f</string>
+    <string name="knitting_details_duration">Duration: %1$s</string>
 
     <!-- Strings related to login -->
     <string name="sign_in">Sign in</string>
