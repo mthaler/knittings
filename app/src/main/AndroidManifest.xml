@@ -84,6 +84,7 @@
         <activity
             android:name=".dropbox.DropboxExportActivity"
             android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".dropbox.DropboxImportActivity"></activity>
     </application>
 
 </manifest>
