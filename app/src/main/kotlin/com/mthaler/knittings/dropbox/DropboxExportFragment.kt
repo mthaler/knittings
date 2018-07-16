@@ -42,22 +42,30 @@ class DropboxExportFragment : AbstractDropboxFragment(), AnkoLogger {
         export_button.setOnClickListener {
             val ctx = context
             if (ctx != null) {
-                val cm = ctx.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-                val activeNetwork = cm.activeNetworkInfo
-                val isWiFi = activeNetwork.type == ConnectivityManager.TYPE_WIFI
-                if (!isWiFi) {
+                try {
+                    val cm = ctx.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+                    val activeNetwork = cm.activeNetworkInfo
+                    val isWiFi = activeNetwork.type == ConnectivityManager.TYPE_WIFI
+                    if (!isWiFi) {
+                        alert {
+                            title = resources.getString(R.string.dropbox_export)
+                            message = resources.getString(R.string.dropbox_export_no_wifi_question)
+                            positiveButton(resources.getString(R.string.dropbox_export_dialog_export_button)) {
+                                exportTask = UploadTask(DropboxClientFactory.getClient(), ctx.applicationContext, progressBar::setProgress, ::setMode).execute()
+                                setMode(true)
+                            }
+                            negativeButton(resources.getString(R.string.dialog_button_cancel)) {}
+                        }.show()
+                    } else  {
+                        exportTask = UploadTask(DropboxClientFactory.getClient(), ctx.applicationContext, progressBar::setProgress, ::setMode).execute()
+                        setMode(true)
+                    }
+                } catch (ex: Exception) {
                     alert {
-                        title = resources.getString(R.string.dropbox_export)
-                        message = resources.getString(R.string.dropbox_export_no_wifi_question)
-                        positiveButton(resources.getString(R.string.dropbox_export_dialog_export_button)) {
-                            exportTask = UploadTask(DropboxClientFactory.getClient(), ctx.applicationContext, progressBar::setProgress, ::setMode).execute()
-                            setMode(true)
-                        }
-                        negativeButton(resources.getString(R.string.dialog_button_cancel)) {}
+                        title = resources.getString(R.string.network_error_title)
+                        message = resources.getString(R.string.network_error_dropbox) + ": " + ex.message
+                        positiveButton(resources.getString(R.string.dialog_button_ok)) {}
                     }.show()
-                } else  {
-                    exportTask = UploadTask(DropboxClientFactory.getClient(), ctx.applicationContext, progressBar::setProgress, ::setMode).execute()
-                    setMode(true)
                 }
             } else {
                 wtf("context null")
