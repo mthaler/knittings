@@ -35,7 +35,7 @@ class DropboxImportFragment : AbstractDropboxFragment(), AnkoLogger {
         import_button.setOnClickListener {
             val ctx = context
             if (ctx != null) {
-                importTask = ListFolderTask(DropboxClientFactory.getClient(), ::onListFolder, ::onListFolderError).execute()
+                importTask = ListFolderTask(DropboxClientFactory.getClient(), ::onListFolder, ::onListFolderError).execute("")
             }
         }
     }
@@ -89,6 +89,12 @@ class DropboxImportFragment : AbstractDropboxFragment(), AnkoLogger {
     }
 
     private fun onListFolder(result: ListFolderResult) {
+        val files = result.entries.map { it.name }.toTypedArray()
+        val f = DropboxListFolderFragment.newInstance(files)
+        val fragmentTransaction = activity!!.supportFragmentManager.beginTransaction()
+        fragmentTransaction.replace(R.id.frament_container, f)
+        fragmentTransaction.addToBackStack(null)
+        fragmentTransaction.commit()
 
     }
 
