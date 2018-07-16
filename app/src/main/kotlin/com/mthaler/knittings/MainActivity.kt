@@ -10,6 +10,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.TextView
 import com.mthaler.knittings.dropbox.DropboxExportActivity
+import com.mthaler.knittings.dropbox.DropboxImportActivity
 import org.jetbrains.anko.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.activity_main.*
@@ -71,8 +72,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         // Handle navigation view item clicks here.
         when (item.itemId) {
             R.id.nav_dropbox_export -> {
-                //startActivity<DropboxExportActivity>()
                 startActivity<DropboxExportActivity>()
+            }
+            R.id.nav_dropbox_import -> {
+                startActivity<DropboxImportActivity>()
             }
         }
 

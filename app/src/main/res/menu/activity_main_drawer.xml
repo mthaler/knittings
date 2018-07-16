@@ -8,6 +8,9 @@
             <item
                 android:id="@+id/nav_dropbox_export"
                 android:title="@string/dropbox_export" />
+            <item
+                android:id="@+id/nav_dropbox_import"
+                android:title="@string/dropbox_import" />
         </menu>
     </item>
 
