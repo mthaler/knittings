@@ -6,13 +6,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.dropbox.core.android.Auth
+import com.dropbox.core.v2.files.ListFolderResult
 import com.mthaler.knittings.R
 import kotlinx.android.synthetic.main.fragment_dropbox_import.*
 import org.jetbrains.anko.AnkoLogger
+import org.jetbrains.anko.doAsync
+import org.jetbrains.anko.uiThread
 
 class DropboxImportFragment : AbstractDropboxFragment(), AnkoLogger {
 
-    private var importTask: AsyncTask<Any, Int?, Any?>? = null
+    private var importTask: AsyncTask<String, Void, ListFolderResult>? = null
     private var importing = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -28,6 +31,13 @@ class DropboxImportFragment : AbstractDropboxFragment(), AnkoLogger {
         super.onViewCreated(view, savedInstanceState)
 
         login_button.setOnClickListener { Auth.startOAuth2Authentication(context, DropboxImportFragment.AppKey) }
+
+        import_button.setOnClickListener {
+            val ctx = context
+            if (ctx != null) {
+                importTask = ListFolderTask(DropboxClientFactory.getClient(), ::onListFolder, ::onListFolderError).execute()
+            }
+        }
     }
 
     override fun onResume() {
@@ -50,7 +60,16 @@ class DropboxImportFragment : AbstractDropboxFragment(), AnkoLogger {
     }
 
     override fun loadData() {
-
+        doAsync {
+            val client = DropboxClientFactory.getClient()
+            val account = client.users().currentAccount
+            val spaceUsage = client.users().spaceUsage
+            uiThread {
+                email_text.text = account.email
+                name_text.text = account.name.displayName
+                type_text.text = account.accountType.name
+            }
+        }
     }
 
     private fun setMode(importing: Boolean) {
@@ -67,6 +86,14 @@ class DropboxImportFragment : AbstractDropboxFragment(), AnkoLogger {
             cancel_button.visibility = View.GONE
         }
         this.importing = importing
+    }
+
+    private fun onListFolder(result: ListFolderResult) {
+
+    }
+
+    private fun onListFolderError(exception: Exception) {
+
     }
 
     companion object {
