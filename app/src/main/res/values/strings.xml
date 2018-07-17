@@ -14,6 +14,7 @@
 
     <!-- knittings list -->
     <string name="knittings_title">Knittings</string>
+
     <!-- knitting details -->
     <string name="delete_knitting">Delete Knitting</string>
     <string name="knitting_title_hint">Title</string>
@@ -23,13 +24,17 @@
     <string name="knitting_needle_diameter_hint">Needle Diameter</string>
     <string name="knitting_size_hint">Size</string>
     <string name="knitting_duration_hint">Duration</string>
+
     <!-- date picker -->
     <string name="date_picker_title">Date</string>
+
     <!-- photo details -->
     <string name="photo_description_hint">Description</string>
     <string name="delete_photo">Delete photo</string>
     <string name="set_main_photo">Use as preview</string>
+
     <!-- dialogs -->
+    <string name="dialog_button_ok">OK</string>
     <string name="dialog_button_cancel">Cancel</string>
 
     <!-- delete knittings dialog -->
@@ -75,6 +80,17 @@
     <string name="dropbox_export_no_wifi_question">No WIFI connection, do you really want to export to Dropbox?</string>
     <string name="dropbox_export_dialog_export_button">Export</string>
 
+    <!-- DropboxImportActivity -->
+    <string name="dropbox_import">Import from Dropbox</string>
+    <string name="dropbox_import_files">Importing files:</string>
+
     <!-- navigation drawer -->
     <string name="export">Export</string>
+
+    <!-- network error -->
+    <string name="network_error_title">Network Error</string>
+    <string name="network_error_dropbox">Could not connect to Dropbox</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
