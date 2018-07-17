@@ -1,20 +1,23 @@
 package com.mthaler.knittings.dropbox
 
 import android.os.Bundle
-import android.support.v4.app.Fragment
+import android.support.v4.app.ListFragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
+import android.widget.TextView
 import com.mthaler.knittings.R
+import org.jetbrains.anko.AnkoLogger
 
-class DropboxListFolderFragment : Fragment() {
-
-    private var items: Array<String>? = null
+class DropboxListFolderFragment : ListFragment(), AnkoLogger {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            items = it.getStringArray(ARG_ITEMS)
+            val items = it.getStringArray(ARG_ITEMS)
+            val adapter = ListFolderAdapter(items)
+            listAdapter = adapter
         }
     }
 
@@ -35,5 +38,24 @@ class DropboxListFolderFragment : Fragment() {
                         putStringArray(ARG_ITEMS, items)
                     }
                 }
+    }
+
+    private inner class ListFolderAdapter(items: Array<String>) : ArrayAdapter<String>(activity, android.R.layout.simple_list_item_1, items) {
+
+        override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
+            var convertView = convertView
+            // if we weren't given a view, inflate one
+            if (null == convertView) {
+                convertView = activity!!.layoutInflater
+                        .inflate(R.layout.list_item_folder, null)
+            }
+
+            val item = getItem(position)
+
+            val titleTextView = convertView!!.findViewById<TextView>(R.id.list_item_folder_name)
+            titleTextView.text = item
+
+            return convertView
+        }
     }
 }
