@@ -1,11 +1,15 @@
 package com.mthaler.knittings.model
 
+import org.json.JSONObject
 import org.junit.Assert.*
 import org.junit.Test
 import java.io.File
+import java.text.SimpleDateFormat
 import java.util.*
 
 class JSONTest {
+
+    private val dateFormat = SimpleDateFormat("yyyy-MM-dd")
 
     @Test
     fun testKnittingToJSON() {
@@ -18,7 +22,7 @@ class JSONTest {
         assertEquals("knitting", j0.getString("title"))
         assertEquals("my first knitting", j0.getString("description"))
         assertEquals("2018-01-10", j0.getString("started"))
-        assertTrue(j0.isNull("finished"))
+        assertFalse(j0.has("finished"))
         assertEquals(3.0, j0.getDouble("needleDiameter"), 0.000001)
         assertEquals(41.0, j0.getDouble("size"), 0.000001)
         assertEquals(5.0, j0.getDouble("rating"), 0.000001)
@@ -36,11 +40,7 @@ class JSONTest {
         assertEquals(3.0, j1.getDouble("needleDiameter"), 0.000001)
         assertEquals(41.0, j1.getDouble("size"), 0.000001)
         assertEquals(5.0, j1.getDouble("rating"), 0.000001)
-        val j2 = j1.getJSONObject("defaultPhoto")
-        assertEquals(42, j2.getLong("id"))
-        assertEquals("/tmp/photo1.jpg", j2.getString("filename"))
-        assertEquals(43, j2.getLong("knittingID"))
-        assertEquals("socks", j2.getString("description"))
+        assertEquals(42, j1.getLong("defaultPhoto"))
     }
 
     @Test
@@ -51,5 +51,22 @@ class JSONTest {
         assertEquals("/tmp/photo1.jpg", j0.getString("filename"))
         assertEquals(43, j0.getLong("knittingID"))
         assertEquals("socks", j0.getString("description"))
+    }
+
+    @Test
+    fun testJSONToKnitting() {
+        val s = """
+            {"size":41,"needleDiameter":3,"rating":5,"description":"my first knitting","started":"2018-01-10","id":42,"title":"knitting"}
+        """.trimIndent()
+        val json = JSONObject(s)
+        val k = json.toKnitting()
+        assertEquals(42, k.id)
+        assertEquals("knitting", k.title)
+        assertEquals("my first knitting", k.description)
+        assertEquals("2018-01-10", dateFormat.format(k.started))
+        assertNull(k.finished)
+        assertEquals(3.0, k.needleDiameter, 0.000001)
+        assertEquals(41.0, k.size, 0.000001)
+        assertEquals(5.0, k.rating, 0.000001)
     }
 }

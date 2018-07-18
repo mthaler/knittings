@@ -14,16 +14,12 @@ fun Knitting.toJSON(): JSONObject {
     result.put("started", dateFormat.format(started))
     if (finished != null) {
         result.put("finished", dateFormat.format(finished))
-    } else {
-        result.put("finished", JSONObject.NULL)
     }
     result.put("needleDiameter", needleDiameter)
     result.put("size", size)
     result.put("rating", rating)
     if (defaultPhoto != null) {
         result.put("defaultPhoto", defaultPhoto.id)
-    } else {
-        result.put("defaultPhoto", JSONObject.NULL)
     }
     return result
 }
@@ -35,6 +31,19 @@ fun Photo.toJSON(): JSONObject {
     result.put("knittingID", knittingID)
     result.put("description", description)
     return result
+}
+
+fun JSONObject.toKnitting(): Knitting {
+    val id = getLong("id")
+    val title = getString("title")
+    val description = getString("description")
+    val started = dateFormat.parse(getString("started"))
+    val finished = if (has("finished")) dateFormat.parse(getString("finished")) else null
+    val needleDiameter = getDouble("needleDiameter")
+    val size = getDouble("size")
+    val defaultPhoto = if (has("defaultPhoto")) getLong("defaultPhoto") else null
+    val rating = getDouble("rating")
+    return Knitting(id, title, description, started, finished, needleDiameter, size, null, rating)
 }
 
 fun knittingsToJSON(knittings: List<Knitting>): JSONArray {
