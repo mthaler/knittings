@@ -8,14 +8,16 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.ListView
 import android.widget.TextView
-import android.widget.Toast
 import com.mthaler.knittings.R
 import org.jetbrains.anko.AnkoLogger
+import org.json.JSONObject
 
 class DropboxListFolderFragment : ListFragment(), AnkoLogger {
 
     override fun onListItemClick(l: ListView?, v: View?, position: Int, id: Long) {
-        Toast.makeText(context, "Import", Toast.LENGTH_SHORT).show()
+        // get current knitting
+        val folderName = (listAdapter as ListFolderAdapter).getItem(position)
+        DownloadDatabaseTask(DropboxClientFactory.getClient(), ::onDownloadDatabase, ::onDownloadDatabaseError).execute(folderName)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,6 +33,14 @@ class DropboxListFolderFragment : ListFragment(), AnkoLogger {
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_dropbox_list_folder, container, false)
+    }
+
+    private fun onDownloadDatabase(result: JSONObject) {
+        println("hello")
+    }
+
+    private fun onDownloadDatabaseError(exception: Exception) {
+
     }
 
     companion object {
