@@ -4,6 +4,7 @@ import org.json.JSONObject
 import org.junit.Assert.*
 import org.junit.Test
 import java.io.File
+import java.io.FilenameFilter
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -47,6 +48,7 @@ class JSONTest {
     fun testPhotoToJSON() {
         val p0 = Photo(42, File("/tmp/photo1.jpg"), 43, "socks", null)
         val j0 = p0.toJSON()
+        println(j0)
         assertEquals(42, j0.getLong("id"))
         assertEquals("/tmp/photo1.jpg", j0.getString("filename"))
         assertEquals(43, j0.getLong("knittingID"))
@@ -55,9 +57,7 @@ class JSONTest {
 
     @Test
     fun testJSONToKnitting() {
-        val s = """
-            {"size":41,"needleDiameter":3,"rating":5,"description":"my first knitting","started":"2018-01-10","id":42,"title":"knitting"}
-        """.trimIndent()
+        val s = """{"size":41,"needleDiameter":3,"rating":5,"description":"my first knitting","started":"2018-01-10","id":42,"title":"knitting"}"""
         val json = JSONObject(s)
         val k = json.toKnitting()
         assertEquals(42, k.id)
@@ -68,5 +68,16 @@ class JSONTest {
         assertEquals(3.0, k.needleDiameter, 0.000001)
         assertEquals(41.0, k.size, 0.000001)
         assertEquals(5.0, k.rating, 0.000001)
+    }
+
+    @Test
+    fun testJSONToPhoto() {
+        val s = """{"knittingID":43,"filename":"/tmp/photo1.jpg","description":"socks","id":42}"""
+        val json = JSONObject(s)
+        val p = json.toPhoto()
+        assertEquals(42, p.id)
+        assertEquals(File("/tmp/photo1.jpg"), p.filename)
+        assertEquals(43, p.knittingID)
+        assertEquals("socks", p.description)
     }
 }
