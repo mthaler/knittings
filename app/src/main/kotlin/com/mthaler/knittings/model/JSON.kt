@@ -3,6 +3,7 @@ package com.mthaler.knittings.model
 import org.json.JSONObject
 import java.text.SimpleDateFormat
 import org.json.JSONArray
+import java.io.File
 
 private val dateFormat = SimpleDateFormat("yyyy-MM-dd")
 
@@ -44,6 +45,14 @@ fun JSONObject.toKnitting(): Knitting {
     val defaultPhoto = if (has("defaultPhoto")) getLong("defaultPhoto") else null
     val rating = getDouble("rating")
     return Knitting(id, title, description, started, finished, needleDiameter, size, null, rating)
+}
+
+fun JSONObject.toPhoto(): Photo {
+    val id = getLong("id")
+    val filename = File(getString("filename"))
+    val knittingID = getLong("knittingID")
+    val description = getString("description")
+    return Photo(id, filename, knittingID, description)
 }
 
 fun knittingsToJSON(knittings: List<Knitting>): JSONArray {
