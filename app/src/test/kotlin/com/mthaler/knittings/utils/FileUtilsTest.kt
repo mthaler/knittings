@@ -5,6 +5,7 @@ import java.util.*
 import org.junit.Assert.*
 import com.mthaler.knittings.utils.FileUtils.createDateTimeDirectoryName
 import com.mthaler.knittings.utils.FileUtils.getExtension
+import com.mthaler.knittings.utils.FileUtils.getFilenameWithoutExtension
 import com.mthaler.knittings.utils.FileUtils.replaceIllegalCharacters
 
 class FileUtilsTest {
@@ -35,5 +36,13 @@ class FileUtilsTest {
         assertEquals("txt", getExtension("test.txt"))
         assertEquals("txt", getExtension(".txt"))
         assertEquals("txt", getExtension("test.orig.txt"))
+    }
+
+    @Test
+    fun testGetFilenameWithoutExtension() {
+        assertEquals("test",  getFilenameWithoutExtension("test"))
+        assertEquals("test", getFilenameWithoutExtension("test.txt"))
+        assertEquals("", getFilenameWithoutExtension(".txt"))
+        assertEquals("test.orig", getFilenameWithoutExtension("test.orig.txt"))
     }
 }

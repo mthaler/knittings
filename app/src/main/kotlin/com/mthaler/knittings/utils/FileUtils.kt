@@ -28,4 +28,13 @@ object FileUtils {
             return "";
         }
     }
+
+    fun getFilenameWithoutExtension(filename: String): String {
+        val index = filename.lastIndexOf(".")
+        if (index >= 0) {
+            return filename.substring(0, index)
+        } else {
+            return filename
+        }
+    }
 }
