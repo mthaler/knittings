@@ -181,4 +181,15 @@ class JSONTest {
         assertEquals(44, j3.getLong("knittingID"))
         assertEquals("shirt", j3.getString("description"))
     }
+
+    @Test
+    fun JSONObjectToDatabase() {
+        val s = """{"knittings":[{"size":41,"needleDiameter":3,"rating":5,"description":"my first knitting","started":"2018-01-10","id":42,"title":"knitting"},
+            {"size":41.5,"needleDiameter":3.5,"rating":4.5,"description":"my second knitting","started":"2018-01-11","finished":"2018-01-12","id":44,"title":"knitting 2"}],
+            "photos":[{"knittingID":43,"filename":"/tmp/photo1.jpg","description":"socks","id":42},{"knittingID":44,"filename":"/tmp/photo2.jpg","description":"shirt","id":43}]}"""
+        val json = JSONObject(s)
+        val db = json.toDatabase()
+        assertEquals(2, db.knittings.size)
+        assertEquals(2, db.photos.size)
+    }
 }
