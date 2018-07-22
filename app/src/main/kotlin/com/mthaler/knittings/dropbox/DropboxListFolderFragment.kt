@@ -11,6 +11,7 @@ import android.widget.TextView
 import com.mthaler.knittings.R
 import com.mthaler.knittings.model.Database
 import org.jetbrains.anko.AnkoLogger
+import org.jetbrains.anko.support.v4.alert
 
 class DropboxListFolderFragment : ListFragment(), AnkoLogger {
 
@@ -35,12 +36,29 @@ class DropboxListFolderFragment : ListFragment(), AnkoLogger {
         return inflater.inflate(R.layout.fragment_dropbox_list_folder, container, false)
     }
 
-    private fun onDownloadDatabase(result: Database) {
-        println("hello")
+    private fun onDownloadDatabase(result: Database?) {
+        if (result != null) {
+            println("hello")
+        } else {
+            alert {
+                title = "Download database"
+                message = "Could not download database: null"
+                positiveButton("OK") {}
+            }.show()
+        }
     }
 
-    private fun onDownloadDatabaseError(exception: Exception) {
-        println("errror")
+    /**
+     * The onDownloadDatabaseError method is called if an exception happens when the DownloadDatabaseTask is executed,
+     *
+     * @arg ex exception that happened when executing DownloadDatabaseTask
+     */
+    private fun onDownloadDatabaseError(ex: Exception) {
+        alert {
+            title = "Download database"
+            message = "Could not download database: " + ex.message
+            positiveButton("OK") {}
+        }.show()
     }
 
     companion object {

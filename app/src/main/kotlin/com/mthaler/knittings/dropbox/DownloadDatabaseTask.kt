@@ -15,12 +15,12 @@ import com.mthaler.knittings.model.*
  * @arg onError callback that is executed if an error happens
  */
 internal class DownloadDatabaseTask(private val dbxClient: DbxClientV2,
-                                    private val onDataLoaded: (Database) -> Unit,
-                                    private val onError: (Exception) -> Unit) : AsyncTask<String, Void, Database>() {
+                                    private val onDataLoaded: (Database?) -> Unit,
+                                    private val onError: (Exception) -> Unit) : AsyncTask<String, Void, Database?>() {
 
     private var exception: Exception? = null
 
-    override fun onPostExecute(result: Database) {
+    override fun onPostExecute(result: Database?) {
         super.onPostExecute(result)
 
         val ex = exception
