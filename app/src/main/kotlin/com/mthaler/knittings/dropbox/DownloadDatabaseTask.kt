@@ -18,12 +18,12 @@ internal class DownloadDatabaseTask(private val dbxClient: DbxClientV2,
                                     private val onDataLoaded: (Database) -> Unit,
                                     private val onError: (Exception) -> Unit) : AsyncTask<String, Void, Database>() {
 
-    private var mException: Exception? = null
+    private var exception: Exception? = null
 
     override fun onPostExecute(result: Database) {
         super.onPostExecute(result)
 
-        val ex = mException
+        val ex = exception
 
         if (ex != null) {
             onError(ex)
@@ -43,7 +43,7 @@ internal class DownloadDatabaseTask(private val dbxClient: DbxClientV2,
             val db = json.toDatabase()
             return db
         } catch (e: Exception) {
-            mException = e
+            exception = e
             return null
         }
     }

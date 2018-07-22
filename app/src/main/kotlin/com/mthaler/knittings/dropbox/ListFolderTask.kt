@@ -7,17 +7,21 @@ import com.dropbox.core.v2.files.ListFolderResult
 
 /**
  * Async task to list items in a folder
+ *
+ * @arg dbxClient DbxClientV2
+ * @arg onDataLoaded callback that is executed when the data is loaded
+ * @arg onError callback that is executed if an error happens
  */
 internal class ListFolderTask(private val dbxClient: DbxClientV2,
                               private val onDataLoaded: (ListFolderResult) -> Unit,
                               private val onError: (Exception) -> Unit) : AsyncTask<String, Void, ListFolderResult>() {
 
-    private var mException: Exception? = null
+    private var exception: Exception? = null
 
     override fun onPostExecute(result: ListFolderResult) {
         super.onPostExecute(result)
 
-        val ex = mException
+        val ex = exception
 
         if (ex != null) {
             onError(ex)
@@ -30,7 +34,7 @@ internal class ListFolderTask(private val dbxClient: DbxClientV2,
         try {
             return dbxClient.files().listFolder(params[0])
         } catch (e: DbxException) {
-            mException = e
+            exception = e
             return null
         }
     }
