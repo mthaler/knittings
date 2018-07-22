@@ -48,7 +48,6 @@ class JSONTest {
     fun testPhotoToJSON() {
         val p0 = Photo(42, File("/tmp/photo1.jpg"), 43, "socks", null)
         val j0 = p0.toJSON()
-        println(j0)
         assertEquals(42, j0.getLong("id"))
         assertEquals("/tmp/photo1.jpg", j0.getString("filename"))
         assertEquals(43, j0.getLong("knittingID"))
@@ -148,7 +147,7 @@ class JSONTest {
         val json = db.toJSON()
         // get the JSON array containing the knittings
         val ks = json.getJSONArray("knittings")
-        assertEquals(ks.length(), 2)
+        assertEquals(2, ks.length())
         val j0 = ks.getJSONObject(0)
         assertEquals(42, j0.getLong("id"))
         assertEquals("knitting", j0.getString("title"))
@@ -169,5 +168,17 @@ class JSONTest {
         assertEquals(41.5, j1.getDouble("size"), 0.000001)
         assertEquals(4.5, j1.getDouble("rating"), 0.000001)
         assertTrue(j0.isNull("defaultPhoto"))
+        val ps = json.getJSONArray("photos")
+        assertEquals(2, ps.length())
+        val j2 = ps.getJSONObject(0)
+        assertEquals(42, j2.getLong("id"))
+        assertEquals("/tmp/photo1.jpg", j2.getString("filename"))
+        assertEquals(43, j2.getLong("knittingID"))
+        assertEquals("socks", j2.getString("description"))
+        val j3 = ps.getJSONObject(1)
+        assertEquals(43, j3.getLong("id"))
+        assertEquals("/tmp/photo2.jpg", j3.getString("filename"))
+        assertEquals(44, j3.getLong("knittingID"))
+        assertEquals("shirt", j3.getString("description"))
     }
 }
