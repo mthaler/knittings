@@ -128,4 +128,23 @@ class JSONTest {
         assertEquals(44, p2.knittingID)
         assertEquals("shirt", p2.description)
     }
+
+    @Test
+    fun testDatabaseToJSON() {
+        val c = GregorianCalendar()
+        c.set(2018, 0, 10)
+        val started = c.time
+        val k0 = Knitting(42, "knitting", "my first knitting", started, null, 3.0, 41.0, null, 5.0)
+        c.set(2018, 0, 11)
+        val started2 = c.time
+        c.set(2018, 0, 12)
+        val finished = c.time
+        val k1 = Knitting(44, "knitting 2", "my second knitting", started2, finished, 3.5, 41.5, null, 4.5)
+        val knittings = listOf(k0, k1)
+        val p0 = Photo(42, File("/tmp/photo1.jpg"), 43, "socks", null)
+        val p1 = Photo(43, File("/tmp/photo2.jpg"), 44, "shirt", null)
+        val photos = listOf(p0, p1)
+        val db = Database(knittings, photos)
+        val json = db.toJSON()
+    }
 }
