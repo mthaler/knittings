@@ -117,6 +117,33 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
     }
 
     /**
+     * Adds the given knitting to the database
+     *
+     * @arg knitting knitting that should be added to the database
+     * @arg manualID: use knitting ID instead of auto-imcremented id
+     */
+    fun addKnitting(knitting: Knitting, manualID: Boolean = false) {
+        dbHelper.writableDatabase.use { database ->
+            val values = ContentValues()
+            if (manualID) {
+                values.put(KnittingDatabaseHelper.KnittingTable.Cols.ID, knitting.id)
+            }
+            values.put(KnittingDatabaseHelper.KnittingTable.Cols.TITLE, knitting.title)
+            values.put(KnittingDatabaseHelper.KnittingTable.Cols.DESCRIPTION, knitting.description)
+            values.put(KnittingDatabaseHelper.KnittingTable.Cols.STARTED, knitting.started.time)
+            if (knitting.finished != null) {
+                values.put(KnittingDatabaseHelper.KnittingTable.Cols.FINISHED, knitting.finished.time)
+            }
+            values.put(KnittingDatabaseHelper.KnittingTable.Cols.NEEDLE_DIAMETER, knitting.needleDiameter)
+            values.put(KnittingDatabaseHelper.KnittingTable.Cols.SIZE, knitting.size)
+            values.put(KnittingDatabaseHelper.KnittingTable.Cols.RATING, knitting.rating)
+
+            val id = database.insert(KnittingDatabaseHelper.KnittingTable.KNITTINGS, null, values)
+            debug("Added knitting " + knitting + " to database, id=" + id)
+        }
+    }
+
+    /**
      * Updates a knitting in the database
      *
      * @param knitting knitting that should be updated

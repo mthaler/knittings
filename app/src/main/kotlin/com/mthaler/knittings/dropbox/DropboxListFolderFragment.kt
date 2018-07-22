@@ -37,10 +37,15 @@ class DropboxListFolderFragment : ListFragment(), AnkoLogger {
         return inflater.inflate(R.layout.fragment_dropbox_list_folder, container, false)
     }
 
-    private fun onDownloadDatabase(result: Database?) {
-        if (result != null) {
+    private fun onDownloadDatabase(database: Database?) {
+        if (database != null) {
             // remove all existing entries from the database
-            datasource
+            datasource.deleteAllKnittings()
+            datasource.deleteAllPhotos()
+            // add downloaded database
+            for (knitting in database.knittings) {
+                datasource.addKnitting(knitting, manualID = true)
+            }
         } else {
             alert {
                 title = "Download database"
