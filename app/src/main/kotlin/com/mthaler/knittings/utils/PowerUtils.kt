@@ -5,7 +5,7 @@ import android.os.BatteryManager
 import android.content.Intent
 import android.content.IntentFilter
 
-object BatteryUtils {
+object PowerUtils {
 
     /**
      * Returns the current battery level or NaN if there is some error
