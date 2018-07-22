@@ -3,7 +3,6 @@ package com.mthaler.knittings.dropbox
 import android.content.Context
 import android.os.AsyncTask
 import android.util.Log
-import android.widget.Toast
 import com.dropbox.core.DbxException
 import com.dropbox.core.v2.DbxClientV2
 import com.dropbox.core.v2.files.WriteMode
@@ -27,7 +26,7 @@ import java.util.*
 class UploadTask(private val dbxClient: DbxClientV2,
                  private val context: Context,
                  private val updateProgress: (Int) -> Unit,
-                 private val onComplete: () -> Unit) : AsyncTask<Void, Int?, Any?>() {
+                 private val onComplete: (Boolean) -> Unit) : AsyncTask<Void, Int?, Any?>() {
 
     override fun doInBackground(vararg params: Void): Any? {
         try {
@@ -80,13 +79,12 @@ class UploadTask(private val dbxClient: DbxClientV2,
     override fun onPostExecute(o: Any?) {
         super.onPostExecute(o)
         updateProgress(100)
-        onComplete()
-        Toast.makeText(context, "Export finished", Toast.LENGTH_SHORT).show()
+        onComplete(false)
     }
 
     override fun onCancelled() {
         super.onCancelled()
-        onComplete()
+        onComplete(true)
     }
 }
 

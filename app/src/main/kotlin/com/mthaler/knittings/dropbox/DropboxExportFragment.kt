@@ -99,8 +99,21 @@ class DropboxExportFragment : AbstractDropboxFragment(), AnkoLogger {
         }
     }
 
-    private fun onUploadComplete() {
+    private fun onUploadComplete(cancelled: Boolean) {
         setMode(false)
+        if (!cancelled) {
+            alert {
+                title = resources.getString(R.string.dropbox_export)
+                message = "Dropbox export completed"
+                positiveButton("OK") {}
+            }.show()
+        } else {
+            alert {
+                title = resources.getString(R.string.dropbox_export)
+                message = "Dropbox export was cancelled"
+                positiveButton("OK") {}
+            }.show()
+        }
     }
 
     private fun setMode(exporting: Boolean) {
