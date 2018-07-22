@@ -16,11 +16,14 @@ import org.jetbrains.anko.support.v4.alert
 import org.jetbrains.anko.uiThread
 import android.content.DialogInterface
 import android.support.v7.app.AlertDialog
+import com.mthaler.knittings.database.datasource
+import com.mthaler.knittings.model.Database
 
 class DropboxImportFragment : AbstractDropboxFragment(), AnkoLogger {
 
     private var importTask: AsyncTask<String, Void, ListFolderResult?>? = null
     private var importing = false
+    private var backupDirectory = "";
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -109,10 +112,13 @@ class DropboxImportFragment : AbstractDropboxFragment(), AnkoLogger {
         if (ctx != null && result != null) {
             val files = result.entries.map { it.name }.toTypedArray()
             val dialogBuilder = AlertDialog.Builder(context!!)
-            dialogBuilder.setTitle("Animals")
+            dialogBuilder.setTitle("Backups")
             dialogBuilder.setItems(files, DialogInterface.OnClickListener { dialog, item ->
-                val selectedText = files[item]  //Selected item in listview
+                val folderName = files[item]
+                backupDirectory = folderName
+                DownloadDatabaseTask(DropboxClientFactory.getClient(), ::onDownloadDatabase, ::onDownloadDatabaseError).execute(folderName)
             })
+            dialogBuilder.setNegativeButton("Cancel", DialogInterface.OnClickListener { dialog, which -> })
             //Create alert dialog object via builder
             val alertDialogObject = dialogBuilder.create()
             //Show the dialog
@@ -124,6 +130,41 @@ class DropboxImportFragment : AbstractDropboxFragment(), AnkoLogger {
                 positiveButton("OK") {}
             }.show()
         }
+    }
+
+    private fun onDownloadDatabase(database: Database?) {
+        if (database != null) {
+            // remove all existing entries from the database
+            datasource.deleteAllKnittings()
+            datasource.deleteAllPhotos()
+            // add downloaded database
+            for (knitting in database.knittings) {
+                datasource.addKnitting(knitting, manualID = true)
+            }
+            for (photo in database.photos) {
+                datasource.addPhoto(photo, manualID = true)
+            }
+            DownloadPhotosTask(DropboxClientFactory.getClient(), backupDirectory, database).execute()
+        } else {
+            alert {
+                title = "Download database"
+                message = "Could not download database: null"
+                positiveButton("OK") {}
+            }.show()
+        }
+    }
+
+    /**
+     * The onDownloadDatabaseError method is called if an exception happens when the DownloadDatabaseTask is executed,
+     *
+     * @param ex exception that happened when executing DownloadDatabaseTask
+     */
+    private fun onDownloadDatabaseError(ex: Exception) {
+        alert {
+            title = "Download database"
+            message = "Could not download database: " + ex.message
+            positiveButton("OK") {}
+        }.show()
     }
 
     /**
