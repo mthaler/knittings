@@ -14,6 +14,8 @@ import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.support.v4.alert
 import org.jetbrains.anko.uiThread
+import android.content.DialogInterface
+import android.support.v7.app.AlertDialog
 
 class DropboxImportFragment : AbstractDropboxFragment(), AnkoLogger {
 
@@ -103,13 +105,18 @@ class DropboxImportFragment : AbstractDropboxFragment(), AnkoLogger {
     }
 
     private fun onListFolder(result: ListFolderResult?) {
-        if (result != null) {
+        val ctx = context
+        if (ctx != null && result != null) {
             val files = result.entries.map { it.name }.toTypedArray()
-            val f = DropboxListFolderFragment.newInstance(files)
-            val fragmentTransaction = activity!!.supportFragmentManager.beginTransaction()
-            fragmentTransaction.replace(R.id.frament_container, f)
-            fragmentTransaction.addToBackStack(null)
-            fragmentTransaction.commit()
+            val dialogBuilder = AlertDialog.Builder(context!!)
+            dialogBuilder.setTitle("Animals")
+            dialogBuilder.setItems(files, DialogInterface.OnClickListener { dialog, item ->
+                val selectedText = files[item]  //Selected item in listview
+            })
+            //Create alert dialog object via builder
+            val alertDialogObject = dialogBuilder.create()
+            //Show the dialog
+            alertDialogObject.show()
         } else {
             alert {
                 title = "List folders"
