@@ -24,4 +24,15 @@ object BatteryUtils {
         }
 
     }
+
+    /**
+     * Returns a boolean if the the device is plugged to a power source
+     *
+     * @arg ctx context
+     */
+    fun isPowerConnected(ctx: Context): Boolean {
+        val intent = ctx.registerReceiver(null, IntentFilter(Intent.ACTION_BATTERY_CHANGED))
+        val plugged = intent.getIntExtra(BatteryManager.EXTRA_PLUGGED, -1)
+        return plugged == BatteryManager.BATTERY_PLUGGED_AC || plugged == BatteryManager.BATTERY_PLUGGED_USB || plugged == BatteryManager.BATTERY_PLUGGED_WIRELESS
+    }
 }
