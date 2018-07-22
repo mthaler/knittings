@@ -40,7 +40,7 @@ class DropboxListFolderFragment : ListFragment(), AnkoLogger {
     }
 
     private fun onDownloadDatabaseError(exception: Exception) {
-
+        println("errror")
     }
 
     companion object {

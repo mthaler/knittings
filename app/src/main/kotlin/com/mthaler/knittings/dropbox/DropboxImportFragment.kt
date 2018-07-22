@@ -11,11 +11,12 @@ import com.mthaler.knittings.R
 import kotlinx.android.synthetic.main.fragment_dropbox_import.*
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.doAsync
+import org.jetbrains.anko.support.v4.alert
 import org.jetbrains.anko.uiThread
 
 class DropboxImportFragment : AbstractDropboxFragment(), AnkoLogger {
 
-    private var importTask: AsyncTask<String, Void, ListFolderResult>? = null
+    private var importTask: AsyncTask<String, Void, ListFolderResult?>? = null
     private var importing = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -88,18 +89,34 @@ class DropboxImportFragment : AbstractDropboxFragment(), AnkoLogger {
         this.importing = importing
     }
 
-    private fun onListFolder(result: ListFolderResult) {
-        val files = result.entries.map { it.name }.toTypedArray()
-        val f = DropboxListFolderFragment.newInstance(files)
-        val fragmentTransaction = activity!!.supportFragmentManager.beginTransaction()
-        fragmentTransaction.replace(R.id.frament_container, f)
-        fragmentTransaction.addToBackStack(null)
-        fragmentTransaction.commit()
-
+    private fun onListFolder(result: ListFolderResult?) {
+        if (result != null) {
+            val files = result.entries.map { it.name }.toTypedArray()
+            val f = DropboxListFolderFragment.newInstance(files)
+            val fragmentTransaction = activity!!.supportFragmentManager.beginTransaction()
+            fragmentTransaction.replace(R.id.frament_container, f)
+            fragmentTransaction.addToBackStack(null)
+            fragmentTransaction.commit()
+        } else {
+            alert {
+                title = "List folders"
+                message = "Error when listing folders: null"
+                positiveButton("OK") {}
+            }.show()
+        }
     }
 
-    private fun onListFolderError(exception: Exception) {
-
+    /**
+     * The onListFolderError method is called if an exception happens when the ListFolderTask is executed,
+     *
+     * @arg ex exception that happened when executing ListFolderTask
+     */
+    private fun onListFolderError(ex: Exception) {
+        alert {
+            title = "List folders"
+            message = "Error when listing folders: " + ex.message
+            positiveButton("OK") {}
+        }.show()
     }
 
     companion object {

@@ -12,12 +12,12 @@ import com.dropbox.core.v2.files.ListFolderResult
  * @arg onError callback that is executed if an error happens
  */
 internal class ListFolderTask(private val dbxClient: DbxClientV2,
-                              private val onDataLoaded: (ListFolderResult) -> Unit,
-                              private val onError: (Exception) -> Unit) : AsyncTask<String, Void, ListFolderResult>() {
+                              private val onDataLoaded: (ListFolderResult?) -> Unit,
+                              private val onError: (Exception) -> Unit) : AsyncTask<String, Void, ListFolderResult?>() {
 
     private var exception: Exception? = null
 
-    override fun onPostExecute(result: ListFolderResult) {
+    override fun onPostExecute(result: ListFolderResult?) {
         super.onPostExecute(result)
 
         val ex = exception
