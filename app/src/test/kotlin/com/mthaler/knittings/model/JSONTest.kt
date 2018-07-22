@@ -108,4 +108,24 @@ class JSONTest {
         assertEquals(43, p.knittingID)
         assertEquals("socks", p.description)
     }
+
+    @Test
+    fun testJSONArrayToPhotos() {
+        val s = """[{"knittingID":43,"filename":"/tmp/photo1.jpg","description":"socks","id":42},
+            |{"knittingID":44,"filename":"/tmp/photo2.jpg","description":"shirt","id":43}]
+        """.trimMargin()
+        val json = JSONArray(s)
+        val photos = json.toPhotos()
+        assertEquals(2, photos.size)
+        val p = photos[0]
+        assertEquals(42, p.id)
+        assertEquals(File("/tmp/photo1.jpg"), p.filename)
+        assertEquals(43, p.knittingID)
+        assertEquals("socks", p.description)
+        val p2 = photos[1]
+        assertEquals(43, p2.id)
+        assertEquals(File("/tmp/photo2.jpg"), p2.filename)
+        assertEquals(44, p2.knittingID)
+        assertEquals("shirt", p2.description)
+    }
 }
