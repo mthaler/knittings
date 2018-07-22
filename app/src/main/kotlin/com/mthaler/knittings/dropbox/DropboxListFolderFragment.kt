@@ -12,6 +12,7 @@ import com.mthaler.knittings.R
 import com.mthaler.knittings.model.Database
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.support.v4.alert
+import com.mthaler.knittings.database.datasource
 
 class DropboxListFolderFragment : ListFragment(), AnkoLogger {
 
@@ -38,7 +39,8 @@ class DropboxListFolderFragment : ListFragment(), AnkoLogger {
 
     private fun onDownloadDatabase(result: Database?) {
         if (result != null) {
-            println("hello")
+            // remove all existing entries from the database
+            datasource
         } else {
             alert {
                 title = "Download database"

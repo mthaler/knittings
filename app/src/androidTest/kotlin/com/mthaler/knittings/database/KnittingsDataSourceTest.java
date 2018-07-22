@@ -159,8 +159,6 @@ public class KnittingsDataSourceTest {
     private void deleteAllKnittings() {
         Context ctx = InstrumentationRegistry.getTargetContext();
         KnittingsDataSource ds = KnittingsDataSource.Companion.getInstance(ctx);
-        for (Knitting knitting : ds.getAllKnittings()) {
-            ds.deleteKnitting(knitting);
-        }
+        ds.deleteAllKnittings();
     }
 }

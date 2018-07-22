@@ -173,6 +173,15 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
     }
 
     /**
+     * Deletes all knittings from the database
+     */
+    fun deleteAllKnittings() {
+        for (knitting in allKnittings) {
+            deleteKnitting(knitting)
+        }
+    }
+
+    /**
      * Gets the knitting with the given id from the database
      *
      * @param id id of the knitting that should be read from database
