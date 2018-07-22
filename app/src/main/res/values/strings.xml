@@ -88,7 +88,4 @@
     <!-- network error -->
     <string name="network_error_title">Network Error</string>
     <string name="network_error_dropbox">Could not connect to Dropbox</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

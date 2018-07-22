@@ -80,6 +80,13 @@
     <string name="dropbox_export_no_wifi_question">Keine WIFI Verbindung, Daten wirklich zur Dropbox exportieren?</string>
     <string name="dropbox_export_dialog_export_button">Exportieren</string>
 
+    <!-- DropboxImportActivity -->
+    <string name="dropbox_import">Aus Dropbox importieren</string>
+    <string name="dropbox_import_files">Importiere Dateien:</string>
+
+    <!-- navigation drawer -->
+    <string name="export">Export</string>
+
     <!-- network error -->
     <string name="network_error_title">Netzwerk Fehler</string>
     <string name="network_error_dropbox">Keine Verbindung zur Dropbox möglich</string>
