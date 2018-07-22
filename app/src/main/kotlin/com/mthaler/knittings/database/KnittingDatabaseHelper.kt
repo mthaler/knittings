@@ -76,13 +76,15 @@ class KnittingDatabaseHelper(context: Context) : ManagedSQLiteOpenHelper(context
 
         val Columns = arrayOf(Cols.ID, Cols.FILENAME, Cols.PREVIEW, Cols.DESCRIPTION, Cols.KNITTING_ID)
 
-        val SQL_CREATE = "CREATE TABLE " + PHOTOS +
-                "(" + Cols.ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                Cols.FILENAME + " TEXT NOT NULL, " +
-                Cols.PREVIEW + " BLOB, " +
-                Cols.DESCRIPTION + " TEXT NOT NULL, " +
-                Cols.KNITTING_ID + " INTEGER NOT NULL, " +
-                "FOREIGN KEY(" + Cols.KNITTING_ID + ") REFERENCES " + KnittingTable.KNITTINGS + "(" + KnittingTable.Cols.ID + "));"
+        fun create(db: SQLiteDatabase) {
+            db.createTable(PHOTOS, true,
+                    Cols.ID to INTEGER + PRIMARY_KEY + AUTOINCREMENT,
+                    Cols.FILENAME to TEXT + NOT_NULL,
+                    Cols.PREVIEW to BLOB,
+                    Cols.DESCRIPTION to TEXT + NOT_NULL,
+                    Cols.KNITTING_ID to INTEGER + NOT_NULL,
+                    FOREIGN_KEY(Cols.KNITTING_ID, KnittingTable.KNITTINGS, KnittingTable.Cols.ID))
+        }
 
         val SQL_DROP = "DROP TABLE IF EXISTS $PHOTOS"
 
@@ -108,10 +110,10 @@ class KnittingDatabaseHelper(context: Context) : ManagedSQLiteOpenHelper(context
         }
 
         try {
-            db.execSQL(PhotoTable.SQL_CREATE)
-            debug("Photo table created with: " + PhotoTable.SQL_CREATE)
+            PhotoTable.create(db)
+            debug("Photo table created")
         } catch (ex: Exception) {
-            error("Could not create photo table with: " + PhotoTable.SQL_CREATE, ex)
+            error("Could not create photo table with: ", ex)
         }
 
     }
