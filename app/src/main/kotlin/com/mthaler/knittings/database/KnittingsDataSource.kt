@@ -327,7 +327,7 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
     }
 
     /**
-     * Deletes the given photo from the database
+     * Deletes the given photo from the database. The photo file is also deleted.
      *
      * @param photo photo that should be deleted
      */
@@ -341,7 +341,7 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
     }
 
     /**
-     * Delete all photos for the given knitting
+     * Delete all photos for the given knitting. Photo filres are also deleted.
      *
      * @param knitting knitting to delete photos for
      */
@@ -355,6 +355,15 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
             val whereArgs = arrayOf(java.lang.Long.toString(id))
             database.delete(KnittingDatabaseHelper.PhotoTable.PHOTOS, whereClause, whereArgs)
             debug("Removed knitting " + id + ": " + knitting.toString())
+        }
+    }
+
+    /**
+     * Deletes all photos from the database. Photo files are also deleted.
+     */
+    fun deleteAllPhotos() {
+        for (photo in allPhotos) {
+            deletePhoto(photo)
         }
     }
 
