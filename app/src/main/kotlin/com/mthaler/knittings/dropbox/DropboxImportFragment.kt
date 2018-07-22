@@ -45,7 +45,7 @@ class DropboxImportFragment : AbstractDropboxFragment(), AnkoLogger {
                 val isWiFi = NetworkUtils.isWifiConnected(ctx)
                 if (!isWiFi) {
                     alert {
-                        title = resources.getString(R.string.dropbox_export)
+                        title = resources.getString(R.string.dropbox_import)
                         message = resources.getString(R.string.dropbox_export_no_wifi_question)
                         positiveButton(resources.getString(R.string.dropbox_export_dialog_export_button)) {
                             importTask = ListFolderTask(DropboxClientFactory.getClient(), ::onListFolder, ::onListFolderError).execute("")
@@ -116,7 +116,14 @@ class DropboxImportFragment : AbstractDropboxFragment(), AnkoLogger {
             dialogBuilder.setItems(files, DialogInterface.OnClickListener { dialog, item ->
                 val folderName = files[item]
                 backupDirectory = folderName
-                DownloadDatabaseTask(DropboxClientFactory.getClient(), ::onDownloadDatabase, ::onDownloadDatabaseError).execute(folderName)
+                alert {
+                    title = resources.getString(R.string.dropbox_import)
+                    message = "Do you really want to import from Dropbox? This will delete all existing data!"
+                    positiveButton("Import") {
+                        DownloadDatabaseTask(DropboxClientFactory.getClient(), ::onDownloadDatabase, ::onDownloadDatabaseError).execute(folderName)
+                    }
+                    negativeButton(resources.getString(R.string.dialog_button_cancel)) {}
+                }.show()
             })
             dialogBuilder.setNegativeButton("Cancel", DialogInterface.OnClickListener { dialog, which -> })
             //Create alert dialog object via builder
