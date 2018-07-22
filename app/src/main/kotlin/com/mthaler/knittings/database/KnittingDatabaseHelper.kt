@@ -16,7 +16,7 @@ class KnittingDatabaseHelper(context: Context) : ManagedSQLiteOpenHelper(context
         // Use different database name for testing. This is an ugly hack, but I didn't find another way to do this
         private val DB_NAME = try {
             Class.forName("android.support.test.espresso.Espresso")
-            "knittings_test.db"
+            null
         } catch (_: ClassNotFoundException) {
             "knittings.db"
         }
