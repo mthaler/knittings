@@ -109,6 +109,9 @@ fun photosToJSON(photos: List<Photo>): JSONArray {
     return result
 }
 
+/**
+ * Converts a database to JSON
+ */
 fun Database.toJSON(): JSONObject {
     val result = JSONObject()
     result.put("knittings", knittingsToJSON(knittings))
