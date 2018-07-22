@@ -7,6 +7,9 @@ import java.io.File
 
 private val dateFormat = SimpleDateFormat("yyyy-MM-dd")
 
+/**
+ * Converts a knitting to a JSON object
+ */
 fun Knitting.toJSON(): JSONObject {
     val result = JSONObject()
     result.put("id", id)
@@ -25,6 +28,9 @@ fun Knitting.toJSON(): JSONObject {
     return result
 }
 
+/**
+ * Converts a photo to a JSON object
+ */
 fun Photo.toJSON(): JSONObject {
     val result = JSONObject()
     result.put("id", id)
@@ -34,6 +40,9 @@ fun Photo.toJSON(): JSONObject {
     return result
 }
 
+/**
+ * Converts a JSON object to a knitting
+ */
 fun JSONObject.toKnitting(): Knitting {
     val id = getLong("id")
     val title = getString("title")
@@ -47,6 +56,9 @@ fun JSONObject.toKnitting(): Knitting {
     return Knitting(id, title, description, started, finished, needleDiameter, size, null, rating)
 }
 
+/**
+ * Converts a JSON array to a list of knittings
+ */
 fun JSONArray.toKnittings(): List<Knitting> {
     val result = ArrayList<Knitting>()
     for(i in 0 until length()) {
@@ -57,6 +69,9 @@ fun JSONArray.toKnittings(): List<Knitting> {
     return result
 }
 
+/**
+ * Converts a JSON object to a photo
+ */
 fun JSONObject.toPhoto(): Photo {
     val id = getLong("id")
     val filename = File(getString("filename"))
@@ -65,6 +80,9 @@ fun JSONObject.toPhoto(): Photo {
     return Photo(id, filename, knittingID, description)
 }
 
+/**
+ * Converts a JSON array to a list of photos
+ */
 fun JSONArray.toPhotos(): List<Photo> {
     val result = ArrayList<Photo>()
     for(i in 0 until length()) {
