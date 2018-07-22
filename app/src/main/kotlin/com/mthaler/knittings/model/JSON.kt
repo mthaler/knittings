@@ -7,6 +7,9 @@ import java.io.File
 
 private val dateFormat = SimpleDateFormat("yyyy-MM-dd")
 
+/**
+ * Converts a knitting to a JSON object
+ */
 fun Knitting.toJSON(): JSONObject {
     val result = JSONObject()
     result.put("id", id)
@@ -25,6 +28,9 @@ fun Knitting.toJSON(): JSONObject {
     return result
 }
 
+/**
+ * Converts a photo to a JSON object
+ */
 fun Photo.toJSON(): JSONObject {
     val result = JSONObject()
     result.put("id", id)
@@ -34,6 +40,9 @@ fun Photo.toJSON(): JSONObject {
     return result
 }
 
+/**
+ * Converts a JSON object to a knitting
+ */
 fun JSONObject.toKnitting(): Knitting {
     val id = getLong("id")
     val title = getString("title")
@@ -47,12 +56,41 @@ fun JSONObject.toKnitting(): Knitting {
     return Knitting(id, title, description, started, finished, needleDiameter, size, null, rating)
 }
 
+/**
+ * Converts a JSON array to a list of knittings
+ */
+fun JSONArray.toKnittings(): List<Knitting> {
+    val result = ArrayList<Knitting>()
+    for(i in 0 until length()) {
+        val item = getJSONObject(i)
+        val knitting = item.toKnitting()
+        result.add(knitting)
+    }
+    return result
+}
+
+/**
+ * Converts a JSON object to a photo
+ */
 fun JSONObject.toPhoto(): Photo {
     val id = getLong("id")
     val filename = File(getString("filename"))
     val knittingID = getLong("knittingID")
     val description = getString("description")
     return Photo(id, filename, knittingID, description)
+}
+
+/**
+ * Converts a JSON array to a list of photos
+ */
+fun JSONArray.toPhotos(): List<Photo> {
+    val result = ArrayList<Photo>()
+    for(i in 0 until length()) {
+        val item = getJSONObject(i)
+        val photo = item.toPhoto()
+        result.add(photo)
+    }
+    return result
 }
 
 fun knittingsToJSON(knittings: List<Knitting>): JSONArray {
@@ -71,9 +109,21 @@ fun photosToJSON(photos: List<Photo>): JSONArray {
     return result
 }
 
-fun dbToJSON(knittings: List<Knitting>, photos: List<Photo>): JSONObject {
+/**
+ * Converts a database to JSON
+ */
+fun Database.toJSON(): JSONObject {
     val result = JSONObject()
     result.put("knittings", knittingsToJSON(knittings))
     result.put("photos", photosToJSON(photos))
     return result
+}
+
+/**
+ * Converts a JSON object to a database object
+ */
+fun JSONObject.toDatabase(): Database {
+    val knittings = getJSONArray("knittings").toKnittings()
+    val photos = getJSONArray("photos").toPhotos()
+    return Database(knittings, photos)
 }

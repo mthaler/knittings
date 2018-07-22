@@ -1,7 +1,6 @@
 package com.mthaler.knittings.dropbox
 
 import android.os.AsyncTask
-
 import com.dropbox.core.DbxException
 import com.dropbox.core.v2.DbxClientV2
 import com.dropbox.core.v2.files.ListFolderResult
@@ -32,8 +31,7 @@ internal class ListFolderTask(private val dbxClient: DbxClientV2,
             return dbxClient.files().listFolder(params[0])
         } catch (e: DbxException) {
             mException = e
+            return null
         }
-
-        return null
     }
 }
