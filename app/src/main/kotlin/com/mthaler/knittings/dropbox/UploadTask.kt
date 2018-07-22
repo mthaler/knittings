@@ -10,7 +10,7 @@ import com.dropbox.core.v2.files.WriteMode
 import com.mthaler.knittings.database.KnittingsDataSource
 import java.io.FileInputStream
 import java.io.IOException
-import com.mthaler.knittings.model.dbToJSON
+import com.mthaler.knittings.model.*
 import java.io.ByteArrayInputStream
 import com.mthaler.knittings.utils.FileUtils.createDateTimeDirectoryName
 import java.util.*
@@ -31,7 +31,7 @@ class UploadTask(private val dbxClient: DbxClientV2,
             // get all photos
             val photos = ds.allPhotos
             // convert database to JSON
-            val dbJSON = dbToJSON(knittings, photos)
+            val dbJSON = Database(knittings, photos).toJSON()
             val s = dbJSON.toString(2)
 
             // create input stream from database JSON
