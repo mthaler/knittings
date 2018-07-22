@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import com.dropbox.core.android.Auth
 import com.dropbox.core.v2.files.ListFolderResult
 import com.mthaler.knittings.R
+import com.mthaler.knittings.utils.NetworkUtils
 import kotlinx.android.synthetic.main.fragment_dropbox_import.*
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.doAsync
@@ -36,7 +37,19 @@ class DropboxImportFragment : AbstractDropboxFragment(), AnkoLogger {
         import_button.setOnClickListener {
             val ctx = context
             if (ctx != null) {
-                importTask = ListFolderTask(DropboxClientFactory.getClient(), ::onListFolder, ::onListFolderError).execute("")
+                val isWiFi = NetworkUtils.isWifiConnected(ctx)
+                if (!isWiFi) {
+                    alert {
+                        title = resources.getString(R.string.dropbox_export)
+                        message = resources.getString(R.string.dropbox_export_no_wifi_question)
+                        positiveButton(resources.getString(R.string.dropbox_export_dialog_export_button)) {
+                            importTask = ListFolderTask(DropboxClientFactory.getClient(), ::onListFolder, ::onListFolderError).execute("")
+                        }
+                        negativeButton(resources.getString(R.string.dialog_button_cancel)) {}
+                    }.show()
+                } else {
+                    importTask = ListFolderTask(DropboxClientFactory.getClient(), ::onListFolder, ::onListFolderError).execute("")
+                }
             }
         }
     }
