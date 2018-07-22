@@ -10,7 +10,7 @@ object PowerUtils {
     /**
      * Returns the current battery level or NaN if there is some error
      *
-     * @arg ctx context
+     * @param ctx context
      */
     fun getBatteryLevel(ctx: Context): Float  {
         val batteryIntent = ctx.registerReceiver(null, IntentFilter(Intent.ACTION_BATTERY_CHANGED))
@@ -28,7 +28,7 @@ object PowerUtils {
     /**
      * Returns a boolean if the the device is plugged to a power source
      *
-     * @arg ctx context
+     * @param ctx context
      */
     fun isPowerConnected(ctx: Context): Boolean {
         val intent = ctx.registerReceiver(null, IntentFilter(Intent.ACTION_BATTERY_CHANGED))

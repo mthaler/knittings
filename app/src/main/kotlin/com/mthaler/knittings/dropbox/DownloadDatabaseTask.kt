@@ -10,9 +10,9 @@ import com.mthaler.knittings.model.*
 /**
  * Async task that downloads the database file from Dropbox
  *
- * @arg dbxClient DbxClientV2
- * @arg onDataLoaded callback that is executed when the data is loaded
- * @arg onError callback that is executed if an error happens
+ * @param dbxClient DbxClientV2
+ * @param onDataLoaded callback that is executed when the data is loaded
+ * @param onError callback that is executed if an error happens
  */
 internal class DownloadDatabaseTask(private val dbxClient: DbxClientV2,
                                     private val onDataLoaded: (Database?) -> Unit,

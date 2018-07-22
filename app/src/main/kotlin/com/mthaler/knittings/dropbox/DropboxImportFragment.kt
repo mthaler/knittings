@@ -122,7 +122,7 @@ class DropboxImportFragment : AbstractDropboxFragment(), AnkoLogger {
     /**
      * The onListFolderError method is called if an exception happens when the ListFolderTask is executed,
      *
-     * @arg ex exception that happened when executing ListFolderTask
+     * @param ex exception that happened when executing ListFolderTask
      */
     private fun onListFolderError(ex: Exception) {
         alert {

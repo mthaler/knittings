@@ -4,6 +4,7 @@ import org.junit.Test
 import java.util.*
 import org.junit.Assert.*
 import com.mthaler.knittings.utils.FileUtils.createDateTimeDirectoryName
+import com.mthaler.knittings.utils.FileUtils.getExtension
 import com.mthaler.knittings.utils.FileUtils.replaceIllegalCharacters
 
 class FileUtilsTest {
@@ -26,5 +27,13 @@ class FileUtilsTest {
         assertEquals("abc_def", replaceIllegalCharacters("abc_def"))
         assertEquals("abc_def", replaceIllegalCharacters("abc?def"))
         assertEquals("a_b_c_d_e", replaceIllegalCharacters("a:b:c:d:e"))
+    }
+
+    @Test
+    fun testGetExtension() {
+        assertEquals("",  getExtension("test"))
+        assertEquals("txt", getExtension("test.txt"))
+        assertEquals("txt", getExtension(".txt"))
+        assertEquals("txt", getExtension("test.orig.txt"))
     }
 }

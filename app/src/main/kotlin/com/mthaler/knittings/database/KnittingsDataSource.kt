@@ -119,8 +119,8 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
     /**
      * Adds the given knitting to the database
      *
-     * @arg knitting knitting that should be added to the database
-     * @arg manualID: use knitting ID instead of auto-imcremented id
+     * @param knitting knitting that should be added to the database
+     * @param manualID: use knitting ID instead of auto-imcremented id
      */
     fun addKnitting(knitting: Knitting, manualID: Boolean = false) {
         dbHelper.writableDatabase.use { database ->
@@ -321,8 +321,8 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
     /**
      * Adds the given photo to the database
      *
-     * @arg photo photo that should be added to the database
-     * @arg manualID: use photo ID instead of auto-imcremented id
+     * @param photo photo that should be added to the database
+     * @param manualID: use photo ID instead of auto-imcremented id
      */
     fun addPhoto(photo: Photo, manualID: Boolean = false) {
         dbHelper.writableDatabase.use { database ->

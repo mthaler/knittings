@@ -16,4 +16,16 @@ object FileUtils {
      * @return filename with characters that are not in [a-zA-Z_0-9] replaced by underscores
      */
     fun replaceIllegalCharacters(filename: String): String = filename.replace("""[^\w.-]""".toRegex(), "_")
+
+    /**
+     *
+     */
+    fun getExtension(filename: String): String {
+        val index = filename.lastIndexOf(".")
+        if (index >= 0) {
+            return filename.substring(index + 1)
+        } else {
+            return "";
+        }
+    }
 }

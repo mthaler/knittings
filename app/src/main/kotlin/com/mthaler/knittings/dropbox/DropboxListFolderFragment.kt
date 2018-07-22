@@ -61,7 +61,7 @@ class DropboxListFolderFragment : ListFragment(), AnkoLogger {
     /**
      * The onDownloadDatabaseError method is called if an exception happens when the DownloadDatabaseTask is executed,
      *
-     * @arg ex exception that happened when executing DownloadDatabaseTask
+     * @param ex exception that happened when executing DownloadDatabaseTask
      */
     private fun onDownloadDatabaseError(ex: Exception) {
         alert {
