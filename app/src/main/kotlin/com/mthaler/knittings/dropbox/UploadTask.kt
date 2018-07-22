@@ -13,6 +13,7 @@ import java.io.IOException
 import com.mthaler.knittings.model.*
 import java.io.ByteArrayInputStream
 import com.mthaler.knittings.utils.FileUtils.createDateTimeDirectoryName
+import com.mthaler.knittings.utils.FileUtils.getExtension
 import java.util.*
 
 /**
@@ -51,9 +52,8 @@ class UploadTask(private val dbxClient: DbxClientV2,
             for ((index, photo) in photos.withIndex()) {
                 if (isCancelled) break
                 publishProgress((index / count.toFloat() * 100).toInt())
-                val file = photo.filename
-                val inputStream = FileInputStream(file)
-                dbxClient.files().uploadBuilder("/" + dir + "/" + file.name) //Path in the user's Dropbox to save the file.
+                val inputStream = FileInputStream(photo.filename)
+                dbxClient.files().uploadBuilder("/" + dir + "/" + photo.id + "." + getExtension(photo.filename.name)) //Path in the user's Dropbox to save the file.
                     .withMode(WriteMode.OVERWRITE) //always overwrite existing file
                     .uploadAndFinish(inputStream)
             }
