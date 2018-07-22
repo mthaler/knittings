@@ -1,22 +1,26 @@
 package com.mthaler.knittings.dropbox
 
 import android.os.AsyncTask
-import com.dropbox.core.DbxException
 import com.dropbox.core.v2.DbxClientV2
+import com.mthaler.knittings.model.Database
 import org.json.JSONObject
 import java.io.ByteArrayOutputStream
-import java.io.IOException
+import com.mthaler.knittings.model.*
 
 /**
- * Task to download a file from Dropbox and put it in the Downloads folder
+ * Async task that downloads the database file from Dropbox
+ *
+ * @arg dbxClient DbxClientV2
+ * @arg onDataLoaded callback that is executed when the data is loaded
+ * @arg onError callback that is executed if an error happens
  */
 internal class DownloadDatabaseTask(private val dbxClient: DbxClientV2,
-                                    private val onDataLoaded: (JSONObject) -> Unit,
-                                    private val onError: (Exception) -> Unit) : AsyncTask<String, Void, JSONObject>() {
+                                    private val onDataLoaded: (Database) -> Unit,
+                                    private val onError: (Exception) -> Unit) : AsyncTask<String, Void, Database>() {
 
     private var mException: Exception? = null
 
-    override fun onPostExecute(result: JSONObject) {
+    override fun onPostExecute(result: Database) {
         super.onPostExecute(result)
 
         val ex = mException
@@ -28,19 +32,19 @@ internal class DownloadDatabaseTask(private val dbxClient: DbxClientV2,
         }
     }
 
-    override fun doInBackground(vararg params: String): JSONObject? {
+    override fun doInBackground(vararg params: String): Database? {
+        // try to download database file from Dropbox and convert it to Database object
         try {
             val os = ByteArrayOutputStream()
             dbxClient.files().download("/" + params[0] + "/db.json").download(os)
             val bytes = os.toByteArray()
             val jsonStr = String(bytes)
-            return JSONObject(jsonStr)
-        } catch (e: DbxException) {
+            val json = JSONObject(jsonStr)
+            val db = json.toDatabase()
+            return db
+        } catch (e: Exception) {
             mException = e
-        } catch (e: IOException) {
-            mException = e
+            return null
         }
-
-        return null
     }
 }

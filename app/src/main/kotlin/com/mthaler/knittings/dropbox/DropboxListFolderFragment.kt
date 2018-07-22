@@ -9,8 +9,8 @@ import android.widget.ArrayAdapter
 import android.widget.ListView
 import android.widget.TextView
 import com.mthaler.knittings.R
+import com.mthaler.knittings.model.Database
 import org.jetbrains.anko.AnkoLogger
-import org.json.JSONObject
 
 class DropboxListFolderFragment : ListFragment(), AnkoLogger {
 
@@ -35,7 +35,7 @@ class DropboxListFolderFragment : ListFragment(), AnkoLogger {
         return inflater.inflate(R.layout.fragment_dropbox_list_folder, container, false)
     }
 
-    private fun onDownloadDatabase(result: JSONObject) {
+    private fun onDownloadDatabase(result: Database) {
         println("hello")
     }
 
