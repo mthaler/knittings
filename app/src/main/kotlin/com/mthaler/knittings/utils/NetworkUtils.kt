@@ -11,8 +11,8 @@ object NetworkUtils {
      */
     fun isWifiConnected(ctx: Context): Boolean {
         try {
-            val connMgr = ctx.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-            val networkInfo = connMgr.getNetworkInfo(ConnectivityManager.TYPE_WIFI)
+            val cm = ctx.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+            val networkInfo = cm.activeNetworkInfo
             return networkInfo.isConnected
         } catch (ex: Exception) {
             return false

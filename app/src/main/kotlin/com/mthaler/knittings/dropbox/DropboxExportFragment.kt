@@ -1,7 +1,5 @@
 package com.mthaler.knittings.dropbox
 
-import android.content.Context
-import android.net.ConnectivityManager
 import android.os.AsyncTask
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.dropbox.core.android.Auth
 import com.mthaler.knittings.R
+import com.mthaler.knittings.utils.NetworkUtils
 import kotlinx.android.synthetic.main.fragment_dropbox_export.*
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.doAsync
@@ -43,9 +42,7 @@ class DropboxExportFragment : AbstractDropboxFragment(), AnkoLogger {
             val ctx = context
             if (ctx != null) {
                 try {
-                    val cm = ctx.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-                    val activeNetwork = cm.activeNetworkInfo
-                    val isWiFi = activeNetwork.type == ConnectivityManager.TYPE_WIFI
+                    val isWiFi = NetworkUtils.isWifiConnected(ctx)
                     if (!isWiFi) {
                         alert {
                             title = resources.getString(R.string.dropbox_export)
