@@ -46,6 +46,9 @@ class DropboxListFolderFragment : ListFragment(), AnkoLogger {
             for (knitting in database.knittings) {
                 datasource.addKnitting(knitting, manualID = true)
             }
+            for (photo in database.photos) {
+                datasource.addPhoto(photo, manualID = true)
+            }
         } else {
             alert {
                 title = "Download database"

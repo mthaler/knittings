@@ -319,6 +319,33 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
     }
 
     /**
+     * Adds the given photo to the database
+     *
+     * @arg photo photo that should be added to the database
+     * @arg manualID: use photo ID instead of auto-imcremented id
+     */
+    fun addPhoto(photo: Photo, manualID: Boolean = false) {
+        dbHelper.writableDatabase.use { database ->
+            val values = ContentValues()
+            if (manualID) {
+                values.put(KnittingDatabaseHelper.PhotoTable.Cols.ID, photo.id)
+            }
+            values.put(KnittingDatabaseHelper.PhotoTable.Cols.FILENAME, photo.filename.absolutePath)
+            values.put(KnittingDatabaseHelper.PhotoTable.Cols.KNITTING_ID, photo.knittingID)
+            values.put(KnittingDatabaseHelper.PhotoTable.Cols.DESCRIPTION, photo.description)
+            val previewBytes = Photo.getBytes(photo.preview)
+            if (previewBytes != null) {
+                values.put(KnittingDatabaseHelper.PhotoTable.Cols.PREVIEW, previewBytes)
+            } else {
+                values.putNull(KnittingDatabaseHelper.PhotoTable.Cols.PREVIEW)
+            }
+
+            val id = database.insert(KnittingDatabaseHelper.PhotoTable.PHOTOS, null, values)
+            debug("Added photo " + photo + " to database, id=" + id)
+        }
+    }
+
+    /**
      * Updates a photo in the database
      *
      * @param photo photo that should be updated
