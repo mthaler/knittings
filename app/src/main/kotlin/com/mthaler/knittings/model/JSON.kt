@@ -118,3 +118,12 @@ fun Database.toJSON(): JSONObject {
     result.put("photos", photosToJSON(photos))
     return result
 }
+
+/**
+ * Converts a JSON object to a database object
+ */
+fun JSONObject.toDatabase(): Database {
+    val knittings = getJSONArray("knittings").toKnittings()
+    val photos = getJSONArray("photos").toPhotos()
+    return Database(knittings, photos)
+}
