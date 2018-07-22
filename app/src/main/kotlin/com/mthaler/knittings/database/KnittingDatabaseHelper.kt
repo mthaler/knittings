@@ -13,7 +13,8 @@ import org.jetbrains.anko.error
 class KnittingDatabaseHelper(context: Context) : ManagedSQLiteOpenHelper(context, DB_NAME, null, DB_VERSION), AnkoLogger {
 
     companion object {
-        // Use different database name for testing. This is an ugly hack, but I didn't find another way to do this
+        // Use in-memory database for testing. This is an ugly hack, but I didn't find another way to do this
+        // if the database name is null, Android uses an in-memory database
         private val DB_NAME = try {
             Class.forName("android.support.test.espresso.Espresso")
             null
