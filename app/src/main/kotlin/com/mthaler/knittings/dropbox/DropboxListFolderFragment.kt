@@ -16,9 +16,12 @@ import com.mthaler.knittings.database.datasource
 
 class DropboxListFolderFragment : ListFragment(), AnkoLogger {
 
+    private var backupDirectory = "";
+
     override fun onListItemClick(l: ListView?, v: View?, position: Int, id: Long) {
         // get current knitting
         val folderName = (listAdapter as ListFolderAdapter).getItem(position)
+        backupDirectory = folderName
         DownloadDatabaseTask(DropboxClientFactory.getClient(), ::onDownloadDatabase, ::onDownloadDatabaseError).execute(folderName)
     }
 
@@ -49,6 +52,7 @@ class DropboxListFolderFragment : ListFragment(), AnkoLogger {
             for (photo in database.photos) {
                 datasource.addPhoto(photo, manualID = true)
             }
+            DownloadPhotosTask(DropboxClientFactory.getClient(), backupDirectory, database).execute()
         } else {
             alert {
                 title = "Download database"
