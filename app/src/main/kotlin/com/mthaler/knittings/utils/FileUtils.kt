@@ -22,19 +22,11 @@ object FileUtils {
      */
     fun getExtension(filename: String): String {
         val index = filename.lastIndexOf(".")
-        if (index >= 0) {
-            return filename.substring(index + 1)
-        } else {
-            return "";
-        }
+        return if (index >= 0) filename.substring(index + 1) else ""
     }
 
     fun getFilenameWithoutExtension(filename: String): String {
         val index = filename.lastIndexOf(".")
-        if (index >= 0) {
-            return filename.substring(0, index)
-        } else {
-            return filename
-        }
+        return if (index >= 0) filename.substring(0, index) else filename
     }
 }

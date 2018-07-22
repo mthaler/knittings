@@ -30,7 +30,7 @@ class PhotoGalleryFragment : Fragment(), AnkoLogger {
         if (savedInstanceState != null) {
             if (savedInstanceState.containsKey(KNITTING_ID)) {
                 knitting = datasource.getKnitting(savedInstanceState.getLong(KNITTING_ID))
-                debug("Set knitting: " + knitting)
+                debug("Set knitting: $knitting")
             }
         }
 

@@ -7,7 +7,7 @@ object NetworkUtils {
     /**
      * Checks if WIFI is available
      *
-     * @param context
+     * @param ctx context
      */
     fun isWifiConnected(ctx: Context): Boolean {
         try {
@@ -22,7 +22,7 @@ object NetworkUtils {
     /**
      * Checks if mobile network is available
      *
-     * @param context
+     * @param ctx context
      */
     fun isMobileConnected(ctx: Context): Boolean {
         try {

@@ -40,8 +40,7 @@ internal class DownloadDatabaseTask(private val dbxClient: DbxClientV2,
             val bytes = os.toByteArray()
             val jsonStr = String(bytes)
             val json = JSONObject(jsonStr)
-            val db = json.toDatabase()
-            return db
+            return json.toDatabase()
         } catch (e: Exception) {
             exception = e
             return null

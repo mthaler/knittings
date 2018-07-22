@@ -14,7 +14,6 @@ import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.support.v4.alert
 import org.jetbrains.anko.uiThread
-import android.content.DialogInterface
 import android.support.v7.app.AlertDialog
 import com.mthaler.knittings.database.datasource
 import com.mthaler.knittings.model.Database
@@ -23,7 +22,7 @@ class DropboxImportFragment : AbstractDropboxFragment(), AnkoLogger {
 
     private var importTask: AsyncTask<String, Void, ListFolderResult?>? = null
     private var importing = false
-    private var backupDirectory = "";
+    private var backupDirectory = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -113,7 +112,7 @@ class DropboxImportFragment : AbstractDropboxFragment(), AnkoLogger {
             val files = result.entries.map { it.name }.toTypedArray()
             val dialogBuilder = AlertDialog.Builder(context!!)
             dialogBuilder.setTitle("Backups")
-            dialogBuilder.setItems(files, DialogInterface.OnClickListener { dialog, item ->
+            dialogBuilder.setItems(files) { dialog, item ->
                 val folderName = files[item]
                 backupDirectory = folderName
                 alert {
@@ -124,8 +123,8 @@ class DropboxImportFragment : AbstractDropboxFragment(), AnkoLogger {
                     }
                     negativeButton(resources.getString(R.string.dialog_button_cancel)) {}
                 }.show()
-            })
-            dialogBuilder.setNegativeButton("Cancel", DialogInterface.OnClickListener { dialog, which -> })
+            }
+            dialogBuilder.setNegativeButton("Cancel") { dialog, which -> }
             //Create alert dialog object via builder
             val alertDialogObject = dialogBuilder.create()
             //Show the dialog

@@ -139,7 +139,7 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
             values.put(KnittingDatabaseHelper.KnittingTable.Cols.RATING, knitting.rating)
 
             val id = database.insert(KnittingDatabaseHelper.KnittingTable.KNITTINGS, null, values)
-            debug("Added knitting " + knitting + " to database, id=" + id)
+            debug("Added knitting $knitting to database, id=$id")
         }
     }
 
@@ -341,7 +341,7 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
             }
 
             val id = database.insert(KnittingDatabaseHelper.PhotoTable.PHOTOS, null, values)
-            debug("Added photo " + photo + " to database, id=" + id)
+            debug("Added photo $photo to database, id=$id")
         }
     }
 

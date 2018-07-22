@@ -32,7 +32,7 @@ interface CanTakePhoto : AnkoLogger {
             val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
             val knitting = context.datasource.getKnitting(knittingID)
             currentPhotoPath = context.datasource.getPhotoFile(knitting)
-            debug("Set current photo path: " + currentPhotoPath)
+            debug("Set current photo path: $currentPhotoPath")
             val packageManager = context.packageManager
             val canTakePhoto = currentPhotoPath != null && takePictureIntent.resolveActivity(packageManager) != null
             if (canTakePhoto) {
@@ -46,7 +46,7 @@ interface CanTakePhoto : AnkoLogger {
             d.dismiss()
             val knitting = context.datasource.getKnitting(knittingID)
             currentPhotoPath = context.datasource.getPhotoFile(knitting)
-            debug("Set current photo path: " + currentPhotoPath)
+            debug("Set current photo path: $currentPhotoPath")
             val photoPickerIntent = Intent(Intent.ACTION_PICK)
             photoPickerIntent.type = "image/*"
             startActivityForResult(photoPickerIntent, REQUEST_IMAGE_IMPORT)
