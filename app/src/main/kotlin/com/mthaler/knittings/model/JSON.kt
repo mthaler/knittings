@@ -47,6 +47,16 @@ fun JSONObject.toKnitting(): Knitting {
     return Knitting(id, title, description, started, finished, needleDiameter, size, null, rating)
 }
 
+fun JSONArray.toKnittings(): List<Knitting> {
+    val result = ArrayList<Knitting>()
+    for(i in 0 until length()) {
+        val item = getJSONObject(i)
+        val knitting = item.toKnitting()
+        result.add(knitting)
+    }
+    return result
+}
+
 fun JSONObject.toPhoto(): Photo {
     val id = getLong("id")
     val filename = File(getString("filename"))

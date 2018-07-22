@@ -1,10 +1,10 @@
 package com.mthaler.knittings.model
 
+import org.json.JSONArray
 import org.json.JSONObject
 import org.junit.Assert.*
 import org.junit.Test
 import java.io.File
-import java.io.FilenameFilter
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -68,6 +68,34 @@ class JSONTest {
         assertEquals(3.0, k.needleDiameter, 0.000001)
         assertEquals(41.0, k.size, 0.000001)
         assertEquals(5.0, k.rating, 0.000001)
+    }
+
+    @Test
+    fun testJSONArrayToKnittings() {
+        val s = """[{"size":41,"needleDiameter":3,"rating":5,"description":"my first knitting","started":"2018-01-10","id":42,"title":"knitting"},
+            |{"size":42,"needleDiameter":3.5,"rating":4.5,"description":"my second knitting","started":"2018-01-11", "finished":"2018-01-12","id":43,"title":"knitting 2"}]
+        """.trimMargin()
+        val json = JSONArray(s)
+        val knittings = json.toKnittings()
+        assertEquals(2, knittings.size)
+        val k = knittings[0]
+        assertEquals(42, k.id)
+        assertEquals("knitting", k.title)
+        assertEquals("my first knitting", k.description)
+        assertEquals("2018-01-10", dateFormat.format(k.started))
+        assertNull(k.finished)
+        assertEquals(3.0, k.needleDiameter, 0.000001)
+        assertEquals(41.0, k.size, 0.000001)
+        assertEquals(5.0, k.rating, 0.000001)
+        val k2 = knittings[1]
+        assertEquals(43, k2.id)
+        assertEquals("knitting 2", k2.title)
+        assertEquals("my second knitting", k2.description)
+        assertEquals("2018-01-11", dateFormat.format(k2.started))
+        assertEquals("2018-01-12", dateFormat.format(k2.finished))
+        assertEquals(3.5, k2.needleDiameter, 0.000001)
+        assertEquals(42.0, k2.size, 0.000001)
+        assertEquals(4.5, k2.rating, 0.000001)
     }
 
     @Test
