@@ -18,13 +18,18 @@ import java.util.*
 
 /**
  * Tasks that uploads the application data to Dropbox
+ *
+ * @param dbxClient Dropbox client
+ * @param context context
+ * @param updateProgress function that is called when progress is updates
+ * @param onComplete function that is called when upload is completed
  */
 class UploadTask(private val dbxClient: DbxClientV2,
                  private val context: Context,
                  private val updateProgress: (Int) -> Unit,
-                 private val setMode: (Boolean) -> Unit) : AsyncTask<Any, Int?, Any?>() {
+                 private val onComplete: () -> Unit) : AsyncTask<Void, Int?, Any?>() {
 
-    override fun doInBackground(params: Array<Any>): Any? {
+    override fun doInBackground(vararg params: Void): Any? {
         try {
             val ds = KnittingsDataSource.getInstance(context)
             // get all knittings
@@ -75,13 +80,13 @@ class UploadTask(private val dbxClient: DbxClientV2,
     override fun onPostExecute(o: Any?) {
         super.onPostExecute(o)
         updateProgress(100)
-        setMode(false)
+        onComplete()
         Toast.makeText(context, "Export finished", Toast.LENGTH_SHORT).show()
     }
 
     override fun onCancelled() {
         super.onCancelled()
-        setMode(false)
+        onComplete()
     }
 }
 

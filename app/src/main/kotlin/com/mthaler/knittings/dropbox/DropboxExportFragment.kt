@@ -21,7 +21,7 @@ import com.mthaler.knittings.utils.StringUtils.formatBytes
  */
 class DropboxExportFragment : AbstractDropboxFragment(), AnkoLogger {
 
-    private var exportTask: AsyncTask<Any, Int?, Any?>? = null
+    private var exportTask: AsyncTask<Void, Int?, Any?>? = null
     private var exporting = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -47,13 +47,13 @@ class DropboxExportFragment : AbstractDropboxFragment(), AnkoLogger {
                         title = resources.getString(R.string.dropbox_export)
                         message = resources.getString(R.string.dropbox_export_no_wifi_question)
                         positiveButton(resources.getString(R.string.dropbox_export_dialog_export_button)) {
-                            exportTask = UploadTask(DropboxClientFactory.getClient(), ctx.applicationContext, progressBar::setProgress, ::setMode).execute()
+                            exportTask = UploadTask(DropboxClientFactory.getClient(), ctx.applicationContext, progressBar::setProgress, ::onUploadComplete).execute()
                             setMode(true)
                         }
                         negativeButton(resources.getString(R.string.dialog_button_cancel)) {}
                     }.show()
                 } else  {
-                    exportTask = UploadTask(DropboxClientFactory.getClient(), ctx.applicationContext, progressBar::setProgress, ::setMode).execute()
+                    exportTask = UploadTask(DropboxClientFactory.getClient(), ctx.applicationContext, progressBar::setProgress, ::onUploadComplete).execute()
                     setMode(true)
                 }
             } else {
@@ -97,6 +97,10 @@ class DropboxExportFragment : AbstractDropboxFragment(), AnkoLogger {
                 free_space_text.text = "Free: " + formatBytes(spaceUsage.allocation.individualValue.allocated - spaceUsage.used)
             }
         }
+    }
+
+    private fun onUploadComplete() {
+        setMode(false)
     }
 
     private fun setMode(exporting: Boolean) {
