@@ -54,12 +54,4 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:visibility="gone" />
-
-    <Button
-        style="@style/ButtonStyle"
-        android:id="@+id/cancel_button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/dropbox_cancel_export"
-        android:visibility="gone" />
 </LinearLayout>

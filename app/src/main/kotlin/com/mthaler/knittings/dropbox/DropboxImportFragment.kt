@@ -95,13 +95,11 @@ class DropboxImportFragment : AbstractDropboxFragment(), AnkoLogger {
             import_button.visibility = View.GONE
             import_text.visibility = View.VISIBLE
             progressBar.visibility = View.VISIBLE
-            cancel_button.visibility = View.VISIBLE
         } else {
             import_button.visibility = View.VISIBLE
             import_text.visibility = View.GONE
             progressBar.visibility = View.GONE
             progressBar.progress = 0
-            cancel_button.visibility = View.GONE
         }
         this.importing = importing
     }
