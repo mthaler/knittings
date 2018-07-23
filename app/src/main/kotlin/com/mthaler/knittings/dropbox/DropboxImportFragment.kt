@@ -118,6 +118,7 @@ class DropboxImportFragment : AbstractDropboxFragment(), AnkoLogger {
                     message = "Do you really want to import from Dropbox? This will delete all existing data!"
                     positiveButton("Import") {
                         DownloadDatabaseTask(DropboxClientFactory.getClient(), ::onDownloadDatabase, ::onDownloadDatabaseError).execute(folderName)
+                        setMode(true)
                     }
                     negativeButton(resources.getString(R.string.dialog_button_cancel)) {}
                 }.show()
@@ -185,6 +186,7 @@ class DropboxImportFragment : AbstractDropboxFragment(), AnkoLogger {
     }
 
     private fun onDownloadPhotosComplete() {
+        setMode(false)
         alert {
             title = resources.getString(R.string.dropbox_import)
             message = "Dropbox import completed"
