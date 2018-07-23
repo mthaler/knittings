@@ -38,7 +38,8 @@ class DownloadPhotosTask(private val dbxClient: DbxClientV2,
             val orientation = PictureUtils.getOrientation(photo.filename.absolutePath)
             val preview = PictureUtils.decodeSampledBitmapFromPath(photo.filename.absolutePath, 200, 200)
             val rotatedPreview = PictureUtils.rotateBitmap(preview, orientation)
-            context.datasource.updatePhoto(photo.copy(preview = rotatedPreview))
+            val photoWithPreview = photo.copy(preview = rotatedPreview)
+            context.datasource.updatePhoto(photoWithPreview)
             // update progress
             publishProgress((index / count.toFloat() * 100).toInt())
 

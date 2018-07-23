@@ -52,7 +52,7 @@ class KnittingListFragment : ListFragment(), KnittingListView, AnkoLogger {
             val knitting = getItem(position)
 
             val titleTextView = convertView!!.findViewById<TextView>(R.id.knitting_list_item_titleTextView)
-            titleTextView.text = knitting!!.title
+            titleTextView.text = knitting.title
 
             val descriptionTextView = convertView.findViewById<TextView>(R.id.knitting_list_item_descriptionTextView)
             descriptionTextView.text = knitting.description

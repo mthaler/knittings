@@ -1,0 +1,8 @@
+Viewing contents of the SQLite database:
+---------------------------------------
+
+- Open Device File Explorer via View > Tool Windows > Device File Explorer
+- Go to data > data > com.mthaler.knittings > database
+- Right click on the database and select Save As... to save the database on the local PC
+- Open the database with SQLiteBrowser
+
