@@ -58,7 +58,7 @@ class JSONTest {
     fun testJSONToKnitting() {
         val s = """{"size":41,"needleDiameter":3,"rating":5,"description":"my first knitting","started":"2018-01-10","id":42,"title":"knitting"}"""
         val json = JSONObject(s)
-        val k = json.toKnitting()
+        val k = json.toKnitting().first
         assertEquals(42, k.id)
         assertEquals("knitting", k.title)
         assertEquals("my first knitting", k.description)
@@ -75,7 +75,7 @@ class JSONTest {
             |{"size":42,"needleDiameter":3.5,"rating":4.5,"description":"my second knitting","started":"2018-01-11", "finished":"2018-01-12","id":43,"title":"knitting 2"}]
         """.trimMargin()
         val json = JSONArray(s)
-        val knittings = json.toKnittings()
+        val knittings = json.toKnittings().map { it.first}
         assertEquals(2, knittings.size)
         val k = knittings[0]
         assertEquals(42, k.id)

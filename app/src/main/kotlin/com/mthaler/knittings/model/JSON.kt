@@ -41,9 +41,10 @@ fun Photo.toJSON(): JSONObject {
 }
 
 /**
- * Converts a JSON object to a knitting
+ * Converts a JSON object to a knitting. The method actually returns a pair of the knitting and
+ * and the optional default photo id
  */
-fun JSONObject.toKnitting(): Knitting {
+fun JSONObject.toKnitting(): Pair<Knitting, Long?> {
     val id = getLong("id")
     val title = getString("title")
     val description = getString("description")
@@ -53,18 +54,18 @@ fun JSONObject.toKnitting(): Knitting {
     val size = getDouble("size")
     val defaultPhoto = if (has("defaultPhoto")) getLong("defaultPhoto") else null
     val rating = getDouble("rating")
-    return Knitting(id, title, description, started, finished, needleDiameter, size, null, rating)
+    return Pair(Knitting(id, title, description, started, finished, needleDiameter, size, null, rating), defaultPhoto)
 }
 
 /**
  * Converts a JSON array to a list of knittings
  */
-fun JSONArray.toKnittings(): List<Knitting> {
-    val result = ArrayList<Knitting>()
+fun JSONArray.toKnittings(): List<Pair<Knitting, Long?>> {
+    val result = ArrayList<Pair<Knitting, Long?>>()
     for(i in 0 until length()) {
         val item = getJSONObject(i)
-        val knitting = item.toKnitting()
-        result.add(knitting)
+        val knittingAndDefaultPhoto = item.toKnitting()
+        result.add(knittingAndDefaultPhoto)
     }
     return result
 }
@@ -123,7 +124,25 @@ fun Database.toJSON(): JSONObject {
  * Converts a JSON object to a database object
  */
 fun JSONObject.toDatabase(): Database {
-    val knittings = getJSONArray("knittings").toKnittings()
+
+    fun updateKnitting(knitting: Knitting, defaultPhotoID: Long?, idToPhoto: Map<Long, Photo>): Knitting {
+        if (defaultPhotoID != null) {
+            if (idToPhoto.containsKey(defaultPhotoID)) {
+                return knitting.copy(defaultPhoto = idToPhoto[defaultPhotoID])
+            } else {
+                return knitting
+            }
+        } else {
+            return knitting
+        }
+    }
+
+    // list of knittings and optional default photo
+    val knittingsAndDefaultPhotos = getJSONArray("knittings").toKnittings()
     val photos = getJSONArray("photos").toPhotos()
+    // create a map from photo id to photo
+    val idToPhoto = photos.map { it.id to it }.toMap()
+    // update the list of knittings with default photos
+    val knittings = knittingsAndDefaultPhotos.map { updateKnitting(it.first, it.second, idToPhoto) }
     return Database(knittings, photos)
 }
