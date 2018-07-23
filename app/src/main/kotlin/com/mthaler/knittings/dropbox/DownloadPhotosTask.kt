@@ -1,12 +1,26 @@
 package com.mthaler.knittings.dropbox
 
+import android.content.Context
 import android.os.AsyncTask
 import com.dropbox.core.v2.DbxClientV2
+import com.mthaler.knittings.PictureUtils
+import com.mthaler.knittings.database.datasource
 import com.mthaler.knittings.model.Database
 import com.mthaler.knittings.utils.FileUtils
 import java.io.FileOutputStream
 
+/**
+ * Async task that downloads all photos from Dropbox and stores them locally. It also generates the preview and stores it in the database
+ *
+ * @param dbxClient Dropbox client
+ * @param context context
+ * @param directory Dropbox backup directory
+ * @param database database
+ * @param updateProgress function to update progess
+ * @param onComplete function that is called when task is completed
+ */
 class DownloadPhotosTask(private val dbxClient: DbxClientV2,
+                         private val context: Context,
                          private val directory: String,
                          private val database: Database,
                          private val updateProgress: (Int) -> Unit,
@@ -20,6 +34,12 @@ class DownloadPhotosTask(private val dbxClient: DbxClientV2,
             FileOutputStream(photo.filename).use {
                 dbxClient.files().download(filename).download(it)
             }
+            // generate preview
+            val orientation = PictureUtils.getOrientation(photo.filename.absolutePath)
+            val preview = PictureUtils.decodeSampledBitmapFromPath(photo.filename.absolutePath, 200, 200)
+            val rotatedPreview = PictureUtils.rotateBitmap(preview, orientation)
+            context.datasource.updatePhoto(photo.copy(preview = rotatedPreview))
+            // update progress
             publishProgress((index / count.toFloat() * 100).toInt())
 
         }

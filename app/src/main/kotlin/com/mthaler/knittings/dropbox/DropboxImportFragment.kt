@@ -151,7 +151,8 @@ class DropboxImportFragment : AbstractDropboxFragment(), AnkoLogger {
     }
 
     private fun onDownloadDatabase(database: Database?) {
-        if (database != null) {
+        val ctx = context
+        if (ctx != null && database != null) {
             // remove all existing entries from the database
             datasource.deleteAllKnittings()
             datasource.deleteAllPhotos()
@@ -162,7 +163,7 @@ class DropboxImportFragment : AbstractDropboxFragment(), AnkoLogger {
             for (photo in database.photos) {
                 datasource.addPhoto(photo, manualID = true)
             }
-            DownloadPhotosTask(DropboxClientFactory.getClient(), backupDirectory, database, progressBar::setProgress, ::onDownloadPhotosComplete).execute()
+            DownloadPhotosTask(DropboxClientFactory.getClient(), ctx, backupDirectory, database, progressBar::setProgress, ::onDownloadPhotosComplete).execute()
         } else {
             alert {
                 title = "Download database"
