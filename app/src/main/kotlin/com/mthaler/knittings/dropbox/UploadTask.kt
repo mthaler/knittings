@@ -55,11 +55,11 @@ class UploadTask(private val dbxClient: DbxClientV2,
             val count = photos.size
             for ((index, photo) in photos.withIndex()) {
                 if (isCancelled) break
-                publishProgress((index / count.toFloat() * 100).toInt())
                 val inputStream = FileInputStream(photo.filename)
                 dbxClient.files().uploadBuilder("/" + dir + "/" + photo.id + "." + getExtension(photo.filename.name)) //Path in the user's Dropbox to save the file.
                     .withMode(WriteMode.OVERWRITE) //always overwrite existing file
                     .uploadAndFinish(inputStream)
+                publishProgress((index / count.toFloat() * 100).toInt())
             }
             Log.d("Upload Status", "Success")
         } catch (e: DbxException) {

@@ -161,7 +161,7 @@ class DropboxImportFragment : AbstractDropboxFragment(), AnkoLogger {
             for (photo in database.photos) {
                 datasource.addPhoto(photo, manualID = true)
             }
-            DownloadPhotosTask(DropboxClientFactory.getClient(), backupDirectory, database, ::onDownloadPhotosComplete).execute()
+            DownloadPhotosTask(DropboxClientFactory.getClient(), backupDirectory, database, progressBar::setProgress, ::onDownloadPhotosComplete).execute()
         } else {
             alert {
                 title = "Download database"
