@@ -8,7 +8,8 @@ import java.io.FileOutputStream
 
 class DownloadPhotosTask(private val dbxClient: DbxClientV2,
                          private val directory: String,
-                         private val database: Database) : AsyncTask<Any, Int?, Any?>() {
+                         private val database: Database,
+                         private val onComplete: () -> Unit) : AsyncTask<Any, Int?, Any?>() {
 
     override fun doInBackground(params: Array<Any>): Any? {
         for (photo in database.photos) {
@@ -27,10 +28,6 @@ class DownloadPhotosTask(private val dbxClient: DbxClientV2,
     }
 
     override fun onPostExecute(o: Any?) {
-
-    }
-
-    override fun onCancelled() {
-
+        onComplete()
     }
 }

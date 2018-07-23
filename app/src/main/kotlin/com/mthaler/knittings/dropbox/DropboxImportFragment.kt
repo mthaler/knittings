@@ -138,6 +138,19 @@ class DropboxImportFragment : AbstractDropboxFragment(), AnkoLogger {
         }
     }
 
+    /**
+     * The onListFolderError method is called if an exception happens when the ListFolderTask is executed,
+     *
+     * @param ex exception that happened when executing ListFolderTask
+     */
+    private fun onListFolderError(ex: Exception) {
+        alert {
+            title = "List folders"
+            message = "Error when listing folders: " + ex.message
+            positiveButton("OK") {}
+        }.show()
+    }
+
     private fun onDownloadDatabase(database: Database?) {
         if (database != null) {
             // remove all existing entries from the database
@@ -150,7 +163,7 @@ class DropboxImportFragment : AbstractDropboxFragment(), AnkoLogger {
             for (photo in database.photos) {
                 datasource.addPhoto(photo, manualID = true)
             }
-            DownloadPhotosTask(DropboxClientFactory.getClient(), backupDirectory, database).execute()
+            DownloadPhotosTask(DropboxClientFactory.getClient(), backupDirectory, database, ::onDownloadPhotosComplete).execute()
         } else {
             alert {
                 title = "Download database"
@@ -173,15 +186,10 @@ class DropboxImportFragment : AbstractDropboxFragment(), AnkoLogger {
         }.show()
     }
 
-    /**
-     * The onListFolderError method is called if an exception happens when the ListFolderTask is executed,
-     *
-     * @param ex exception that happened when executing ListFolderTask
-     */
-    private fun onListFolderError(ex: Exception) {
+    private fun onDownloadPhotosComplete() {
         alert {
-            title = "List folders"
-            message = "Error when listing folders: " + ex.message
+            title = resources.getString(R.string.dropbox_import)
+            message = "Dropbox import completed"
             positiveButton("OK") {}
         }.show()
     }
