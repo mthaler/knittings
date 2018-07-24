@@ -45,7 +45,7 @@ class KnittingListFragment : ListFragment(), KnittingListView, AnkoLogger {
             // if we weren't given a view, inflate one
             if (null == convertView) {
                 convertView = activity!!.layoutInflater
-                        .inflate(R.layout.list_item_knitting, null)
+                        .inflate(R.layout.list_item_knitting, parent, false)
             }
 
             // configure the view for this Crime

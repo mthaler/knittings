@@ -1,5 +1,6 @@
 package com.mthaler.knittings
 
+import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
@@ -22,6 +23,7 @@ interface CanTakePhoto : AnkoLogger {
     fun takePhoto(context: Context, layoutInflater: LayoutInflater, knittingID: Long): Boolean {
         // take photo icon clicked, ask user if photo should be taken or imported from gallery
         val b = AlertDialog.Builder(context)
+        @SuppressLint("InflateParams")
         val layout = layoutInflater.inflate(R.layout.dialog_take_photo, null)
         val buttonTakePhoto = layout.find<Button>(R.id.button_take_photo)
         val buttonImportPhoto = layout.find<Button>(R.id.buttom_import_photo)

@@ -1,5 +1,6 @@
 package com.mthaler.knittings
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.AlertDialog
 import android.app.Dialog
@@ -33,6 +34,7 @@ class DatePickerFragment : DialogFragment() {
         val month = calendar.get(Calendar.MONTH)
         val day = calendar.get(Calendar.DAY_OF_MONTH)
 
+        @SuppressLint("InflateParams")
         val v = activity!!.layoutInflater.inflate(R.layout.dialog_date, null)
 
         val datePicker = v.findViewById<DatePicker>(R.id.dialog_date_datePicker)

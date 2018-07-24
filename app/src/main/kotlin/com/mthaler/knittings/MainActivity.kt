@@ -1,5 +1,6 @@
 package com.mthaler.knittings
 
+import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
@@ -87,6 +88,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
      * Shows the about dialog that displays the app name, version and some additional information
      */
     private fun showAboutDialog() {
+        @SuppressLint("InflateParams")
         val v = layoutInflater.inflate(R.layout.dialog_about, null)
         val appName = v.find<TextView>(R.id.about_app_name)
         appName.text = (appName.text.toString() + " " + BuildConfig.VERSION_NAME)
