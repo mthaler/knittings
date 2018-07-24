@@ -27,6 +27,7 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
      * @return all knittings from database
      */
     val allKnittings: ArrayList<Knitting>
+        @Synchronized
         get() = dbHelper.readableDatabase.use { database ->
             val knittings = ArrayList<Knitting>()
 
@@ -53,6 +54,7 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
      * @return all knittings from database
      */
     val allPhotos: ArrayList<Photo>
+        @Synchronized
         get() = dbHelper.readableDatabase.use { database ->
             val photos = ArrayList<Photo>()
 
@@ -88,6 +90,7 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
      * @param size size of knitting
      * @return new knitting
      */
+    @Synchronized
     fun createKnitting(title: String, description: String, started: Date, finished: Date?, needleDiameter: Double, size: Double, rating: Double): Knitting {
         debug("Creating knitting, title: " + title + ", description: " + description + ", started: " + started + ", finished: " +
                 finished + ", needle diameter: " + needleDiameter + ", size: " + size + ", rating: " + rating)
@@ -122,6 +125,7 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
      * @param knitting knitting that should be added to the database
      * @param manualID: use knitting ID instead of auto-imcremented id
      */
+    @Synchronized
     fun addKnitting(knitting: Knitting, manualID: Boolean = false) {
         dbHelper.writableDatabase.use { database ->
             val values = ContentValues()
@@ -136,6 +140,12 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
             }
             values.put(KnittingDatabaseHelper.KnittingTable.Cols.NEEDLE_DIAMETER, knitting.needleDiameter)
             values.put(KnittingDatabaseHelper.KnittingTable.Cols.SIZE, knitting.size)
+            if (knitting.defaultPhoto != null) {
+                debug("Default photo: " + knitting.defaultPhoto)
+                values.put(KnittingDatabaseHelper.KnittingTable.Cols.DEFAULT_PHOTO_ID, knitting.defaultPhoto.id)
+            } else {
+                values.putNull(KnittingDatabaseHelper.KnittingTable.Cols.DEFAULT_PHOTO_ID)
+            }
             values.put(KnittingDatabaseHelper.KnittingTable.Cols.RATING, knitting.rating)
 
             val id = database.insert(KnittingDatabaseHelper.KnittingTable.KNITTINGS, null, values)
@@ -149,6 +159,7 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
      * @param knitting knitting that should be updated
      * @return updated knitting
      */
+    @Synchronized
     fun updateKnitting(knitting: Knitting): Knitting {
         debug("Updating knitting " + knitting + ", default photo: " + knitting.defaultPhoto)
         dbHelper.writableDatabase.use { database ->
@@ -189,6 +200,7 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
      *
      * @param knitting knitting that should be deleted
      */
+    @Synchronized
     fun deleteKnitting(knitting: Knitting) {
         val id = knitting.id
         // delete all photos from the database
@@ -202,6 +214,7 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
     /**
      * Deletes all knittings from the database
      */
+    @Synchronized
     fun deleteAllKnittings() {
         for (knitting in allKnittings) {
             deleteKnitting(knitting)
@@ -214,6 +227,7 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
      * @param id id of the knitting that should be read from database
      * @return knitting for the given id
      */
+    @Synchronized
     fun getKnitting(id: Long): Knitting {
         debug("Getting knitting for id $id")
         dbHelper.readableDatabase.use { database ->
@@ -228,6 +242,7 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
         }
     }
 
+    @Synchronized
     fun getPhotoFile(knitting: Knitting): File? {
         val externalFilesDir = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES) ?: return null
         return File(externalFilesDir, knitting.photoFilename)
@@ -239,6 +254,7 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
      * @param id id of the photo that should be read from database
      * @return photo for the given id
      */
+    @Synchronized
     fun getPhoto(id: Long): Photo {
         debug("Getting photo for id $id")
         dbHelper.readableDatabase.use { database ->
@@ -259,6 +275,7 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
      * @param knitting knitting to get photos for
      * @return list of photos for the given knitting
      */
+    @Synchronized
     fun getAllPhotos(knitting: Knitting): ArrayList<Photo> {
         dbHelper.readableDatabase.use { database ->
             val photos = ArrayList<Photo>()
@@ -291,6 +308,7 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
      * @param preview preview of the photo. Might be null
      * @return new photo
      */
+    @Synchronized
     fun createPhoto(filename: File, knittingID: Long, preview: Bitmap?, description: String): Photo {
         debug("Creating photo for $filename, knitting id: $knittingID, preview: $preview, description: $description")
         dbHelper.writableDatabase.use { database ->
@@ -324,6 +342,7 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
      * @param photo photo that should be added to the database
      * @param manualID: use photo ID instead of auto-imcremented id
      */
+    @Synchronized
     fun addPhoto(photo: Photo, manualID: Boolean = false) {
         dbHelper.writableDatabase.use { database ->
             val values = ContentValues()
@@ -351,6 +370,7 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
      * @param photo photo that should be updated
      * @return updated photo
      */
+    @Synchronized
     fun updatePhoto(photo: Photo): Photo {
         debug("Updating photo $photo")
         dbHelper.writableDatabase.use { database ->
@@ -385,6 +405,7 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
      *
      * @param photo photo that should be deleted
      */
+    @Synchronized
     fun deletePhoto(photo: Photo) {
         deletePhotoFile(photo.filename)
         val id = photo.id
@@ -399,6 +420,7 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
      *
      * @param knitting knitting to delete photos for
      */
+    @Synchronized
     private fun deleteAllPhotos(knitting: Knitting) {
         for(photo in getAllPhotos(knitting)) {
             deletePhotoFile(photo.filename)
@@ -415,12 +437,14 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
     /**
      * Deletes all photos from the database. Photo files are also deleted.
      */
+    @Synchronized
     fun deleteAllPhotos() {
         for (photo in allPhotos) {
             deletePhoto(photo)
         }
     }
 
+    @Synchronized
     private fun cursorToKnitting(cursor: Cursor): Knitting {
         val idIndex = cursor.getColumnIndex(KnittingDatabaseHelper.KnittingTable.Cols.ID)
         val idTitle = cursor.getColumnIndex(KnittingDatabaseHelper.KnittingTable.Cols.TITLE)
@@ -449,6 +473,7 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
         return Knitting(id, title = title, description = description, started = started, finished = finished, needleDiameter = needleDiameter, size = size, rating = rating, defaultPhoto = defaultPhoto)
     }
 
+    @Synchronized
     private fun cursorToPhoto(cursor: Cursor): Photo {
         val idIndex = cursor.getColumnIndex(KnittingDatabaseHelper.PhotoTable.Cols.ID)
         val idPreview = cursor.getColumnIndex(KnittingDatabaseHelper.PhotoTable.Cols.PREVIEW)
@@ -472,6 +497,7 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
         }
     }
 
+    @Synchronized
     private fun deletePhotoFile(file: File) {
         if (file.exists()) {
             if(file.delete()) {
@@ -503,7 +529,9 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
 
 // Access property for Context
 val Context.datasource: KnittingsDataSource
+    @Synchronized
     get() = KnittingsDataSource.getInstance(applicationContext)
 
 val Fragment.datasource: KnittingsDataSource
+    @Synchronized
     get() = KnittingsDataSource.getInstance(this.activity)
