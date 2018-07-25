@@ -1,0 +1,5 @@
+To allow more then one user, go to https://www.dropbox.com/developers/apps
+
+There one can increase the numner of development users
+
+To allow for an arbitrary number of users, one needs to apply for production here
