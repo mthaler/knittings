@@ -47,13 +47,13 @@ class DropboxExportFragment : AbstractDropboxFragment(), AnkoLogger {
                         title = resources.getString(R.string.dropbox_export)
                         message = resources.getString(R.string.dropbox_export_no_wifi_question)
                         positiveButton(resources.getString(R.string.dropbox_export_dialog_export_button)) {
-                            exportTask = UploadTask(DropboxClientFactory.getClient(), ctx.applicationContext, progressBar::setProgress, ::onUploadComplete).execute()
+                            exportTask = UploadTask(DropboxClientFactory.getClient(), ctx.applicationContext, progressBar::setProgress, ::onUploadComplete, ::onUploadError).execute()
                             setMode(true)
                         }
                         negativeButton(resources.getString(R.string.dialog_button_cancel)) {}
                     }.show()
                 } else  {
-                    exportTask = UploadTask(DropboxClientFactory.getClient(), ctx.applicationContext, progressBar::setProgress, ::onUploadComplete).execute()
+                    exportTask = UploadTask(DropboxClientFactory.getClient(), ctx.applicationContext, progressBar::setProgress, ::onUploadComplete, ::onUploadError).execute()
                     setMode(true)
                 }
             } else {
@@ -114,6 +114,14 @@ class DropboxExportFragment : AbstractDropboxFragment(), AnkoLogger {
                 positiveButton("OK") {}
             }.show()
         }
+    }
+
+    private fun onUploadError(ex: Exception) {
+        alert {
+            title = resources.getString(R.string.dropbox_export)
+            message = "Dropbox export failed: " + ex.message
+            positiveButton("OK") {}
+        }.show()
     }
 
     private fun setMode(exporting: Boolean) {

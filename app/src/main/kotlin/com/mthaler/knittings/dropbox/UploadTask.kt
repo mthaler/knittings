@@ -3,12 +3,10 @@ package com.mthaler.knittings.dropbox
 import android.content.Context
 import android.os.AsyncTask
 import android.util.Log
-import com.dropbox.core.DbxException
 import com.dropbox.core.v2.DbxClientV2
 import com.dropbox.core.v2.files.WriteMode
 import com.mthaler.knittings.database.KnittingsDataSource
 import java.io.FileInputStream
-import java.io.IOException
 import com.mthaler.knittings.model.*
 import java.io.ByteArrayInputStream
 import com.mthaler.knittings.utils.FileUtils.createDateTimeDirectoryName
@@ -22,11 +20,15 @@ import java.util.*
  * @param context context
  * @param updateProgress function that is called when progress is updates
  * @param onComplete function that is called when upload is completed
+ * @param onError function that is called when an error happens during upload
  */
 class UploadTask(private val dbxClient: DbxClientV2,
                  private val context: Context,
                  private val updateProgress: (Int) -> Unit,
-                 private val onComplete: (Boolean) -> Unit) : AsyncTask<Void, Int?, Any?>() {
+                 private val onComplete: (Boolean) -> Unit,
+                 private val onError: (Exception) -> Unit) : AsyncTask<Void, Int?, Any?>() {
+
+    private var exception: Exception? = null
 
     override fun doInBackground(vararg params: Void): Any? {
         try {
@@ -61,13 +63,10 @@ class UploadTask(private val dbxClient: DbxClientV2,
                     .uploadAndFinish(inputStream)
                 publishProgress((index / count.toFloat() * 100).toInt())
             }
-            Log.d("Upload Status", "Success")
-        } catch (e: DbxException) {
-            e.printStackTrace()
-        } catch (e: IOException) {
-            e.printStackTrace()
+            Log.d("UploadTask", "Export completed")
+        } catch (ex: Exception) {
+            Log.e("UploadTask", "Could not complete export", ex)
         }
-
         return null
     }
 
@@ -79,7 +78,13 @@ class UploadTask(private val dbxClient: DbxClientV2,
     override fun onPostExecute(o: Any?) {
         super.onPostExecute(o)
         updateProgress(100)
-        onComplete(false)
+        val ex = exception
+
+        if (ex != null) {
+            onError(ex)
+        } else {
+            onComplete(false)
+        }
     }
 
     override fun onCancelled() {
