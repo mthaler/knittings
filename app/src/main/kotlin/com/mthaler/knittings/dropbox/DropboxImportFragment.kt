@@ -77,7 +77,7 @@ class DropboxImportFragment : AbstractDropboxFragment(), AnkoLogger {
         }
     }
 
-    override fun loadData() {
+    override fun loadData(onError: (Exception) -> Unit) {
         doAsync {
             val client = DropboxClientFactory.getClient()
             val account = client.users().currentAccount

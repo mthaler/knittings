@@ -85,7 +85,7 @@ class DropboxExportFragment : AbstractDropboxFragment(), AnkoLogger {
         }
     }
 
-    override fun loadData() {
+    override fun loadData(onError: (Exception) -> Unit) {
         doAsync {
             val client = DropboxClientFactory.getClient()
             var account: FullAccount? = null
@@ -99,7 +99,7 @@ class DropboxExportFragment : AbstractDropboxFragment(), AnkoLogger {
             }
             uiThread {
                 if (exception != null) {
-                    throw exception
+                    onError(exception)
                 } else {
                     if (account != null) {
                         email_text.text = account.email
