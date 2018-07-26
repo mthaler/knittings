@@ -65,6 +65,7 @@ class UploadTask(private val dbxClient: DbxClientV2,
             }
             Log.d("UploadTask", "Export completed")
         } catch (ex: Exception) {
+            exception = ex
             Log.e("UploadTask", "Could not complete export", ex)
         }
         return null
