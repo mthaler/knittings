@@ -64,6 +64,6 @@ abstract class AbstractDropboxFragment : Fragment(), AnkoLogger {
     }
 
     companion object {
-        private val SharedPreferencesName = "com.mthaler.knittings"
+        val SharedPreferencesName = "com.mthaler.knittings"
     }
 }
