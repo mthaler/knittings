@@ -6,6 +6,9 @@ import kotlinx.android.synthetic.main.activity_dropbox_export.*
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
+import org.jetbrains.anko.alert
+import org.jetbrains.anko.doAsync
+import org.jetbrains.anko.uiThread
 
 /**
  * Activity that handles Dropbox export
@@ -37,9 +40,33 @@ class DropboxExportActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.menu_item_dropbox_logout -> {
-                DropboxClientFactory.getClient().auth().tokenRevoke()
-                val prefs = getSharedPreferences(AbstractDropboxFragment.SharedPreferencesName, AppCompatActivity.MODE_PRIVATE)
-                prefs.getString("access-token", null)
+                doAsync {
+                    try {
+                        // remove auth token from Dropbox server
+                        DropboxClientFactory.getClient().auth().tokenRevoke()
+                    } catch (ex: Exception) {
+                    }
+                    uiThread {
+                        // delete auth token from shared preferences
+                        val prefs = getSharedPreferences(AbstractDropboxFragment.SharedPreferencesName, AppCompatActivity.MODE_PRIVATE)
+                        val editor = prefs.edit()
+                        editor.remove("access-token")
+                        editor.commit()
+                        // clear client so that it is not reused next time we connect to Dropbox
+                        DropboxClientFactory.clearClient()
+                        // replace the Dropbox export fragment with a new one
+                        val ft = supportFragmentManager.beginTransaction()
+                        val f = DropboxExportFragment()
+                        ft.replace(R.id.frament_container, f)
+                        ft.addToBackStack(null)
+                        ft.commit()
+                        alert {
+                            title = resources.getString(R.string.dropbox_export)
+                            message = "Logged out of Dropbox"
+                            positiveButton("OK") {}
+                        }.show()
+                    }
+                }
                 true
             }
             else -> super.onOptionsItemSelected(item)

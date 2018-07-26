@@ -6,6 +6,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.dropbox.core.android.Auth
+import com.dropbox.core.v2.users.FullAccount
+import com.dropbox.core.v2.users.SpaceUsage
 import com.mthaler.knittings.R
 import com.mthaler.knittings.utils.NetworkUtils
 import kotlinx.android.synthetic.main.fragment_dropbox_export.*
@@ -86,15 +88,30 @@ class DropboxExportFragment : AbstractDropboxFragment(), AnkoLogger {
     override fun loadData() {
         doAsync {
             val client = DropboxClientFactory.getClient()
-            val account = client.users().currentAccount
-            val spaceUsage = client.users().spaceUsage
+            var account: FullAccount? = null
+            var spaceUsage: SpaceUsage? = null
+            var exception: Exception? = null
+            try {
+                account = client.users().currentAccount
+                spaceUsage = client.users().spaceUsage
+            } catch (ex: Exception) {
+                exception = ex
+            }
             uiThread {
-                email_text.text = account.email
-                name_text.text = account.name.displayName
-                type_text.text = account.accountType.name
-                max_space_text.text = "Max: " + formatBytes(spaceUsage.allocation.individualValue.allocated)
-                used_space_text.text = "Used: " + formatBytes(spaceUsage.used)
-                free_space_text.text = "Free: " + formatBytes(spaceUsage.allocation.individualValue.allocated - spaceUsage.used)
+                if (exception != null) {
+                    throw exception
+                } else {
+                    if (account != null) {
+                        email_text.text = account.email
+                        name_text.text = account.name.displayName
+                        type_text.text = account.accountType.name
+                    }
+                    if (spaceUsage != null) {
+                        max_space_text.text = "Max: " + formatBytes(spaceUsage.allocation.individualValue.allocated)
+                        used_space_text.text = "Used: " + formatBytes(spaceUsage.used)
+                        free_space_text.text = "Free: " + formatBytes(spaceUsage.allocation.individualValue.allocated - spaceUsage.used)
+                    }
+                }
             }
         }
     }
