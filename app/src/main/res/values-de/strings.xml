@@ -68,9 +68,10 @@
     <string name="knitting_details_needle">Nadel: %1$.1f</string>
     <string name="knitting_details_size">Größe: %1$.1f</string>
 
-    <!-- Strings related to login -->
+    <!-- Strings related to login / logout -->
     <string name="sign_in">Anmelden</string>
     <string name="title_activity_login">Anmelden</string>
+    <string name="logout">Abmelden</string>
 
     <!-- DropboxExportActivity -->
     <string name="dropbox_login">An Dropbox anmelden</string>
