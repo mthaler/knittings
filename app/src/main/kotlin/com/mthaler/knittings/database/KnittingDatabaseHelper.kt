@@ -41,8 +41,6 @@ class KnittingDatabaseHelper(context: Context) : ManagedSQLiteOpenHelper(context
 
         val Columns = arrayOf(Cols.ID, Cols.TITLE, Cols.DESCRIPTION, Cols.STARTED, Cols.FINISHED, Cols.NEEDLE_DIAMETER, Cols.SIZE, Cols.DEFAULT_PHOTO_ID, Cols.RATING, Cols.DURATION)
 
-        val SQL_DROP = "DROP TABLE IF EXISTS $KNITTINGS"
-
         object Cols {
             val ID = "_id"
             val TITLE = "title"
@@ -89,14 +87,29 @@ class KnittingDatabaseHelper(context: Context) : ManagedSQLiteOpenHelper(context
                     FOREIGN_KEY(Cols.KNITTING_ID, KnittingTable.KNITTINGS, KnittingTable.Cols.ID))
         }
 
-        val SQL_DROP = "DROP TABLE IF EXISTS $PHOTOS"
-
         object Cols {
             val ID = "_id"
             val FILENAME = "filename"
             val PREVIEW = "preview"
             val DESCRIPTION = "description"
             val KNITTING_ID = "knitting_id"
+        }
+    }
+
+    object CategoryTable {
+        val CATEGORY = "category"
+
+        val Columns = arrayOf(Cols.ID, Cols.NAME)
+
+        object Cols {
+            val ID = "_id"
+            val NAME = "name"
+        }
+
+        fun create(db: SQLiteDatabase) {
+            db.createTable(CATEGORY, true,
+                    Cols.ID to INTEGER + PRIMARY_KEY + AUTOINCREMENT,
+                    Cols.NAME to TEXT + NOT_NULL)
         }
     }
 
