@@ -2,10 +2,8 @@ package com.mthaler.knittings.database
 
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
-import org.jetbrains.anko.AnkoLogger
+import org.jetbrains.anko.*
 import org.jetbrains.anko.db.*
-import org.jetbrains.anko.debug
-import org.jetbrains.anko.error
 
 /**
  * Database helper class that defines our tables, columns and methods to create and drop tables
@@ -21,7 +19,7 @@ class KnittingDatabaseHelper(context: Context) : ManagedSQLiteOpenHelper(context
         } catch (_: ClassNotFoundException) {
             "knittings.db"
         }
-        private val DB_VERSION = 1
+        private val DB_VERSION = 2
 
         private var instance: KnittingDatabaseHelper? = null
 
@@ -41,7 +39,7 @@ class KnittingDatabaseHelper(context: Context) : ManagedSQLiteOpenHelper(context
     object KnittingTable {
         val KNITTINGS = "knittings"
 
-        val Columns = arrayOf(Cols.ID, Cols.TITLE, Cols.DESCRIPTION, Cols.STARTED, Cols.FINISHED, Cols.NEEDLE_DIAMETER, Cols.SIZE, Cols.DEFAULT_PHOTO_ID, Cols.RATING)
+        val Columns = arrayOf(Cols.ID, Cols.TITLE, Cols.DESCRIPTION, Cols.STARTED, Cols.FINISHED, Cols.NEEDLE_DIAMETER, Cols.SIZE, Cols.DEFAULT_PHOTO_ID, Cols.RATING, Cols.DURATION)
 
         val SQL_DROP = "DROP TABLE IF EXISTS $KNITTINGS"
 
@@ -55,6 +53,7 @@ class KnittingDatabaseHelper(context: Context) : ManagedSQLiteOpenHelper(context
             val SIZE = "size"
             val DEFAULT_PHOTO_ID = "default_photo_id"
             val RATING = "rating"
+            val DURATION = "duration"
         }
 
         fun create(db: SQLiteDatabase) {
@@ -68,8 +67,11 @@ class KnittingDatabaseHelper(context: Context) : ManagedSQLiteOpenHelper(context
                     Cols.SIZE to REAL + NOT_NULL + DEFAULT("0.0"),
                     Cols.DEFAULT_PHOTO_ID to INTEGER,
                     Cols.RATING to REAL + NOT_NULL + DEFAULT("0.0"),
+                    Cols.DURATION to INTEGER + NOT_NULL + DEFAULT("0"),
                     FOREIGN_KEY(Cols.DEFAULT_PHOTO_ID, PhotoTable.PHOTOS, PhotoTable.Cols.ID))
         }
+
+        val SQL_ADD_DURATION = "ALTER TABLE " + KNITTINGS + " ADD COLUMN " + Cols.DURATION + " INTEGER NOT NULL DEFAULT 0"
     }
 
     object PhotoTable {
@@ -114,17 +116,17 @@ class KnittingDatabaseHelper(context: Context) : ManagedSQLiteOpenHelper(context
             PhotoTable.create(db)
             debug("Photo table created")
         } catch (ex: Exception) {
-            error("Could not create photo table with: ", ex)
+            error("Could not create photo table", ex)
         }
 
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
-        debug("Knitting table with version number $oldVersion will be dropped.")
-        db.execSQL(KnittingTable.SQL_DROP)
-        debug("Photo table with version number $oldVersion will be dropped.")
-        db.execSQL(PhotoTable.SQL_DROP)
-        onCreate(db)
+        if (oldVersion < 2) {
+            info("Updating knitting table from $oldVersion to $newVersion")
+            db.execSQL(KnittingTable.SQL_ADD_DURATION)
+            info("Added duration colomn to knitting table")
+        }
     }
 }
 
