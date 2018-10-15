@@ -1,5 +1,6 @@
 package com.mthaler.knittings.dropbox
 
+import android.content.Context
 import android.os.AsyncTask
 import com.dropbox.core.v2.DbxClientV2
 import com.mthaler.knittings.model.Database
@@ -14,7 +15,8 @@ import com.mthaler.knittings.model.*
  * @param onDataLoaded callback that is executed when the data is loaded
  * @param onError callback that is executed if an error happens
  */
-internal class DownloadDatabaseTask(private val dbxClient: DbxClientV2,
+internal class DownloadDatabaseTask(private val context: Context,
+                                    private val dbxClient: DbxClientV2,
                                     private val onDataLoaded: (Database?) -> Unit,
                                     private val onError: (Exception) -> Unit) : AsyncTask<String, Void, Database?>() {
 
@@ -40,7 +42,7 @@ internal class DownloadDatabaseTask(private val dbxClient: DbxClientV2,
             val bytes = os.toByteArray()
             val jsonStr = String(bytes)
             val json = JSONObject(jsonStr)
-            return json.toDatabase()
+            return json.toDatabase(context)
         } catch (e: Exception) {
             exception = e
             return null

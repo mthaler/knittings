@@ -1,5 +1,6 @@
 package com.mthaler.knittings.model
 
+import android.content.Context
 import org.json.JSONObject
 import java.text.SimpleDateFormat
 import org.json.JSONArray
@@ -123,7 +124,7 @@ fun Database.toJSON(): JSONObject {
 /**
  * Converts a JSON object to a database object
  */
-fun JSONObject.toDatabase(): Database {
+fun JSONObject.toDatabase(context: Context): Database {
 
     fun updateKnitting(knitting: Knitting, defaultPhotoID: Long?, idToPhoto: Map<Long, Photo>): Knitting {
         if (defaultPhotoID != null) {
