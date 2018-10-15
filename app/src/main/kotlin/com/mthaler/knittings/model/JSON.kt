@@ -1,6 +1,7 @@
 package com.mthaler.knittings.model
 
 import android.content.Context
+import android.os.Environment
 import org.json.JSONObject
 import java.text.SimpleDateFormat
 import org.json.JSONArray
@@ -126,6 +127,8 @@ fun Database.toJSON(): JSONObject {
  */
 fun JSONObject.toDatabase(context: Context): Database {
 
+    val externalFilesDir = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+
     fun updateKnitting(knitting: Knitting, defaultPhotoID: Long?, idToPhoto: Map<Long, Photo>): Knitting {
         if (defaultPhotoID != null) {
             if (idToPhoto.containsKey(defaultPhotoID)) {
@@ -137,13 +140,22 @@ fun JSONObject.toDatabase(context: Context): Database {
             return knitting
         }
     }
+    
+    fun updatePhotoFilename(photo: Photo): Photo {
+        val oldFilename = photo.filename
+        val newFilename = File(externalFilesDir, oldFilename.name)
+        return photo.copy(filename = newFilename)
+    }
 
     // list of knittings and optional default photo
     val knittingsAndDefaultPhotos = getJSONArray("knittings").toKnittings()
     val photos = getJSONArray("photos").toPhotos()
+    // we need to update the filename of the photo because the external storage location might be different
+    val photosWithUpdatedFilename = photos.map { it -> updatePhotoFilename(it) }
+
     // create a map from photo id to photo
-    val idToPhoto = photos.map { it.id to it }.toMap()
+    val idToPhoto = photosWithUpdatedFilename.map { it.id to it }.toMap()
     // update the list of knittings with default photos
     val knittings = knittingsAndDefaultPhotos.map { updateKnitting(it.first, it.second, idToPhoto) }
-    return Database(knittings, photos)
+    return Database(knittings, photosWithUpdatedFilename)
 }
