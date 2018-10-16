@@ -1,5 +1,6 @@
 package com.mthaler.knittings.model
 
+import android.graphics.Color
 import org.json.JSONArray
 import org.json.JSONObject
 import org.junit.Assert.*
@@ -52,6 +53,19 @@ class JSONTest {
         assertEquals("/tmp/photo1.jpg", j0.getString("filename"))
         assertEquals(43, j0.getLong("knittingID"))
         assertEquals("socks", j0.getString("description"))
+    }
+
+    @Test
+    fun testCategoryToJSON() {
+        val c0 = Category(42, "test", null)
+        val j0 = c0.toJSON()
+        assertEquals(42, j0.getLong("id"))
+        assertEquals("test", j0.getString("name"))
+        val c1 = Category(43, "socks", Color.RED)
+        val j1 = c1.toJSON()
+        assertEquals(43, j1.getLong("id"))
+        assertEquals("socks", j1.getString("name"))
+        assertEquals(Color.RED, j1.getInt("color"))
     }
 
     @Test
@@ -126,6 +140,24 @@ class JSONTest {
         assertEquals(File("/tmp/photo2.jpg"), p2.filename)
         assertEquals(44, p2.knittingID)
         assertEquals("shirt", p2.description)
+    }
+
+    @Test
+    fun testJSONToCategory() {
+        val s1 = """{"name":"test","id":42}"""
+        assertEquals(Category(42, "test", null), JSONObject(s1).toCategory())
+        val s2 = """{"color":-65536,"name":"socks","id":43}"""
+        assertEquals(Category(43, "socks", Color.RED), JSONObject(s2).toCategory())
+    }
+
+    @Test
+    fun testJSONArrayToCategories() {
+        val s = """[{"name":"test","id":42},{"color":-65536,"name":"socks","id":43}]"""
+        val json = JSONArray(s)
+        val categories = json.toCategories()
+        assertEquals(2, categories.size)
+        assertEquals(Category(42, "test", null), categories[0])
+        assertEquals(Category(43, "socks", Color.RED), categories[1])
     }
 
     @Test
