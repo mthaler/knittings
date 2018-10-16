@@ -163,5 +163,5 @@ fun JSONObject.toDatabase(context: Context): Database {
     val idToPhoto = photosWithUpdatedFilename.map { it.id to it }.toMap()
     // update the list of knittings with default photos
     val knittings = knittingsAndDefaultPhotos.map { updateKnitting(it.first, it.second, idToPhoto) }
-    return Database(knittings, photosWithUpdatedFilename)
+    return Database(knittings, photosWithUpdatedFilename, ArrayList<Category>())
 }

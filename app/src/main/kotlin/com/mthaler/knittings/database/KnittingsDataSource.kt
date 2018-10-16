@@ -76,6 +76,33 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
             return photos
         }
 
+    /**
+     * Returns all knittings from the database
+     *
+     * @return all knittings from database
+     */
+    val allCategories: ArrayList<Category>
+        @Synchronized
+        get() = dbHelper.readableDatabase.use { database ->
+            val categories = ArrayList<Category>()
+
+            val cursor = database.query(KnittingDatabaseHelper.CategoryTable.CATEGORY, KnittingDatabaseHelper.CategoryTable.Columns, null, null, null, null, null)
+
+            cursor.moveToFirst()
+            var category: Category
+
+            while (!cursor.isAfterLast) {
+                category = cursorToCategory(cursor)
+                categories.add(category)
+                debug("Read category $category")
+                cursor.moveToNext()
+            }
+
+            cursor.close()
+
+            return categories
+        }
+
     init {
         dbHelper = context.database
     }

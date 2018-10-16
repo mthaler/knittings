@@ -37,8 +37,10 @@ class UploadTask(private val dbxClient: DbxClientV2,
             val knittings = ds.allKnittings
             // get all photos
             val photos = ds.allPhotos
+            // get all categories
+            val categories = ds.allCategories
             // convert database to JSON
-            val dbJSON = Database(knittings, photos).toJSON()
+            val dbJSON = Database(knittings, photos, categories).toJSON()
             val s = dbJSON.toString(2)
 
             // create input stream from database JSON
