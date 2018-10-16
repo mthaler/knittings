@@ -5,6 +5,7 @@ import android.content.Context
 import android.database.Cursor
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.Color
 import android.os.Environment
 import com.mthaler.knittings.model.Knitting
 import com.mthaler.knittings.model.Photo
@@ -14,6 +15,7 @@ import java.io.File
 import java.util.ArrayList
 import java.util.Date
 import android.support.v4.app.Fragment
+import com.mthaler.knittings.model.Category
 import org.jetbrains.anko.error
 
 class KnittingsDataSource private constructor(context: Context): AnkoLogger {
@@ -500,6 +502,18 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
         } else {
             return photo
         }
+    }
+
+    @Synchronized
+    private fun cursorToCategory(cursor: Cursor): Category {
+        val idIndex = cursor.getColumnIndex(KnittingDatabaseHelper.CategoryTable.Cols.ID)
+        val idName = cursor.getColumnIndex(KnittingDatabaseHelper.CategoryTable.Cols.NAME)
+        val idColor = cursor.getColumnIndex(KnittingDatabaseHelper.CategoryTable.Cols.COLOR)
+
+        val id = cursor.getLong(idIndex)
+        val name = cursor.getString(idName)
+        val color = if (cursor.isNull(idColor)) null else Color.parseColor(cursor.getString(idColor))
+        return Category(id, name, color)
     }
 
     @Synchronized
