@@ -27,6 +27,7 @@ fun Knitting.toJSON(): JSONObject {
     if (defaultPhoto != null) {
         result.put("defaultPhoto", defaultPhoto.id)
     }
+    result.put("duration", duration)
     return result
 }
 
@@ -56,7 +57,8 @@ fun JSONObject.toKnitting(): Pair<Knitting, Long?> {
     val size = getDouble("size")
     val defaultPhoto = if (has("defaultPhoto")) getLong("defaultPhoto") else null
     val rating = getDouble("rating")
-    return Pair(Knitting(id, title, description, started, finished, needleDiameter, size, null, rating), defaultPhoto)
+    val duration = if (has("duration")) getLong("duration") else 0L
+    return Pair(Knitting(id, title, description, started, finished, needleDiameter, size, null, rating, duration), defaultPhoto)
 }
 
 /**
