@@ -16,7 +16,7 @@ data class Knitting(val id: Long,
                     val defaultPhoto: Photo? = null,
                     val rating: Double = 0.0,
                     val duration: Long = 0L,
-                    val categories: List<Category> = ArrayList<Category>()) {
+                    val category: Category? = null) {
 
     val photoFilename: String
         get() {
