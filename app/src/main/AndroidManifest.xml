@@ -87,6 +87,7 @@
         <activity
             android:name=".dropbox.DropboxImportActivity"
             android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".StopwatchActivity"></activity>
     </application>
 
 </manifest>
