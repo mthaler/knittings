@@ -143,7 +143,7 @@ class JSONTest {
         val p0 = Photo(42, File("/tmp/photo1.jpg"), 43, "socks", null)
         val p1 = Photo(43, File("/tmp/photo2.jpg"), 44, "shirt", null)
         val photos = listOf(p0, p1)
-        val db = Database(knittings, photos)
+        val db = Database(knittings, photos, ArrayList<Category>())
         val json = db.toJSON()
         // get the JSON array containing the knittings
         val ks = json.getJSONArray("knittings")
@@ -188,7 +188,7 @@ class JSONTest {
             {"size":41.5,"needleDiameter":3.5,"rating":4.5,"description":"my second knitting","started":"2018-01-11","finished":"2018-01-12","id":44,"title":"knitting 2"}],
             "photos":[{"knittingID":43,"filename":"/tmp/photo1.jpg","description":"socks","id":42},{"knittingID":44,"filename":"/tmp/photo2.jpg","description":"shirt","id":43}]}"""
         val json = JSONObject(s)
-        val db = json.toDatabase()
+        val db = json.toDatabase(File("/tmp"))
         assertEquals(2, db.knittings.size)
         assertEquals(2, db.photos.size)
         val k = db.knittings[0]

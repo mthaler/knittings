@@ -1,7 +1,5 @@
 package com.mthaler.knittings.model
 
-import android.content.Context
-import android.os.Environment
 import org.json.JSONObject
 import java.text.SimpleDateFormat
 import org.json.JSONArray
@@ -112,6 +110,29 @@ fun JSONArray.toPhotos(): List<Photo> {
     return result
 }
 
+/**
+ * Converts a JSON object to a category
+ */
+fun JSONObject.toCategory(): Category {
+    val id = getLong("id")
+    val name = getString("name")
+    val color = if (has("color")) getInt("color") else null
+    return Category(id, name, color)
+}
+
+/**
+ * Converts a JSON array to a list of categories
+ */
+fun JSONArray.toCategories(): List<Category> {
+    val result = ArrayList<Category>()
+    for(i in 0 until length()) {
+        val item = getJSONObject(i)
+        val category = item.toCategory()
+        result.add(category)
+    }
+    return result
+}
+
 fun knittingsToJSON(knittings: List<Knitting>): JSONArray {
     val result = JSONArray()
     for (knitting in knittings) {
@@ -150,9 +171,7 @@ fun Database.toJSON(): JSONObject {
 /**
  * Converts a JSON object to a database object
  */
-fun JSONObject.toDatabase(context: Context): Database {
-
-    val externalFilesDir = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+fun JSONObject.toDatabase(externalFilesDir: File): Database {
 
     fun updateKnitting(knitting: Knitting, defaultPhotoID: Long?, idToPhoto: Map<Long, Photo>): Knitting {
         if (defaultPhotoID != null) {
@@ -172,15 +191,30 @@ fun JSONObject.toDatabase(context: Context): Database {
         return photo.copy(filename = newFilename)
     }
 
+    fun addCategory(knitting: Knitting, categoryID: Long?, idToCategory: Map<Long, Category>): Knitting {
+        if (categoryID != null) {
+            if (idToCategory.containsKey(categoryID)) {
+                return knitting.copy(category = idToCategory[categoryID])
+            } else {
+                return knitting
+            }
+        } else {
+            return knitting
+        }
+    }
+
     // list of knittings and optional default photo
     val knittingsAndDefaultPhotos = getJSONArray("knittings").toKnittings()
     val photos = getJSONArray("photos").toPhotos()
+    val categories = if (has("categories")) getJSONArray("categories").toCategories() else ArrayList<Category>()
     // we need to update the filename of the photo because the external storage location might be different
     val photosWithUpdatedFilename = photos.map { it -> updatePhotoFilename(it) }
 
     // create a map from photo id to photo
     val idToPhoto = photosWithUpdatedFilename.map { it.id to it }.toMap()
+    // create a map from category id to category
+    val idToCategory = categories.map { it.id to it }.toMap()
     // update the list of knittings with default photos
-    val knittings = knittingsAndDefaultPhotos.map { updateKnitting(it.first, it.second, idToPhoto) }
-    return Database(knittings, photosWithUpdatedFilename, ArrayList<Category>())
+    val knittings = knittingsAndDefaultPhotos.map { Pair(updateKnitting(it.first, it.second, idToPhoto), it.third) }.map { addCategory(it.first, it.second, idToCategory)  }
+    return Database(knittings, photosWithUpdatedFilename, categories)
 }

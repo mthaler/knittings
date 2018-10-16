@@ -2,6 +2,7 @@ package com.mthaler.knittings.dropbox
 
 import android.content.Context
 import android.os.AsyncTask
+import android.os.Environment
 import com.dropbox.core.v2.DbxClientV2
 import com.mthaler.knittings.model.Database
 import org.json.JSONObject
@@ -42,7 +43,8 @@ internal class DownloadDatabaseTask(private val context: Context,
             val bytes = os.toByteArray()
             val jsonStr = String(bytes)
             val json = JSONObject(jsonStr)
-            return json.toDatabase(context)
+            val externalFilesDir = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+            return json.toDatabase(externalFilesDir)
         } catch (e: Exception) {
             exception = e
             return null
