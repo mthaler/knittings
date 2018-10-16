@@ -28,6 +28,9 @@ fun Knitting.toJSON(): JSONObject {
         result.put("defaultPhoto", defaultPhoto.id)
     }
     result.put("duration", duration)
+    if (category != null) {
+        result.put("category", category.id)
+    }
     return result
 }
 
@@ -47,7 +50,7 @@ fun Photo.toJSON(): JSONObject {
  * Converts a JSON object to a knitting. The method actually returns a pair of the knitting and
  * and the optional default photo id
  */
-fun JSONObject.toKnitting(): Pair<Knitting, Long?> {
+fun JSONObject.toKnitting(): Triple<Knitting, Long?, Long?> {
     val id = getLong("id")
     val title = getString("title")
     val description = getString("description")
@@ -58,14 +61,15 @@ fun JSONObject.toKnitting(): Pair<Knitting, Long?> {
     val defaultPhoto = if (has("defaultPhoto")) getLong("defaultPhoto") else null
     val rating = getDouble("rating")
     val duration = if (has("duration")) getLong("duration") else 0L
-    return Pair(Knitting(id, title, description, started, finished, needleDiameter, size, null, rating, duration), defaultPhoto)
+    val category = if (has("category")) getLong("category") else 0L
+    return Triple(Knitting(id, title, description, started, finished, needleDiameter, size, null, rating, duration), defaultPhoto, category)
 }
 
 /**
  * Converts a JSON array to a list of knittings
  */
-fun JSONArray.toKnittings(): List<Pair<Knitting, Long?>> {
-    val result = ArrayList<Pair<Knitting, Long?>>()
+fun JSONArray.toKnittings(): List<Triple<Knitting, Long?, Long?>> {
+    val result = ArrayList<Triple<Knitting, Long?, Long?>>()
     for(i in 0 until length()) {
         val item = getJSONObject(i)
         val knittingAndDefaultPhoto = item.toKnitting()
