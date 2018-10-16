@@ -5,7 +5,6 @@ import android.content.Context
 import android.database.Cursor
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.graphics.Color
 import android.os.Environment
 import com.mthaler.knittings.model.Knitting
 import com.mthaler.knittings.model.Photo
@@ -448,6 +447,105 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
         }
     }
 
+    /**
+     * Gets the category with the given id from the database
+     *
+     * @param id id of the category that should be read from database
+     * @return category for the given id
+     */
+    @Synchronized
+    fun getCategory(id: Long): Category {
+        debug("Getting category for id $id")
+        dbHelper.readableDatabase.use { database ->
+            val cursor = database.query(KnittingDatabaseHelper.CategoryTable.CATEGORY,
+                    KnittingDatabaseHelper.CategoryTable.Columns, KnittingDatabaseHelper.CategoryTable.Cols.ID + "=" + id, null, null, null, null)
+
+            cursor.moveToFirst()
+            val category = cursorToCategory(cursor)
+            cursor.close()
+
+            return category
+        }
+    }
+
+    /**
+     * Creates a new category and adds it to the database
+     *
+     * @param name name of the category
+     * @param color color used for the category
+     * @return new category
+     */
+    @Synchronized
+    fun createCategory(name: String, color: Int?): Category {
+        debug("Creating category $name, color: $color")
+        dbHelper.writableDatabase.use { database ->
+            val values = ContentValues()
+            values.put(KnittingDatabaseHelper.CategoryTable.Cols.NAME, name)
+            if (color != null) {
+                values.put(KnittingDatabaseHelper.CategoryTable.Cols.COLOR, color)
+            } else {
+                values.putNull(KnittingDatabaseHelper.PhotoTable.Cols.PREVIEW)
+            }
+
+            val id = database.insert(KnittingDatabaseHelper.CategoryTable.CATEGORY, null, values)
+
+            val cursor = database.query(KnittingDatabaseHelper.CategoryTable.CATEGORY,
+                    KnittingDatabaseHelper.CategoryTable.Columns, KnittingDatabaseHelper.CategoryTable.Cols.ID + "=" + id, null, null, null, null)
+
+            cursor.moveToFirst()
+            val category = cursorToCategory(cursor)
+            cursor.close()
+
+            return category
+        }
+    }
+
+    /**
+     * Updates a photo in the database
+     *
+     * @param photo photo that should be updated
+     * @return updated photo
+     */
+    @Synchronized
+    fun updateCategory(category: Category): Category {
+        debug("Updating category $category")
+        dbHelper.writableDatabase.use { database ->
+            val values = ContentValues()
+            values.put(KnittingDatabaseHelper.CategoryTable.Cols.NAME, category.name)
+            if (category.color != null) {
+                values.put(KnittingDatabaseHelper.CategoryTable.Cols.COLOR, category.color)
+            } else {
+                values.putNull(KnittingDatabaseHelper.CategoryTable.Cols.COLOR)
+            }
+
+            database.update(KnittingDatabaseHelper.CategoryTable.CATEGORY,
+                    values,
+                    KnittingDatabaseHelper.CategoryTable.Cols.ID + "=" + category.id, null)
+
+            val cursor = database.query(KnittingDatabaseHelper.CategoryTable.CATEGORY,
+                    KnittingDatabaseHelper.CategoryTable.Columns, KnittingDatabaseHelper.CategoryTable.Cols.ID + "=" + category.id, null, null, null, null)
+
+            cursor.moveToFirst()
+            val result = cursorToCategory(cursor)
+            cursor.close()
+
+            return result
+        }
+    }
+
+    /**
+     * Deletes the given category from the database
+     *
+     * @param photo category that should be deleted
+     */
+    @Synchronized
+    fun deleteCategory(category: Category) {
+        dbHelper.writableDatabase.use { database ->
+            database.delete(KnittingDatabaseHelper.CategoryTable.CATEGORY, KnittingDatabaseHelper.CategoryTable.Cols.ID + "=" + category.id, null)
+            debug("Deleted category " + category.id + ": " + category)
+        }
+    }
+
     @Synchronized
     private fun cursorToKnitting(cursor: Cursor): Knitting {
         val idIndex = cursor.getColumnIndex(KnittingDatabaseHelper.KnittingTable.Cols.ID)
@@ -512,7 +610,7 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
 
         val id = cursor.getLong(idIndex)
         val name = cursor.getString(idName)
-        val color = if (cursor.isNull(idColor)) null else Color.parseColor(cursor.getString(idColor))
+        val color = if (cursor.isNull(idColor)) null else cursor.getInt(idColor)
         return Category(id, name, color)
     }
 

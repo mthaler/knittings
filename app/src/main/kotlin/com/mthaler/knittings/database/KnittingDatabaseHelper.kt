@@ -115,7 +115,7 @@ class KnittingDatabaseHelper(context: Context) : ManagedSQLiteOpenHelper(context
             db.createTable(CATEGORY, true,
                     Cols.ID to INTEGER + PRIMARY_KEY + AUTOINCREMENT,
                     Cols.NAME to TEXT + NOT_NULL,
-                    Cols.COLOR to TEXT)
+                    Cols.COLOR to INTEGER)
         }
     }
 
