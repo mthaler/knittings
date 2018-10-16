@@ -39,7 +39,7 @@ class KnittingDatabaseHelper(context: Context) : ManagedSQLiteOpenHelper(context
     object KnittingTable {
         val KNITTINGS = "knittings"
 
-        val Columns = arrayOf(Cols.ID, Cols.TITLE, Cols.DESCRIPTION, Cols.STARTED, Cols.FINISHED, Cols.NEEDLE_DIAMETER, Cols.SIZE, Cols.DEFAULT_PHOTO_ID, Cols.RATING, Cols.DURATION)
+        val Columns = arrayOf(Cols.ID, Cols.TITLE, Cols.DESCRIPTION, Cols.STARTED, Cols.FINISHED, Cols.NEEDLE_DIAMETER, Cols.SIZE, Cols.DEFAULT_PHOTO_ID, Cols.RATING, Cols.DURATION, Cols.CATEGORY_ID)
 
         object Cols {
             val ID = "_id"
@@ -52,6 +52,7 @@ class KnittingDatabaseHelper(context: Context) : ManagedSQLiteOpenHelper(context
             val DEFAULT_PHOTO_ID = "default_photo_id"
             val RATING = "rating"
             val DURATION = "duration"
+            val CATEGORY_ID = "category_ID"
         }
 
         fun create(db: SQLiteDatabase) {
@@ -66,10 +67,13 @@ class KnittingDatabaseHelper(context: Context) : ManagedSQLiteOpenHelper(context
                     Cols.DEFAULT_PHOTO_ID to INTEGER,
                     Cols.RATING to REAL + NOT_NULL + DEFAULT("0.0"),
                     Cols.DURATION to INTEGER + NOT_NULL + DEFAULT("0"),
-                    FOREIGN_KEY(Cols.DEFAULT_PHOTO_ID, PhotoTable.PHOTOS, PhotoTable.Cols.ID))
+                    Cols.CATEGORY_ID to INTEGER,
+                    FOREIGN_KEY(Cols.DEFAULT_PHOTO_ID, PhotoTable.PHOTOS, PhotoTable.Cols.ID),
+                    FOREIGN_KEY(Cols.CATEGORY_ID, CategoryTable.CATEGORY, CategoryTable.Cols.ID))
         }
 
         val SQL_ADD_DURATION = "ALTER TABLE " + KNITTINGS + " ADD COLUMN " + Cols.DURATION + " INTEGER NOT NULL DEFAULT 0"
+        val SQL_ADD_CATEGORY = "ALTER TABLE " + KNITTINGS + " ADD COLUMN " + Cols.CATEGORY_ID + " INTEGER"
     }
 
     object PhotoTable {
@@ -99,36 +103,19 @@ class KnittingDatabaseHelper(context: Context) : ManagedSQLiteOpenHelper(context
     object CategoryTable {
         val CATEGORY = "category"
 
-        val Columns = arrayOf(Cols.ID, Cols.NAME)
+        val Columns = arrayOf(Cols.ID, Cols.NAME, Cols.COLOR)
 
         object Cols {
             val ID = "_id"
             val NAME = "name"
+            val COLOR = "color"
         }
 
         fun create(db: SQLiteDatabase) {
             db.createTable(CATEGORY, true,
                     Cols.ID to INTEGER + PRIMARY_KEY + AUTOINCREMENT,
-                    Cols.NAME to TEXT + NOT_NULL)
-        }
-    }
-
-    object KnittingToCategoryTable {
-        val KNITTING_TO_CATEGORY = "knitting_to_category"
-
-        val Columns = arrayOf(Cols.KNITTING_ID, Cols.CATEGORY_ID)
-
-        object Cols {
-            val KNITTING_ID = "knitting_id"
-            val CATEGORY_ID = "category_id"
-        }
-
-        fun create(db: SQLiteDatabase) {
-            db.createTable(KNITTING_TO_CATEGORY, true,
-                    Cols.KNITTING_ID to INTEGER + NOT_NULL,
-                    Cols.CATEGORY_ID to TEXT + NOT_NULL,
-                    FOREIGN_KEY(Cols.KNITTING_ID, KnittingTable.KNITTINGS, KnittingTable.Cols.ID),
-                    FOREIGN_KEY(Cols.CATEGORY_ID, CategoryTable.CATEGORY, CategoryTable.Cols.ID))
+                    Cols.NAME to TEXT + NOT_NULL,
+                    Cols.COLOR to TEXT)
         }
     }
 
@@ -157,13 +144,6 @@ class KnittingDatabaseHelper(context: Context) : ManagedSQLiteOpenHelper(context
         } catch (ex: Exception) {
             error("Could not create category table", ex)
         }
-
-        try {
-            KnittingToCategoryTable.create(db)
-            debug("Knitting to category table created")
-        } catch (ex: Exception) {
-            error("Could not create knitting to category table", ex)
-        }
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
@@ -171,19 +151,14 @@ class KnittingDatabaseHelper(context: Context) : ManagedSQLiteOpenHelper(context
             info("Updating knitting table from $oldVersion to $newVersion")
             db.execSQL(KnittingTable.SQL_ADD_DURATION)
             info("Added duration colomn to knitting table")
+            db.execSQL(KnittingTable.SQL_ADD_CATEGORY)
+            info("Added category ID colomn to knitting table")
 
             try {
                 CategoryTable.create(db)
                 debug("Category table created")
             } catch (ex: Exception) {
                 error("Could not create category table", ex)
-            }
-
-            try {
-                KnittingToCategoryTable.create(db)
-                debug("Knitting to category table created")
-            } catch (ex: Exception) {
-                error("Could not create knitting to category table", ex)
             }
         }
     }
