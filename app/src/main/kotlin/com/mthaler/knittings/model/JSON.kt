@@ -46,6 +46,16 @@ fun Photo.toJSON(): JSONObject {
     return result
 }
 
+fun Category.toJSON(): JSONObject {
+    val result = JSONObject()
+    result.put("id", id)
+    result.put("name", name)
+    if (color != null) {
+        result.put("color", color)
+    }
+    return result
+}
+
 /**
  * Converts a JSON object to a knitting. The method actually returns a pair of the knitting and
  * and the optional default photo id
@@ -104,7 +114,7 @@ fun JSONArray.toPhotos(): List<Photo> {
 
 fun knittingsToJSON(knittings: List<Knitting>): JSONArray {
     val result = JSONArray()
-    for(knitting in knittings) {
+    for (knitting in knittings) {
         result.put(knitting.toJSON())
     }
     return result
@@ -112,8 +122,16 @@ fun knittingsToJSON(knittings: List<Knitting>): JSONArray {
 
 fun photosToJSON(photos: List<Photo>): JSONArray {
     val result = JSONArray()
-    for(photo in photos) {
+    for (photo in photos) {
         result.put(photo.toJSON())
+    }
+    return result
+}
+
+fun categoriesToJSON(categories: List<Category>): JSONArray {
+    val result = JSONArray()
+    for (category in categories) {
+        result.put(category.toJSON())
     }
     return result
 }
@@ -125,6 +143,7 @@ fun Database.toJSON(): JSONObject {
     val result = JSONObject()
     result.put("knittings", knittingsToJSON(knittings))
     result.put("photos", photosToJSON(photos))
+    result.put("categories", categoriesToJSON(categories))
     return result
 }
 
