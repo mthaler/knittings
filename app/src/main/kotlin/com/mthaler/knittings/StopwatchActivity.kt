@@ -21,7 +21,7 @@ class StopwatchActivity : AppCompatActivity() {
         val id = if (savedInstanceState != null) savedInstanceState.getLong(EXTRA_KNITTING_ID) else intent.getLongExtra(EXTRA_KNITTING_ID, -1L)
         if (id != -1L) {
             knittingID = id
-            seconds = datasource.getKnitting(knittingID).duration
+            seconds = datasource.getKnitting(knittingID).duration / 1000
         } else {
             error("Could not get knitting id")
         }
@@ -46,7 +46,7 @@ class StopwatchActivity : AppCompatActivity() {
     fun onClickStop(view: View) {
         running = false
         val knitting = datasource.getKnitting(knittingID)
-        datasource.updateKnitting(knitting.copy(duration = seconds))
+        datasource.updateKnitting(knitting.copy(duration = seconds * 1000))
 
     }
 
