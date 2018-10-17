@@ -3,33 +3,38 @@ package com.mthaler.knittings
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
-import android.os.PersistableBundle
 import android.view.View
 import android.widget.TextView
+import com.mthaler.knittings.database.datasource
 import java.util.*
 
 class StopwatchActivity : AppCompatActivity() {
 
-    private var seconds = 0
+    private var knittingID: Long = -1
+    private var seconds = 0L
     private var running = false
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_stopwatch)
+        val id = if (savedInstanceState != null) savedInstanceState.getLong(EXTRA_KNITTING_ID) else intent.getLongExtra(EXTRA_KNITTING_ID, -1L)
+        if (id != -1L) {
+            knittingID = id
+            seconds = datasource.getKnitting(knittingID).duration
+        } else {
+            error("Could not get knitting id")
+        }
         if (savedInstanceState != null) {
-            seconds = savedInstanceState.getInt("seconds")
             running = savedInstanceState.getBoolean("running")
         }
         runTimer()
     }
 
-    override fun onSaveInstanceState(outState: Bundle?, outPersistentState: PersistableBundle?) {
-        super.onSaveInstanceState(outState, outPersistentState)
-        if (outState != null) {
-            outState.putInt("seconds", seconds)
-            outState.putBoolean("running", running)
-        }
+    override fun onSaveInstanceState(outState: Bundle) {
+        outState.putLong(EXTRA_KNITTING_ID, knittingID)
+        outState.putBoolean("running", running)
+        super.onSaveInstanceState(outState)
     }
 
     //Start the stopwatch running when the Start button is clicked.
@@ -40,6 +45,9 @@ class StopwatchActivity : AppCompatActivity() {
     //Stop the stopwatch running when the Stop button is clicked.
     fun onClickStop(view: View) {
         running = false
+        val knitting = datasource.getKnitting(knittingID)
+        datasource.updateKnitting(knitting.copy(duration = seconds))
+
     }
 
     fun onClickReset(view: View) {
@@ -64,5 +72,9 @@ class StopwatchActivity : AppCompatActivity() {
 
             }
         })
+    }
+
+    companion object {
+        val EXTRA_KNITTING_ID = "com.mthaler.knitting.KNITTING_ID"
     }
 }
