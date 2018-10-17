@@ -82,6 +82,10 @@ class KnittingDetailsActivity : AppCompatActivity(), AnkoLogger, CanTakePhoto {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
+            R.id.menu_item_show_stopwatch -> {
+                startActivity<StopwatchActivity>()
+                return true
+            }
             R.id.menu_item_show_gallery -> {
                 startActivity<PhotoGalleryActivity>(PhotoGalleryActivity.EXTRA_KNITTING_ID to knittingID)
                 return true
