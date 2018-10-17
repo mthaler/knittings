@@ -530,8 +530,8 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
     /**
      * Updates a photo in the database
      *
-     * @param photo photo that should be updated
-     * @return updated photo
+     * @param category category that should be updated
+     * @return updated category
      */
     @Synchronized
     fun updateCategory(category: Category): Category {
@@ -563,7 +563,7 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
     /**
      * Deletes the given category from the database
      *
-     * @param photo category that should be deleted
+     * @param category category that should be deleted
      */
     @Synchronized
     fun deleteCategory(category: Category) {

@@ -59,7 +59,7 @@ abstract class AbstractDropboxFragment : Fragment(), AnkoLogger {
         editor.commit()
         // clear client so that it is not reused next time we connect to Dropbox
         DropboxClientFactory.clearClient()
-        var accessToken = Auth.getOAuth2Token()
+        val accessToken = Auth.getOAuth2Token()
         if (accessToken != null) {
             // save the access token
             prefs.edit().putString("access-token", accessToken).apply()

@@ -4,7 +4,7 @@
     <item
         android:id="@+id/menu_item_show_stopwatch"
         android:icon="@drawable/ic_action_stopwatch"
-        android:title="Stopwatch"
+        android:title="@string/stopwatch"
         app:showAsAction="ifRoom|withText"/>
     <item
         android:id="@+id/menu_item_show_gallery"
