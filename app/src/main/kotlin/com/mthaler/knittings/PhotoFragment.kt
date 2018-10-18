@@ -11,6 +11,7 @@ import android.widget.EditText
 import android.widget.ImageView
 import com.mthaler.knittings.database.datasource
 import com.mthaler.knittings.model.Photo
+import com.mthaler.knittings.utils.PictureUtils
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
 

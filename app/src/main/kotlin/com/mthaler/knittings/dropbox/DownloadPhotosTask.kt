@@ -3,7 +3,7 @@ package com.mthaler.knittings.dropbox
 import android.content.Context
 import android.os.AsyncTask
 import com.dropbox.core.v2.DbxClientV2
-import com.mthaler.knittings.PictureUtils
+import com.mthaler.knittings.utils.PictureUtils
 import com.mthaler.knittings.database.datasource
 import com.mthaler.knittings.model.Database
 import com.mthaler.knittings.utils.FileUtils

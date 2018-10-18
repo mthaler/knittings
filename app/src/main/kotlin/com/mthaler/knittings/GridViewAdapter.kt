@@ -9,6 +9,7 @@ import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.TextView
 import com.mthaler.knittings.model.Photo
+import com.mthaler.knittings.utils.PictureUtils
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
 

@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.view.ViewTreeObserver
 import android.widget.ImageView
 import com.mthaler.knittings.model.Photo
+import com.mthaler.knittings.utils.PictureUtils
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
 

@@ -11,6 +11,7 @@ import android.widget.Button
 import android.widget.Toast
 import org.jetbrains.anko.*
 import com.mthaler.knittings.database.datasource
+import com.mthaler.knittings.utils.PictureUtils
 import java.io.File
 import java.io.FileNotFoundException
 
