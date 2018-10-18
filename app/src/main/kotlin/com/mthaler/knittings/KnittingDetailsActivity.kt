@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import com.mthaler.knittings.database.datasource
+import com.mthaler.knittings.stopwatch.StopwatchActivity
 import org.jetbrains.anko.*
 import java.io.File
 import kotlinx.android.synthetic.main.activity_knitting_details.*

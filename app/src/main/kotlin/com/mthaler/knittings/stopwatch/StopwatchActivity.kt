@@ -1,10 +1,11 @@
-package com.mthaler.knittings
+package com.mthaler.knittings.stopwatch
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.view.View
 import android.widget.TextView
+import com.mthaler.knittings.R
 import com.mthaler.knittings.database.datasource
 import java.util.*
 
