@@ -10,6 +10,7 @@ import android.support.v7.app.ActionBarDrawerToggle
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.TextView
+import com.mthaler.knittings.category.CategoryListActivity
 import com.mthaler.knittings.dropbox.DropboxExportActivity
 import com.mthaler.knittings.dropbox.DropboxImportActivity
 import org.jetbrains.anko.*
@@ -77,6 +78,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
             R.id.nav_dropbox_import -> {
                 startActivity<DropboxImportActivity>()
+            }
+            R.id.nav_edit_categories -> {
+                startActivity<CategoryListActivity>()
             }
         }
 

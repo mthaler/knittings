@@ -13,5 +13,12 @@
                 android:title="@string/dropbox_import" />
         </menu>
     </item>
+    <item android:title="Categories">
+        <menu>
+            <item
+                android:id="@+id/nav_edit_categories"
+                android:title="Edit categories" />
+        </menu>
+    </item>
 
 </menu>
