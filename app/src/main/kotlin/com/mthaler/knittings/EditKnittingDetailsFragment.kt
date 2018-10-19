@@ -14,8 +14,12 @@ import android.widget.TextView
 import com.mthaler.knittings.database.KnittingsDataSource
 import com.mthaler.knittings.database.datasource
 import com.mthaler.knittings.model.Knitting
+import com.mthaler.knittings.utils.TimeUtils
 import java.text.DateFormat
 import java.util.*
+import com.mthaler.knittings.durationpicker.DurationPickerDialog
+import com.mthaler.knittings.durationpicker.DurationPicker
+
 
 class EditKnittingDetailsFragment : Fragment() {
 
@@ -23,6 +27,7 @@ class EditKnittingDetailsFragment : Fragment() {
 
     private lateinit var textViewStarted: TextView
     private lateinit var textViewFinished: TextView
+    private lateinit var textViewDuration: TextView
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
@@ -55,6 +60,21 @@ class EditKnittingDetailsFragment : Fragment() {
 
         val editTextSize = v.findViewById<EditText>(R.id.knitting_size)
         editTextSize.addTextChangedListener(createTextWatcher { c, knitting -> knitting.copy(size = java.lang.Double.parseDouble(c.toString())) })
+
+        textViewDuration = v.findViewById(R.id.knitting_duration)
+        textViewDuration.setOnClickListener {
+            val now = Calendar.getInstance()
+            val mTimePicker = DurationPickerDialog(this.context, object : DurationPickerDialog.OnTimeSetListener {
+
+                override fun onTimeSet(view: DurationPicker, hourOfDay: Int, minute: Int, seconds: Int) {
+                    // TODO Auto-generated method stub
+                    textViewDuration.setText(getString(R.string.time) + String.format("%02d", hourOfDay) +
+                            ":" + String.format("%02d", minute) +
+                            ":" + String.format("%02d", seconds))
+                }
+            }, now.get(Calendar.HOUR_OF_DAY), now.get(Calendar.MINUTE), now.get(Calendar.SECOND), true)
+            mTimePicker.show()
+        }
 
         val ratingBar = v.findViewById<RatingBar>(R.id.ratingBar)
         ratingBar.onRatingBarChangeListener = RatingBar.OnRatingBarChangeListener { ratingBar, rating, fromUser ->
@@ -116,6 +136,8 @@ class EditKnittingDetailsFragment : Fragment() {
 
             val editTextSize = v.findViewById<EditText>(R.id.knitting_size)
             editTextSize.setText(String.format(Locale.ROOT, "%.1f", knitting.size))
+
+            textViewDuration.text = TimeUtils.formatDuration(knitting.duration)
 
             val ratingBar = v.findViewById<RatingBar>(R.id.ratingBar)
             ratingBar.rating = knitting.rating.toFloat()

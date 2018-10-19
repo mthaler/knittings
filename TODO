@@ -9,3 +9,4 @@ TODO:
 - use Kotlin Android extensions everywhere instead of findViewById
 - put toolbar in its own file and include it instead of defining it everywhere
 - check if WLAN is available before dropbox export
+- Add take photo button to edit knitting details activity
