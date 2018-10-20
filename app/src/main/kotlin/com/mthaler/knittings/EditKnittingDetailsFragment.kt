@@ -13,6 +13,7 @@ import android.widget.RatingBar
 import android.widget.TextView
 import com.mthaler.knittings.database.KnittingsDataSource
 import com.mthaler.knittings.database.datasource
+import com.mthaler.knittings.datepicker.DatePickerFragment
 import com.mthaler.knittings.model.Knitting
 import com.mthaler.knittings.utils.TimeUtils
 import java.text.DateFormat

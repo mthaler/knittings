@@ -17,20 +17,21 @@ import com.mthaler.knittings.R
 
 /**
  * A dialog that prompts the user for the time of day using a [DurationPicker].
- */
-class DurationPickerDialog
-/**
- * @param context Parent.
+ *
+ *  * @param context Parent.
  * @param theme the theme to apply to this dialog
  * @param callBack How parent is notified.
  * @param hourOfDay The initial hour.
  * @param minute The initial minute.
  * @param is24HourView Whether this is a 24 hour view, or AM/PM.
  */
-(context: Context,
- theme: Int,
- private val mCallback: OnTimeSetListener?,
- internal var mInitialHourOfDay: Int, internal var mInitialMinute: Int, internal var mInitialSeconds: Int, internal var mIs24HourView: Boolean) : AlertDialog(context, theme), OnClickListener, OnTimeChangedListener {
+class DurationPickerDialog(context: Context,
+                           theme: Int,
+                           private val callback: OnTimeSetListener,
+                           internal var mInitialHourOfDay: Int,
+                           internal var mInitialMinute: Int,
+                           internal var mInitialSeconds: Int,
+                           internal var mIs24HourView: Boolean) : AlertDialog(context, theme), OnClickListener, OnTimeChangedListener {
 
     private val mTimePicker: DurationPicker
     private val mCalendar: Calendar
@@ -88,9 +89,9 @@ class DurationPickerDialog
     }
 
     override fun onClick(dialog: DialogInterface, which: Int) {
-        if (mCallback != null) {
+        if (callback != null) {
             mTimePicker.clearFocus()
-            mCallback.onTimeSet(mTimePicker, mTimePicker.currentHour!!,
+            callback.onTimeSet(mTimePicker, mTimePicker.currentHour!!,
                     mTimePicker.currentMinute!!, mTimePicker.currentSeconds!!)
         }
     }

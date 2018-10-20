@@ -1,4 +1,4 @@
-package com.mthaler.knittings
+package com.mthaler.knittings.durationpicker
 
 import android.annotation.SuppressLint
 import android.app.Activity
@@ -8,11 +8,11 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
 import android.widget.DatePicker
-import java.util.Calendar
-import java.util.Date
-import java.util.GregorianCalendar
+import com.mthaler.knittings.R
+import com.mthaler.knittings.datepicker.DatePickerFragment
+import java.util.*
 
-class DatePickerFragment : DialogFragment() {
+class DurationPickerFragment : DialogFragment() {
 
     private var date: Date? = null
 
@@ -20,7 +20,7 @@ class DatePickerFragment : DialogFragment() {
         val tf = targetFragment
         if (tf != null) {
             val i = Intent()
-            i.putExtra(EXTRA_DATE, date)
+            i.putExtra(DatePickerFragment.EXTRA_DATE, date)
             tf.onActivityResult(targetRequestCode, resultCode, i)
         }
     }
