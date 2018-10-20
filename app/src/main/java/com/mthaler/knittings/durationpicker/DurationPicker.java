@@ -17,7 +17,6 @@
 
 package com.mthaler.knittings.durationpicker;
 
-import java.text.DateFormatSymbols;
 import java.util.Calendar;
 
 import android.content.Context;
@@ -25,8 +24,6 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
-import android.view.View;
-import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.NumberPicker;
 import android.widget.NumberPicker.Formatter;
@@ -72,8 +69,8 @@ public class DurationPicker extends FrameLayout {
             };
 
     // state
-    private int mCurrentHour = 0; // 0-23
-    private int mCurrentMinute = 0; // 0-59
+    private int mCurrentHours = 0; // 0-23
+    private int mCurrentMinutes = 0; // 0-59
     private int mCurrentSeconds = 0; // 0-59
 
     // ui components
@@ -82,7 +79,7 @@ public class DurationPicker extends FrameLayout {
     private final NumberPicker mSecondPicker;
 
     // callbacks
-    private OnTimeChangedListener mOnTimeChangedListener;
+    private OnTimeChangedListener mOnDurationChangedListener;
 
     /**
      * The callback interface used to indicate the time has been adjusted.
@@ -122,7 +119,7 @@ public class DurationPicker extends FrameLayout {
             @Override
             public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
                 // TODO Auto-generated method stub
-                mCurrentHour = newVal;
+                mCurrentHours = newVal;
                 onTimeChanged();
             }
         });
@@ -130,12 +127,18 @@ public class DurationPicker extends FrameLayout {
         // digits of minute
         mMinutePicker = (NumberPicker) findViewById(R.id.minute);
         mMinutePicker.setMinValue(0);
-        mMinutePicker.setMaxValue(59);
+        mMinutePicker.setMaxValue(11);
         mMinutePicker.setFormatter(TWO_DIGIT_FORMATTER);
+        final String[] minuteValues = new String[12];
+        for (int i = 0; i < minuteValues.length; i++) {
+            String number = Integer.toString(i*5);
+            minuteValues[i] = number.length() < 2 ? "0" + number : number;
+        }
+        mMinutePicker.setDisplayedValues(minuteValues);
         mMinutePicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
             @Override
             public void onValueChange(NumberPicker spinner, int oldVal, int newVal) {
-                mCurrentMinute = newVal;
+                mCurrentMinutes = Integer.parseInt(minuteValues[newVal]);;
                 onTimeChanged();
             }
         });
@@ -143,8 +146,14 @@ public class DurationPicker extends FrameLayout {
         // digits of seconds
         mSecondPicker = (NumberPicker) findViewById(R.id.seconds);
         mSecondPicker.setMinValue(0);
-        mSecondPicker.setMaxValue(59);
+        mSecondPicker.setMaxValue(11);
         mSecondPicker.setFormatter( TWO_DIGIT_FORMATTER);
+        final String[] secondValues = new String[12];
+        for (int i = 0; i < secondValues.length; i++) {
+            String number = Integer.toString(i*5);
+            secondValues[i] = number.length() < 2 ? "0" + number : number;
+        }
+        mSecondPicker.setDisplayedValues(secondValues);
         mSecondPicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
 
             @Override
@@ -234,7 +243,7 @@ public class DurationPicker extends FrameLayout {
     @Override
     protected Parcelable onSaveInstanceState() {
         Parcelable superState = super.onSaveInstanceState();
-        return new SavedState(superState, mCurrentHour, mCurrentMinute);
+        return new SavedState(superState, mCurrentHours, mCurrentMinutes);
     }
 
     @Override
@@ -250,21 +259,21 @@ public class DurationPicker extends FrameLayout {
      * @param onTimeChangedListener the callback, should not be null.
      */
     public void setOnTimeChangedListener(OnTimeChangedListener onTimeChangedListener) {
-        mOnTimeChangedListener = onTimeChangedListener;
+        mOnDurationChangedListener = onTimeChangedListener;
     }
 
     /**
      * @return The current hour (0-23).
      */
     public Integer getCurrentHour() {
-        return mCurrentHour;
+        return mCurrentHours;
     }
 
     /**
      * Set the current hour.
      */
     public void setCurrentHour(Integer currentHour) {
-        this.mCurrentHour = currentHour;
+        this.mCurrentHours = currentHour;
         updateHourDisplay();
     }
 
@@ -272,14 +281,14 @@ public class DurationPicker extends FrameLayout {
      * @return The current minute.
      */
     public Integer getCurrentMinute() {
-        return mCurrentMinute;
+        return mCurrentMinutes;
     }
 
     /**
      * Set the current minute (0-59).
      */
     public void setCurrentMinute(Integer currentMinute) {
-        this.mCurrentMinute = currentMinute;
+        this.mCurrentMinutes = currentMinute;
         updateMinuteDisplay();
     }
 
@@ -307,7 +316,7 @@ public class DurationPicker extends FrameLayout {
      * Set the state of the spinners appropriate to the current hour.
      */
     private void updateHourDisplay() {
-        int currentHour = mCurrentHour;
+        int currentHour = mCurrentHours;
         mHourPicker.setValue(currentHour);
         onTimeChanged();
     }
@@ -319,15 +328,15 @@ public class DurationPicker extends FrameLayout {
     }
 
     private void onTimeChanged() {
-        mOnTimeChangedListener.onTimeChanged(this, getCurrentHour(), getCurrentMinute(), getCurrentSeconds());
+        mOnDurationChangedListener.onTimeChanged(this, getCurrentHour(), getCurrentMinute(), getCurrentSeconds());
     }
 
     /**
      * Set the state of the spinners appropriate to the current minute.
      */
     private void updateMinuteDisplay() {
-        mMinutePicker.setValue(mCurrentMinute);
-        mOnTimeChangedListener.onTimeChanged(this, getCurrentHour(), getCurrentMinute(), getCurrentSeconds());
+        mMinutePicker.setValue(mCurrentMinutes);
+        mOnDurationChangedListener.onTimeChanged(this, getCurrentHour(), getCurrentMinute(), getCurrentSeconds());
     }
 
     /**
@@ -335,7 +344,7 @@ public class DurationPicker extends FrameLayout {
      */
     private void updateSecondsDisplay() {
         mSecondPicker.setValue(mCurrentSeconds);
-        mOnTimeChangedListener.onTimeChanged(this, getCurrentHour(), getCurrentMinute(), getCurrentSeconds());
+        mOnDurationChangedListener.onTimeChanged(this, getCurrentHour(), getCurrentMinute(), getCurrentSeconds());
     }
 }
 
