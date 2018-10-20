@@ -66,12 +66,8 @@ class KnittingDetailsActivity : AppCompatActivity(), AnkoLogger, CanTakePhoto {
         if (knittingID != -1L) {
             // initialize the knitting details fragment with the knitting it should display
             val fragment = supportFragmentManager.findFragmentById(R.id.fragment_knitting_details) as KnittingDetailsFragment
-            if (fragment != null) {
-                val knitting = datasource.getKnitting(knittingID)
-                fragment.init(knitting)
-            } else {
-                error("Could not get knitting details fragment")
-            }
+            val knitting = datasource.getKnitting(knittingID)
+            fragment.init(knitting)
         }
     }
 

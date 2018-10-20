@@ -19,12 +19,8 @@ class EditKnittingDetailsActivity : AppCompatActivity() {
         if (id != -1L) {
             // initialize the edit knitting details fragment with the knitting it should display
             val fragment = supportFragmentManager.findFragmentById(R.id.fragment_edit_knitting_details) as EditKnittingDetailsFragment
-            if (fragment != null) {
-                val knitting = datasource.getKnitting(id)
-                fragment.init(knitting)
-            } else {
-                error("Could not get knitting details fragment")
-            }
+            val knitting = datasource.getKnitting(id)
+            fragment.init(knitting)
         }
     }
 

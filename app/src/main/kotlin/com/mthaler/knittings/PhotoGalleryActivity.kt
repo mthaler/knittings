@@ -42,12 +42,8 @@ class PhotoGalleryActivity : AppCompatActivity(), CanTakePhoto, AnkoLogger {
         super.onResume()
         if (knittingID != -1L) {
             val fragment = supportFragmentManager.findFragmentById(R.id.fragment_photo_gallery) as PhotoGalleryFragment
-            if (fragment != null) {
-                val knitting = datasource.getKnitting(knittingID)
-                fragment.init(knitting)
-            } else {
-                error("Could not get photo gallery fragment")
-            }
+            val knitting = datasource.getKnitting(knittingID)
+            fragment.init(knitting)
         } else {
             error("Could not get knitting id")
         }

@@ -70,13 +70,9 @@ class PhotoActivity : AppCompatActivity(), AnkoLogger {
             message = resources.getString(R.string.delete_photo_dialog_question)
             positiveButton(resources.getString(R.string.delete_photo_dialog_delete_button)) {
                 val adapter = pager.adapter as PhotoPagerAdapter
-                if (adapter != null) {
-                    val frag = adapter.getPhotoFragment()
-                    if (frag != null) {
-                        frag.deletePhoto()
-                    } else {
-                        error("Photo fragment null")
-                    }
+                val frag = adapter.getPhotoFragment()
+                if (frag != null) {
+                    frag.deletePhoto()
                 } else {
                     error("Photo fragment null")
                 }
@@ -91,21 +87,16 @@ class PhotoActivity : AppCompatActivity(), AnkoLogger {
      */
     private fun setDefaultPhoto() {
         val adapter = pager.adapter as PhotoPagerAdapter
-        if (adapter != null) {
-            val frag = adapter.getPhotoFragment()
-            if (frag != null) {
-                val photo = frag.photo
-                val knitting = datasource.getKnitting(photo!!.knittingID)
-                datasource.updateKnitting(knitting.copy(defaultPhoto = photo))
-                debug("Set $photo as default photo")
-                Snackbar.make(photo_activity_layout, "Used as main photo", Snackbar.LENGTH_SHORT).show()
-            } else {
-                error("Photo fragment null")
-            }
+        val frag = adapter.getPhotoFragment()
+        if (frag != null) {
+            val photo = frag.photo
+            val knitting = datasource.getKnitting(photo!!.knittingID)
+            datasource.updateKnitting(knitting.copy(defaultPhoto = photo))
+            debug("Set $photo as default photo")
+            Snackbar.make(photo_activity_layout, "Used as main photo", Snackbar.LENGTH_SHORT).show()
         } else {
-            error("Adapter null")
+            error("Photo fragment null")
         }
-
     }
 
 

@@ -84,7 +84,6 @@ class DurationPickerDialog(context: Context,
         mTimePicker.currentHour = mInitialHourOfDay
         mTimePicker.currentMinute = mInitialMinute
         mTimePicker.setCurrentSecond(mInitialSeconds)
-        mTimePicker.setIs24HourView(mIs24HourView)
         mTimePicker.setOnTimeChangedListener(this)
     }
 
@@ -118,7 +117,6 @@ class DurationPickerDialog(context: Context,
         state.putInt(HOUR, mTimePicker.currentHour!!)
         state.putInt(MINUTE, mTimePicker.currentMinute!!)
         state.putInt(SECONDS, mTimePicker.currentSeconds!!)
-        state.putBoolean(IS_24_HOUR, mTimePicker.is24HourView)
         return state
     }
 
@@ -130,7 +128,6 @@ class DurationPickerDialog(context: Context,
         mTimePicker.currentHour = hour
         mTimePicker.currentMinute = minute
         mTimePicker.setCurrentSecond(seconds)
-        mTimePicker.setIs24HourView(savedInstanceState.getBoolean(IS_24_HOUR))
         mTimePicker.setOnTimeChangedListener(this)
         updateTitle(hour, minute, seconds)
     }

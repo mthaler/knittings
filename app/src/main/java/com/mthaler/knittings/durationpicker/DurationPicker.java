@@ -75,16 +75,11 @@ public class DurationPicker extends FrameLayout {
     private int mCurrentHour = 0; // 0-23
     private int mCurrentMinute = 0; // 0-59
     private int mCurrentSeconds = 0; // 0-59
-    private Boolean mIs24HourView = false;
-    private boolean mIsAm;
 
     // ui components
     private final NumberPicker mHourPicker;
     private final NumberPicker mMinutePicker;
     private final NumberPicker mSecondPicker;
-    private final Button mAmPmButton;
-    private final String mAmText;
-    private final String mPmText;
 
     // callbacks
     private OnTimeChangedListener mOnTimeChangedListener;
@@ -128,17 +123,6 @@ public class DurationPicker extends FrameLayout {
             public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
                 // TODO Auto-generated method stub
                 mCurrentHour = newVal;
-                if (!mIs24HourView) {
-                    // adjust from [1-12] to [0-11] internally, with the times
-                    // written "12:xx" being the start of the half-day
-                    if (mCurrentHour == 12) {
-                        mCurrentHour = 0;
-                    }
-                    if (!mIsAm) {
-                        // PM means 12 hours later than nominal
-                        mCurrentHour += 12;
-                    }
-                }
                 onTimeChanged();
             }
         });
@@ -172,7 +156,7 @@ public class DurationPicker extends FrameLayout {
         });
 
         // am/pm
-        mAmPmButton = (Button) findViewById(R.id.amPm);
+        //mAmPmButton = (Button) findViewById(R.id.amPm);
 
         // now that the hour/minute picker objects have been initialized, set
         // the hour range properly based on the 12/24 hour display mode.
@@ -187,36 +171,6 @@ public class DurationPicker extends FrameLayout {
         setCurrentMinute(cal.get(Calendar.MINUTE));
         setCurrentSecond(cal.get(Calendar.SECOND));
 
-        mIsAm = (mCurrentHour < 12);
-
-        /* Get the localized am/pm strings and use them in the spinner */
-        DateFormatSymbols dfs = new DateFormatSymbols();
-        String[] dfsAmPm = dfs.getAmPmStrings();
-        mAmText = dfsAmPm[Calendar.AM];
-        mPmText = dfsAmPm[Calendar.PM];
-        mAmPmButton.setText(mIsAm ? mAmText : mPmText);
-        mAmPmButton.setOnClickListener(new OnClickListener() {
-            public void onClick(View v) {
-                requestFocus();
-                if (mIsAm) {
-
-                    // Currently AM switching to PM
-                    if (mCurrentHour < 12) {
-                        mCurrentHour += 12;
-                    }
-                } else {
-
-                    // Currently PM switching to AM
-                    if (mCurrentHour >= 12) {
-                        mCurrentHour -= 12;
-                    }
-                }
-                mIsAm = !mIsAm;
-                mAmPmButton.setText(mIsAm ? mAmText : mPmText);
-                onTimeChanged();
-            }
-        });
-
         if (!isEnabled()) {
             setEnabled(false);
         }
@@ -227,7 +181,7 @@ public class DurationPicker extends FrameLayout {
         super.setEnabled(enabled);
         mMinutePicker.setEnabled(enabled);
         mHourPicker.setEnabled(enabled);
-        mAmPmButton.setEnabled(enabled);
+        //mAmPmButton.setEnabled(enabled);
     }
 
     /**
@@ -315,25 +269,6 @@ public class DurationPicker extends FrameLayout {
     }
 
     /**
-     * Set whether in 24 hour or AM/PM mode.
-     * @param is24HourView True = 24 hour mode. False = AM/PM.
-     */
-    public void setIs24HourView(Boolean is24HourView) {
-        if (mIs24HourView != is24HourView) {
-            mIs24HourView = is24HourView;
-            configurePickerRanges();
-            updateHourDisplay();
-        }
-    }
-
-    /**
-     * @return true if this is in 24 hour view else false.
-     */
-    public boolean is24HourView() {
-        return mIs24HourView;
-    }
-
-    /**
      * @return The current minute.
      */
     public Integer getCurrentMinute() {
@@ -373,29 +308,14 @@ public class DurationPicker extends FrameLayout {
      */
     private void updateHourDisplay() {
         int currentHour = mCurrentHour;
-        if (!mIs24HourView) {
-            // convert [0,23] ordinal to wall clock display
-            if (currentHour > 12) currentHour -= 12;
-            else if (currentHour == 0) currentHour = 12;
-        }
         mHourPicker.setValue(currentHour);
-        mIsAm = mCurrentHour < 12;
-        mAmPmButton.setText(mIsAm ? mAmText : mPmText);
         onTimeChanged();
     }
 
     private void configurePickerRanges() {
-        if (mIs24HourView) {
-            mHourPicker.setMinValue(0);
-            mHourPicker.setMaxValue(23);
-            mHourPicker.setFormatter(TWO_DIGIT_FORMATTER);
-            mAmPmButton.setVisibility(View.GONE);
-        } else {
-            mHourPicker.setMinValue(1);
-            mHourPicker.setMaxValue(12);
-            mHourPicker.setFormatter(null);
-            mAmPmButton.setVisibility(View.VISIBLE);
-        }
+        mHourPicker.setMinValue(0);
+        mHourPicker.setMaxValue(23);
+        mHourPicker.setFormatter(TWO_DIGIT_FORMATTER);
     }
 
     private void onTimeChanged() {
