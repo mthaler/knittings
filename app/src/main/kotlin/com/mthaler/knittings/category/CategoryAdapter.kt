@@ -8,11 +8,10 @@ import android.widget.TextView
 import com.mthaler.knittings.R
 import com.mthaler.knittings.model.Category
 
-class CategoryAdapter(val categories: ArrayList<Category>): RecyclerView.Adapter<CategoryAdapter.ViewHolder>() {
+class CategoryAdapter(val categories: ArrayList<Category>, val listener: OnItemClickListener): RecyclerView.Adapter<CategoryAdapter.ViewHolder>() {
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.txtName?.text = categories[position].name
-        holder.txtTitle?.text = categories[position].color.toString()
+        holder.bind(categories[position], listener)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -28,6 +27,11 @@ class CategoryAdapter(val categories: ArrayList<Category>): RecyclerView.Adapter
         val txtName = itemView.findViewById<TextView>(R.id.name)
         val txtTitle = itemView.findViewById<TextView>(R.id.color)
 
+        fun bind(category: Category, listener: OnItemClickListener) {
+            txtName.text = category.name
+            txtTitle.text = category.color.toString()
+            itemView.setOnClickListener({v -> listener.onItemClick(category) })
+        }
     }
 
 }

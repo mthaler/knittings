@@ -7,6 +7,7 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import com.mthaler.knittings.R
 import com.mthaler.knittings.model.Category
+import org.jetbrains.anko.startActivity
 
 class CategoryListActivity : AppCompatActivity() {
 
@@ -23,7 +24,11 @@ class CategoryListActivity : AppCompatActivity() {
         val rv = findViewById<RecyclerView>(R.id.recyclerView)
         rv.layoutManager = LinearLayoutManager(this)
 
-        val adapter = CategoryAdapter(categories)
+        val adapter = CategoryAdapter(categories, object : OnItemClickListener {
+            override fun onItemClick(item: Category?) {
+                startActivity<EditCategoryActivity>()
+            }
+        })
         rv.adapter = adapter
     }
 }
