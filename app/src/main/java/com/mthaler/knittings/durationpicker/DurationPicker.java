@@ -1,7 +1,6 @@
 package com.mthaler.knittings.durationpicker;
 
 import java.util.Calendar;
-
 import android.content.Context;
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -10,7 +9,6 @@ import android.view.LayoutInflater;
 import android.widget.FrameLayout;
 import android.widget.NumberPicker;
 import android.widget.NumberPicker.Formatter;
-
 import com.mthaler.knittings.R;
 
 /**
@@ -233,13 +231,6 @@ public class DurationPicker extends FrameLayout {
     }
 
     /**
-     * @return The current hour (0-23).
-     */
-    public Integer getCurrentHour() {
-        return mCurrentHours;
-    }
-
-    /**
      * Set the current hour.
      */
     public void setCurrentHour(Integer currentHour) {
@@ -248,25 +239,11 @@ public class DurationPicker extends FrameLayout {
     }
 
     /**
-     * @return The current minute.
-     */
-    public Integer getCurrentMinute() {
-        return mCurrentMinutes;
-    }
-
-    /**
      * Set the current minute (0-59).
      */
     public void setCurrentMinute(Integer currentMinute) {
         this.mCurrentMinutes = currentMinute;
         updateMinuteDisplay();
-    }
-
-    /**
-     * @return The current minute.
-     */
-    public Integer getCurrentSeconds() {
-        return mCurrentSeconds;
     }
 
     /**

@@ -1,17 +1,13 @@
 package com.mthaler.knittings.durationpicker
 
-import java.util.Calendar
-
 import android.app.AlertDialog
 import android.content.Context
 import android.content.DialogInterface
 import android.content.DialogInterface.OnClickListener
 import android.os.Bundle
-import android.text.format.DateFormat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.Window
-
 import com.mthaler.knittings.durationpicker.DurationPicker.OnDurationChangedListener
 import com.mthaler.knittings.R
 import com.mthaler.knittings.utils.TimeUtils
@@ -75,8 +71,8 @@ class DurationPickerDialog(context: Context,
         mTimePicker = view.findViewById<View>(R.id.timePicker) as DurationPicker
 
         // initialize state
-        mTimePicker.currentHour = mInitialHourOfDay
-        mTimePicker.currentMinute = mInitialMinute
+        mTimePicker.setCurrentHour(mInitialHourOfDay)
+        mTimePicker.setCurrentMinute(mInitialMinute)
         mTimePicker.setCurrentSecond(mInitialSeconds)
         mTimePicker.setOnDurationChangedListener(this)
     }
@@ -92,34 +88,27 @@ class DurationPickerDialog(context: Context,
         updateTitle(duration)
     }
 
-    fun updateTime(hourOfDay: Int, minutOfHour: Int, seconds: Int) {
-        mTimePicker.currentHour = hourOfDay
-        mTimePicker.currentMinute = minutOfHour
-        mTimePicker.setCurrentSecond(seconds)
-    }
-
     private fun updateTitle(duration: Long) {
         setTitle(TimeUtils.formatDuration(duration))
     }
 
     override fun onSaveInstanceState(): Bundle {
         val state = super.onSaveInstanceState()
-        state.putInt(HOUR, mTimePicker.currentHour!!)
-        state.putInt(MINUTE, mTimePicker.currentMinute!!)
-        state.putInt(SECONDS, mTimePicker.currentSeconds!!)
+        state.putLong(DURATION, mTimePicker.duration)
         return state
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         super.onRestoreInstanceState(savedInstanceState)
-        val hour = savedInstanceState.getInt(HOUR)
-        val minute = savedInstanceState.getInt(MINUTE)
-        val seconds = savedInstanceState.getInt(SECONDS)
-        mTimePicker.currentHour = hour
-        mTimePicker.currentMinute = minute
-        mTimePicker.setCurrentSecond(seconds)
+        val duration = savedInstanceState.getLong(DURATION)
+        val seconds = duration / 1000 % 60
+        val minutes = duration / (1000 * 60) % 60
+        val hours = duration / (1000 * 60 * 60)
+        mTimePicker.setCurrentHour(hours.toInt())
+        mTimePicker.setCurrentMinute(minutes.toInt())
+        mTimePicker.setCurrentSecond(seconds.toInt())
         mTimePicker.setOnDurationChangedListener(this)
-        updateTitle(0L)
+        updateTitle(duration)
     }
 
     companion object {
@@ -127,7 +116,7 @@ class DurationPickerDialog(context: Context,
         private val HOUR = "hour"
         private val MINUTE = "minute"
         private val SECONDS = "seconds"
-        private val IS_24_HOUR = "is24hour"
+        private val DURATION = "duration"
     }
 
 
