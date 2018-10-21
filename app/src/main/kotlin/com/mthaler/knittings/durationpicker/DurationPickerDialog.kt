@@ -25,9 +25,7 @@ import com.mthaler.knittings.utils.TimeUtils
 class DurationPickerDialog(context: Context,
                            theme: Int,
                            private val callback: OnTimeSetListener,
-                           internal var mInitialHourOfDay: Int,
-                           internal var mInitialMinute: Int,
-                           internal var mInitialSeconds: Int) : AlertDialog(context, theme), OnClickListener, OnDurationChangedListener {
+                           initialDuration: Long) : AlertDialog(context, theme), OnClickListener, OnDurationChangedListener {
 
     private val mTimePicker: DurationPicker
 
@@ -52,8 +50,7 @@ class DurationPickerDialog(context: Context,
      */
     constructor(context: Context,
                 callBack: OnTimeSetListener,
-                hourOfDay: Int, minute: Int, seconds: Int, is24HourView: Boolean) : this(context, 0,
-            callBack, hourOfDay, minute, seconds) {
+                duration: Long) : this(context, 0, callBack, duration) {
     }
 
     init {
@@ -71,9 +68,7 @@ class DurationPickerDialog(context: Context,
         mTimePicker = view.findViewById<View>(R.id.timePicker) as DurationPicker
 
         // initialize state
-        mTimePicker.setCurrentHour(mInitialHourOfDay)
-        mTimePicker.setCurrentMinute(mInitialMinute)
-        mTimePicker.setCurrentSecond(mInitialSeconds)
+        mTimePicker.setDuration(initialDuration)
         mTimePicker.setOnDurationChangedListener(this)
     }
 

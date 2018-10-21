@@ -230,6 +230,15 @@ public class DurationPicker extends FrameLayout {
         return 1000L * (mCurrentSeconds + 60 * mCurrentMinutes + 3600 * mCurrentHours);
     }
 
+    public void setDuration(long duration) {
+        long seconds = duration / 1000 % 60;
+        long minutes = duration / (1000 * 60) % 60;
+        long hours = duration / (1000 * 60 * 60);
+        setCurrentHour((int)hours);
+        setCurrentMinute((int)minutes);
+        setCurrentSecond((int)seconds);
+    }
+
     /**
      * Set the current hour.
      */
