@@ -53,8 +53,8 @@ public class DurationPicker extends FrameLayout {
      * A no-op callback used in the constructor to avoid null checks
      * later in the code.
      */
-    private static final OnTimeChangedListener NO_OP_CHANGE_LISTENER = new OnTimeChangedListener() {
-        public void onTimeChanged(DurationPicker view, int hourOfDay, int minute, int seconds) {
+    private static final OnDurationChangedListener NO_OP_CHANGE_LISTENER = new OnDurationChangedListener() {
+        public void onDurationChanged(DurationPicker view, int hourOfDay, int minute, int seconds) {
         }
     };
 
@@ -79,12 +79,12 @@ public class DurationPicker extends FrameLayout {
     private final NumberPicker mSecondPicker;
 
     // callbacks
-    private OnTimeChangedListener mOnDurationChangedListener;
+    private OnDurationChangedListener mOnDurationChangedListener;
 
     /**
      * The callback interface used to indicate the time has been adjusted.
      */
-    public interface OnTimeChangedListener {
+    public interface OnDurationChangedListener {
 
         /**
          * @param view The view associated with this listener.
@@ -92,7 +92,7 @@ public class DurationPicker extends FrameLayout {
          * @param minute The current minute.
          * @param seconds The current second.
          */
-        void onTimeChanged(DurationPicker view, int hourOfDay, int minute, int seconds);
+        void onDurationChanged(DurationPicker view, int hourOfDay, int minute, int seconds);
     }
 
     public DurationPicker(Context context) {
@@ -173,7 +173,7 @@ public class DurationPicker extends FrameLayout {
 
         // initialize to current time
         Calendar cal = Calendar.getInstance();
-        setOnTimeChangedListener(NO_OP_CHANGE_LISTENER);
+        setOnDurationChangedListener(NO_OP_CHANGE_LISTENER);
 
         // by default we're not in 24 hour mode
         setCurrentHour(cal.get(Calendar.HOUR_OF_DAY));
@@ -248,10 +248,10 @@ public class DurationPicker extends FrameLayout {
 
     /**
      * Set the callback that indicates the time has been adjusted by the user.
-     * @param onTimeChangedListener the callback, should not be null.
+     * @param onDurationChangedListener the callback, should not be null.
      */
-    public void setOnTimeChangedListener(OnTimeChangedListener onTimeChangedListener) {
-        mOnDurationChangedListener = onTimeChangedListener;
+    public void setOnDurationChangedListener(OnDurationChangedListener onDurationChangedListener) {
+        mOnDurationChangedListener = onDurationChangedListener;
     }
 
     /**
@@ -320,7 +320,7 @@ public class DurationPicker extends FrameLayout {
     }
 
     private void onTimeChanged() {
-        mOnDurationChangedListener.onTimeChanged(this, getCurrentHour(), getCurrentMinute(), getCurrentSeconds());
+        mOnDurationChangedListener.onDurationChanged(this, getCurrentHour(), getCurrentMinute(), getCurrentSeconds());
     }
 
     /**
@@ -328,7 +328,7 @@ public class DurationPicker extends FrameLayout {
      */
     private void updateMinuteDisplay() {
         mMinutePicker.setValue(mCurrentMinutes);
-        mOnDurationChangedListener.onTimeChanged(this, getCurrentHour(), getCurrentMinute(), getCurrentSeconds());
+        mOnDurationChangedListener.onDurationChanged(this, getCurrentHour(), getCurrentMinute(), getCurrentSeconds());
     }
 
     /**
@@ -336,7 +336,7 @@ public class DurationPicker extends FrameLayout {
      */
     private void updateSecondsDisplay() {
         mSecondPicker.setValue(mCurrentSeconds);
-        mOnDurationChangedListener.onTimeChanged(this, getCurrentHour(), getCurrentMinute(), getCurrentSeconds());
+        mOnDurationChangedListener.onDurationChanged(this, getCurrentHour(), getCurrentMinute(), getCurrentSeconds());
     }
 }
 

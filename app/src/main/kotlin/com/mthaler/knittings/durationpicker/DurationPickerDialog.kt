@@ -12,7 +12,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.Window
 
-import com.mthaler.knittings.durationpicker.DurationPicker.OnTimeChangedListener
+import com.mthaler.knittings.durationpicker.DurationPicker.OnDurationChangedListener
 import com.mthaler.knittings.R
 
 /**
@@ -31,7 +31,7 @@ class DurationPickerDialog(context: Context,
                            internal var mInitialHourOfDay: Int,
                            internal var mInitialMinute: Int,
                            internal var mInitialSeconds: Int,
-                           internal var mIs24HourView: Boolean) : AlertDialog(context, theme), OnClickListener, OnTimeChangedListener {
+                           internal var mIs24HourView: Boolean) : AlertDialog(context, theme), OnClickListener, OnDurationChangedListener {
 
     private val mTimePicker: DurationPicker
     private val mCalendar: Calendar
@@ -84,7 +84,7 @@ class DurationPickerDialog(context: Context,
         mTimePicker.currentHour = mInitialHourOfDay
         mTimePicker.currentMinute = mInitialMinute
         mTimePicker.setCurrentSecond(mInitialSeconds)
-        mTimePicker.setOnTimeChangedListener(this)
+        mTimePicker.setOnDurationChangedListener(this)
     }
 
     override fun onClick(dialog: DialogInterface, which: Int) {
@@ -95,7 +95,7 @@ class DurationPickerDialog(context: Context,
         }
     }
 
-    override fun onTimeChanged(view: DurationPicker, hourOfDay: Int, minute: Int, seconds: Int) {
+    override fun onDurationChanged(view: DurationPicker, hourOfDay: Int, minute: Int, seconds: Int) {
         updateTitle(hourOfDay, minute, seconds)
     }
 
@@ -128,7 +128,7 @@ class DurationPickerDialog(context: Context,
         mTimePicker.currentHour = hour
         mTimePicker.currentMinute = minute
         mTimePicker.setCurrentSecond(seconds)
-        mTimePicker.setOnTimeChangedListener(this)
+        mTimePicker.setOnDurationChangedListener(this)
         updateTitle(hour, minute, seconds)
     }
 
