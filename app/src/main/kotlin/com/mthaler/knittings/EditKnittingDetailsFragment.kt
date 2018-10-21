@@ -63,12 +63,7 @@ class EditKnittingDetailsFragment : Fragment() {
 
         textViewDuration = v.findViewById(R.id.knitting_duration)
         textViewDuration.setOnClickListener {
-            val mTimePicker = DurationPickerDialog(this.context!!, object : DurationPickerDialog.OnTimeSetListener {
-
-                override fun onTimeSet(view: DurationPicker, duration: Long) {
-                    textViewDuration.setText(TimeUtils.formatDuration(duration))
-                }
-            }, knitting!!.duration)
+            val mTimePicker = DurationPickerDialog(this.context!!, { durationPicker, duration ->  textViewDuration.setText(TimeUtils.formatDuration(duration)) }, knitting!!.duration)
             mTimePicker.show()
         }
 

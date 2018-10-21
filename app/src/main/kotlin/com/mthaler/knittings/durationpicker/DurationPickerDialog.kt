@@ -15,32 +15,17 @@ import com.mthaler.knittings.utils.TimeUtils
 /**
  * A dialog that prompts the user for the time of day using a [DurationPicker].
  *
- *  * @param context Parent.
+ * @param context Parent.
  * @param theme the theme to apply to this dialog
- * @param callBack How parent is notified.
- * @param hourOfDay The initial hour.
- * @param minute The initial minute.
- * @param is24HourView Whether this is a 24 hour view, or AM/PM.
+ * @param callback How parent is notified.
+ * @param initialDuration initial duration
  */
 class DurationPickerDialog(context: Context,
                            theme: Int,
-                           private val callback: OnTimeSetListener,
+                           private val callback: (DurationPicker, Long) -> Unit,
                            initialDuration: Long) : AlertDialog(context, theme), OnClickListener, OnDurationChangedListener {
 
     private val mTimePicker: DurationPicker
-
-    /**
-     * The callback interface used to indicate the user is done filling in
-     * the time (they clicked on the 'Set' button).
-     */
-    interface OnTimeSetListener {
-
-        /**
-         * @param view The view associated with this listener.
-         * @param duration duration in milliseconds
-         */
-        fun onTimeSet(view: DurationPicker, duration: Long)
-    }
 
     /**
      * @param context Parent.
@@ -49,7 +34,7 @@ class DurationPickerDialog(context: Context,
      * @param minute The initial minute.
      */
     constructor(context: Context,
-                callBack: OnTimeSetListener,
+                callBack: (DurationPicker, Long) -> Unit,
                 duration: Long) : this(context, 0, callBack, duration) {
     }
 
@@ -75,7 +60,7 @@ class DurationPickerDialog(context: Context,
     override fun onClick(dialog: DialogInterface, which: Int) {
         if (callback != null) {
             mTimePicker.clearFocus()
-            callback.onTimeSet(mTimePicker, mTimePicker.duration)
+            callback(mTimePicker, mTimePicker.duration)
         }
     }
 
@@ -108,9 +93,6 @@ class DurationPickerDialog(context: Context,
 
     companion object {
 
-        private val HOUR = "hour"
-        private val MINUTE = "minute"
-        private val SECONDS = "seconds"
         private val DURATION = "duration"
     }
 

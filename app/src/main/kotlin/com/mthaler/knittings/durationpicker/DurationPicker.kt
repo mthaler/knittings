@@ -157,7 +157,7 @@ class DurationPicker @JvmOverloads constructor(context: Context, attrs: Attribut
 
     override fun onSaveInstanceState(): Parcelable? {
         val superState = super.onSaveInstanceState()
-        return SavedState(superState, duration!!)
+        return SavedState(superState, duration)
     }
 
     override fun onRestoreInstanceState(state: Parcelable) {
@@ -227,7 +227,7 @@ class DurationPicker @JvmOverloads constructor(context: Context, attrs: Attribut
     }
 
     private fun onTimeChanged() {
-        mOnDurationChangedListener!!.onDurationChanged(this, duration!!)
+        mOnDurationChangedListener!!.onDurationChanged(this, duration)
     }
 
     /**
@@ -235,7 +235,7 @@ class DurationPicker @JvmOverloads constructor(context: Context, attrs: Attribut
      */
     private fun updateMinuteDisplay() {
         mMinutePicker.value = mCurrentMinutes
-        mOnDurationChangedListener!!.onDurationChanged(this, duration!!)
+        mOnDurationChangedListener!!.onDurationChanged(this, duration)
     }
 
     /**
@@ -243,7 +243,7 @@ class DurationPicker @JvmOverloads constructor(context: Context, attrs: Attribut
      */
     private fun updateSecondsDisplay() {
         mSecondPicker.value = mCurrentSeconds
-        mOnDurationChangedListener!!.onDurationChanged(this, duration!!)
+        mOnDurationChangedListener!!.onDurationChanged(this, duration)
     }
 
     companion object {
