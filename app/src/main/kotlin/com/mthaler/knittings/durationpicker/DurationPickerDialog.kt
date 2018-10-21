@@ -59,7 +59,7 @@ class DurationPickerDialog(context: Context,
         updateTitle(0L)
 
         setButton(context.getText(R.string.time_set), this)
-        setButton2(context.getText(R.string.cancel), null as OnClickListener?)
+        setButton2(context.getText(R.string.dialog_button_cancel), null as OnClickListener?)
         //setIcon(android.R.drawable.ic_dialog_time);
 
         val inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater

@@ -106,7 +106,7 @@ public class DurationPicker extends FrameLayout {
         // digits of minute
         mMinutePicker = (NumberPicker) findViewById(R.id.minute);
         mMinutePicker.setMinValue(0);
-        mMinutePicker.setMaxValue(11);
+        mMinutePicker.setMaxValue(59);
         mMinutePicker.setFormatter(TWO_DIGIT_FORMATTER);
         mMinutePicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
             @Override
@@ -119,7 +119,7 @@ public class DurationPicker extends FrameLayout {
         // digits of seconds
         mSecondPicker = (NumberPicker) findViewById(R.id.seconds);
         mSecondPicker.setMinValue(0);
-        mSecondPicker.setMaxValue(11);
+        mSecondPicker.setMaxValue(59);
         mSecondPicker.setFormatter( TWO_DIGIT_FORMATTER);
         mSecondPicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
 
@@ -157,34 +157,24 @@ public class DurationPicker extends FrameLayout {
      */
     private static class SavedState extends BaseSavedState {
 
-        private final int mHour;
-        private final int mMinute;
+        private final long mDuration;
 
-        private SavedState(Parcelable superState, int hour, int minute) {
+        private SavedState(Parcelable superState, long duration) {
             super(superState);
-            mHour = hour;
-            mMinute = minute;
+            mDuration = duration;
         }
 
         private SavedState(Parcel in) {
             super(in);
-            mHour = in.readInt();
-            mMinute = in.readInt();
+            mDuration = in.readLong();
         }
 
-        public int getHour() {
-            return mHour;
-        }
-
-        public int getMinute() {
-            return mMinute;
-        }
+        public long getDuration() { return mDuration; }
 
         @Override
         public void writeToParcel(Parcel dest, int flags) {
             super.writeToParcel(dest, flags);
-            dest.writeInt(mHour);
-            dest.writeInt(mMinute);
+            dest.writeLong(mDuration);
         }
 
         public static final Parcelable.Creator<SavedState> CREATOR
@@ -202,15 +192,14 @@ public class DurationPicker extends FrameLayout {
     @Override
     protected Parcelable onSaveInstanceState() {
         Parcelable superState = super.onSaveInstanceState();
-        return new SavedState(superState, mCurrentHours, mCurrentMinutes);
+        return new SavedState(superState, getDuration());
     }
 
     @Override
     protected void onRestoreInstanceState(Parcelable state) {
         SavedState ss = (SavedState) state;
         super.onRestoreInstanceState(ss.getSuperState());
-        setCurrentHour(ss.getHour());
-        setCurrentMinute(ss.getMinute());
+        setDuration(ss.getDuration());
     }
 
     /**

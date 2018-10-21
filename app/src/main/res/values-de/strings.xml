@@ -99,4 +99,7 @@
     <string name="start">Start</string>
     <string name="stop">Stop</string>
     <string name="reset">Reset</string>
+
+    <string name="categories">Kategorien</string>
+    <string name="edit_categories">Kategorien verwalten</string>
 </resources>

@@ -99,6 +99,8 @@
     <string name="reset">Reset</string>
 
     <string name="time_set">Set time</string>
-    <string name="cancel">Cancel</string>
     <string name="time">Time : </string>
+
+    <string name="categories">Categories</string>
+    <string name="edit_categories">Edit categories</string>
 </resources>

@@ -13,11 +13,11 @@
                 android:title="@string/dropbox_import" />
         </menu>
     </item>
-    <item android:title="Categories">
+    <item android:title="@string/categories">
         <menu>
             <item
                 android:id="@+id/nav_edit_categories"
-                android:title="Edit categories" />
+                android:title="@string/edit_categories" />
         </menu>
     </item>
 
