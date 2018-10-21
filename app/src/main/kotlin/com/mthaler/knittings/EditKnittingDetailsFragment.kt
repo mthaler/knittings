@@ -19,7 +19,6 @@ import com.mthaler.knittings.utils.TimeUtils
 import java.text.DateFormat
 import java.util.*
 import com.mthaler.knittings.durationpicker.DurationPickerDialog
-import com.mthaler.knittings.durationpicker.DurationPicker
 
 class EditKnittingDetailsFragment : Fragment() {
 
@@ -63,7 +62,13 @@ class EditKnittingDetailsFragment : Fragment() {
 
         textViewDuration = v.findViewById(R.id.knitting_duration)
         textViewDuration.setOnClickListener {
-            val mTimePicker = DurationPickerDialog(this.context!!, { durationPicker, duration ->  textViewDuration.setText(TimeUtils.formatDuration(duration)) }, knitting!!.duration)
+            val mTimePicker = DurationPickerDialog(this.context!!, { durationPicker, duration -> run {
+                textViewDuration.setText(TimeUtils.formatDuration(duration))
+                val knitting0 = knitting!!
+                val knitting1 = knitting0.copy(duration = duration)
+                knitting = knitting1
+                datasource.updateKnitting(knitting1)
+            } }, knitting!!.duration)
             mTimePicker.show()
         }
 
