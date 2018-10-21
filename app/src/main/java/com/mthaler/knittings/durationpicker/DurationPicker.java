@@ -129,16 +129,10 @@ public class DurationPicker extends FrameLayout {
         mMinutePicker.setMinValue(0);
         mMinutePicker.setMaxValue(11);
         mMinutePicker.setFormatter(TWO_DIGIT_FORMATTER);
-        final String[] minuteValues = new String[12];
-        for (int i = 0; i < minuteValues.length; i++) {
-            String number = Integer.toString(i*5);
-            minuteValues[i] = number.length() < 2 ? "0" + number : number;
-        }
-        mMinutePicker.setDisplayedValues(minuteValues);
         mMinutePicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
             @Override
             public void onValueChange(NumberPicker spinner, int oldVal, int newVal) {
-                mCurrentMinutes = Integer.parseInt(minuteValues[newVal]);;
+                mCurrentMinutes = newVal;
                 onTimeChanged();
             }
         });
@@ -148,12 +142,6 @@ public class DurationPicker extends FrameLayout {
         mSecondPicker.setMinValue(0);
         mSecondPicker.setMaxValue(11);
         mSecondPicker.setFormatter( TWO_DIGIT_FORMATTER);
-        final String[] secondValues = new String[12];
-        for (int i = 0; i < secondValues.length; i++) {
-            String number = Integer.toString(i*5);
-            secondValues[i] = number.length() < 2 ? "0" + number : number;
-        }
-        mSecondPicker.setDisplayedValues(secondValues);
         mSecondPicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
 
             @Override
@@ -252,6 +240,10 @@ public class DurationPicker extends FrameLayout {
      */
     public void setOnDurationChangedListener(OnDurationChangedListener onDurationChangedListener) {
         mOnDurationChangedListener = onDurationChangedListener;
+    }
+
+    public Long getDuration() {
+        return 1000L * (mCurrentSeconds + 60 * mCurrentMinutes + 3600 * mCurrentHours);
     }
 
     /**
