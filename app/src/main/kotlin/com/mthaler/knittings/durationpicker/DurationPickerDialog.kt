@@ -14,6 +14,7 @@ import android.view.Window
 
 import com.mthaler.knittings.durationpicker.DurationPicker.OnDurationChangedListener
 import com.mthaler.knittings.R
+import com.mthaler.knittings.utils.TimeUtils
 
 /**
  * A dialog that prompts the user for the time of day using a [DurationPicker].
@@ -30,12 +31,9 @@ class DurationPickerDialog(context: Context,
                            private val callback: OnTimeSetListener,
                            internal var mInitialHourOfDay: Int,
                            internal var mInitialMinute: Int,
-                           internal var mInitialSeconds: Int,
-                           internal var mIs24HourView: Boolean) : AlertDialog(context, theme), OnClickListener, OnDurationChangedListener {
+                           internal var mInitialSeconds: Int) : AlertDialog(context, theme), OnClickListener, OnDurationChangedListener {
 
     private val mTimePicker: DurationPicker
-    private val mCalendar: Calendar
-    private val mDateFormat: java.text.DateFormat
 
     /**
      * The callback interface used to indicate the user is done filling in
@@ -45,10 +43,9 @@ class DurationPickerDialog(context: Context,
 
         /**
          * @param view The view associated with this listener.
-         * @param hourOfDay The hour that was set.
-         * @param minute The minute that was set.
+         * @param duration duration in milliseconds
          */
-        fun onTimeSet(view: DurationPicker, hourOfDay: Int, minute: Int, seconds: Int)
+        fun onTimeSet(view: DurationPicker, duration: Long)
     }
 
     /**
@@ -56,20 +53,17 @@ class DurationPickerDialog(context: Context,
      * @param callBack How parent is notified.
      * @param hourOfDay The initial hour.
      * @param minute The initial minute.
-     * @param is24HourView Whether this is a 24 hour view, or AM/PM.
      */
     constructor(context: Context,
                 callBack: OnTimeSetListener,
                 hourOfDay: Int, minute: Int, seconds: Int, is24HourView: Boolean) : this(context, 0,
-            callBack, hourOfDay, minute, seconds, is24HourView) {
+            callBack, hourOfDay, minute, seconds) {
     }
 
     init {
         requestWindowFeature(Window.FEATURE_NO_TITLE)
 
-        mDateFormat = DateFormat.getTimeFormat(context)
-        mCalendar = Calendar.getInstance()
-        updateTitle(mInitialHourOfDay, mInitialMinute, mInitialSeconds)
+        updateTitle(0L)
 
         setButton(context.getText(R.string.time_set), this)
         setButton2(context.getText(R.string.cancel), null as OnClickListener?)
@@ -90,13 +84,12 @@ class DurationPickerDialog(context: Context,
     override fun onClick(dialog: DialogInterface, which: Int) {
         if (callback != null) {
             mTimePicker.clearFocus()
-            callback.onTimeSet(mTimePicker, mTimePicker.currentHour!!,
-                    mTimePicker.currentMinute!!, mTimePicker.currentSeconds!!)
+            callback.onTimeSet(mTimePicker, mTimePicker.duration)
         }
     }
 
-    override fun onDurationChanged(view: DurationPicker, hourOfDay: Int, minute: Int, seconds: Int) {
-        updateTitle(hourOfDay, minute, seconds)
+    override fun onDurationChanged(view: DurationPicker, duration: Long) {
+        updateTitle(duration)
     }
 
     fun updateTime(hourOfDay: Int, minutOfHour: Int, seconds: Int) {
@@ -105,11 +98,8 @@ class DurationPickerDialog(context: Context,
         mTimePicker.setCurrentSecond(seconds)
     }
 
-    private fun updateTitle(hour: Int, minute: Int, seconds: Int) {
-        val sHour = String.format("%02d", hour)
-        val sMin = String.format("%02d", minute)
-        val sSec = String.format("%02d", seconds)
-        setTitle("$sHour:$sMin:$sSec")
+    private fun updateTitle(duration: Long) {
+        setTitle(TimeUtils.formatDuration(duration))
     }
 
     override fun onSaveInstanceState(): Bundle {
@@ -129,7 +119,7 @@ class DurationPickerDialog(context: Context,
         mTimePicker.currentMinute = minute
         mTimePicker.setCurrentSecond(seconds)
         mTimePicker.setOnDurationChangedListener(this)
-        updateTitle(hour, minute, seconds)
+        updateTitle(0L)
     }
 
     companion object {

@@ -21,7 +21,6 @@ import java.util.*
 import com.mthaler.knittings.durationpicker.DurationPickerDialog
 import com.mthaler.knittings.durationpicker.DurationPicker
 
-
 class EditKnittingDetailsFragment : Fragment() {
 
     private var knitting: Knitting? = null
@@ -67,11 +66,8 @@ class EditKnittingDetailsFragment : Fragment() {
             val now = Calendar.getInstance()
             val mTimePicker = DurationPickerDialog(this.context!!, object : DurationPickerDialog.OnTimeSetListener {
 
-                override fun onTimeSet(view: DurationPicker, hourOfDay: Int, minute: Int, seconds: Int) {
-                    // TODO Auto-generated method stub
-                    textViewDuration.setText(getString(R.string.time) + String.format("%02d", hourOfDay) +
-                            ":" + String.format("%02d", minute) +
-                            ":" + String.format("%02d", seconds))
+                override fun onTimeSet(view: DurationPicker, duration: Long) {
+                    textViewDuration.setText(TimeUtils.formatDuration(duration))
                 }
             }, now.get(Calendar.HOUR_OF_DAY), now.get(Calendar.MINUTE), now.get(Calendar.SECOND), true)
             mTimePicker.show()

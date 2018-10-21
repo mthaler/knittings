@@ -1,20 +1,3 @@
-/*
- * Copyright (C) 2007 The Android Open Source Project
- * Copyright (C) 2013 Ivan Kovac navratnanos@gmail.com
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package com.mthaler.knittings.durationpicker;
 
 import java.util.Calendar;
@@ -54,7 +37,7 @@ public class DurationPicker extends FrameLayout {
      * later in the code.
      */
     private static final OnDurationChangedListener NO_OP_CHANGE_LISTENER = new OnDurationChangedListener() {
-        public void onDurationChanged(DurationPicker view, int hourOfDay, int minute, int seconds) {
+        public void onDurationChanged(DurationPicker view, long duration) {
         }
     };
 
@@ -88,11 +71,9 @@ public class DurationPicker extends FrameLayout {
 
         /**
          * @param view The view associated with this listener.
-         * @param hourOfDay The current hour.
-         * @param minute The current minute.
-         * @param seconds The current second.
+         * @param duration duration in milliseconds.
          */
-        void onDurationChanged(DurationPicker view, int hourOfDay, int minute, int seconds);
+        void onDurationChanged(DurationPicker view, long duration);
     }
 
     public DurationPicker(Context context) {
@@ -242,6 +223,11 @@ public class DurationPicker extends FrameLayout {
         mOnDurationChangedListener = onDurationChangedListener;
     }
 
+    /**
+     * Returns the duration in milliseconds
+     *
+     * @return duration in milliseconds
+     */
     public Long getDuration() {
         return 1000L * (mCurrentSeconds + 60 * mCurrentMinutes + 3600 * mCurrentHours);
     }
@@ -312,7 +298,7 @@ public class DurationPicker extends FrameLayout {
     }
 
     private void onTimeChanged() {
-        mOnDurationChangedListener.onDurationChanged(this, getCurrentHour(), getCurrentMinute(), getCurrentSeconds());
+        mOnDurationChangedListener.onDurationChanged(this, getDuration());
     }
 
     /**
@@ -320,7 +306,7 @@ public class DurationPicker extends FrameLayout {
      */
     private void updateMinuteDisplay() {
         mMinutePicker.setValue(mCurrentMinutes);
-        mOnDurationChangedListener.onDurationChanged(this, getCurrentHour(), getCurrentMinute(), getCurrentSeconds());
+        mOnDurationChangedListener.onDurationChanged(this, getDuration());
     }
 
     /**
@@ -328,7 +314,7 @@ public class DurationPicker extends FrameLayout {
      */
     private void updateSecondsDisplay() {
         mSecondPicker.setValue(mCurrentSeconds);
-        mOnDurationChangedListener.onDurationChanged(this, getCurrentHour(), getCurrentMinute(), getCurrentSeconds());
+        mOnDurationChangedListener.onDurationChanged(this, getDuration());
     }
 }
 
