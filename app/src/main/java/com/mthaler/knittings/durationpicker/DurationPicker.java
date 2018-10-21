@@ -185,14 +185,6 @@ public class DurationPicker extends FrameLayout {
         }
     }
 
-    @Override
-    public void setEnabled(boolean enabled) {
-        super.setEnabled(enabled);
-        mMinutePicker.setEnabled(enabled);
-        mHourPicker.setEnabled(enabled);
-        //mAmPmButton.setEnabled(enabled);
-    }
-
     /**
      * Used to save / restore state of time picker
      */
