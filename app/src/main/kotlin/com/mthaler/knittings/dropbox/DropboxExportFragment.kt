@@ -158,6 +158,6 @@ class DropboxExportFragment : AbstractDropboxFragment(), AnkoLogger {
     }
 
     companion object {
-        private val AppKey = "6ybf7tgqdbhf641"
+        private const val AppKey = "6ybf7tgqdbhf641"
     }
 }

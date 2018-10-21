@@ -102,7 +102,7 @@ class PhotoActivity : AppCompatActivity(), AnkoLogger {
 
 
     companion object {
-        val EXTRA_PHOTO_ID = "com.mthaler.knitting.PHOTO_ID"
-        val EXTRA_KNITTING_ID = "com.mthaler.knitting.KNITTING_ID"
+        const val EXTRA_PHOTO_ID = "com.mthaler.knitting.PHOTO_ID"
+        const val EXTRA_KNITTING_ID = "com.mthaler.knitting.KNITTING_ID"
     }
 }

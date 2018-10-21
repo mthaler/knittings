@@ -74,6 +74,6 @@ class PhotoGalleryFragment : Fragment(), AnkoLogger {
 
     companion object : AnkoLogger {
 
-        private val KNITTING_ID = "knitting_id"
+        private const val KNITTING_ID = "knitting_id"
     }
 }

@@ -126,7 +126,7 @@ class KnittingDetailsActivity : AppCompatActivity(), AnkoLogger, CanTakePhoto {
     }
 
     companion object {
-        val EXTRA_KNITTING_ID = "com.mthaler.knitting.KNITTING_ID"
-        val CURRENT_PHOTO_PATH = "com.mthaler.knitting.CURRENT_PHOTO_PATH"
+        const val EXTRA_KNITTING_ID = "com.mthaler.knitting.KNITTING_ID"
+        const val CURRENT_PHOTO_PATH = "com.mthaler.knitting.CURRENT_PHOTO_PATH"
     }
 }

@@ -54,7 +54,7 @@ class DatePickerFragment : DialogFragment() {
     }
 
     companion object {
-        val EXTRA_DATE = "com.mthaler.knittings.DATE"
+        const val EXTRA_DATE = "com.mthaler.knittings.DATE"
 
         fun newInstance(date: Date?): DatePickerFragment {
             val args = Bundle()

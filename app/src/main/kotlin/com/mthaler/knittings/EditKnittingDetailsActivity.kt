@@ -25,6 +25,6 @@ class EditKnittingDetailsActivity : AppCompatActivity() {
     }
 
     companion object {
-        val EXTRA_KNITTING_ID = "com.mthaler.knitting.KNITTING_ID"
+        const val EXTRA_KNITTING_ID = "com.mthaler.knitting.KNITTING_ID"
     }
 }

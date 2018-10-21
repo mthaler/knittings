@@ -27,6 +27,6 @@ class DropboxImportActivity : AppCompatActivity() {
     }
 
     companion object {
-        val DropboxImportFragmentTag = "dropbox_import_fragment"
+        const val DropboxImportFragmentTag = "dropbox_import_fragment"
     }
 }

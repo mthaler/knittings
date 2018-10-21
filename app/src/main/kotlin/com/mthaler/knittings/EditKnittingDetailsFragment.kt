@@ -165,8 +165,8 @@ class EditKnittingDetailsFragment : Fragment() {
     }
 
     companion object {
-        private val DIALOG_DATE = "date"
-        private val REQUEST_STARTED = 0
-        private val REQUEST_FINISHED = 1
+        private const val DIALOG_DATE = "date"
+        private const val REQUEST_STARTED = 0
+        private const val REQUEST_FINISHED = 1
     }
 }

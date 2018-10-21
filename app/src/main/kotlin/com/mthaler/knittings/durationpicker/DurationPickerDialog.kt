@@ -30,13 +30,11 @@ class DurationPickerDialog(context: Context,
     /**
      * @param context Parent.
      * @param callBack How parent is notified.
-     * @param hourOfDay The initial hour.
-     * @param minute The initial minute.
+     * @param duration initial duration
      */
     constructor(context: Context,
                 callBack: (DurationPicker, Long) -> Unit,
-                duration: Long) : this(context, 0, callBack, duration) {
-    }
+                duration: Long) : this(context, 0, callBack, duration)
 
     init {
         requestWindowFeature(Window.FEATURE_NO_TITLE)

@@ -89,7 +89,7 @@ class PhotoFragment : Fragment() {
     }
 
     companion object {
-        private val EXTRA_PHOTO_ID = "com.mthaler.knittings.photo_id"
+        private const val EXTRA_PHOTO_ID = "com.mthaler.knittings.photo_id"
 
         fun newInstance(photoID: Long): PhotoFragment {
             val bundle = Bundle()

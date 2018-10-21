@@ -74,6 +74,6 @@ class DropboxExportActivity : AppCompatActivity() {
     }
 
     companion object {
-        val DropboxExportFragmentTag = "dropbox_export_fragment"
+        const val DropboxExportFragmentTag = "dropbox_export_fragment"
     }
 }

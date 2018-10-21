@@ -107,7 +107,7 @@ interface CanTakePhoto : AnkoLogger {
     }
 
     companion object {
-        val REQUEST_IMAGE_CAPTURE = 0
-        val REQUEST_IMAGE_IMPORT = 1
+        const val REQUEST_IMAGE_CAPTURE = 0
+        const val REQUEST_IMAGE_IMPORT = 1
     }
 }
