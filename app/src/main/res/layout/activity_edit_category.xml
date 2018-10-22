@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".category.EditCategoryActivity">
 
     <android.support.design.widget.TextInputLayout
@@ -19,4 +20,12 @@
             android:layout_marginRight="16dp"
             android:hint="Name" />
     </android.support.design.widget.TextInputLayout>
+
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Button" />
+
 </LinearLayout>

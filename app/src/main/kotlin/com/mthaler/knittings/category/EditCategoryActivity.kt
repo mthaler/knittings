@@ -3,11 +3,17 @@ package com.mthaler.knittings.category
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
+import android.widget.Button
 import android.widget.EditText
 import com.mthaler.knittings.R
 import com.mthaler.knittings.TextWatcher
 import com.mthaler.knittings.database.datasource
 import com.mthaler.knittings.model.Category
+import android.R.attr.numColumns
+import android.graphics.Color
+import com.android.colorpicker.ColorPickerDialog
+
+
 
 class EditCategoryActivity : AppCompatActivity() {
 
@@ -26,6 +32,13 @@ class EditCategoryActivity : AppCompatActivity() {
         val editTextTitle = findViewById<EditText>(R.id.category_name)
         editTextTitle.addTextChangedListener(createTextWatcher { c, knitting -> knitting.copy(name = c.toString()) })
         editTextTitle.setText(category!!.name)
+
+        val button = findViewById<Button>(R.id.button)
+        button.setOnClickListener( { view -> run {
+            val colorPickerDialog = ColorPickerDialog()
+            colorPickerDialog.initialize(R.string.delete_photo, intArrayOf(Color.RED, Color.GREEN, Color.BLUE), Color.RED, 3, 3)
+            colorPickerDialog.show(getFragmentManager(), null);
+        }})
     }
 
     /**
