@@ -9,7 +9,6 @@ import com.mthaler.knittings.R
 import com.mthaler.knittings.TextWatcher
 import com.mthaler.knittings.database.datasource
 import com.mthaler.knittings.model.Category
-import android.R.attr.numColumns
 import android.graphics.Color
 import com.android.colorpicker.ColorPickerDialog
 
@@ -36,7 +35,7 @@ class EditCategoryActivity : AppCompatActivity() {
         val button = findViewById<Button>(R.id.button)
         button.setOnClickListener( { view -> run {
             val colorPickerDialog = ColorPickerDialog()
-            colorPickerDialog.initialize(R.string.delete_photo, intArrayOf(Color.RED, Color.GREEN, Color.BLUE), Color.RED, 3, 3)
+            colorPickerDialog.initialize(R.string.delete_photo, COLORS, Color.RED, 5, COLORS.size)
             colorPickerDialog.show(getFragmentManager(), null);
         }})
     }
@@ -65,5 +64,8 @@ class EditCategoryActivity : AppCompatActivity() {
 
     companion object {
         const val EXTRA_CATEGORY_ID = "com.mthaler.knitting.CATEGORY_ID"
+
+        val COLORS = arrayOf("#F6402C", "#EB1460", "#9C1AB1", "#6633B9", "#3D4DB7", "#1093F5", "#00A6F6", "#00BBD5", "#009687", "#46AF4A",
+                "#88C440", "#CCDD1E", "#FFEC16", "#FFC100", "#FF9800", "#FF5505", "#7A5547", "#9D9D9D", "#5E7C8B").map { Color.parseColor(it) }.toIntArray()
     }
 }
