@@ -511,7 +511,7 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
             if (color != null) {
                 values.put(KnittingDatabaseHelper.CategoryTable.Cols.COLOR, color)
             } else {
-                values.putNull(KnittingDatabaseHelper.PhotoTable.Cols.PREVIEW)
+                values.putNull(KnittingDatabaseHelper.CategoryTable.Cols.COLOR)
             }
 
             val id = database.insert(KnittingDatabaseHelper.CategoryTable.CATEGORY, null, values)

@@ -101,5 +101,5 @@
     <string name="reset">Reset</string>
 
     <string name="categories">Kategorien</string>
-    <string name="edit_categories">Kategorien verwalten</string>
+    <string name="manage_categories">Kategorien verwalten</string>
 </resources>
