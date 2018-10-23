@@ -12,8 +12,6 @@ import com.mthaler.knittings.model.Category
 import android.graphics.Color
 import com.android.colorpicker.ColorPickerDialog
 
-
-
 class EditCategoryActivity : AppCompatActivity() {
 
     private var category: Category? = null
@@ -32,10 +30,27 @@ class EditCategoryActivity : AppCompatActivity() {
         editTextTitle.addTextChangedListener(createTextWatcher { c, knitting -> knitting.copy(name = c.toString()) })
         editTextTitle.setText(category!!.name)
 
-        val button = findViewById<Button>(R.id.button)
+        val button = findViewById<Button>(R.id.button_select_color)
+        if (category!!.color != null) {
+            button.setBackgroundColor(category!!.color!!)
+        }
         button.setOnClickListener( { view -> run {
             val colorPickerDialog = ColorPickerDialog()
-            colorPickerDialog.initialize(R.string.delete_photo, COLORS, Color.RED, 5, COLORS.size)
+            colorPickerDialog.initialize(R.string.delete_photo, COLORS, Color.RED, 4, COLORS.size)
+            colorPickerDialog.setOnColorSelectedListener({ color -> run {
+                val category0 = category
+                if (category0 != null) {
+                    try {
+                        val category1 = category0.copy(color = color)
+                        datasource.updateCategory(category1)
+                        category = category1
+                        button.setBackgroundColor(color)
+                    } catch(ex: Exception) {
+                    }
+
+                }
+                button.setBackgroundColor(color)
+            } })
             colorPickerDialog.show(getFragmentManager(), null);
         }})
     }
