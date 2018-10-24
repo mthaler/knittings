@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="wrap_content">
     <LinearLayout
@@ -7,10 +8,13 @@
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-        <ImageView
+        <com.mthaler.knittings.category.ColorSwatch
             android:id="@+id/category_list_item_color"
-            android:layout_width="30dp"
-            android:layout_height="30dp" />
+            android:layout_width="26dp"
+            android:layout_height="26dp"
+            android:layout_marginRight="6dp"
+            android:layout_marginTop="2dp"
+            app:color="@color/white"/>
         <TextView
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
             android:id="@+id/category_list_item_name"
