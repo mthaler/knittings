@@ -1,4 +1,4 @@
-package com.mthaler.knittings
+package com.mthaler.knittings.details
 
 import android.app.Activity
 import android.content.Intent
@@ -6,6 +6,9 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import com.mthaler.knittings.CanTakePhoto
+import com.mthaler.knittings.PhotoGalleryActivity
+import com.mthaler.knittings.R
 import com.mthaler.knittings.database.datasource
 import com.mthaler.knittings.stopwatch.StopwatchActivity
 import org.jetbrains.anko.*
@@ -30,11 +33,11 @@ class KnittingDetailsActivity : AppCompatActivity(), AnkoLogger, CanTakePhoto {
 
         // get the id of the knitting that should be displayed. If the application was destroyed because e.g. the device configuration changed
         // because the device was rotated we use the knitting id from the saved instance state. Otherwise we use the id passed to the intent
-        val id = if (savedInstanceState != null) savedInstanceState.getLong(EXTRA_KNITTING_ID) else intent.getLongExtra(KnittingDetailsActivity.EXTRA_KNITTING_ID, -1L)
+        val id = if (savedInstanceState != null) savedInstanceState.getLong(EXTRA_KNITTING_ID) else intent.getLongExtra(EXTRA_KNITTING_ID, -1L)
         if (id != -1L) {
             // start edit knitting details fragment if the user clicks the floating action button
             edit_knitting_details.setOnClickListener {
-                startActivity< EditKnittingDetailsActivity>(EditKnittingDetailsActivity.EXTRA_KNITTING_ID to id)
+                startActivity<EditKnittingDetailsActivity>(EditKnittingDetailsActivity.EXTRA_KNITTING_ID to id)
             }
             knittingID = id
         } else {

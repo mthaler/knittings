@@ -46,25 +46,25 @@
                 android:value=".PhotoGalleryActivity" />
         </activity>
         <activity
-            android:name=".KnittingDetailsActivity"
+            android:name=".details.KnittingDetailsActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
         </activity>
         <activity
-            android:name=".EditKnittingDetailsActivity"
+            android:name=".details.EditKnittingDetailsActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".KnittingDetailsActivity" />
+                android:value=".details.KnittingDetailsActivity" />
         </activity>
         <activity
             android:name=".PhotoGalleryActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".KnittingDetailsActivity" />
+                android:value=".details.KnittingDetailsActivity" />
         </activity>
         <activity
             android:name="com.dropbox.core.android.AuthActivity"

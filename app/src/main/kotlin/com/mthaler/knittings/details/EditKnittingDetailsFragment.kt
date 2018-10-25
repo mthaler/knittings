@@ -1,4 +1,4 @@
-package com.mthaler.knittings
+package com.mthaler.knittings.details
 
 import android.app.Activity
 import android.content.Intent
@@ -11,6 +11,8 @@ import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.RatingBar
 import android.widget.TextView
+import com.mthaler.knittings.R
+import com.mthaler.knittings.TextWatcher
 import com.mthaler.knittings.database.KnittingsDataSource
 import com.mthaler.knittings.database.datasource
 import com.mthaler.knittings.datepicker.DatePickerFragment

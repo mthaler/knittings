@@ -1,10 +1,12 @@
-package com.mthaler.knittings
+package com.mthaler.knittings.details
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.mthaler.knittings.ImageAdapter
+import com.mthaler.knittings.R
 import com.mthaler.knittings.database.datasource
 import com.mthaler.knittings.model.Knitting
 import com.mthaler.knittings.utils.TimeUtils
