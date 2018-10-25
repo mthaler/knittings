@@ -4,10 +4,12 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v7.app.AlertDialog
 import android.text.Editable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.EditText
 import android.widget.RatingBar
 import android.widget.TextView
@@ -74,6 +76,17 @@ class EditKnittingDetailsFragment : Fragment() {
             mTimePicker.show()
         }
 
+        val buttonCategory = v.findViewById<Button>(R.id.knitting_category)
+        buttonCategory.setOnClickListener { run {
+            val categories = datasource.allCategories
+            val builder = AlertDialog.Builder(this.context!!)
+            builder.setTitle("Select category")
+            builder.setItems(categories.map { it.name }.toTypedArray() , { dialog, which ->
+                val c = categories[which]
+            })
+            builder.show()
+        } }
+
         val ratingBar = v.findViewById<RatingBar>(R.id.ratingBar)
         ratingBar.onRatingBarChangeListener = RatingBar.OnRatingBarChangeListener { ratingBar, rating, fromUser ->
             val knitting0 = knitting
@@ -136,6 +149,13 @@ class EditKnittingDetailsFragment : Fragment() {
             editTextSize.setText(String.format(Locale.ROOT, "%.1f", knitting.size))
 
             textViewDuration.text = TimeUtils.formatDuration(knitting.duration)
+
+            if (knitting.category != null) {
+                val buttonCategory = v.findViewById<Button>(R.id.knitting_category)
+                buttonCategory.text = knitting.category.name
+            }
+
+
 
             val ratingBar = v.findViewById<RatingBar>(R.id.ratingBar)
             ratingBar.rating = knitting.rating.toFloat()
