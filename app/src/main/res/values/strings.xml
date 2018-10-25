@@ -67,6 +67,7 @@
     <string name="knitting_details_needle">Needle: %1$.1f</string>
     <string name="knitting_details_size">Size: %1$.1f</string>
     <string name="knitting_details_duration">Duration: %1$s</string>
+    <string name="knitting_details_category">Category: %1$s</string>
 
     <!-- Strings related to login / logout -->
     <string name="sign_in">Sign in</string>
@@ -111,4 +112,6 @@
     <!-- Content description for a selected color square. -->
     <string name="color_swatch_description_selected">Color selected</string>
     <string name="select_color">Select color</string>
+
+    <string name="knitting_category_hint">Category:</string>
 </resources>
