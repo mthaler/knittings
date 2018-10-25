@@ -24,7 +24,11 @@ class CategoryListActivity : AppCompatActivity() {
 
         val rv = findViewById<RecyclerView>(R.id.recyclerView)
         rv.layoutManager = LinearLayoutManager(this)
+    }
 
+    override fun onResume() {
+        super.onResume()
+        val rv = findViewById<RecyclerView>(R.id.recyclerView)
         val adapter = CategoryAdapter(this, datasource.allCategories, object : OnItemClickListener {
             override fun onItemClick(item: Category?) {
                 startActivity<EditCategoryActivity>(EditCategoryActivity.EXTRA_CATEGORY_ID to item!!.id)
