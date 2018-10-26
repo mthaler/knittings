@@ -114,4 +114,6 @@
     <string name="select_color">Select color</string>
 
     <string name="knitting_category_hint">Category:</string>
+
+    <string name="sort">Sort</string>
 </resources>

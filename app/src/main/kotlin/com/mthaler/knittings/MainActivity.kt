@@ -16,6 +16,7 @@ import com.mthaler.knittings.dropbox.DropboxImportActivity
 import org.jetbrains.anko.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.activity_main.*
+import android.widget.Toast
 
 /**
  * The main activity that gets displayed when the app is started.
@@ -62,6 +63,16 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
+            R.id.menu_item_sort -> {
+                val listItems = arrayOf("Newest first", "Oldest first")
+                val builder = AlertDialog.Builder(this)
+                val checkedItem = 0
+                builder.setSingleChoiceItems(listItems, checkedItem) { dialog, which -> Toast.makeText(this, "Position: " + which + " Value: " + listItems[which], Toast.LENGTH_LONG).show() }
+                builder.setPositiveButton("Done") { dialog, which -> dialog.dismiss() }
+                val dialog = builder.create()
+                dialog.show()
+                true
+            }
             R.id.menu_item_about -> {
                 showAboutDialog()
                 true
