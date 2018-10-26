@@ -134,6 +134,7 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
             values.put(KnittingDatabaseHelper.KnittingTable.Cols.SIZE, size)
             values.put(KnittingDatabaseHelper.KnittingTable.Cols.RATING, rating)
             values.put(KnittingDatabaseHelper.KnittingTable.Cols.DURATION, 0L)
+            values.putNull(KnittingDatabaseHelper.KnittingTable.Cols.CATEGORY_ID)
 
             val id = database.insert(KnittingDatabaseHelper.KnittingTable.KNITTINGS, null, values)
 
@@ -176,6 +177,11 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
                 values.putNull(KnittingDatabaseHelper.KnittingTable.Cols.DEFAULT_PHOTO_ID)
             }
             values.put(KnittingDatabaseHelper.KnittingTable.Cols.RATING, knitting.rating)
+            if (knitting.category != null) {
+                values.put(KnittingDatabaseHelper.KnittingTable.Cols.CATEGORY_ID, knitting.category.id)
+            } else {
+                values.putNull(KnittingDatabaseHelper.KnittingTable.Cols.CATEGORY_ID)
+            }
 
             val id = database.insert(KnittingDatabaseHelper.KnittingTable.KNITTINGS, null, values)
             debug("Added knitting $knitting to database, id=$id")
@@ -590,6 +596,7 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
         val idDefaultPhoto = cursor.getColumnIndex(KnittingDatabaseHelper.KnittingTable.Cols.DEFAULT_PHOTO_ID)
         val idRating = cursor.getColumnIndex(KnittingDatabaseHelper.KnittingTable.Cols.RATING)
         val idDuration = cursor.getColumnIndex(KnittingDatabaseHelper.KnittingTable.Cols.DURATION)
+        val idCategory = cursor.getColumnIndex(KnittingDatabaseHelper.KnittingTable.Cols.CATEGORY_ID)
 
         val id = cursor.getLong(idIndex)
         val title = cursor.getString(idTitle)
@@ -606,8 +613,13 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
             val defaultPhotoID = cursor.getLong(idDefaultPhoto)
             defaultPhoto = getPhoto(defaultPhotoID)
         }
+        var category: Category? = null
+        if (!cursor.isNull(idCategory)) {
+            val categoryID = cursor.getLong(idCategory)
+            category = getCategory(categoryID)
+        }
         return Knitting(id, title = title, description = description, started = started, finished = finished, needleDiameter = needleDiameter,
-                size = size, rating = rating, defaultPhoto = defaultPhoto, duration = duration)
+                size = size, rating = rating, defaultPhoto = defaultPhoto, duration = duration, category = category)
     }
 
     @Synchronized
