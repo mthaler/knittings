@@ -66,26 +66,31 @@ class EditKnittingDetailsFragment : Fragment() {
 
         textViewDuration = v.findViewById(R.id.knitting_duration)
         textViewDuration.setOnClickListener {
-            val mTimePicker = DurationPickerDialog(this.context!!, { durationPicker, duration -> run {
+            val mTimePicker = DurationPickerDialog(this.context!!, { durationPicker, duration ->
                 textViewDuration.setText(TimeUtils.formatDuration(duration))
                 val knitting0 = knitting!!
                 val knitting1 = knitting0.copy(duration = duration)
                 knitting = knitting1
                 datasource.updateKnitting(knitting1)
-            } }, knitting!!.duration)
+            }, knitting!!.duration)
             mTimePicker.show()
         }
 
         val buttonCategory = v.findViewById<Button>(R.id.knitting_category)
-        buttonCategory.setOnClickListener { run {
+        buttonCategory.setOnClickListener {
             val categories = datasource.allCategories
             val builder = AlertDialog.Builder(this.context!!)
             builder.setTitle("Select category")
             builder.setItems(categories.map { it.name }.toTypedArray() , { dialog, which ->
                 val c = categories[which]
+                buttonCategory.text = c.name
+                val knitting0 = knitting!!
+                val knitting1 = knitting0.copy(category = c)
+                knitting = knitting1
+                datasource.updateKnitting(knitting1)
             })
             builder.show()
-        } }
+        }
 
         val ratingBar = v.findViewById<RatingBar>(R.id.ratingBar)
         ratingBar.onRatingBarChangeListener = RatingBar.OnRatingBarChangeListener { ratingBar, rating, fromUser ->

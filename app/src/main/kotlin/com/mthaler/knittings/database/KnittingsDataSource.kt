@@ -209,6 +209,11 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
             }
             values.put(KnittingDatabaseHelper.KnittingTable.Cols.RATING, knitting.rating)
             values.put(KnittingDatabaseHelper.KnittingTable.Cols.DURATION, knitting.duration)
+            if (knitting.category != null) {
+                values.put(KnittingDatabaseHelper.KnittingTable.Cols.CATEGORY_ID, knitting.category.id)
+            } else {
+                values.putNull(KnittingDatabaseHelper.KnittingTable.Cols.CATEGORY_ID)
+            }
 
             database.update(KnittingDatabaseHelper.KnittingTable.KNITTINGS,
                     values,
