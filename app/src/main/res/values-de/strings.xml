@@ -108,4 +108,5 @@
     <string name="knitting_category_hint">Kategorie:</string>
 
     <string name="sort">Sortieren</string>
+    <string name="filter">Filtern</string>
 </resources>

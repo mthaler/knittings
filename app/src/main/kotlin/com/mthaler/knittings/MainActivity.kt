@@ -63,6 +63,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
+            R.id.menu_item_about -> {
+                showAboutDialog()
+                true
+            }
             R.id.menu_item_sort -> {
                 val listItems = arrayOf("Newest first", "Oldest first")
                 val builder = AlertDialog.Builder(this)
@@ -73,8 +77,15 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 dialog.show()
                 true
             }
-            R.id.menu_item_about -> {
-                showAboutDialog()
+            R.id.menu_item_filter -> {
+                val listItems = arrayOf("one", "two", "three", "four", "five")
+                val builder = AlertDialog.Builder(this)
+                builder.setTitle("Choose items");
+                val checkedItems = booleanArrayOf(true, false, true, false, true) //this will checked the items when user open the dialog
+                builder.setMultiChoiceItems(listItems, checkedItems) { dialog, which, isChecked -> Toast.makeText(this, "Position: " + which + " Value: " + listItems[which] + " State: " + if (isChecked) "checked" else "unchecked", Toast.LENGTH_LONG).show() }
+                builder.setPositiveButton("Done") { dialog, which -> dialog.dismiss() }
+                val dialog = builder.create()
+                dialog.show()
                 true
             }
             else -> super.onOptionsItemSelected(item)
