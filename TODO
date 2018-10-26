@@ -10,3 +10,5 @@ TODO:
 - put toolbar in its own file and include it instead of defining it everywhere
 - check if WLAN is available before dropbox export
 - Add take photo button to edit knitting details activity
+- Add support for deleting categories, make sure the category is also removed from the knittings
+- Add support for rotating photos
