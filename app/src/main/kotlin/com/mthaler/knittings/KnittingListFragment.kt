@@ -1,5 +1,6 @@
 package com.mthaler.knittings
 
+import android.graphics.Color
 import android.support.v4.app.ListFragment
 import android.view.View
 import android.view.ViewGroup
@@ -68,6 +69,17 @@ class KnittingListFragment : ListFragment(), KnittingListView, AnkoLogger {
                 photoView.setImageBitmap(knitting.defaultPhoto.preview)
             } else {
                 photoView.setImageBitmap(null)
+            }
+
+            val categoryIndicator = convertView.findViewById<CategoryIndicator>(R.id.knitting_list_item_categoryIndicator)
+            if (knitting.category != null) {
+                if (knitting.category.color != null) {
+                    categoryIndicator.color = knitting.category.color
+                } else {
+                    categoryIndicator.color = Color.WHITE
+                }
+            } else {
+                categoryIndicator.color = Color.WHITE
             }
 
             return convertView
