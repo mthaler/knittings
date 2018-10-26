@@ -1,4 +1,4 @@
-package com.mthaler.knittings
+package com.mthaler.knittings.photo
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -9,6 +9,8 @@ import android.view.ViewGroup
 import android.view.ViewTreeObserver
 import android.widget.EditText
 import android.widget.ImageView
+import com.mthaler.knittings.R
+import com.mthaler.knittings.TextWatcher
 import com.mthaler.knittings.database.datasource
 import com.mthaler.knittings.model.Photo
 import com.mthaler.knittings.utils.PictureUtils

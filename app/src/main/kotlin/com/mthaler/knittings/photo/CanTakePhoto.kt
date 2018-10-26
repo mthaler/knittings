@@ -1,4 +1,4 @@
-package com.mthaler.knittings
+package com.mthaler.knittings.photo
 
 import android.annotation.SuppressLint
 import android.app.AlertDialog
@@ -9,6 +9,7 @@ import android.support.v4.content.FileProvider
 import android.view.LayoutInflater
 import android.widget.Button
 import android.widget.Toast
+import com.mthaler.knittings.R
 import org.jetbrains.anko.*
 import com.mthaler.knittings.database.datasource
 import com.mthaler.knittings.utils.PictureUtils

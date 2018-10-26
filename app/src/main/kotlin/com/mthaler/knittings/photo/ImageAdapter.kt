@@ -1,4 +1,4 @@
-package com.mthaler.knittings
+package com.mthaler.knittings.photo
 
 import android.content.Context
 import android.support.v4.view.PagerAdapter

@@ -1,4 +1,4 @@
-package com.mthaler.knittings
+package com.mthaler.knittings.photo
 
 import android.app.Activity
 import android.content.Context
@@ -8,6 +8,7 @@ import android.view.ViewTreeObserver
 import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.TextView
+import com.mthaler.knittings.R
 import com.mthaler.knittings.model.Photo
 import com.mthaler.knittings.utils.PictureUtils
 import org.jetbrains.anko.doAsync

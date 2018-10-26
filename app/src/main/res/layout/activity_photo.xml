@@ -5,7 +5,7 @@
     android:id="@+id/photo_activity_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.mthaler.knittings.PhotoActivity">
+    tools:context="com.mthaler.knittings.photo.PhotoActivity">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -33,7 +33,7 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/fragment_photo"
-        android:name="com.mthaler.knittings.PhotoFragment"
+        android:name="com.mthaler.knittings.photos.PhotoFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"

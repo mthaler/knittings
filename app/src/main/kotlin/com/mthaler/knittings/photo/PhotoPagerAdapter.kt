@@ -1,4 +1,4 @@
-package com.mthaler.knittings
+package com.mthaler.knittings.photo
 
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager

@@ -1,10 +1,11 @@
-package com.mthaler.knittings
+package com.mthaler.knittings.photo
 
 import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import com.mthaler.knittings.R
 import com.mthaler.knittings.database.datasource
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.alert

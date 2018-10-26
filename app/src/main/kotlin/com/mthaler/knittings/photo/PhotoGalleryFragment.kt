@@ -1,4 +1,4 @@
-package com.mthaler.knittings
+package com.mthaler.knittings.photo
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.GridView
+import com.mthaler.knittings.R
 import org.jetbrains.anko.support.v4.*
 import com.mthaler.knittings.database.datasource
 import com.mthaler.knittings.model.Knitting
