@@ -68,11 +68,23 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 true
             }
             R.id.menu_item_sort -> {
-                val listItems = arrayOf("Newest first", "Oldest first")
+                val knittingListView = supportFragmentManager.findFragmentById(R.id.fragment_knitting_list) as KnittingListView
+                val listItems = arrayOf("Newest first", "Oldest first", "Alphabetical")
                 val builder = AlertDialog.Builder(this)
-                val checkedItem = 0
-                builder.setSingleChoiceItems(listItems, checkedItem) { dialog, which -> Toast.makeText(this, "Position: " + which + " Value: " + listItems[which], Toast.LENGTH_LONG).show() }
-                builder.setPositiveButton("Done") { dialog, which -> dialog.dismiss() }
+                val checkedItem = when(knittingListView.getSorting()) {
+                    Sorting.NewestFirst -> 0
+                    Sorting.OldestFirst -> 1
+                    Sorting.Alphabetical -> 2
+                }
+                builder.setSingleChoiceItems(listItems, checkedItem) { dialog, which -> when(which) {
+                    0 -> knittingListView.setSorting(Sorting.NewestFirst)
+                    1 -> knittingListView.setSorting(Sorting.OldestFirst)
+                    2 -> knittingListView.setSorting(Sorting.Alphabetical)
+                  }
+                    knittingListView.updateKnittingList()
+                    dialog.dismiss()
+                }
+                builder.setNegativeButton("Cancel") { dialog, which -> dialog.dismiss() }
                 val dialog = builder.create()
                 dialog.show()
                 true
