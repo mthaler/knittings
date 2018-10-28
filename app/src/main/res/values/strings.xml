@@ -6,6 +6,7 @@
     <!-- navigation drawer (dropbox export, categories etc.) -->
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="navigation_drawer_header_export">Export</string>
 
     <!-- generic dialog strings -->
     <string name="dialog_button_ok">OK</string>
@@ -94,9 +95,6 @@
     <!-- DropboxImportActivity -->
     <string name="dropbox_import">Import from Dropbox</string>
     <string name="dropbox_import_files">Importing files:</string>
-
-    <!-- navigation drawer -->
-    <string name="export">Export</string>
 
     <!-- network error -->
     <string name="network_error_title">Network Error</string>
