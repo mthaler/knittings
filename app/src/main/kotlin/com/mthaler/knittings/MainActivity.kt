@@ -94,7 +94,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 val knittingListView = supportFragmentManager.findFragmentById(R.id.fragment_knitting_list) as KnittingListView
                 val categories = datasource.allCategories
                 categories.sortedBy { it.name }
-                val listItems = (listOf("All") + categories.map { it.name }.toList()).toTypedArray()
+                val listItems = (listOf(getString(R.string.filter_show_all)) + categories.map { it.name }.toList()).toTypedArray()
                 val builder = AlertDialog.Builder(this)
                 val filter = knittingListView.getFilter()
                 val checkedItem = if (filter is NoFilter) {

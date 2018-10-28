@@ -16,6 +16,9 @@
     <string name="sorting_oldest_first">Oldest first</string>
     <string name="sorting_alphabetical">Alphabetical</string>
 
+    <!-- filter -->
+    <string name="filter_show_all">All</string>
+
     <!-- activities -->
     <string name="activity_knitting_details">Knitting Details</string>
     <string name="activity_edit_knitting_details">Edit Knitting Details</string>
