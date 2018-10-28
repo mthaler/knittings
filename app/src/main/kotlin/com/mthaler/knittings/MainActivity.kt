@@ -17,6 +17,7 @@ import org.jetbrains.anko.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.activity_main.*
 import com.mthaler.knittings.database.datasource
+import java.lang.Exception
 
 /**
  * The main activity that gets displayed when the app is started.
@@ -95,10 +96,21 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 categories.sortedBy { it.name }
                 val listItems = (listOf("All") + categories.map { it.name }.toList()).toTypedArray()
                 val builder = AlertDialog.Builder(this)
-                val checkedItem = 0
+                val filter = knittingListView.getFilter()
+                val checkedItem = if (filter is NoFilter) {
+                    0
+                } else if (filter is SingleCategoryFilter) {
+                    val index = categories.indexOf(filter.category)
+                    index + 1
+                } else {
+                    throw Exception("Unknown filter: " + filter)
+                }
                 builder.setSingleChoiceItems(listItems, checkedItem) { dialog, which -> when(which) {
-                    0 -> {}
-                    else -> {}
+                    0 -> knittingListView.setFilter(NoFilter)
+                    else -> {
+                        val category = categories[which - 1]
+                        knittingListView.setFilter(SingleCategoryFilter(category))
+                    }
                 }
                     knittingListView.updateKnittingList()
                     dialog.dismiss()

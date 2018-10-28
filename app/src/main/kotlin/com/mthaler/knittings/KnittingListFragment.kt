@@ -14,7 +14,6 @@ import com.mthaler.knittings.details.KnittingDetailsActivity
 import com.mthaler.knittings.model.Knitting
 import org.jetbrains.anko.AnkoLogger
 import java.text.DateFormat
-import java.util.ArrayList
 import java.util.Date
 import org.jetbrains.anko.support.v4.*
 
