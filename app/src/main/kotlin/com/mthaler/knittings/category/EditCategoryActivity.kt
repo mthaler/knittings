@@ -56,22 +56,20 @@ class EditCategoryActivity : AppCompatActivity() {
     }
 
     /**
-     * Creates a textwatcher that updates the knitting using the given update function
+     * Creates a text watcher that updates the knitting using the given update function
      *
      * @param updateKnitting function to updated the knitting
      */
     private fun createTextWatcher(updateCategory: (CharSequence, Category) -> Category): TextWatcher {
         return object : TextWatcher {
             override fun afterTextChanged(c: Editable) {
-                val category0 = category
-                if (category0 != null) {
+                category?.let {
                     try {
-                        val category1 = updateCategory(c, category0)
-                        datasource.updateCategory(category1)
-                        category = category1
+                        val c = updateCategory(c, it)
+                        datasource.updateCategory(c)
+                        category = c
                     } catch(ex: Exception) {
                     }
-
                 }
             }
         }
