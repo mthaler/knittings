@@ -12,9 +12,6 @@ import com.mthaler.knittings.model.Category
 import android.graphics.Color
 import com.android.colorpicker.ColorPickerDialog
 
-/**
- * The EditCategoryActivity is used to edit categories
- */
 class EditCategoryActivity : AppCompatActivity() {
 
     private var category: Category? = null
@@ -29,51 +26,52 @@ class EditCategoryActivity : AppCompatActivity() {
             category = datasource.getCategory(id)
         }
 
-        // add a text changed listener that updates the knitting if the title is edited
         val editTextTitle = findViewById<EditText>(R.id.category_name)
         editTextTitle.addTextChangedListener(createTextWatcher { c, knitting -> knitting.copy(name = c.toString()) })
         editTextTitle.setText(category!!.name)
 
         val button = findViewById<Button>(R.id.button_select_color)
-        // set background color of the button to category color if it is defined
-        category?.let {  it.color?.let { button.setBackgroundColor(it) }  }
-        // show color picker dialog if the button is clicked
-        button.setOnClickListener { view ->
+        if (category!!.color != null) {
+            button.setBackgroundColor(category!!.color!!)
+        }
+        button.setOnClickListener { view -> run {
             val colorPickerDialog = ColorPickerDialog()
             colorPickerDialog.initialize(R.string.delete_photo, COLORS, Color.RED, 4, COLORS.size)
-            colorPickerDialog.setOnColorSelectedListener { color ->
-                category?.let {
+            colorPickerDialog.setOnColorSelectedListener { color -> run {
+                val category0 = category
+                if (category0 != null) {
                     try {
-                        // update category
-                        val c = it.copy(color = color)
-                        datasource.updateCategory(c)
-                        category = c
+                        val category1 = category0.copy(color = color)
+                        datasource.updateCategory(category1)
+                        category = category1
                         button.setBackgroundColor(color)
                     } catch(ex: Exception) {
                     }
 
                 }
                 button.setBackgroundColor(color)
+            } }
             colorPickerDialog.show(getFragmentManager(), null)
         }}
     }
 
     /**
-     * Creates a text watcher that updates the category using the given update function
+     * Creates a textwatcher that updates the knitting using the given update function
      *
-     * @param updateCategory function to updated the category
+     * @param updateKnitting function to updated the knitting
      */
     private fun createTextWatcher(updateCategory: (CharSequence, Category) -> Category): TextWatcher {
         return object : TextWatcher {
             override fun afterTextChanged(c: Editable) {
-                category?.let {
+                val category0 = category
+                if (category0 != null) {
                     try {
-                        // update category
-                        val c = updateCategory(c, it)
-                        datasource.updateCategory(c)
-                        category = c
+                        val category1 = updateCategory(c, category0)
+                        datasource.updateCategory(category1)
+                        category = category1
                     } catch(ex: Exception) {
                     }
+
                 }
             }
         }
