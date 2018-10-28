@@ -28,8 +28,7 @@ class KnittingDetailsFragment : Fragment(), AnkoLogger {
      * @param knitting knitting for which details should be displayed
      */
     fun init(knitting: Knitting) {
-        val v = view
-        if (v != null) {
+        view?.let {
             view_pager.offscreenPageLimit = 3
             val photos = datasource.getAllPhotos(knitting)
             if (photos.size > 0) {
