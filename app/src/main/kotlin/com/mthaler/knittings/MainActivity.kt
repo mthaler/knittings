@@ -1,6 +1,5 @@
 package com.mthaler.knittings
 
-import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
@@ -9,7 +8,7 @@ import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.TextView
+import com.mthaler.knittings.about.AboutDialog
 import com.mthaler.knittings.category.CategoryListActivity
 import com.mthaler.knittings.dropbox.DropboxExportActivity
 import com.mthaler.knittings.dropbox.DropboxImportActivity
@@ -65,7 +64,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.menu_item_about -> {
-                showAboutDialog()
+                AboutDialog.show(this)
                 true
             }
             R.id.menu_item_sort -> {
@@ -140,19 +139,5 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         drawer_layout.closeDrawer(GravityCompat.START)
         return true
-    }
-
-    /**
-     * Shows the about dialog that displays the app name, version and some additional information
-     */
-    private fun showAboutDialog() {
-        @SuppressLint("InflateParams")
-        val v = layoutInflater.inflate(R.layout.dialog_about, null)
-        val appName = v.find<TextView>(R.id.about_app_name)
-        appName.text = (appName.text.toString() + " " + BuildConfig.VERSION_NAME)
-        val b = AlertDialog.Builder(this)
-        b.setView(v)
-        b.setPositiveButton(android.R.string.ok ) { diag, i -> diag.dismiss()}
-        b.create().show()
     }
 }
