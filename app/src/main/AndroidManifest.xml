@@ -89,7 +89,7 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".stopwatch.StopwatchActivity" />
         <activity android:name=".category.CategoryListActivity" />
-        <activity android:name=".category.EditCategoryActivity"></activity>
+        <activity android:name=".category.EditCategoryActivity" />
     </application>
 
 </manifest>

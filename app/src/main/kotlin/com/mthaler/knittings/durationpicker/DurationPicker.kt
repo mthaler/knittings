@@ -159,7 +159,7 @@ class DurationPicker @JvmOverloads constructor(context: Context, attrs: Attribut
 
     override fun onRestoreInstanceState(state: Parcelable) {
         val ss = state as SavedState
-        super.onRestoreInstanceState(ss.getSuperState())
+        super.onRestoreInstanceState(ss.superState)
         setDuration(ss.duration)
     }
 

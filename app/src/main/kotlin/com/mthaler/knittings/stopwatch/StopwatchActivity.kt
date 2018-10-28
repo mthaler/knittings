@@ -67,7 +67,7 @@ class StopwatchActivity : AppCompatActivity() {
                 val minutes = seconds % 3600 / 60
                 val secs = seconds % 60
                 val time = String.format(Locale.getDefault(), "%d:%02d:%02d", hours, minutes, secs)
-                timeView.setText(time)
+                timeView.text = time
                 if (running) {
                     seconds++
                 }

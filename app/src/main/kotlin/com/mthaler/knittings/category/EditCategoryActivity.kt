@@ -51,7 +51,7 @@ class EditCategoryActivity : AppCompatActivity() {
                 }
                 button.setBackgroundColor(color)
             } }
-            colorPickerDialog.show(getFragmentManager(), null)
+            colorPickerDialog.show(fragmentManager, null)
         }}
     }
 
