@@ -6,6 +6,9 @@ import com.mthaler.knittings.R
 import com.mthaler.knittings.database.datasource
 import kotlinx.android.synthetic.main.activity_edit_knitting_details.*
 
+/**
+ * EditKnittingDetailsActivity is used to edit knitting details
+ */
 class EditKnittingDetailsActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -13,7 +16,6 @@ class EditKnittingDetailsActivity : AppCompatActivity() {
         setContentView(R.layout.activity_edit_knitting_details)
 
         setSupportActionBar(toolbar)
-        //supportActionBar!!.setDisplayHomeAsUpEnabled(true)
 
         // get the id of the knitting that should be displayed.
         val id = intent.getLongExtra(EXTRA_KNITTING_ID, -1L)
