@@ -16,7 +16,7 @@ import com.mthaler.knittings.dropbox.DropboxImportActivity
 import org.jetbrains.anko.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.activity_main.*
-import android.widget.Toast
+import com.mthaler.knittings.database.datasource
 
 /**
  * The main activity that gets displayed when the app is started.
@@ -90,12 +90,20 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 true
             }
             R.id.menu_item_filter -> {
-                val listItems = arrayOf("one", "two", "three", "four", "five")
+                val knittingListView = supportFragmentManager.findFragmentById(R.id.fragment_knitting_list) as KnittingListView
+                val categories = datasource.allCategories
+                categories.sortedBy { it.name }
+                val listItems = (listOf("All") + categories.map { it.name }.toList()).toTypedArray()
                 val builder = AlertDialog.Builder(this)
-                builder.setTitle("Choose items")
-                val checkedItems = booleanArrayOf(true, false, true, false, true) //this will checked the items when user open the dialog
-                builder.setMultiChoiceItems(listItems, checkedItems) { dialog, which, isChecked -> Toast.makeText(this, "Position: " + which + " Value: " + listItems[which] + " State: " + if (isChecked) "checked" else "unchecked", Toast.LENGTH_LONG).show() }
-                builder.setPositiveButton("Done") { dialog, which -> dialog.dismiss() }
+                val checkedItem = 0
+                builder.setSingleChoiceItems(listItems, checkedItem) { dialog, which -> when(which) {
+                    0 -> {}
+                    else -> {}
+                }
+                    knittingListView.updateKnittingList()
+                    dialog.dismiss()
+                }
+                builder.setNegativeButton(R.string.dialog_button_cancel) { dialog, which -> dialog.dismiss() }
                 val dialog = builder.create()
                 dialog.show()
                 true
