@@ -581,6 +581,12 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
         dbHelper.writableDatabase.use { database ->
             database.delete(KnittingDatabaseHelper.CategoryTable.CATEGORY, KnittingDatabaseHelper.CategoryTable.Cols.ID + "=" + category.id, null)
             debug("Deleted category " + category.id + ": " + category)
+            // we need to remove the deleted category from the knittings that use it
+            val knittings = allKnittings.filter { it.category == category }
+            for (knitting in knittings) {
+                updateKnitting(knitting.copy(category = null))
+            }
+            debug("Removed category " + category.id + " from " + knittings.size + "knittings")
         }
     }
 
