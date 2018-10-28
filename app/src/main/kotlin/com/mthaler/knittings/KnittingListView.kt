@@ -8,5 +8,9 @@ interface KnittingListView {
 
     fun setSorting(sorting: Sorting)
 
+    fun getFilter(): Filter
+
+    fun setFilter(filter: Filter)
+
     fun updateKnittingList()
 }

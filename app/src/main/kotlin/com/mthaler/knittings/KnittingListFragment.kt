@@ -21,6 +21,7 @@ import org.jetbrains.anko.support.v4.*
 class KnittingListFragment : ListFragment(), KnittingListView, AnkoLogger {
 
     private var _sorting: Sorting = Sorting.NewestFirst
+    private var _filter: Filter = NoFilter
 
     override fun onListItemClick(l: ListView?, v: View?, position: Int, id: Long) {
         // get current knitting
@@ -47,7 +48,8 @@ class KnittingListFragment : ListFragment(), KnittingListView, AnkoLogger {
             Sorting.OldestFirst -> knittings.sortBy { it.started }
             Sorting.Alphabetical -> knittings.sortBy { it.title.toLowerCase() }
         }
-        val adapter = KnittingAdapter(knittings)
+        val filtered = _filter.filter(knittings)
+        val adapter = KnittingAdapter(filtered)
         listAdapter = adapter
     }
 
@@ -57,7 +59,14 @@ class KnittingListFragment : ListFragment(), KnittingListView, AnkoLogger {
         _sorting = sorting
     }
 
-    private inner class KnittingAdapter(knittings: ArrayList<Knitting>) : ArrayAdapter<Knitting>(activity, android.R.layout.simple_list_item_1, knittings) {
+    override fun getFilter(): Filter = _filter
+
+    override fun setFilter(filter: Filter) {
+        _filter = filter
+    }
+
+
+    private inner class KnittingAdapter(knittings: List<Knitting>) : ArrayAdapter<Knitting>(activity, android.R.layout.simple_list_item_1, knittings) {
 
         override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
             var convertView = convertView
