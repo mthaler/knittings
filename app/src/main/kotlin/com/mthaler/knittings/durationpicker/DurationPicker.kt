@@ -144,13 +144,10 @@ class DurationPicker @JvmOverloads constructor(context: Context, attrs: Attribut
 
             @JvmField
             val CREATOR: Parcelable.Creator<SavedState?> = object : Parcelable.Creator<SavedState?> {
-                override fun createFromParcel(`in`: Parcel): SavedState {
-                    return SavedState(`in`)
-                }
 
-                override fun newArray(size: Int): Array<SavedState?> {
-                    return arrayOfNulls<SavedState>(size)
-                }
+                override fun createFromParcel(`in`: Parcel): SavedState = SavedState(`in`)
+
+                override fun newArray(size: Int): Array<SavedState?> = arrayOfNulls<SavedState>(size)
             }
         }
     }
@@ -207,9 +204,7 @@ class DurationPicker @JvmOverloads constructor(context: Context, attrs: Attribut
         updateSecondsDisplay()
     }
 
-    override fun getBaseline(): Int {
-        return mHourPicker.baseline
-    }
+    override fun getBaseline(): Int = mHourPicker.baseline
 
     /**
      * Set the state of the spinners appropriate to the current hour.

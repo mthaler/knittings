@@ -9,7 +9,7 @@ import android.widget.TextView
 import com.mthaler.knittings.R
 import com.mthaler.knittings.model.Category
 
-class CategoryAdapter(val context: Context, val categories: ArrayList<Category>, val listener: OnItemClickListener): RecyclerView.Adapter<CategoryAdapter.ViewHolder>() {
+class CategoryAdapter(val context: Context, val categories: ArrayList<Category>, private val listener: OnItemClickListener): RecyclerView.Adapter<CategoryAdapter.ViewHolder>() {
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(categories[position], listener)
@@ -20,13 +20,11 @@ class CategoryAdapter(val context: Context, val categories: ArrayList<Category>,
         return ViewHolder(context, v)
     }
 
-    override fun getItemCount(): Int {
-        return categories.size
-    }
+    override fun getItemCount(): Int = categories.size
 
     class ViewHolder(val context: Context, itemView: View): RecyclerView.ViewHolder(itemView){
-        val colorSwatch = itemView.findViewById<ColorSwatch>(R.id.category_list_item_color)
-        val textFieldName = itemView.findViewById<TextView>(R.id.category_list_item_name)
+        private val colorSwatch = itemView.findViewById<ColorSwatch>(R.id.category_list_item_color)
+        private val textFieldName = itemView.findViewById<TextView>(R.id.category_list_item_name)
 
         fun bind(category: Category, listener: OnItemClickListener) {
             val c = category.color
@@ -34,7 +32,7 @@ class CategoryAdapter(val context: Context, val categories: ArrayList<Category>,
                 colorSwatch.color = c
             }
             textFieldName.text = category.name
-            itemView.setOnClickListener({v -> listener.onItemClick(category) })
+            itemView.setOnClickListener { v -> listener.onItemClick(category) }
         }
     }
 

@@ -34,7 +34,7 @@ class EditCategoryActivity : AppCompatActivity() {
         if (category!!.color != null) {
             button.setBackgroundColor(category!!.color!!)
         }
-        button.setOnClickListener( { view -> run {
+        button.setOnClickListener { view -> run {
             val colorPickerDialog = ColorPickerDialog()
             colorPickerDialog.initialize(R.string.delete_photo, COLORS, Color.RED, 4, COLORS.size)
             colorPickerDialog.setOnColorSelectedListener({ color -> run {
@@ -52,7 +52,7 @@ class EditCategoryActivity : AppCompatActivity() {
                 button.setBackgroundColor(color)
             } })
             colorPickerDialog.show(getFragmentManager(), null)
-        }})
+        }}
     }
 
     /**
