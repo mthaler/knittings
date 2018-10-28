@@ -35,7 +35,7 @@ class StopwatchActivity : AppCompatActivity() {
 
     override fun onSaveInstanceState(outState: Bundle) {
         outState.putLong(EXTRA_KNITTING_ID, knittingID)
-        outState.putLong("seconds", seconds);
+        outState.putLong("seconds", seconds)
         outState.putBoolean("running", running)
         super.onSaveInstanceState(outState)
     }

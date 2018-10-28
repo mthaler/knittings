@@ -92,7 +92,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             R.id.menu_item_filter -> {
                 val listItems = arrayOf("one", "two", "three", "four", "five")
                 val builder = AlertDialog.Builder(this)
-                builder.setTitle("Choose items");
+                builder.setTitle("Choose items")
                 val checkedItems = booleanArrayOf(true, false, true, false, true) //this will checked the items when user open the dialog
                 builder.setMultiChoiceItems(listItems, checkedItems) { dialog, which, isChecked -> Toast.makeText(this, "Position: " + which + " Value: " + listItems[which] + " State: " + if (isChecked) "checked" else "unchecked", Toast.LENGTH_LONG).show() }
                 builder.setPositiveButton("Done") { dialog, which -> dialog.dismiss() }
