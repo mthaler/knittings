@@ -8,6 +8,12 @@ import android.util.AttributeSet
 import android.view.View
 import com.mthaler.knittings.R
 
+/**
+ * The ColorSwatch class implements a view that displays a color using a filled circle
+ *
+ * @param context Context
+ * @param attrs attribute set passed to the view if it is instantiated from XML
+ */
 class ColorSwatch(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
 
     constructor(context: Context): this(context, null)
@@ -28,6 +34,9 @@ class ColorSwatch(context: Context?, attrs: AttributeSet?) : View(context, attrs
         setupAttributes(attrs)
     }
 
+    /**
+     * Handles the attributes passed if the color swatch is instantiated from XML
+     */
     private fun setupAttributes(attrs: AttributeSet?) {
         val typedArray = context.theme.obtainStyledAttributes(attrs, R.styleable.ColorSwatch, 0, 0)
         color = typedArray.getColor(R.styleable.ColorSwatch_color, DEFAULT_COLOR)
@@ -35,8 +44,8 @@ class ColorSwatch(context: Context?, attrs: AttributeSet?) : View(context, attrs
     }
 
     override fun onDraw(canvas: Canvas) {
-        // call the super method to keep any drawing from the parent side.
         super.onDraw(canvas)
+        // draw a filled circle with the given color
         paint.color = _color
         paint.style = Paint.Style.FILL
         val radius = size / 2f
@@ -45,6 +54,7 @@ class ColorSwatch(context: Context?, attrs: AttributeSet?) : View(context, attrs
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
+        // determine the size of our color swatch
         size = Math.min(measuredWidth, measuredHeight)
         setMeasuredDimension(size, size)
     }
