@@ -4,8 +4,18 @@
     <string name="app_name">Strickereien</string>
     <string name="about">Info</string>
 
+    <!-- navigation drawer (dropbox export, categories etc.) -->
     <string name="navigation_drawer_open">Navigationsleiste öffnen</string>
     <string name="navigation_drawer_close">Navigationsleiste schließen</string>
+
+    <!-- generic dialog strings -->
+    <string name="dialog_button_ok">OK</string>
+    <string name="dialog_button_cancel">Abbrechen</string>
+
+    <!-- sorting -->
+    <string name="sorting_newest_first">Neueste zuerst</string>
+    <string name="sorting_oldest_first">Älteste zuerst</string>
+    <string name="sorting_alphabetical">Alphabetisch</string>
 
     <!-- activities -->
     <string name="activity_knitting_details">Übersicht</string>
@@ -33,10 +43,6 @@
     <string name="photo_description_hint">Beschreibung</string>
     <string name="delete_photo">Foto löschen</string>
     <string name="set_main_photo">Als Vorschau verwenden</string>
-
-    <!-- dialogs -->
-    <string name="dialog_button_ok">OK</string>
-    <string name="dialog_button_cancel">Abbrechen</string>
 
     <!-- delete knittings dialog -->
     <string name="delete_knitting_dialog_title">Löschen</string>

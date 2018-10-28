@@ -3,8 +3,18 @@
     <string name="app_name">Knittings</string>
     <string name="about">About</string>
 
+    <!-- navigation drawer (dropbox export, categories etc.) -->
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <!-- generic dialog strings -->
+    <string name="dialog_button_ok">OK</string>
+    <string name="dialog_button_cancel">Cancel</string>
+
+    <!-- sorting -->
+    <string name="sorting_newest_first">Newest first</string>
+    <string name="sorting_oldest_first">Oldest first</string>
+    <string name="sorting_alphabetical">Alphabetical</string>
 
     <!-- activities -->
     <string name="activity_knitting_details">Knitting Details</string>
@@ -32,10 +42,6 @@
     <string name="photo_description_hint">Description</string>
     <string name="delete_photo">Delete photo</string>
     <string name="set_main_photo">Use as preview</string>
-
-    <!-- dialogs -->
-    <string name="dialog_button_ok">OK</string>
-    <string name="dialog_button_cancel">Cancel</string>
 
     <!-- delete knittings dialog -->
     <string name="delete_knitting_dialog_title">Delete</string>
