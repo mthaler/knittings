@@ -9,6 +9,9 @@ import com.mthaler.knittings.R
 import com.mthaler.knittings.database.datasource
 import java.util.*
 
+/**
+ * StopWatchActivity shows a stopwatch that can be used to measure the time the user is working on a knitting
+ */
 class StopwatchActivity : AppCompatActivity() {
 
     private var knittingID: Long = -1
