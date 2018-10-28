@@ -69,7 +69,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
             R.id.menu_item_sort -> {
                 val knittingListView = supportFragmentManager.findFragmentById(R.id.fragment_knitting_list) as KnittingListView
-                val listItems = arrayOf("Newest first", "Oldest first", "Alphabetical")
+                val listItems = arrayOf(getString(R.string.sorting_newest_first), getString(R.string.sorting_oldest_first), getString(R.string.sorting_alphabetical))
                 val builder = AlertDialog.Builder(this)
                 val checkedItem = when(knittingListView.getSorting()) {
                     Sorting.NewestFirst -> 0
@@ -84,7 +84,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     knittingListView.updateKnittingList()
                     dialog.dismiss()
                 }
-                builder.setNegativeButton("Cancel") { dialog, which -> dialog.dismiss() }
+                builder.setNegativeButton(R.string.dialog_button_cancel) { dialog, which -> dialog.dismiss() }
                 val dialog = builder.create()
                 dialog.show()
                 true
