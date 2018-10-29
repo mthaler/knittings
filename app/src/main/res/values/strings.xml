@@ -124,4 +124,6 @@
 
     <string name="sort">Sort</string>
     <string name="filter">Filter</string>
+
+    <string name="delete_category">Delete category</string>
 </resources>
