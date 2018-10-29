@@ -84,10 +84,12 @@ class EditKnittingDetailsFragment : Fragment() {
             builder.setItems(categories.map { it.name }.toTypedArray()) { dialog, which ->
                 val c = categories[which]
                 buttonCategory.text = c.name
-                val knitting0 = knitting!!
-                val knitting1 = knitting0.copy(category = c)
-                knitting = knitting1
-                datasource.updateKnitting(knitting1)
+                knitting?.let {
+                    val k = it.copy(category = c)
+                    knitting = k
+                    datasource.updateKnitting(k)
+                }
+
             }
             builder.show()
         }
