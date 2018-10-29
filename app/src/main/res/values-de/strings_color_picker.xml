@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Default title for color picker dialog [CHAR LIMIT=30] -->
+    <string name="color_picker_default_title">Farbe auswählen</string>
+    <!-- Content description for a color square. -->
+    <string name="color_swatch_description">Farbe</string>
+    <!-- Content description for a selected color square. -->
+    <string name="color_swatch_description_selected">Farbe ausgewählt</string>
+    <string name="select_color">Farbe auswählen</string>
+</resources>

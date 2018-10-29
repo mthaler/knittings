@@ -112,14 +112,6 @@
     <string name="categories">Categories</string>
     <string name="manage_categories">Manage categories</string>
 
-    !-- Default title for color picker dialog [CHAR LIMIT=30] -->
-    <string name="color_picker_default_title">Select a Color</string>
-    <!-- Content description for a color square. -->
-    <string name="color_swatch_description">Color</string>
-    <!-- Content description for a selected color square. -->
-    <string name="color_swatch_description_selected">Color selected</string>
-    <string name="select_color">Select color</string>
-
     <string name="knitting_category_hint">Category:</string>
 
     <string name="sort">Sort</string>
