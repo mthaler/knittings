@@ -9,14 +9,12 @@ object NetworkUtils {
      *
      * @param ctx context
      */
-    fun isWifiConnected(ctx: Context): Boolean {
-        try {
-            val cm = ctx.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-            val networkInfo = cm.activeNetworkInfo
-            return networkInfo.isConnected
-        } catch (ex: Exception) {
-            return false
-        }
+    fun isWifiConnected(ctx: Context): Boolean = try {
+        val cm = ctx.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val networkInfo = cm.activeNetworkInfo
+        networkInfo.isConnected
+    } catch (ex: Exception) {
+        false
     }
 
     /**

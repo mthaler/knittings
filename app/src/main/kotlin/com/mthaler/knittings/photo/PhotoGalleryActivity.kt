@@ -55,13 +55,11 @@ class PhotoGalleryActivity : AppCompatActivity(), CanTakePhoto, AnkoLogger {
         return true
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.menu_item_add_photo -> {
-                return takePhoto(this, layoutInflater, knittingID)
-            }
-            else -> return super.onOptionsItemSelected(item)
+    override fun onOptionsItemSelected(item: MenuItem): Boolean = when (item.itemId) {
+        R.id.menu_item_add_photo -> {
+            takePhoto(this, layoutInflater, knittingID)
         }
+        else -> super.onOptionsItemSelected(item)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

@@ -67,14 +67,12 @@ class EditCategoryActivity : AppCompatActivity() {
         return true
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.menu_item_delete_category -> {
-                showDeleteDialog()
-                return true
-            }
-            else -> return super.onOptionsItemSelected(item)
+    override fun onOptionsItemSelected(item: MenuItem): Boolean = when (item.itemId) {
+        R.id.menu_item_delete_category -> {
+            showDeleteDialog()
+            true
         }
+        else -> super.onOptionsItemSelected(item)
     }
 
     /**

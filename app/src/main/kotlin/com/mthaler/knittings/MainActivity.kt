@@ -102,7 +102,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     val index = categories.indexOf(filter.category)
                     index + 1
                 } else {
-                    throw Exception("Unknown filter: " + filter)
+                    throw Exception("Unknown filter: $filter")
                 }
                 builder.setSingleChoiceItems(listItems, checkedItem) { dialog, which -> when(which) {
                     0 -> knittingListView.setFilter(NoFilter)
