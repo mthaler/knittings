@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- string resources for photo package -->
+<resources>
+    <!-- photo details -->
+    <string name="photo_description_hint">Beschreibung</string>
+    <string name="delete_photo">Foto löschen</string>
+    <string name="set_main_photo">Als Vorschau verwenden</string>
+</resources>
