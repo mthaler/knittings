@@ -95,9 +95,9 @@ class EditCategoryActivity : AppCompatActivity() {
     }
 
     /**
-     * Creates a text watcher that updates the knitting using the given update function
+     * Creates a text watcher that updates the category using the given update function
      *
-     * @param updateKnitting function to updated the knitting
+     * @param updateCategory function to updated the category
      */
     private fun createTextWatcher(updateCategory: (CharSequence, Category) -> Category): TextWatcher {
         return object : TextWatcher {
