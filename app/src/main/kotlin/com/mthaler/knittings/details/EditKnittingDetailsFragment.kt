@@ -92,13 +92,13 @@ class EditKnittingDetailsFragment : Fragment() {
             builder.show()
         }
 
+        // update knitting if user changes the rating
         val ratingBar = v.findViewById<RatingBar>(R.id.ratingBar)
         ratingBar.onRatingBarChangeListener = RatingBar.OnRatingBarChangeListener { ratingBar, rating, fromUser ->
-            val knitting0 = knitting
-            if (knitting0 != null) {
-                val knitting1 = knitting0.copy(rating = rating.toDouble())
-                datasource.updateKnitting(knitting1)
-                knitting = knitting1
+            knitting?.let {
+                val k = it.copy(rating = rating.toDouble())
+                datasource.updateKnitting(k)
+                knitting = k
             }
         }
 
