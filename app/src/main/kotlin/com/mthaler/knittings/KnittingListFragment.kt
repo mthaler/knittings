@@ -71,25 +71,22 @@ class KnittingListFragment : ListFragment(), KnittingListView, AnkoLogger {
     private inner class KnittingAdapter(knittings: List<Knitting>) : ArrayAdapter<Knitting>(activity, android.R.layout.simple_list_item_1, knittings) {
 
         override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-            var convertView = convertView
-            // if we weren't given a view, inflate one
-            if (null == convertView) {
-                convertView = activity!!.layoutInflater.inflate(R.layout.list_item_knitting, parent, false)
-            }
 
-            // configure the view for this Crime
+            val v = if (convertView != null) convertView else activity!!.layoutInflater.inflate(R.layout.list_item_knitting, parent, false)
+
+            // configure the view for the knitting
             val knitting = getItem(position)
 
-            val titleTextView = convertView!!.findViewById<TextView>(R.id.knitting_list_item_titleTextView)
+            val titleTextView = v.findViewById<TextView>(R.id.knitting_list_item_titleTextView)
             titleTextView.text = knitting.title
 
-            val descriptionTextView = convertView.findViewById<TextView>(R.id.knitting_list_item_descriptionTextView)
+            val descriptionTextView = v.findViewById<TextView>(R.id.knitting_list_item_descriptionTextView)
             descriptionTextView.text = knitting.description
 
-            val startedTextView = convertView.findViewById<TextView>(R.id.knitting_list_item_startedTextView)
+            val startedTextView = v.findViewById<TextView>(R.id.knitting_list_item_startedTextView)
             startedTextView.text = DateFormat.getDateInstance().format(knitting.started)
 
-            val photoView = convertView.findViewById<ImageView>(R.id.knitting_list_item_photoImageView)
+            val photoView = v.findViewById<ImageView>(R.id.knitting_list_item_photoImageView)
             // the list item views are reused, we always need to set bitmap, otherwise the previous bitmap is used
             if (knitting.defaultPhoto?.preview != null) {
                 photoView.setImageBitmap(knitting.defaultPhoto.preview)
@@ -97,7 +94,7 @@ class KnittingListFragment : ListFragment(), KnittingListView, AnkoLogger {
                 photoView.setImageBitmap(null)
             }
 
-            val categoryIndicator = convertView.findViewById<CategoryIndicator>(R.id.knitting_list_item_categoryIndicator)
+            val categoryIndicator = v.findViewById<CategoryIndicator>(R.id.knitting_list_item_categoryIndicator)
             if (knitting.category != null) {
                 if (knitting.category.color != null) {
                     categoryIndicator.color = knitting.category.color
@@ -108,7 +105,7 @@ class KnittingListFragment : ListFragment(), KnittingListView, AnkoLogger {
                 categoryIndicator.color = Color.WHITE
             }
 
-            return convertView
+            return v
         }
     }
 }
