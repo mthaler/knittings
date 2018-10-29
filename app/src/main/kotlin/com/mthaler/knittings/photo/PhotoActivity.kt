@@ -90,17 +90,16 @@ class PhotoActivity : AppCompatActivity(), AnkoLogger {
         val adapter = pager.adapter as PhotoPagerAdapter
         val frag = adapter.getPhotoFragment()
         if (frag != null) {
-            val photo = frag.photo
-            val knitting = datasource.getKnitting(photo!!.knittingID)
-            datasource.updateKnitting(knitting.copy(defaultPhoto = photo))
-            debug("Set $photo as default photo")
-            Snackbar.make(photo_activity_layout, "Used as main photo", Snackbar.LENGTH_SHORT).show()
+            frag.photo?.let {
+                val knitting = datasource.getKnitting(it.knittingID)
+                datasource.updateKnitting(knitting.copy(defaultPhoto = it))
+                debug("Set $it as default photo")
+                Snackbar.make(photo_activity_layout, "Used as main photo", Snackbar.LENGTH_SHORT).show()
+            }
         } else {
             error("Photo fragment null")
         }
     }
-
-
 
     companion object {
         const val EXTRA_PHOTO_ID = "com.mthaler.knitting.PHOTO_ID"

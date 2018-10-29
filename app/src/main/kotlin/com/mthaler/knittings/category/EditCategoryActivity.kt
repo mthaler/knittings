@@ -32,14 +32,14 @@ class EditCategoryActivity : AppCompatActivity() {
             category = datasource.getCategory(id)
         }
 
+        // set edit text title text to category name
         val editTextTitle = findViewById<EditText>(R.id.category_name)
         editTextTitle.addTextChangedListener(createTextWatcher { c, knitting -> knitting.copy(name = c.toString()) })
-        editTextTitle.setText(category!!.name)
+        category?.let { editTextTitle.setText(it.name) }
 
+        // set background color of the button to category color if it is defined
         val button = findViewById<Button>(R.id.button_select_color)
-        if (category!!.color != null) {
-            button.setBackgroundColor(category!!.color!!)
-        }
+        category?.let { if (it.color != null) button.setBackgroundColor(it.color) }
         button.setOnClickListener { view -> run {
             val colorPickerDialog = ColorPickerDialog()
             colorPickerDialog.initialize(R.string.delete_photo, COLORS, Color.RED, 4, COLORS.size)
