@@ -81,23 +81,6 @@
     <string name="knitting_details_duration">Dauer: %1$s</string>
     <string name="knitting_details_category">Kategorie: %1$s</string>
 
-    <!-- Strings related to login / logout -->
-    <string name="sign_in">Anmelden</string>
-    <string name="title_activity_login">Anmelden</string>
-    <string name="logout">Abmelden</string>
-
-    <!-- DropboxExportActivity -->
-    <string name="dropbox_login">An Dropbox anmelden</string>
-    <string name="dropbox_export">Nach Dropbox exportieren</string>
-    <string name="dropbox_export_files">Exportiere Dateien:</string>
-    <string name="dropbox_cancel_export">Export abbrechen</string>
-    <string name="dropbox_export_no_wifi_question">Keine WIFI Verbindung, Daten wirklich zur Dropbox exportieren?</string>
-    <string name="dropbox_export_dialog_export_button">Exportieren</string>
-
-    <!-- DropboxImportActivity -->
-    <string name="dropbox_import">Aus Dropbox importieren</string>
-    <string name="dropbox_import_files">Importiere Dateien:</string>
-
     <!-- network error -->
     <string name="network_error_title">Netzwerk Fehler</string>
     <string name="network_error_dropbox">Keine Verbindung zur Dropbox möglich</string>
