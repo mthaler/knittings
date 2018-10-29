@@ -6,5 +6,4 @@
     <string name="color_swatch_description">Color</string>
     <!-- Content description for a selected color square. -->
     <string name="color_swatch_description_selected">Color selected</string>
-    <string name="select_color">Select color</string>
 </resources>
