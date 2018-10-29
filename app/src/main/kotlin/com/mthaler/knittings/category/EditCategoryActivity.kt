@@ -10,7 +10,11 @@ import com.mthaler.knittings.TextWatcher
 import com.mthaler.knittings.database.datasource
 import com.mthaler.knittings.model.Category
 import android.graphics.Color
+import android.view.Menu
+import android.view.MenuItem
 import com.android.colorpicker.ColorPickerDialog
+import kotlinx.android.synthetic.main.activity_edit_category.*
+import org.jetbrains.anko.alert
 
 class EditCategoryActivity : AppCompatActivity() {
 
@@ -19,6 +23,8 @@ class EditCategoryActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_edit_category)
+
+        setSupportActionBar(toolbar)
 
         // get the id of the category that should be displayed.
         val id = intent.getLongExtra(EXTRA_CATEGORY_ID, -1L)
@@ -53,6 +59,39 @@ class EditCategoryActivity : AppCompatActivity() {
             } }
             colorPickerDialog.show(fragmentManager, null)
         }}
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        menuInflater.inflate(R.menu.edit_category, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.menu_item_delete_category -> {
+                showDeleteDialog()
+                return true
+            }
+            else -> return super.onOptionsItemSelected(item)
+        }
+    }
+
+    /**
+     * Displays a dialog that asks the user to confirm that the knitting should be deleted
+     */
+    private fun showDeleteDialog() {
+        // show alert asking user to confirm that knitting should be deleted
+        alert {
+            title = resources.getString(R.string.delete_knitting_dialog_title)
+            message = resources.getString(R.string.delete_knitting_dialog_question)
+            positiveButton(resources.getString(R.string.delete_knitting_dialog_delete_button)) {
+                // delete database entry
+                datasource.deleteCategory(category!!)
+                finish()
+            }
+            negativeButton(resources.getString(R.string.dialog_button_cancel)) {}
+        }.show()
     }
 
     /**
