@@ -91,7 +91,7 @@ class DurationPickerDialog(context: Context,
 
     companion object {
 
-        private val DURATION = "duration"
+        private const val DURATION = "duration"
     }
 
 

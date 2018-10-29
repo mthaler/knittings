@@ -10,7 +10,7 @@ interface Filter {
     /**
      * Filter the knitting list
      *
-     * @param knittling list
+     * @param knitting list
      * @return filtered knitting list
      */
     fun filter(knittings: List<Knitting>): List<Knitting>
