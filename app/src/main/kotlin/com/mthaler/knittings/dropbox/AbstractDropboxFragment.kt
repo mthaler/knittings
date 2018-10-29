@@ -53,17 +53,19 @@ abstract class AbstractDropboxFragment : Fragment(), AnkoLogger {
 
     protected fun onLoadDataError(ex: Exception) {
         // delete auth token from shared preferences
-        val prefs = context!!.getSharedPreferences(AbstractDropboxFragment.SharedPreferencesName, AppCompatActivity.MODE_PRIVATE)
-        val editor = prefs.edit()
-        editor.remove("access-token")
-        editor.commit()
-        // clear client so that it is not reused next time we connect to Dropbox
-        DropboxClientFactory.clearClient()
-        val accessToken = Auth.getOAuth2Token()
-        if (accessToken != null) {
-            // save the access token
-            prefs.edit().putString("access-token", accessToken).apply()
-            initAndLoadData(accessToken)
+        context?.let {
+            val prefs = it.getSharedPreferences(AbstractDropboxFragment.SharedPreferencesName, AppCompatActivity.MODE_PRIVATE)
+            val editor = prefs.edit()
+            editor.remove("access-token")
+            editor.commit()
+            // clear client so that it is not reused next time we connect to Dropbox
+            DropboxClientFactory.clearClient()
+            val accessToken = Auth.getOAuth2Token()
+            if (accessToken != null) {
+                // save the access token
+                prefs.edit().putString("access-token", accessToken).apply()
+                initAndLoadData(accessToken)
+            }
         }
     }
 

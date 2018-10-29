@@ -44,18 +44,22 @@ class EditKnittingDetailsFragment : Fragment() {
 
         textViewStarted = v.findViewById(R.id.knitting_started)
         textViewStarted.setOnClickListener {
-            val fm = activity!!.supportFragmentManager
-            val dialog = DatePickerFragment.newInstance(knitting!!.started)
-            dialog.setTargetFragment(this, REQUEST_STARTED)
-            dialog.show(fm, DIALOG_DATE)
+            activity?.let {
+                val fm = it.supportFragmentManager
+                val dialog = DatePickerFragment.newInstance(knitting!!.started)
+                dialog.setTargetFragment(this, REQUEST_STARTED)
+                dialog.show(fm, DIALOG_DATE)
+            }
         }
 
         textViewFinished = v.findViewById(R.id.knitting_finished)
         textViewFinished.setOnClickListener {
-            val fm = activity!!.supportFragmentManager
-            val dialog = DatePickerFragment.newInstance(if (knitting!!.finished != null) knitting!!.finished else Date())
-            dialog.setTargetFragment(this, REQUEST_FINISHED)
-            dialog.show(fm, DIALOG_DATE)
+            activity?.let {
+                val fm = it.supportFragmentManager
+                val dialog = DatePickerFragment.newInstance(if (knitting!!.finished != null) knitting!!.finished else Date())
+                dialog.setTargetFragment(this, REQUEST_FINISHED)
+                dialog.show(fm, DIALOG_DATE)
+            }
         }
 
         val editTextNeedleDiameter = v.findViewById<EditText>(R.id.knitting_needle_diameter)
