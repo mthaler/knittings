@@ -17,16 +17,19 @@ import java.text.DateFormat
 import java.util.Date
 import org.jetbrains.anko.support.v4.*
 
+/**
+ * KnittingListFragment displays a list of knittings
+ */
 class KnittingListFragment : ListFragment(), KnittingListView, AnkoLogger {
 
     private var _sorting: Sorting = Sorting.NewestFirst
     private var _filter: Filter = NoFilter
 
     override fun onListItemClick(l: ListView?, v: View?, position: Int, id: Long) {
-        // get current knitting
-        val c = (listAdapter as KnittingAdapter).getItem(position)
-        // start knitting activity
-        startActivity<KnittingDetailsActivity>(KnittingDetailsActivity.EXTRA_KNITTING_ID to c!!.id)
+        // get current knitting and start knitting details activitiy if it is not null
+        (listAdapter as KnittingAdapter).getItem(position)?.let {
+            startActivity<KnittingDetailsActivity>(KnittingDetailsActivity.EXTRA_KNITTING_ID to it.id)
+        }
     }
 
     override fun onResume() {
@@ -71,8 +74,7 @@ class KnittingListFragment : ListFragment(), KnittingListView, AnkoLogger {
             var convertView = convertView
             // if we weren't given a view, inflate one
             if (null == convertView) {
-                convertView = activity!!.layoutInflater
-                        .inflate(R.layout.list_item_knitting, parent, false)
+                convertView = activity!!.layoutInflater.inflate(R.layout.list_item_knitting, parent, false)
             }
 
             // configure the view for this Crime
