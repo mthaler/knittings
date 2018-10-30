@@ -41,7 +41,7 @@ class DurationPickerDialog(context: Context,
 
         updateTitle(0L)
 
-        setButton(context.getText(R.string.time_set), this)
+        setButton(context.getText(R.string.durationpicker_set_duration), this)
         setButton2(context.getText(R.string.dialog_button_cancel), null as OnClickListener?)
         //setIcon(android.R.drawable.ic_dialog_time);
 
