@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- string resources for category package -->
+<resources>
+    <string name="categories">Categories</string>
+    <string name="manage_categories">Manage categories</string>
+    <string name="select_color">Select color</string>
+
+    <string name="knitting_category_hint">Category:</string>
+</resources>
