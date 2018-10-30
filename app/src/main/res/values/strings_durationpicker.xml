@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- string resources for durationpicker package -->
+<resources>
+    <string name="time_set">Set time</string>
+    <string name="time">Time : </string>
+</resources>
