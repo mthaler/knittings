@@ -80,12 +80,6 @@
     <string name="network_error_title">Netzwerk Fehler</string>
     <string name="network_error_dropbox">Keine Verbindung zur Dropbox möglich</string>
 
-    <!-- stopwatch -->
-    <string name="stopwatch">Stopwatch</string>
-    <string name="start">Start</string>
-    <string name="stop">Stop</string>
-    <string name="reset">Reset</string>
-
     <string name="sort">Sortieren</string>
     <string name="filter">Filtern</string>
 
