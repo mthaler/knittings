@@ -29,20 +29,22 @@ import com.mthaler.knittings.R
  *
  * For a dialog using this view, see [android.app.TimePickerDialog].
  */
-class DurationPicker @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyle: Int = 0) : FrameLayout(context, attrs, defStyle) {
+class DurationPicker @JvmOverloads constructor(context: Context,
+                                               attrs: AttributeSet? = null,
+                                               defStyle: Int = 0) : FrameLayout(context, attrs, defStyle) {
 
     // state
-    private var mCurrentHours = 0 // 0-23
-    private var mCurrentMinutes = 0 // 0-59
-    private var mCurrentSeconds = 0 // 0-59
+    private var currentHours = 0 // 0-23
+    private var currentMinutes = 0 // 0-59
+    private var currentSeconds = 0 // 0-59
 
     // ui components
-    private val mHourPicker: NumberPicker
-    private val mMinutePicker: NumberPicker
-    private val mSecondPicker: NumberPicker
+    private val hourPicker: NumberPicker
+    private val minutePicker: NumberPicker
+    private val secondPicker: NumberPicker
 
     // callbacks
-    private var mOnDurationChangedListener: OnDurationChangedListener? = null
+    private var onDurationChangedListener: OnDurationChangedListener? = null
 
     /**
      * Returns the duration in milliseconds
@@ -50,7 +52,7 @@ class DurationPicker @JvmOverloads constructor(context: Context, attrs: Attribut
      * @return duration in milliseconds
      */
     val duration: Long
-        get() = 1000L * (mCurrentSeconds + 60 * mCurrentMinutes + 3600 * mCurrentHours)
+        get() = 1000L * (currentSeconds + 60 * currentMinutes + 3600 * currentHours)
 
     /**
      * The callback interface used to indicate the time has been adjusted.
@@ -67,35 +69,32 @@ class DurationPicker @JvmOverloads constructor(context: Context, attrs: Attribut
     init {
 
         val inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        inflater.inflate(R.layout.duration_picker_widget,
-                this, // we are the parent
-                true)
+        inflater.inflate(R.layout.duration_picker_widget, this, true)
 
         // hour
-        mHourPicker = findViewById(R.id.hour)
-        mHourPicker.setOnValueChangedListener { picker, oldVal, newVal ->
-            // TODO Auto-generated method stub
-            mCurrentHours = newVal
+        hourPicker = findViewById(R.id.hour)
+        hourPicker.setOnValueChangedListener { picker, oldVal, newVal ->
+            currentHours = newVal
             onTimeChanged()
         }
 
         // digits of minute
-        mMinutePicker = findViewById(R.id.minute)
-        mMinutePicker.minValue = 0
-        mMinutePicker.maxValue = 59
-        mMinutePicker.setFormatter(TWO_DIGIT_FORMATTER)
-        mMinutePicker.setOnValueChangedListener { spinner, oldVal, newVal ->
-            mCurrentMinutes = newVal
+        minutePicker = findViewById(R.id.minute)
+        minutePicker.minValue = 0
+        minutePicker.maxValue = 59
+        minutePicker.setFormatter(TWO_DIGIT_FORMATTER)
+        minutePicker.setOnValueChangedListener { spinner, oldVal, newVal ->
+            currentMinutes = newVal
             onTimeChanged()
         }
 
         // digits of seconds
-        mSecondPicker = findViewById(R.id.seconds)
-        mSecondPicker.minValue = 0
-        mSecondPicker.maxValue = 59
-        mSecondPicker.setFormatter(TWO_DIGIT_FORMATTER)
-        mSecondPicker.setOnValueChangedListener { picker, oldVal, newVal ->
-            mCurrentSeconds = newVal
+        secondPicker = findViewById(R.id.seconds)
+        secondPicker.minValue = 0
+        secondPicker.maxValue = 59
+        secondPicker.setFormatter(TWO_DIGIT_FORMATTER)
+        secondPicker.setOnValueChangedListener { picker, oldVal, newVal ->
+            currentSeconds = newVal
             onTimeChanged()
         }
 
@@ -107,17 +106,7 @@ class DurationPicker @JvmOverloads constructor(context: Context, attrs: Attribut
         configurePickerRanges()
 
         // initialize to current time
-        val cal = Calendar.getInstance()
         setOnDurationChangedListener(NO_OP_CHANGE_LISTENER)
-
-        // by default we're not in 24 hour mode
-        setCurrentHour(cal.get(Calendar.HOUR_OF_DAY))
-        setCurrentMinute(cal.get(Calendar.MINUTE))
-        setCurrentSecond(cal.get(Calendar.SECOND))
-
-        if (!isEnabled) {
-            isEnabled = false
-        }
     }
 
     /**
@@ -168,7 +157,7 @@ class DurationPicker @JvmOverloads constructor(context: Context, attrs: Attribut
      * @param onDurationChangedListener the callback, should not be null.
      */
     fun setOnDurationChangedListener(onDurationChangedListener: OnDurationChangedListener) {
-        mOnDurationChangedListener = onDurationChangedListener
+        this.onDurationChangedListener = onDurationChangedListener
     }
 
     fun setDuration(duration: Long) {
@@ -184,7 +173,7 @@ class DurationPicker @JvmOverloads constructor(context: Context, attrs: Attribut
      * Set the current hour.
      */
     fun setCurrentHour(currentHour: Int?) {
-        this.mCurrentHours = currentHour!!
+        this.currentHours = currentHour!!
         updateHourDisplay()
     }
 
@@ -192,7 +181,7 @@ class DurationPicker @JvmOverloads constructor(context: Context, attrs: Attribut
      * Set the current minute (0-59).
      */
     fun setCurrentMinute(currentMinute: Int?) {
-        this.mCurrentMinutes = currentMinute!!
+        this.currentMinutes = currentMinute!!
         updateMinuteDisplay()
     }
 
@@ -200,45 +189,45 @@ class DurationPicker @JvmOverloads constructor(context: Context, attrs: Attribut
      * Set the current second (0-59).
      */
     fun setCurrentSecond(currentSecond: Int?) {
-        this.mCurrentSeconds = currentSecond!!
+        this.currentSeconds = currentSecond!!
         updateSecondsDisplay()
     }
 
-    override fun getBaseline(): Int = mHourPicker.baseline
+    override fun getBaseline(): Int = hourPicker.baseline
 
     /**
      * Set the state of the spinners appropriate to the current hour.
      */
     private fun updateHourDisplay() {
-        val currentHour = mCurrentHours
-        mHourPicker.value = currentHour
+        val currentHour = currentHours
+        hourPicker.value = currentHour
         onTimeChanged()
     }
 
     private fun configurePickerRanges() {
-        mHourPicker.minValue = 0
-        mHourPicker.maxValue = 23
-        mHourPicker.setFormatter(TWO_DIGIT_FORMATTER)
+        hourPicker.minValue = 0
+        hourPicker.maxValue = 23
+        hourPicker.setFormatter(TWO_DIGIT_FORMATTER)
     }
 
     private fun onTimeChanged() {
-        mOnDurationChangedListener!!.onDurationChanged(this, duration)
+        onDurationChangedListener!!.onDurationChanged(this, duration)
     }
 
     /**
      * Set the state of the spinners appropriate to the current minute.
      */
     private fun updateMinuteDisplay() {
-        mMinutePicker.value = mCurrentMinutes
-        mOnDurationChangedListener!!.onDurationChanged(this, duration)
+        minutePicker.value = currentMinutes
+        onDurationChangedListener!!.onDurationChanged(this, duration)
     }
 
     /**
      * Set the state of the spinners appropriate to the current second.
      */
     private fun updateSecondsDisplay() {
-        mSecondPicker.value = mCurrentSeconds
-        mOnDurationChangedListener!!.onDurationChanged(this, duration)
+        secondPicker.value = currentSeconds
+        onDurationChangedListener!!.onDurationChanged(this, duration)
     }
 
     companion object {
