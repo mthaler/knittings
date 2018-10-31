@@ -96,13 +96,13 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 val listItems = (listOf(getString(R.string.filter_show_all)) + categories.map { it.name }.toList()).toTypedArray()
                 val builder = AlertDialog.Builder(this)
                 val filter = knittingListView.getFilter()
-                val checkedItem = if (filter is NoFilter) {
-                    0
-                } else if (filter is SingleCategoryFilter) {
-                    val index = categories.indexOf(filter.category)
-                    index + 1
-                } else {
-                    throw Exception("Unknown filter: $filter")
+                val checkedItem = when (filter) {
+                    is NoFilter -> 0
+                    is SingleCategoryFilter -> {
+                        val index = categories.indexOf(filter.category)
+                        index + 1
+                    }
+                    else -> throw Exception("Unknown filter: $filter")
                 }
                 builder.setSingleChoiceItems(listItems, checkedItem) { dialog, which -> when(which) {
                     0 -> knittingListView.setFilter(NoFilter)
