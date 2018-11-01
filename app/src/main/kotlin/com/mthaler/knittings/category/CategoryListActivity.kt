@@ -27,7 +27,7 @@ class CategoryListActivity : AppCompatActivity() {
             startActivity<EditCategoryActivity>(EditCategoryActivity.EXTRA_CATEGORY_ID to category.id)
         } }
 
-        val rv = findViewById<RecyclerView>(R.id.recyclerView)
+        val rv = findViewById<RecyclerView>(R.id.category_recycler_view)
         rv.layoutManager = LinearLayoutManager(this)
     }
 
@@ -44,7 +44,7 @@ class CategoryListActivity : AppCompatActivity() {
      * Updates the list of categories
      */
     private fun updateCategoryList() {
-        val rv = findViewById<RecyclerView>(R.id.recyclerView)
+        val rv = findViewById<RecyclerView>(R.id.category_recycler_view)
         val categories = datasource.allCategories
         // start EditCategoryActivity if the users clicks on a category
         val adapter = CategoryAdapter(this, categories, OnItemClickListener { item -> startActivity<EditCategoryActivity>(EditCategoryActivity.EXTRA_CATEGORY_ID to item!!.id) })

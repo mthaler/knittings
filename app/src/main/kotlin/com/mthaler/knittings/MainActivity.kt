@@ -1,11 +1,12 @@
 package com.mthaler.knittings
 
-import android.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.design.widget.NavigationView
 import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
+import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
 import android.view.Menu
 import android.view.MenuItem
 import com.mthaler.knittings.about.AboutDialog
@@ -16,7 +17,6 @@ import org.jetbrains.anko.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.activity_main.*
 import com.mthaler.knittings.database.datasource
-import java.lang.Exception
 
 /**
  * The main activity that gets displayed when the app is started.
@@ -44,6 +44,18 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         toggle.syncState()
 
         nav_view.setNavigationItemSelectedListener(this)
+
+        val rv = findViewById<RecyclerView>(R.id.knitting_recycler_view)
+        rv.layoutManager = LinearLayoutManager(this)
+    }
+
+    /**
+     * The onResume method is called when the activity is started or if the user returns from another activity
+     * e.g. the KnittingDetailsActivity.
+     */
+    override fun onResume() {
+        super.onResume()
+        updateKnittingList()
     }
 
     override fun onBackPressed() {
@@ -139,5 +151,16 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         drawer_layout.closeDrawer(GravityCompat.START)
         return true
+    }
+
+    /**
+     * Updates the list of categories
+     */
+    private fun updateKnittingList() {
+        val rv = findViewById<RecyclerView>(R.id.knitting_recycler_view)
+        val knittings = datasource.allKnittings
+        // start EditCategoryActivity if the users clicks on a category
+        val adapter = KnittingAdapter(this, knittings)
+        rv.adapter = adapter
     }
 }
