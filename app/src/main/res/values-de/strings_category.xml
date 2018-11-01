@@ -6,4 +6,7 @@
     <string name="select_color">Farbe auswählen</string>
 
     <string name="knitting_category_hint">Kategorie:</string>
+
+    <!-- edit category menu -->
+    <string name="delete_category">Kategorie löschen</string>
 </resources>
