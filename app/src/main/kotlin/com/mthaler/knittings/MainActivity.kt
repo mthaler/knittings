@@ -17,6 +17,8 @@ import org.jetbrains.anko.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.activity_main.*
 import com.mthaler.knittings.database.datasource
+import com.mthaler.knittings.details.EditKnittingDetailsActivity
+import java.util.*
 
 /**
  * The main activity that gets displayed when the app is started.
@@ -34,13 +36,15 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         // set on click handler of floating action button that creates a new knitting
         fab.setOnClickListener {
-            //val knittingListView = supportFragmentManager.findFragmentById(R.id.fragment_knitting_list) as KnittingListView
-            //knittingListView.addKnitting()
+            // start knitting activity with newly created knitting
+            val knitting = datasource.createKnitting("", "", Date(), null, 0.0, 0.0, 0.0)
+            startActivity<EditKnittingDetailsActivity>(EditKnittingDetailsActivity.EXTRA_KNITTING_ID to knitting.id)
         }
 
         val toggle = ActionBarDrawerToggle(
                 this, drawer_layout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
         drawer_layout.addDrawerListener(toggle)
+        
         toggle.syncState()
 
         nav_view.setNavigationItemSelectedListener(this)
