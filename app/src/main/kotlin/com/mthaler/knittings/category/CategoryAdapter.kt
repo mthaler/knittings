@@ -57,5 +57,4 @@ class CategoryAdapter(val context: Context, val categories: ArrayList<Category>,
             itemView.setOnClickListener { v -> listener.onItemClick(category) }
         }
     }
-
 }
