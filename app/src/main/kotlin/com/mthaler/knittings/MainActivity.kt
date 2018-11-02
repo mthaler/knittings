@@ -109,33 +109,32 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 true
             }
             R.id.menu_item_filter -> {
-//                val knittingListView = supportFragmentManager.findFragmentById(R.id.fragment_knitting_list) as KnittingListView
-//                val categories = datasource.allCategories
-//                categories.sortedBy { it.name }
-//                val listItems = (listOf(getString(R.string.filter_show_all)) + categories.map { it.name }.toList()).toTypedArray()
-//                val builder = AlertDialog.Builder(this)
-//                val filter = knittingListView.getFilter()
-//                val checkedItem = when (filter) {
-//                    is NoFilter -> 0
-//                    is SingleCategoryFilter -> {
-//                        val index = categories.indexOf(filter.category)
-//                        index + 1
-//                    }
-//                    else -> throw Exception("Unknown filter: $filter")
-//                }
-//                builder.setSingleChoiceItems(listItems, checkedItem) { dialog, which -> when(which) {
-//                    0 -> knittingListView.setFilter(NoFilter)
-//                    else -> {
-//                        val category = categories[which - 1]
-//                        knittingListView.setFilter(SingleCategoryFilter(category))
-//                    }
-//                }
-//                    knittingListView.updateKnittingList()
-//                    dialog.dismiss()
-//                }
-//                builder.setNegativeButton(R.string.dialog_button_cancel) { dialog, which -> dialog.dismiss() }
-//                val dialog = builder.create()
-//                dialog.show()
+                val categories = datasource.allCategories
+                categories.sortedBy { it.name }
+                val listItems = (listOf(getString(R.string.filter_show_all)) + categories.map { it.name }.toList()).toTypedArray()
+                val builder = AlertDialog.Builder(this)
+                val f = filter
+                val checkedItem = when (f) {
+                    is NoFilter -> 0
+                    is SingleCategoryFilter -> {
+                        val index = categories.indexOf(f.category)
+                        index + 1
+                    }
+                    else -> throw Exception("Unknown filter: $f")
+                }
+                builder.setSingleChoiceItems(listItems, checkedItem) { dialog, which -> when(which) {
+                    0 -> filter = NoFilter
+                    else -> {
+                        val category = categories[which - 1]
+                        filter = SingleCategoryFilter(category)
+                    }
+                }
+                    updateKnittingList()
+                    dialog.dismiss()
+                }
+                builder.setNegativeButton(R.string.dialog_button_cancel) { dialog, which -> dialog.dismiss() }
+                val dialog = builder.create()
+                dialog.show()
                 true
             }
             else -> super.onOptionsItemSelected(item)
