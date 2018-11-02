@@ -11,7 +11,7 @@ import android.widget.TextView
 import com.mthaler.knittings.model.Knitting
 import java.text.DateFormat
 
-class KnittingAdapter(val context: Context, val knittings: ArrayList<Knitting>): RecyclerView.Adapter<KnittingAdapter.ViewHolder>() {
+class KnittingAdapter(val context: Context, val knittings: List<Knitting>): RecyclerView.Adapter<KnittingAdapter.ViewHolder>() {
 
     /**
      * Creates, configures and returns a ViewHolder object for a particular row in the list

@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.support.design.widget.NavigationView
 import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
+import android.support.v7.app.AlertDialog
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.Menu
@@ -27,6 +28,9 @@ import java.util.*
  */
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
+    private var sorting: Sorting = Sorting.NewestFirst
+    private var filter: Filter = NoFilter
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -44,7 +48,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         val toggle = ActionBarDrawerToggle(
                 this, drawer_layout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
         drawer_layout.addDrawerListener(toggle)
-        
+
         toggle.syncState()
 
         nav_view.setNavigationItemSelectedListener(this)
@@ -84,25 +88,24 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 true
             }
             R.id.menu_item_sort -> {
-//                val knittingListView = supportFragmentManager.findFragmentById(R.id.fragment_knitting_list) as KnittingListView
-//                val listItems = arrayOf(getString(R.string.sorting_newest_first), getString(R.string.sorting_oldest_first), getString(R.string.sorting_alphabetical))
-//                val builder = AlertDialog.Builder(this)
-//                val checkedItem = when(knittingListView.getSorting()) {
-//                    Sorting.NewestFirst -> 0
-//                    Sorting.OldestFirst -> 1
-//                    Sorting.Alphabetical -> 2
-//                }
-//                builder.setSingleChoiceItems(listItems, checkedItem) { dialog, which -> when(which) {
-//                    0 -> knittingListView.setSorting(Sorting.NewestFirst)
-//                    1 -> knittingListView.setSorting(Sorting.OldestFirst)
-//                    2 -> knittingListView.setSorting(Sorting.Alphabetical)
-//                  }
-//                    knittingListView.updateKnittingList()
-//                    dialog.dismiss()
-//                }
-//                builder.setNegativeButton(R.string.dialog_button_cancel) { dialog, which -> dialog.dismiss() }
-//                val dialog = builder.create()
-//                dialog.show()
+                val listItems = arrayOf(getString(R.string.sorting_newest_first), getString(R.string.sorting_oldest_first), getString(R.string.sorting_alphabetical))
+                val builder = AlertDialog.Builder(this)
+                val checkedItem = when(sorting) {
+                    Sorting.NewestFirst -> 0
+                    Sorting.OldestFirst -> 1
+                    Sorting.Alphabetical -> 2
+                }
+                builder.setSingleChoiceItems(listItems, checkedItem) { dialog, which -> when(which) {
+                    0 -> sorting = Sorting.NewestFirst
+                    1 -> sorting = Sorting.OldestFirst
+                    2 -> sorting = Sorting.Alphabetical
+                  }
+                    updateKnittingList()
+                    dialog.dismiss()
+                }
+                builder.setNegativeButton(R.string.dialog_button_cancel) { dialog, which -> dialog.dismiss() }
+                val dialog = builder.create()
+                dialog.show()
                 true
             }
             R.id.menu_item_filter -> {
@@ -163,8 +166,14 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private fun updateKnittingList() {
         val rv = findViewById<RecyclerView>(R.id.knitting_recycler_view)
         val knittings = datasource.allKnittings
+        when(sorting) {
+            Sorting.NewestFirst -> knittings.sortByDescending { it.started}
+            Sorting.OldestFirst -> knittings.sortBy { it.started }
+            Sorting.Alphabetical -> knittings.sortBy { it.title.toLowerCase() }
+        }
+        val filtered = filter.filter(knittings)
         // start EditCategoryActivity if the users clicks on a category
-        val adapter = KnittingAdapter(this, knittings)
+        val adapter = KnittingAdapter(this, filtered )
         rv.adapter = adapter
     }
 }
