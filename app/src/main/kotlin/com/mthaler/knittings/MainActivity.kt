@@ -57,6 +57,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         val rv = findViewById<RecyclerView>(R.id.knitting_recycler_view)
         rv.layoutManager = LinearLayoutManager(this)
+
+        if (savedInstanceState != null) {
+            sorting = Sorting.valueOf(savedInstanceState.getString("sorting"))
+        }
     }
 
     /**
@@ -66,6 +70,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onResume() {
         super.onResume()
         updateKnittingList()
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        outState.putString("sorting", sorting.name)
+        super.onSaveInstanceState(outState)
     }
 
     override fun onBackPressed() {
