@@ -11,7 +11,7 @@ import android.widget.TextView
 import com.mthaler.knittings.model.Knitting
 import java.text.DateFormat
 
-class KnittingAdapter(val context: Context, val knittings: List<Knitting>): RecyclerView.Adapter<KnittingAdapter.ViewHolder>() {
+class KnittingAdapter(val context: Context, val knittings: List<Knitting>, private val listener: OnItemClickListener): RecyclerView.Adapter<KnittingAdapter.ViewHolder>() {
 
     /**
      * Creates, configures and returns a ViewHolder object for a particular row in the list
@@ -46,12 +46,16 @@ class KnittingAdapter(val context: Context, val knittings: List<Knitting>): Recy
      * @param context context
      * @param itemView item view
      */
-    class ViewHolder(val context: Context, itemView: View): RecyclerView.ViewHolder(itemView){
+    inner class ViewHolder(val context: Context, itemView: View): RecyclerView.ViewHolder(itemView){
         val titleTextView = itemView.findViewById<TextView>(R.id.knitting_list_item_titleTextView)
         val descriptionTextView = itemView.findViewById<TextView>(R.id.knitting_list_item_descriptionTextView)
         val startedTextView = itemView.findViewById<TextView>(R.id.knitting_list_item_startedTextView)
         val photoView = itemView.findViewById<ImageView>(R.id.knitting_list_item_photoImageView)
         val categoryIndicator = itemView.findViewById<CategoryIndicator>(R.id.knitting_list_item_categoryIndicator)
+
+        init {
+            itemView.setOnClickListener { v -> listener.onItemClick(knittings[adapterPosition] ) }
+        }
 
         fun bind(knitting: Knitting) {
             titleTextView.text = knitting.title
