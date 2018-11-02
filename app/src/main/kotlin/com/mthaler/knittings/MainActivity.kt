@@ -41,7 +41,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         setSupportActionBar(toolbar)
 
         // set on click handler of floating action button that creates a new knitting
-        fab.setOnClickListener {
+        fab_create_add_knitting.setOnClickListener {
             // start knitting activity with newly created knitting
             val knitting = datasource.createKnitting("", "", Date(), null, 0.0, 0.0, 0.0)
             startActivity<EditKnittingDetailsActivity>(EditKnittingDetailsActivity.EXTRA_KNITTING_ID to knitting.id)
