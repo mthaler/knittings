@@ -2,11 +2,12 @@ package com.mthaler.knittings
 
 import com.mthaler.knittings.model.Category
 import com.mthaler.knittings.model.Knitting
+import java.io.Serializable
 
 /**
  * Filter used for filtering the knitting list displayed to the user
  */
-interface Filter {
+interface Filter : Serializable {
     /**
      * Filter the knitting list
      *

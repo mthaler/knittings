@@ -60,6 +60,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         if (savedInstanceState != null) {
             sorting = Sorting.valueOf(savedInstanceState.getString("sorting"))
+            filter = savedInstanceState.getSerializable("filter") as Filter
         }
     }
 
@@ -74,6 +75,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     override fun onSaveInstanceState(outState: Bundle) {
         outState.putString("sorting", sorting.name)
+        outState.putSerializable("filter", filter)
         super.onSaveInstanceState(outState)
     }
 
