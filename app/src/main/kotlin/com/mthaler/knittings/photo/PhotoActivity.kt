@@ -42,64 +42,64 @@ class PhotoActivity : AppCompatActivity(), AnkoLogger {
 
     }
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        menuInflater.inflate(R.menu.photo, menu)
-        return true
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            R.id.menu_item_delete_photo -> {
-                showDeletePhotoDialog()
-                true
-            }
-            R.id.menu_item_set_main_photo -> {
-                setDefaultPhoto()
-                true
-            }
-            else -> super.onOptionsItemSelected(item)
-        }
-    }
+//    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+//        // Inflate the menu; this adds items to the action bar if it is present.
+//        menuInflater.inflate(R.menu.photo, menu)
+//        return true
+//    }
+//
+//    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+//        return when (item.itemId) {
+//            R.id.menu_item_delete_photo -> {
+//                showDeletePhotoDialog()
+//                true
+//            }
+//            R.id.menu_item_set_main_photo -> {
+//                setDefaultPhoto()
+//                true
+//            }
+//            else -> super.onOptionsItemSelected(item)
+//        }
+//    }
 
     /**
      * how alert asking user to confirm that photo should be deleted
      */
-    private fun showDeletePhotoDialog() {
-        alert {
-            title = resources.getString(R.string.delete_photo_dialog_title)
-            message = resources.getString(R.string.delete_photo_dialog_question)
-            positiveButton(resources.getString(R.string.delete_photo_dialog_delete_button)) {
-                val adapter = pager.adapter as PhotoPagerAdapter
-                val frag = adapter.getPhotoFragment()
-                if (frag != null) {
-                    frag.deletePhoto()
-                } else {
-                    error("Photo fragment null")
-                }
-                finish()
-            }
-            negativeButton(resources.getString(R.string.dialog_button_cancel)) {}
-        }.show()
-    }
+//    private fun showDeletePhotoDialog() {
+//        alert {
+//            title = resources.getString(R.string.delete_photo_dialog_title)
+//            message = resources.getString(R.string.delete_photo_dialog_question)
+//            positiveButton(resources.getString(R.string.delete_photo_dialog_delete_button)) {
+//                val adapter = pager.adapter as PhotoPagerAdapter
+//                val frag = adapter.getPhotoFragment()
+//                if (frag != null) {
+//                    frag.deletePhoto()
+//                } else {
+//                    error("Photo fragment null")
+//                }
+//                finish()
+//            }
+//            negativeButton(resources.getString(R.string.dialog_button_cancel)) {}
+//        }.show()
+//    }
 
     /**
      * Sets the current photo as the default photo used as preview for knittings list
      */
-    private fun setDefaultPhoto() {
-        val adapter = pager.adapter as PhotoPagerAdapter
-        val frag = adapter.getPhotoFragment()
-        if (frag != null) {
-            frag.photo?.let {
-                val knitting = datasource.getKnitting(it.knittingID)
-                datasource.updateKnitting(knitting.copy(defaultPhoto = it))
-                debug("Set $it as default photo")
-                Snackbar.make(photo_activity_layout, "Used as main photo", Snackbar.LENGTH_SHORT).show()
-            }
-        } else {
-            error("Photo fragment null")
-        }
-    }
+//    private fun setDefaultPhoto() {
+//        val adapter = pager.adapter as PhotoPagerAdapter
+//        val frag = adapter.getPhotoFragment()
+//        if (frag != null) {
+//            frag.photo?.let {
+//                val knitting = datasource.getKnitting(it.knittingID)
+//                datasource.updateKnitting(knitting.copy(defaultPhoto = it))
+//                debug("Set $it as default photo")
+//                Snackbar.make(photo_activity_layout, "Used as main photo", Snackbar.LENGTH_SHORT).show()
+//            }
+//        } else {
+//            error("Photo fragment null")
+//        }
+//    }
 
     companion object {
         const val EXTRA_PHOTO_ID = "com.mthaler.knitting.PHOTO_ID"

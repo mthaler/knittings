@@ -1,12 +1,10 @@
 package com.mthaler.knittings.photo
 
 import android.os.Bundle
+import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
 import android.text.Editable
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.view.ViewTreeObserver
+import android.view.*
 import android.widget.EditText
 import android.widget.ImageView
 import com.mthaler.knittings.R
@@ -14,7 +12,11 @@ import com.mthaler.knittings.TextWatcher
 import com.mthaler.knittings.database.datasource
 import com.mthaler.knittings.model.Photo
 import com.mthaler.knittings.utils.PictureUtils
+import kotlinx.android.synthetic.main.activity_photo.*
+import org.jetbrains.anko.debug
+import org.jetbrains.anko.support.v4.alert
 import org.jetbrains.anko.doAsync
+import org.jetbrains.anko.error
 import org.jetbrains.anko.uiThread
 
 /**
@@ -23,6 +25,13 @@ import org.jetbrains.anko.uiThread
 class PhotoFragment : Fragment() {
 
     var photo: Photo? = null
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        // we need to call setHasOptionsMenu(true) to indicate that we are interested in participating in the action bar
+        setHasOptionsMenu(true)
+    }
 
     override fun onCreateView(inflater: LayoutInflater, parent: ViewGroup?, savedInstanceState: Bundle?): View? {
 
@@ -73,7 +82,44 @@ class PhotoFragment : Fragment() {
         return v
     }
 
-    fun deletePhoto() {
+    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        inflater?.let { it.inflate(R.menu.photo, menu) }
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        return when (item!!.itemId) {
+            R.id.menu_item_delete_photo -> {
+                showDeletePhotoDialog()
+                true
+            }
+            R.id.menu_item_set_main_photo -> {
+                setDefaultPhoto()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    /**
+     * how alert asking user to confirm that photo should be deleted
+     */
+    private fun showDeletePhotoDialog() {
+        alert {
+            title = resources.getString(R.string.delete_photo_dialog_title)
+            message = resources.getString(R.string.delete_photo_dialog_question)
+            positiveButton(resources.getString(R.string.delete_photo_dialog_delete_button)) {
+                deletePhoto()
+                // close activity
+                activity?.let { it.finish() }
+            }
+            negativeButton(resources.getString(R.string.dialog_button_cancel)) {}
+        }.show()
+    }
+
+
+    private fun deletePhoto() {
         // check if the photo is used as default photo
         val p = photo
         if (p != null) {
@@ -88,6 +134,19 @@ class PhotoFragment : Fragment() {
             error("Cannot delete photo because it is null")
         }
     }
+
+    /**
+     * Sets the current photo as the default photo used as preview for knittings list
+     */
+    private fun setDefaultPhoto() {
+        photo?.let {
+            val knitting = datasource.getKnitting(it.knittingID)
+            datasource.updateKnitting(knitting.copy(defaultPhoto = it))
+            //debug("Set $it as default photo")
+            Snackbar.make(view!!, "Used as main photo", Snackbar.LENGTH_SHORT).show()
+        }
+    }
+
 
     companion object {
         private const val EXTRA_PHOTO_ID = "com.mthaler.knittings.photo_id"
