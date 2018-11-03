@@ -28,9 +28,8 @@ class PhotoFragment : Fragment() {
 
         val v = inflater.inflate(R.layout.fragment_photo, parent, false)
 
-        val args = arguments
-        if (args != null) {
-            val id = args.getLong(EXTRA_PHOTO_ID, -1L)
+        arguments?.let {
+            val id = it.getLong(EXTRA_PHOTO_ID, -1L)
             if (id != -1L) {
                 photo = datasource.getPhoto(id)
             }
