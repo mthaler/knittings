@@ -2,7 +2,7 @@ package com.mthaler.knittings.utils
 
 object ColorUtils {
 
-    fun ColorToHex(color: Int): String {
+    fun colorToHex(color: Int): String {
         val alpha = android.graphics.Color.alpha(color)
         val blue = android.graphics.Color.blue(color)
         val green = android.graphics.Color.green(color)

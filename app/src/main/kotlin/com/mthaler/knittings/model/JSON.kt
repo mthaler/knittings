@@ -1,5 +1,7 @@
 package com.mthaler.knittings.model
 
+import android.graphics.Color
+import com.mthaler.knittings.utils.ColorUtils
 import org.json.JSONObject
 import java.text.SimpleDateFormat
 import org.json.JSONArray
@@ -49,7 +51,7 @@ fun Category.toJSON(): JSONObject {
     result.put("id", id)
     result.put("name", name)
     if (color != null) {
-        result.put("color", color)
+        result.put("color", ColorUtils.colorToHex(color))
     }
     return result
 }
@@ -116,7 +118,7 @@ fun JSONArray.toPhotos(): List<Photo> {
 fun JSONObject.toCategory(): Category {
     val id = getLong("id")
     val name = getString("name")
-    val color = if (has("color")) getInt("color") else null
+    val color = if (has("color")) Color.parseColor(getString("color")) else null
     return Category(id, name, color)
 }
 
