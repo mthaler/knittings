@@ -1,3 +1,5 @@
 package com.mthaler.knittings.model
 
-data class Category(val id: Long, val name: String, val color: Int?)
+import java.io.Serializable
+
+data class Category(val id: Long, val name: String, val color: Int?) : Serializable
