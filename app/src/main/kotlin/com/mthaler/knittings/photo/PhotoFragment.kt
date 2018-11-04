@@ -12,17 +12,13 @@ import com.mthaler.knittings.TextWatcher
 import com.mthaler.knittings.database.datasource
 import com.mthaler.knittings.model.Photo
 import com.mthaler.knittings.utils.PictureUtils
-import kotlinx.android.synthetic.main.activity_photo.*
-import org.jetbrains.anko.debug
+import org.jetbrains.anko.*
 import org.jetbrains.anko.support.v4.alert
-import org.jetbrains.anko.doAsync
-import org.jetbrains.anko.error
-import org.jetbrains.anko.uiThread
 
 /**
  * PhotoFragment displays a photo and the description
  */
-class PhotoFragment : Fragment() {
+class PhotoFragment : Fragment(), AnkoLogger {
 
     var photo: Photo? = null
 
@@ -121,17 +117,14 @@ class PhotoFragment : Fragment() {
 
     private fun deletePhoto() {
         // check if the photo is used as default photo
-        val p = photo
-        if (p != null) {
-            val knitting = datasource.getKnitting(p.knittingID)
-            if (knitting.defaultPhoto != null && knitting.defaultPhoto.id == p.id) {
+        photo?.let {
+            val knitting = datasource.getKnitting(it.knittingID)
+            if (knitting.defaultPhoto != null && knitting.defaultPhoto.id == it.id) {
                 datasource.updateKnitting(knitting.copy(defaultPhoto = null))
             }
             // delete database entry
-            datasource.deletePhoto(p)
+            datasource.deletePhoto(it)
             photo = null
-        } else {
-            error("Cannot delete photo because it is null")
         }
     }
 
@@ -142,8 +135,10 @@ class PhotoFragment : Fragment() {
         photo?.let {
             val knitting = datasource.getKnitting(it.knittingID)
             datasource.updateKnitting(knitting.copy(defaultPhoto = it))
-            //debug("Set $it as default photo")
-            Snackbar.make(view!!, "Used as main photo", Snackbar.LENGTH_SHORT).show()
+            debug("Set $it as default photo")
+            view?.let {
+                Snackbar.make(it, "Used as main photo", Snackbar.LENGTH_SHORT).show()
+            }
         }
     }
 
