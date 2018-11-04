@@ -49,13 +49,15 @@ class PhotoFragment : Fragment(), AnkoLogger {
                 val width = imageView.measuredWidth
                 val height = imageView.measuredHeight
                 // loading and scaling the bitmap is expensive, use async task to do the work
-                val path = photo!!.filename.absolutePath
-                doAsync {
-                    val orientation = PictureUtils.getOrientation(path)
-                    val scaled = PictureUtils.decodeSampledBitmapFromPath(path, width, height)
-                    val rotated = PictureUtils.rotateBitmap(scaled, orientation)
-                    uiThread {
-                        imageView.setImageBitmap(rotated)
+                photo?.let {
+                    val path = it.filename.absolutePath
+                    doAsync {
+                        val orientation = PictureUtils.getOrientation(path)
+                        val scaled = PictureUtils.decodeSampledBitmapFromPath(path, width, height)
+                        val rotated = PictureUtils.rotateBitmap(scaled, orientation)
+                        uiThread {
+                            imageView.setImageBitmap(rotated)
+                        }
                     }
                 }
                 return true
