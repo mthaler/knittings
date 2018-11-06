@@ -485,6 +485,13 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
         }
     }
 
+    @Synchronized
+    fun deleteAllCategories() {
+        for (category in allCategories) {
+            deleteCategory(category)
+        }
+    }
+
     /**
      * Gets the category with the given id from the database
      *
@@ -535,6 +542,30 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
             cursor.close()
 
             return category
+        }
+    }
+
+    /**
+     * Adds the given category to the database
+     *
+     * @param category category that should be added to the database
+     * @param manualID: use cagegpry ID instead of auto-imcremented id
+     */
+    @Synchronized
+    fun addCategory(category: Category, manualID: Boolean = false) {
+        dbHelper.writableDatabase.use { database ->
+            val values = ContentValues()
+            if (manualID) {
+                values.put(KnittingDatabaseHelper.CategoryTable.Cols.ID, category.id)
+            }
+            values.put(KnittingDatabaseHelper.CategoryTable.Cols.NAME, category.name)
+            if (category.color != null) {
+                values.put(KnittingDatabaseHelper.CategoryTable.Cols.COLOR, category.color)
+            } else {
+                values.putNull(KnittingDatabaseHelper.CategoryTable.Cols.COLOR)
+            }
+            val id = database.insert(KnittingDatabaseHelper.CategoryTable.CATEGORY, null, values)
+            debug("Added category $category to database, id=$id")
         }
     }
 

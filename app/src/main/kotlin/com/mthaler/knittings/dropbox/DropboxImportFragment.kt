@@ -156,12 +156,16 @@ class DropboxImportFragment : AbstractDropboxFragment(), AnkoLogger {
             // remove all existing entries from the database
             datasource.deleteAllKnittings()
             datasource.deleteAllPhotos()
+            datasource.deleteAllCategories()
             // add downloaded database
             for (knitting in database.knittings) {
                 datasource.addKnitting(knitting, manualID = true)
             }
             for (photo in database.photos) {
                 datasource.addPhoto(photo, manualID = true)
+            }
+            for (category in database.categories) {
+                datasource.addCategory(category, manualID = true)
             }
             DownloadPhotosTask(DropboxClientFactory.getClient(), ctx, backupDirectory, database, progressBar::setProgress, ::onDownloadPhotosComplete).execute()
         } else {
