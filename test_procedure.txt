@@ -1,0 +1,5 @@
+MainActivity:
+- check that device can be rotated
+- check that sorting and filter is kept when device is rotated
+- check that scrolling works
+- check that clicking on items works
