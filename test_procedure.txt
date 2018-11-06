@@ -3,3 +3,16 @@ MainActivity:
 - check that sorting and filter is kept when device is rotated
 - check that scrolling works
 - check that clicking on items works
+- check if adding new knitting works
+
+Knitting Details:
+- check if device can be rotated
+- check if starting stopwatch works
+- check if showing gallery works
+- check if delete knitting works
+
+Dropbox export:
+- check if export to Dropbox works
+
+Dropbox import:
+- check if import from Dropbox works
