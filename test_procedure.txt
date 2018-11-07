@@ -12,6 +12,11 @@ Knitting Details:
 - check if showing gallery works
 - check if delete knitting works
 
+
+Stopwatch:
+- check that stopwatch works when rotating the device
+- check that stopwatch works when switching to another activity
+
 Dropbox export:
 - check if export to Dropbox works
 
