@@ -6,16 +6,42 @@ MainActivity:
 - check if adding new knitting works
 - check that showing about dialog works
 
-Knitting Details:
+Knitting details:
 - check if device can be rotated
+- check that knitting details are shown
+- check that sliding photo works
 - check if starting stopwatch works
 - check if showing gallery works
 - check if delete knitting works
+- check that adding a photo works
+- check that import from gallery works
+- check that scrolling works
 
+Photo gallery:
+- check that device can be rotated
+- check that photos are shown
+- check that photo can be clicked and edit photo activity is started
+- check that adding a photo works
+- check that import from gallery works
+- check that scrolling works
+- check that description is shown
+
+Edit photo activity:
+- check that device can be rotated
+- check that photo is displayed
+- check that scrolling works
+- check that editing description works
+- check that sliding photo works
+- check that deleting a photo works
+- check that use as preview works
 
 Stopwatch:
 - check that stopwatch works when rotating the device
 - check that stopwatch works when switching to another activity
+
+Manage category:
+- check that device can be rotated
+- check that editing categories works
 
 Dropbox export:
 - check if export to Dropbox works
