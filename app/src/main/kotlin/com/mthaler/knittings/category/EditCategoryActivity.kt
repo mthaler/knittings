@@ -81,9 +81,9 @@ class EditCategoryActivity : AppCompatActivity() {
     private fun showDeleteDialog() {
         // show alert asking user to confirm that knitting should be deleted
         alert {
-            title = resources.getString(R.string.delete_knitting_dialog_title)
-            message = resources.getString(R.string.delete_knitting_dialog_question)
-            positiveButton(resources.getString(R.string.delete_knitting_dialog_delete_button)) {
+            title = resources.getString(R.string.delete_category_dialog_title)
+            message = resources.getString(R.string.delete_category_dialog_question)
+            positiveButton(resources.getString(R.string.delete_category_dialog_delete_button)) {
                 // delete database entry
                 datasource.deleteCategory(category!!)
                 finish()

@@ -9,4 +9,9 @@
 
     <!-- edit category menu -->
     <string name="delete_category">Kategorie löschen</string>
+
+    <!-- delete category dialog -->
+    <string name="delete_category_dialog_title">Kategorie Löschen</string>
+    <string name="delete_category_dialog_question">Kategorie wirklich löschen?</string>
+    <string name="delete_category_dialog_delete_button">Löschen</string>
 </resources>

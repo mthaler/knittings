@@ -16,3 +16,4 @@ TODO:
   * https://stackoverflow.com/questions/20586619/android-viewpager-with-bottom-dots
   * https://stackoverflow.com/questions/38459309/how-do-you-create-an-android-view-pager-with-a-dots-indicator/38459310#38459310
   * https://github.com/ManuelPeinado/NumericPageIndicator
+- Setting the filter to a category, then deleting the category crashes the app when returning to the knitting list
