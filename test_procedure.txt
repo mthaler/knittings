@@ -4,6 +4,7 @@ MainActivity:
 - check that scrolling works
 - check that clicking on items works
 - check if adding new knitting works
+- check that showing about dialog works
 
 Knitting Details:
 - check if device can be rotated
