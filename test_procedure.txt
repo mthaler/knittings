@@ -1,3 +1,6 @@
+General:
+- check translations
+
 MainActivity:
 - check that device can be rotated
 - check that sorting and filter is kept when device is rotated
@@ -16,6 +19,11 @@ Knitting details:
 - check that adding a photo works
 - check that import from gallery works
 - check that scrolling works
+
+Edit knitting details:
+- check if device can be rotated
+- check that knitting details are shown
+- check that editing all knitting details works as expected
 
 Photo gallery:
 - check that device can be rotated
