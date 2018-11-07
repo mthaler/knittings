@@ -21,21 +21,21 @@
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="20dp"
         android:onClick="onClickStart"
-        android:text="@string/start" />
+        android:text="@string/stopwatch_start" />
     <Button
         android:id="@+id/stop_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
         android:onClick="onClickStop"
-        android:text="@string/stop" />
+        android:text="@string/stopwatch_stop" />
     <Button
-        android:id="@+id/reset_button"
+        android:id="@+id/discard_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="32dp"
         android:onClick="onClickReset"
-        android:text="@string/reset" />
+        android:text="@string/stopwatch_discard" />
 </LinearLayout>
