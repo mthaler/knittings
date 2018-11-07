@@ -36,6 +36,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="32dp"
-        android:onClick="onClickReset"
+        android:onClick="onClickDiscard"
         android:text="@string/stopwatch_discard" />
 </LinearLayout>

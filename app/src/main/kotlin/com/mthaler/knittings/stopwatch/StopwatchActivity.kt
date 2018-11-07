@@ -56,9 +56,10 @@ class StopwatchActivity : AppCompatActivity() {
 
     }
 
-    fun onClickReset(view: View) {
+    fun onClickDiscard(view: View) {
         running = false
         seconds = 0
+        finish()
     }
 
     private fun runTimer() {
