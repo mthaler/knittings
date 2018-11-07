@@ -42,7 +42,7 @@ class EditCategoryActivity : AppCompatActivity() {
         category?.let { if (it.color != null) button.setBackgroundColor(it.color) }
         button.setOnClickListener { view -> run {
             val colorPickerDialog = ColorPickerDialog()
-            colorPickerDialog.initialize(R.string.delete_photo, COLORS, Color.RED, 4, COLORS.size)
+            colorPickerDialog.initialize(R.string.category_color_dialog_title, COLORS, Color.RED, 4, COLORS.size)
             colorPickerDialog.setOnColorSelectedListener { color -> run {
                 val category0 = category
                 if (category0 != null) {

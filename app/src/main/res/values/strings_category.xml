@@ -14,4 +14,7 @@
     <string name="delete_category_dialog_title">Delete</string>
     <string name="delete_category_dialog_question">Do you really want to delete the category?</string>
     <string name="delete_category_dialog_delete_button">Delete</string>
+
+    <!-- color dialog -->
+    <string name="category_color_dialog_title">Select color</string>
 </resources>
