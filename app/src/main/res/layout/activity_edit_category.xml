@@ -34,7 +34,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
-            android:hint="Name" />
+            android:hint="@string/edit_category_name_hint" />
     </android.support.design.widget.TextInputLayout>
 
 
@@ -45,6 +45,6 @@
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:layout_marginTop="20dp"
-        android:text="@string/select_color" />
+        android:text="@string/edit_category_select_color" />
 
 </LinearLayout>

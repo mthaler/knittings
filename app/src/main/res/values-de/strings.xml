@@ -65,6 +65,7 @@
     <string name="knitting_details_size">Größe: %1$.1f</string>
     <string name="knitting_details_duration">Dauer: %1$s</string>
     <string name="knitting_details_category">Kategorie: %1$s</string>
+    <string name="knitting_category_hint">Kategorie:</string>
 
     <!-- network error -->
     <string name="network_error_title">Netzwerk Fehler</string>
