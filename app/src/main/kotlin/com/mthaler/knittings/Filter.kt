@@ -11,7 +11,7 @@ interface Filter : Serializable {
     /**
      * Filter the knitting list
      *
-     * @param knitting list
+     * @param knittings knitting list
      * @return filtered knitting list
      */
     fun filter(knittings: List<Knitting>): List<Knitting>
