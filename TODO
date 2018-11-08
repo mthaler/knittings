@@ -1,5 +1,4 @@
 TODO:
-- make sure everything still works if device is rotated
 - make entries in knittings list look nicer
 - make sure everything is translated
 - KnittingDetails view crashes when rotated during taking photos
@@ -16,4 +15,4 @@ TODO:
   * https://stackoverflow.com/questions/20586619/android-viewpager-with-bottom-dots
   * https://stackoverflow.com/questions/38459309/how-do-you-create-an-android-view-pager-with-a-dots-indicator/38459310#38459310
   * https://github.com/ManuelPeinado/NumericPageIndicator
-- Setting the filter to a category, then deleting the category crashes the app when returning to the knitting list
+- check that the delete photo code is correct. See the delete category code for reference

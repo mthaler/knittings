@@ -16,6 +16,7 @@ import java.util.Date
 import android.support.v4.app.Fragment
 import com.mthaler.knittings.model.Category
 import org.jetbrains.anko.error
+import java.lang.Exception
 
 class KnittingsDataSource private constructor(context: Context): AnkoLogger {
 
@@ -609,14 +610,14 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
      */
     @Synchronized
     fun deleteCategory(category: Category) {
+        // get all knittings from the database and remove the category we are going to delete
+        // we need to do this before deleting the category
+        val knittings = allKnittings.filter { it.category == category }
+        for (knitting in knittings) {
+            updateKnitting(knitting.copy(category = null))
+        }
+        debug("Removed category " + category.id + " from " + knittings.size + "knittings")
         dbHelper.writableDatabase.use { database ->
-            // get all knittings from the database and remove the category we are going to delete
-            // we need to do this before deleting the category
-            val knittings = allKnittings.filter { it.category == category }
-            for (knitting in knittings) {
-                updateKnitting(knitting.copy(category = null))
-            }
-            debug("Removed category " + category.id + " from " + knittings.size + "knittings")
             // delete the category
             database.delete(KnittingDatabaseHelper.CategoryTable.CATEGORY, KnittingDatabaseHelper.CategoryTable.Cols.ID + "=" + category.id, null)
             debug("Deleted category " + category.id + ": " + category)
