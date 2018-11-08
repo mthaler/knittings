@@ -1,6 +1,5 @@
 package com.mthaler.knittings.durationpicker
 
-import java.util.Calendar
 import android.content.Context
 import android.os.Parcel
 import android.os.Parcelable
@@ -136,7 +135,7 @@ class DurationPicker @JvmOverloads constructor(context: Context,
 
                 override fun createFromParcel(`in`: Parcel): SavedState = SavedState(`in`)
 
-                override fun newArray(size: Int): Array<SavedState?> = arrayOfNulls<SavedState>(size)
+                override fun newArray(size: Int): Array<SavedState?> = arrayOfNulls(size)
             }
         }
     }

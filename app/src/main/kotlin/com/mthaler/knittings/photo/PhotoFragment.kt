@@ -82,7 +82,7 @@ class PhotoFragment : Fragment(), AnkoLogger {
 
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        inflater?.let { it.inflate(R.menu.photo, menu) }
+        inflater?.inflate(R.menu.photo, menu)
         super.onCreateOptionsMenu(menu, inflater)
     }
 
@@ -110,7 +110,7 @@ class PhotoFragment : Fragment(), AnkoLogger {
             positiveButton(resources.getString(R.string.delete_photo_dialog_delete_button)) {
                 deletePhoto()
                 // close activity
-                activity?.let { it.finish() }
+                activity?.finish()
             }
             negativeButton(resources.getString(R.string.dialog_button_cancel)) {}
         }.show()

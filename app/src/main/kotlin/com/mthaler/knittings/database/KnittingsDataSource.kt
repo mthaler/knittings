@@ -16,7 +16,6 @@ import java.util.Date
 import android.support.v4.app.Fragment
 import com.mthaler.knittings.model.Category
 import org.jetbrains.anko.error
-import java.lang.Exception
 
 class KnittingsDataSource private constructor(context: Context): AnkoLogger {
 
