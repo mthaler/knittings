@@ -19,7 +19,7 @@
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
             app:popupTheme="@style/AppTheme.PopupOverlay"
-            app:title="@string/activity_knitting_details" />
+            app:title="@string/activity_edit_category_name" />
 
     </android.support.design.widget.AppBarLayout>
 

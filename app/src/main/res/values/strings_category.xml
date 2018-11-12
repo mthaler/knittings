@@ -2,6 +2,7 @@
 <!-- string resources for category package -->
 <resources>
     <string name="activity_category_list_name">Categories</string>
+    <string name="activity_edit_category_name">Edit Category</string>
 
     <string name="categories">Categories</string>
     <string name="manage_categories">Manage categories</string>
