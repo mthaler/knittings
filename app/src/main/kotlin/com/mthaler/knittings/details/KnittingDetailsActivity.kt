@@ -29,7 +29,9 @@ class KnittingDetailsActivity : AppCompatActivity(), AnkoLogger, CanTakePhoto {
         setContentView(R.layout.activity_knitting_details)
 
         setSupportActionBar(toolbar)
-        //supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
+        // enable up navigation
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         // get the id of the knitting that should be displayed. If the application was destroyed because e.g. the device configuration changed
         // because the device was rotated we use the knitting id from the saved instance state. Otherwise we use the id passed to the intent

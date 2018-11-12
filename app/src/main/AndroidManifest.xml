@@ -40,11 +40,7 @@
         </activity>
         <activity
             android:name=".photo.PhotoActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".photo.PhotoGalleryActivity" />
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".details.KnittingDetailsActivity"
             android:theme="@style/AppTheme.NoActionBar">
@@ -83,11 +79,23 @@
         </activity>
         <activity
             android:name=".dropbox.DropboxExportActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity" />
+        </activity>
         <activity
             android:name=".dropbox.DropboxImportActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".stopwatch.StopwatchActivity" />
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity" />
+        </activity>
+        <activity android:name=".stopwatch.StopwatchActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".details.KnittingDetailsActivity" />
+        </activity>
         <activity android:name=".category.CategoryListActivity" />
         <activity android:name=".category.EditCategoryActivity"
             android:theme="@style/AppTheme.NoActionBar" />

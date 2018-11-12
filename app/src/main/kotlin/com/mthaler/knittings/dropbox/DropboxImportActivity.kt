@@ -16,6 +16,9 @@ class DropboxImportActivity : AppCompatActivity() {
 
         setSupportActionBar(toolbar)
 
+        // enable up navigation
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
         val f = supportFragmentManager.findFragmentByTag(DropboxImportActivity.DropboxImportFragmentTag)
 
         // If the Fragment is non-null, then it is currently being
