@@ -197,6 +197,8 @@ class EditKnittingDetailsFragment : Fragment() {
         }
     }
 
+    fun getKnittingID(): Long? = knitting?.id
+
     companion object {
         private const val DIALOG_DATE = "date"
         private const val REQUEST_STARTED = 0
