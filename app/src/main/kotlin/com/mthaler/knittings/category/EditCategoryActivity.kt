@@ -26,6 +26,9 @@ class EditCategoryActivity : AppCompatActivity() {
 
         setSupportActionBar(toolbar)
 
+        // enable up navigation
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
         // get the id of the category that should be displayed.
         val id = intent.getLongExtra(EXTRA_CATEGORY_ID, -1L)
         if (id != -1L) {
