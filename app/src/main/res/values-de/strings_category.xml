@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- string resources for category package -->
 <resources>
+    <string name="activity_category_list_name">Kategorien</string>
+
     <string name="categories">Kategorien</string>
     <string name="manage_categories">Kategorien verwalten</string>
     <string name="edit_category_select_color">Farbe auswählen</string>

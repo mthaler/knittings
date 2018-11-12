@@ -100,7 +100,8 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".details.KnittingDetailsActivity" />
         </activity>
-        <activity android:name=".category.CategoryListActivity">
+        <activity android:name=".category.CategoryListActivity"
+            android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />

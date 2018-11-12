@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView
 import com.mthaler.knittings.R
 import com.mthaler.knittings.database.datasource
 import org.jetbrains.anko.startActivity
+import kotlinx.android.synthetic.main.activity_category_list.*
 
 /**
  * CategoryListActivity displays a list of categories. The user can add a new category by clicking
@@ -18,6 +19,11 @@ class CategoryListActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_category_list)
+
+        setSupportActionBar(toolbar)
+
+        // enable up navigation
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         // add new category if the user clicks the floating action button and start the
         // EditCategoryActivity to edit the new category
