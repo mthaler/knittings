@@ -52,7 +52,7 @@ class PhotoActivity : AppCompatActivity(), AnkoLogger {
             if (upIntent == null) {
                 throw IllegalStateException("No Parent Activity Intent")
             } else {
-                upIntent.putExtra(KnittingDetailsActivity.EXTRA_KNITTING_ID, knittingID)
+                upIntent.putExtra(PhotoGalleryActivity.EXTRA_KNITTING_ID, knittingID)
                 NavUtils.navigateUpTo(this, upIntent)
             }
             true
