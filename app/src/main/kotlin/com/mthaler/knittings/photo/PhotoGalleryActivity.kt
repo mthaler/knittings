@@ -4,10 +4,12 @@ import android.app.Activity
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v4.app.NavUtils
 import android.view.Menu
 import android.view.MenuItem
 import com.mthaler.knittings.R
 import com.mthaler.knittings.database.datasource
+import com.mthaler.knittings.details.KnittingDetailsActivity
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.error
 import java.io.File
@@ -59,6 +61,18 @@ class PhotoGalleryActivity : AppCompatActivity(), CanTakePhoto, AnkoLogger {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean = when (item.itemId) {
+        android.R.id.home -> {
+            // Respond to the action bar's Up/Home button
+            val upIntent: Intent? = NavUtils.getParentActivityIntent(this)
+            if (upIntent == null) {
+                throw IllegalStateException("No Parent Activity Intent")
+            } else {
+                upIntent.putExtra(KnittingDetailsActivity.EXTRA_KNITTING_ID, knittingID)
+                NavUtils.navigateUpTo(this, upIntent)
+            }
+            true
+        }
+
         R.id.menu_item_add_photo -> {
             takePhoto(this, layoutInflater, knittingID)
         }
