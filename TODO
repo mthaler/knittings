@@ -1,9 +1,7 @@
 TODO:
-- make entries in knittings list look nicer
 - make sure everything is translated
 - KnittingDetails view crashes when rotated during taking photos
 - Ratings not visible in landscape mode on Nexus One
-- Add categories: Socken, Pullover etc. Make it possible to define different colors for category. Use these colos in knitting list as background
 - Add needle and size to list, similar to Ortovox Bergtouren App
 - use Kotlin Android extensions everywhere instead of findViewById
 - put toolbar in its own file and include it instead of defining it everywhere
@@ -16,3 +14,10 @@ TODO:
   * https://stackoverflow.com/questions/38459309/how-do-you-create-an-android-view-pager-with-a-dots-indicator/38459310#38459310
   * https://github.com/ManuelPeinado/NumericPageIndicator
 - check that the delete photo code is correct. See the delete category code for reference
+- display graphics if knitting list is empty, see:
+  * https://stackoverflow.com/questions/28217436/how-to-show-an-empty-view-with-a-recyclerview
+  * http://akbaribrahim.com/empty-view-for-androids-recyclerview/
+  * https://stackoverflow.com/questions/47417645/empty-view-on-a-recyclerview
+  * https://stackoverflow.com/questions/27414173/equivalent-of-listview-setemptyview-in-recyclerview
+  * http://alexzh.com/tutorials/how-to-setemptyview-to-recyclerview/
+  * https://readyandroid.wordpress.com/how-to-show-an-empty-view-with-a-recyclerview/
