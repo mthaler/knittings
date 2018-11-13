@@ -4,16 +4,21 @@ import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v4.app.NavUtils
+import android.view.Menu
 import android.view.MenuItem
 import com.mthaler.knittings.R
 import com.mthaler.knittings.database.datasource
 import kotlinx.android.synthetic.main.activity_edit_knitting_details.*
 import com.mthaler.knittings.Extras.EXTRA_KNITTING_ID
+import com.mthaler.knittings.photo.CanTakePhoto
+import java.io.File
 
 /**
  * EditKnittingDetailsActivity is used to edit knitting details
  */
-class EditKnittingDetailsActivity : AppCompatActivity() {
+class EditKnittingDetailsActivity : AppCompatActivity(), CanTakePhoto {
+
+    override var currentPhotoPath: File? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,6 +37,12 @@ class EditKnittingDetailsActivity : AppCompatActivity() {
             val knitting = datasource.getKnitting(id)
             fragment.init(knitting)
         }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        menuInflater.inflate(R.menu.edit_knitting_details, menu)
+        return true
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean = when (item.itemId) {

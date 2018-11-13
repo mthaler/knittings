@@ -9,10 +9,6 @@ TODO:
 - Add take photo button to edit knitting details activity
 - Add support for deleting categories, make sure the category is also removed from the knittings
 - Add support for rotating photos
-- Add dots / page indicator to photo view pager:
-  * https://stackoverflow.com/questions/20586619/android-viewpager-with-bottom-dots
-  * https://stackoverflow.com/questions/38459309/how-do-you-create-an-android-view-pager-with-a-dots-indicator/38459310#38459310
-  * https://github.com/ManuelPeinado/NumericPageIndicator
 - check that the delete photo code is correct. See the delete category code for reference
 - display graphics if knitting list is empty, see:
   * https://stackoverflow.com/questions/28217436/how-to-show-an-empty-view-with-a-recyclerview
