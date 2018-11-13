@@ -2,9 +2,13 @@ package com.mthaler.knittings.details
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v4.content.ContextCompat
+import android.support.v4.view.ViewPager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.LinearLayout
 import com.mthaler.knittings.photo.ImageAdapter
 import com.mthaler.knittings.R
 import com.mthaler.knittings.database.datasource
@@ -35,9 +39,38 @@ class KnittingDetailsFragment : Fragment(), AnkoLogger {
                 view_pager.visibility = View.VISIBLE
                 val adapter = ImageAdapter(context!!, photos) //Here we are defining the Imageadapter object
                 view_pager.adapter = adapter // Here we are passing and setting the adapter for the images
+
+                val dotscount = adapter.count
+                val dots = arrayOfNulls<ImageView>(dotscount)
+                for (i in 0 .. dotscount - 1) {
+                    dots[i] = ImageView(context)
+                    dots[i]!!.setImageDrawable(ContextCompat.getDrawable(context!!.applicationContext, R.drawable.non_active_dot))
+                    val params = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+                    params.setMargins(8, 0, 8, 0)
+                    sliderDots.addView(dots[i], params)
+                }
+                dots[0]!!.setImageDrawable(ContextCompat.getDrawable(context!!.applicationContext, R.drawable.active_dot))
+                view_pager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
+                    override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
+
+                    }
+
+                    override fun onPageSelected(position: Int) {
+
+                        for (i in 0 until dotscount) {
+                            dots[i]!!.setImageDrawable(ContextCompat.getDrawable(context!!.applicationContext, R.drawable.non_active_dot))
+                        }
+
+                        dots[position]!!.setImageDrawable(ContextCompat.getDrawable(context!!.applicationContext, R.drawable.active_dot))
+
+                    }
+
+                    override fun onPageScrollStateChanged(state: Int) {}
+                })
             } else {
                 view_pager.visibility = View.GONE
             }
+
 
             knitting_title.text = knitting.title
             knitting_description.text = knitting.description

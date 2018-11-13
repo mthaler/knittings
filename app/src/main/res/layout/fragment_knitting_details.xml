@@ -12,12 +12,21 @@
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
+
             <android.support.v4.view.ViewPager
                 android:id="@+id/view_pager"
                 android:layout_width="match_parent"
                 android:layout_height="200dp" />
+
+            <LinearLayout
+                android:id="@+id/sliderDots"
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal|bottom"
+                android:layout_marginBottom="8dp"/>
         </FrameLayout>
-        
+
         <TextView
             android:id="@+id/knitting_title"
             android:layout_width="match_parent"
