@@ -1,5 +1,6 @@
 package com.mthaler.knittings.details
 
+import android.app.Activity
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
@@ -42,6 +43,26 @@ class EditKnittingDetailsActivity : AppCompatActivity(), CanTakePhoto {
             fragment.init(knitting)
             knittingID = id
         }
+
+        // restore current photo path
+        if (savedInstanceState != null && savedInstanceState.containsKey(CURRENT_PHOTO_PATH)) {
+            currentPhotoPath = File(savedInstanceState.getString(CURRENT_PHOTO_PATH))
+        }
+    }
+
+    /**
+     * This method is called if the activity gets destroyed because e.g. the device configuration changes because the device is rotated
+     * We need to store instance variables because they are not automatically restored
+     *
+     * @param savedInstanceState saved instance state
+     */
+    override fun onSaveInstanceState(savedInstanceState: Bundle) {
+        savedInstanceState.putLong(EXTRA_KNITTING_ID, knittingID)
+        val p = currentPhotoPath
+        if (p != null) {
+            savedInstanceState.putString(CURRENT_PHOTO_PATH, p.absolutePath)
+        }
+        super.onSaveInstanceState(savedInstanceState)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -67,6 +88,22 @@ class EditKnittingDetailsActivity : AppCompatActivity(), CanTakePhoto {
             startActivity<PhotoGalleryActivity>(EXTRA_KNITTING_ID to knittingID)
             true
         }
+        R.id.menu_item_add_photo -> {
+            takePhoto(this, layoutInflater, knittingID)
+        }
         else -> super.onOptionsItemSelected(item)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (resultCode != Activity.RESULT_OK) {
+            return
+        }
+        if (requestCode == CanTakePhoto.REQUEST_IMAGE_CAPTURE || requestCode == CanTakePhoto.REQUEST_IMAGE_IMPORT) {
+            onActivityResult(this, knittingID, requestCode, resultCode, data)
+        }
+    }
+
+    companion object {
+        const val CURRENT_PHOTO_PATH = "com.mthaler.knitting.CURRENT_PHOTO_PATH"
     }
 }
