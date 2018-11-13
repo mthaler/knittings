@@ -33,6 +33,9 @@ class KnittingDetailsFragment : Fragment(), AnkoLogger {
      */
     fun init(knitting: Knitting) {
         view?.let {
+            // remove slider dots and on page changed listener. We readd it if we need it
+            sliderDots.removeAllViews()
+            view_pager.clearOnPageChangeListeners()
             view_pager.offscreenPageLimit = 3
             val photos = datasource.getAllPhotos(knitting)
             if (photos.size > 0) {
@@ -40,35 +43,39 @@ class KnittingDetailsFragment : Fragment(), AnkoLogger {
                 val adapter = ImageAdapter(context!!, photos) //Here we are defining the Imageadapter object
                 view_pager.adapter = adapter // Here we are passing and setting the adapter for the images
 
+
                 val dotscount = adapter.count
-                // create array of dots that are displayed at the bottom of the photo
-                val dots = (0 .. dotscount - 1).map {
-                    val dot = ImageView(context)
-                    dot.setImageDrawable(ContextCompat.getDrawable(context!!.applicationContext, R.drawable.non_active_dot))
-                    val params = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT)
-                    params.setMargins(8, 0, 8, 0)
-                    sliderDots.addView(dot, params)
-                    dot
-                }.toTypedArray()
-                // make the first dot active
-                dots[0].setImageDrawable(ContextCompat.getDrawable(context!!.applicationContext, R.drawable.active_dot))
-                view_pager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
 
-                    override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {}
+                if (photos.size > 1)  {
+                    // create array of dots that are displayed at the bottom of the photo
+                    val dots = (0 .. dotscount - 1).map {
+                        val dot = ImageView(context)
+                        dot.setImageDrawable(ContextCompat.getDrawable(context!!.applicationContext, R.drawable.non_active_dot))
+                        val params = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+                        params.setMargins(8, 0, 8, 0)
+                        sliderDots.addView(dot, params)
+                        dot
+                    }.toTypedArray()
+                    // make the first dot active
+                    dots[0].setImageDrawable(ContextCompat.getDrawable(context!!.applicationContext, R.drawable.active_dot))
+                    view_pager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
 
-                    override fun onPageSelected(position: Int) {
-                        context?.let {
-                            for (i in 0 until dotscount) {
-                                dots[i].setImageDrawable(ContextCompat.getDrawable(it.applicationContext, R.drawable.non_active_dot))
+                        override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {}
+
+                        override fun onPageSelected(position: Int) {
+                            context?.let {
+                                for (i in 0 until dotscount) {
+                                    dots[i].setImageDrawable(ContextCompat.getDrawable(it.applicationContext, R.drawable.non_active_dot))
+                                }
+                                // mark the dot for the selected page as active
+                                dots[position].setImageDrawable(ContextCompat.getDrawable(it.applicationContext, R.drawable.active_dot))
                             }
-                            // mark the dot for the selected page as active
-                            dots[position].setImageDrawable(ContextCompat.getDrawable(it.applicationContext, R.drawable.active_dot))
+
                         }
 
-                    }
-
-                    override fun onPageScrollStateChanged(state: Int) {}
-                })
+                        override fun onPageScrollStateChanged(state: Int) {}
+                    })
+                }
             } else {
                 view_pager.visibility = View.GONE
             }
