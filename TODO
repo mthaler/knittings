@@ -21,3 +21,4 @@ TODO:
   * https://stackoverflow.com/questions/27414173/equivalent-of-listview-setemptyview-in-recyclerview
   * http://alexzh.com/tutorials/how-to-setemptyview-to-recyclerview/
   * https://readyandroid.wordpress.com/how-to-show-an-empty-view-with-a-recyclerview/
+- When creating a new category and going back using up nagivation, the category is gone
