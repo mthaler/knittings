@@ -11,6 +11,8 @@ import com.mthaler.knittings.database.datasource
 import kotlinx.android.synthetic.main.activity_edit_knitting_details.*
 import com.mthaler.knittings.Extras.EXTRA_KNITTING_ID
 import com.mthaler.knittings.photo.CanTakePhoto
+import com.mthaler.knittings.photo.PhotoGalleryActivity
+import org.jetbrains.anko.startActivity
 import java.io.File
 
 /**
@@ -18,6 +20,8 @@ import java.io.File
  */
 class EditKnittingDetailsActivity : AppCompatActivity(), CanTakePhoto {
 
+    // id of the displayed knitting
+    private var knittingID: Long = -1
     override var currentPhotoPath: File? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,6 +40,7 @@ class EditKnittingDetailsActivity : AppCompatActivity(), CanTakePhoto {
             val fragment = supportFragmentManager.findFragmentById(R.id.fragment_edit_knitting_details) as EditKnittingDetailsFragment
             val knitting = datasource.getKnitting(id)
             fragment.init(knitting)
+            knittingID = id
         }
     }
 
@@ -56,6 +61,10 @@ class EditKnittingDetailsActivity : AppCompatActivity(), CanTakePhoto {
                 fragment.getKnittingID()?.let { upIntent.putExtra(EXTRA_KNITTING_ID, it) }
                 NavUtils.navigateUpTo(this, upIntent)
             }
+            true
+        }
+        R.id.menu_item_show_gallery -> {
+            startActivity<PhotoGalleryActivity>(EXTRA_KNITTING_ID to knittingID)
             true
         }
         else -> super.onOptionsItemSelected(item)
