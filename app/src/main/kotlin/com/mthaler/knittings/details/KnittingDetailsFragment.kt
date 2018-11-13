@@ -50,19 +50,20 @@ class KnittingDetailsFragment : Fragment(), AnkoLogger {
                     sliderDots.addView(dot, params)
                     dot
                 }.toTypedArray()
+                // make the first dot active
                 dots[0].setImageDrawable(ContextCompat.getDrawable(context!!.applicationContext, R.drawable.active_dot))
                 view_pager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
-                    override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
 
-                    }
+                    override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {}
 
                     override fun onPageSelected(position: Int) {
-
-                        for (i in 0 until dotscount) {
-                            dots[i].setImageDrawable(ContextCompat.getDrawable(context!!.applicationContext, R.drawable.non_active_dot))
+                        context?.let {
+                            for (i in 0 until dotscount) {
+                                dots[i].setImageDrawable(ContextCompat.getDrawable(it.applicationContext, R.drawable.non_active_dot))
+                            }
+                            // mark the dot for the selected page as active
+                            dots[position].setImageDrawable(ContextCompat.getDrawable(it.applicationContext, R.drawable.active_dot))
                         }
-
-                        dots[position].setImageDrawable(ContextCompat.getDrawable(context!!.applicationContext, R.drawable.active_dot))
 
                     }
 
