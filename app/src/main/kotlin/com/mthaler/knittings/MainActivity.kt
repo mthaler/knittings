@@ -22,6 +22,7 @@ import com.mthaler.knittings.details.EditKnittingDetailsActivity
 import com.mthaler.knittings.details.KnittingDetailsActivity
 import com.mthaler.knittings.model.Knitting
 import java.util.*
+import com.mthaler.knittings.Extras.EXTRA_KNITTING_ID
 
 /**
  * The main activity that gets displayed when the app is started.
@@ -44,7 +45,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         fab_create_add_knitting.setOnClickListener {
             // start knitting activity with newly created knitting
             val knitting = datasource.createKnitting("", "", Date(), null, 0.0, 0.0, 0.0)
-            startActivity<EditKnittingDetailsActivity>(EditKnittingDetailsActivity.EXTRA_KNITTING_ID to knitting.id)
+            startActivity<EditKnittingDetailsActivity>(EXTRA_KNITTING_ID to knitting.id)
         }
 
         val toggle = ActionBarDrawerToggle(
@@ -187,7 +188,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         // start EditCategoryActivity if the users clicks on a category
         val adapter = KnittingAdapter(this, filtered, object : OnItemClickListener {
             override fun onItemClick(item: Knitting) {
-                startActivity<KnittingDetailsActivity>(KnittingDetailsActivity.EXTRA_KNITTING_ID to item.id)
+                startActivity<KnittingDetailsActivity>(EXTRA_KNITTING_ID to item.id)
             }
         })
         rv.adapter = adapter

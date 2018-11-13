@@ -15,6 +15,7 @@ import android.view.MenuItem
 import com.android.colorpicker.ColorPickerDialog
 import kotlinx.android.synthetic.main.activity_edit_category.*
 import org.jetbrains.anko.alert
+import com.mthaler.knittings.Extras.EXTRA_CATEGORY_ID
 
 class EditCategoryActivity : AppCompatActivity() {
 
@@ -116,8 +117,6 @@ class EditCategoryActivity : AppCompatActivity() {
     }
 
     companion object {
-        const val EXTRA_CATEGORY_ID = "com.mthaler.knitting.CATEGORY_ID"
-
         val COLORS = arrayOf("#F6402C", "#EB1460", "#9C1AB1", "#6633B9", "#3D4DB7", "#1093F5", "#00A6F6", "#00BBD5", "#009687", "#46AF4A",
                 "#88C440", "#CCDD1E", "#FFEC16", "#FFC100", "#FF9800", "#FF5505", "#7A5547", "#9D9D9D", "#5E7C8B").map { Color.parseColor(it) }.toIntArray()
     }

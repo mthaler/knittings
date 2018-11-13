@@ -8,6 +8,7 @@ import android.view.MenuItem
 import com.mthaler.knittings.R
 import com.mthaler.knittings.database.datasource
 import kotlinx.android.synthetic.main.activity_edit_knitting_details.*
+import com.mthaler.knittings.Extras.EXTRA_KNITTING_ID
 
 /**
  * EditKnittingDetailsActivity is used to edit knitting details
@@ -41,15 +42,11 @@ class EditKnittingDetailsActivity : AppCompatActivity() {
                 throw IllegalStateException("No Parent Activity Intent")
             } else {
                 val fragment = supportFragmentManager.findFragmentById(R.id.fragment_edit_knitting_details) as EditKnittingDetailsFragment
-                fragment.getKnittingID()?.let { upIntent.putExtra(KnittingDetailsActivity.EXTRA_KNITTING_ID, it) }
+                fragment.getKnittingID()?.let { upIntent.putExtra(EXTRA_KNITTING_ID, it) }
                 NavUtils.navigateUpTo(this, upIntent)
             }
             true
         }
         else -> super.onOptionsItemSelected(item)
-    }
-
-    companion object {
-        const val EXTRA_KNITTING_ID = "com.mthaler.knitting.KNITTING_ID"
     }
 }

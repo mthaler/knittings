@@ -7,8 +7,9 @@ import android.support.v4.app.NavUtils
 import android.view.MenuItem
 import com.mthaler.knittings.R
 import com.mthaler.knittings.database.datasource
-import com.mthaler.knittings.details.KnittingDetailsActivity
 import org.jetbrains.anko.AnkoLogger
+import com.mthaler.knittings.Extras.EXTRA_KNITTING_ID
+import com.mthaler.knittings.Extras.EXTRA_PHOTO_ID
 import kotlinx.android.synthetic.main.activity_photo.*
 
 /**
@@ -52,16 +53,11 @@ class PhotoActivity : AppCompatActivity(), AnkoLogger {
             if (upIntent == null) {
                 throw IllegalStateException("No Parent Activity Intent")
             } else {
-                upIntent.putExtra(PhotoGalleryActivity.EXTRA_KNITTING_ID, knittingID)
+                upIntent.putExtra(EXTRA_KNITTING_ID, knittingID)
                 NavUtils.navigateUpTo(this, upIntent)
             }
             true
         }
         else -> super.onOptionsItemSelected(item)
-    }
-
-    companion object {
-        const val EXTRA_PHOTO_ID = "com.mthaler.knitting.PHOTO_ID"
-        const val EXTRA_KNITTING_ID = "com.mthaler.knitting.KNITTING_ID"
     }
 }

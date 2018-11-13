@@ -14,6 +14,7 @@ import com.mthaler.knittings.model.Photo
 import com.mthaler.knittings.utils.PictureUtils
 import org.jetbrains.anko.*
 import org.jetbrains.anko.support.v4.alert
+import com.mthaler.knittings.Extras.EXTRA_PHOTO_ID
 
 /**
  * PhotoFragment displays a photo and the description
@@ -146,7 +147,6 @@ class PhotoFragment : Fragment(), AnkoLogger {
 
 
     companion object {
-        private const val EXTRA_PHOTO_ID = "com.mthaler.knittings.photo_id"
 
         fun newInstance(photoID: Long): PhotoFragment {
             val bundle = Bundle()

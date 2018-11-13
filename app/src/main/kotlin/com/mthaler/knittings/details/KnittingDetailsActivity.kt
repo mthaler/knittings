@@ -13,6 +13,7 @@ import com.mthaler.knittings.database.datasource
 import com.mthaler.knittings.stopwatch.StopwatchActivity
 import org.jetbrains.anko.*
 import java.io.File
+import com.mthaler.knittings.Extras.EXTRA_KNITTING_ID
 import kotlinx.android.synthetic.main.activity_knitting_details.*
 
 /**
@@ -39,7 +40,7 @@ class KnittingDetailsActivity : AppCompatActivity(), AnkoLogger, CanTakePhoto {
         if (id != -1L) {
             // start edit knitting details fragment if the user clicks the floating action button
             edit_knitting_details.setOnClickListener {
-                startActivity<EditKnittingDetailsActivity>(EditKnittingDetailsActivity.EXTRA_KNITTING_ID to id)
+                startActivity<EditKnittingDetailsActivity>(EXTRA_KNITTING_ID to id)
             }
             knittingID = id
         } else {
@@ -85,11 +86,11 @@ class KnittingDetailsActivity : AppCompatActivity(), AnkoLogger, CanTakePhoto {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.menu_item_show_stopwatch -> {
-                startActivity<StopwatchActivity>(StopwatchActivity.EXTRA_KNITTING_ID to knittingID)
+                startActivity<StopwatchActivity>(EXTRA_KNITTING_ID to knittingID)
                 return true
             }
             R.id.menu_item_show_gallery -> {
-                startActivity<PhotoGalleryActivity>(PhotoGalleryActivity.EXTRA_KNITTING_ID to knittingID)
+                startActivity<PhotoGalleryActivity>(EXTRA_KNITTING_ID to knittingID)
                 return true
             }
             R.id.menu_item_add_photo -> {
@@ -131,7 +132,6 @@ class KnittingDetailsActivity : AppCompatActivity(), AnkoLogger, CanTakePhoto {
     }
 
     companion object {
-        const val EXTRA_KNITTING_ID = "com.mthaler.knitting.KNITTING_ID"
         const val CURRENT_PHOTO_PATH = "com.mthaler.knitting.CURRENT_PHOTO_PATH"
     }
 }

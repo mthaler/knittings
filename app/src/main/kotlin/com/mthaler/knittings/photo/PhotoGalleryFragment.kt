@@ -14,6 +14,8 @@ import com.mthaler.knittings.model.Knitting
 import com.mthaler.knittings.model.Photo
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.debug
+import com.mthaler.knittings.Extras.EXTRA_KNITTING_ID
+import com.mthaler.knittings.Extras.EXTRA_PHOTO_ID
 
 /**
  * A fragment that displays a list of photos using a grid
@@ -29,8 +31,8 @@ class PhotoGalleryFragment : Fragment(), AnkoLogger {
         val v = inflater.inflate(R.layout.fragment_photo_gallery, container, false)
 
         if (savedInstanceState != null) {
-            if (savedInstanceState.containsKey(KNITTING_ID)) {
-                knitting = datasource.getKnitting(savedInstanceState.getLong(KNITTING_ID))
+            if (savedInstanceState.containsKey(EXTRA_KNITTING_ID)) {
+                knitting = datasource.getKnitting(savedInstanceState.getLong(EXTRA_KNITTING_ID))
                 debug("Set knitting: $knitting")
             }
         }
@@ -56,7 +58,7 @@ class PhotoGalleryFragment : Fragment(), AnkoLogger {
     override fun onSaveInstanceState(outState: Bundle) {
         val k = knitting
         if (k != null) {
-            outState.putLong(KNITTING_ID, k.id)
+            outState.putLong(EXTRA_KNITTING_ID, k.id)
         }
         super.onSaveInstanceState(outState)
     }
@@ -69,12 +71,7 @@ class PhotoGalleryFragment : Fragment(), AnkoLogger {
         gridView.onItemClickListener = AdapterView.OnItemClickListener { parent, v, position, id ->
             // photo clicked, show photo in photo activity
             val photo = parent.getItemAtPosition(position) as Photo
-            startActivity<PhotoActivity>(PhotoActivity.EXTRA_PHOTO_ID to photo.id, PhotoActivity.EXTRA_KNITTING_ID to knitting.id)
+            startActivity<PhotoActivity>(EXTRA_PHOTO_ID to photo.id, EXTRA_KNITTING_ID to knitting.id)
         }
-    }
-
-    companion object : AnkoLogger {
-
-        private const val KNITTING_ID = "knitting_id"
     }
 }

@@ -9,10 +9,10 @@ import android.view.Menu
 import android.view.MenuItem
 import com.mthaler.knittings.R
 import com.mthaler.knittings.database.datasource
-import com.mthaler.knittings.details.KnittingDetailsActivity
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.error
 import java.io.File
+import com.mthaler.knittings.Extras.EXTRA_KNITTING_ID
 import kotlinx.android.synthetic.main.activity_photo_gallery.*
 
 class PhotoGalleryActivity : AppCompatActivity(), CanTakePhoto, AnkoLogger {
@@ -67,7 +67,7 @@ class PhotoGalleryActivity : AppCompatActivity(), CanTakePhoto, AnkoLogger {
             if (upIntent == null) {
                 throw IllegalStateException("No Parent Activity Intent")
             } else {
-                upIntent.putExtra(KnittingDetailsActivity.EXTRA_KNITTING_ID, knittingID)
+                upIntent.putExtra(EXTRA_KNITTING_ID, knittingID)
                 NavUtils.navigateUpTo(this, upIntent)
             }
             true
@@ -86,9 +86,5 @@ class PhotoGalleryActivity : AppCompatActivity(), CanTakePhoto, AnkoLogger {
         if (requestCode == CanTakePhoto.REQUEST_IMAGE_CAPTURE || requestCode == CanTakePhoto.REQUEST_IMAGE_IMPORT) {
             onActivityResult(this, knittingID, requestCode, resultCode, data)
         }
-    }
-
-    companion object {
-        const val EXTRA_KNITTING_ID = "com.mthaler.knitting.KNITTING_ID"
     }
 }

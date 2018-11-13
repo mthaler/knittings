@@ -10,7 +10,7 @@ import android.view.View
 import android.widget.TextView
 import com.mthaler.knittings.R
 import com.mthaler.knittings.database.datasource
-import com.mthaler.knittings.details.KnittingDetailsActivity
+import com.mthaler.knittings.Extras.EXTRA_KNITTING_ID
 import java.util.*
 
 /**
@@ -93,15 +93,11 @@ class StopwatchActivity : AppCompatActivity() {
             if (upIntent == null) {
                 throw IllegalStateException("No Parent Activity Intent")
             } else {
-                upIntent.putExtra(KnittingDetailsActivity.EXTRA_KNITTING_ID, knittingID)
+                upIntent.putExtra(EXTRA_KNITTING_ID, knittingID)
                 NavUtils.navigateUpTo(this, upIntent)
             }
             true
         }
         else -> super.onOptionsItemSelected(item)
-    }
-
-    companion object {
-        val EXTRA_KNITTING_ID = "com.mthaler.knitting.KNITTING_ID"
     }
 }

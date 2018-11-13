@@ -9,6 +9,7 @@ import android.view.View
 import com.mthaler.knittings.R
 import com.mthaler.knittings.database.datasource
 import org.jetbrains.anko.startActivity
+import com.mthaler.knittings.Extras.EXTRA_CATEGORY_ID
 import kotlinx.android.synthetic.main.activity_category_list.*
 
 /**
@@ -31,7 +32,7 @@ class CategoryListActivity : AppCompatActivity() {
         val fab = findViewById<FloatingActionButton>(R.id.fab_create_category)
         fab.setOnClickListener { v -> run {
             val category = datasource.createCategory("category", null)
-            startActivity<EditCategoryActivity>(EditCategoryActivity.EXTRA_CATEGORY_ID to category.id)
+            startActivity<EditCategoryActivity>(EXTRA_CATEGORY_ID to category.id)
         } }
 
         val rv = findViewById<RecyclerView>(R.id.category_recycler_view)
@@ -62,7 +63,7 @@ class CategoryListActivity : AppCompatActivity() {
             category_recycler_view.visibility = View.VISIBLE
         }
         // start EditCategoryActivity if the users clicks on a category
-        val adapter = CategoryAdapter(this, categories, OnItemClickListener { item -> startActivity<EditCategoryActivity>(EditCategoryActivity.EXTRA_CATEGORY_ID to item!!.id) })
+        val adapter = CategoryAdapter(this, categories, OnItemClickListener { item -> startActivity<EditCategoryActivity>(EXTRA_CATEGORY_ID to item!!.id) })
         rv.adapter = adapter
     }
 }
