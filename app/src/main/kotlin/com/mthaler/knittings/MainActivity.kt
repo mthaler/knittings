@@ -10,6 +10,7 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import com.mthaler.knittings.about.AboutDialog
 import com.mthaler.knittings.category.CategoryListActivity
 import com.mthaler.knittings.dropbox.DropboxExportActivity
@@ -23,6 +24,7 @@ import com.mthaler.knittings.details.KnittingDetailsActivity
 import com.mthaler.knittings.model.Knitting
 import java.util.*
 import com.mthaler.knittings.Extras.EXTRA_KNITTING_ID
+import kotlinx.android.synthetic.main.content_main.*
 
 /**
  * The main activity that gets displayed when the app is started.
@@ -179,6 +181,13 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private fun updateKnittingList() {
         val rv = findViewById<RecyclerView>(R.id.knitting_recycler_view)
         val knittings = datasource.allKnittings
+        if (knittings.isEmpty()) {
+            knitting_list_empty_recycler_view.visibility = View.VISIBLE
+            knitting_recycler_view.visibility = View.GONE
+        } else {
+            knitting_list_empty_recycler_view.visibility = View.GONE
+            knitting_recycler_view.visibility = View.VISIBLE
+        }
         when(sorting) {
             Sorting.NewestFirst -> knittings.sortByDescending { it.started}
             Sorting.OldestFirst -> knittings.sortBy { it.started }
