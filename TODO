@@ -16,3 +16,11 @@ TODO:
   * http://alexzh.com/tutorials/how-to-setemptyview-to-recyclerview/
   * https://readyandroid.wordpress.com/how-to-show-an-empty-view-with-a-recyclerview/
 - When creating a new category and going back using up nagivation, the category is gone
+- Knitting Details Activity: add option to display / edit categories
+- Make it possible to select projects that should have a category: show list with checkboxes
+- Size: allow 40/42 (we need a second size)
+- Update the application icon, it is hard to see if there is a background image
+- Started / finished: date is next to started, but below finished on some devices
+- Zähler für fertige Projekte, der sich z.B. jährlich auf null setzen lässt. Damit man schauen kann, wie viel man im Jahr geschafft hat. Könnte für einige interessant sein, viele zählen ihre Socken durch. Vielleicht auch so, dass man pro Kategorie zählen kann. Oder einfach alles insgesamt. Die diskutieren noch.
+- Strickreihenzähler
+- Improve the visibility of the dots showing that there is more then one photo
