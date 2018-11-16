@@ -15,7 +15,7 @@
    viewBox="0 0 328.12498 328.125"
    sodipodi:version="0.32"
    version="1.0"
-   inkscape:version="0.92.1 r15371"
+   inkscape:version="0.92.3 (2405546, 2018-03-11)"
    width="350"
    height="350"
    enable-background="new"><sodipodi:namedview
@@ -28,10 +28,10 @@
      inkscape:window-x="0"
      borderopacity="1.0"
      inkscape:current-layer="Layer_1"
-     inkscape:cx="204.65902"
-     inkscape:cy="149.24412"
+     inkscape:cx="126.28807"
+     inkscape:cy="202.2273"
      inkscape:window-y="0"
-     inkscape:window-height="1141"
+     inkscape:window-height="1015"
      inkscape:pageopacity="0.0"
      showgrid="false"
      inkscape:window-maximized="1" /><defs
@@ -77,7 +77,7 @@
          in="fbSourceGraphic"
          operator="over"
          result="composite2" /></filter></defs><rect
-     style="fill:#ffb72c;fill-opacity:1;stroke-width:0.93749994;filter:url(#filter4538)"
+     style="fill:#ffb7bf;fill-opacity:1;stroke-width:0.93749994;filter:url(#filter4538)"
      id="rect4532"
      width="328.98743"
      height="335.92218"
