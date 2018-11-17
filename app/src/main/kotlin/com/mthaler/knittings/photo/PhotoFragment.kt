@@ -97,6 +97,9 @@ class PhotoFragment : Fragment(), AnkoLogger {
                 setDefaultPhoto()
                 true
             }
+            R.id.menu_item_rotate_photo -> {
+                true
+            }
             else -> super.onOptionsItemSelected(item)
         }
     }
