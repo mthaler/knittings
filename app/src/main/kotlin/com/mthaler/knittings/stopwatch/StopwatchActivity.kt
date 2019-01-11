@@ -37,7 +37,8 @@ class StopwatchActivity : AppCompatActivity() {
             error("Could not get knitting id")
         }
         if (savedInstanceState != null) {
-            elapsedTime = savedInstanceState.getLong(EXTRA_STOPWATCH_ELAPSED_TIME)
+            val t = savedInstanceState.getLong(EXTRA_STOPWATCH_ACTIVITY_STOPPED_TIME)
+            elapsedTime = savedInstanceState.getLong(EXTRA_STOPWATCH_ELAPSED_TIME) + (System.currentTimeMillis() - t)
             running = savedInstanceState.getBoolean(EXTRA_STOPWATCH_RUNNING)
         }
         runTimer()
@@ -46,6 +47,7 @@ class StopwatchActivity : AppCompatActivity() {
     override fun onSaveInstanceState(outState: Bundle) {
         outState.putLong(EXTRA_KNITTING_ID, knittingID)
         outState.putLong(EXTRA_STOPWATCH_ELAPSED_TIME, elapsedTime)
+        outState.putLong(EXTRA_STOPWATCH_ACTIVITY_STOPPED_TIME, System.currentTimeMillis())
         outState.putBoolean(EXTRA_STOPWATCH_RUNNING, running)
         super.onSaveInstanceState(outState)
     }
@@ -109,7 +111,7 @@ class StopwatchActivity : AppCompatActivity() {
 
     companion object {
         val EXTRA_STOPWATCH_RUNNING = "com.mthaler.knitting.STOPWATCH_RUNNING"
-        val EXTRA_STOPWATCH_ELAPSED_TIME = "com.mthaler.knitting.ELAPSED_TIME"
-        val EXTRA_STOPWATCH_TIME = "com.mthaler.knitting.TIME"
+        val EXTRA_STOPWATCH_ELAPSED_TIME = "com.mthaler.knitting.STOPWATCH_ELAPSED_TIME"
+        val EXTRA_STOPWATCH_ACTIVITY_STOPPED_TIME = "com.mthaler.knitting.STOPWATCH_ACTIVITY_STOPPED_TIME"
     }
 }
