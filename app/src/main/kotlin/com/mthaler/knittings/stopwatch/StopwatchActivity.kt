@@ -27,6 +27,7 @@ class StopwatchActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_stopwatch)
 
+        // get the knitting for the stopwatch
         val id = if (savedInstanceState != null) savedInstanceState.getLong(EXTRA_KNITTING_ID) else intent.getLongExtra(EXTRA_KNITTING_ID, -1L)
         if (id != -1L) {
             knittingID = id
@@ -36,7 +37,7 @@ class StopwatchActivity : AppCompatActivity() {
         }
         if (savedInstanceState != null) {
             seconds = savedInstanceState.getLong("seconds")
-            running = savedInstanceState.getBoolean("running")
+            running = savedInstanceState.getBoolean(EXTRA_STOPWATCH_RUNNING)
         }
         runTimer()
     }
@@ -44,7 +45,7 @@ class StopwatchActivity : AppCompatActivity() {
     override fun onSaveInstanceState(outState: Bundle) {
         outState.putLong(EXTRA_KNITTING_ID, knittingID)
         outState.putLong("seconds", seconds)
-        outState.putBoolean("running", running)
+        outState.putBoolean(EXTRA_STOPWATCH_RUNNING, running)
         super.onSaveInstanceState(outState)
     }
 
@@ -99,5 +100,9 @@ class StopwatchActivity : AppCompatActivity() {
             true
         }
         else -> super.onOptionsItemSelected(item)
+    }
+
+    companion object {
+        val EXTRA_STOPWATCH_RUNNING = "com.mthaler.knitting.STOPWATCH_RUNNING"
     }
 }
