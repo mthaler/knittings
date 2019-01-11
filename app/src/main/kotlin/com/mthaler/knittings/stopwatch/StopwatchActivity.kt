@@ -55,13 +55,14 @@ class StopwatchActivity : AppCompatActivity() {
     //Start the stopwatch running when the Start button is clicked.
     fun onClickStart(view: View) {
         running = true
+        previousTime = System.currentTimeMillis()
     }
 
     //Stop the stopwatch running when the Stop button is clicked.
     fun onClickStop(view: View) {
         running = false
         val knitting = datasource.getKnitting(knittingID)
-        datasource.updateKnitting(knitting.copy(duration = elapsedTime * 1000))
+        datasource.updateKnitting(knitting.copy(duration = elapsedTime))
 
     }
 
