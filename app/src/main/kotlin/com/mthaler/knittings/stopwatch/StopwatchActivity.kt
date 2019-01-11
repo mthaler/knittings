@@ -19,7 +19,8 @@ import java.util.*
 class StopwatchActivity : AppCompatActivity() {
 
     private var knittingID: Long = -1
-    private var seconds = 0L
+    private var elapsedTime = 0L
+    private var previousTime = 0L
     private var running = false
 
 
@@ -31,12 +32,12 @@ class StopwatchActivity : AppCompatActivity() {
         val id = if (savedInstanceState != null) savedInstanceState.getLong(EXTRA_KNITTING_ID) else intent.getLongExtra(EXTRA_KNITTING_ID, -1L)
         if (id != -1L) {
             knittingID = id
-            seconds = datasource.getKnitting(knittingID).duration / 1000
+            elapsedTime = datasource.getKnitting(knittingID).duration
         } else {
             error("Could not get knitting id")
         }
         if (savedInstanceState != null) {
-            seconds = savedInstanceState.getLong("seconds")
+            elapsedTime = savedInstanceState.getLong(EXTRA_STOPWATCH_ELAPSED_TIME)
             running = savedInstanceState.getBoolean(EXTRA_STOPWATCH_RUNNING)
         }
         runTimer()
@@ -44,7 +45,7 @@ class StopwatchActivity : AppCompatActivity() {
 
     override fun onSaveInstanceState(outState: Bundle) {
         outState.putLong(EXTRA_KNITTING_ID, knittingID)
-        outState.putLong("seconds", seconds)
+        outState.putLong(EXTRA_STOPWATCH_ELAPSED_TIME, elapsedTime)
         outState.putBoolean(EXTRA_STOPWATCH_RUNNING, running)
         super.onSaveInstanceState(outState)
     }
@@ -58,30 +59,34 @@ class StopwatchActivity : AppCompatActivity() {
     fun onClickStop(view: View) {
         running = false
         val knitting = datasource.getKnitting(knittingID)
-        datasource.updateKnitting(knitting.copy(duration = seconds * 1000))
+        datasource.updateKnitting(knitting.copy(duration = elapsedTime * 1000))
 
     }
 
     fun onClickDiscard(view: View) {
         running = false
-        seconds = 0
+        elapsedTime = 0
         finish()
     }
 
     private fun runTimer() {
+        previousTime = System.currentTimeMillis()
         val timeView = findViewById<TextView>(R.id.time_view)
         val handler = Handler()
         handler.post(object : Runnable {
             override fun run() {
-                val hours = seconds / 3600
-                val minutes = seconds % 3600 / 60
-                val secs = seconds % 60
+                val totalSeconds = elapsedTime / 1000
+                val hours = totalSeconds / 3600
+                val minutes = totalSeconds % 3600 / 60
+                val secs = totalSeconds % 60
                 val time = String.format(Locale.getDefault(), "%d:%02d:%02d", hours, minutes, secs)
                 timeView.text = time
                 if (running) {
-                    seconds++
+                    val t = System.currentTimeMillis()
+                    elapsedTime += (t - previousTime)
+                    previousTime = t
                 }
-                handler.postDelayed(this, 1000)
+                handler.postDelayed(this, 500)
 
             }
         })
@@ -104,5 +109,7 @@ class StopwatchActivity : AppCompatActivity() {
 
     companion object {
         val EXTRA_STOPWATCH_RUNNING = "com.mthaler.knitting.STOPWATCH_RUNNING"
+        val EXTRA_STOPWATCH_ELAPSED_TIME = "com.mthaler.knitting.ELAPSED_TIME"
+        val EXTRA_STOPWATCH_TIME = "com.mthaler.knitting.TIME"
     }
 }
