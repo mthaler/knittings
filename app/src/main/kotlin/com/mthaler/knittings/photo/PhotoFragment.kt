@@ -100,6 +100,9 @@ class PhotoFragment : Fragment(), AnkoLogger {
             R.id.menu_item_rotate_photo -> {
                 true
             }
+            R.id.menu_item_share -> {
+                true
+            }
             else -> super.onOptionsItemSelected(item)
         }
     }
