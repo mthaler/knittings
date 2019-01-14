@@ -1,5 +1,7 @@
 package com.mthaler.knittings.photo
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
@@ -101,6 +103,12 @@ class PhotoFragment : Fragment(), AnkoLogger {
                 true
             }
             R.id.menu_item_share -> {
+                photo?.let {
+                    val shareIntent = Intent(Intent.ACTION_SEND)
+                    shareIntent.setType("image/jpg")
+                    shareIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(it.filename))
+                    startActivity(Intent.createChooser(shareIntent, "Share image using"))
+                }
                 true
             }
             else -> super.onOptionsItemSelected(item)
