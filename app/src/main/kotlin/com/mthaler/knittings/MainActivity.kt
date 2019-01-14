@@ -24,6 +24,7 @@ import com.mthaler.knittings.details.KnittingDetailsActivity
 import com.mthaler.knittings.model.Knitting
 import java.util.*
 import com.mthaler.knittings.Extras.EXTRA_KNITTING_ID
+import com.mthaler.knittings.settings.SettingsActivity
 import kotlinx.android.synthetic.main.content_main.*
 
 /**
@@ -168,6 +169,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
             R.id.nav_edit_categories -> {
                 startActivity<CategoryListActivity>()
+            }
+            R.id.nav_edit_settings -> {
+                //startActivity<SettingsActivity>()
             }
         }
 
