@@ -20,5 +20,11 @@
                 android:title="@string/manage_categories" />
         </menu>
     </item>
-
+    <item android:title="@string/settings">
+        <menu>
+            <item
+                android:id="@+id/nav_edit_settings"
+                android:title="@string/edit_settings" />
+        </menu>
+    </item>
 </menu>
