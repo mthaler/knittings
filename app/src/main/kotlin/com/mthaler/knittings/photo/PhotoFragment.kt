@@ -1,8 +1,12 @@
 package com.mthaler.knittings.photo
 
+import android.content.Intent
+import android.graphics.Bitmap
+import android.net.Uri
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
+import android.support.v4.content.FileProvider
 import android.text.Editable
 import android.view.*
 import android.widget.EditText
@@ -15,6 +19,9 @@ import com.mthaler.knittings.utils.PictureUtils
 import org.jetbrains.anko.*
 import org.jetbrains.anko.support.v4.alert
 import com.mthaler.knittings.Extras.EXTRA_PHOTO_ID
+import java.io.File
+import java.io.FileOutputStream
+import java.io.IOException
 
 /**
  * PhotoFragment displays a photo and the description
@@ -100,6 +107,15 @@ class PhotoFragment : Fragment(), AnkoLogger {
             R.id.menu_item_rotate_photo -> {
                 true
             }
+            R.id.menu_item_share -> {
+                photo?.let {
+                    val path = it.filename.absolutePath
+                    val scaled = PictureUtils.decodeSampledBitmapFromPath(path, 800, 800)
+                    val uri = saveImage(scaled)
+                    uri?.let { shareImageUri(it) }
+                }
+                true
+            }
             else -> super.onOptionsItemSelected(item)
         }
     }
@@ -148,6 +164,41 @@ class PhotoFragment : Fragment(), AnkoLogger {
         }
     }
 
+    /**
+     * Saves the image as PNG to the app's cache directory.
+     * @param image Bitmap to save.
+     * @return Uri of the saved file or null
+     */
+    private fun saveImage(image: Bitmap): Uri? {
+        //TODO - Should be processed in another thread
+        val imagesFolder = File(context!!.getCacheDir(), "images");
+        var uri: Uri? = null;
+        try {
+            imagesFolder.mkdirs();
+            val file = File(imagesFolder, "shared_image.jpg");
+
+            val stream = FileOutputStream(file);
+            image.compress(Bitmap.CompressFormat.JPEG, 90, stream);
+            stream.flush()
+            stream.close()
+            uri = FileProvider.getUriForFile(context!!, "com.mthaler.knittings.fileprovider", file);
+        } catch (e: IOException) {
+            error("IOException while trying to write file for sharing: " + e.message)
+        }
+        return uri;
+    }
+
+    /**
+     * Shares the PNG image from Uri.
+     * @param uri Uri of image to share.
+     */
+    private fun shareImageUri(uri: Uri) {
+        val intent = Intent(android.content.Intent.ACTION_SEND);
+        intent.putExtra(Intent.EXTRA_STREAM, uri);
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        intent.setType("image/png");
+        startActivity(intent);
+    }
 
     companion object {
 

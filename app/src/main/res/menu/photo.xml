@@ -15,4 +15,8 @@
         android:id="@+id/menu_item_set_main_photo"
         android:title="@string/set_main_photo"
         app:showAsAction="never|withText"/>
+    <item
+        android:id="@+id/menu_item_share"
+        android:title="Share"
+        app:showAsAction="never" />
 </menu>
