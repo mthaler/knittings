@@ -6,4 +6,5 @@
     <string name="delete_photo">Foto löschen</string>
     <string name="set_main_photo">Als Vorschau verwenden</string>
     <string name="rotate_photo">Rotieren</string>
+    <string name="share_photo">Teilen</string>
 </resources>
