@@ -33,7 +33,7 @@ class DurationPicker @JvmOverloads constructor(context: Context,
                                                defStyle: Int = 0) : FrameLayout(context, attrs, defStyle) {
 
     // state
-    private var currentHours = 0 // 0-23
+    private var currentHours = 0 // 0-9999
     private var currentMinutes = 0 // 0-59
     private var currentSeconds = 0 // 0-59
 
@@ -72,6 +72,8 @@ class DurationPicker @JvmOverloads constructor(context: Context,
 
         // hour
         hourPicker = findViewById(R.id.hour)
+        hourPicker.minValue = 0
+        hourPicker.maxValue = 9999
         hourPicker.setOnValueChangedListener { picker, oldVal, newVal ->
             currentHours = newVal
             onTimeChanged()
@@ -96,13 +98,6 @@ class DurationPicker @JvmOverloads constructor(context: Context,
             currentSeconds = newVal
             onTimeChanged()
         }
-
-        // am/pm
-        //mAmPmButton = (Button) findViewById(R.id.amPm);
-
-        // now that the hour/minute picker objects have been initialized, set
-        // the hour range properly based on the 12/24 hour display mode.
-        configurePickerRanges()
 
         // initialize to current time
         setOnDurationChangedListener(NO_OP_CHANGE_LISTENER)
@@ -201,12 +196,6 @@ class DurationPicker @JvmOverloads constructor(context: Context,
         val currentHour = currentHours
         hourPicker.value = currentHour
         onTimeChanged()
-    }
-
-    private fun configurePickerRanges() {
-        hourPicker.minValue = 0
-        hourPicker.maxValue = 23
-        hourPicker.setFormatter(TWO_DIGIT_FORMATTER)
     }
 
     private fun onTimeChanged() {
