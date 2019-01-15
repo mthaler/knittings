@@ -18,7 +18,7 @@ abstract class AbstractDropboxFragment : Fragment(), AnkoLogger {
 
         val ctx = context
         if (ctx != null) {
-            // get the access token from shared preferences
+            // get the access token from shared pref_sharing
             val prefs = ctx.getSharedPreferences(SharedPreferencesName, AppCompatActivity.MODE_PRIVATE)
             var accessToken = prefs.getString("access-token", null)
             if (accessToken == null) {
@@ -52,7 +52,7 @@ abstract class AbstractDropboxFragment : Fragment(), AnkoLogger {
     protected abstract fun loadData(onError: (Exception) -> Unit)
 
     protected fun onLoadDataError(ex: Exception) {
-        // delete auth token from shared preferences
+        // delete auth token from shared pref_sharing
         context?.let {
             val prefs = it.getSharedPreferences(AbstractDropboxFragment.SharedPreferencesName, AppCompatActivity.MODE_PRIVATE)
             val editor = prefs.edit()

@@ -22,6 +22,7 @@ import com.mthaler.knittings.Extras.EXTRA_PHOTO_ID
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
+import android.preference.PreferenceManager
 
 /**
  * PhotoFragment displays a photo and the description
@@ -110,7 +111,9 @@ class PhotoFragment : Fragment(), AnkoLogger {
             R.id.menu_item_share -> {
                 photo?.let {
                     val path = it.filename.absolutePath
-                    val scaled = PictureUtils.decodeSampledBitmapFromPath(path, 800, 800)
+                    val prefs = PreferenceManager.getDefaultSharedPreferences(activity)
+                    val size = Integer.parseInt(prefs.getString("share_photo_size", "1200"))
+                    val scaled = PictureUtils.decodeSampledBitmapFromPath(path, size, size)
                     val uri = saveImage(scaled)
                     uri?.let { shareImageUri(it) }
                 }

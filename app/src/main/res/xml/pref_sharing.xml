@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     <EditTextPreference
+        android:defaultValue="1200"
+        android:inputType="number"
         android:key="share_photo_size"
         android:summary="Size of shared photos"
         android:title="Size of shared photos" />
