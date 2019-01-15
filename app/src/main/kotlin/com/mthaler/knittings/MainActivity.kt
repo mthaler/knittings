@@ -171,7 +171,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 startActivity<CategoryListActivity>()
             }
             R.id.nav_edit_settings -> {
-                //startActivity<SettingsActivity>()
+                startActivity<SettingsActivity>()
             }
         }
 
