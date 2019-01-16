@@ -71,6 +71,7 @@
 
     <string name="sort">Sort</string>
     <string name="filter">Filter</string>
+    <string name="count">Count</string>
 
     <string name="edit_knitting_details_category">Category</string>
 </resources>

@@ -154,6 +154,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 dialog.show()
                 true
             }
+            R.id.menu_item_count -> {
+                startActivity<ProjectCountActivity>()
+                true
+            }
             else -> super.onOptionsItemSelected(item)
         }
     }
