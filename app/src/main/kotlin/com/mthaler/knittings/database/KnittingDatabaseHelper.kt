@@ -19,7 +19,7 @@ class KnittingDatabaseHelper(context: Context) : ManagedSQLiteOpenHelper(context
         } catch (_: ClassNotFoundException) {
             "knittings.db"
         }
-        private val DB_VERSION = 2
+        val DB_VERSION = 2
 
         private var instance: KnittingDatabaseHelper? = null
 

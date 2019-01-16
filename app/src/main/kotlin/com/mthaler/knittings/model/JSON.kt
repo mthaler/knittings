@@ -1,6 +1,7 @@
 package com.mthaler.knittings.model
 
 import android.graphics.Color
+import com.mthaler.knittings.database.KnittingDatabaseHelper
 import com.mthaler.knittings.utils.ColorUtils
 import org.json.JSONObject
 import java.text.SimpleDateFormat
@@ -164,6 +165,7 @@ fun categoriesToJSON(categories: List<Category>): JSONArray {
  */
 fun Database.toJSON(): JSONObject {
     val result = JSONObject()
+    result.put("version", KnittingDatabaseHelper.DB_VERSION)
     result.put("knittings", knittingsToJSON(knittings))
     result.put("photos", photosToJSON(photos))
     result.put("categories", categoriesToJSON(categories))
