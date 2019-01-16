@@ -47,11 +47,11 @@ class KnittingAdapter(val context: Context, val knittings: List<Knitting>, priva
      * @param itemView item view
      */
     inner class ViewHolder(val context: Context, itemView: View): RecyclerView.ViewHolder(itemView){
-        val titleTextView = itemView.findViewById<TextView>(R.id.knitting_list_item_titleTextView)
-        val descriptionTextView = itemView.findViewById<TextView>(R.id.knitting_list_item_descriptionTextView)
-        val startedTextView = itemView.findViewById<TextView>(R.id.knitting_list_item_startedTextView)
-        val photoView = itemView.findViewById<ImageView>(R.id.knitting_list_item_photoImageView)
-        val categoryIndicator = itemView.findViewById<CategoryIndicator>(R.id.knitting_list_item_categoryIndicator)
+        private val titleTextView = itemView.findViewById<TextView>(R.id.knitting_list_item_titleTextView)
+        private val descriptionTextView = itemView.findViewById<TextView>(R.id.knitting_list_item_descriptionTextView)
+        private val startedTextView = itemView.findViewById<TextView>(R.id.knitting_list_item_startedTextView)
+        private val photoView = itemView.findViewById<ImageView>(R.id.knitting_list_item_photoImageView)
+        private val categoryIndicator = itemView.findViewById<CategoryIndicator>(R.id.knitting_list_item_categoryIndicator)
 
         init {
             itemView.setOnClickListener { v -> listener.onItemClick(knittings[adapterPosition] ) }

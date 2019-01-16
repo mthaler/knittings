@@ -174,7 +174,7 @@ class PhotoFragment : Fragment(), AnkoLogger {
      */
     private fun saveImage(image: Bitmap): Uri? {
         //TODO - Should be processed in another thread
-        val imagesFolder = File(context!!.getCacheDir(), "images");
+        val imagesFolder = File(context!!.cacheDir, "images");
         var uri: Uri? = null;
         try {
             imagesFolder.mkdirs();
@@ -199,7 +199,7 @@ class PhotoFragment : Fragment(), AnkoLogger {
         val intent = Intent(android.content.Intent.ACTION_SEND);
         intent.putExtra(Intent.EXTRA_STREAM, uri);
         intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-        intent.setType("image/png");
+        intent.type = "image/png";
         startActivity(intent);
     }
 
