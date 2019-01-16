@@ -8,7 +8,7 @@
         app:showAsAction="ifRoom|withText"/>
     <item
         android:id="@+id/menu_item_rotate_photo"
-        android:icon="@drawable/ic_action_rotate_right"
+        android:icon="@drawable/ic_rotate_right_white_36dp"
         android:title="@string/rotate_photo"
         app:showAsAction="ifRoom|withText"/>
     <item
