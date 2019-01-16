@@ -26,6 +26,7 @@
     <string name="activity_edit_knitting_details">Edit Knitting Details</string>
     <string name="activity_photo_gallery">Galerie</string>
     <string name="activity_photo">Edit Photo</string>
+    <string name="activity_project_count">Projekte Zählen</string>
 
     <!-- knittings list -->
     <string name="knittings_title">Strickereien</string>
