@@ -10,6 +10,7 @@ import java.util.*
 import android.widget.Spinner
 import android.widget.TextView
 import com.mthaler.knittings.database.datasource
+import com.mthaler.knittings.model.Knitting
 
 class ProjectCountActivity : AppCompatActivity() {
 
@@ -22,25 +23,14 @@ class ProjectCountActivity : AppCompatActivity() {
         // enable up navigation
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
+        // get all knittings from database
         val knittings = datasource.allKnittings
-        knittings.sortBy { it.started }
-        val oldest = knittings.firstOrNull()
+
+        val years = createYearsList(knittings)
+        val categoryNames = createCategoryNamesList()
 
         val textViewProjectCount = findViewById<TextView>(R.id.projectCount)
 
-        val years = ArrayList<String>()
-        val thisYear = Calendar.getInstance().get(Calendar.YEAR)
-        if (oldest != null) {
-            val c = Calendar.getInstance()
-            c.time = oldest.started
-            for (i in c.get(Calendar.YEAR)..thisYear) {
-                years.add(Integer.toString(i))
-            }
-        } else {
-            years.add(Integer.toString(thisYear))
-        }
-        years.add("All")
-        years.reverse()
         val yearAdapter = ArrayAdapter(this, R.layout.my_spinner, years)
         val spinYear = findViewById<Spinner>(R.id.year_spinner)
         spinYear.adapter = yearAdapter
@@ -63,9 +53,6 @@ class ProjectCountActivity : AppCompatActivity() {
             }
         }
 
-        val categories = datasource.allCategories
-        categories.sortedBy { it.name }
-        val categoryNames = listOf(getString(R.string.filter_show_all)) + categories.map { it.name }.toList()
         val categoryAdapter = ArrayAdapter(this, R.layout.my_spinner, categoryNames)
         val spinCategory = findViewById<Spinner>(R.id.category_spinner)
         spinCategory.adapter = categoryAdapter
@@ -83,5 +70,36 @@ class ProjectCountActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    /**
+     * Creates a list of years starting with the year of the oldest knitting until the current year
+     * All is added as the first element of the list
+     *
+     * @param knittings list of all knittings
+     * @return list of years
+     */
+    private fun createYearsList(knittings: List<Knitting>): List<String> {
+        val oldest = knittings.minBy { it.started.time }
+        val years = ArrayList<String>()
+        val thisYear = Calendar.getInstance().get(Calendar.YEAR)
+        if (oldest != null) {
+            val c = Calendar.getInstance()
+            c.time = oldest.started
+            for (i in c.get(Calendar.YEAR)..thisYear) {
+                years.add(Integer.toString(i))
+            }
+        } else {
+            years.add(Integer.toString(thisYear))
+        }
+        years.add("All")
+        years.reverse()
+        return years
+    }
+
+    private fun createCategoryNamesList(): List<String> {
+        val categories = datasource.allCategories
+        categories.sortBy { it.name }
+        return listOf(getString(R.string.filter_show_all)) + categories.map { it.name }.toList()
     }
 }
