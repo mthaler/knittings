@@ -19,4 +19,8 @@
 
     <style name="ButtonStyle" parent="Widget.AppCompat.Button.Colored" />
 
+    <style name="MySpinnerLook"
+        parent="@android:style/Widget.TextView.SpinnerItem">
+        <item name="android:textSize">30sp</item>
+    </style>
 </resources>

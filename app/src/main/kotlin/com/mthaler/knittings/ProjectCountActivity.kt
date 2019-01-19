@@ -35,7 +35,7 @@ class ProjectCountActivity : AppCompatActivity() {
             years.add(Integer.toString(thisYear))
         }
         years.reverse()
-        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, years)
+        val adapter = ArrayAdapter(this, R.layout.my_spinner, years)
         val spinYear = findViewById(R.id.year_spinner) as Spinner
         spinYear.setAdapter(adapter)
     }
