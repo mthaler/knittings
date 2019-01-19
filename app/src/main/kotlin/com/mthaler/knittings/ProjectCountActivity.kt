@@ -26,7 +26,7 @@ class ProjectCountActivity : AppCompatActivity() {
         knittings.sortBy { it.started }
         val oldest = knittings.firstOrNull()
 
-        val textViewProjectCount = findViewById(R.id.projectCount) as TextView
+        val textViewProjectCount = findViewById<TextView>(R.id.projectCount)
 
         val years = ArrayList<String>()
         val thisYear = Calendar.getInstance().get(Calendar.YEAR)
@@ -42,8 +42,8 @@ class ProjectCountActivity : AppCompatActivity() {
         years.add("All")
         years.reverse()
         val yearAdapter = ArrayAdapter(this, R.layout.my_spinner, years)
-        val spinYear = findViewById(R.id.year_spinner) as Spinner
-        spinYear.setAdapter(yearAdapter)
+        val spinYear = findViewById<Spinner>(R.id.year_spinner)
+        spinYear.adapter = yearAdapter
         spinYear.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(parent: AdapterView<*>?) {
             }
@@ -67,8 +67,8 @@ class ProjectCountActivity : AppCompatActivity() {
         categories.sortedBy { it.name }
         val categoryNames = listOf(getString(R.string.filter_show_all)) + categories.map { it.name }.toList()
         val categoryAdapter = ArrayAdapter(this, R.layout.my_spinner, categoryNames)
-        val spinCategory = findViewById(R.id.category_spinner) as Spinner
-        spinCategory.setAdapter(categoryAdapter)
+        val spinCategory = findViewById<Spinner>(R.id.category_spinner)
+        spinCategory.adapter = categoryAdapter
         spinCategory.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(parent: AdapterView<*>?) {
             }

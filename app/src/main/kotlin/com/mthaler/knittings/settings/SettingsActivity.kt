@@ -97,13 +97,12 @@ class SettingsActivity : AppCompatPreferenceActivity() {
             if (preference is ListPreference) {
                 // For list pref_sharing, look up the correct display value in
                 // the preference's 'entries' list.
-                val listPreference = preference
-                val index = listPreference.findIndexOfValue(stringValue)
+                val index = preference.findIndexOfValue(stringValue)
 
                 // Set the summary to reflect the new value.
                 preference.setSummary(
                         if (index >= 0)
-                            listPreference.entries[index]
+                            preference.entries[index]
                         else
                             null)
 

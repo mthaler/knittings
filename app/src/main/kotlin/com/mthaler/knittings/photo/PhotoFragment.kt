@@ -174,21 +174,21 @@ class PhotoFragment : Fragment(), AnkoLogger {
      */
     private fun saveImage(image: Bitmap): Uri? {
         //TODO - Should be processed in another thread
-        val imagesFolder = File(context!!.cacheDir, "images");
-        var uri: Uri? = null;
+        val imagesFolder = File(context!!.cacheDir, "images")
+        var uri: Uri? = null
         try {
-            imagesFolder.mkdirs();
-            val file = File(imagesFolder, "shared_image.jpg");
+            imagesFolder.mkdirs()
+            val file = File(imagesFolder, "shared_image.jpg")
 
-            val stream = FileOutputStream(file);
-            image.compress(Bitmap.CompressFormat.JPEG, 90, stream);
+            val stream = FileOutputStream(file)
+            image.compress(Bitmap.CompressFormat.JPEG, 90, stream)
             stream.flush()
             stream.close()
-            uri = FileProvider.getUriForFile(context!!, "com.mthaler.knittings.fileprovider", file);
+            uri = FileProvider.getUriForFile(context!!, "com.mthaler.knittings.fileprovider", file)
         } catch (e: IOException) {
             error("IOException while trying to write file for sharing: " + e.message)
         }
-        return uri;
+        return uri
     }
 
     /**
@@ -196,11 +196,11 @@ class PhotoFragment : Fragment(), AnkoLogger {
      * @param uri Uri of image to share.
      */
     private fun shareImageUri(uri: Uri) {
-        val intent = Intent(android.content.Intent.ACTION_SEND);
-        intent.putExtra(Intent.EXTRA_STREAM, uri);
-        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-        intent.type = "image/png";
-        startActivity(intent);
+        val intent = Intent(android.content.Intent.ACTION_SEND)
+        intent.putExtra(Intent.EXTRA_STREAM, uri)
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+        intent.type = "image/png"
+        startActivity(intent)
     }
 
     companion object {
