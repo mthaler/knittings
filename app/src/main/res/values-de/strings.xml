@@ -7,7 +7,6 @@
     <!-- navigation drawer (dropbox export, categories etc.) -->
     <string name="navigation_drawer_open">Navigationsleiste öffnen</string>
     <string name="navigation_drawer_close">Navigationsleiste schließen</string>
-    <string name="navigation_drawer_header_export">Exportieren</string>
 
     <!-- generic dialog strings -->
     <string name="dialog_button_ok">OK</string>

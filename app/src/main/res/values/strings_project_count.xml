@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="project_count_year">Year:</string>
+    <string name="project_count_category">Category:</string>
+</resources>
