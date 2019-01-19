@@ -30,42 +30,32 @@ class ProjectCountActivity : AppCompatActivity() {
         val categoryNames = createCategoryNamesList()
 
         val textViewProjectCount = findViewById<TextView>(R.id.projectCount)
+        val spinYear = findViewById<Spinner>(R.id.year_spinner)
+        val spinCategory = findViewById<Spinner>(R.id.category_spinner)
 
         val yearAdapter = ArrayAdapter(this, R.layout.my_spinner, years)
-        val spinYear = findViewById<Spinner>(R.id.year_spinner)
         spinYear.adapter = yearAdapter
         spinYear.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-            }
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
 
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                if (position == 0) {
-                    textViewProjectCount.text = Integer.toString(knittings.size)
-                } else {
-                    val year = Integer.parseInt(years[position])
-                    textViewProjectCount.text = Integer.toString(knittings.count {
-                        val c = Calendar.getInstance()
-                        c.time = it.started
-                        year == c.get(Calendar.YEAR)
-                    })
-                }
+                val year = if (position == 0) null else Integer.parseInt(years[position])
+                val p = spinCategory.selectedItemPosition
+                val categoryName = if (p == 0) null else categoryNames[p]
+                textViewProjectCount.text = Integer.toString(getProjectCount(knittings, year, categoryName))
             }
         }
 
         val categoryAdapter = ArrayAdapter(this, R.layout.my_spinner, categoryNames)
-        val spinCategory = findViewById<Spinner>(R.id.category_spinner)
         spinCategory.adapter = categoryAdapter
         spinCategory.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-            }
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
 
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                if (position == 0) {
-                    textViewProjectCount.text = Integer.toString(knittings.size)
-                } else {
-                    val categoryName = categoryNames[position]
-                    textViewProjectCount.text = Integer.toString(knittings.count { it.category != null && it.category.name == categoryName })
-                }
+                val p = spinYear.selectedItemPosition
+                val year = if (p == 0) null else Integer.parseInt(years[p])
+                val categoryName = if (position == 0) null else categoryNames[position]
+                textViewProjectCount.text = Integer.toString(getProjectCount(knittings, year, categoryName))
             }
         }
     }
