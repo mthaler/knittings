@@ -119,7 +119,7 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
      * @return new knitting
      */
     @Synchronized
-    fun createKnitting(title: String, description: String, started: Date, finished: Date?, needleDiameter: Double, size: Double, rating: Double): Knitting {
+    fun createKnitting(title: String, description: String, started: Date, finished: Date?, needleDiameter: String, size: String, rating: Double): Knitting {
         debug("Creating knitting, title: " + title + ", description: " + description + ", started: " + started + ", finished: " +
                 finished + ", needle diameter: " + needleDiameter + ", size: " + size + ", rating: " + rating)
         dbHelper.writableDatabase.use { database ->

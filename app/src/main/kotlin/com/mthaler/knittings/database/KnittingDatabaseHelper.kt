@@ -19,7 +19,7 @@ class KnittingDatabaseHelper(context: Context) : ManagedSQLiteOpenHelper(context
         } catch (_: ClassNotFoundException) {
             "knittings.db"
         }
-        val DB_VERSION = 2
+        val DB_VERSION = 3
 
         private var instance: KnittingDatabaseHelper? = null
 
@@ -62,8 +62,8 @@ class KnittingDatabaseHelper(context: Context) : ManagedSQLiteOpenHelper(context
                     Cols.DESCRIPTION to TEXT + NOT_NULL,
                     Cols.STARTED to INTEGER + NOT_NULL + DEFAULT("0"),
                     Cols.FINISHED to INTEGER,
-                    Cols.NEEDLE_DIAMETER to REAL + NOT_NULL + DEFAULT("0.0"),
-                    Cols.SIZE to REAL + NOT_NULL + DEFAULT("0.0"),
+                    Cols.NEEDLE_DIAMETER to TEXT + NOT_NULL + DEFAULT("0.0"),
+                    Cols.SIZE to TEXT + NOT_NULL + DEFAULT("0.0"),
                     Cols.DEFAULT_PHOTO_ID to INTEGER,
                     Cols.RATING to REAL + NOT_NULL + DEFAULT("0.0"),
                     Cols.DURATION to INTEGER + NOT_NULL + DEFAULT("0"),
@@ -147,7 +147,7 @@ class KnittingDatabaseHelper(context: Context) : ManagedSQLiteOpenHelper(context
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
-        if (oldVersion < 2) {
+        if (oldVersion == 1) {
             info("Updating knitting table from $oldVersion to $newVersion")
             db.execSQL(KnittingTable.SQL_ADD_DURATION)
             info("Added duration colomn to knitting table")
