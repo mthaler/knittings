@@ -3,12 +3,9 @@ package com.mthaler.knittings
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
-import android.widget.AdapterView
+import android.widget.*
 import kotlinx.android.synthetic.main.activity_project_count.*
-import android.widget.ArrayAdapter
 import java.util.*
-import android.widget.Spinner
-import android.widget.TextView
 import com.mthaler.knittings.database.datasource
 import com.mthaler.knittings.model.Knitting
 
@@ -32,6 +29,7 @@ class ProjectCountActivity : AppCompatActivity() {
         val textViewProjectCount = findViewById<TextView>(R.id.projectCount)
         val spinYear = findViewById<Spinner>(R.id.year_spinner)
         val spinCategory = findViewById<Spinner>(R.id.category_spinner)
+        val progressBarCircle = findViewById<ProgressBar>(R.id.progressBarCircle)
 
         val yearAdapter = ArrayAdapter(this, R.layout.my_spinner, years)
         spinYear.adapter = yearAdapter
@@ -42,7 +40,10 @@ class ProjectCountActivity : AppCompatActivity() {
                 val year = if (position == 0) null else Integer.parseInt(years[position])
                 val p = spinCategory.selectedItemPosition
                 val categoryName = if (p == 0) null else categoryNames[p]
-                textViewProjectCount.text = Integer.toString(getProjectCount(knittings, year, categoryName))
+                val projectCount = getProjectCount(knittings, year, categoryName)
+                textViewProjectCount.text = Integer.toString(projectCount)
+                val percent = 100 * projectCount / knittings.size
+                progressBarCircle.progress = percent
             }
         }
 
@@ -55,7 +56,10 @@ class ProjectCountActivity : AppCompatActivity() {
                 val p = spinYear.selectedItemPosition
                 val year = if (p == 0) null else Integer.parseInt(years[p])
                 val categoryName = if (position == 0) null else categoryNames[position]
-                textViewProjectCount.text = Integer.toString(getProjectCount(knittings, year, categoryName))
+                val projectCount = getProjectCount(knittings, year, categoryName)
+                textViewProjectCount.text = Integer.toString(projectCount)
+                val percent = 100 * projectCount / knittings.size
+                progressBarCircle.progress = percent
             }
         }
     }
