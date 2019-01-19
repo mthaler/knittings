@@ -116,7 +116,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="16dp"
                     android:layout_marginRight="16dp"
-                    android:inputType="numberDecimal"
+                    android:inputType="text"
                     android:hint="@string/knitting_needle_diameter_hint" />
             </android.support.design.widget.TextInputLayout>
 
@@ -132,7 +132,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="16dp"
                     android:layout_marginRight="16dp"
-                    android:inputType="numberDecimal"
+                    android:inputType="text"
                     android:editable="false"
                     android:hint="@string/knitting_size_hint" />
             </android.support.design.widget.TextInputLayout>

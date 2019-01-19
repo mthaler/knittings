@@ -154,10 +154,10 @@ class EditKnittingDetailsFragment : Fragment() {
             textViewFinished.text = if (knitting.finished != null) DateFormat.getDateInstance().format(knitting.finished) else ""
 
             val editTextNeedleDiameter = v.findViewById<EditText>(R.id.knitting_needle_diameter)
-            editTextNeedleDiameter.setText(String.format(Locale.ROOT, "%.1f", knitting.needleDiameter))
+            editTextNeedleDiameter.setText(knitting.needleDiameter)
 
             val editTextSize = v.findViewById<EditText>(R.id.knitting_size)
-            editTextSize.setText(String.format(Locale.ROOT, "%.1f", knitting.size))
+            editTextSize.setText(knitting.size)
 
             textViewDuration.text = TimeUtils.formatDuration(knitting.duration)
 
