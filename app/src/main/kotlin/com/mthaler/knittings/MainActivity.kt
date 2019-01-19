@@ -155,6 +155,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 true
             }
             R.id.menu_item_count -> {
+                val builder = AlertDialog.Builder(this)
                 startActivity<ProjectCountActivity>()
                 true
             }

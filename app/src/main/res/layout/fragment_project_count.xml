@@ -9,13 +9,15 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp">
 
         <ProgressBar
             android:id="@+id/progressBarCircle"
             style="?android:attr/progressBarStyleHorizontal"
-            android:layout_width="270dp"
-            android:layout_height="270dp"
+            android:layout_width="250dp"
+            android:layout_height="250dp"
             android:layout_centerInParent="true"
             android:background="@drawable/drawable_circle_progress_background"
             android:indeterminate="false"
