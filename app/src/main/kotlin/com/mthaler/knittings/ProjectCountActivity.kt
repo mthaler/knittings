@@ -105,4 +105,34 @@ class ProjectCountActivity : AppCompatActivity() {
         categories.sortBy { it.name }
         return listOf(getString(R.string.filter_show_all)) + categories.map { it.name }.toList()
     }
+
+    companion object {
+
+        /**
+         * Gets the project count for the given year and category name
+         *
+         * @param knittings list of all knittings
+         * @param year year to get the project count for or null for all years
+         * @param categoryName name of the category to get the project count for or null for all categories
+         */
+        private fun getProjectCount(knittings: List<Knitting>, year: Int?, categoryName: String?): Int {
+            if (year == null && categoryName == null) {
+                return knittings.size
+            } else if (year != null && categoryName == null) {
+                return knittings.count {
+                    val c = Calendar.getInstance()
+                    c.time = it.started
+                    year == c.get(Calendar.YEAR)
+                }
+            } else if (year == null && categoryName != null) {
+                return knittings.count { it.category != null && it.category.name == categoryName }
+            } else {
+                return knittings.count {
+                    val c = Calendar.getInstance()
+                    c.time = it.started
+                    year == c.get(Calendar.YEAR) && it.category != null && it.category.name == categoryName
+                }
+            }
+        }
+    }
 }
