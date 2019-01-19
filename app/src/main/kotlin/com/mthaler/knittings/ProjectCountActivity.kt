@@ -39,7 +39,6 @@ class ProjectCountActivity : AppCompatActivity() {
             }
 
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                val knittings = datasource.allKnittings
                 if (position == 0) {
                     textViewProjectCount.text = Integer.toString(knittings.size)
                 } else {
@@ -61,7 +60,6 @@ class ProjectCountActivity : AppCompatActivity() {
             }
 
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                val knittings = datasource.allKnittings
                 if (position == 0) {
                     textViewProjectCount.text = Integer.toString(knittings.size)
                 } else {
@@ -97,6 +95,11 @@ class ProjectCountActivity : AppCompatActivity() {
         return years
     }
 
+    /**
+     * Creates a list of categories. All is added as the first element of the list
+     *
+     * @return list of categories
+     */
     private fun createCategoryNamesList(): List<String> {
         val categories = datasource.allCategories
         categories.sortBy { it.name }
