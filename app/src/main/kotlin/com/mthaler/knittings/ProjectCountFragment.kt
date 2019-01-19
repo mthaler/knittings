@@ -1,24 +1,24 @@
 package com.mthaler.knittings
 
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v4.app.Fragment
+import android.view.LayoutInflater
 import android.view.View
-import android.widget.*
-import kotlinx.android.synthetic.main.activity_project_count.*
-import java.util.*
+import android.view.ViewGroup
+import android.widget.ProgressBar
+import android.widget.Spinner
+import android.widget.TextView
 import com.mthaler.knittings.database.datasource
 import com.mthaler.knittings.model.Knitting
+import org.jetbrains.anko.AnkoLogger
+import java.util.*
 
-class ProjectCountActivity : AppCompatActivity() {
+class ProjectCountFragment : Fragment(), AnkoLogger {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_project_count)
-
-        setSupportActionBar(toolbar)
-
-        // enable up navigation
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
+                              savedInstanceState: Bundle?): View? {
+        // Inflate the layout for this fragment
+        val v = inflater.inflate(R.layout.fragment_project_count, container, false)
 
         // get all knittings from database
         val knittings = datasource.allKnittings
@@ -26,42 +26,12 @@ class ProjectCountActivity : AppCompatActivity() {
         val years = createYearsList(knittings)
         val categoryNames = createCategoryNamesList()
 
-        val textViewProjectCount = findViewById<TextView>(R.id.projectCount)
-        val spinYear = findViewById<Spinner>(R.id.year_spinner)
-        val spinCategory = findViewById<Spinner>(R.id.category_spinner)
-        val progressBarCircle = findViewById<ProgressBar>(R.id.progressBarCircle)
+        val textViewProjectCount = v.findViewById<TextView>(R.id.projectCount)
+        val spinYear = v.findViewById<Spinner>(R.id.year_spinner)
+        val spinCategory = v.findViewById<Spinner>(R.id.category_spinner)
+        val progressBarCircle = v.findViewById<ProgressBar>(R.id.progressBarCircle)
 
-        val yearAdapter = ArrayAdapter(this, R.layout.my_spinner, years)
-        spinYear.adapter = yearAdapter
-        spinYear.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onNothingSelected(parent: AdapterView<*>?) {}
-
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                val year = if (position == 0) null else Integer.parseInt(years[position])
-                val p = spinCategory.selectedItemPosition
-                val categoryName = if (p == 0) null else categoryNames[p]
-                val projectCount = getProjectCount(knittings, year, categoryName)
-                textViewProjectCount.text = Integer.toString(projectCount) + " / " + Integer.toString(knittings.size)
-                val percent = 100 * projectCount / knittings.size
-                progressBarCircle.progress = percent
-            }
-        }
-
-        val categoryAdapter = ArrayAdapter(this, R.layout.my_spinner, categoryNames)
-        spinCategory.adapter = categoryAdapter
-        spinCategory.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onNothingSelected(parent: AdapterView<*>?) {}
-
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                val p = spinYear.selectedItemPosition
-                val year = if (p == 0) null else Integer.parseInt(years[p])
-                val categoryName = if (position == 0) null else categoryNames[position]
-                val projectCount = getProjectCount(knittings, year, categoryName)
-                textViewProjectCount.text = Integer.toString(projectCount) + " / " + Integer.toString(knittings.size)
-                val percent = 100 * projectCount / knittings.size
-                progressBarCircle.progress = percent
-            }
-        }
+        return v
     }
 
     /**
