@@ -35,8 +35,14 @@ class ProjectCountActivity : AppCompatActivity() {
             years.add(Integer.toString(thisYear))
         }
         years.reverse()
-        val adapter = ArrayAdapter(this, R.layout.my_spinner, years)
+        val yearAdapter = ArrayAdapter(this, R.layout.my_spinner, years)
         val spinYear = findViewById(R.id.year_spinner) as Spinner
-        spinYear.setAdapter(adapter)
+        spinYear.setAdapter(yearAdapter)
+
+        val categories = datasource.allCategories
+        categories.sortedBy { it.name }
+        val categoryAdapter = ArrayAdapter(this, R.layout.my_spinner, listOf(getString(R.string.filter_show_all)) + categories.map { it.name }.toList())
+        val spinCategory = findViewById(R.id.category_spinner) as Spinner
+        spinCategory.setAdapter(categoryAdapter)
     }
 }
