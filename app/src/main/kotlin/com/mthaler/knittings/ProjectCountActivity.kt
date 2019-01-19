@@ -2,6 +2,8 @@ package com.mthaler.knittings
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
+import android.widget.AdapterView
 import kotlinx.android.synthetic.main.activity_project_count.*
 import android.widget.ArrayAdapter
 import java.util.*
@@ -38,11 +40,29 @@ class ProjectCountActivity : AppCompatActivity() {
         val yearAdapter = ArrayAdapter(this, R.layout.my_spinner, years)
         val spinYear = findViewById(R.id.year_spinner) as Spinner
         spinYear.setAdapter(yearAdapter)
+        spinYear.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            }
+
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            }
+        }
 
         val categories = datasource.allCategories
         categories.sortedBy { it.name }
         val categoryAdapter = ArrayAdapter(this, R.layout.my_spinner, listOf(getString(R.string.filter_show_all)) + categories.map { it.name }.toList())
         val spinCategory = findViewById(R.id.category_spinner) as Spinner
         spinCategory.setAdapter(categoryAdapter)
+        spinCategory.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            }
+
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            }
+        }
     }
 }
