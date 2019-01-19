@@ -5,9 +5,7 @@ import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ProgressBar
-import android.widget.Spinner
-import android.widget.TextView
+import android.widget.*
 import com.mthaler.knittings.database.datasource
 import com.mthaler.knittings.model.Knitting
 import org.jetbrains.anko.AnkoLogger
@@ -30,6 +28,38 @@ class ProjectCountFragment : Fragment(), AnkoLogger {
         val spinYear = v.findViewById<Spinner>(R.id.year_spinner)
         val spinCategory = v.findViewById<Spinner>(R.id.category_spinner)
         val progressBarCircle = v.findViewById<ProgressBar>(R.id.progressBarCircle)
+
+        val yearAdapter = ArrayAdapter(this.context, R.layout.my_spinner, years)
+        spinYear.adapter = yearAdapter
+        spinYear.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
+
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                val year = if (position == 0) null else Integer.parseInt(years[position])
+                val p = spinCategory.selectedItemPosition
+                val categoryName = if (p == 0) null else categoryNames[p]
+                val projectCount = getProjectCount(knittings, year, categoryName)
+                textViewProjectCount.text = Integer.toString(projectCount) + " / " + Integer.toString(knittings.size)
+                val percent = 100 * projectCount / knittings.size
+                progressBarCircle.progress = percent
+            }
+        }
+
+        val categoryAdapter = ArrayAdapter(this.context, R.layout.my_spinner, categoryNames)
+        spinCategory.adapter = categoryAdapter
+        spinCategory.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
+
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                val p = spinYear.selectedItemPosition
+                val year = if (p == 0) null else Integer.parseInt(years[p])
+                val categoryName = if (position == 0) null else categoryNames[position]
+                val projectCount = getProjectCount(knittings, year, categoryName)
+                textViewProjectCount.text = Integer.toString(projectCount) + " / " + Integer.toString(knittings.size)
+                val percent = 100 * projectCount / knittings.size
+                progressBarCircle.progress = percent
+            }
+        }
 
         return v
     }
