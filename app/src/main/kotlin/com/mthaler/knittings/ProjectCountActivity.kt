@@ -39,6 +39,7 @@ class ProjectCountActivity : AppCompatActivity() {
         } else {
             years.add(Integer.toString(thisYear))
         }
+        years.add("All")
         years.reverse()
         val yearAdapter = ArrayAdapter(this, R.layout.my_spinner, years)
         val spinYear = findViewById(R.id.year_spinner) as Spinner
@@ -48,6 +49,17 @@ class ProjectCountActivity : AppCompatActivity() {
             }
 
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                val knittings = datasource.allKnittings
+                if (position == 0) {
+                    textViewProjectCount.text = Integer.toString(knittings.size)
+                } else {
+                    val year = Integer.parseInt(years[position])
+                    textViewProjectCount.text = Integer.toString(knittings.count {
+                        val c = Calendar.getInstance()
+                        c.time = it.started
+                        year == c.get(Calendar.YEAR)
+                    })
+                }
             }
         }
 
