@@ -642,8 +642,8 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
         val description = cursor.getString(idDescription)
         val started = Date(cursor.getLong(idStarted))
         val finished = if (cursor.isNull(idFinished)) null else Date(cursor.getLong(idFinished))
-        val needleDiameter = cursor.getDouble(idNeedleDiameter)
-        val size = cursor.getDouble(idSize)
+        val needleDiameter = cursor.getString(idNeedleDiameter)
+        val size = cursor.getString(idSize)
         val rating = cursor.getDouble(idRating)
         val duration = cursor.getLong(idDuration)
 

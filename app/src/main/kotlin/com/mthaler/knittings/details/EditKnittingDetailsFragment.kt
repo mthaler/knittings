@@ -63,10 +63,10 @@ class EditKnittingDetailsFragment : Fragment() {
         }
 
         val editTextNeedleDiameter = v.findViewById<EditText>(R.id.knitting_needle_diameter)
-        editTextNeedleDiameter.addTextChangedListener(createTextWatcher { c, knitting -> knitting.copy(needleDiameter = java.lang.Double.parseDouble(c.toString())) })
+        editTextNeedleDiameter.addTextChangedListener(createTextWatcher { c, knitting -> knitting.copy(needleDiameter = c.toString()) })
 
         val editTextSize = v.findViewById<EditText>(R.id.knitting_size)
-        editTextSize.addTextChangedListener(createTextWatcher { c, knitting -> knitting.copy(size = java.lang.Double.parseDouble(c.toString())) })
+        editTextSize.addTextChangedListener(createTextWatcher { c, knitting -> knitting.copy(size = c.toString()) })
 
         textViewDuration = v.findViewById(R.id.knitting_duration)
         textViewDuration.setOnClickListener {

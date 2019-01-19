@@ -67,8 +67,8 @@ fun JSONObject.toKnitting(): Triple<Knitting, Long?, Long?> {
     val description = getString("description")
     val started = dateFormat.parse(getString("started"))
     val finished = if (has("finished")) dateFormat.parse(getString("finished")) else null
-    val needleDiameter = getDouble("needleDiameter")
-    val size = getDouble("size")
+    val needleDiameter = getString("needleDiameter")
+    val size = getString("size")
     val defaultPhoto = if (has("defaultPhoto")) getLong("defaultPhoto") else null
     val rating = getDouble("rating")
     val duration = if (has("duration")) getLong("duration") else 0L
