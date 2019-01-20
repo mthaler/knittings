@@ -61,8 +61,8 @@
     <!-- knitting details -->
     <string name="knitting_details_started">Angefangen: %1$s</string>
     <string name="knitting_details_finished">Fertig: %1$s</string>
-    <string name="knitting_details_needle">Nadel: %1$.1f</string>
-    <string name="knitting_details_size">Größe: %1$.1f</string>
+    <string name="knitting_details_needle">Nadel: %1$s</string>
+    <string name="knitting_details_size">Größe: %1$s</string>
     <string name="knitting_details_duration">Dauer: %1$s</string>
     <string name="knitting_details_category">Kategorie: %1$s</string>
     <string name="knitting_category_hint">Kategorie:</string>
