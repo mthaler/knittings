@@ -8,6 +8,8 @@ import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.support.v7.widget.SearchView
+import android.text.TextUtils
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -32,10 +34,12 @@ import kotlinx.android.synthetic.main.content_main.*
  * It displays a list of knittings. The user can add new knittings or
  * edit existing ones
  */
-class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
+class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener, SearchView.OnQueryTextListener, SearchView.OnCloseListener {
 
     private var sorting: Sorting = Sorting.NewestFirst
     private var filter: Filter = NoFilter
+    private var initialQuery: CharSequence? = null
+    private var sv: SearchView? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -65,6 +69,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         if (savedInstanceState != null) {
             sorting = Sorting.valueOf(savedInstanceState.getString("sorting"))
             filter = savedInstanceState.getSerializable("filter") as Filter
+            initialQuery = savedInstanceState.getCharSequence(STATE_QUERY)
         }
     }
 
@@ -80,6 +85,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onSaveInstanceState(outState: Bundle) {
         outState.putString("sorting", sorting.name)
         outState.putSerializable("filter", filter)
+        val sv = this.sv
+        if (sv != null && !sv.isIconified()) {
+            outState.putCharSequence(STATE_QUERY, sv.getQuery());
+        }
+
         super.onSaveInstanceState(outState)
     }
 
@@ -94,6 +104,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
         menuInflater.inflate(R.menu.knittings_list, menu)
+        configureSearchView(menu)
         return true
     }
 
@@ -210,5 +221,47 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
         })
         rv.adapter = adapter
+    }
+
+    private fun configureSearchView(menu: Menu) {
+        val search = menu.findItem(R.id.search)
+        val sv = search.getActionView() as SearchView
+        sv.setOnQueryTextListener(this)
+        sv.setOnCloseListener(this)
+        sv.setSubmitButtonEnabled(false)
+        sv.setIconifiedByDefault(true)
+        if (initialQuery != null)
+        {
+            sv.setIconified(false)
+            search.expandActionView()
+            sv.setQuery(initialQuery, true)
+        }
+        this.sv = sv
+    }
+
+
+    override fun onQueryTextChange(newText: String?): Boolean {
+        if (newText != null && TextUtils.isEmpty(newText)) {
+            //adapter.getFilter().filter("");
+        }
+        else {
+            //adapter.getFilter().filter(newText.toString());
+        }
+
+        return true
+    }
+
+
+    override fun onQueryTextSubmit(newText: String?): Boolean {
+        return false
+    }
+
+    override fun onClose(): Boolean {
+        //adapter.getFilter().filter("");
+        return true
+    }
+
+    companion object {
+        private val STATE_QUERY = "q"
     }
 }
