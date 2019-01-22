@@ -264,13 +264,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
      *         if available, true if the action was handled by the listener
      */
     override fun onQueryTextChange(newText: String?): Boolean {
-        if (newText != null && TextUtils.isEmpty(newText)) {
-            //adapter.getFilter().filter("");
+        if (newText == null || TextUtils.isEmpty(newText)) {
+            filter = NoFilter
+        } else {
+            filter = ContainsFilter(newText)
         }
-        else {
-            //adapter.getFilter().filter(newText.toString());
-        }
-
+        updateKnittingList()
         return true
     }
 
@@ -292,7 +291,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
      * @return true if the listener wants to override the default behavior of clearing the text field and dismissing it, false otherwise.
      */
     override fun onClose(): Boolean {
-        //adapter.getFilter().filter("");
+        filter = NoFilter
         return true
     }
 
