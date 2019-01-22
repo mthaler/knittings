@@ -2,6 +2,7 @@ package com.mthaler.knittings
 
 import com.mthaler.knittings.model.Category
 import com.mthaler.knittings.model.Knitting
+import com.mthaler.knittings.utils.StringUtils.containsIgnoreCase
 import java.io.Serializable
 
 /**
@@ -26,11 +27,18 @@ object NoFilter : Filter {
 }
 
 /**
- * A filter that filters the knitting list by category
+ * A filter that filters the project list by category
  *
  * @param category used for filtering
  */
 data class SingleCategoryFilter(val category: Category) : Filter {
 
     override fun filter(knittings: List<Knitting>): List<Knitting> = knittings.filter { it.category == category }
+}
+
+/**
+ * A filter that filters the project list by checking if the title or the description contains the given text
+ */
+data class ContainsFilter(val text: String) : Filter {
+    override fun filter(knittings: List<Knitting>): List<Knitting> = knittings.filter { containsIgnoreCase( it.title, text) || containsIgnoreCase(it.description, text) }
 }
