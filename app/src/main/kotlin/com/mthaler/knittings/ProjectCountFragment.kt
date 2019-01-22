@@ -114,17 +114,27 @@ class ProjectCountFragment : Fragment(), AnkoLogger {
                 return knittings.size
             } else if (year != null && categoryName == null) {
                 return knittings.count {
-                    val c = Calendar.getInstance()
-                    c.time = it.started
-                    year == c.get(Calendar.YEAR)
+                    val finished = it.finished
+                    if (finished != null) {
+                        val c = Calendar.getInstance()
+                        c.time = finished
+                        year == c.get(Calendar.YEAR)
+                    } else {
+                        false
+                    }
                 }
             } else if (year == null && categoryName != null) {
                 return knittings.count { it.category != null && it.category.name == categoryName }
             } else {
                 return knittings.count {
-                    val c = Calendar.getInstance()
-                    c.time = it.started
-                    year == c.get(Calendar.YEAR) && it.category != null && it.category.name == categoryName
+                    val finished = it.finished
+                    if (finished != null) {
+                        val c = Calendar.getInstance()
+                        c.time = finished
+                        year == c.get(Calendar.YEAR) && it.category != null && it.category.name == categoryName
+                    } else {
+                        false
+                    }
                 }
             }
         }
