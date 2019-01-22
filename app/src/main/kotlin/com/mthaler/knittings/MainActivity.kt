@@ -30,9 +30,8 @@ import com.mthaler.knittings.settings.SettingsActivity
 import kotlinx.android.synthetic.main.content_main.*
 
 /**
- * The main activity that gets displayed when the app is started.
- * It displays a list of knittings. The user can add new knittings or
- * edit existing ones
+ * The main activity that gets displayed when the app is started. It displays a list of knitting projects.
+ * The user can add new projects or edit existing ones
  */
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener, SearchView.OnQueryTextListener, SearchView.OnCloseListener {
 
@@ -108,7 +107,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         return true
     }
 
-
+    /**
+     * This hook is called whenever an item in your options menu is selected.
+     *
+     * @param item the menu item that was selected.
+     * @return return false to allow normal menu processing to proceed, true to consume it here.
+     */
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.menu_item_about -> {
@@ -174,6 +178,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
     }
 
+    /**
+     * Called when an item in the navigation menu is selected.
+     *
+     * @param item the selected item
+     * @return true to display the item as the selected item
+     */
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         // Handle navigation view item clicks here.
         when (item.itemId) {
@@ -239,7 +249,13 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         this.sv = sv
     }
 
-
+    /**
+     * Called when the query text is changed by the use
+     *
+     * @param the new content of the query text field
+     * @return false if the SearchView should perform the default action of showing any suggestions
+     *         if available, true if the action was handled by the listener
+     */
     override fun onQueryTextChange(newText: String?): Boolean {
         if (newText != null && TextUtils.isEmpty(newText)) {
             //adapter.getFilter().filter("");
@@ -251,11 +267,23 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         return true
     }
 
-
+    /**
+     * Called when the user submits the query. This could be due to a key press on the keyboard or due to pressing a submit button.
+     * The listener can override the standard behavior by returning true to indicate that it has handled the submit request.
+     * Otherwise return false to let the SearchView handle the submission by launching any associated intent.
+     *
+     * @param new content of the query text field
+     * @return true if the query has been handled by the listener, false to let the SearchView perform the default action.
+     */
     override fun onQueryTextSubmit(newText: String?): Boolean {
         return false
     }
 
+    /**
+     * The user is attempting to close the SearchView.
+     *
+     * @return true if the listener wants to override the default behavior of clearing the text field and dismissing it, false otherwise.
+     */
     override fun onClose(): Boolean {
         //adapter.getFilter().filter("");
         return true
