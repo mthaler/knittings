@@ -100,6 +100,13 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
     }
 
+    /**
+     * Initialize the contents of the Activity's standard options menu.
+     * This is only called once, the first time the options menu is displayed.
+     *
+     * @param menu The options menu in which you place your items.
+     * @return you must return true for the menu to be displayed; if you return false it will not be shown.
+     */
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
         menuInflater.inflate(R.menu.knittings_list, menu)

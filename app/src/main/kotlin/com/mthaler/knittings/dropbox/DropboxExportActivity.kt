@@ -34,12 +34,25 @@ class DropboxExportActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Initialize the contents of the Activity's standard options menu.
+     * This is only called once, the first time the options menu is displayed.
+     *
+     * @param menu The options menu in which you place your items.
+     * @return you must return true for the menu to be displayed; if you return false it will not be shown.
+     */
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
         menuInflater.inflate(R.menu.dropbox_export, menu)
         return true
     }
 
+    /**
+     * This hook is called whenever an item in your options menu is selected.
+     *
+     * @param item the menu item that was selected.
+     * @return return false to allow normal menu processing to proceed, true to consume it here.
+     */
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.menu_item_dropbox_logout -> {

@@ -111,6 +111,15 @@ class EditKnittingDetailsFragment : Fragment() {
         return v
     }
 
+    /**
+     * Called when an activity you launched exits, giving you the requestCode you started it with, the resultCode it returned,
+     * and any additional data from it. The resultCode will be RESULT_CANCELED if the activity explicitly returned that,
+     * didn't return any result, or crashed during its operation.
+     *
+     * @param requestCode The integer request code originally supplied to startActivityForResult(), allowing you to identify who this result came from.
+     * @param resultCode The integer result code returned by the child activity through its setResult().
+     * @param data An Intent, which can return result data to the caller (various data can be attached to Intent "extras").
+     */
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (resultCode != Activity.RESULT_OK) {
             return
