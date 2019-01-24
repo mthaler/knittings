@@ -11,6 +11,7 @@ import com.mthaler.knittings.TextWatcher
 import com.mthaler.knittings.database.datasource
 import com.mthaler.knittings.model.Category
 import android.graphics.Color
+import android.support.v4.app.ActivityCompat
 import android.view.Menu
 import android.view.MenuItem
 import com.android.colorpicker.ColorPickerDialog
@@ -88,6 +89,15 @@ class EditCategoryActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean = when (item.itemId) {
         R.id.menu_item_delete_category -> {
             showDeleteDialog()
+            true
+        }
+        android.R.id.home -> {
+            category?.let {
+                val i = Intent()
+                i.putExtra(EXTRA_CATEGORY_ID, it.id)
+                setResult(RESULT_OK, i)
+            }
+            finish()
             true
         }
         else -> super.onOptionsItemSelected(item)
