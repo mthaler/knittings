@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.support.v7.app.AlertDialog
 import android.text.Editable
 import android.view.LayoutInflater
 import android.view.View
@@ -15,6 +14,7 @@ import android.widget.RatingBar
 import android.widget.TextView
 import com.mthaler.knittings.R
 import com.mthaler.knittings.TextWatcher
+import com.mthaler.knittings.category.SelectCategoryActivity
 import com.mthaler.knittings.database.KnittingsDataSource
 import com.mthaler.knittings.database.datasource
 import com.mthaler.knittings.datepicker.DatePickerFragment
@@ -23,6 +23,8 @@ import com.mthaler.knittings.utils.TimeUtils
 import java.text.DateFormat
 import java.util.*
 import com.mthaler.knittings.durationpicker.DurationPickerDialog
+import com.mthaler.knittings.Extras.EXTRA_CATEGORY_ID
+import com.mthaler.knittings.Extras.EXTRA_KNITTING_ID
 
 class EditKnittingDetailsFragment : Fragment() {
 
@@ -31,6 +33,7 @@ class EditKnittingDetailsFragment : Fragment() {
     private lateinit var textViewStarted: TextView
     private lateinit var textViewFinished: TextView
     private lateinit var textViewDuration: TextView
+    private lateinit var buttonCategory: Button
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
@@ -80,22 +83,12 @@ class EditKnittingDetailsFragment : Fragment() {
             mTimePicker.show()
         }
 
-        val buttonCategory = v.findViewById<Button>(R.id.knitting_category)
+        buttonCategory = v.findViewById<Button>(R.id.knitting_category)
         buttonCategory.setOnClickListener {
-            val categories = datasource.allCategories
-            val builder = AlertDialog.Builder(this.context!!)
-            builder.setTitle("Select category")
-            builder.setItems(categories.map { it.name }.toTypedArray()) { dialog, which ->
-                val c = categories[which]
-                buttonCategory.text = c.name
-                knitting?.let {
-                    val k = it.copy(category = c)
-                    knitting = k
-                    datasource.updateKnitting(k)
-                }
-
-            }
-            builder.show()
+            val i = Intent(context, SelectCategoryActivity::class.java)
+            // add the knitting ID which is required to make up navigation work correctly
+            knitting?.let { i.putExtra(EXTRA_KNITTING_ID, it.id) }
+            startActivityForResult(i, REQUEST_SELECT_CATEGORY)
         }
 
         // update knitting if user changes the rating
@@ -121,6 +114,7 @@ class EditKnittingDetailsFragment : Fragment() {
      * @param data An Intent, which can return result data to the caller (various data can be attached to Intent "extras").
      */
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
         if (resultCode != Activity.RESULT_OK) {
             return
         }
@@ -146,6 +140,17 @@ class EditKnittingDetailsFragment : Fragment() {
             knitting = knitting?.copy(finished = date)
             textViewFinished.text = DateFormat.getDateInstance().format(date)
             KnittingsDataSource.getInstance(activity!!).updateKnitting(knitting!!)
+        } else if (requestCode == REQUEST_SELECT_CATEGORY) {
+            data?.let {
+                val categoryID = it.getLongExtra(EXTRA_CATEGORY_ID, -1)
+                val c = datasource.getCategory(categoryID)
+                buttonCategory.text = c.name
+                knitting?.let {
+                    val k = it.copy(category = c)
+                    knitting = k
+                    datasource.updateKnitting(k)
+                }
+            }
         }
     }
 
@@ -212,5 +217,6 @@ class EditKnittingDetailsFragment : Fragment() {
         private const val DIALOG_DATE = "date"
         private const val REQUEST_STARTED = 0
         private const val REQUEST_FINISHED = 1
+        private const val REQUEST_SELECT_CATEGORY = 2
     }
 }

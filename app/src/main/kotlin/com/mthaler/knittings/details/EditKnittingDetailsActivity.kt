@@ -1,6 +1,5 @@
 package com.mthaler.knittings.details
 
-import android.app.Activity
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
@@ -117,11 +116,11 @@ class EditKnittingDetailsActivity : AppCompatActivity(), CanTakePhoto {
      * @param data An Intent, which can return result data to the caller (various data can be attached to Intent "extras").
      */
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (resultCode != Activity.RESULT_OK) {
-            return
-        }
         if (requestCode == CanTakePhoto.REQUEST_IMAGE_CAPTURE || requestCode == CanTakePhoto.REQUEST_IMAGE_IMPORT) {
             onActivityResult(this, knittingID, requestCode, resultCode, data)
+        } else {
+            // we need to call super.onActivityResult, otherwise the fragment onActivityResult method might not be called (except for dialogs)
+            super<AppCompatActivity>.onActivityResult(requestCode, resultCode, data)
         }
     }
 
