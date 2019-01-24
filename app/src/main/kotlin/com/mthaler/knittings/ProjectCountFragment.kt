@@ -40,7 +40,7 @@ class ProjectCountFragment : Fragment(), AnkoLogger {
                 val categoryName = if (p == 0) null else categoryNames[p]
                 val projectCount = getProjectCount(knittings, year, categoryName)
                 textViewProjectCount.text = Integer.toString(projectCount) + " / " + Integer.toString(knittings.size)
-                val percent = 100 * projectCount / knittings.size
+                val percent = if (knittings.size > 0) 100 * projectCount / knittings.size else 0
                 progressBarCircle.progress = percent
             }
         }
@@ -56,7 +56,7 @@ class ProjectCountFragment : Fragment(), AnkoLogger {
                 val categoryName = if (position == 0) null else categoryNames[position]
                 val projectCount = getProjectCount(knittings, year, categoryName)
                 textViewProjectCount.text = Integer.toString(projectCount) + " / " + Integer.toString(knittings.size)
-                val percent = 100 * projectCount / knittings.size
+                val percent = if (knittings.size > 0) 100 * projectCount / knittings.size else 0
                 progressBarCircle.progress = percent
             }
         }
