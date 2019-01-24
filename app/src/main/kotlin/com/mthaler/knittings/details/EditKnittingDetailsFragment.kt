@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.support.v7.app.AlertDialog
 import android.text.Editable
 import android.view.LayoutInflater
 import android.view.View
@@ -15,6 +14,7 @@ import android.widget.RatingBar
 import android.widget.TextView
 import com.mthaler.knittings.R
 import com.mthaler.knittings.TextWatcher
+import com.mthaler.knittings.category.SelectCategoryActivity
 import com.mthaler.knittings.database.KnittingsDataSource
 import com.mthaler.knittings.database.datasource
 import com.mthaler.knittings.datepicker.DatePickerFragment
@@ -82,20 +82,22 @@ class EditKnittingDetailsFragment : Fragment() {
 
         val buttonCategory = v.findViewById<Button>(R.id.knitting_category)
         buttonCategory.setOnClickListener {
-            val categories = datasource.allCategories
-            val builder = AlertDialog.Builder(this.context!!)
-            builder.setTitle("Select category")
-            builder.setItems(categories.map { it.name }.toTypedArray()) { dialog, which ->
-                val c = categories[which]
-                buttonCategory.text = c.name
-                knitting?.let {
-                    val k = it.copy(category = c)
-                    knitting = k
-                    datasource.updateKnitting(k)
-                }
-
-            }
-            builder.show()
+            val i = Intent(context, SelectCategoryActivity::class.java)
+            startActivityForResult(i, REQUEST_SELECT_CATEGORY)
+//            val categories = datasource.allCategories
+//            val builder = AlertDialog.Builder(this.context!!)
+//            builder.setTitle("Select category")
+//            builder.setItems(categories.map { it.name }.toTypedArray()) { dialog, which ->
+//                val c = categories[which]
+//                buttonCategory.text = c.name
+//                knitting?.let {
+//                    val k = it.copy(category = c)
+//                    knitting = k
+//                    datasource.updateKnitting(k)
+//                }
+//
+//            }
+//            builder.show()
         }
 
         // update knitting if user changes the rating
@@ -212,5 +214,6 @@ class EditKnittingDetailsFragment : Fragment() {
         private const val DIALOG_DATE = "date"
         private const val REQUEST_STARTED = 0
         private const val REQUEST_FINISHED = 1
+        private const val REQUEST_SELECT_CATEGORY = 2
     }
 }

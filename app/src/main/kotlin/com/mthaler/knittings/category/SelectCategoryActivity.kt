@@ -1,5 +1,7 @@
 package com.mthaler.knittings.category
 
+import android.app.Activity
+import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
@@ -59,7 +61,11 @@ class SelectCategoryActivity : AppCompatActivity() {
             category_recycler_view.visibility = View.VISIBLE
         }
         // start EditCategoryActivity if the users clicks on a category
-        val adapter = CategoryAdapter(this, categories, OnItemClickListener { item -> })
+        val adapter = CategoryAdapter(this, categories, OnItemClickListener { item ->
+            val i = Intent()
+            setResult(Activity.RESULT_OK, i)
+            finish()
+        })
         rv.adapter = adapter
     }
 }
