@@ -23,6 +23,7 @@ import com.mthaler.knittings.utils.TimeUtils
 import java.text.DateFormat
 import java.util.*
 import com.mthaler.knittings.durationpicker.DurationPickerDialog
+import com.mthaler.knittings.Extras.EXTRA_CATEGORY_ID
 
 class EditKnittingDetailsFragment : Fragment() {
 
@@ -31,6 +32,7 @@ class EditKnittingDetailsFragment : Fragment() {
     private lateinit var textViewStarted: TextView
     private lateinit var textViewFinished: TextView
     private lateinit var textViewDuration: TextView
+    private lateinit var buttonCategory: Button
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
@@ -80,7 +82,7 @@ class EditKnittingDetailsFragment : Fragment() {
             mTimePicker.show()
         }
 
-        val buttonCategory = v.findViewById<Button>(R.id.knitting_category)
+        buttonCategory = v.findViewById<Button>(R.id.knitting_category)
         buttonCategory.setOnClickListener {
             val i = Intent(context, SelectCategoryActivity::class.java)
             startActivityForResult(i, REQUEST_SELECT_CATEGORY)
@@ -123,6 +125,8 @@ class EditKnittingDetailsFragment : Fragment() {
      * @param data An Intent, which can return result data to the caller (various data can be attached to Intent "extras").
      */
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        val res = resultCode
         if (resultCode != Activity.RESULT_OK) {
             return
         }
@@ -149,7 +153,16 @@ class EditKnittingDetailsFragment : Fragment() {
             textViewFinished.text = DateFormat.getDateInstance().format(date)
             KnittingsDataSource.getInstance(activity!!).updateKnitting(knitting!!)
         } else if (requestCode == REQUEST_SELECT_CATEGORY) {
-            
+            data?.let {
+                val categoryID = it.getLongExtra(EXTRA_CATEGORY_ID, -1)
+                val c = datasource.getCategory(categoryID)
+                buttonCategory.text = c.name
+                knitting?.let {
+                    val k = it.copy(category = c)
+                    knitting = k
+                    datasource.updateKnitting(k)
+                }
+            }
         }
     }
 

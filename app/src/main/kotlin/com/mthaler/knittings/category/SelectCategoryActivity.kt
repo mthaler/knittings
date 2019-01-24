@@ -63,7 +63,7 @@ class SelectCategoryActivity : AppCompatActivity() {
         // start EditCategoryActivity if the users clicks on a category
         val adapter = CategoryAdapter(this, categories, OnItemClickListener { item ->
             val i = Intent()
-            item.let { i.putExtra(EXTRA_CATEGORY_ID, it.id) }
+            item?.let { i.putExtra(EXTRA_CATEGORY_ID, it.id) }
             setResult(Activity.RESULT_OK, i)
             finish()
         })
