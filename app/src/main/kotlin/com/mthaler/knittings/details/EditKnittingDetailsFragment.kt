@@ -24,6 +24,7 @@ import java.text.DateFormat
 import java.util.*
 import com.mthaler.knittings.durationpicker.DurationPickerDialog
 import com.mthaler.knittings.Extras.EXTRA_CATEGORY_ID
+import com.mthaler.knittings.Extras.EXTRA_KNITTING_ID
 
 class EditKnittingDetailsFragment : Fragment() {
 
@@ -85,21 +86,9 @@ class EditKnittingDetailsFragment : Fragment() {
         buttonCategory = v.findViewById<Button>(R.id.knitting_category)
         buttonCategory.setOnClickListener {
             val i = Intent(context, SelectCategoryActivity::class.java)
+            // add the knitting ID which is required to make up navigation work correctly
+            knitting?.let { i.putExtra(EXTRA_KNITTING_ID, it.id) }
             startActivityForResult(i, REQUEST_SELECT_CATEGORY)
-//            val categories = datasource.allCategories
-//            val builder = AlertDialog.Builder(this.context!!)
-//            builder.setTitle("Select category")
-//            builder.setItems(categories.map { it.name }.toTypedArray()) { dialog, which ->
-//                val c = categories[which]
-//                buttonCategory.text = c.name
-//                knitting?.let {
-//                    val k = it.copy(category = c)
-//                    knitting = k
-//                    datasource.updateKnitting(k)
-//                }
-//
-//            }
-//            builder.show()
         }
 
         // update knitting if user changes the rating
