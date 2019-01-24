@@ -148,6 +148,8 @@ class EditKnittingDetailsFragment : Fragment() {
             knitting = knitting?.copy(finished = date)
             textViewFinished.text = DateFormat.getDateInstance().format(date)
             KnittingsDataSource.getInstance(activity!!).updateKnitting(knitting!!)
+        } else if (requestCode == REQUEST_SELECT_CATEGORY) {
+            
         }
     }
 
