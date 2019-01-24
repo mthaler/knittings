@@ -12,6 +12,7 @@ import com.mthaler.knittings.R
 import com.mthaler.knittings.database.datasource
 import kotlinx.android.synthetic.main.activity_select_category.*
 import com.mthaler.knittings.Extras.EXTRA_CATEGORY_ID
+import com.mthaler.knittings.model.Category
 import org.jetbrains.anko.startActivity
 
 class SelectCategoryActivity : AppCompatActivity() {
@@ -28,10 +29,10 @@ class SelectCategoryActivity : AppCompatActivity() {
         // add new category if the user clicks the floating action button and start the
         // EditCategoryActivity to edit the new category
         val fab = findViewById<FloatingActionButton>(R.id.fab_create_category)
-        fab.setOnClickListener { v -> run {
+        fab.setOnClickListener { v ->
             val category = datasource.createCategory("category", null)
             startActivity<EditCategoryActivity>(EXTRA_CATEGORY_ID to category.id)
-        } }
+        }
 
         val rv = findViewById<RecyclerView>(R.id.category_recycler_view)
         rv.layoutManager = LinearLayoutManager(this)
@@ -61,11 +62,13 @@ class SelectCategoryActivity : AppCompatActivity() {
             category_recycler_view.visibility = View.VISIBLE
         }
         // start EditCategoryActivity if the users clicks on a category
-        val adapter = CategoryAdapter(this, categories, OnItemClickListener { item ->
-            val i = Intent()
-            item?.let { i.putExtra(EXTRA_CATEGORY_ID, it.id) }
-            setResult(Activity.RESULT_OK, i)
-            finish()
+        val adapter = CategoryAdapter(this, categories, object : OnItemClickListener {
+            override fun onItemClick(item: Category) {
+                val i = Intent()
+                i.putExtra(EXTRA_CATEGORY_ID, item.id)
+                setResult(Activity.RESULT_OK, i)
+                finish()
+            }
         })
         rv.adapter = adapter
     }

@@ -10,6 +10,7 @@ import com.mthaler.knittings.R
 import com.mthaler.knittings.database.datasource
 import org.jetbrains.anko.startActivity
 import com.mthaler.knittings.Extras.EXTRA_CATEGORY_ID
+import com.mthaler.knittings.model.Category
 import kotlinx.android.synthetic.main.activity_category_list.*
 
 /**
@@ -63,7 +64,10 @@ class CategoryListActivity : AppCompatActivity() {
             category_recycler_view.visibility = View.VISIBLE
         }
         // start EditCategoryActivity if the users clicks on a category
-        val adapter = CategoryAdapter(this, categories, OnItemClickListener { item -> startActivity<EditCategoryActivity>(EXTRA_CATEGORY_ID to item!!.id) })
+        val adapter = CategoryAdapter(this, categories, object : OnItemClickListener {
+            override fun onItemClick(item: Category) {
+                startActivity<EditCategoryActivity>(EXTRA_CATEGORY_ID to item!!.id)
+            }})
         rv.adapter = adapter
     }
 }
