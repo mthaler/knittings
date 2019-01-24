@@ -43,8 +43,10 @@ class SelectCategoryActivity : AppCompatActivity() {
         // EditCategoryActivity to edit the new category
         val fab = findViewById<FloatingActionButton>(R.id.fab_create_category)
         fab.setOnClickListener { v ->
-            val category = datasource.createCategory("category", null)
-            startActivity<EditCategoryActivity>(EXTRA_CATEGORY_ID to category.id)
+            val category = datasource.createCategory("", null)
+            val i = Intent(this, EditCategoryActivity::class.java)
+            i.putExtra(EXTRA_CATEGORY_ID, category.id)
+            startActivityForResult(i, REQUEST_EDIT_CATEGORY)
         }
 
         val rv = findViewById<RecyclerView>(R.id.category_recycler_view)
@@ -93,6 +95,31 @@ class SelectCategoryActivity : AppCompatActivity() {
     }
 
     /**
+     * Called when an activity you launched exits, giving you the requestCode you started it with, the resultCode it returned,
+     * and any additional data from it. The resultCode will be RESULT_CANCELED if the activity explicitly returned that,
+     * didn't return any result, or crashed during its operation.
+     *
+     * @param requestCode The integer request code originally supplied to startActivityForResult(), allowing you to identify who this result came from.
+     * @param resultCode The integer result code returned by the child activity through its setResult().
+     * @param data An Intent, which can return result data to the caller (various data can be attached to Intent "extras").
+     */
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode != Activity.RESULT_OK) {
+            return
+        }
+        if (requestCode == REQUEST_EDIT_CATEGORY) {
+            data?.let {
+                val categoryID = it.getLongExtra(EXTRA_CATEGORY_ID, -1)
+                val i = Intent()
+                i.putExtra(EXTRA_CATEGORY_ID, categoryID)
+                setResult(Activity.RESULT_OK, i)
+                finish()
+            }
+        }
+    }
+
+    /**
      * Updates the list of categories
      */
     private fun updateCategoryList() {
@@ -116,5 +143,9 @@ class SelectCategoryActivity : AppCompatActivity() {
             }
         })
         rv.adapter = adapter
+    }
+
+    companion object {
+        private const val REQUEST_EDIT_CATEGORY = 0
     }
 }

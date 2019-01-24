@@ -115,7 +115,6 @@ class EditKnittingDetailsFragment : Fragment() {
      */
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        val res = resultCode
         if (resultCode != Activity.RESULT_OK) {
             return
         }

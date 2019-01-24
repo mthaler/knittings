@@ -1,5 +1,6 @@
 package com.mthaler.knittings.category
 
+import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
@@ -90,6 +91,19 @@ class EditCategoryActivity : AppCompatActivity() {
             true
         }
         else -> super.onOptionsItemSelected(item)
+    }
+
+    /**
+     * Called when the activity has detected the user's press of the back key. The default implementation simply
+     * finishes the current activity, but you can override this to do whatever you want.
+     */
+    override fun onBackPressed() {
+        category?.let {
+            val i = Intent()
+            i.putExtra(EXTRA_CATEGORY_ID, it.id)
+            setResult(RESULT_OK, i)
+        }
+        super.onBackPressed()
     }
 
     /**
