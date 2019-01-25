@@ -11,7 +11,6 @@ import com.mthaler.knittings.TextWatcher
 import com.mthaler.knittings.database.datasource
 import com.mthaler.knittings.model.Category
 import android.graphics.Color
-import android.support.v4.app.ActivityCompat
 import android.view.Menu
 import android.view.MenuItem
 import com.android.colorpicker.ColorPickerDialog
