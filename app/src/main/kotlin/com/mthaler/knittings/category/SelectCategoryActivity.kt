@@ -35,6 +35,24 @@ class SelectCategoryActivity : AppCompatActivity(), CategoryListFragment.OnFragm
         }
     }
 
+    /**
+     * Called when the activity has detected the user's press of the back key. The default implementation simply
+     * finishes the current activity, but you can override this to do whatever you want.
+     */
+    override fun onBackPressed() {
+        val fm = supportFragmentManager
+        val f = fm.findFragmentById(R.id.select_category_container) as HasCategory
+        f?.let {
+            val c = it.getCategory()
+            c?.let {
+                val i = Intent()
+                i.putExtra(Extras.EXTRA_CATEGORY_ID, it.id)
+                setResult(Activity.RESULT_OK, i)
+            }
+        }
+        super.onBackPressed()
+    }
+
     override fun createCategory() {
         val category = datasource.createCategory("", null)
         val f = EditCategoryFragment.newInstance(category.id)
