@@ -1,6 +1,7 @@
 package com.mthaler.knittings.category
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
@@ -20,6 +21,7 @@ import kotlinx.android.synthetic.main.fragment_select_category.*
 class SelectCategoryFragment : Fragment() {
 
     private var knittingID: Long = -1
+    private var listener: OnCreateCategoryListener? = null
 
     /**
      * Called to do initial creation of a fragment. This is called after onAttach(Activity) and before
@@ -60,10 +62,7 @@ class SelectCategoryFragment : Fragment() {
         // EditCategoryActivity to edit the new category
         val fab = v.findViewById<FloatingActionButton>(R.id.fab_create_category)
         fab.setOnClickListener { view ->
-            val category = datasource.createCategory("", null)
-            val i = Intent(context, EditCategoryActivity::class.java)
-            i.putExtra(Extras.EXTRA_CATEGORY_ID, category.id)
-            startActivityForResult(i, REQUEST_EDIT_CATEGORY)
+            listener?.let { it.createCategory() }
         }
 
         val rv = v.findViewById<RecyclerView>(R.id.category_recycler_view)
@@ -81,31 +80,6 @@ class SelectCategoryFragment : Fragment() {
     override fun onSaveInstanceState(savedInstanceState: Bundle) {
         savedInstanceState.putLong(EXTRA_KNITTING_ID, knittingID)
         super.onSaveInstanceState(savedInstanceState)
-    }
-
-    /**
-     * Called when an activity you launched exits, giving you the requestCode you started it with, the resultCode it returned,
-     * and any additional data from it. The resultCode will be RESULT_CANCELED if the activity explicitly returned that,
-     * didn't return any result, or crashed during its operation.
-     *
-     * @param requestCode The integer request code originally supplied to startActivityForResult(), allowing you to identify who this result came from.
-     * @param resultCode The integer result code returned by the child activity through its setResult().
-     * @param data An Intent, which can return result data to the caller (various data can be attached to Intent "extras").
-     */
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode != Activity.RESULT_OK) {
-            return
-        }
-        if (requestCode == REQUEST_EDIT_CATEGORY) {
-            data?.let {
-                val categoryID = it.getLongExtra(Extras.EXTRA_CATEGORY_ID, -1)
-                val i = Intent()
-                i.putExtra(Extras.EXTRA_CATEGORY_ID, categoryID)
-                activity!!.setResult(Activity.RESULT_OK, i)
-                activity!!.finish()
-            }
-        }
     }
 
     override fun onResume() {
@@ -137,6 +111,42 @@ class SelectCategoryFragment : Fragment() {
             }
         })
         rv.adapter = adapter
+    }
+
+    /**
+     * Called when a fragment is first attached to its context. onCreate(Bundle) will be called after this.
+     *
+     * @param context Context
+     */
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        if (context is OnCreateCategoryListener) {
+            listener = context
+        } else {
+            throw RuntimeException(context.toString() + " must implement OnFragmentInteractionListener")
+        }
+    }
+
+    /**
+     * Called when the fragment is no longer attached to its activity. This is called after onDestroy().
+     */
+    override fun onDetach() {
+        super.onDetach()
+        listener = null
+    }
+
+    /**
+     * This interface must be implemented by activities that contain this
+     * fragment to allow an interaction in this fragment to be communicated
+     * to the activity and potentially other fragments contained in that
+     * activity.
+     */
+    interface OnCreateCategoryListener {
+
+        /**
+         * Called if the user clicks the floating action button to create a category
+         */
+        fun createCategory()
     }
 
     companion object {
