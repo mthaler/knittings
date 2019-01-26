@@ -113,13 +113,6 @@
                 android:value=".details.EditKnittingDetailsActivity" />
         </activity>
         <activity
-            android:name=".category.EditCategoryActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".category.CategoryListActivity" />
-        </activity>
-        <activity
             android:name=".ProjectCountActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data

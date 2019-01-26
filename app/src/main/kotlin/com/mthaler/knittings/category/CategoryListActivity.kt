@@ -4,8 +4,6 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import com.mthaler.knittings.R
 import com.mthaler.knittings.database.datasource
-import org.jetbrains.anko.startActivity
-import com.mthaler.knittings.Extras.EXTRA_CATEGORY_ID
 import com.mthaler.knittings.Extras.EXTRA_KNITTING_ID
 import kotlinx.android.synthetic.main.activity_category_list.*
 
@@ -38,11 +36,21 @@ class CategoryListActivity : AppCompatActivity(), CategoryListFragment.OnFragmen
     }
 
     override fun createCategory() {
-        val category = datasource.createCategory("category", null)
-        startActivity<EditCategoryActivity>(EXTRA_CATEGORY_ID to category.id)
+        val category = datasource.createCategory("", null)
+        val f = EditCategoryFragment.newInstance(category.id)
+        val fm = supportFragmentManager
+        val ft = fm.beginTransaction()
+        ft.replace(R.id.category_list_container, f)
+        ft.addToBackStack(null)
+        ft.commit()
     }
 
     override fun categoryClicked(categoryID: Long) {
-        startActivity<EditCategoryActivity>(EXTRA_CATEGORY_ID to categoryID)
+        val f = EditCategoryFragment.newInstance(categoryID)
+        val fm = supportFragmentManager
+        val ft = fm.beginTransaction()
+        ft.replace(R.id.category_list_container, f)
+        ft.addToBackStack(null)
+        ft.commit()
     }
 }
