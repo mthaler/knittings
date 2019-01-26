@@ -47,9 +47,9 @@ class EditKnittingDetailsFragment : Fragment() {
 
         textViewStarted = v.findViewById(R.id.knitting_started)
         textViewStarted.setOnClickListener {
-            activity?.let {
-                val fm = it.supportFragmentManager
-                val dialog = DatePickerFragment.newInstance(knitting!!.started)
+            knitting?.let {
+                val fm = fragmentManager
+                val dialog = DatePickerFragment.newInstance(it.started)
                 dialog.setTargetFragment(this, REQUEST_STARTED)
                 dialog.show(fm, DIALOG_DATE)
             }
@@ -57,9 +57,9 @@ class EditKnittingDetailsFragment : Fragment() {
 
         textViewFinished = v.findViewById(R.id.knitting_finished)
         textViewFinished.setOnClickListener {
-            activity?.let {
-                val fm = it.supportFragmentManager
-                val dialog = DatePickerFragment.newInstance(if (knitting!!.finished != null) knitting!!.finished else Date())
+            knitting?.let {
+                val fm = fragmentManager
+                val dialog = DatePickerFragment.newInstance(if (it.finished != null) it.finished else Date())
                 dialog.setTargetFragment(this, REQUEST_FINISHED)
                 dialog.show(fm, DIALOG_DATE)
             }

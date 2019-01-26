@@ -96,7 +96,7 @@ class CategoryListFragment : Fragment() {
             category_recycler_view.visibility = View.VISIBLE
         }
         // start EditCategoryActivity if the users clicks on a category
-        val adapter = CategoryAdapter(context!!, categories, { category ->
+        val adapter = CategoryAdapter(categories, { category ->
             listener?.let { it.categoryClicked(category.id) }
         })
         rv.adapter = adapter

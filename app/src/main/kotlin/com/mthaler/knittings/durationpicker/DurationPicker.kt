@@ -166,24 +166,24 @@ class DurationPicker @JvmOverloads constructor(context: Context,
     /**
      * Set the current hour.
      */
-    fun setCurrentHour(currentHour: Int?) {
-        this.currentHours = currentHour!!
+    fun setCurrentHour(currentHour: Int) {
+        this.currentHours = currentHour
         updateHourDisplay()
     }
 
     /**
      * Set the current minute (0-59).
      */
-    fun setCurrentMinute(currentMinute: Int?) {
-        this.currentMinutes = currentMinute!!
+    fun setCurrentMinute(currentMinute: Int) {
+        this.currentMinutes = currentMinute
         updateMinuteDisplay()
     }
 
     /**
      * Set the current second (0-59).
      */
-    fun setCurrentSecond(currentSecond: Int?) {
-        this.currentSeconds = currentSecond!!
+    fun setCurrentSecond(currentSecond: Int) {
+        this.currentSeconds = currentSecond
         updateSecondsDisplay()
     }
 
@@ -199,7 +199,7 @@ class DurationPicker @JvmOverloads constructor(context: Context,
     }
 
     private fun onTimeChanged() {
-        onDurationChangedListener!!.onDurationChanged(this, duration)
+        onDurationChangedListener?.onDurationChanged(this, duration)
     }
 
     /**
@@ -207,7 +207,7 @@ class DurationPicker @JvmOverloads constructor(context: Context,
      */
     private fun updateMinuteDisplay() {
         minutePicker.value = currentMinutes
-        onDurationChangedListener!!.onDurationChanged(this, duration)
+        onDurationChangedListener?.onDurationChanged(this, duration)
     }
 
     /**
@@ -215,7 +215,7 @@ class DurationPicker @JvmOverloads constructor(context: Context,
      */
     private fun updateSecondsDisplay() {
         secondPicker.value = currentSeconds
-        onDurationChangedListener!!.onDurationChanged(this, duration)
+        onDurationChangedListener?.onDurationChanged(this, duration)
     }
 
     companion object {

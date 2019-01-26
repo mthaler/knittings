@@ -162,7 +162,7 @@ class EditCategoryFragment : Fragment(), HasCategory {
             message = resources.getString(R.string.delete_category_dialog_question)
             positiveButton(resources.getString(R.string.delete_category_dialog_delete_button)) {
                 // delete database entry
-                datasource.deleteCategory(category!!)
+                category?.let { datasource.deleteCategory(it) }
                 activity?.let { it.finish() }
             }
             negativeButton(resources.getString(R.string.dialog_button_cancel)) {}

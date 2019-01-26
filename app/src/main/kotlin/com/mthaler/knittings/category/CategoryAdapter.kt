@@ -1,6 +1,5 @@
 package com.mthaler.knittings.category
 
-import android.content.Context
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -9,8 +8,7 @@ import android.widget.TextView
 import com.mthaler.knittings.R
 import com.mthaler.knittings.model.Category
 
-class CategoryAdapter(val context: Context,
-                      val categories: ArrayList<Category>, private val onItemClick: (Category) -> Unit): RecyclerView.Adapter<CategoryAdapter.ViewHolder>() {
+class CategoryAdapter(val categories: ArrayList<Category>, private val onItemClick: (Category) -> Unit): RecyclerView.Adapter<CategoryAdapter.ViewHolder>() {
 
     /**
      * Creates, configures and returns a ViewHolder object for a particular row in the list
@@ -20,7 +18,7 @@ class CategoryAdapter(val context: Context,
      */
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val v = LayoutInflater.from(parent.context).inflate(R.layout.list_item_category, parent, false)
-        return ViewHolder(context, v)
+        return ViewHolder(v)
     }
 
     /**
@@ -42,10 +40,9 @@ class CategoryAdapter(val context: Context,
      * The ViewHolder class is responsible for binding data as needed from our model into the widgets
      * for a row in our list
      *
-     * @param context context
      * @param itemView item view
      */
-    class ViewHolder(val context: Context, itemView: View): RecyclerView.ViewHolder(itemView){
+    class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
         private val colorSwatch = itemView.findViewById<ColorSwatch>(R.id.category_list_item_color)
         private val textFieldName = itemView.findViewById<TextView>(R.id.category_list_item_name)
 
