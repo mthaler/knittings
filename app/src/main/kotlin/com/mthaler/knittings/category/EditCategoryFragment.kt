@@ -17,11 +17,11 @@ import com.mthaler.knittings.TextWatcher
 import com.mthaler.knittings.database.datasource
 import org.jetbrains.anko.support.v4.alert
 
-class EditCategoryFragment : Fragment(), HasCategory {
+class EditCategoryFragment : Fragment() {
 
     private var category: Category? = null
 
-    override fun getCategory(): Category? {
+    fun getCategory(): Category? {
         return category
     }
 

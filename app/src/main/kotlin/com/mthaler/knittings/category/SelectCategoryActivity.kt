@@ -57,11 +57,13 @@ class SelectCategoryActivity : AppCompatActivity(), CategoryListFragment.OnFragm
      */
     override fun onBackPressed() {
         val fm = supportFragmentManager
-        val f = fm.findFragmentById(R.id.select_category_container) as HasCategory
-        f?.getCategory()?.let {
-            val i = Intent()
-            i.putExtra(Extras.EXTRA_CATEGORY_ID, it.id)
-            setResult(Activity.RESULT_OK, i)
+        val f = fm.findFragmentById(R.id.select_category_container)
+        if (f is EditCategoryFragment) {
+            f.getCategory()?.let {
+                val i = Intent()
+                i.putExtra(Extras.EXTRA_CATEGORY_ID, it.id)
+                setResult(Activity.RESULT_OK, i)
+            }
         }
         super.onBackPressed()
     }
@@ -83,7 +85,7 @@ class SelectCategoryActivity : AppCompatActivity(), CategoryListFragment.OnFragm
                 upIntent.putExtra(EXTRA_KNITTING_ID, knittingID)
                 val fm = supportFragmentManager
                 val f = fm.findFragmentById(R.id.select_category_container)
-                if (f is HasCategory) {
+                if (f is EditCategoryFragment) {
                     f.getCategory()?.let {
                         upIntent.putExtra(Extras.EXTRA_CATEGORY_ID, it.id)
                     }
