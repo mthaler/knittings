@@ -1,11 +1,10 @@
 package com.mthaler.knittings.category
 
-
-import android.app.Activity
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
+import android.support.design.widget.FloatingActionButton
 import android.support.v4.app.Fragment
+import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -19,7 +18,7 @@ import kotlinx.android.synthetic.main.fragment_category_list.*
 class CategoryListFragment : Fragment() {
 
     private var knittingID: Long = -1
-    private var listener: OnCategoryClickedListener? = null
+    private var listener: OnFragmentInteractionListener? = null
 
     /**
      * Called to do initial creation of a fragment. This is called after onAttach(Activity) and before
@@ -54,7 +53,17 @@ class CategoryListFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_category_list, container, false)
+        val v = inflater.inflate(R.layout.fragment_category_list, container, false)
+
+        // add new category if the user clicks the floating action button and start the
+        // EditCategoryActivity to edit the new category
+        val fab = v.findViewById<FloatingActionButton>(R.id.fab_create_category)
+        fab.setOnClickListener { v -> listener?.let { it.createCategory() } }
+
+        val rv = v.findViewById<RecyclerView>(R.id.category_recycler_view)
+        rv.layoutManager = LinearLayoutManager(context)
+
+        return v
     }
 
     /**
@@ -85,10 +94,7 @@ class CategoryListFragment : Fragment() {
         // start EditCategoryActivity if the users clicks on a category
         val adapter = CategoryAdapter(context!!, categories, object : OnItemClickListener {
             override fun onItemClick(item: Category) {
-                val i = Intent()
-                i.putExtra(Extras.EXTRA_CATEGORY_ID, item.id)
-                activity!!.setResult(Activity.RESULT_OK, i)
-                activity!!.finish()
+                listener?.let { it.categoryClicked(item.id) }
             }
         })
         rv.adapter = adapter
@@ -101,7 +107,7 @@ class CategoryListFragment : Fragment() {
      */
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        if (context is OnCategoryClickedListener) {
+        if (context is OnFragmentInteractionListener) {
             listener = context
         } else {
             throw RuntimeException(context.toString() + " must implement OnFragmentInteractionListener")
@@ -122,10 +128,17 @@ class CategoryListFragment : Fragment() {
      * to the activity and potentially other fragments contained in that
      * activity.
      */
-    interface OnCategoryClickedListener {
+    interface OnFragmentInteractionListener {
 
         /**
-         * Called if the user clicks a category
+         * Called if the user clicks the floating action button to create a category
+         */
+        fun createCategory()
+
+        /**
+         * Called if the user clicks a category in the list
+         *
+         * @param categoryID category ID
          */
         fun categoryClicked(categoryID: Long)
     }
