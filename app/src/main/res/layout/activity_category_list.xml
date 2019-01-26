@@ -23,31 +23,8 @@
     </android.support.design.widget.AppBarLayout>
 
     <FrameLayout
+        android:id="@+id/category_list_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="?attr/actionBarSize">
-
-        <!-- image that is shown if the category list is empty -->
-        <ImageView
-            android:id="@+id/category_empty_recycler_view"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:padding="48dp"
-            android:src="@drawable/binder"
-            android:visibility="gone" />
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/category_recycler_view"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:visibility="visible" />
-
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fab_create_category"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end|bottom"
-            app:srcCompat="@drawable/ic_add_white_36dp"
-            android:layout_margin="16dp" />
-    </FrameLayout>
+        android:layout_marginTop="?attr/actionBarSize" />
 </android.support.design.widget.CoordinatorLayout>

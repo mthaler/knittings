@@ -2,22 +2,18 @@ package com.mthaler.knittings.category
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.support.design.widget.FloatingActionButton
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
-import android.view.View
 import com.mthaler.knittings.R
 import com.mthaler.knittings.database.datasource
 import org.jetbrains.anko.startActivity
 import com.mthaler.knittings.Extras.EXTRA_CATEGORY_ID
-import com.mthaler.knittings.model.Category
+import com.mthaler.knittings.Extras.EXTRA_KNITTING_ID
 import kotlinx.android.synthetic.main.activity_category_list.*
 
 /**
  * CategoryListActivity displays a list of categories. The user can add a new category by clicking
  * the floating action button and edit existing categories by clicking the category.
  */
-class CategoryListActivity : AppCompatActivity() {
+class CategoryListActivity : AppCompatActivity(), CategoryListFragment.OnFragmentInteractionListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,46 +24,25 @@ class CategoryListActivity : AppCompatActivity() {
         // enable up navigation
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        // add new category if the user clicks the floating action button and start the
-        // EditCategoryActivity to edit the new category
-        val fab = findViewById<FloatingActionButton>(R.id.fab_create_category)
-        fab.setOnClickListener { v -> run {
-            val category = datasource.createCategory("category", null)
-            startActivity<EditCategoryActivity>(EXTRA_CATEGORY_ID to category.id)
-        } }
+        // get the id of the category that should be displayed.
+        val knittingID = intent.getLongExtra(EXTRA_KNITTING_ID, -1L)
 
-        val rv = findViewById<RecyclerView>(R.id.category_recycler_view)
-        rv.layoutManager = LinearLayoutManager(this)
-    }
-
-    /**
-     * The onResume method is called when the activity is started or if the user returns from another activity
-     * e.g. the EditCategoryActivity.
-     */
-    override fun onResume() {
-        super.onResume()
-        updateCategoryList()
-    }
-
-    /**
-     * Updates the list of categories
-     */
-    private fun updateCategoryList() {
-        val rv = findViewById<RecyclerView>(R.id.category_recycler_view)
-        val categories = datasource.allCategories
-        // show image if category list is empty
-        if (categories.isEmpty()) {
-            category_empty_recycler_view.visibility = View.VISIBLE
-            category_recycler_view.visibility = View.GONE
-        } else {
-            category_empty_recycler_view.visibility = View.GONE
-            category_recycler_view.visibility = View.VISIBLE
+        if (savedInstanceState == null) {
+            val f = CategoryListFragment.newInstance(knittingID)
+            val fm = supportFragmentManager
+            val ft = fm.beginTransaction()
+            ft.add(R.id.category_list_container, f)
+            //ft.addToBackStack(null)
+            ft.commit()
         }
-        // start EditCategoryActivity if the users clicks on a category
-        val adapter = CategoryAdapter(this, categories, object : OnItemClickListener {
-            override fun onItemClick(item: Category) {
-                startActivity<EditCategoryActivity>(EXTRA_CATEGORY_ID to item!!.id)
-            }})
-        rv.adapter = adapter
+    }
+
+    override fun createCategory() {
+        val category = datasource.createCategory("category", null)
+        startActivity<EditCategoryActivity>(EXTRA_CATEGORY_ID to category.id)
+    }
+
+    override fun categoryClicked(categoryID: Long) {
+        startActivity<EditCategoryActivity>(EXTRA_CATEGORY_ID to categoryID)
     }
 }

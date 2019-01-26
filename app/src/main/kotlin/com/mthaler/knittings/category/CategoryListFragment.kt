@@ -77,6 +77,11 @@ class CategoryListFragment : Fragment() {
         super.onSaveInstanceState(savedInstanceState)
     }
 
+    override fun onResume() {
+        super.onResume()
+        updateCategoryList()
+    }
+
     /**
      * Updates the list of categories
      */
@@ -153,7 +158,7 @@ class CategoryListFragment : Fragment() {
          */
         @JvmStatic
         fun newInstance(knittingID: Long) =
-                SelectCategoryFragment().apply {
+                CategoryListFragment().apply {
                     arguments = Bundle().apply {
                         putLong(Extras.EXTRA_KNITTING_ID, knittingID)
                     }
