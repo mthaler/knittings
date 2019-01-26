@@ -174,19 +174,21 @@ class PhotoFragment : Fragment(), AnkoLogger {
      */
     private fun saveImage(image: Bitmap): Uri? {
         //TODO - Should be processed in another thread
-        val imagesFolder = File(context!!.cacheDir, "images")
         var uri: Uri? = null
-        try {
-            imagesFolder.mkdirs()
-            val file = File(imagesFolder, "shared_image.jpg")
+        context?.let {
+            val imagesFolder = File(it.cacheDir, "images")
+            try {
+                imagesFolder.mkdirs()
+                val file = File(imagesFolder, "shared_image.jpg")
 
-            val stream = FileOutputStream(file)
-            image.compress(Bitmap.CompressFormat.JPEG, 90, stream)
-            stream.flush()
-            stream.close()
-            uri = FileProvider.getUriForFile(context!!, "com.mthaler.knittings.fileprovider", file)
-        } catch (e: IOException) {
-            error("IOException while trying to write file for sharing: " + e.message)
+                val stream = FileOutputStream(file)
+                image.compress(Bitmap.CompressFormat.JPEG, 90, stream)
+                stream.flush()
+                stream.close()
+                uri = FileProvider.getUriForFile(it, "com.mthaler.knittings.fileprovider", file)
+            } catch (e: IOException) {
+                error("IOException while trying to write file for sharing: " + e.message)
+            }
         }
         return uri
     }
