@@ -1,8 +1,10 @@
 package com.mthaler.knittings.category
 
+import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v7.app.AppCompatActivity
 import android.text.Editable
 import android.view.*
 import android.widget.Button
@@ -13,6 +15,7 @@ import com.mthaler.knittings.model.Category
 import com.mthaler.knittings.Extras.EXTRA_CATEGORY_ID
 import com.mthaler.knittings.TextWatcher
 import com.mthaler.knittings.database.datasource
+import org.jetbrains.anko.support.v4.alert
 
 class EditCategoryFragment : Fragment() {
 
@@ -102,6 +105,53 @@ class EditCategoryFragment : Fragment() {
             inflater.inflate(R.menu.edit_category, menu)
         }
     }
+
+    /**
+     * This hook is called whenever an item in your options menu is selected.
+     *
+     * @param item the menu item that was selected.
+     * @return return false to allow normal menu processing to proceed, true to consume it here.
+     */
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        if (item != null) {
+            return when (item.itemId) {
+                R.id.menu_item_delete_category -> {
+                    showDeleteDialog()
+                    true
+                }
+                android.R.id.home -> {
+                    category?.let {
+                        val i = Intent()
+                        i.putExtra(EXTRA_CATEGORY_ID, it.id)
+                        activity?.let {  it.setResult(AppCompatActivity.RESULT_OK, i) }
+                    }
+                    activity?.let { it.finish() }
+                    true
+                }
+                else -> super.onOptionsItemSelected(item)
+            }
+        } else {
+            return super.onOptionsItemSelected(item)
+        }
+    }
+
+    /**
+     * Displays a dialog that asks the user to confirm that the knitting should be deleted
+     */
+    private fun showDeleteDialog() {
+        // show alert asking user to confirm that knitting should be deleted
+        alert {
+            title = resources.getString(R.string.delete_category_dialog_title)
+            message = resources.getString(R.string.delete_category_dialog_question)
+            positiveButton(resources.getString(R.string.delete_category_dialog_delete_button)) {
+                // delete database entry
+                datasource.deleteCategory(category!!)
+                activity?.let { it.finish() }
+            }
+            negativeButton(resources.getString(R.string.dialog_button_cancel)) {}
+        }.show()
+    }
+
 
     /**
      * Creates a text watcher that updates the category using the given update function
