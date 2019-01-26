@@ -82,7 +82,7 @@ class EditCategoryFragment : Fragment() {
                 }
                 button.setBackgroundColor(color)
             } }
-            colorPickerDialog.show(activity!!.fragmentManager, null)
+            colorPickerDialog.show(fragmentManager, null)
         }}
 
         return v
