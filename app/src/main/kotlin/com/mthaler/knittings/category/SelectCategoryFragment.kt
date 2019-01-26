@@ -108,6 +108,11 @@ class SelectCategoryFragment : Fragment() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        updateCategoryList()
+    }
+
     /**
      * Updates the list of categories
      */
