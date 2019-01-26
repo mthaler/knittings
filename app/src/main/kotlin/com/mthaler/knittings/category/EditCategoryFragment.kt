@@ -4,9 +4,7 @@ import android.graphics.Color
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.text.Editable
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.Button
 import android.widget.EditText
 import com.android.colorpicker.ColorPickerDialog
@@ -54,6 +52,8 @@ class EditCategoryFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
 
+        setHasOptionsMenu(true)
+
         // Inflate the layout for this fragment
         val v = inflater.inflate(R.layout.fragment_edit_category, container, false)
 
@@ -86,6 +86,21 @@ class EditCategoryFragment : Fragment() {
         }}
 
         return v
+    }
+
+    /**
+     * Initialize the contents of the Fragment host's standard options menu. You should place your menu items in to menu.
+     * For this method to be called, you must have first called setHasOptionsMenu(boolean).
+     * See Activity.onCreateOptionsMenu for more information.
+     *
+     * @param menu The options menu in which you place your items.
+     * @param inflater MenuInflater
+     */
+    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+        super.onCreateOptionsMenu(menu, inflater)
+        if (menu != null && inflater != null) {
+            inflater.inflate(R.menu.edit_category, menu)
+        }
     }
 
     /**
