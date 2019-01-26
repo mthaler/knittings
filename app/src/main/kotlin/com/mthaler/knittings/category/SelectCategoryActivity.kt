@@ -11,7 +11,7 @@ import kotlinx.android.synthetic.main.activity_select_category.*
 import com.mthaler.knittings.Extras.EXTRA_KNITTING_ID
 import com.mthaler.knittings.database.datasource
 
-class SelectCategoryActivity : AppCompatActivity(), SelectCategoryFragment.OnCreateCategoryListener {
+class SelectCategoryActivity : AppCompatActivity(), CategoryListFragment.OnFragmentInteractionListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,7 +26,7 @@ class SelectCategoryActivity : AppCompatActivity(), SelectCategoryFragment.OnCre
         val knittingID = intent.getLongExtra(EXTRA_KNITTING_ID, -1L)
 
         if (savedInstanceState == null) {
-            val f = SelectCategoryFragment.newInstance(knittingID)
+            val f = CategoryListFragment.newInstance(knittingID)
             val fm = supportFragmentManager
             val ft = fm.beginTransaction()
             ft.add(R.id.select_category_container, f)
@@ -43,6 +43,13 @@ class SelectCategoryActivity : AppCompatActivity(), SelectCategoryFragment.OnCre
         ft.replace(R.id.select_category_container, f)
         //ft.addToBackStack(null)
         ft.commit()
+    }
+
+    override fun categoryClicked(categoryID: Long) {
+        val i = Intent()
+        i.putExtra(Extras.EXTRA_CATEGORY_ID, categoryID)
+        setResult(Activity.RESULT_OK, i)
+        finish()
     }
 
     /**
