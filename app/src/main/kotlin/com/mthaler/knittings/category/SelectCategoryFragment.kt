@@ -15,7 +15,7 @@ import com.mthaler.knittings.Extras.EXTRA_KNITTING_ID
 import com.mthaler.knittings.R
 import com.mthaler.knittings.database.datasource
 import com.mthaler.knittings.model.Category
-import kotlinx.android.synthetic.main.activity_select_category.*
+import kotlinx.android.synthetic.main.fragment_select_category.*
 
 class SelectCategoryFragment : Fragment() {
 
