@@ -127,9 +127,9 @@ class EditCategoryFragment : Fragment(), HasCategory {
                     category?.let {
                         val i = Intent()
                         i.putExtra(EXTRA_CATEGORY_ID, it.id)
-                        activity?.let {  it.setResult(AppCompatActivity.RESULT_OK, i) }
+                        activity?.setResult(AppCompatActivity.RESULT_OK, i)
                     }
-                    activity?.let { it.finish() }
+                    activity?.finish()
                     true
                 }
                 else -> super.onOptionsItemSelected(item)
@@ -163,7 +163,7 @@ class EditCategoryFragment : Fragment(), HasCategory {
             positiveButton(resources.getString(R.string.delete_category_dialog_delete_button)) {
                 // delete database entry
                 category?.let { datasource.deleteCategory(it) }
-                activity?.let { it.finish() }
+                activity?.finish()
             }
             negativeButton(resources.getString(R.string.dialog_button_cancel)) {}
         }.show()
