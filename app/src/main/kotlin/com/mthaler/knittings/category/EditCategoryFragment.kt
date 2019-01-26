@@ -17,9 +17,13 @@ import com.mthaler.knittings.TextWatcher
 import com.mthaler.knittings.database.datasource
 import org.jetbrains.anko.support.v4.alert
 
-class EditCategoryFragment : Fragment() {
+class EditCategoryFragment : Fragment(), HasCategory {
 
     private var category: Category? = null
+
+    override fun getCategory(): Category? {
+        return category
+    }
 
     /**
      * Called to do initial creation of a fragment. This is called after onAttach(Activity) and before
