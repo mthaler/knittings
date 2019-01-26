@@ -12,7 +12,6 @@ import android.view.ViewGroup
 import com.mthaler.knittings.Extras
 import com.mthaler.knittings.R
 import com.mthaler.knittings.database.datasource
-import com.mthaler.knittings.model.Category
 import kotlinx.android.synthetic.main.fragment_category_list.*
 
 class CategoryListFragment : Fragment() {
@@ -97,10 +96,8 @@ class CategoryListFragment : Fragment() {
             category_recycler_view.visibility = View.VISIBLE
         }
         // start EditCategoryActivity if the users clicks on a category
-        val adapter = CategoryAdapter(context!!, categories, object : OnItemClickListener {
-            override fun onItemClick(item: Category) {
-                listener?.let { it.categoryClicked(item.id) }
-            }
+        val adapter = CategoryAdapter(context!!, categories, { category ->
+            listener?.let { it.categoryClicked(category.id) }
         })
         rv.adapter = adapter
     }
