@@ -23,28 +23,9 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <android.support.design.widget.TextInputLayout
-        android:id="@+id/category_name_input_layout_name"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp">
-
-        <android.support.design.widget.TextInputEditText android:id="@+id/category_name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            android:hint="@string/edit_category_name_hint" />
-    </android.support.design.widget.TextInputLayout>
-
-
-    <Button
-        android:id="@+id/button_select_color"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginTop="20dp"
-        android:text="@string/edit_category_select_color" />
+   <FrameLayout
+       android:id="@+id/edit_category_container"
+       android:layout_width="match_parent"
+       android:layout_height="match_parent" />
 
 </LinearLayout>

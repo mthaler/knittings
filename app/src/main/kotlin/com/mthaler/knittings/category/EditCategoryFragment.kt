@@ -70,7 +70,7 @@ class EditCategoryFragment : Fragment() {
         category?.let { if (it.color != null) button.setBackgroundColor(it.color) }
         button.setOnClickListener { view -> run {
             val colorPickerDialog = ColorPickerDialog()
-            colorPickerDialog.initialize(R.string.category_color_dialog_title, COLORS, Color.RED, 4, EditCategoryActivity.COLORS.size)
+            colorPickerDialog.initialize(R.string.category_color_dialog_title, COLORS, Color.RED, 4, COLORS.size)
             colorPickerDialog.setOnColorSelectedListener { color -> run {
                 val category0 = category
                 if (category0 != null) {
@@ -196,11 +196,11 @@ class EditCategoryFragment : Fragment() {
          */
         @JvmStatic
         fun newInstance(categoryID: Long) =
-                EditCategoryFragment().apply {
-                    arguments = Bundle().apply {
-                        putLong(EXTRA_CATEGORY_ID, categoryID)
-                    }
+            EditCategoryFragment().apply {
+                arguments = Bundle().apply {
+                    putLong(EXTRA_CATEGORY_ID, categoryID)
                 }
+            }
 
         val COLORS = arrayOf("#F6402C", "#EB1460", "#9C1AB1", "#6633B9", "#3D4DB7", "#1093F5", "#00A6F6", "#00BBD5", "#009687", "#46AF4A",
                 "#88C440", "#CCDD1E", "#FFEC16", "#FFC100", "#FF9800", "#FF5505", "#7A5547", "#9D9D9D", "#5E7C8B").map { Color.parseColor(it) }.toIntArray()
