@@ -1,13 +1,19 @@
 package com.mthaler.knittings.category
 
+import android.graphics.Color
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.text.Editable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.EditText
+import com.android.colorpicker.ColorPickerDialog
 import com.mthaler.knittings.R
 import com.mthaler.knittings.model.Category
 import com.mthaler.knittings.Extras.EXTRA_CATEGORY_ID
+import com.mthaler.knittings.TextWatcher
 import com.mthaler.knittings.database.datasource
 
 class EditCategoryFragment : Fragment() {
@@ -47,8 +53,59 @@ class EditCategoryFragment : Fragment() {
      */
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
+
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_edit_category, container, false)
+        val v = inflater.inflate(R.layout.fragment_edit_category, container, false)
+
+        // set edit text title text to category name
+        val editTextTitle = v.findViewById<EditText>(R.id.category_name)
+        editTextTitle.addTextChangedListener(createTextWatcher { c, knitting -> knitting.copy(name = c.toString()) })
+        category?.let { editTextTitle.setText(it.name) }
+
+        // set background color of the button to category color if it is defined
+        val button = v.findViewById<Button>(R.id.button_select_color)
+        category?.let { if (it.color != null) button.setBackgroundColor(it.color) }
+        button.setOnClickListener { view -> run {
+            val colorPickerDialog = ColorPickerDialog()
+            colorPickerDialog.initialize(R.string.category_color_dialog_title, EditCategoryActivity.COLORS, Color.RED, 4, EditCategoryActivity.COLORS.size)
+            colorPickerDialog.setOnColorSelectedListener { color -> run {
+                val category0 = category
+                if (category0 != null) {
+                    try {
+                        val category1 = category0.copy(color = color)
+                        datasource.updateCategory(category1)
+                        category = category1
+                        button.setBackgroundColor(color)
+                    } catch(ex: Exception) {
+                    }
+
+                }
+                button.setBackgroundColor(color)
+            } }
+            colorPickerDialog.show(activity!!.fragmentManager, null)
+        }}
+
+        return v
+    }
+
+    /**
+     * Creates a text watcher that updates the category using the given update function
+     *
+     * @param updateCategory function to updated the category
+     */
+    private fun createTextWatcher(updateCategory: (CharSequence, Category) -> Category): TextWatcher {
+        return object : TextWatcher {
+            override fun afterTextChanged(c: Editable) {
+                category?.let {
+                    try {
+                        val c = updateCategory(c, it)
+                        datasource.updateCategory(c)
+                        category = c
+                    } catch(ex: Exception) {
+                    }
+                }
+            }
+        }
     }
 
     companion object {
