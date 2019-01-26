@@ -163,7 +163,8 @@ class EditCategoryFragment : Fragment(), HasCategory {
             positiveButton(resources.getString(R.string.delete_category_dialog_delete_button)) {
                 // delete database entry
                 category?.let { datasource.deleteCategory(it) }
-                activity?.finish()
+                // go back to the previous fragment which is the category list
+                fragmentManager?.popBackStack()
             }
             negativeButton(resources.getString(R.string.dialog_button_cancel)) {}
         }.show()
