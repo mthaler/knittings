@@ -80,11 +80,13 @@ class SelectCategoryActivity : AppCompatActivity(), CategoryListFragment.OnFragm
             if (upIntent == null) {
                 throw IllegalStateException("No Parent Activity Intent")
             } else {
+                upIntent.putExtra(EXTRA_KNITTING_ID, knittingID)
                 val fm = supportFragmentManager
-                val f = fm.findFragmentById(R.id.select_category_container) as HasCategory
-                f?.getCategory()?.let {
-                    upIntent.putExtra(Extras.EXTRA_CATEGORY_ID, it.id)
-                    upIntent.putExtra(EXTRA_KNITTING_ID, knittingID)
+                val f = fm.findFragmentById(R.id.select_category_container)
+                if (f is HasCategory) {
+                    f.getCategory()?.let {
+                        upIntent.putExtra(Extras.EXTRA_CATEGORY_ID, it.id)
+                    }
                 }
                 NavUtils.navigateUpTo(this, upIntent)
             }
