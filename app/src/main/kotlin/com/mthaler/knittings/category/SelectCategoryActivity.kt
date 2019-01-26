@@ -37,9 +37,12 @@ class SelectCategoryActivity : AppCompatActivity(), SelectCategoryFragment.OnCre
 
     override fun createCategory() {
         val category = datasource.createCategory("", null)
-        val i = Intent(this, EditCategoryActivity::class.java)
-        i.putExtra(Extras.EXTRA_CATEGORY_ID, category.id)
-        startActivityForResult(i, REQUEST_EDIT_CATEGORY)
+        val f = EditCategoryFragment.newInstance(category.id)
+        val fm = supportFragmentManager
+        val ft = fm.beginTransaction()
+        ft.replace(R.id.select_category_container, f)
+        //ft.addToBackStack(null)
+        ft.commit()
     }
 
     /**
