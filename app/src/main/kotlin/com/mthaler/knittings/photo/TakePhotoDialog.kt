@@ -23,6 +23,8 @@ object TakePhotoDialog : AnkoLogger {
      * @param context Context
      * @param layoutInflater layout inflater
      * @param knittingID ID of the knitting for which a photo should be added
+     * @param takePhoto function that is called if the user wants to take a photo
+     * @param importPhoto function that is called if the user wants to import a photo
      */
     fun create(context: Context,
                layoutInflater: LayoutInflater,
