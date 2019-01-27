@@ -1,10 +1,12 @@
 package com.mthaler.knittings.settings
 
+import android.annotation.SuppressLint
+import android.os.Build
 import android.os.Bundle
-import android.support.v7.preference.ListPreference
-import android.support.v7.preference.Preference
-import android.support.v7.preference.PreferenceFragmentCompat
-import android.support.v7.preference.PreferenceManager
+import android.support.v7.preference.*
+import android.support.v7.widget.RecyclerView
+import android.view.View
+import android.view.ViewGroup
 import com.mthaler.knittings.R
 
 class SettingsFragment : PreferenceFragmentCompat() {
@@ -20,6 +22,32 @@ class SettingsFragment : PreferenceFragmentCompat() {
         // Load the Preferences from the XML file
         addPreferencesFromResource(R.xml.app_preferences)
         bindPreferenceSummaryToValue(findPreference("share_photo_size"))
+    }
+
+    // TODO: this is a hack to remove the left margin from the PreferenceCategory
+    override fun onCreateAdapter(preferenceScreen: PreferenceScreen?): RecyclerView.Adapter<*> {
+        return object : PreferenceGroupAdapter(preferenceScreen) {
+            @SuppressLint("RestrictedApi")
+            override fun onBindViewHolder(holder: PreferenceViewHolder, position: Int) {
+                super.onBindViewHolder(holder, position)
+                val preference = getItem(position)
+                if (preference is PreferenceCategory)
+                    setZeroPaddingToLayoutChildren(holder.itemView)
+            }
+        }
+    }
+
+    private fun setZeroPaddingToLayoutChildren(view: View) {
+        if (view !is ViewGroup)
+            return
+        val childCount = view.childCount
+        for (i in 0 until childCount) {
+            setZeroPaddingToLayoutChildren(view.getChildAt(i))
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1)
+                view.setPaddingRelative(0, view.paddingTop, view.paddingEnd, view.paddingBottom)
+            else
+                view.setPadding(0, view.paddingTop, view.paddingRight, view.paddingBottom)
+        }
     }
 
     companion object {
