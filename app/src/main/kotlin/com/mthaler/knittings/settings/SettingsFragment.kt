@@ -1,10 +1,10 @@
 package com.mthaler.knittings.settings
 
 import android.os.Bundle
-import android.preference.ListPreference
+import android.support.v7.preference.ListPreference
 import android.support.v7.preference.Preference
-import android.preference.PreferenceManager
 import android.support.v7.preference.PreferenceFragmentCompat
+import android.support.v7.preference.PreferenceManager
 import com.mthaler.knittings.R
 
 class SettingsFragment : PreferenceFragmentCompat() {
@@ -12,8 +12,11 @@ class SettingsFragment : PreferenceFragmentCompat() {
     /**
      * Called during onCreate(Bundle) to supply the preferences for this fragment. Subclasses are expected to call
      * setPreferenceScreen(PreferenceScreen) either directly or via helper methods such as addPreferencesFromResource(int).
+     *
+     * @param savedInstanceState If the fragment is being re-created from a previous saved state, this is the state.
+     * @param rootKey  If non-null, this preference fragment should be rooted at the PreferenceScreen with this key.
      */
-    override fun onCreatePreferences(bundle: Bundle, s: String) {
+    override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         // Load the Preferences from the XML file
         addPreferencesFromResource(R.xml.app_preferences)
         bindPreferenceSummaryToValue(findPreference("share_photo_size"))
