@@ -85,8 +85,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         outState.putString("sorting", sorting.name)
         outState.putSerializable("filter", filter)
         val sv = this.sv
-        if (sv != null && !sv.isIconified()) {
-            outState.putCharSequence(STATE_QUERY, sv.getQuery());
+        if (sv != null && !sv.isIconified) {
+            outState.putCharSequence(STATE_QUERY, sv.query)
         }
 
         super.onSaveInstanceState(outState)

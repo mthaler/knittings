@@ -155,12 +155,10 @@ class CategoryListFragment : Fragment() {
          */
         @JvmStatic
         fun newInstance(knittingID: Long) =
-                CategoryListFragment().apply {
-                    arguments = Bundle().apply {
-                        putLong(Extras.EXTRA_KNITTING_ID, knittingID)
-                    }
+            CategoryListFragment().apply {
+                arguments = Bundle().apply {
+                    putLong(Extras.EXTRA_KNITTING_ID, knittingID)
                 }
-
-        private const val REQUEST_EDIT_CATEGORY = 0
+            }
     }
 }

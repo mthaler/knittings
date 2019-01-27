@@ -83,7 +83,7 @@ class EditKnittingDetailsFragment : Fragment() {
             mTimePicker.show()
         }
 
-        buttonCategory = v.findViewById<Button>(R.id.knitting_category)
+        buttonCategory = v.findViewById(R.id.knitting_category)
         buttonCategory.setOnClickListener {
             val i = Intent(context, SelectCategoryActivity::class.java)
             // add the knitting ID which is required to make up navigation work correctly
