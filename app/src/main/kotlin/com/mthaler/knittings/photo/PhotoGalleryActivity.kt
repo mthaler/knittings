@@ -15,11 +15,19 @@ import java.io.File
 import com.mthaler.knittings.Extras.EXTRA_KNITTING_ID
 import kotlinx.android.synthetic.main.activity_photo_gallery.*
 
-class PhotoGalleryActivity : AppCompatActivity(), CanTakePhoto, AnkoLogger {
+class PhotoGalleryActivity : AppCompatActivity(), AnkoLogger {
 
     private var knittingID: Long = -1
-    override var currentPhotoPath: File? = null
+    private var currentPhotoPath: File? = null
 
+    /**
+     * Called when the activity is starting. This is where most initialization should go: calling setContentView(int)
+     * to inflate the activity's UI, using findViewById(int) to programmatically interact with widgets in the UI,
+     * calling managedQuery(android.net.Uri, String[], String, String[], String) to retrieve cursors for data being displayed, etc.
+     *
+     * @param savedInstanceState Bundle: If the activity is being re-initialized after previously being shut down then this Bundle contains
+     *                           the data it most recently supplied in onSaveInstanceState(Bundle). Note: Otherwise it is null.
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_photo_gallery)
@@ -38,6 +46,14 @@ class PhotoGalleryActivity : AppCompatActivity(), CanTakePhoto, AnkoLogger {
         }
     }
 
+    /**
+     * Called to ask the fragment to save its current dynamic state, so it can later be reconstructed in a
+     * new instance of its process is restarted. If a new instance of the fragment later needs to be created,
+     * the data you place in the Bundle here will be available in the Bundle given to onCreate(Bundle),
+     * onCreateView(LayoutInflater, ViewGroup, Bundle), and onActivityCreated(Bundle).
+     *
+     * @param outState If the fragment is being re-created from a previous saved state, this is the state.
+     */
     override fun onSaveInstanceState(outState: Bundle) {
         outState.putLong(EXTRA_KNITTING_ID, knittingID)
         super.onSaveInstanceState(outState)
@@ -87,7 +103,9 @@ class PhotoGalleryActivity : AppCompatActivity(), CanTakePhoto, AnkoLogger {
         }
 
         R.id.menu_item_add_photo -> {
-            takePhoto(this, layoutInflater, knittingID)
+            val d = TakePhotoDialog.create(this, layoutInflater, knittingID, this::takePhoto, this::importPhoto)
+            d.show()
+            true
         }
         else -> super.onOptionsItemSelected(item)
     }
@@ -96,8 +114,32 @@ class PhotoGalleryActivity : AppCompatActivity(), CanTakePhoto, AnkoLogger {
         if (resultCode != Activity.RESULT_OK) {
             return
         }
-        if (requestCode == CanTakePhoto.REQUEST_IMAGE_CAPTURE || requestCode == CanTakePhoto.REQUEST_IMAGE_IMPORT) {
-            onActivityResult(this, knittingID, requestCode, resultCode, data)
+        when (requestCode) {
+            REQUEST_IMAGE_CAPTURE -> {
+                currentPhotoPath?.let { TakePhotoDialog.handleTakePhotoResult(this, knittingID, it) }
+            }
+            REQUEST_IMAGE_IMPORT -> {
+                val f = currentPhotoPath
+                if (f != null && data != null) {
+                    TakePhotoDialog.handleImageImportResult(this, knittingID, f, data)
+                }
+            }
+            else -> super.onActivityResult(requestCode, resultCode, data)
         }
+    }
+
+    private fun takePhoto(file: File, intent: Intent) {
+        currentPhotoPath = file
+        startActivityForResult(intent, REQUEST_IMAGE_CAPTURE)
+    }
+
+    private fun importPhoto(file: File, intent: Intent) {
+        currentPhotoPath = file
+        startActivityForResult(intent, REQUEST_IMAGE_IMPORT)
+    }
+
+    companion object {
+        const val REQUEST_IMAGE_CAPTURE = 0
+        const val REQUEST_IMAGE_IMPORT = 1
     }
 }

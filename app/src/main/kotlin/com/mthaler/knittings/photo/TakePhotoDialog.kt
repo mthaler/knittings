@@ -42,6 +42,7 @@ object TakePhotoDialog : AnkoLogger {
         val d = b.create()
         // take a photo if the user clicks the take photo button
         buttonTakePhoto.setOnClickListener {
+            d.dismiss()
             val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
             val knitting = context.datasource.getKnitting(knittingID)
             // create a photo file for the photo
