@@ -75,12 +75,39 @@ object TakePhotoDialog : AnkoLogger {
      */
     fun handleTakePhotoResult(context: Context,
                               knittingID: Long,
-                              file: File): Unit {
+                              file: File) {
         // add photo to database
         val orientation = PictureUtils.getOrientation(file.absolutePath)
         val preview = PictureUtils.decodeSampledBitmapFromPath(file.absolutePath, 200, 200)
         val rotatedPreview = PictureUtils.rotateBitmap(preview, orientation)
         val photo = context.datasource.createPhoto(file,knittingID, rotatedPreview, "")
+        debug("Created new photo from $file, knitting id $knittingID")
+        // add first photo as default photo
+        val knitting = context.datasource.getKnitting(knittingID)
+        if (knitting.defaultPhoto == null) {
+            debug("Set $photo as default photo")
+            context.datasource.updateKnitting(knitting.copy(defaultPhoto = photo))
+        }
+    }
+
+    /**
+     * Should be called from onActivityResult when the import image activity returns
+     *
+     * @param context Context
+     * @param knittingID ID of the knitting for which a photo should be added
+     * @param file photo file
+     * @param data data returned from import image activity
+     */
+    fun handleImageImportResult(context: Context,
+                                knittingID: Long,
+                                file: File,
+                                data: Intent) {
+        val imageUri = data.data
+        PictureUtils.copy(imageUri, file, context)
+        val orientation = PictureUtils.getOrientation(file.absolutePath)
+        val preview = PictureUtils.decodeSampledBitmapFromPath(file.absolutePath, 200, 200)
+        val rotatedPreview = PictureUtils.rotateBitmap(preview, orientation)
+        val photo = context.datasource.createPhoto(file, knittingID, rotatedPreview, "")
         debug("Created new photo from $file, knitting id $knittingID")
         // add first photo as default photo
         val knitting = context.datasource.getKnitting(knittingID)
