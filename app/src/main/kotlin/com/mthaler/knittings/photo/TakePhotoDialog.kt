@@ -10,6 +10,7 @@ import android.view.LayoutInflater
 import android.widget.Button
 import com.mthaler.knittings.R
 import com.mthaler.knittings.database.datasource
+import com.mthaler.knittings.utils.PictureUtils
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.debug
 import org.jetbrains.anko.find
@@ -63,5 +64,29 @@ object TakePhotoDialog : AnkoLogger {
             importPhoto(f!!, photoPickerIntent)
         }
         return d
+    }
+
+    /**
+     * Should be called from onActivityResult when the image capture activity returns
+     *
+     * @param context Context
+     * @param knittingID ID of the knitting for which a photo should be added
+     * @param file photo file
+     */
+    fun handleTakePhotoResult(context: Context,
+                              knittingID: Long,
+                              file: File): Unit {
+        // add photo to database
+        val orientation = PictureUtils.getOrientation(file.absolutePath)
+        val preview = PictureUtils.decodeSampledBitmapFromPath(file.absolutePath, 200, 200)
+        val rotatedPreview = PictureUtils.rotateBitmap(preview, orientation)
+        val photo = context.datasource.createPhoto(file,knittingID, rotatedPreview, "")
+        debug("Created new photo from $file, knitting id $knittingID")
+        // add first photo as default photo
+        val knitting = context.datasource.getKnitting(knittingID)
+        if (knitting.defaultPhoto == null) {
+            debug("Set $photo as default photo")
+            context.datasource.updateKnitting(knitting.copy(defaultPhoto = photo))
+        }
     }
 }
