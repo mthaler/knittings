@@ -6,7 +6,6 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import com.mthaler.knittings.photo.CanTakePhoto
 import com.mthaler.knittings.photo.PhotoGalleryActivity
 import com.mthaler.knittings.R
 import com.mthaler.knittings.database.datasource
@@ -14,17 +13,26 @@ import com.mthaler.knittings.stopwatch.StopwatchActivity
 import org.jetbrains.anko.*
 import java.io.File
 import com.mthaler.knittings.Extras.EXTRA_KNITTING_ID
+import com.mthaler.knittings.photo.TakePhotoDialog
 import kotlinx.android.synthetic.main.activity_knitting_details.*
 
 /**
  * Activity that displays knitting details (name, description, start time etc.)
  */
-class KnittingDetailsActivity : AppCompatActivity(), AnkoLogger, CanTakePhoto {
+class KnittingDetailsActivity : AppCompatActivity(), AnkoLogger {
 
     // id of the displayed knitting
     private var knittingID: Long = -1
-    override var currentPhotoPath: File? = null
+    private var currentPhotoPath: File? = null
 
+    /**
+     * Called when the activity is starting. This is where most initialization should go: calling setContentView(int)
+     * to inflate the activity's UI, using findViewById(int) to programmatically interact with widgets in the UI,
+     * calling managedQuery(android.net.Uri, String[], String, String[], String) to retrieve cursors for data being displayed, etc.
+     *
+     * @param savedInstanceState Bundle: If the activity is being re-initialized after previously being shut down then this Bundle contains
+     *                           the data it most recently supplied in onSaveInstanceState(Bundle). Note: Otherwise it is null.
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_knitting_details)
@@ -107,7 +115,9 @@ class KnittingDetailsActivity : AppCompatActivity(), AnkoLogger, CanTakePhoto {
                 return true
             }
             R.id.menu_item_add_photo -> {
-                return takePhoto(this, layoutInflater, knittingID)
+                val d = TakePhotoDialog.create(this, layoutInflater, knittingID, this::takePhoto, this::importPhoto)
+                d.show()
+                return true
             }
             R.id.menu_item_delete_knitting -> {
                 showDeleteDialog()
@@ -130,8 +140,17 @@ class KnittingDetailsActivity : AppCompatActivity(), AnkoLogger, CanTakePhoto {
         if (resultCode != Activity.RESULT_OK) {
             return
         }
-        if (requestCode == CanTakePhoto.REQUEST_IMAGE_CAPTURE || requestCode == CanTakePhoto.REQUEST_IMAGE_IMPORT) {
-            onActivityResult(this, knittingID, requestCode, resultCode, data)
+        when (requestCode) {
+            REQUEST_IMAGE_CAPTURE -> {
+                currentPhotoPath?.let { TakePhotoDialog.handleTakePhotoResult(this, knittingID, it) }
+            }
+            REQUEST_IMAGE_IMPORT -> {
+                val f = currentPhotoPath
+                if (f != null && data != null) {
+                    TakePhotoDialog.handleImageImportResult(this, knittingID, f, data)
+                }
+            }
+            else -> super.onActivityResult(requestCode, resultCode, data)
         }
     }
 
@@ -153,7 +172,19 @@ class KnittingDetailsActivity : AppCompatActivity(), AnkoLogger, CanTakePhoto {
         }.show()
     }
 
+    private fun takePhoto(file: File, intent: Intent) {
+        currentPhotoPath = file
+        startActivityForResult(intent, REQUEST_IMAGE_CAPTURE)
+    }
+
+    private fun importPhoto(file: File, intent: Intent) {
+        currentPhotoPath = file
+        startActivityForResult(intent, REQUEST_IMAGE_IMPORT)
+    }
+
     companion object {
         const val CURRENT_PHOTO_PATH = "com.mthaler.knitting.CURRENT_PHOTO_PATH"
+        const val REQUEST_IMAGE_CAPTURE = 0
+        const val REQUEST_IMAGE_IMPORT = 1
     }
 }
