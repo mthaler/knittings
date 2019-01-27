@@ -26,6 +26,25 @@ class PhotoGalleryFragment : Fragment(), AnkoLogger {
     private lateinit var gridView: GridView
 
     /**
+     * Called to do initial creation of a fragment. This is called after onAttach(Activity) and before
+     * onCreateView(LayoutInflater, ViewGroup, Bundle). Note that this can be called while the fragment's activity
+     * is still in the process of being created. As such, you can not rely on things like the activity's content view
+     * hierarchy being initialized at this point. If you want to do work once the activity itself is created,
+     * see onActivityCreated(Bundle).
+     *
+     * Any restored child fragments will be created before the base Fragment.onCreate method returns.
+     *
+     * @param savedInstanceState If the fragment is being re-created from a previous saved state, this is the state.
+     */
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        arguments?.let {
+            val knittingID = it.getLong(EXTRA_KNITTING_ID)
+            knitting = datasource.getKnitting(knittingID)
+        }
+    }
+
+    /**
      * Called to have the fragment instantiate its user interface view. This is optional, and non-graphical
      * fragments can return null (which is the default implementation). This will be called between onCreate(Bundle)
      * and onActivityCreated(Bundle).
@@ -90,5 +109,21 @@ class PhotoGalleryFragment : Fragment(), AnkoLogger {
             val photo = parent.getItemAtPosition(position) as Photo
             startActivity<PhotoActivity>(EXTRA_PHOTO_ID to photo.id, EXTRA_KNITTING_ID to knitting.id)
         }
+    }
+
+    companion object {
+        /**
+         * Use this factory method to create a new instance of this fragment using the provided parameters.
+         *
+         * @param knittingID id of the knitting for which photos should be displayed
+         * @return A new instance of fragment PhotoGalleryFragment.
+         */
+        @JvmStatic
+        fun newInstance(knittingID: Long) =
+                PhotoGalleryFragment().apply {
+                    arguments = Bundle().apply {
+                        putLong(EXTRA_KNITTING_ID, knittingID)
+                    }
+                }
     }
 }
