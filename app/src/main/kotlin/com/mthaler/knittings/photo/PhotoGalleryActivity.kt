@@ -1,23 +1,19 @@
 package com.mthaler.knittings.photo
 
-import android.app.Activity
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v4.app.NavUtils
-import android.view.Menu
 import android.view.MenuItem
 import com.mthaler.knittings.R
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.error
-import java.io.File
 import com.mthaler.knittings.Extras.EXTRA_KNITTING_ID
 import kotlinx.android.synthetic.main.activity_photo_gallery.*
 
 class PhotoGalleryActivity : AppCompatActivity(), AnkoLogger {
 
     private var knittingID: Long = -1
-    private var currentPhotoPath: File? = null
 
     /**
      * Called when the activity is starting. This is where most initialization should go: calling setContentView(int)
@@ -68,19 +64,6 @@ class PhotoGalleryActivity : AppCompatActivity(), AnkoLogger {
     }
 
     /**
-     * Initialize the contents of the Activity's standard options menu.
-     * This is only called once, the first time the options menu is displayed.
-     *
-     * @param menu The options menu in which you place your items.
-     * @return you must return true for the menu to be displayed; if you return false it will not be shown.
-     */
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        menuInflater.inflate(R.menu.photo_gallery, menu)
-        return true
-    }
-
-    /**
      * This hook is called whenever an item in your options menu is selected.
      *
      * @param item the menu item that was selected.
@@ -98,53 +81,6 @@ class PhotoGalleryActivity : AppCompatActivity(), AnkoLogger {
             }
             true
         }
-        R.id.menu_item_add_photo -> {
-            val d = TakePhotoDialog.create(this, layoutInflater, knittingID, this::takePhoto, this::importPhoto)
-            d.show()
-            true
-        }
         else -> super.onOptionsItemSelected(item)
-    }
-
-    /**
-     * Called when an activity you launched exits, giving you the requestCode you started it with, the resultCode it returned,
-     * and any additional data from it. The resultCode will be RESULT_CANCELED if the activity explicitly returned that,
-     * didn't return any result, or crashed during its operation.
-     *
-     * @param requestCode The integer request code originally supplied to startActivityForResult(), allowing you to identify who this result came from.
-     * @param resultCode The integer result code returned by the child activity through its setResult().
-     * @param data An Intent, which can return result data to the caller (various data can be attached to Intent "extras").
-     */
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (resultCode != Activity.RESULT_OK) {
-            return
-        }
-        when (requestCode) {
-            REQUEST_IMAGE_CAPTURE -> {
-                currentPhotoPath?.let { TakePhotoDialog.handleTakePhotoResult(this, knittingID, it) }
-            }
-            REQUEST_IMAGE_IMPORT -> {
-                val f = currentPhotoPath
-                if (f != null && data != null) {
-                    TakePhotoDialog.handleImageImportResult(this, knittingID, f, data)
-                }
-            }
-            else -> super.onActivityResult(requestCode, resultCode, data)
-        }
-    }
-
-    private fun takePhoto(file: File, intent: Intent) {
-        currentPhotoPath = file
-        startActivityForResult(intent, REQUEST_IMAGE_CAPTURE)
-    }
-
-    private fun importPhoto(file: File, intent: Intent) {
-        currentPhotoPath = file
-        startActivityForResult(intent, REQUEST_IMAGE_IMPORT)
-    }
-
-    companion object {
-        const val REQUEST_IMAGE_CAPTURE = 0
-        const val REQUEST_IMAGE_IMPORT = 1
     }
 }

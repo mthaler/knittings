@@ -1,10 +1,10 @@
 package com.mthaler.knittings.photo
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.AdapterView
 import android.widget.GridView
 import com.mthaler.knittings.R
@@ -16,6 +16,7 @@ import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.debug
 import com.mthaler.knittings.Extras.EXTRA_KNITTING_ID
 import com.mthaler.knittings.Extras.EXTRA_PHOTO_ID
+import java.io.File
 
 /**
  * A fragment that displays a list of photos using a grid
@@ -24,6 +25,7 @@ class PhotoGalleryFragment : Fragment(), AnkoLogger {
 
     private lateinit var knitting: Knitting
     private lateinit var gridView: GridView
+    private var currentPhotoPath: File? = null
 
     /**
      * Called to do initial creation of a fragment. This is called after onAttach(Activity) and before
@@ -59,6 +61,8 @@ class PhotoGalleryFragment : Fragment(), AnkoLogger {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
         val v = inflater.inflate(R.layout.fragment_photo_gallery, container, false)
+
+        setHasOptionsMenu(true)
 
         if (savedInstanceState != null) {
             if (savedInstanceState.containsKey(EXTRA_KNITTING_ID)) {
@@ -105,6 +109,79 @@ class PhotoGalleryFragment : Fragment(), AnkoLogger {
         }
     }
 
+    /**
+     * Initialize the contents of the Fragment host's standard options menu. You should place your menu items in to menu.
+     * For this method to be called, you must have first called setHasOptionsMenu(boolean).
+     * See Activity.onCreateOptionsMenu for more information.
+     *
+     * @param menu The options menu in which you place your items.
+     * @param inflater MenuInflater
+     */
+    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+        super.onCreateOptionsMenu(menu, inflater)
+        if (menu != null && inflater != null) {
+            inflater.inflate(R.menu.photo_gallery, menu)
+        }
+    }
+
+    /**
+     * This hook is called whenever an item in your options menu is selected.
+     *
+     * @param item the menu item that was selected.
+     * @return return false to allow normal menu processing to proceed, true to consume it here.
+     */
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        if (item != null) {
+            return when (item.itemId) {
+                R.id.menu_item_add_photo -> {
+                    val d = TakePhotoDialog.create(context!!, layoutInflater, knitting.id, this::takePhoto, this::importPhoto)
+                    d.show()
+                    true
+                }
+                else -> super.onOptionsItemSelected(item)
+            }
+        } else {
+            return super.onOptionsItemSelected(item)
+        }
+    }
+
+    /**
+     * Called when an activity you launched exits, giving you the requestCode you started it with, the resultCode it returned,
+     * and any additional data from it. The resultCode will be RESULT_CANCELED if the activity explicitly returned that,
+     * didn't return any result, or crashed during its operation.
+     *
+     * @param requestCode The integer request code originally supplied to startActivityForResult(), allowing you to identify who this result came from.
+     * @param resultCode The integer result code returned by the child activity through its setResult().
+     * @param data An Intent, which can return result data to the caller (various data can be attached to Intent "extras").
+     */
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (resultCode != Activity.RESULT_OK) {
+            return
+        }
+        when (requestCode) {
+            REQUEST_IMAGE_CAPTURE -> {
+                currentPhotoPath?.let { TakePhotoDialog.handleTakePhotoResult(context!!, knitting.id, it) }
+            }
+            REQUEST_IMAGE_IMPORT -> {
+                val f = currentPhotoPath
+                if (f != null && data != null) {
+                    TakePhotoDialog.handleImageImportResult(context!!, knitting.id, f, data)
+                }
+            }
+            else -> super.onActivityResult(requestCode, resultCode, data)
+        }
+    }
+
+    private fun takePhoto(file: File, intent: Intent) {
+        currentPhotoPath = file
+        startActivityForResult(intent, REQUEST_IMAGE_CAPTURE)
+    }
+
+    private fun importPhoto(file: File, intent: Intent) {
+        currentPhotoPath = file
+        startActivityForResult(intent, REQUEST_IMAGE_IMPORT)
+    }
+
     companion object {
         /**
          * Use this factory method to create a new instance of this fragment using the provided parameters.
@@ -114,10 +191,13 @@ class PhotoGalleryFragment : Fragment(), AnkoLogger {
          */
         @JvmStatic
         fun newInstance(knittingID: Long) =
-                PhotoGalleryFragment().apply {
-                    arguments = Bundle().apply {
-                        putLong(EXTRA_KNITTING_ID, knittingID)
-                    }
+            PhotoGalleryFragment().apply {
+                arguments = Bundle().apply {
+                    putLong(EXTRA_KNITTING_ID, knittingID)
                 }
+            }
+
+        const val REQUEST_IMAGE_CAPTURE = 0
+        const val REQUEST_IMAGE_IMPORT = 1
     }
 }
