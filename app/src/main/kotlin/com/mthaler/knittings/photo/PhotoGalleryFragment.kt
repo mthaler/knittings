@@ -22,7 +22,7 @@ import com.mthaler.knittings.Extras.EXTRA_PHOTO_ID
  */
 class PhotoGalleryFragment : Fragment(), AnkoLogger {
 
-    private var knitting: Knitting? = null
+    private lateinit var knitting: Knitting
     private lateinit var gridView: GridView
 
     /**
@@ -69,6 +69,15 @@ class PhotoGalleryFragment : Fragment(), AnkoLogger {
 
         gridView = v.findViewById(R.id.gridView)
 
+        val photos = datasource.getAllPhotos(knitting)
+        val gridAdapter = GridViewAdapter(activity!!, R.layout.grid_item_layout, photos)
+        gridView.adapter = gridAdapter
+        gridView.onItemClickListener = AdapterView.OnItemClickListener { parent, v, position, id ->
+            // photo clicked, show photo in photo activity
+            val photo = parent.getItemAtPosition(position) as Photo
+            startActivity<PhotoActivity>(EXTRA_PHOTO_ID to photo.id, EXTRA_KNITTING_ID to knitting.id)
+        }
+
         return v
     }
 
@@ -80,34 +89,19 @@ class PhotoGalleryFragment : Fragment(), AnkoLogger {
      */
     override fun onSaveInstanceState(outState: Bundle) {
         val k = knitting
-        if (k != null) {
-            outState.putLong(EXTRA_KNITTING_ID, k.id)
-        }
+        outState.putLong(EXTRA_KNITTING_ID, k.id)
         super.onSaveInstanceState(outState)
     }
 
     override fun onResume() {
         super.onResume()
-        val k = knitting
         val a = activity
-        if (k != null && a != null) {
+        if (a != null) {
             // get knitting from database because it could have changed
-            knitting = datasource.getKnitting(k.id)
-            val photos = datasource.getAllPhotos(k)
+            knitting = datasource.getKnitting(knitting.id)
+            val photos = datasource.getAllPhotos(knitting)
             val gridAdapter = GridViewAdapter(a, R.layout.grid_item_layout, photos)
             gridView.adapter = gridAdapter
-        }
-    }
-
-    fun init(knitting: Knitting) {
-        this.knitting = knitting
-        val photos = datasource.getAllPhotos(knitting)
-        val gridAdapter = GridViewAdapter(activity!!, R.layout.grid_item_layout, photos)
-        gridView.adapter = gridAdapter
-        gridView.onItemClickListener = AdapterView.OnItemClickListener { parent, v, position, id ->
-            // photo clicked, show photo in photo activity
-            val photo = parent.getItemAtPosition(position) as Photo
-            startActivity<PhotoActivity>(EXTRA_PHOTO_ID to photo.id, EXTRA_KNITTING_ID to knitting.id)
         }
     }
 

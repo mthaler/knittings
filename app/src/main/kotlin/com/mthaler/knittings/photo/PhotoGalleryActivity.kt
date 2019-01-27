@@ -8,7 +8,6 @@ import android.support.v4.app.NavUtils
 import android.view.Menu
 import android.view.MenuItem
 import com.mthaler.knittings.R
-import com.mthaler.knittings.database.datasource
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.error
 import java.io.File
@@ -44,6 +43,15 @@ class PhotoGalleryActivity : AppCompatActivity(), AnkoLogger {
         } else {
             error("Could not get knitting id")
         }
+
+        if (savedInstanceState == null) {
+            val f = PhotoGalleryFragment.newInstance(knittingID)
+            val fm = supportFragmentManager
+            val ft = fm.beginTransaction()
+            ft.add(R.id.photo_gallery_container, f)
+            //ft.addToBackStack(null)
+            ft.commit()
+        }
     }
 
     /**
@@ -57,17 +65,6 @@ class PhotoGalleryActivity : AppCompatActivity(), AnkoLogger {
     override fun onSaveInstanceState(outState: Bundle) {
         outState.putLong(EXTRA_KNITTING_ID, knittingID)
         super.onSaveInstanceState(outState)
-    }
-
-    override fun onResume() {
-        super.onResume()
-        if (knittingID != -1L) {
-            val fragment = supportFragmentManager.findFragmentById(R.id.fragment_photo_gallery) as PhotoGalleryFragment
-            val knitting = datasource.getKnitting(knittingID)
-            fragment.init(knitting)
-        } else {
-            error("Could not get knitting id")
-        }
     }
 
     /**
