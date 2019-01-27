@@ -1,5 +1,6 @@
 package com.mthaler.knittings.details
 
+import android.app.Activity
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
@@ -10,20 +11,28 @@ import com.mthaler.knittings.R
 import com.mthaler.knittings.database.datasource
 import kotlinx.android.synthetic.main.activity_edit_knitting_details.*
 import com.mthaler.knittings.Extras.EXTRA_KNITTING_ID
-import com.mthaler.knittings.photo.CanTakePhoto
 import com.mthaler.knittings.photo.PhotoGalleryActivity
+import com.mthaler.knittings.photo.TakePhotoDialog
 import org.jetbrains.anko.startActivity
 import java.io.File
 
 /**
  * EditKnittingDetailsActivity is used to edit knitting details
  */
-class EditKnittingDetailsActivity : AppCompatActivity(), CanTakePhoto {
+class EditKnittingDetailsActivity : AppCompatActivity() {
 
     // id of the displayed knitting
     private var knittingID: Long = -1
-    override var currentPhotoPath: File? = null
+    private var currentPhotoPath: File? = null
 
+    /**
+     * Called when the activity is starting. This is where most initialization should go: calling setContentView(int)
+     * to inflate the activity's UI, using findViewById(int) to programmatically interact with widgets in the UI,
+     * calling managedQuery(android.net.Uri, String[], String, String[], String) to retrieve cursors for data being displayed, etc.
+     *
+     * @param savedInstanceState Bundle: If the activity is being re-initialized after previously being shut down then this Bundle contains
+     *                           the data it most recently supplied in onSaveInstanceState(Bundle). Note: Otherwise it is null.
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_edit_knitting_details)
@@ -101,7 +110,9 @@ class EditKnittingDetailsActivity : AppCompatActivity(), CanTakePhoto {
             true
         }
         R.id.menu_item_add_photo -> {
-            takePhoto(this, layoutInflater, knittingID)
+            val d = TakePhotoDialog.create(this, layoutInflater, knittingID, this::takePhoto, this::importPhoto)
+            d.show()
+            true
         }
         else -> super.onOptionsItemSelected(item)
     }
@@ -116,15 +127,37 @@ class EditKnittingDetailsActivity : AppCompatActivity(), CanTakePhoto {
      * @param data An Intent, which can return result data to the caller (various data can be attached to Intent "extras").
      */
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (requestCode == CanTakePhoto.REQUEST_IMAGE_CAPTURE || requestCode == CanTakePhoto.REQUEST_IMAGE_IMPORT) {
-            onActivityResult(this, knittingID, requestCode, resultCode, data)
-        } else {
-            // we need to call super.onActivityResult, otherwise the fragment onActivityResult method might not be called (except for dialogs)
-            super<AppCompatActivity>.onActivityResult(requestCode, resultCode, data)
+        if (resultCode != Activity.RESULT_OK) {
+            return
+        }
+        when (requestCode) {
+            REQUEST_IMAGE_CAPTURE -> {
+                currentPhotoPath?.let { TakePhotoDialog.handleTakePhotoResult(this, knittingID, it) }
+            }
+            REQUEST_IMAGE_IMPORT -> {
+                val f = currentPhotoPath
+                if (f != null && data != null) {
+                    TakePhotoDialog.handleImageImportResult(this, knittingID, f, data)
+                }
+            }
+            else -> super.onActivityResult(requestCode, resultCode, data)
         }
     }
 
+    private fun takePhoto(file: File, intent: Intent) {
+        currentPhotoPath = file
+        startActivityForResult(intent, REQUEST_IMAGE_CAPTURE)
+    }
+
+    private fun importPhoto(file: File, intent: Intent) {
+        currentPhotoPath = file
+        startActivityForResult(intent, REQUEST_IMAGE_IMPORT)
+    }
+
+
     companion object {
         const val CURRENT_PHOTO_PATH = "com.mthaler.knitting.CURRENT_PHOTO_PATH"
+        const val REQUEST_IMAGE_CAPTURE = 0
+        const val REQUEST_IMAGE_IMPORT = 1
     }
 }

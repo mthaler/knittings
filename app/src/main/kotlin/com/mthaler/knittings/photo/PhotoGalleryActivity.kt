@@ -101,7 +101,6 @@ class PhotoGalleryActivity : AppCompatActivity(), AnkoLogger {
             }
             true
         }
-
         R.id.menu_item_add_photo -> {
             val d = TakePhotoDialog.create(this, layoutInflater, knittingID, this::takePhoto, this::importPhoto)
             d.show()
