@@ -19,9 +19,9 @@ import org.jetbrains.anko.support.v4.alert
 
 class EditCategoryFragment : Fragment() {
 
-    private var category: Category? = null
+    private lateinit var category: Category
 
-    fun getCategory(): Category? {
+    fun getCategory(): Category {
         return category
     }
 
@@ -42,6 +42,9 @@ class EditCategoryFragment : Fragment() {
             val categoryID = it.getLong(EXTRA_CATEGORY_ID)
             category = datasource.getCategory(categoryID)
         }
+
+        // Retain this fragment across configuration changes.
+        setRetainInstance(true)
     }
 
     /**
@@ -67,25 +70,22 @@ class EditCategoryFragment : Fragment() {
         // set edit text title text to category name
         val editTextTitle = v.findViewById<EditText>(R.id.category_name)
         editTextTitle.addTextChangedListener(createTextWatcher { c, knitting -> knitting.copy(name = c.toString()) })
-        category?.let { editTextTitle.setText(it.name) }
+        editTextTitle.setText(category.name)
 
         // set background color of the button to category color if it is defined
         val button = v.findViewById<Button>(R.id.button_select_color)
-        category?.let { if (it.color != null) button.setBackgroundColor(it.color) }
+        category.let { if (it.color != null) button.setBackgroundColor(it.color) }
         button.setOnClickListener { view -> run {
             val colorPickerDialog = ColorPickerDialog()
             colorPickerDialog.initialize(R.string.category_color_dialog_title, COLORS, Color.RED, 4, COLORS.size)
             colorPickerDialog.setOnColorSelectedListener { color -> run {
                 val category0 = category
-                if (category0 != null) {
-                    try {
-                        val category1 = category0.copy(color = color)
-                        datasource.updateCategory(category1)
-                        category = category1
-                        button.setBackgroundColor(color)
-                    } catch(ex: Exception) {
-                    }
-
+                try {
+                    val category1 = category0.copy(color = color)
+                    datasource.updateCategory(category1)
+                    category = category1
+                    button.setBackgroundColor(color)
+                } catch(ex: Exception) {
                 }
                 button.setBackgroundColor(color)
             } }
@@ -123,33 +123,11 @@ class EditCategoryFragment : Fragment() {
                     showDeleteDialog()
                     true
                 }
-                android.R.id.home -> {
-                    category?.let {
-                        val i = Intent()
-                        i.putExtra(EXTRA_CATEGORY_ID, it.id)
-                        activity?.setResult(AppCompatActivity.RESULT_OK, i)
-                    }
-                    activity?.finish()
-                    true
-                }
                 else -> super.onOptionsItemSelected(item)
             }
         } else {
             return super.onOptionsItemSelected(item)
         }
-    }
-
-    /**
-     * Called to ask the fragment to save its current dynamic state, so it can later be reconstructed in a
-     * new instance of its process is restarted. If a new instance of the fragment later needs to be created,
-     * the data you place in the Bundle here will be available in the Bundle given to onCreate(Bundle),
-     * onCreateView(LayoutInflater, ViewGroup, Bundle), and onActivityCreated(Bundle).
-     *
-     * @param outState If the fragment is being re-created from a previous saved state, this is the state.
-     */
-    override fun onSaveInstanceState(outState: Bundle) {
-        category?.let { outState.putLong(EXTRA_CATEGORY_ID, it.id) }
-        super.onSaveInstanceState(outState)
     }
 
     /**
@@ -162,7 +140,7 @@ class EditCategoryFragment : Fragment() {
             message = resources.getString(R.string.delete_category_dialog_question)
             positiveButton(resources.getString(R.string.delete_category_dialog_delete_button)) {
                 // delete database entry
-                category?.let { datasource.deleteCategory(it) }
+                datasource.deleteCategory(category)
                 // go back to the previous fragment which is the category list
                 fragmentManager?.popBackStack()
             }
@@ -179,14 +157,9 @@ class EditCategoryFragment : Fragment() {
     private fun createTextWatcher(updateCategory: (CharSequence, Category) -> Category): TextWatcher {
         return object : TextWatcher {
             override fun afterTextChanged(c: Editable) {
-                category?.let {
-                    try {
-                        val c = updateCategory(c, it)
-                        datasource.updateCategory(c)
-                        category = c
-                    } catch(ex: Exception) {
-                    }
-                }
+                val c = updateCategory(c, category)
+                datasource.updateCategory(c)
+                category = c
             }
         }
     }

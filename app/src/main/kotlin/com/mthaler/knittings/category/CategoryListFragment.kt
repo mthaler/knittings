@@ -35,6 +35,8 @@ class CategoryListFragment : Fragment() {
         arguments?.let {
             knittingID = it.getLong(Extras.EXTRA_KNITTING_ID)
         }
+
+        setRetainInstance(true)
     }
 
     /**
@@ -63,17 +65,6 @@ class CategoryListFragment : Fragment() {
         rv.layoutManager = LinearLayoutManager(context)
 
         return v
-    }
-
-    /**
-     * This method is called if the activity gets destroyed because e.g. the device configuration changes because the device is rotated
-     * We need to store instance variables because they are not automatically restored
-     *
-     * @param savedInstanceState saved instance state
-     */
-    override fun onSaveInstanceState(savedInstanceState: Bundle) {
-        savedInstanceState.putLong(Extras.EXTRA_KNITTING_ID, knittingID)
-        super.onSaveInstanceState(savedInstanceState)
     }
 
     override fun onResume() {

@@ -76,7 +76,6 @@ class SelectCategoryActivity : AppCompatActivity(), CategoryListFragment.OnFragm
         super.onBackPressed()
     }
 
-
     /**
      * This hook is called whenever an item in your options menu is selected.
      *
@@ -85,20 +84,22 @@ class SelectCategoryActivity : AppCompatActivity(), CategoryListFragment.OnFragm
      */
     override fun onOptionsItemSelected(item: MenuItem): Boolean = when (item.itemId) {
         android.R.id.home -> {
-            // Respond to the action bar's Up/Home button
-            val upIntent: Intent? = NavUtils.getParentActivityIntent(this)
-            if (upIntent == null) {
-                throw IllegalStateException("No Parent Activity Intent")
+            val fm = supportFragmentManager
+            val f = fm.findFragmentById(R.id.select_category_container)
+            if (f is EditCategoryFragment) {
+                val i = Intent()
+                i.putExtra(EXTRA_KNITTING_ID, knittingID)
+                i.putExtra(Extras.EXTRA_CATEGORY_ID, f.getCategory().id)
+                setResult(Activity.RESULT_OK, i)
+                finish()
             } else {
-                upIntent.putExtra(EXTRA_KNITTING_ID, knittingID)
-                val fm = supportFragmentManager
-                val f = fm.findFragmentById(R.id.select_category_container)
-                if (f is EditCategoryFragment) {
-                    f.getCategory()?.let {
-                        upIntent.putExtra(Extras.EXTRA_CATEGORY_ID, it.id)
-                    }
+                val upIntent: Intent? = NavUtils.getParentActivityIntent(this)
+                if (upIntent == null) {
+                    throw IllegalStateException("No Parent Activity Intent")
+                } else {
+                    upIntent.putExtra(EXTRA_KNITTING_ID, knittingID)
+                    NavUtils.navigateUpTo(this, upIntent)
                 }
-                NavUtils.navigateUpTo(this, upIntent)
             }
             true
         }
