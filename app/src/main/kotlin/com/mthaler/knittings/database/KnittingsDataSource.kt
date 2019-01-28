@@ -19,7 +19,10 @@ import com.mthaler.knittings.database.table.PhotoTable
 import com.mthaler.knittings.model.Category
 import org.jetbrains.anko.error
 import com.mthaler.knittings.database.table.CategoryTable.cursorToCategory
+import com.mthaler.knittings.database.table.NeedleTable
 import com.mthaler.knittings.database.table.PhotoTable.cursorToPhoto
+import com.mthaler.knittings.database.table.NeedleTable.cursorToNeedle
+import com.mthaler.knittings.model.Needle
 
 class KnittingsDataSource private constructor(context: Context): AnkoLogger {
 
@@ -105,6 +108,33 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
             cursor.close()
 
             return categories
+        }
+
+    /**
+     * Returns all needles from the database
+     *
+     * @return all needles from database
+     */
+    val allNeedles: ArrayList<Needle>
+        @Synchronized
+        get() = dbHelper.readableDatabase.use { database ->
+            val needles = ArrayList<Needle>()
+
+            val cursor = database.query(NeedleTable.NEEDLES, NeedleTable.Columns, null, null, null, null, null)
+
+            cursor.moveToFirst()
+            var needle: Needle
+
+            while (!cursor.isAfterLast) {
+                needle = cursorToNeedle(cursor)
+                needles.add(needle)
+                debug("Read category $needle")
+                cursor.moveToNext()
+            }
+
+            cursor.close()
+
+            return needles
         }
 
     init {
@@ -489,13 +519,6 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
         }
     }
 
-    @Synchronized
-    fun deleteAllCategories() {
-        for (category in allCategories) {
-            deleteCategory(category)
-        }
-    }
-
     /**
      * Gets the category with the given id from the database
      *
@@ -626,6 +649,145 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
             debug("Deleted category " + category.id + ": " + category)
         }
     }
+
+
+    @Synchronized
+    fun deleteAllCategories() {
+        for (category in allCategories) {
+            deleteCategory(category)
+        }
+    }
+
+    /**
+     * Gets the category with the given id from the database
+     *
+     * @param id id of the category that should be read from database
+     * @return category for the given id
+     */
+    @Synchronized
+    fun getNeedle(id: Long): Needle {
+        debug("Getting needle for id $id")
+        dbHelper.readableDatabase.use { database ->
+            val cursor = database.query(NeedleTable.NEEDLES,
+                    NeedleTable.Columns, NeedleTable.Cols.ID + "=" + id, null, null, null, null)
+
+            cursor.moveToFirst()
+            val needle = cursorToNeedle(cursor)
+            cursor.close()
+
+            return needle
+        }
+    }
+
+    /**
+     * Creates a new needle and adds it to the database
+     *
+     * @param name name of the needle
+     * @return new needle
+     */
+    @Synchronized
+    fun createNeedle(name: String, description: String, size: String, length: String, material: String, inUse: Boolean): Needle {
+        debug("Creating needle $name")
+        dbHelper.writableDatabase.use { database ->
+            val values = ContentValues()
+            values.put(NeedleTable.Cols.NAME, name)
+            values.put(NeedleTable.Cols.DESCRIPTION, description)
+            values.put(NeedleTable.Cols.SIZE, size)
+            values.put(NeedleTable.Cols.LENGTH, length)
+            values.put(NeedleTable.Cols.MATERIAL, material)
+            values.put(NeedleTable.Cols.IN_USE, inUse)
+
+            val id = database.insert(NeedleTable.NEEDLES, null, values)
+
+            val cursor = database.query(NeedleTable.NEEDLES,
+                    NeedleTable.Columns, NeedleTable.Cols.ID + "=" + id, null, null, null, null)
+
+            cursor.moveToFirst()
+            val needle = cursorToNeedle(cursor)
+            cursor.close()
+
+            return needle
+        }
+    }
+
+    /**
+     * Adds the given needle to the database
+     *
+     * @param needle needle that should be added to the database
+     * @param manualID: use cagegpry ID instead of auto-imcremented id
+     */
+    @Synchronized
+    fun addNeedle(needle: Needle, manualID: Boolean = false) {
+        dbHelper.writableDatabase.use { database ->
+            val values = ContentValues()
+            if (manualID) {
+                values.put(NeedleTable.Cols.ID, needle.id)
+            }
+            values.put(NeedleTable.Cols.NAME, needle.name)
+            values.put(NeedleTable.Cols.DESCRIPTION, needle.description)
+            values.put(NeedleTable.Cols.SIZE, needle.size)
+            values.put(NeedleTable.Cols.LENGTH, needle.length)
+            values.put(NeedleTable.Cols.MATERIAL, needle.material)
+            values.put(NeedleTable.Cols.IN_USE, needle.inUse)
+            val id = database.insert(NeedleTable.NEEDLES, null, values)
+            debug("Added category $needle to database, id=$id")
+        }
+    }
+
+    /**
+     * Updates a photo in the database
+     *
+     * @param category category that should be updated
+     * @return updated category
+     */
+    @Synchronized
+    fun updateNeedle(needle: Needle): Needle {
+        debug("Updating needle $needle")
+        dbHelper.writableDatabase.use { database ->
+            val values = ContentValues()
+            values.put(NeedleTable.Cols.NAME, needle.name)
+            values.put(NeedleTable.Cols.DESCRIPTION, needle.description)
+            values.put(NeedleTable.Cols.SIZE, needle.size)
+            values.put(NeedleTable.Cols.LENGTH, needle.length)
+            values.put(NeedleTable.Cols.MATERIAL, needle.material)
+            values.put(NeedleTable.Cols.IN_USE, needle.inUse)
+            database.update(NeedleTable.NEEDLES,
+                    values,
+                    NeedleTable.Cols.ID + "=" + needle.id, null)
+
+            val cursor = database.query(NeedleTable.NEEDLES,
+                    NeedleTable.Columns, NeedleTable.Cols.ID + "=" + needle.id, null, null, null, null)
+
+            cursor.moveToFirst()
+            val result = cursorToNeedle(cursor)
+            cursor.close()
+
+            return result
+        }
+    }
+
+    /**
+     * Deletes the given needle from the database
+     *
+     * @param needle needle that should be deleted
+     */
+    @Synchronized
+    fun deleteNeedle(needle: Needle) {
+        dbHelper.writableDatabase.use { database ->
+            // delete the category
+            database.delete(NeedleTable.NEEDLES, NeedleTable.Cols.ID + "=" + needle.id, null)
+            debug("Deleted needle " + needle.id + ": " + needle)
+        }
+    }
+
+
+    @Synchronized
+    fun deleteAllNeedles() {
+        for (needle in allNeedles) {
+            deleteNeedle(needle)
+        }
+    }
+
 
     @Synchronized
     private fun cursorToKnitting(cursor: Cursor): Knitting {
