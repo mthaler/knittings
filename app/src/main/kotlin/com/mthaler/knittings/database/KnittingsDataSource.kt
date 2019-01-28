@@ -4,7 +4,6 @@ import android.content.ContentValues
 import android.content.Context
 import android.database.Cursor
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.os.Environment
 import com.mthaler.knittings.model.Knitting
 import com.mthaler.knittings.model.Photo
@@ -19,6 +18,8 @@ import com.mthaler.knittings.database.table.KnittingTable
 import com.mthaler.knittings.database.table.PhotoTable
 import com.mthaler.knittings.model.Category
 import org.jetbrains.anko.error
+import com.mthaler.knittings.database.table.CategoryTable.cursorToCategory
+import com.mthaler.knittings.database.table.PhotoTable.cursorToPhoto
 
 class KnittingsDataSource private constructor(context: Context): AnkoLogger {
 
@@ -662,42 +663,6 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
         }
         return Knitting(id, title = title, description = description, started = started, finished = finished, needleDiameter = needleDiameter,
                 size = size, rating = rating, defaultPhoto = defaultPhoto, duration = duration, category = category)
-    }
-
-    @Synchronized
-    private fun cursorToPhoto(cursor: Cursor): Photo {
-        val idIndex = cursor.getColumnIndex(PhotoTable.Cols.ID)
-        val idPreview = cursor.getColumnIndex(PhotoTable.Cols.PREVIEW)
-        val idFilename = cursor.getColumnIndex(PhotoTable.Cols.FILENAME)
-        val idKnittingIndex = cursor.getColumnIndex(PhotoTable.Cols.KNITTING_ID)
-        val idDescription = cursor.getColumnIndex(PhotoTable.Cols.DESCRIPTION)
-
-        val id = cursor.getLong(idIndex)
-        val filename = cursor.getString(idFilename)
-        val previewBytes = if (cursor.isNull(idPreview)) null else cursor.getBlob(idPreview)
-        val knittingID = cursor.getLong(idKnittingIndex)
-        val description = cursor.getString(idDescription)
-
-        val photo = Photo(id, File(filename), knittingID, description)
-        if (previewBytes != null) {
-            val options = BitmapFactory.Options()
-            val preview = BitmapFactory.decodeByteArray(previewBytes, 0, previewBytes.size, options)
-            return photo.copy(preview = preview)
-        } else {
-            return photo
-        }
-    }
-
-    @Synchronized
-    private fun cursorToCategory(cursor: Cursor): Category {
-        val idIndex = cursor.getColumnIndex(CategoryTable.Cols.ID)
-        val idName = cursor.getColumnIndex(CategoryTable.Cols.NAME)
-        val idColor = cursor.getColumnIndex(CategoryTable.Cols.COLOR)
-
-        val id = cursor.getLong(idIndex)
-        val name = cursor.getString(idName)
-        val color = if (cursor.isNull(idColor)) null else cursor.getInt(idColor)
-        return Category(id, name, color)
     }
 
     @Synchronized

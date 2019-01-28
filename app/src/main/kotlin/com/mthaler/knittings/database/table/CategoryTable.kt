@@ -1,6 +1,8 @@
 package com.mthaler.knittings.database.table
 
+import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
+import com.mthaler.knittings.model.Category
 import org.jetbrains.anko.db.*
 
 object CategoryTable {
@@ -19,5 +21,16 @@ object CategoryTable {
                 Cols.ID to INTEGER + PRIMARY_KEY + AUTOINCREMENT,
                 Cols.NAME to TEXT + NOT_NULL,
                 Cols.COLOR to INTEGER)
+    }
+
+    fun cursorToCategory(cursor: Cursor): Category {
+        val idIndex = cursor.getColumnIndex(Cols.ID)
+        val idName = cursor.getColumnIndex(Cols.NAME)
+        val idColor = cursor.getColumnIndex(Cols.COLOR)
+
+        val id = cursor.getLong(idIndex)
+        val name = cursor.getString(idName)
+        val color = if (cursor.isNull(idColor)) null else cursor.getInt(idColor)
+        return Category(id, name, color)
     }
 }
