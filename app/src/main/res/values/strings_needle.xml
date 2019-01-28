@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="edit_needle_name_hint">Name</string>
+    <string name="edit_needle_size_hint">Size</string>
+    <string name="edit_needle_length_hint">Length</string>
     <string-array name="needle_material_array">
         <item>Aluminum</item>
         <item>Bamboo</item>
@@ -9,4 +11,10 @@
         <item>Wood</item>
         <item>Other</item>
     </string-array>
+    <!-- edit needle menu -->
+    <string name="delete_needle">Delete needle</string>
+    <!-- delete needle dialog -->
+    <string name="delete_needle_dialog_title">Delete</string>
+    <string name="delete_needle_dialog_question">Do you really want to delete the needle?</string>
+    <string name="delete_needle_dialog_delete_button">Delete</string>
 </resources>

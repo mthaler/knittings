@@ -2,17 +2,19 @@ package com.mthaler.knittings.needle
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.text.Editable
+import android.view.*
+import android.widget.EditText
 import com.mthaler.knittings.Extras
 import com.mthaler.knittings.R
+import com.mthaler.knittings.TextWatcher
 import com.mthaler.knittings.database.datasource
 import com.mthaler.knittings.model.Needle
+import org.jetbrains.anko.support.v4.alert
 
 class EditNeedleFragment : Fragment() {
 
-    private lateinit var category: Needle
+    private lateinit var needle: Needle
 
     /**
      * Called to do initial creation of a fragment. This is called after onAttach(Activity) and before
@@ -29,7 +31,7 @@ class EditNeedleFragment : Fragment() {
         super.onCreate(savedInstanceState)
         arguments?.let {
             val needleID = it.getLong(Extras.EXTRA_NEEDLE_ID)
-            //needle = datasource.getNeedle(needleID)
+            needle = datasource.getNeedle(needleID)
         }
 
         // Retain this fragment across configuration changes.
@@ -50,8 +52,96 @@ class EditNeedleFragment : Fragment() {
      */
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
+
+        setHasOptionsMenu(true)
+
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_edit_needle, container, false)
+        val v = inflater.inflate(R.layout.fragment_edit_needle, container, false)
+
+        // set edit text title text to category name
+        val editTextName = v.findViewById<EditText>(R.id.needle_name)
+        editTextName.addTextChangedListener(createTextWatcher { c, knitting -> knitting.copy(name = c.toString()) })
+        editTextName.setText(needle.name)
+
+        // set edit text title text to category name
+        val editTextSize = v.findViewById<EditText>(R.id.needle_size)
+        editTextSize.addTextChangedListener(createTextWatcher { c, knitting -> knitting.copy(size = c.toString()) })
+        editTextSize.setText(needle.size)
+
+        // set edit text title text to category name
+        val editTextLength = v.findViewById<EditText>(R.id.needle_length)
+        editTextLength.addTextChangedListener(createTextWatcher { c, knitting -> knitting.copy(length = c.toString()) })
+        editTextLength.setText(needle.length)
+
+        return v
+    }
+
+    /**
+     * Initialize the contents of the Fragment host's standard options menu. You should place your menu items in to menu.
+     * For this method to be called, you must have first called setHasOptionsMenu(boolean).
+     * See Activity.onCreateOptionsMenu for more information.
+     *
+     * @param menu The options menu in which you place your items.
+     * @param inflater MenuInflater
+     */
+    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+        super.onCreateOptionsMenu(menu, inflater)
+        if (menu != null && inflater != null) {
+            inflater.inflate(R.menu.edit_needle, menu)
+        }
+    }
+
+    /**
+     * Creates a text watcher that updates the category using the given update function
+     *
+     * @param updateCategory function to updated the category
+     */
+    private fun createTextWatcher(updateNeedle: (CharSequence, Needle) -> Needle): TextWatcher {
+        return object : TextWatcher {
+            override fun afterTextChanged(c: Editable) {
+                val n = updateNeedle(c, needle)
+                datasource.updateNeedle(n)
+                needle = n
+            }
+        }
+    }
+
+    /**
+     * This hook is called whenever an item in your options menu is selected.
+     *
+     * @param item the menu item that was selected.
+     * @return return false to allow normal menu processing to proceed, true to consume it here.
+     */
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        if (item != null) {
+            return when (item.itemId) {
+                R.id.menu_item_delete_needle -> {
+                    showDeleteDialog()
+                    true
+                }
+                else -> super.onOptionsItemSelected(item)
+            }
+        } else {
+            return super.onOptionsItemSelected(item)
+        }
+    }
+
+    /**
+     * Displays a dialog that asks the user to confirm that the knitting should be deleted
+     */
+    private fun showDeleteDialog() {
+        // show alert asking user to confirm that knitting should be deleted
+        alert {
+            title = resources.getString(R.string.delete_needle_dialog_title)
+            message = resources.getString(R.string.delete_needle_dialog_question)
+            positiveButton(resources.getString(R.string.delete_needle_dialog_delete_button)) {
+                // delete database entry
+                datasource.deleteNeedle(needle)
+                // go back to the previous fragment which is the category list
+                fragmentManager?.popBackStack()
+            }
+            negativeButton(resources.getString(R.string.dialog_button_cancel)) {}
+        }.show()
     }
 
     companion object {
