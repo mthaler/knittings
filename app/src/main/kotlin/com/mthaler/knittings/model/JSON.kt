@@ -57,6 +57,17 @@ fun Category.toJSON(): JSONObject {
     return result
 }
 
+fun Needle.toJSON(): JSONObject {
+    val result = JSONObject()
+    result.put("id", id)
+    result.put("name", name)
+    result.put("description", description)
+    result.put("size", size)
+    result.put("length", length)
+    result.put("material", material)
+    result.put("inUse", inUse)
+}
+
 /**
  * Converts a JSON object to a knitting. The method actually returns a pair of the knitting and
  * and the optional default photo id
