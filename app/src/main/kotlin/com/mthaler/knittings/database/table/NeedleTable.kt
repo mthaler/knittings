@@ -8,7 +8,7 @@ import org.jetbrains.anko.db.*
 object NeedleTable {
     val NEEDLES = "needles"
 
-    val Columns = arrayOf(Cols.ID, Cols.NAME)
+    val Columns = arrayOf(Cols.ID, Cols.NAME, Cols.DESCRIPTION, Cols.SIZE, Cols.LENGTH, Cols.MATERIAL, Cols.IN_USE)
 
     object Cols {
         val ID = "_id"

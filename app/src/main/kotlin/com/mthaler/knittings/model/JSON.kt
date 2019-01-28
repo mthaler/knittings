@@ -32,6 +32,7 @@ fun Knitting.toJSON(): JSONObject {
     if (category != null) {
         result.put("category", category.id)
     }
+    result.put("status", status)
     return result
 }
 
@@ -85,7 +86,8 @@ fun JSONObject.toKnitting(): Triple<Knitting, Long?, Long?> {
     val rating = getDouble("rating")
     val duration = if (has("duration")) getLong("duration") else 0L
     val category = if (has("category")) getLong("category") else 0L
-    return Triple(Knitting(id, title, description, started, finished, needleDiameter, size, null, rating, duration), defaultPhoto, category)
+    val status = if (has("status")) getString("status") else ""
+    return Triple(Knitting(id, title, description, started, finished, needleDiameter, size, null, rating, duration,  status = status), defaultPhoto, category)
 }
 
 /**

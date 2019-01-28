@@ -23,6 +23,7 @@ object KnittingTable {
         val RATING = "rating"
         val DURATION = "duration"
         val CATEGORY_ID = "category_ID"
+        val STATUS = "status"
     }
 
     fun create(db: SQLiteDatabase) {
@@ -44,4 +45,5 @@ object KnittingTable {
 
     val SQL_ADD_DURATION = "ALTER TABLE " + KNITTINGS + " ADD COLUMN " + Cols.DURATION + " INTEGER NOT NULL DEFAULT 0"
     val SQL_ADD_CATEGORY = "ALTER TABLE " + KNITTINGS + " ADD COLUMN " + Cols.CATEGORY_ID + " INTEGER"
+    val SQL_ADD_STATUS = "ALTER TABLE " + KNITTINGS + " ADD COLUMN " + Cols.STATUS + " STRING NOT NULL"
 }
