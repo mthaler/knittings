@@ -66,6 +66,7 @@ fun Needle.toJSON(): JSONObject {
     result.put("length", length)
     result.put("material", material)
     result.put("inUse", inUse)
+    return result
 }
 
 /**
@@ -147,6 +148,33 @@ fun JSONArray.toCategories(): List<Category> {
     return result
 }
 
+/**
+ * Converts a JSON object to a needle
+ */
+fun JSONObject.toNeedle(): Needle {
+    val id = getLong("id")
+    val name = getString("name")
+    val description = getString("description")
+    val size = getString("size")
+    val length = getString("length")
+    val material = getString("material")
+    val inUse = getBoolean("inUse")
+    return Needle(id, name, description, size, length, material, inUse)
+}
+
+/**
+ * Converts a JSON array to a list of needles
+ */
+fun JSONArray.toNeedles(): List<Needle> {
+    val result = ArrayList<Needle>()
+    for(i in 0 until length()) {
+        val item = getJSONObject(i)
+        val needle = item.toNeedle()
+        result.add(needle)
+    }
+    return result
+}
+
 fun knittingsToJSON(knittings: List<Knitting>): JSONArray {
     val result = JSONArray()
     for (knitting in knittings) {
@@ -171,6 +199,14 @@ fun categoriesToJSON(categories: List<Category>): JSONArray {
     return result
 }
 
+fun needlesToJSON(needles: List<Needle>): JSONArray {
+    val result = JSONArray()
+    for (needle in needles) {
+        result.put(needle.toJSON())
+    }
+    return result
+}
+
 /**
  * Converts a database to JSON
  */
@@ -180,6 +216,7 @@ fun Database.toJSON(): JSONObject {
     result.put("knittings", knittingsToJSON(knittings))
     result.put("photos", photosToJSON(photos))
     result.put("categories", categoriesToJSON(categories))
+    result.put("needles", needlesToJSON(needles))
     return result
 }
 
@@ -231,5 +268,5 @@ fun JSONObject.toDatabase(externalFilesDir: File): Database {
     val idToCategory = categories.map { it.id to it }.toMap()
     // update the list of knittings with default photos
     val knittings = knittingsAndDefaultPhotos.map { Pair(updateKnitting(it.first, it.second, idToPhoto), it.third) }.map { addCategory(it.first, it.second, idToCategory)  }
-    return Database(knittings, photosWithUpdatedFilename, categories)
+    return Database(knittings, photosWithUpdatedFilename, categories, ArrayList<Needle>())
 }
