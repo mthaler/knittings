@@ -2,6 +2,9 @@ package com.mthaler.knittings.database
 
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
+import com.mthaler.knittings.database.table.CategoryTable
+import com.mthaler.knittings.database.table.KnittingTable
+import com.mthaler.knittings.database.table.PhotoTable
 import org.jetbrains.anko.*
 import org.jetbrains.anko.db.*
 
@@ -31,92 +34,6 @@ class KnittingDatabaseHelper(context: Context) : ManagedSQLiteOpenHelper(context
             return instance!!
         }
 
-    }
-
-    /**
-     * Class that defines the knittings database table schema
-     */
-    object KnittingTable {
-        val KNITTINGS = "knittings"
-
-        val Columns = arrayOf(Cols.ID, Cols.TITLE, Cols.DESCRIPTION, Cols.STARTED, Cols.FINISHED, Cols.NEEDLE_DIAMETER, Cols.SIZE, Cols.DEFAULT_PHOTO_ID, Cols.RATING, Cols.DURATION, Cols.CATEGORY_ID)
-
-        object Cols {
-            val ID = "_id"
-            val TITLE = "title"
-            val DESCRIPTION = "description"
-            val STARTED = "started"
-            val FINISHED = "finished"
-            val NEEDLE_DIAMETER = "needle_diameter"
-            val SIZE = "size"
-            val DEFAULT_PHOTO_ID = "default_photo_id"
-            val RATING = "rating"
-            val DURATION = "duration"
-            val CATEGORY_ID = "category_ID"
-        }
-
-        fun create(db: SQLiteDatabase) {
-            db.createTable(KNITTINGS, true,
-                    Cols.ID to INTEGER + PRIMARY_KEY + AUTOINCREMENT,
-                    Cols.TITLE to TEXT + NOT_NULL,
-                    Cols.DESCRIPTION to TEXT + NOT_NULL,
-                    Cols.STARTED to INTEGER + NOT_NULL + DEFAULT("0"),
-                    Cols.FINISHED to INTEGER,
-                    Cols.NEEDLE_DIAMETER to TEXT + NOT_NULL,
-                    Cols.SIZE to TEXT + NOT_NULL,
-                    Cols.DEFAULT_PHOTO_ID to INTEGER,
-                    Cols.RATING to REAL + NOT_NULL + DEFAULT("0.0"),
-                    Cols.DURATION to INTEGER + NOT_NULL + DEFAULT("0"),
-                    Cols.CATEGORY_ID to INTEGER,
-                    FOREIGN_KEY(Cols.DEFAULT_PHOTO_ID, PhotoTable.PHOTOS, PhotoTable.Cols.ID),
-                    FOREIGN_KEY(Cols.CATEGORY_ID, CategoryTable.CATEGORY, CategoryTable.Cols.ID))
-        }
-
-        val SQL_ADD_DURATION = "ALTER TABLE " + KNITTINGS + " ADD COLUMN " + Cols.DURATION + " INTEGER NOT NULL DEFAULT 0"
-        val SQL_ADD_CATEGORY = "ALTER TABLE " + KNITTINGS + " ADD COLUMN " + Cols.CATEGORY_ID + " INTEGER"
-    }
-
-    object PhotoTable {
-        val PHOTOS = "photos"
-
-        val Columns = arrayOf(Cols.ID, Cols.FILENAME, Cols.PREVIEW, Cols.DESCRIPTION, Cols.KNITTING_ID)
-
-        fun create(db: SQLiteDatabase) {
-            db.createTable(PHOTOS, true,
-                    Cols.ID to INTEGER + PRIMARY_KEY + AUTOINCREMENT,
-                    Cols.FILENAME to TEXT + NOT_NULL,
-                    Cols.PREVIEW to BLOB,
-                    Cols.DESCRIPTION to TEXT + NOT_NULL,
-                    Cols.KNITTING_ID to INTEGER + NOT_NULL,
-                    FOREIGN_KEY(Cols.KNITTING_ID, KnittingTable.KNITTINGS, KnittingTable.Cols.ID))
-        }
-
-        object Cols {
-            val ID = "_id"
-            val FILENAME = "filename"
-            val PREVIEW = "preview"
-            val DESCRIPTION = "description"
-            val KNITTING_ID = "knitting_id"
-        }
-    }
-
-    object CategoryTable {
-        val CATEGORY = "category"
-
-        val Columns = arrayOf(Cols.ID, Cols.NAME, Cols.COLOR)
-
-        object Cols {
-            val ID = "_id"
-            val NAME = "name"
-            val COLOR = "color"
-        }
-
-        fun create(db: SQLiteDatabase) {
-            db.createTable(CATEGORY, true,
-                    Cols.ID to INTEGER + PRIMARY_KEY + AUTOINCREMENT,
-                    Cols.NAME to TEXT + NOT_NULL,
-                    Cols.COLOR to INTEGER)
-        }
     }
 
     init {

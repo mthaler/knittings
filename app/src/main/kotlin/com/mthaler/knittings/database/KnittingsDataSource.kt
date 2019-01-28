@@ -14,6 +14,9 @@ import java.io.File
 import java.util.ArrayList
 import java.util.Date
 import android.support.v4.app.Fragment
+import com.mthaler.knittings.database.table.CategoryTable
+import com.mthaler.knittings.database.table.KnittingTable
+import com.mthaler.knittings.database.table.PhotoTable
 import com.mthaler.knittings.model.Category
 import org.jetbrains.anko.error
 
@@ -32,7 +35,7 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
         get() = dbHelper.readableDatabase.use { database ->
             val knittings = ArrayList<Knitting>()
 
-            val cursor = database.query(KnittingDatabaseHelper.KnittingTable.KNITTINGS, KnittingDatabaseHelper.KnittingTable.Columns, null, null, null, null, null)
+            val cursor = database.query(KnittingTable.KNITTINGS, KnittingTable.Columns, null, null, null, null, null)
 
             cursor.moveToFirst()
             var knitting: Knitting
@@ -59,7 +62,7 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
         get() = dbHelper.readableDatabase.use { database ->
             val photos = ArrayList<Photo>()
 
-            val cursor = database.query(KnittingDatabaseHelper.PhotoTable.PHOTOS, KnittingDatabaseHelper.PhotoTable.Columns, null, null, null, null, null)
+            val cursor = database.query(PhotoTable.PHOTOS, PhotoTable.Columns, null, null, null, null, null)
 
             cursor.moveToFirst()
             var photo: Photo
@@ -86,7 +89,7 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
         get() = dbHelper.readableDatabase.use { database ->
             val categories = ArrayList<Category>()
 
-            val cursor = database.query(KnittingDatabaseHelper.CategoryTable.CATEGORY, KnittingDatabaseHelper.CategoryTable.Columns, null, null, null, null, null)
+            val cursor = database.query(CategoryTable.CATEGORY, CategoryTable.Columns, null, null, null, null, null)
 
             cursor.moveToFirst()
             var category: Category
@@ -124,22 +127,22 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
                 finished + ", needle diameter: " + needleDiameter + ", size: " + size + ", rating: " + rating)
         dbHelper.writableDatabase.use { database ->
             val values = ContentValues()
-            values.put(KnittingDatabaseHelper.KnittingTable.Cols.TITLE, title)
-            values.put(KnittingDatabaseHelper.KnittingTable.Cols.DESCRIPTION, description)
-            values.put(KnittingDatabaseHelper.KnittingTable.Cols.STARTED, started.time)
+            values.put(KnittingTable.Cols.TITLE, title)
+            values.put(KnittingTable.Cols.DESCRIPTION, description)
+            values.put(KnittingTable.Cols.STARTED, started.time)
             if (finished != null) {
-                values.put(KnittingDatabaseHelper.KnittingTable.Cols.FINISHED, finished.time)
+                values.put(KnittingTable.Cols.FINISHED, finished.time)
             }
-            values.put(KnittingDatabaseHelper.KnittingTable.Cols.NEEDLE_DIAMETER, needleDiameter)
-            values.put(KnittingDatabaseHelper.KnittingTable.Cols.SIZE, size)
-            values.put(KnittingDatabaseHelper.KnittingTable.Cols.RATING, rating)
-            values.put(KnittingDatabaseHelper.KnittingTable.Cols.DURATION, 0L)
-            values.putNull(KnittingDatabaseHelper.KnittingTable.Cols.CATEGORY_ID)
+            values.put(KnittingTable.Cols.NEEDLE_DIAMETER, needleDiameter)
+            values.put(KnittingTable.Cols.SIZE, size)
+            values.put(KnittingTable.Cols.RATING, rating)
+            values.put(KnittingTable.Cols.DURATION, 0L)
+            values.putNull(KnittingTable.Cols.CATEGORY_ID)
 
-            val id = database.insert(KnittingDatabaseHelper.KnittingTable.KNITTINGS, null, values)
+            val id = database.insert(KnittingTable.KNITTINGS, null, values)
 
-            val cursor = database.query(KnittingDatabaseHelper.KnittingTable.KNITTINGS,
-                    KnittingDatabaseHelper.KnittingTable.Columns, KnittingDatabaseHelper.KnittingTable.Cols.ID + "=" + id, null, null, null, null)
+            val cursor = database.query(KnittingTable.KNITTINGS,
+                    KnittingTable.Columns, KnittingTable.Cols.ID + "=" + id, null, null, null, null)
 
             cursor.moveToFirst()
             val knittings = cursorToKnitting(cursor)
@@ -160,30 +163,30 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
         dbHelper.writableDatabase.use { database ->
             val values = ContentValues()
             if (manualID) {
-                values.put(KnittingDatabaseHelper.KnittingTable.Cols.ID, knitting.id)
+                values.put(KnittingTable.Cols.ID, knitting.id)
             }
-            values.put(KnittingDatabaseHelper.KnittingTable.Cols.TITLE, knitting.title)
-            values.put(KnittingDatabaseHelper.KnittingTable.Cols.DESCRIPTION, knitting.description)
-            values.put(KnittingDatabaseHelper.KnittingTable.Cols.STARTED, knitting.started.time)
+            values.put(KnittingTable.Cols.TITLE, knitting.title)
+            values.put(KnittingTable.Cols.DESCRIPTION, knitting.description)
+            values.put(KnittingTable.Cols.STARTED, knitting.started.time)
             if (knitting.finished != null) {
-                values.put(KnittingDatabaseHelper.KnittingTable.Cols.FINISHED, knitting.finished.time)
+                values.put(KnittingTable.Cols.FINISHED, knitting.finished.time)
             }
-            values.put(KnittingDatabaseHelper.KnittingTable.Cols.NEEDLE_DIAMETER, knitting.needleDiameter)
-            values.put(KnittingDatabaseHelper.KnittingTable.Cols.SIZE, knitting.size)
+            values.put(KnittingTable.Cols.NEEDLE_DIAMETER, knitting.needleDiameter)
+            values.put(KnittingTable.Cols.SIZE, knitting.size)
             if (knitting.defaultPhoto != null) {
                 debug("Default photo: " + knitting.defaultPhoto)
-                values.put(KnittingDatabaseHelper.KnittingTable.Cols.DEFAULT_PHOTO_ID, knitting.defaultPhoto.id)
+                values.put(KnittingTable.Cols.DEFAULT_PHOTO_ID, knitting.defaultPhoto.id)
             } else {
-                values.putNull(KnittingDatabaseHelper.KnittingTable.Cols.DEFAULT_PHOTO_ID)
+                values.putNull(KnittingTable.Cols.DEFAULT_PHOTO_ID)
             }
-            values.put(KnittingDatabaseHelper.KnittingTable.Cols.RATING, knitting.rating)
+            values.put(KnittingTable.Cols.RATING, knitting.rating)
             if (knitting.category != null) {
-                values.put(KnittingDatabaseHelper.KnittingTable.Cols.CATEGORY_ID, knitting.category.id)
+                values.put(KnittingTable.Cols.CATEGORY_ID, knitting.category.id)
             } else {
-                values.putNull(KnittingDatabaseHelper.KnittingTable.Cols.CATEGORY_ID)
+                values.putNull(KnittingTable.Cols.CATEGORY_ID)
             }
 
-            val id = database.insert(KnittingDatabaseHelper.KnittingTable.KNITTINGS, null, values)
+            val id = database.insert(KnittingTable.KNITTINGS, null, values)
             debug("Added knitting $knitting to database, id=$id")
         }
     }
@@ -199,34 +202,34 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
         debug("Updating knitting " + knitting + ", default photo: " + knitting.defaultPhoto)
         dbHelper.writableDatabase.use { database ->
             val values = ContentValues()
-            values.put(KnittingDatabaseHelper.KnittingTable.Cols.TITLE, knitting.title)
-            values.put(KnittingDatabaseHelper.KnittingTable.Cols.DESCRIPTION, knitting.description)
-            values.put(KnittingDatabaseHelper.KnittingTable.Cols.STARTED, knitting.started.time)
+            values.put(KnittingTable.Cols.TITLE, knitting.title)
+            values.put(KnittingTable.Cols.DESCRIPTION, knitting.description)
+            values.put(KnittingTable.Cols.STARTED, knitting.started.time)
             if (knitting.finished != null) {
-                values.put(KnittingDatabaseHelper.KnittingTable.Cols.FINISHED, knitting.finished.time)
+                values.put(KnittingTable.Cols.FINISHED, knitting.finished.time)
             }
-            values.put(KnittingDatabaseHelper.KnittingTable.Cols.NEEDLE_DIAMETER, knitting.needleDiameter)
-            values.put(KnittingDatabaseHelper.KnittingTable.Cols.SIZE, knitting.size)
+            values.put(KnittingTable.Cols.NEEDLE_DIAMETER, knitting.needleDiameter)
+            values.put(KnittingTable.Cols.SIZE, knitting.size)
             if (knitting.defaultPhoto != null) {
                 debug("Default photo: " + knitting.defaultPhoto)
-                values.put(KnittingDatabaseHelper.KnittingTable.Cols.DEFAULT_PHOTO_ID, knitting.defaultPhoto.id)
+                values.put(KnittingTable.Cols.DEFAULT_PHOTO_ID, knitting.defaultPhoto.id)
             } else {
-                values.putNull(KnittingDatabaseHelper.KnittingTable.Cols.DEFAULT_PHOTO_ID)
+                values.putNull(KnittingTable.Cols.DEFAULT_PHOTO_ID)
             }
-            values.put(KnittingDatabaseHelper.KnittingTable.Cols.RATING, knitting.rating)
-            values.put(KnittingDatabaseHelper.KnittingTable.Cols.DURATION, knitting.duration)
+            values.put(KnittingTable.Cols.RATING, knitting.rating)
+            values.put(KnittingTable.Cols.DURATION, knitting.duration)
             if (knitting.category != null) {
-                values.put(KnittingDatabaseHelper.KnittingTable.Cols.CATEGORY_ID, knitting.category.id)
+                values.put(KnittingTable.Cols.CATEGORY_ID, knitting.category.id)
             } else {
-                values.putNull(KnittingDatabaseHelper.KnittingTable.Cols.CATEGORY_ID)
+                values.putNull(KnittingTable.Cols.CATEGORY_ID)
             }
 
-            database.update(KnittingDatabaseHelper.KnittingTable.KNITTINGS,
+            database.update(KnittingTable.KNITTINGS,
                     values,
-                    KnittingDatabaseHelper.KnittingTable.Cols.ID + "=" + knitting.id, null)
+                    KnittingTable.Cols.ID + "=" + knitting.id, null)
 
-            val cursor = database.query(KnittingDatabaseHelper.KnittingTable.KNITTINGS,
-                    KnittingDatabaseHelper.KnittingTable.Columns, KnittingDatabaseHelper.KnittingTable.Cols.ID + "=" + knitting.id, null, null, null, null)
+            val cursor = database.query(KnittingTable.KNITTINGS,
+                    KnittingTable.Columns, KnittingTable.Cols.ID + "=" + knitting.id, null, null, null, null)
 
             cursor.moveToFirst()
             val result = cursorToKnitting(cursor)
@@ -247,7 +250,7 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
         // delete all photos from the database
         deleteAllPhotos(knitting)
         dbHelper.writableDatabase.use { database ->
-            database.delete(KnittingDatabaseHelper.KnittingTable.KNITTINGS, KnittingDatabaseHelper.KnittingTable.Cols.ID + "=" + id, null)
+            database.delete(KnittingTable.KNITTINGS, KnittingTable.Cols.ID + "=" + id, null)
             debug("Deleted knitting " + id + ": " + knitting.toString())
         }
     }
@@ -272,8 +275,8 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
     fun getKnitting(id: Long): Knitting {
         debug("Getting knitting for id $id")
         dbHelper.readableDatabase.use { database ->
-            val cursor = database.query(KnittingDatabaseHelper.KnittingTable.KNITTINGS,
-                    KnittingDatabaseHelper.KnittingTable.Columns, KnittingDatabaseHelper.KnittingTable.Cols.ID + "=" + id, null, null, null, null)
+            val cursor = database.query(KnittingTable.KNITTINGS,
+                    KnittingTable.Columns, KnittingTable.Cols.ID + "=" + id, null, null, null, null)
 
             cursor.moveToFirst()
             val knitting = cursorToKnitting(cursor)
@@ -299,8 +302,8 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
     fun getPhoto(id: Long): Photo {
         debug("Getting photo for id $id")
         dbHelper.readableDatabase.use { database ->
-            val cursor = database.query(KnittingDatabaseHelper.PhotoTable.PHOTOS,
-                    KnittingDatabaseHelper.PhotoTable.Columns, KnittingDatabaseHelper.PhotoTable.Cols.ID + "=" + id, null, null, null, null)
+            val cursor = database.query(PhotoTable.PHOTOS,
+                    PhotoTable.Columns, PhotoTable.Cols.ID + "=" + id, null, null, null, null)
 
             cursor.moveToFirst()
             val photo = cursorToPhoto(cursor)
@@ -321,9 +324,9 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
         dbHelper.readableDatabase.use { database ->
             val photos = ArrayList<Photo>()
 
-            val whereClause = KnittingDatabaseHelper.PhotoTable.Cols.KNITTING_ID + " = ?"
+            val whereClause = PhotoTable.Cols.KNITTING_ID + " = ?"
             val whereArgs = arrayOf(java.lang.Double.toString(knitting.id.toDouble()))
-            val cursor = database.query(KnittingDatabaseHelper.PhotoTable.PHOTOS, KnittingDatabaseHelper.PhotoTable.Columns, whereClause, whereArgs, null, null, null)
+            val cursor = database.query(PhotoTable.PHOTOS, PhotoTable.Columns, whereClause, whereArgs, null, null, null)
 
             cursor.moveToFirst()
             var photo: Photo
@@ -354,20 +357,20 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
         debug("Creating photo for $filename, knitting id: $knittingID, preview: $preview, description: $description")
         dbHelper.writableDatabase.use { database ->
             val values = ContentValues()
-            values.put(KnittingDatabaseHelper.PhotoTable.Cols.FILENAME, filename.absolutePath)
-            values.put(KnittingDatabaseHelper.PhotoTable.Cols.KNITTING_ID, knittingID)
-            values.put(KnittingDatabaseHelper.PhotoTable.Cols.DESCRIPTION, description)
+            values.put(PhotoTable.Cols.FILENAME, filename.absolutePath)
+            values.put(PhotoTable.Cols.KNITTING_ID, knittingID)
+            values.put(PhotoTable.Cols.DESCRIPTION, description)
             val previewBytes = Photo.getBytes(preview)
             if (previewBytes != null) {
-                values.put(KnittingDatabaseHelper.PhotoTable.Cols.PREVIEW, previewBytes)
+                values.put(PhotoTable.Cols.PREVIEW, previewBytes)
             } else {
-                values.putNull(KnittingDatabaseHelper.PhotoTable.Cols.PREVIEW)
+                values.putNull(PhotoTable.Cols.PREVIEW)
             }
 
-            val id = database.insert(KnittingDatabaseHelper.PhotoTable.PHOTOS, null, values)
+            val id = database.insert(PhotoTable.PHOTOS, null, values)
 
-            val cursor = database.query(KnittingDatabaseHelper.PhotoTable.PHOTOS,
-                    KnittingDatabaseHelper.PhotoTable.Columns, KnittingDatabaseHelper.PhotoTable.Cols.ID + "=" + id, null, null, null, null)
+            val cursor = database.query(PhotoTable.PHOTOS,
+                    PhotoTable.Columns, PhotoTable.Cols.ID + "=" + id, null, null, null, null)
 
             cursor.moveToFirst()
             val photo = cursorToPhoto(cursor)
@@ -388,19 +391,19 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
         dbHelper.writableDatabase.use { database ->
             val values = ContentValues()
             if (manualID) {
-                values.put(KnittingDatabaseHelper.PhotoTable.Cols.ID, photo.id)
+                values.put(PhotoTable.Cols.ID, photo.id)
             }
-            values.put(KnittingDatabaseHelper.PhotoTable.Cols.FILENAME, photo.filename.absolutePath)
-            values.put(KnittingDatabaseHelper.PhotoTable.Cols.KNITTING_ID, photo.knittingID)
-            values.put(KnittingDatabaseHelper.PhotoTable.Cols.DESCRIPTION, photo.description)
+            values.put(PhotoTable.Cols.FILENAME, photo.filename.absolutePath)
+            values.put(PhotoTable.Cols.KNITTING_ID, photo.knittingID)
+            values.put(PhotoTable.Cols.DESCRIPTION, photo.description)
             val previewBytes = Photo.getBytes(photo.preview)
             if (previewBytes != null) {
-                values.put(KnittingDatabaseHelper.PhotoTable.Cols.PREVIEW, previewBytes)
+                values.put(PhotoTable.Cols.PREVIEW, previewBytes)
             } else {
-                values.putNull(KnittingDatabaseHelper.PhotoTable.Cols.PREVIEW)
+                values.putNull(PhotoTable.Cols.PREVIEW)
             }
 
-            val id = database.insert(KnittingDatabaseHelper.PhotoTable.PHOTOS, null, values)
+            val id = database.insert(PhotoTable.PHOTOS, null, values)
             debug("Added photo $photo to database, id=$id")
         }
     }
@@ -416,22 +419,22 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
         debug("Updating photo $photo")
         dbHelper.writableDatabase.use { database ->
             val values = ContentValues()
-            values.put(KnittingDatabaseHelper.PhotoTable.Cols.FILENAME, photo.filename.absolutePath)
-            values.put(KnittingDatabaseHelper.PhotoTable.Cols.KNITTING_ID, photo.knittingID)
-            values.put(KnittingDatabaseHelper.PhotoTable.Cols.DESCRIPTION, photo.description)
+            values.put(PhotoTable.Cols.FILENAME, photo.filename.absolutePath)
+            values.put(PhotoTable.Cols.KNITTING_ID, photo.knittingID)
+            values.put(PhotoTable.Cols.DESCRIPTION, photo.description)
             val previewBytes = Photo.getBytes(photo.preview)
             if (previewBytes != null) {
-                values.put(KnittingDatabaseHelper.PhotoTable.Cols.PREVIEW, previewBytes)
+                values.put(PhotoTable.Cols.PREVIEW, previewBytes)
             } else {
-                values.putNull(KnittingDatabaseHelper.PhotoTable.Cols.PREVIEW)
+                values.putNull(PhotoTable.Cols.PREVIEW)
             }
 
-            database.update(KnittingDatabaseHelper.PhotoTable.PHOTOS,
+            database.update(PhotoTable.PHOTOS,
                     values,
-                    KnittingDatabaseHelper.PhotoTable.Cols.ID + "=" + photo.id, null)
+                    PhotoTable.Cols.ID + "=" + photo.id, null)
 
-            val cursor = database.query(KnittingDatabaseHelper.PhotoTable.PHOTOS,
-                    KnittingDatabaseHelper.PhotoTable.Columns, KnittingDatabaseHelper.PhotoTable.Cols.ID + "=" + photo.id, null, null, null, null)
+            val cursor = database.query(PhotoTable.PHOTOS,
+                    PhotoTable.Columns, PhotoTable.Cols.ID + "=" + photo.id, null, null, null, null)
 
             cursor.moveToFirst()
             val result = cursorToPhoto(cursor)
@@ -451,7 +454,7 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
         deletePhotoFile(photo.filename)
         val id = photo.id
         dbHelper.writableDatabase.use { database ->
-            database.delete(KnittingDatabaseHelper.PhotoTable.PHOTOS, KnittingDatabaseHelper.PhotoTable.Cols.ID + "=" + id, null)
+            database.delete(PhotoTable.PHOTOS, PhotoTable.Cols.ID + "=" + id, null)
             debug("Deleted photo " + id + ": " + photo.toString())
         }
     }
@@ -468,9 +471,9 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
         }
         val id = knitting.id
         dbHelper.writableDatabase.use { database ->
-            val whereClause = KnittingDatabaseHelper.PhotoTable.Cols.KNITTING_ID + "= ?"
+            val whereClause = PhotoTable.Cols.KNITTING_ID + "= ?"
             val whereArgs = arrayOf(java.lang.Long.toString(id))
-            database.delete(KnittingDatabaseHelper.PhotoTable.PHOTOS, whereClause, whereArgs)
+            database.delete(PhotoTable.PHOTOS, whereClause, whereArgs)
             debug("Removed knitting " + id + ": " + knitting.toString())
         }
     }
@@ -502,8 +505,8 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
     fun getCategory(id: Long): Category {
         debug("Getting category for id $id")
         dbHelper.readableDatabase.use { database ->
-            val cursor = database.query(KnittingDatabaseHelper.CategoryTable.CATEGORY,
-                    KnittingDatabaseHelper.CategoryTable.Columns, KnittingDatabaseHelper.CategoryTable.Cols.ID + "=" + id, null, null, null, null)
+            val cursor = database.query(CategoryTable.CATEGORY,
+                    CategoryTable.Columns, CategoryTable.Cols.ID + "=" + id, null, null, null, null)
 
             cursor.moveToFirst()
             val category = cursorToCategory(cursor)
@@ -525,17 +528,17 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
         debug("Creating category $name, color: $color")
         dbHelper.writableDatabase.use { database ->
             val values = ContentValues()
-            values.put(KnittingDatabaseHelper.CategoryTable.Cols.NAME, name)
+            values.put(CategoryTable.Cols.NAME, name)
             if (color != null) {
-                values.put(KnittingDatabaseHelper.CategoryTable.Cols.COLOR, color)
+                values.put(CategoryTable.Cols.COLOR, color)
             } else {
-                values.putNull(KnittingDatabaseHelper.CategoryTable.Cols.COLOR)
+                values.putNull(CategoryTable.Cols.COLOR)
             }
 
-            val id = database.insert(KnittingDatabaseHelper.CategoryTable.CATEGORY, null, values)
+            val id = database.insert(CategoryTable.CATEGORY, null, values)
 
-            val cursor = database.query(KnittingDatabaseHelper.CategoryTable.CATEGORY,
-                    KnittingDatabaseHelper.CategoryTable.Columns, KnittingDatabaseHelper.CategoryTable.Cols.ID + "=" + id, null, null, null, null)
+            val cursor = database.query(CategoryTable.CATEGORY,
+                    CategoryTable.Columns, CategoryTable.Cols.ID + "=" + id, null, null, null, null)
 
             cursor.moveToFirst()
             val category = cursorToCategory(cursor)
@@ -556,15 +559,15 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
         dbHelper.writableDatabase.use { database ->
             val values = ContentValues()
             if (manualID) {
-                values.put(KnittingDatabaseHelper.CategoryTable.Cols.ID, category.id)
+                values.put(CategoryTable.Cols.ID, category.id)
             }
-            values.put(KnittingDatabaseHelper.CategoryTable.Cols.NAME, category.name)
+            values.put(CategoryTable.Cols.NAME, category.name)
             if (category.color != null) {
-                values.put(KnittingDatabaseHelper.CategoryTable.Cols.COLOR, category.color)
+                values.put(CategoryTable.Cols.COLOR, category.color)
             } else {
-                values.putNull(KnittingDatabaseHelper.CategoryTable.Cols.COLOR)
+                values.putNull(CategoryTable.Cols.COLOR)
             }
-            val id = database.insert(KnittingDatabaseHelper.CategoryTable.CATEGORY, null, values)
+            val id = database.insert(CategoryTable.CATEGORY, null, values)
             debug("Added category $category to database, id=$id")
         }
     }
@@ -580,19 +583,19 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
         debug("Updating category $category")
         dbHelper.writableDatabase.use { database ->
             val values = ContentValues()
-            values.put(KnittingDatabaseHelper.CategoryTable.Cols.NAME, category.name)
+            values.put(CategoryTable.Cols.NAME, category.name)
             if (category.color != null) {
-                values.put(KnittingDatabaseHelper.CategoryTable.Cols.COLOR, category.color)
+                values.put(CategoryTable.Cols.COLOR, category.color)
             } else {
-                values.putNull(KnittingDatabaseHelper.CategoryTable.Cols.COLOR)
+                values.putNull(CategoryTable.Cols.COLOR)
             }
 
-            database.update(KnittingDatabaseHelper.CategoryTable.CATEGORY,
+            database.update(CategoryTable.CATEGORY,
                     values,
-                    KnittingDatabaseHelper.CategoryTable.Cols.ID + "=" + category.id, null)
+                    CategoryTable.Cols.ID + "=" + category.id, null)
 
-            val cursor = database.query(KnittingDatabaseHelper.CategoryTable.CATEGORY,
-                    KnittingDatabaseHelper.CategoryTable.Columns, KnittingDatabaseHelper.CategoryTable.Cols.ID + "=" + category.id, null, null, null, null)
+            val cursor = database.query(CategoryTable.CATEGORY,
+                    CategoryTable.Columns, CategoryTable.Cols.ID + "=" + category.id, null, null, null, null)
 
             cursor.moveToFirst()
             val result = cursorToCategory(cursor)
@@ -618,24 +621,24 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
         debug("Removed category " + category.id + " from " + knittings.size + "knittings")
         dbHelper.writableDatabase.use { database ->
             // delete the category
-            database.delete(KnittingDatabaseHelper.CategoryTable.CATEGORY, KnittingDatabaseHelper.CategoryTable.Cols.ID + "=" + category.id, null)
+            database.delete(CategoryTable.CATEGORY, CategoryTable.Cols.ID + "=" + category.id, null)
             debug("Deleted category " + category.id + ": " + category)
         }
     }
 
     @Synchronized
     private fun cursorToKnitting(cursor: Cursor): Knitting {
-        val idIndex = cursor.getColumnIndex(KnittingDatabaseHelper.KnittingTable.Cols.ID)
-        val idTitle = cursor.getColumnIndex(KnittingDatabaseHelper.KnittingTable.Cols.TITLE)
-        val idDescription = cursor.getColumnIndex(KnittingDatabaseHelper.KnittingTable.Cols.DESCRIPTION)
-        val idStarted = cursor.getColumnIndex(KnittingDatabaseHelper.KnittingTable.Cols.STARTED)
-        val idFinished = cursor.getColumnIndex(KnittingDatabaseHelper.KnittingTable.Cols.FINISHED)
-        val idNeedleDiameter = cursor.getColumnIndex(KnittingDatabaseHelper.KnittingTable.Cols.NEEDLE_DIAMETER)
-        val idSize = cursor.getColumnIndex(KnittingDatabaseHelper.KnittingTable.Cols.SIZE)
-        val idDefaultPhoto = cursor.getColumnIndex(KnittingDatabaseHelper.KnittingTable.Cols.DEFAULT_PHOTO_ID)
-        val idRating = cursor.getColumnIndex(KnittingDatabaseHelper.KnittingTable.Cols.RATING)
-        val idDuration = cursor.getColumnIndex(KnittingDatabaseHelper.KnittingTable.Cols.DURATION)
-        val idCategory = cursor.getColumnIndex(KnittingDatabaseHelper.KnittingTable.Cols.CATEGORY_ID)
+        val idIndex = cursor.getColumnIndex(KnittingTable.Cols.ID)
+        val idTitle = cursor.getColumnIndex(KnittingTable.Cols.TITLE)
+        val idDescription = cursor.getColumnIndex(KnittingTable.Cols.DESCRIPTION)
+        val idStarted = cursor.getColumnIndex(KnittingTable.Cols.STARTED)
+        val idFinished = cursor.getColumnIndex(KnittingTable.Cols.FINISHED)
+        val idNeedleDiameter = cursor.getColumnIndex(KnittingTable.Cols.NEEDLE_DIAMETER)
+        val idSize = cursor.getColumnIndex(KnittingTable.Cols.SIZE)
+        val idDefaultPhoto = cursor.getColumnIndex(KnittingTable.Cols.DEFAULT_PHOTO_ID)
+        val idRating = cursor.getColumnIndex(KnittingTable.Cols.RATING)
+        val idDuration = cursor.getColumnIndex(KnittingTable.Cols.DURATION)
+        val idCategory = cursor.getColumnIndex(KnittingTable.Cols.CATEGORY_ID)
 
         val id = cursor.getLong(idIndex)
         val title = cursor.getString(idTitle)
@@ -663,11 +666,11 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
 
     @Synchronized
     private fun cursorToPhoto(cursor: Cursor): Photo {
-        val idIndex = cursor.getColumnIndex(KnittingDatabaseHelper.PhotoTable.Cols.ID)
-        val idPreview = cursor.getColumnIndex(KnittingDatabaseHelper.PhotoTable.Cols.PREVIEW)
-        val idFilename = cursor.getColumnIndex(KnittingDatabaseHelper.PhotoTable.Cols.FILENAME)
-        val idKnittingIndex = cursor.getColumnIndex(KnittingDatabaseHelper.PhotoTable.Cols.KNITTING_ID)
-        val idDescription = cursor.getColumnIndex(KnittingDatabaseHelper.PhotoTable.Cols.DESCRIPTION)
+        val idIndex = cursor.getColumnIndex(PhotoTable.Cols.ID)
+        val idPreview = cursor.getColumnIndex(PhotoTable.Cols.PREVIEW)
+        val idFilename = cursor.getColumnIndex(PhotoTable.Cols.FILENAME)
+        val idKnittingIndex = cursor.getColumnIndex(PhotoTable.Cols.KNITTING_ID)
+        val idDescription = cursor.getColumnIndex(PhotoTable.Cols.DESCRIPTION)
 
         val id = cursor.getLong(idIndex)
         val filename = cursor.getString(idFilename)
@@ -687,9 +690,9 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
 
     @Synchronized
     private fun cursorToCategory(cursor: Cursor): Category {
-        val idIndex = cursor.getColumnIndex(KnittingDatabaseHelper.CategoryTable.Cols.ID)
-        val idName = cursor.getColumnIndex(KnittingDatabaseHelper.CategoryTable.Cols.NAME)
-        val idColor = cursor.getColumnIndex(KnittingDatabaseHelper.CategoryTable.Cols.COLOR)
+        val idIndex = cursor.getColumnIndex(CategoryTable.Cols.ID)
+        val idName = cursor.getColumnIndex(CategoryTable.Cols.NAME)
+        val idColor = cursor.getColumnIndex(CategoryTable.Cols.COLOR)
 
         val id = cursor.getLong(idIndex)
         val name = cursor.getString(idName)
