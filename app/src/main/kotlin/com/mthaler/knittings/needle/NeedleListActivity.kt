@@ -1,11 +1,15 @@
 package com.mthaler.knittings.needle
 
+import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v4.app.NavUtils
+import android.view.MenuItem
 import com.mthaler.knittings.R
+import com.mthaler.knittings.database.datasource
 import kotlinx.android.synthetic.main.activity_needle_list.*
 
-class NeedleListActivity : AppCompatActivity() {
+class NeedleListActivity : AppCompatActivity(), NeedleListFragment.OnFragmentInteractionListener {
 
     /**
      * Called when the activity is starting. This is where most initialization should go: calling setContentView(int)
@@ -23,5 +27,59 @@ class NeedleListActivity : AppCompatActivity() {
 
         // enable up navigation
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
+        if (savedInstanceState == null) {
+            val f = NeedleListFragment()
+            val fm = supportFragmentManager
+            val ft = fm.beginTransaction()
+            ft.add(R.id.needle_list_container, f)
+            //ft.addToBackStack(null)
+            ft.commit()
+        }
+    }
+
+    /**
+     * This hook is called whenever an item in your options menu is selected.
+     *
+     * @param item the menu item that was selected.
+     * @return return false to allow normal menu processing to proceed, true to consume it here.
+     */
+    override fun onOptionsItemSelected(item: MenuItem): Boolean = when (item.itemId) {
+        android.R.id.home -> {
+            // Respond to the action bar's Up/Home button
+            val upIntent: Intent? = NavUtils.getParentActivityIntent(this)
+            if (upIntent == null) {
+                throw IllegalStateException("No Parent Activity Intent")
+            } else {
+                val fm = supportFragmentManager
+                val f = fm.findFragmentById(R.id.needle_list_container)
+                if (f is EditNeedleFragment) {
+                    fm.popBackStack()
+                } else {
+                    NavUtils.navigateUpTo(this, upIntent)
+                }
+            }
+            true
+        }
+        else -> super.onOptionsItemSelected(item)
+    }
+
+    override fun createNeedle() {
+        val needle = datasource.createNeedle("", "", "", "", "", false)
+        val f = EditNeedleFragment.newInstance(needle.id)
+        val fm = supportFragmentManager
+        val ft = fm.beginTransaction()
+        ft.replace(R.id.needle_list_container, f)
+        ft.addToBackStack(null)
+        ft.commit()
+    }
+
+    override fun needleClicked(needleID: Long) {
+        val f = EditNeedleFragment.newInstance(needleID)
+        val fm = supportFragmentManager
+        val ft = fm.beginTransaction()
+        ft.replace(R.id.needle_list_container, f)
+        ft.addToBackStack(null)
+        ft.commit()
     }
 }
