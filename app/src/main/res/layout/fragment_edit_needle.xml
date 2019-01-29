@@ -48,6 +48,12 @@
             android:hint="@string/edit_needle_length_hint" />
     </android.support.design.widget.TextInputLayout>
 
+    <CheckBox android:id="@+id/needle_in_use"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/edit_needle_in_use" />
+
+
     <Spinner
         android:id="@+id/needle_material"
         android:layout_width="fill_parent"

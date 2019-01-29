@@ -5,6 +5,7 @@ import android.support.v4.app.Fragment
 import android.text.Editable
 import android.view.*
 import android.widget.ArrayAdapter
+import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.Spinner
 import com.mthaler.knittings.Extras
@@ -62,17 +63,17 @@ class EditNeedleFragment : Fragment() {
 
         // set edit text title text to category name
         val editTextName = v.findViewById<EditText>(R.id.needle_name)
-        editTextName.addTextChangedListener(createTextWatcher { c, knitting -> knitting.copy(name = c.toString()) })
+        editTextName.addTextChangedListener(createTextWatcher { c, needle -> needle.copy(name = c.toString()) })
         editTextName.setText(needle.name)
 
         // set edit text title text to category name
         val editTextSize = v.findViewById<EditText>(R.id.needle_size)
-        editTextSize.addTextChangedListener(createTextWatcher { c, knitting -> knitting.copy(size = c.toString()) })
+        editTextSize.addTextChangedListener(createTextWatcher { c, needle -> needle.copy(size = c.toString()) })
         editTextSize.setText(needle.size)
 
         // set edit text title text to category name
         val editTextLength = v.findViewById<EditText>(R.id.needle_length)
-        editTextLength.addTextChangedListener(createTextWatcher { c, knitting -> knitting.copy(length = c.toString()) })
+        editTextLength.addTextChangedListener(createTextWatcher { c, needle -> needle.copy(length = c.toString()) })
         editTextLength.setText(needle.length)
 
         val spinnerMaterial = v.findViewById<Spinner>(R.id.needle_material)
@@ -87,6 +88,10 @@ class EditNeedleFragment : Fragment() {
             // Apply the adapter to the spinner
             spinnerMaterial.adapter = adapter
         }
+
+        val checkBoxinUse = v.findViewById<CheckBox>(R.id.needle_in_use)
+        checkBoxinUse.setOnCheckedChangeListener { view, checked -> needle = needle.copy(inUse = checked) }
+        checkBoxinUse.setChecked(needle.inUse)
 
         return v
     }
