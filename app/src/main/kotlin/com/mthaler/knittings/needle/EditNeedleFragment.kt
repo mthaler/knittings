@@ -4,7 +4,9 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.text.Editable
 import android.view.*
+import android.widget.ArrayAdapter
 import android.widget.EditText
+import android.widget.Spinner
 import com.mthaler.knittings.Extras
 import com.mthaler.knittings.R
 import com.mthaler.knittings.TextWatcher
@@ -72,6 +74,19 @@ class EditNeedleFragment : Fragment() {
         val editTextLength = v.findViewById<EditText>(R.id.needle_length)
         editTextLength.addTextChangedListener(createTextWatcher { c, knitting -> knitting.copy(length = c.toString()) })
         editTextLength.setText(needle.length)
+
+        val spinnerMaterial = v.findViewById<Spinner>(R.id.needle_material)
+        // Create an ArrayAdapter using the string array and a default spinner layout
+        ArrayAdapter.createFromResource(
+                context,
+                R.array.needle_material_array,
+                android.R.layout.simple_spinner_item
+        ).also { adapter ->
+            // Specify the layout to use when the list of choices appears
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            // Apply the adapter to the spinner
+            spinnerMaterial.adapter = adapter
+        }
 
         return v
     }
