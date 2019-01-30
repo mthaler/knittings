@@ -123,7 +123,11 @@ class EditNeedleFragment : Fragment() {
         }
 
         val checkBoxinUse = v.findViewById<CheckBox>(R.id.needle_in_use)
-        checkBoxinUse.setOnCheckedChangeListener { view, checked -> needle = needle.copy(inUse = checked) }
+        checkBoxinUse.setOnCheckedChangeListener { view, checked ->
+            val n = needle.copy(inUse = checked)
+            datasource.updateNeedle(n)
+            needle = n
+        }
         checkBoxinUse.setChecked(needle.inUse)
 
         return v
