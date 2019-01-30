@@ -85,6 +85,13 @@ class EditNeedleFragment : Fragment() {
             // Apply the adapter to the spinner
             spinnerMaterial.adapter = adapter
         }
+        val materials = resources.getStringArray(R.array.needle_material_array)
+        val index = materials.indexOf(needle.material)
+        if (index >= 0) {
+            spinnerMaterial.setSelection(index)
+        } else {
+            spinnerMaterial.setSelection(0)
+        }
         spinnerMaterial.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
 
             /**
@@ -99,6 +106,9 @@ class EditNeedleFragment : Fragment() {
              * @param id the row id of the item that is selected
              */
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                val n = needle.copy(material = materials[position])
+                datasource.updateNeedle(n)
+                needle = n
             }
 
             /**
