@@ -64,6 +64,8 @@
     <string name="knitting_details_duration">Duration: %1$s</string>
     <string name="knitting_details_category">Category: %1$s</string>
     <string name="knitting_category_hint">Category:</string>
+    <string name="knitting_details_status">Status: %1$s</string>
+    <string name="knitting_status_hint">Status:</string>
 
     <!-- network error -->
     <string name="network_error_title">Network Error</string>

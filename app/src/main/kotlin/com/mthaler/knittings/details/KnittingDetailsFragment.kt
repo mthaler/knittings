@@ -89,6 +89,7 @@ class KnittingDetailsFragment : Fragment(), AnkoLogger {
             knitting_size.text = getString(R.string.knitting_details_size, knitting.size)
             knitting_duration.text = getString(R.string.knitting_details_duration, TimeUtils.formatDuration(knitting.duration))
             knitting_category.text = getString(R.string.knitting_details_category, if (knitting.category != null) knitting.category.name else "")
+            knitting_status.text = getString(R.string.knitting_details_status, knitting.status)
             ratingBar.rating = knitting.rating.toFloat()
         }
     }

@@ -10,4 +10,6 @@
     <string name="knitting_needle_diameter_hint">Nadel</string>
     <string name="knitting_size_hint">Größe</string>
     <string name="knitting_duration_hint">Dauer</string>
+    <string name="knitting_status_hint">Status:</string>
+    <string name="knitting_details_status">Status: %1$s</string>
 </resources>
