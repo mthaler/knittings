@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="manage_needles">Manage needles</string>
     <string name="edit_needle_name_hint">Name</string>
     <string name="edit_needle_size_hint">Size</string>
     <string name="edit_needle_length_hint">Length</string>
