@@ -216,6 +216,7 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
             } else {
                 values.putNull(KnittingTable.Cols.CATEGORY_ID)
             }
+            values.put(KnittingTable.Cols.STATUS, knitting.status)
 
             val id = database.insert(KnittingTable.KNITTINGS, null, values)
             debug("Added knitting $knitting to database, id=$id")
@@ -254,6 +255,7 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
             } else {
                 values.putNull(KnittingTable.Cols.CATEGORY_ID)
             }
+            values.put(KnittingTable.Cols.STATUS, knitting.status)
 
             database.update(KnittingTable.KNITTINGS,
                     values,
@@ -802,6 +804,7 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
         val idRating = cursor.getColumnIndex(KnittingTable.Cols.RATING)
         val idDuration = cursor.getColumnIndex(KnittingTable.Cols.DURATION)
         val idCategory = cursor.getColumnIndex(KnittingTable.Cols.CATEGORY_ID)
+        val idStatus = cursor.getColumnIndex(KnittingTable.Cols.STATUS)
 
         val id = cursor.getLong(idIndex)
         val title = cursor.getString(idTitle)
@@ -823,8 +826,9 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
             val categoryID = cursor.getLong(idCategory)
             category = getCategory(categoryID)
         }
+        val status = if (cursor.isNull(idStatus)) "" else cursor.getString(idStatus)
         return Knitting(id, title = title, description = description, started = started, finished = finished, needleDiameter = needleDiameter,
-                size = size, rating = rating, defaultPhoto = defaultPhoto, duration = duration, category = category)
+                size = size, rating = rating, defaultPhoto = defaultPhoto, duration = duration, category = category, status = status)
     }
 
     @Synchronized
