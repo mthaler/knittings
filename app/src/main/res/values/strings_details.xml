@@ -10,4 +10,12 @@
     <string name="knitting_needle_diameter_hint">Needle Diameter</string>
     <string name="knitting_size_hint">Size</string>
     <string name="knitting_duration_hint">Duration</string>
+    <string-array name="knitting_status">
+        <item></item>
+        <item>In the works</item>
+        <item>Finished</item>
+        <item>Planned</item>
+        <item>On hold</item>
+        <item>Discarded</item>
+    </string-array>
 </resources>

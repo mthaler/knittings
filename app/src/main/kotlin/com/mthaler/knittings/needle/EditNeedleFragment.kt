@@ -77,7 +77,7 @@ class EditNeedleFragment : Fragment() {
         // Create an ArrayAdapter using the string array and a default spinner layout
         ArrayAdapter.createFromResource(
                 context,
-                R.array.needle_material_array,
+                R.array.needle_material,
                 android.R.layout.simple_spinner_item
         ).also { adapter ->
             // Specify the layout to use when the list of choices appears
@@ -85,7 +85,7 @@ class EditNeedleFragment : Fragment() {
             // Apply the adapter to the spinner
             spinnerMaterial.adapter = adapter
         }
-        val materials = resources.getStringArray(R.array.needle_material_array)
+        val materials = resources.getStringArray(R.array.needle_material)
         val index = materials.indexOf(needle.material)
         if (index >= 0) {
             spinnerMaterial.setSelection(index)
