@@ -4,16 +4,12 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.text.Editable
 import android.view.*
-import android.widget.ArrayAdapter
-import android.widget.CheckBox
-import android.widget.EditText
-import android.widget.Spinner
+import android.widget.*
 import com.mthaler.knittings.Extras
 import com.mthaler.knittings.R
 import com.mthaler.knittings.TextWatcher
 import com.mthaler.knittings.database.datasource
 import com.mthaler.knittings.model.Needle
-import kotlinx.android.synthetic.main.grid_item_layout.view.*
 import org.jetbrains.anko.support.v4.alert
 
 class EditNeedleFragment : Fragment() {
@@ -88,6 +84,32 @@ class EditNeedleFragment : Fragment() {
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             // Apply the adapter to the spinner
             spinnerMaterial.adapter = adapter
+        }
+        spinnerMaterial.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+
+            /**
+             * Callback method to be invoked when an item in this view has been selected. This callback is invoked only when the
+             * newly selected position is different from the previously selected position or if there was no selected item.
+             *
+             * Implementers can call getItemAtPosition(position) if they need to access the data associated with the selected item.
+             *
+             * @param parent the AdapterView where the selection happened
+             * @param view the view within the AdapterView that was clicked
+             * @param position the position of the view in the adapter
+             * @param id the row id of the item that is selected
+             */
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+            }
+
+            /**
+             * Callback method to be invoked when the selection disappears from this view. The selection can disappear
+             * for instance when touch is activated or when the adapter becomes empty.
+             *
+             * @param parent the AdapterView where the selection happened
+             */
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+            }
+
         }
 
         val checkBoxinUse = v.findViewById<CheckBox>(R.id.needle_in_use)
