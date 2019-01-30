@@ -13,6 +13,7 @@ import com.mthaler.knittings.R
 import com.mthaler.knittings.TextWatcher
 import com.mthaler.knittings.database.datasource
 import com.mthaler.knittings.model.Needle
+import kotlinx.android.synthetic.main.grid_item_layout.view.*
 import org.jetbrains.anko.support.v4.alert
 
 class EditNeedleFragment : Fragment() {
