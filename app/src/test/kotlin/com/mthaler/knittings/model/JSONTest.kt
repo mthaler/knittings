@@ -79,6 +79,7 @@ class JSONTest {
         assertEquals("20 cm", j0.getString("length"))
         assertEquals("metal", j0.getString("material"))
         assertTrue(j0.getBoolean("inUse"))
+        println(j0)
     }
 
     @Test
@@ -171,6 +172,12 @@ class JSONTest {
         assertEquals(2, categories.size)
         assertEquals(Category(42, "test", null), categories[0])
         assertEquals(Category(43, "socks", Color.RED), categories[1])
+    }
+
+    @Test
+    fun testJSONToNeedle() {
+        val s = """{"size":"5 mm","material":"metal","name":"needle","length":"20 cm","inUse":true,"description":"my first needle","id":42}"""
+        assertEquals(Needle(42, "needle", "my first needle", "5 mm", "20 cm", "metal", true), JSONObject(s).toNeedle())
     }
 
     @Test
