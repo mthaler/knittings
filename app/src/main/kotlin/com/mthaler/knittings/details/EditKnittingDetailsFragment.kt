@@ -73,14 +73,16 @@ class EditKnittingDetailsFragment : Fragment() {
 
         textViewDuration = v.findViewById(R.id.knitting_duration)
         textViewDuration.setOnClickListener {
-            val mTimePicker = DurationPickerDialog(this.context!!, { durationPicker, duration ->
-                textViewDuration.text = TimeUtils.formatDuration(duration)
-                val knitting0 = knitting!!
-                val knitting1 = knitting0.copy(duration = duration)
-                knitting = knitting1
-                datasource.updateKnitting(knitting1)
-            }, knitting!!.duration)
-            mTimePicker.show()
+            context?.let {
+                val d = DurationPickerDialog(it, { durationPicker, duration ->
+                    textViewDuration.text = TimeUtils.formatDuration(duration)
+                    val knitting0 = knitting!!
+                    val knitting1 = knitting0.copy(duration = duration)
+                    knitting = knitting1
+                    datasource.updateKnitting(knitting1)
+                }, knitting!!.duration)
+                d.show()
+            }
         }
 
         buttonCategory = v.findViewById(R.id.knitting_category)

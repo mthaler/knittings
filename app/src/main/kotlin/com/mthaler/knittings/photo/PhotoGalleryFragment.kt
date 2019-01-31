@@ -78,12 +78,14 @@ class PhotoGalleryFragment : Fragment(), AnkoLogger {
         gridView = v.findViewById(R.id.gridView)
 
         val photos = datasource.getAllPhotos(knitting)
-        val gridAdapter = GridViewAdapter(activity!!, R.layout.grid_item_layout, photos)
-        gridView.adapter = gridAdapter
-        gridView.onItemClickListener = AdapterView.OnItemClickListener { parent, v, position, id ->
-            // photo clicked, show photo in photo activity
-            val photo = parent.getItemAtPosition(position) as Photo
-            startActivity<PhotoActivity>(EXTRA_PHOTO_ID to photo.id, EXTRA_KNITTING_ID to knitting.id)
+        context?.let {
+            val gridAdapter = GridViewAdapter(it, R.layout.grid_item_layout, photos)
+            gridView.adapter = gridAdapter
+            gridView.onItemClickListener = AdapterView.OnItemClickListener { parent, v, position, id ->
+                // photo clicked, show photo in photo activity
+                val photo = parent.getItemAtPosition(position) as Photo
+                startActivity<PhotoActivity>(EXTRA_PHOTO_ID to photo.id, EXTRA_KNITTING_ID to knitting.id)
+            }
         }
 
         return v
@@ -138,8 +140,10 @@ class PhotoGalleryFragment : Fragment(), AnkoLogger {
         if (item != null) {
             return when (item.itemId) {
                 R.id.menu_item_add_photo -> {
-                    val d = TakePhotoDialog.create(context!!, layoutInflater, knitting.id, this::takePhoto, this::importPhoto)
-                    d.show()
+                    context?.let {
+                        val d = TakePhotoDialog.create(it, layoutInflater, knitting.id, this::takePhoto, this::importPhoto)
+                        d.show()
+                    }
                     true
                 }
                 else -> super.onOptionsItemSelected(item)
