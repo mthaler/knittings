@@ -175,7 +175,7 @@ class JSONTest {
         val p0 = Photo(42, File("/tmp/photo1.jpg"), 43, "socks", null)
         val p1 = Photo(43, File("/tmp/photo2.jpg"), 44, "shirt", null)
         val photos = listOf(p0, p1)
-        val db = Database(knittings, photos, ArrayList())
+        val db = Database(knittings, photos, ArrayList(), ArrayList())
         val json = db.toJSON()
         assertEquals(2, json.getInt("version"))
         // get the JSON array containing the knittings

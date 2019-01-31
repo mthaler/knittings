@@ -67,11 +67,9 @@ class SelectCategoryActivity : AppCompatActivity(), CategoryListFragment.OnFragm
         val fm = supportFragmentManager
         val f = fm.findFragmentById(R.id.select_category_container)
         if (f is EditCategoryFragment) {
-            f.getCategory()?.let {
-                val i = Intent()
-                i.putExtra(Extras.EXTRA_CATEGORY_ID, it.id)
-                setResult(Activity.RESULT_OK, i)
-            }
+            val i = Intent()
+            i.putExtra(Extras.EXTRA_CATEGORY_ID, f.getCategory())
+            setResult(Activity.RESULT_OK, i)
         }
         super.onBackPressed()
     }

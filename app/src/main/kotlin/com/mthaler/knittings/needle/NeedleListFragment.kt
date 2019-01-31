@@ -31,7 +31,7 @@ class NeedleListFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setRetainInstance(true)
+        retainInstance = true
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -86,7 +86,7 @@ class NeedleListFragment : Fragment() {
         if (context is OnFragmentInteractionListener) {
             listener = context
         } else {
-            throw RuntimeException(context.toString() + " must implement OnFragmentInteractionListener")
+            throw RuntimeException("$context must implement OnFragmentInteractionListener")
         }
     }
 

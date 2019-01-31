@@ -35,7 +35,7 @@ class EditNeedleFragment : Fragment() {
         }
 
         // Retain this fragment across configuration changes.
-        setRetainInstance(true)
+        retainInstance = true
     }
 
     /**
@@ -151,7 +151,7 @@ class EditNeedleFragment : Fragment() {
     /**
      * Creates a text watcher that updates the category using the given update function
      *
-     * @param updateCategory function to updated the category
+     * @param updateNeedle function to updated the needle
      */
     private fun createTextWatcher(updateNeedle: (CharSequence, Needle) -> Needle): TextWatcher {
         return object : TextWatcher {

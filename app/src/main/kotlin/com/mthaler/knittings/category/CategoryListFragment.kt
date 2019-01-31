@@ -36,7 +36,7 @@ class CategoryListFragment : Fragment() {
             knittingID = it.getLong(Extras.EXTRA_KNITTING_ID)
         }
 
-        setRetainInstance(true)
+        retainInstance = true
     }
 
     /**
@@ -103,7 +103,7 @@ class CategoryListFragment : Fragment() {
         if (context is OnFragmentInteractionListener) {
             listener = context
         } else {
-            throw RuntimeException(context.toString() + " must implement OnFragmentInteractionListener")
+            throw RuntimeException("$context must implement OnFragmentInteractionListener")
         }
     }
 
@@ -141,7 +141,7 @@ class CategoryListFragment : Fragment() {
         /**
          * Use this factory method to create a new instance of this fragment using the provided parameters.
          *
-         * @param categoryID id of the category that should be edited
+         * @param knittingID id of the knitting for which a category should be selected
          * @return A new instance of fragment EditCategoryFragment.
          */
         @JvmStatic

@@ -97,10 +97,10 @@ class PhotoGalleryFragment : Fragment(), AnkoLogger {
      *
      * @param savedInstanceState saved instance state
      */
-    override fun onSaveInstanceState(outState: Bundle) {
-        outState.putLong(EXTRA_KNITTING_ID, knitting.id)
-        currentPhotoPath?.let { outState.putString(CURRENT_PHOTO_PATH, it.absolutePath) }
-        super.onSaveInstanceState(outState)
+    override fun onSaveInstanceState(savedInstanceState: Bundle) {
+        savedInstanceState.putLong(EXTRA_KNITTING_ID, knitting.id)
+        currentPhotoPath?.let { savedInstanceState.putString(CURRENT_PHOTO_PATH, it.absolutePath) }
+        super.onSaveInstanceState(savedInstanceState)
     }
 
     override fun onResume() {

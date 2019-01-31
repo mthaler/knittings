@@ -1,10 +1,8 @@
 package com.mthaler.knittings.category
 
-import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.support.v7.app.AppCompatActivity
 import android.text.Editable
 import android.view.*
 import android.widget.Button
@@ -44,7 +42,7 @@ class EditCategoryFragment : Fragment() {
         }
 
         // Retain this fragment across configuration changes.
-        setRetainInstance(true)
+        retainInstance = true
     }
 
     /**

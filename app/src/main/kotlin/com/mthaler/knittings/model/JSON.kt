@@ -262,7 +262,7 @@ fun JSONObject.toDatabase(externalFilesDir: File): Database {
     val photos = getJSONArray("photos").toPhotos()
     val categories = if (has("categories")) getJSONArray("categories").toCategories() else ArrayList()
     // we need to update the filename of the photo because the external storage location might be different
-    val photosWithUpdatedFilename = photos.map { it -> updatePhotoFilename(it) }
+    val photosWithUpdatedFilename = photos.map { updatePhotoFilename(it) }
 
     // create a map from photo id to photo
     val idToPhoto = photosWithUpdatedFilename.map { it.id to it }.toMap()

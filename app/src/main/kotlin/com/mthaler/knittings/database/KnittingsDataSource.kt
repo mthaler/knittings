@@ -284,7 +284,7 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
         deleteAllPhotos(knitting)
         dbHelper.writableDatabase.use { database ->
             database.delete(KnittingTable.KNITTINGS, KnittingTable.Cols.ID + "=" + id, null)
-            debug("Deleted knitting " + id + ": " + knitting.toString())
+            debug("Deleted knitting $id: $knitting")
         }
     }
 
@@ -739,8 +739,8 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
     /**
      * Updates a photo in the database
      *
-     * @param category category that should be updated
-     * @return updated category
+     * @param category needle that should be updated
+     * @return updated needle
      */
     @Synchronized
     fun updateNeedle(needle: Needle): Needle {

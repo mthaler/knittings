@@ -263,7 +263,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     /**
      * Called when the query text is changed by the use
      *
-     * @param the new content of the query text field
+     * @param newText the new content of the query text field
      * @return false if the SearchView should perform the default action of showing any suggestions
      *         if available, true if the action was handled by the listener
      */
@@ -282,7 +282,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
      * The listener can override the standard behavior by returning true to indicate that it has handled the submit request.
      * Otherwise return false to let the SearchView handle the submission by launching any associated intent.
      *
-     * @param new content of the query text field
+     * @param newText new content of the query text field
      * @return true if the query has been handled by the listener, false to let the SearchView perform the default action.
      */
     override fun onQueryTextSubmit(newText: String?): Boolean {
