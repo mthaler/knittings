@@ -69,6 +69,10 @@ class PhotoGalleryFragment : Fragment(), AnkoLogger {
                 knitting = datasource.getKnitting(savedInstanceState.getLong(EXTRA_KNITTING_ID))
                 debug("Set knitting: $knitting")
             }
+            // restore current photo path
+            if (savedInstanceState.containsKey(CURRENT_PHOTO_PATH)) {
+                currentPhotoPath = File(savedInstanceState.getString(CURRENT_PHOTO_PATH))
+            }
         }
 
         gridView = v.findViewById(R.id.gridView)
@@ -92,8 +96,8 @@ class PhotoGalleryFragment : Fragment(), AnkoLogger {
      * @param savedInstanceState saved instance state
      */
     override fun onSaveInstanceState(outState: Bundle) {
-        val k = knitting
-        outState.putLong(EXTRA_KNITTING_ID, k.id)
+        outState.putLong(EXTRA_KNITTING_ID, knitting.id)
+        currentPhotoPath?.let { outState.putString(CURRENT_PHOTO_PATH, it.absolutePath) }
         super.onSaveInstanceState(outState)
     }
 
@@ -197,6 +201,7 @@ class PhotoGalleryFragment : Fragment(), AnkoLogger {
                 }
             }
 
+        const val CURRENT_PHOTO_PATH = "com.mthaler.knitting.CURRENT_PHOTO_PATH"
         const val REQUEST_IMAGE_CAPTURE = 0
         const val REQUEST_IMAGE_IMPORT = 1
     }

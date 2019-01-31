@@ -66,10 +66,7 @@ class EditKnittingDetailsActivity : AppCompatActivity() {
      */
     override fun onSaveInstanceState(savedInstanceState: Bundle) {
         savedInstanceState.putLong(EXTRA_KNITTING_ID, knittingID)
-        val p = currentPhotoPath
-        if (p != null) {
-            savedInstanceState.putString(CURRENT_PHOTO_PATH, p.absolutePath)
-        }
+        currentPhotoPath?.let { savedInstanceState.putString(CURRENT_PHOTO_PATH, it.absolutePath) }
         super.onSaveInstanceState(savedInstanceState)
     }
 
