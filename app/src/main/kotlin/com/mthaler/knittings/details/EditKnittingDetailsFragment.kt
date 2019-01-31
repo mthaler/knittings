@@ -8,10 +8,7 @@ import android.text.Editable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.EditText
-import android.widget.RatingBar
-import android.widget.TextView
+import android.widget.*
 import com.mthaler.knittings.R
 import com.mthaler.knittings.TextWatcher
 import com.mthaler.knittings.category.SelectCategoryActivity
@@ -91,6 +88,59 @@ class EditKnittingDetailsFragment : Fragment() {
             // add the knitting ID which is required to make up navigation work correctly
             knitting?.let { i.putExtra(EXTRA_KNITTING_ID, it.id) }
             startActivityForResult(i, REQUEST_SELECT_CATEGORY)
+        }
+
+        val spinnerStatus = v.findViewById<Spinner>(R.id.knitting_status)
+        val statusList = resources.getStringArray(R.array.knitting_status)
+        // Create an ArrayAdapter using the string array and a default spinner layout
+        ArrayAdapter.createFromResource(
+                context,
+                R.array.knitting_status,
+                android.R.layout.simple_spinner_item
+        ).also { adapter ->
+            // Specify the layout to use when the list of choices appears
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            // Apply the adapter to the spinner
+            spinnerStatus.adapter = adapter
+        }
+        var index = -1
+        knitting?.let { index = statusList.indexOf(it.status) }
+        if (index >= 0) {
+            spinnerStatus.setSelection(index)
+        } else {
+            spinnerStatus.setSelection(0)
+        }
+        spinnerStatus.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+
+            /**
+             * Callback method to be invoked when an item in this view has been selected. This callback is invoked only when the
+             * newly selected position is different from the previously selected position or if there was no selected item.
+             *
+             * Implementers can call getItemAtPosition(position) if they need to access the data associated with the selected item.
+             *
+             * @param parent the AdapterView where the selection happened
+             * @param view the view within the AdapterView that was clicked
+             * @param position the position of the view in the adapter
+             * @param id the row id of the item that is selected
+             */
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                val k0 = knitting
+                if (k0 != null) {
+                    val k1 = k0.copy(status = statusList[position])
+                    datasource.updateKnitting(k1)
+                    knitting = k1
+                }
+            }
+
+            /**
+             * Callback method to be invoked when the selection disappears from this view. The selection can disappear
+             * for instance when touch is activated or when the adapter becomes empty.
+             *
+             * @param parent the AdapterView where the selection happened
+             */
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+            }
+
         }
 
         // update knitting if user changes the rating
