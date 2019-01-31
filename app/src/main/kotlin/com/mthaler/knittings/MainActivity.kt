@@ -51,7 +51,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         // set on click handler of floating action button that creates a new knitting
         fab_create_add_knitting.setOnClickListener {
             // start knitting activity with newly created knitting
-            val knitting = datasource.createKnitting("", "", Date(), null, "", "", 0.0)
+            val knitting = datasource.createKnitting("", "", Date(), null, "", "", 0.0, "")
             startActivity<EditKnittingDetailsActivity>(EXTRA_KNITTING_ID to knitting.id)
         }
 

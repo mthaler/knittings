@@ -62,6 +62,13 @@ class KnittingDatabaseHelper(context: Context) : ManagedSQLiteOpenHelper(context
         } catch (ex: Exception) {
             error("Could not create category table", ex)
         }
+
+        try {
+            NeedleTable.create(db)
+            debug("Needle table created")
+        } catch (ex: Exception) {
+            error("Could not create category needle", ex)
+        }
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {

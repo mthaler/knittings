@@ -153,7 +153,7 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
      * @return new knitting
      */
     @Synchronized
-    fun createKnitting(title: String, description: String, started: Date, finished: Date?, needleDiameter: String, size: String, rating: Double): Knitting {
+    fun createKnitting(title: String, description: String, started: Date, finished: Date?, needleDiameter: String, size: String, rating: Double, status: String): Knitting {
         debug("Creating knitting, title: " + title + ", description: " + description + ", started: " + started + ", finished: " +
                 finished + ", needle diameter: " + needleDiameter + ", size: " + size + ", rating: " + rating)
         dbHelper.writableDatabase.use { database ->
@@ -168,6 +168,7 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
             values.put(KnittingTable.Cols.SIZE, size)
             values.put(KnittingTable.Cols.RATING, rating)
             values.put(KnittingTable.Cols.DURATION, 0L)
+            values.put(KnittingTable.Cols.STATUS, status)
             values.putNull(KnittingTable.Cols.CATEGORY_ID)
 
             val id = database.insert(KnittingTable.KNITTINGS, null, values)

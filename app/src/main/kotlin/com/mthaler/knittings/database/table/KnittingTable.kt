@@ -39,11 +39,12 @@ object KnittingTable {
                 Cols.RATING to REAL + NOT_NULL + DEFAULT("0.0"),
                 Cols.DURATION to INTEGER + NOT_NULL + DEFAULT("0"),
                 Cols.CATEGORY_ID to INTEGER,
+                Cols.STATUS to TEXT + NOT_NULL,
                 FOREIGN_KEY(Cols.DEFAULT_PHOTO_ID, PhotoTable.PHOTOS, PhotoTable.Cols.ID),
                 FOREIGN_KEY(Cols.CATEGORY_ID, CategoryTable.CATEGORY, CategoryTable.Cols.ID))
     }
 
     val SQL_ADD_DURATION = "ALTER TABLE " + KNITTINGS + " ADD COLUMN " + Cols.DURATION + " INTEGER NOT NULL DEFAULT 0"
     val SQL_ADD_CATEGORY = "ALTER TABLE " + KNITTINGS + " ADD COLUMN " + Cols.CATEGORY_ID + " INTEGER"
-    val SQL_ADD_STATUS = "ALTER TABLE " + KNITTINGS + " ADD COLUMN " + Cols.STATUS + " STRING"
+    val SQL_ADD_STATUS = "ALTER TABLE " + KNITTINGS + " ADD COLUMN " + Cols.STATUS + " TEXT"
 }
