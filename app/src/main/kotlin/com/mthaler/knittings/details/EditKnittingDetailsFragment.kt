@@ -103,13 +103,6 @@ class EditKnittingDetailsFragment : Fragment() {
             // Apply the adapter to the spinner
             spinnerStatus.adapter = adapter
         }
-        var index = -1
-        knitting?.let { index = statusList.indexOf(it.status) }
-        if (index >= 0) {
-            spinnerStatus.setSelection(index)
-        } else {
-            spinnerStatus.setSelection(0)
-        }
         spinnerStatus.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
 
             /**
@@ -232,7 +225,15 @@ class EditKnittingDetailsFragment : Fragment() {
                 buttonCategory.text = knitting.category.name
             }
 
-
+            val statusList = resources.getStringArray(R.array.knitting_status)
+            val spinnerStatus = v.findViewById<Spinner>(R.id.knitting_status)
+            var index = -1
+            knitting?.let { index = statusList.indexOf(it.status) }
+            if (index >= 0) {
+                spinnerStatus.setSelection(index)
+            } else {
+                spinnerStatus.setSelection(0)
+            }
 
             val ratingBar = v.findViewById<RatingBar>(R.id.ratingBar)
             ratingBar.rating = knitting.rating.toFloat()
