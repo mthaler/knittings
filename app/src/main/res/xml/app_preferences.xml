@@ -4,6 +4,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <android.support.v7.preference.PreferenceCategory
+        android:title="@string/pref_header_photos"
+        app:iconSpaceReserved="false">
+        <android.support.v7.preference.SwitchPreferenceCompat
+            android:key="photos_use_newest_as_preview"
+            android:title="Use newest photo as preview"
+            android:defaultValue="true"
+            app:iconSpaceReserved="false"/>
+    </android.support.v7.preference.PreferenceCategory>
+    <android.support.v7.preference.PreferenceCategory
         android:title="@string/pref_header_sharing"
         app:iconSpaceReserved="false">
         <android.support.v7.preference.EditTextPreference
