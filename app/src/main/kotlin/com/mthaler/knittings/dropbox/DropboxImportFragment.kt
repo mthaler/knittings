@@ -157,6 +157,7 @@ class DropboxImportFragment : AbstractDropboxFragment(), AnkoLogger {
             datasource.deleteAllKnittings()
             datasource.deleteAllPhotos()
             datasource.deleteAllCategories()
+            datasource.deleteAllNeedles()
             // add downloaded database
             for (knitting in database.knittings) {
                 datasource.addKnitting(knitting, manualID = true)
@@ -166,6 +167,9 @@ class DropboxImportFragment : AbstractDropboxFragment(), AnkoLogger {
             }
             for (category in database.categories) {
                 datasource.addCategory(category, manualID = true)
+            }
+            for (needle in database.needles) {
+                datasource.addNeedle(needle, manualID = true)
             }
             DownloadPhotosTask(DropboxClientFactory.getClient(), ctx, backupDirectory, database, progressBar::setProgress, ::onDownloadPhotosComplete).execute()
         } else {
