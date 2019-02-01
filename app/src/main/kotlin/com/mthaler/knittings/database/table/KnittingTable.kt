@@ -9,7 +9,9 @@ import org.jetbrains.anko.db.*
 object KnittingTable {
     val KNITTINGS = "knittings"
 
-    val Columns = arrayOf(Cols.ID, Cols.TITLE, Cols.DESCRIPTION, Cols.STARTED, Cols.FINISHED, Cols.NEEDLE_DIAMETER, Cols.SIZE, Cols.DEFAULT_PHOTO_ID, Cols.RATING, Cols.DURATION, Cols.CATEGORY_ID)
+    val Columns = arrayOf(Cols.ID, Cols.TITLE, Cols.DESCRIPTION, Cols.STARTED, Cols.FINISHED,
+            Cols.NEEDLE_DIAMETER, Cols.SIZE, Cols.DEFAULT_PHOTO_ID, Cols.RATING, Cols.DURATION,
+            Cols.CATEGORY_ID, Cols.STATUS)
 
     object Cols {
         val ID = "_id"
