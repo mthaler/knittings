@@ -13,7 +13,7 @@
     <string name="knitting_status_hint">Status:</string>
     <string name="knitting_details_status">Status: %1$s</string>
     <string-array name="knitting_status">
-        <item></item>
+        <item/>
         <item>In Arbeit</item>
         <item>Beendet</item>
         <item>Geplant</item>

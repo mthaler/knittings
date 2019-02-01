@@ -740,7 +740,7 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
     /**
      * Updates a photo in the database
      *
-     * @param category needle that should be updated
+     * @param needle needle that should be updated
      * @return updated needle
      */
     @Synchronized

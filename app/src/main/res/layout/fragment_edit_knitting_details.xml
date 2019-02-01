@@ -207,7 +207,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Status:"/>
+                android:text="@string/edit_knitting_details_status"/>
             <Spinner
                 android:id="@+id/knitting_status"
                 android:layout_width="wrap_content"

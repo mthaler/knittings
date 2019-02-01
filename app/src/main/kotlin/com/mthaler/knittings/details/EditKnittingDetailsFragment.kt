@@ -227,8 +227,7 @@ class EditKnittingDetailsFragment : Fragment() {
 
             val statusList = resources.getStringArray(R.array.knitting_status)
             val spinnerStatus = v.findViewById<Spinner>(R.id.knitting_status)
-            var index = -1
-            knitting?.let { index = statusList.indexOf(it.status) }
+            val index = statusList.indexOf(knitting.status)
             if (index >= 0) {
                 spinnerStatus.setSelection(index)
             } else {

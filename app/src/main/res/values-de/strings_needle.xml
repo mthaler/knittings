@@ -5,8 +5,9 @@
     <string name="edit_needle_name_hint">Name</string>
     <string name="edit_needle_size_hint">Größe</string>
     <string name="edit_needle_length_hint">Länge</string>
+    <string name="edit_needle_materal_hint">Material:</string>
     <string-array name="needle_material">
-        <item></item>
+        <item/>
         <item>Aluminium</item>
         <item>Bambus</item>
         <item>Metall</item>

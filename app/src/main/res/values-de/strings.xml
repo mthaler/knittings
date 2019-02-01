@@ -76,4 +76,5 @@
     <string name="count">Zählen</string>
 
     <string name="edit_knitting_details_category">Kategorie</string>
+    <string name="edit_knitting_details_status">Status:</string>
 </resources>
