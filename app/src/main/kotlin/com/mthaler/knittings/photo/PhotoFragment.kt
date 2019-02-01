@@ -112,7 +112,7 @@ class PhotoFragment : Fragment(), AnkoLogger {
                 photo?.let {
                     val path = it.filename.absolutePath
                     val prefs = PreferenceManager.getDefaultSharedPreferences(activity)
-                    val size = Integer.parseInt(prefs.getString("share_photo_size", "1200"))
+                    val size = Integer.parseInt(prefs.getString(resources.getString(R.string.key_share_photo_size), "1200"))
                     val scaled = PictureUtils.decodeSampledBitmapFromPath(path, size, size)
                     val uri = saveImage(scaled)
                     uri?.let { shareImageUri(it) }

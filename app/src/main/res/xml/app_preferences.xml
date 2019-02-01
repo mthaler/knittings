@@ -7,7 +7,7 @@
         android:title="@string/pref_header_photos"
         app:iconSpaceReserved="false">
         <android.support.v7.preference.SwitchPreferenceCompat
-            android:key="photos_use_newest_as_preview"
+            android:key="@string/key_photos_use_newest_as_preview"
             android:title="Use newest photo as preview"
             android:defaultValue="true"
             app:iconSpaceReserved="false"/>
@@ -16,7 +16,7 @@
         android:title="@string/pref_header_sharing"
         app:iconSpaceReserved="false">
         <android.support.v7.preference.EditTextPreference
-            android:key="share_photo_size"
+            android:key="@string/key_share_photo_size"
             android:defaultValue="1200"
             android:inputType="number"
             android:summary="Size of shared photos"
