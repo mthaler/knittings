@@ -6,9 +6,7 @@ import android.support.design.widget.FloatingActionButton
 import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
 import android.support.v4.view.ViewPager
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.RatingBar
@@ -65,6 +63,10 @@ class KnittingDetailsFragment : Fragment(), AnkoLogger {
      * @param savedInstanceState If non-null, this fragment is being re-constructed from a previous saved state as given here.
      */
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+
+        setHasOptionsMenu(true)
+
+        // Inflate the layout for this fragment
         val v = inflater.inflate(R.layout.fragment_knitting_details, container, false)
 
         // start edit knitting details fragment if the user clicks the floating action button
@@ -73,6 +75,41 @@ class KnittingDetailsFragment : Fragment(), AnkoLogger {
             listener?.editKnitting(knitting.id)
         }
         return v
+    }
+
+    /**
+     * Initialize the contents of the Fragment host's standard options menu. You should place your menu items in to menu.
+     * For this method to be called, you must have first called setHasOptionsMenu(boolean).
+     * See Activity.onCreateOptionsMenu for more information.
+     *
+     * @param menu The options menu in which you place your items.
+     * @param inflater MenuInflater
+     */
+    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+        super.onCreateOptionsMenu(menu, inflater)
+        if (menu != null && inflater != null) {
+            inflater.inflate(R.menu.knitting_details_fragment, menu)
+        }
+    }
+
+    /**
+     * This hook is called whenever an item in your options menu is selected.
+     *
+     * @param item the menu item that was selected.
+     * @return return false to allow normal menu processing to proceed, true to consume it here.
+     */
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        if (item != null) {
+            return when (item.itemId) {
+                R.id.menu_item_show_stopwatch -> {
+                    listener?.startStopwatch(knitting.id)
+                    true
+                }
+                else -> super.onOptionsItemSelected(item)
+            }
+        } else {
+            return super.onOptionsItemSelected(item)
+        }
     }
 
     override fun onResume() {
@@ -199,6 +236,8 @@ class KnittingDetailsFragment : Fragment(), AnkoLogger {
          * Called if the user clicks the floating action button to edit a knitting project
          */
         fun editKnitting(id: Long)
+
+        fun startStopwatch(id: Long)
     }
 
     companion object {

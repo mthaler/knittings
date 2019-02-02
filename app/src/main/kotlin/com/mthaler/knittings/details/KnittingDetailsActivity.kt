@@ -92,10 +92,6 @@ class KnittingDetailsActivity : AppCompatActivity(), KnittingDetailsFragment.OnF
      */
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.menu_item_show_stopwatch -> {
-                startActivity<StopwatchActivity>(EXTRA_KNITTING_ID to knittingID)
-                return true
-            }
             R.id.menu_item_show_gallery -> {
                 startActivity<PhotoGalleryActivity>(EXTRA_KNITTING_ID to knittingID)
                 return true
@@ -170,6 +166,10 @@ class KnittingDetailsActivity : AppCompatActivity(), KnittingDetailsFragment.OnF
 
     override fun editKnitting(id: Long) {
         startActivity<EditKnittingDetailsActivity>(EXTRA_KNITTING_ID to id)
+    }
+
+    override fun startStopwatch(id: Long) {
+        startActivity<StopwatchActivity>(EXTRA_KNITTING_ID to knittingID)
     }
 
     companion object {
