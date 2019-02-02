@@ -54,9 +54,17 @@ class KnittingDetailsActivity : AppCompatActivity(), AnkoLogger {
         } else {
             error("Could not get knitting id")
         }
-        // restore current photo path
-        if (savedInstanceState != null && savedInstanceState.containsKey(CURRENT_PHOTO_PATH)) {
-            currentPhotoPath = File(savedInstanceState.getString(CURRENT_PHOTO_PATH))
+        if (savedInstanceState == null) {
+            val f = KnittingDetailsFragment.newInstance(-1)
+            val fm = supportFragmentManager
+            val ft = fm.beginTransaction()
+            ft.add(R.id.knitting_details_container, f)
+            //ft.addToBackStack(null)
+            ft.commit()
+        } else {
+            if (savedInstanceState.containsKey(CURRENT_PHOTO_PATH)) {
+                currentPhotoPath = File(savedInstanceState.getString(CURRENT_PHOTO_PATH))
+            }
         }
     }
 
@@ -70,16 +78,6 @@ class KnittingDetailsActivity : AppCompatActivity(), AnkoLogger {
         savedInstanceState.putLong(EXTRA_KNITTING_ID, knittingID)
         currentPhotoPath?.let { savedInstanceState.putString(CURRENT_PHOTO_PATH, it.absolutePath)  }
         super.onSaveInstanceState(savedInstanceState)
-    }
-
-    override fun onResume() {
-        super.onResume()
-        if (knittingID != -1L) {
-            // initialize the knitting details fragment with the knitting it should display
-            val fragment = supportFragmentManager.findFragmentById(R.id.fragment_knitting_details) as KnittingDetailsFragment
-            val knitting = datasource.getKnitting(knittingID)
-            fragment.init(knitting)
-        }
     }
 
     /**
