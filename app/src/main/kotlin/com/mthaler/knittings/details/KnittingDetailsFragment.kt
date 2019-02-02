@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
+import com.mthaler.knittings.Extras
 import com.mthaler.knittings.photo.ImageAdapter
 import com.mthaler.knittings.R
 import com.mthaler.knittings.database.datasource
@@ -92,5 +93,23 @@ class KnittingDetailsFragment : Fragment(), AnkoLogger {
             knitting_status.text = getString(R.string.knitting_details_status, knitting.status)
             ratingBar.rating = knitting.rating.toFloat()
         }
+    }
+
+    companion object {
+
+        /**
+         * Use this factory method to create a new instance of this fragment using the provided parameters.
+         *
+         * @param categoryID id of the category that should be edited
+         * @return A new instance of fragment KnittingDetailsFragment
+         */
+        @JvmStatic
+        fun newInstance(knittingID: Long) =
+                KnittingDetailsFragment().apply {
+                    arguments = Bundle().apply {
+                        putLong(Extras.EXTRA_KNITTING_ID, knittingID)
+                    }
+                }
+
     }
 }
