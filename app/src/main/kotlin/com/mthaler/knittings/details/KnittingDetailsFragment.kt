@@ -210,11 +210,11 @@ class KnittingDetailsFragment : Fragment(), AnkoLogger {
          */
         @JvmStatic
         fun newInstance(knittingID: Long) =
-                KnittingDetailsFragment().apply {
-                    arguments = Bundle().apply {
-                        putLong(Extras.EXTRA_KNITTING_ID, knittingID)
-                    }
+            KnittingDetailsFragment().apply {
+                arguments = Bundle().apply {
+                    putLong(Extras.EXTRA_KNITTING_ID, knittingID)
                 }
+            }
 
     }
 }

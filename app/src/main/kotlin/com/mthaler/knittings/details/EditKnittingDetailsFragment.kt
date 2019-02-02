@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import com.mthaler.knittings.Extras
 import com.mthaler.knittings.R
 import com.mthaler.knittings.TextWatcher
 import com.mthaler.knittings.category.SelectCategoryActivity
@@ -266,6 +267,22 @@ class EditKnittingDetailsFragment : Fragment() {
     fun getKnittingID(): Long? = knitting?.id
 
     companion object {
+
+        /**
+         * Use this factory method to create a new instance of this fragment using the provided parameters.
+         *
+         * @param categoryID id of the category that should be edited
+         * @return A new instance of fragment EditKnittingDetailsFragment
+         */
+        @JvmStatic
+        fun newInstance(knittingID: Long) =
+            EditKnittingDetailsFragment().apply {
+                arguments = Bundle().apply {
+                    putLong(Extras.EXTRA_KNITTING_ID, knittingID)
+                }
+            }
+
+
         private const val DIALOG_DATE = "date"
         private const val REQUEST_STARTED = 0
         private const val REQUEST_FINISHED = 1
