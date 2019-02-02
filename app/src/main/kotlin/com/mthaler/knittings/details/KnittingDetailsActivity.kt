@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v4.app.NavUtils
 import android.view.Menu
 import android.view.MenuItem
 import com.mthaler.knittings.photo.PhotoGalleryActivity
@@ -23,6 +24,7 @@ class KnittingDetailsActivity : AppCompatActivity(), KnittingDetailsFragment.OnF
 
     // id of the displayed knitting
     private var knittingID: Long = -1
+    private var edit: Boolean = false
     private var currentPhotoPath: File? = null
 
     /**
@@ -45,8 +47,8 @@ class KnittingDetailsActivity : AppCompatActivity(), KnittingDetailsFragment.OnF
         // get the id of the knitting that should be displayed. If the application was destroyed because e.g. the device configuration changed
         // because the device was rotated we use the knitting id from the saved instance state. Otherwise we use the id passed to the intent
         knittingID = if (savedInstanceState != null) savedInstanceState.getLong(EXTRA_KNITTING_ID) else intent.getLongExtra(EXTRA_KNITTING_ID, -1L)
+        edit =  intent.getBooleanExtra(EXTRA_EDIT, false)
         if (savedInstanceState == null) {
-            val edit = intent.getBooleanExtra(EXTRA_EDIT, false)
             if (edit) {
                 val f = EditKnittingDetailsFragment.newInstance(knittingID)
                 val fm = supportFragmentManager
@@ -100,19 +102,37 @@ class KnittingDetailsActivity : AppCompatActivity(), KnittingDetailsFragment.OnF
      * @param item the menu item that was selected.
      * @return return false to allow normal menu processing to proceed, true to consume it here.
      */
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.menu_item_show_gallery -> {
-                startActivity<PhotoGalleryActivity>(EXTRA_KNITTING_ID to knittingID)
-                return true
+    override fun onOptionsItemSelected(item: MenuItem): Boolean = when (item.itemId) {
+        android.R.id.home -> {
+            // Respond to the action bar's Up/Home button
+            val upIntent: Intent? = NavUtils.getParentActivityIntent(this)
+            if (upIntent == null) {
+                throw IllegalStateException("No Parent Activity Intent")
+            } else {
+                val fm = supportFragmentManager
+                val f = fm.findFragmentById(R.id.knitting_details_container)
+                if (f is EditKnittingDetailsFragment) {
+                    if (edit) {
+                        NavUtils.navigateUpTo(this, upIntent)
+                    } else {
+                        fm.popBackStack()
+                    }
+                } else {
+                    NavUtils.navigateUpTo(this, upIntent)
+                }
             }
-            R.id.menu_item_add_photo -> {
-                val d = TakePhotoDialog.create(this, layoutInflater, knittingID, this::takePhoto, this::importPhoto)
-                d.show()
-                return true
-            }
-            else -> return super.onOptionsItemSelected(item)
+            true
         }
+        R.id.menu_item_show_gallery -> {
+            startActivity<PhotoGalleryActivity>(EXTRA_KNITTING_ID to knittingID)
+            true
+        }
+        R.id.menu_item_add_photo -> {
+            val d = TakePhotoDialog.create(this, layoutInflater, knittingID, this::takePhoto, this::importPhoto)
+            d.show()
+            true
+        }
+        else -> super.onOptionsItemSelected(item)
     }
 
     /**
