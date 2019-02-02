@@ -101,10 +101,6 @@ class KnittingDetailsActivity : AppCompatActivity(), KnittingDetailsFragment.OnF
                 d.show()
                 return true
             }
-            R.id.menu_item_delete_knitting -> {
-                showDeleteDialog()
-                return true
-            }
             else -> return super.onOptionsItemSelected(item)
         }
     }
@@ -170,6 +166,10 @@ class KnittingDetailsActivity : AppCompatActivity(), KnittingDetailsFragment.OnF
 
     override fun startStopwatch(id: Long) {
         startActivity<StopwatchActivity>(EXTRA_KNITTING_ID to knittingID)
+    }
+
+    override fun deleteKnitting(id: Long) {
+        showDeleteDialog()
     }
 
     companion object {

@@ -7,4 +7,10 @@
         android:title="@string/stopwatch"
         android:orderInCategory="0"
         app:showAsAction="ifRoom|withText"/>
+    <item
+        android:id="@+id/menu_item_delete_knitting"
+        android:icon="@drawable/ic_delete_white_36dp"
+        android:title="@string/delete_knitting"
+        android:orderInCategory="3"
+        app:showAsAction="ifRoom|withText"/>
 </menu>

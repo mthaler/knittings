@@ -105,6 +105,10 @@ class KnittingDetailsFragment : Fragment(), AnkoLogger {
                     listener?.startStopwatch(knitting.id)
                     true
                 }
+                R.id.menu_item_delete_knitting -> {
+                    listener?.deleteKnitting(knitting.id)
+                    return true
+                }
                 else -> super.onOptionsItemSelected(item)
             }
         } else {
@@ -238,6 +242,8 @@ class KnittingDetailsFragment : Fragment(), AnkoLogger {
         fun editKnitting(id: Long)
 
         fun startStopwatch(id: Long)
+
+        fun deleteKnitting(id: Long)
     }
 
     companion object {
