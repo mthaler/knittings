@@ -2,6 +2,7 @@ package com.mthaler.knittings.details
 
 import android.content.Context
 import android.os.Bundle
+import android.support.design.widget.FloatingActionButton
 import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
 import android.support.v4.view.ViewPager
@@ -65,6 +66,12 @@ class KnittingDetailsFragment : Fragment(), AnkoLogger {
      */
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val v = inflater.inflate(R.layout.fragment_knitting_details, container, false)
+
+        // start edit knitting details fragment if the user clicks the floating action button
+        val edit_knitting_details = v.findViewById<FloatingActionButton>(R.id.edit_knitting_details)
+        edit_knitting_details.setOnClickListener {
+            listener?.editKnitting(knitting.id)
+        }
         return v
     }
 
@@ -190,7 +197,7 @@ class KnittingDetailsFragment : Fragment(), AnkoLogger {
         /**
          * Called if the user clicks the floating action button to edit a knitting project
          */
-        fun editKnitting()
+        fun editKnitting(id: Long)
     }
 
     companion object {

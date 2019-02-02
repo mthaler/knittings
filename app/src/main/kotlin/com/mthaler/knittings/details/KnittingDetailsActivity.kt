@@ -44,18 +44,9 @@ class KnittingDetailsActivity : AppCompatActivity(), KnittingDetailsFragment.OnF
 
         // get the id of the knitting that should be displayed. If the application was destroyed because e.g. the device configuration changed
         // because the device was rotated we use the knitting id from the saved instance state. Otherwise we use the id passed to the intent
-        val id = if (savedInstanceState != null) savedInstanceState.getLong(EXTRA_KNITTING_ID) else intent.getLongExtra(EXTRA_KNITTING_ID, -1L)
-        if (id != -1L) {
-            // start edit knitting details fragment if the user clicks the floating action button
-            edit_knitting_details.setOnClickListener {
-                startActivity<EditKnittingDetailsActivity>(EXTRA_KNITTING_ID to id)
-            }
-            knittingID = id
-        } else {
-            error("Could not get knitting id")
-        }
+        knittingID = if (savedInstanceState != null) savedInstanceState.getLong(EXTRA_KNITTING_ID) else intent.getLongExtra(EXTRA_KNITTING_ID, -1L)
         if (savedInstanceState == null) {
-            val f = KnittingDetailsFragment.newInstance(id)
+            val f = KnittingDetailsFragment.newInstance(knittingID)
             val fm = supportFragmentManager
             val ft = fm.beginTransaction()
             ft.add(R.id.knitting_details_container, f)
@@ -177,7 +168,8 @@ class KnittingDetailsActivity : AppCompatActivity(), KnittingDetailsFragment.OnF
         startActivityForResult(intent, REQUEST_IMAGE_IMPORT)
     }
 
-    override fun editKnitting() {
+    override fun editKnitting(id: Long) {
+        startActivity<EditKnittingDetailsActivity>(EXTRA_KNITTING_ID to id)
     }
 
     companion object {
