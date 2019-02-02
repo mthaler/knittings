@@ -55,7 +55,7 @@ class KnittingDetailsActivity : AppCompatActivity(), AnkoLogger {
             error("Could not get knitting id")
         }
         if (savedInstanceState == null) {
-            val f = KnittingDetailsFragment.newInstance(-1)
+            val f = KnittingDetailsFragment.newInstance(id)
             val fm = supportFragmentManager
             val ft = fm.beginTransaction()
             ft.add(R.id.knitting_details_container, f)
