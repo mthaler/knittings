@@ -77,6 +77,7 @@ class KnittingDetailsFragment : Fragment(), AnkoLogger {
 
     override fun onResume() {
         super.onResume()
+        knitting = datasource.getKnitting(knitting.id)
         updateDetails()
     }
 

@@ -55,6 +55,18 @@ class EditKnittingDetailsFragment : Fragment() {
         retainInstance = true
     }
 
+    /**
+     * Called to have the fragment instantiate its user interface view. This is optional, and non-graphical
+     * fragments can return null (which is the default implementation). This will be called between onCreate(Bundle)
+     * and onActivityCreated(Bundle).
+     *
+     * If you return a View from here, you will later be called in onDestroyView() when the view is being released.
+     *
+     * @param inflater the LayoutInflater object that can be used to inflate any views in the fragment
+     * @param container If non-null, this is the parent view that the fragment's UI should be attached to.
+     *                  The fragment should not add the view itself, but this can be used to generate the LayoutParams of the view.
+     * @param savedInstanceState If non-null, this fragment is being re-constructed from a previous saved state as given here.
+     */
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
         val v = inflater.inflate(R.layout.fragment_edit_knitting_details, container, false)
@@ -222,34 +234,40 @@ class EditKnittingDetailsFragment : Fragment() {
         }
     }
 
-    fun init(knitting: Knitting) {
-        val v = view
-        if (v != null) {
-            val editTextTitle = v.findViewById<EditText>(R.id.knitting_title)
+    override fun onResume() {
+        super.onResume()
+        knitting = datasource.getKnitting(knitting.id)
+        updateDetails()
+    }
+
+    fun updateDetails() {
+        view?.let {
+            val editTextTitle = it.findViewById<EditText>(R.id.knitting_title)
             editTextTitle.setText(knitting.title)
 
-            val editTextDescription = v.findViewById<EditText>(R.id.knitting_description)
+            val editTextDescription = it.findViewById<EditText>(R.id.knitting_description)
             editTextDescription.setText(knitting.description)
 
             textViewStarted.text = DateFormat.getDateInstance().format(knitting.started)
 
             textViewFinished.text = if (knitting.finished != null) DateFormat.getDateInstance().format(knitting.finished) else ""
 
-            val editTextNeedleDiameter = v.findViewById<EditText>(R.id.knitting_needle_diameter)
+            val editTextNeedleDiameter = it.findViewById<EditText>(R.id.knitting_needle_diameter)
             editTextNeedleDiameter.setText(knitting.needleDiameter)
 
-            val editTextSize = v.findViewById<EditText>(R.id.knitting_size)
+            val editTextSize = it.findViewById<EditText>(R.id.knitting_size)
             editTextSize.setText(knitting.size)
 
             textViewDuration.text = TimeUtils.formatDuration(knitting.duration)
 
-            if (knitting.category != null) {
-                val buttonCategory = v.findViewById<Button>(R.id.knitting_category)
-                buttonCategory.text = knitting.category.name
+            val c = knitting.category
+            if (c != null) {
+                val buttonCategory = it.findViewById<Button>(R.id.knitting_category)
+                buttonCategory.text = c.name
             }
 
             val statusList = resources.getStringArray(R.array.knitting_status)
-            val spinnerStatus = v.findViewById<Spinner>(R.id.knitting_status)
+            val spinnerStatus = it.findViewById<Spinner>(R.id.knitting_status)
             val index = statusList.indexOf(knitting.status)
             if (index >= 0) {
                 spinnerStatus.setSelection(index)
@@ -257,10 +275,8 @@ class EditKnittingDetailsFragment : Fragment() {
                 spinnerStatus.setSelection(0)
             }
 
-            val ratingBar = v.findViewById<RatingBar>(R.id.ratingBar)
+            val ratingBar = it.findViewById<RatingBar>(R.id.ratingBar)
             ratingBar.rating = knitting.rating.toFloat()
-
-            this.knitting = knitting
         }
     }
 

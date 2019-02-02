@@ -8,7 +8,6 @@ import android.support.v4.app.NavUtils
 import android.view.Menu
 import android.view.MenuItem
 import com.mthaler.knittings.R
-import com.mthaler.knittings.database.datasource
 import kotlinx.android.synthetic.main.activity_edit_knitting_details.*
 import com.mthaler.knittings.Extras.EXTRA_KNITTING_ID
 import com.mthaler.knittings.photo.PhotoGalleryActivity
@@ -43,18 +42,18 @@ class EditKnittingDetailsActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         // get the id of the knitting that should be displayed.
-        val id = intent.getLongExtra(EXTRA_KNITTING_ID, -1L)
-        if (id != -1L) {
-            // initialize the edit knitting details fragment with the knitting it should display
-            val fragment = supportFragmentManager.findFragmentById(R.id.fragment_edit_knitting_details) as EditKnittingDetailsFragment
-            val knitting = datasource.getKnitting(id)
-            fragment.init(knitting)
-            knittingID = id
-        }
-
-        // restore current photo path
-        if (savedInstanceState != null && savedInstanceState.containsKey(CURRENT_PHOTO_PATH)) {
-            currentPhotoPath = File(savedInstanceState.getString(CURRENT_PHOTO_PATH))
+        knittingID = intent.getLongExtra(EXTRA_KNITTING_ID, -1L)
+        if (savedInstanceState == null) {
+            val f = EditKnittingDetailsFragment.newInstance(knittingID)
+            val fm = supportFragmentManager
+            val ft = fm.beginTransaction()
+            ft.add(R.id.edit_knitting_details_container, f)
+            //ft.addToBackStack(null)
+            ft.commit()
+        } else {
+            if (savedInstanceState.containsKey(CURRENT_PHOTO_PATH)) {
+                currentPhotoPath = File(savedInstanceState.getString(CURRENT_PHOTO_PATH))
+            }
         }
     }
 
@@ -96,7 +95,7 @@ class EditKnittingDetailsActivity : AppCompatActivity() {
             if (upIntent == null) {
                 throw IllegalStateException("No Parent Activity Intent")
             } else {
-                val fragment = supportFragmentManager.findFragmentById(R.id.fragment_edit_knitting_details) as EditKnittingDetailsFragment
+                val fragment = supportFragmentManager.findFragmentById(R.id.edit_knitting_details_container) as EditKnittingDetailsFragment
                 fragment.getKnittingID()?.let { upIntent.putExtra(EXTRA_KNITTING_ID, it) }
                 NavUtils.navigateUpTo(this, upIntent)
             }
