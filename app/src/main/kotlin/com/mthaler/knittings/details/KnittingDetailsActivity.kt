@@ -161,7 +161,12 @@ class KnittingDetailsActivity : AppCompatActivity(), KnittingDetailsFragment.OnF
     }
 
     override fun editKnitting(id: Long) {
-        startActivity<EditKnittingDetailsActivity>(EXTRA_KNITTING_ID to id)
+        val f = EditKnittingDetailsFragment.newInstance(knittingID)
+        val fm = supportFragmentManager
+        val ft = fm.beginTransaction()
+        ft.replace(R.id.knitting_details_container, f)
+        ft.addToBackStack(null)
+        ft.commit()
     }
 
     override fun startStopwatch(id: Long) {
