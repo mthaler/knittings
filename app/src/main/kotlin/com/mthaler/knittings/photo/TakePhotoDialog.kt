@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
+import android.preference.PreferenceManager
 import android.provider.MediaStore
 import android.support.v4.content.FileProvider
 import android.view.LayoutInflater
@@ -85,9 +86,15 @@ object TakePhotoDialog : AnkoLogger {
         debug("Created new photo from $file, knitting id $knittingID")
         // add first photo as default photo
         val knitting = context.datasource.getKnitting(knittingID)
-        if (knitting.defaultPhoto == null) {
-            debug("Set $photo as default photo")
+        val prefs = PreferenceManager.getDefaultSharedPreferences(context)
+        val useNewestAsPreview = prefs.getBoolean(context.resources.getString(R.string.key_photos_use_newest_as_preview), true)
+        if (useNewestAsPreview) {
             context.datasource.updateKnitting(knitting.copy(defaultPhoto = photo))
+        } else {
+            if (knitting.defaultPhoto == null) {
+                debug("Set $photo as default photo")
+                context.datasource.updateKnitting(knitting.copy(defaultPhoto = photo))
+            }
         }
     }
 
@@ -112,9 +119,15 @@ object TakePhotoDialog : AnkoLogger {
         debug("Created new photo from $file, knitting id $knittingID")
         // add first photo as default photo
         val knitting = context.datasource.getKnitting(knittingID)
-        if (knitting.defaultPhoto == null) {
-            debug("Set $photo as default photo")
+        val prefs = PreferenceManager.getDefaultSharedPreferences(context)
+        val useNewestAsPreview = prefs.getBoolean(context.resources.getString(R.string.key_photos_use_newest_as_preview), true)
+        if (useNewestAsPreview) {
             context.datasource.updateKnitting(knitting.copy(defaultPhoto = photo))
+        } else {
+            if (knitting.defaultPhoto == null) {
+                debug("Set $photo as default photo")
+                context.datasource.updateKnitting(knitting.copy(defaultPhoto = photo))
+            }
         }
     }
 }

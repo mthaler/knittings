@@ -24,7 +24,7 @@ class KnittingDetailsActivity : AppCompatActivity(), KnittingDetailsFragment.OnF
 
     // id of the displayed knitting
     private var knittingID: Long = -1
-    private var edit: Boolean = false
+    private var editOnly: Boolean = false
     private var currentPhotoPath: File? = null
 
     /**
@@ -47,9 +47,9 @@ class KnittingDetailsActivity : AppCompatActivity(), KnittingDetailsFragment.OnF
         // get the id of the knitting that should be displayed. If the application was destroyed because e.g. the device configuration changed
         // because the device was rotated we use the knitting id from the saved instance state. Otherwise we use the id passed to the intent
         knittingID = if (savedInstanceState != null) savedInstanceState.getLong(EXTRA_KNITTING_ID) else intent.getLongExtra(EXTRA_KNITTING_ID, -1L)
-        edit =  intent.getBooleanExtra(EXTRA_EDIT, false)
+        editOnly =  intent.getBooleanExtra(EXTRA_EDIT_ONLY, false)
         if (savedInstanceState == null) {
-            if (edit) {
+            if (editOnly) {
                 val f = EditKnittingDetailsFragment.newInstance(knittingID)
                 val fm = supportFragmentManager
                 val ft = fm.beginTransaction()
@@ -79,6 +79,7 @@ class KnittingDetailsActivity : AppCompatActivity(), KnittingDetailsFragment.OnF
      */
     override fun onSaveInstanceState(savedInstanceState: Bundle) {
         savedInstanceState.putLong(EXTRA_KNITTING_ID, knittingID)
+        savedInstanceState.putBoolean(EXTRA_EDIT_ONLY, editOnly)
         currentPhotoPath?.let { savedInstanceState.putString(CURRENT_PHOTO_PATH, it.absolutePath)  }
         super.onSaveInstanceState(savedInstanceState)
     }
@@ -112,7 +113,7 @@ class KnittingDetailsActivity : AppCompatActivity(), KnittingDetailsFragment.OnF
                 val fm = supportFragmentManager
                 val f = fm.findFragmentById(R.id.knitting_details_container)
                 if (f is EditKnittingDetailsFragment) {
-                    if (edit) {
+                    if (editOnly) {
                         NavUtils.navigateUpTo(this, upIntent)
                     } else {
                         fm.popBackStack()
@@ -209,7 +210,7 @@ class KnittingDetailsActivity : AppCompatActivity(), KnittingDetailsFragment.OnF
 
     companion object {
 
-        const val EXTRA_EDIT = "com.mthaler.knittings.edit"
+        const val EXTRA_EDIT_ONLY = "com.mthaler.knittings.edit_ony"
         private const val CURRENT_PHOTO_PATH = "com.mthaler.knittings.CURRENT_PHOTO_PATH"
         private const val REQUEST_IMAGE_CAPTURE = 0
         private const val REQUEST_IMAGE_IMPORT = 1

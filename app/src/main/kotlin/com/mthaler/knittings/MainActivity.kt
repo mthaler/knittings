@@ -51,7 +51,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         fab_create_add_knitting.setOnClickListener {
             // start knitting activity with newly created knitting
             val knitting = datasource.createKnitting("", "", Date(), null, "", "", 0.0, "")
-            startActivity<KnittingDetailsActivity>(EXTRA_KNITTING_ID to knitting.id, KnittingDetailsActivity.EXTRA_EDIT to true)
+            startActivity<KnittingDetailsActivity>(EXTRA_KNITTING_ID to knitting.id, KnittingDetailsActivity.EXTRA_EDIT_ONLY to true)
         }
 
         val toggle = ActionBarDrawerToggle(
@@ -237,7 +237,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         // start EditCategoryActivity if the users clicks on a category
         val adapter = KnittingAdapter(this, filtered, object : OnItemClickListener {
             override fun onItemClick(item: Knitting) {
-                startActivity<KnittingDetailsActivity>(EXTRA_KNITTING_ID to item.id, KnittingDetailsActivity.EXTRA_EDIT to false)
+                startActivity<KnittingDetailsActivity>(EXTRA_KNITTING_ID to item.id, KnittingDetailsActivity.EXTRA_EDIT_ONLY to false)
             }
         })
         rv.adapter = adapter
