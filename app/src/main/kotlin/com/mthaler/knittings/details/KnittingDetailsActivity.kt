@@ -19,7 +19,7 @@ import kotlinx.android.synthetic.main.activity_knitting_details.*
 /**
  * Activity that displays knitting details (name, description, start time etc.)
  */
-class KnittingDetailsActivity : AppCompatActivity(), AnkoLogger {
+class KnittingDetailsActivity : AppCompatActivity(), KnittingDetailsFragment.OnFragmentInteractionListener, AnkoLogger {
 
     // id of the displayed knitting
     private var knittingID: Long = -1
@@ -175,6 +175,9 @@ class KnittingDetailsActivity : AppCompatActivity(), AnkoLogger {
     private fun importPhoto(file: File, intent: Intent) {
         currentPhotoPath = file
         startActivityForResult(intent, REQUEST_IMAGE_IMPORT)
+    }
+
+    override fun editKnitting() {
     }
 
     companion object {
