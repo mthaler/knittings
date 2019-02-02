@@ -252,6 +252,7 @@ class KnittingDetailsFragment : Fragment(), AnkoLogger {
          * Use this factory method to create a new instance of this fragment using the provided parameters.
          *
          * @param categoryID id of the category that should be edited
+         * @param edit a boolean indicating if EditKnittingFragment should be displayed instead of KnittingDetailsFragment
          * @return A new instance of fragment KnittingDetailsFragment
          */
         @JvmStatic

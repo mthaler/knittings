@@ -46,12 +46,22 @@ class KnittingDetailsActivity : AppCompatActivity(), KnittingDetailsFragment.OnF
         // because the device was rotated we use the knitting id from the saved instance state. Otherwise we use the id passed to the intent
         knittingID = if (savedInstanceState != null) savedInstanceState.getLong(EXTRA_KNITTING_ID) else intent.getLongExtra(EXTRA_KNITTING_ID, -1L)
         if (savedInstanceState == null) {
-            val f = KnittingDetailsFragment.newInstance(knittingID)
-            val fm = supportFragmentManager
-            val ft = fm.beginTransaction()
-            ft.add(R.id.knitting_details_container, f)
-            //ft.addToBackStack(null)
-            ft.commit()
+            val edit = intent.getBooleanExtra(EXTRA_EDIT, false)
+            if (edit) {
+                val f = EditKnittingDetailsFragment.newInstance(knittingID)
+                val fm = supportFragmentManager
+                val ft = fm.beginTransaction()
+                ft.add(R.id.knitting_details_container, f)
+                //ft.addToBackStack(null)
+                ft.commit()
+            } else {
+                val f = KnittingDetailsFragment.newInstance(knittingID)
+                val fm = supportFragmentManager
+                val ft = fm.beginTransaction()
+                ft.add(R.id.knitting_details_container, f)
+                //ft.addToBackStack(null)
+                ft.commit()
+            }
         } else {
             if (savedInstanceState.containsKey(CURRENT_PHOTO_PATH)) {
                 currentPhotoPath = File(savedInstanceState.getString(CURRENT_PHOTO_PATH))
@@ -178,8 +188,10 @@ class KnittingDetailsActivity : AppCompatActivity(), KnittingDetailsFragment.OnF
     }
 
     companion object {
-        const val CURRENT_PHOTO_PATH = "com.mthaler.knitting.CURRENT_PHOTO_PATH"
-        const val REQUEST_IMAGE_CAPTURE = 0
-        const val REQUEST_IMAGE_IMPORT = 1
+
+        const val EXTRA_EDIT = "com.mthaler.knittings.edit"
+        private const val CURRENT_PHOTO_PATH = "com.mthaler.knittings.CURRENT_PHOTO_PATH"
+        private const val REQUEST_IMAGE_CAPTURE = 0
+        private const val REQUEST_IMAGE_IMPORT = 1
     }
 }

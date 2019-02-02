@@ -21,7 +21,6 @@ import org.jetbrains.anko.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.activity_main.*
 import com.mthaler.knittings.database.datasource
-import com.mthaler.knittings.details.EditKnittingDetailsActivity
 import com.mthaler.knittings.details.KnittingDetailsActivity
 import com.mthaler.knittings.model.Knitting
 import java.util.*
@@ -52,7 +51,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         fab_create_add_knitting.setOnClickListener {
             // start knitting activity with newly created knitting
             val knitting = datasource.createKnitting("", "", Date(), null, "", "", 0.0, "")
-            startActivity<EditKnittingDetailsActivity>(EXTRA_KNITTING_ID to knitting.id)
+            startActivity<KnittingDetailsActivity>(EXTRA_KNITTING_ID to knitting.id, KnittingDetailsActivity.EXTRA_EDIT to true)
         }
 
         val toggle = ActionBarDrawerToggle(
@@ -238,7 +237,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         // start EditCategoryActivity if the users clicks on a category
         val adapter = KnittingAdapter(this, filtered, object : OnItemClickListener {
             override fun onItemClick(item: Knitting) {
-                startActivity<KnittingDetailsActivity>(EXTRA_KNITTING_ID to item.id)
+                startActivity<KnittingDetailsActivity>(EXTRA_KNITTING_ID to item.id, KnittingDetailsActivity.EXTRA_EDIT to false)
             }
         })
         rv.adapter = adapter

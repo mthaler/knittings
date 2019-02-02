@@ -52,13 +52,6 @@
                 android:value=".MainActivity" />
         </activity>
         <activity
-            android:name=".details.EditKnittingDetailsActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".details.KnittingDetailsActivity" />
-        </activity>
-        <activity
             android:name=".photo.PhotoGalleryActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
@@ -111,7 +104,7 @@
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".details.EditKnittingDetailsActivity" />
+                android:value=".details.KnittingDetailsActivity" />
         </activity>
         <activity
             android:name=".ProjectCountActivity"
