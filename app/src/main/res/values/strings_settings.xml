@@ -4,4 +4,6 @@
     <string name="title_activity_settings">Settings</string>
     <string name="pref_header_photos">Photos</string>
     <string name="pref_header_sharing">Sharing</string>
+    <string name="pref_use_newest_photo_as_preview">Use newest photo as preview</string>
+    <string name="pref_size_of_shared_photos">Size of shared photos</string>
 </resources>

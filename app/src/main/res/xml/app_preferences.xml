@@ -8,7 +8,7 @@
         app:iconSpaceReserved="false">
         <android.support.v7.preference.SwitchPreferenceCompat
             android:key="@string/key_photos_use_newest_as_preview"
-            android:title="Use newest photo as preview"
+            android:title="@string/pref_use_newest_photo_as_preview"
             android:defaultValue="true"
             app:iconSpaceReserved="false"/>
     </android.support.v7.preference.PreferenceCategory>
@@ -19,8 +19,7 @@
             android:key="@string/key_share_photo_size"
             android:defaultValue="1200"
             android:inputType="number"
-            android:summary="Size of shared photos"
-            android:title="Size of shared photos"
+            android:title="@string/pref_size_of_shared_photos"
             app:iconSpaceReserved="false"/>
     </android.support.v7.preference.PreferenceCategory>
 </android.support.v7.preference.PreferenceScreen>
