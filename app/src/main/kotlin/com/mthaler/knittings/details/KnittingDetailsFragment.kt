@@ -116,6 +116,11 @@ class KnittingDetailsFragment : Fragment(), AnkoLogger {
         }
     }
 
+    /**
+     * Called when the fragment is visible to the user and actively running. This is generally tied to Activity.onResume of the containing Activity's lifecycle.
+     *
+     * If you override this method you must call through to the superclass implementation.
+     */
     override fun onResume() {
         super.onResume()
         knitting = datasource.getKnitting(knitting.id)
@@ -131,6 +136,7 @@ class KnittingDetailsFragment : Fragment(), AnkoLogger {
             view_pager.clearOnPageChangeListeners()
             view_pager.offscreenPageLimit = 3
             val photos = datasource.getAllPhotos(knitting)
+            photos.sortByDescending { it.id }
             if (photos.size > 0) {
                 view_pager.visibility = View.VISIBLE
                 val adapter = ImageAdapter(context!!, photos) //Here we are defining the Imageadapter object

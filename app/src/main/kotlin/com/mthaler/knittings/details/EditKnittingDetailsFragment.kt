@@ -234,6 +234,11 @@ class EditKnittingDetailsFragment : Fragment() {
         }
     }
 
+    /**
+     * Called when the fragment is visible to the user and actively running. This is generally tied to Activity.onResume of the containing Activity's lifecycle.
+     *
+     * If you override this method you must call through to the superclass implementation.
+     */
     override fun onResume() {
         super.onResume()
         knitting = datasource.getKnitting(knitting.id)
