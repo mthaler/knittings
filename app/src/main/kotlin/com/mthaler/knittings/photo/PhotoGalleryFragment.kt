@@ -76,16 +76,10 @@ class PhotoGalleryFragment : Fragment(), AnkoLogger {
         }
 
         gridView = v.findViewById(R.id.gridView)
-
-        val photos = datasource.getAllPhotos(knitting)
-        context?.let {
-            val gridAdapter = GridViewAdapter(it, R.layout.grid_item_layout, photos)
-            gridView.adapter = gridAdapter
-            gridView.onItemClickListener = AdapterView.OnItemClickListener { parent, v, position, id ->
-                // photo clicked, show photo in photo activity
-                val photo = parent.getItemAtPosition(position) as Photo
-                startActivity<PhotoActivity>(EXTRA_PHOTO_ID to photo.id, EXTRA_KNITTING_ID to knitting.id)
-            }
+        gridView.onItemClickListener = AdapterView.OnItemClickListener { parent, v, position, id ->
+            // photo clicked, show photo in photo activity
+            val photo = parent.getItemAtPosition(position) as Photo
+            startActivity<PhotoActivity>(EXTRA_PHOTO_ID to photo.id, EXTRA_KNITTING_ID to knitting.id)
         }
 
         return v
@@ -105,12 +99,13 @@ class PhotoGalleryFragment : Fragment(), AnkoLogger {
 
     override fun onResume() {
         super.onResume()
-        val a = activity
-        if (a != null) {
+        activity?.let {
             // get knitting from database because it could have changed
             knitting = datasource.getKnitting(knitting.id)
             val photos = datasource.getAllPhotos(knitting)
-            val gridAdapter = GridViewAdapter(a, R.layout.grid_item_layout, photos)
+            // show the newest photos first. The id is incremented for each photo that is added, thus we can sort by id
+            photos.sortByDescending { it.id }
+            val gridAdapter = GridViewAdapter(it, R.layout.grid_item_layout, photos)
             gridView.adapter = gridAdapter
         }
     }
