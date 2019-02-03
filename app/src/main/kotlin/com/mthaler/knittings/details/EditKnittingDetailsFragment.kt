@@ -13,7 +13,6 @@ import com.mthaler.knittings.Extras
 import com.mthaler.knittings.R
 import com.mthaler.knittings.TextWatcher
 import com.mthaler.knittings.category.SelectCategoryActivity
-import com.mthaler.knittings.database.KnittingsDataSource
 import com.mthaler.knittings.database.datasource
 import com.mthaler.knittings.datepicker.DatePickerFragment
 import com.mthaler.knittings.model.Knitting
@@ -79,22 +78,18 @@ class EditKnittingDetailsFragment : Fragment() {
 
         textViewStarted = v.findViewById(R.id.knitting_started)
         textViewStarted.setOnClickListener {
-            knitting?.let {
-                val fm = fragmentManager
-                val dialog = DatePickerFragment.newInstance(it.started)
-                dialog.setTargetFragment(this, REQUEST_STARTED)
-                dialog.show(fm, DIALOG_DATE)
-            }
+            val fm = fragmentManager
+            val dialog = DatePickerFragment.newInstance(knitting.started)
+            dialog.setTargetFragment(this, REQUEST_STARTED)
+            dialog.show(fm, DIALOG_DATE)
         }
 
         textViewFinished = v.findViewById(R.id.knitting_finished)
         textViewFinished.setOnClickListener {
-            knitting?.let {
-                val fm = fragmentManager
-                val dialog = DatePickerFragment.newInstance(if (it.finished != null) it.finished else Date())
-                dialog.setTargetFragment(this, REQUEST_FINISHED)
-                dialog.show(fm, DIALOG_DATE)
-            }
+            val fm = fragmentManager
+            val dialog = DatePickerFragment.newInstance(if (knitting.finished != null) knitting.finished else Date())
+            dialog.setTargetFragment(this, REQUEST_FINISHED)
+            dialog.show(fm, DIALOG_DATE)
         }
 
         val editTextNeedleDiameter = v.findViewById<EditText>(R.id.knitting_needle_diameter)
@@ -108,11 +103,9 @@ class EditKnittingDetailsFragment : Fragment() {
             context?.let {
                 val d = DurationPickerDialog(it, { durationPicker, duration ->
                     textViewDuration.text = TimeUtils.formatDuration(duration)
-                    val knitting0 = knitting!!
-                    val knitting1 = knitting0.copy(duration = duration)
-                    knitting = knitting1
-                    datasource.updateKnitting(knitting1)
-                }, knitting!!.duration)
+                    knitting = knitting.copy(duration = duration)
+                    datasource.updateKnitting(knitting)
+                }, knitting.duration)
                 d.show()
             }
         }
@@ -121,7 +114,7 @@ class EditKnittingDetailsFragment : Fragment() {
         buttonCategory.setOnClickListener {
             val i = Intent(context, SelectCategoryActivity::class.java)
             // add the knitting ID which is required to make up navigation work correctly
-            knitting?.let { i.putExtra(EXTRA_KNITTING_ID, it.id) }
+            i.putExtra(EXTRA_KNITTING_ID, knitting.id)
             startActivityForResult(i, REQUEST_SELECT_CATEGORY)
         }
 
@@ -174,11 +167,8 @@ class EditKnittingDetailsFragment : Fragment() {
         // update knitting if user changes the rating
         val ratingBar = v.findViewById<RatingBar>(R.id.ratingBar)
         ratingBar.onRatingBarChangeListener = RatingBar.OnRatingBarChangeListener { ratingBar, rating, fromUser ->
-            knitting?.let {
-                val k = it.copy(rating = rating.toDouble())
-                datasource.updateKnitting(k)
-                knitting = k
-            }
+            knitting = knitting.copy(rating = rating.toDouble())
+            datasource.updateKnitting(knitting)
         }
 
         return v
@@ -217,19 +207,16 @@ class EditKnittingDetailsFragment : Fragment() {
                 textViewFinished.text = DateFormat.getDateInstance().format(date)
             }
 
-            knitting = knitting?.copy(finished = date)
+            knitting = knitting.copy(finished = date)
             textViewFinished.text = DateFormat.getDateInstance().format(date)
-            KnittingsDataSource.getInstance(activity!!).updateKnitting(knitting!!)
+            datasource.updateKnitting(knitting)
         } else if (requestCode == REQUEST_SELECT_CATEGORY) {
             data?.let {
                 val categoryID = it.getLongExtra(EXTRA_CATEGORY_ID, -1)
                 val c = datasource.getCategory(categoryID)
                 buttonCategory.text = c.name
-                knitting?.let {
-                    val k = it.copy(category = c)
-                    knitting = k
-                    datasource.updateKnitting(k)
-                }
+                knitting = knitting.copy(category = c)
+                datasource.updateKnitting(knitting)
             }
         }
     }
@@ -307,14 +294,12 @@ class EditKnittingDetailsFragment : Fragment() {
         }
     }
 
-    fun getKnittingID(): Long? = knitting?.id
-
     companion object {
 
         /**
          * Use this factory method to create a new instance of this fragment using the provided parameters.
          *
-         * @param categoryID id of the category that should be edited
+         * @param knittingID id of the knitting project that should be edited
          * @return A new instance of fragment EditKnittingDetailsFragment
          */
         @JvmStatic

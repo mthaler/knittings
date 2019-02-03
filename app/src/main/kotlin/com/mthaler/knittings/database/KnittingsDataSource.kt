@@ -489,7 +489,7 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
         val id = photo.id
         dbHelper.writableDatabase.use { database ->
             database.delete(PhotoTable.PHOTOS, PhotoTable.Cols.ID + "=" + id, null)
-            debug("Deleted photo " + id + ": " + photo.toString())
+            debug("Deleted photo $id: $photo")
         }
     }
 
@@ -508,7 +508,7 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
             val whereClause = PhotoTable.Cols.KNITTING_ID + "= ?"
             val whereArgs = arrayOf(java.lang.Long.toString(id))
             database.delete(PhotoTable.PHOTOS, whereClause, whereArgs)
-            debug("Removed knitting " + id + ": " + knitting.toString())
+            debug("Removed knitting $id: $knitting")
         }
     }
 

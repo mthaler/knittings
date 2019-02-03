@@ -245,10 +245,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private fun configureSearchView(menu: Menu) {
         val search = menu.findItem(R.id.search)
-        val sv = search.getActionView() as SearchView
+        val sv = search.actionView as SearchView
         sv.setOnQueryTextListener(this)
         sv.setOnCloseListener(this)
-        sv.setSubmitButtonEnabled(false)
+        sv.isSubmitButtonEnabled = false
         sv.setIconifiedByDefault(true)
         if (initialQuery != null)
         {
@@ -284,9 +284,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
      * @param newText new content of the query text field
      * @return true if the query has been handled by the listener, false to let the SearchView perform the default action.
      */
-    override fun onQueryTextSubmit(newText: String?): Boolean {
-        return false
-    }
+    override fun onQueryTextSubmit(newText: String?): Boolean = false
 
     /**
      * The user is attempting to close the SearchView.

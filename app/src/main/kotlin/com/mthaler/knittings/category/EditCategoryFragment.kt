@@ -19,9 +19,7 @@ class EditCategoryFragment : Fragment() {
 
     private lateinit var category: Category
 
-    fun getCategory(): Category {
-        return category
-    }
+    fun getCategory(): Category = category
 
     /**
      * Called to do initial creation of a fragment. This is called after onAttach(Activity) and before

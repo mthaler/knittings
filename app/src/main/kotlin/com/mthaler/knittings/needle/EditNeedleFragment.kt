@@ -128,7 +128,7 @@ class EditNeedleFragment : Fragment() {
             datasource.updateNeedle(n)
             needle = n
         }
-        checkBoxinUse.setChecked(needle.inUse)
+        checkBoxinUse.isChecked = needle.inUse
 
         return v
     }

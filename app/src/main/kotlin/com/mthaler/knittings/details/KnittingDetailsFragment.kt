@@ -70,8 +70,8 @@ class KnittingDetailsFragment : Fragment(), AnkoLogger {
         val v = inflater.inflate(R.layout.fragment_knitting_details, container, false)
 
         // start edit knitting details fragment if the user clicks the floating action button
-        val edit_knitting_details = v.findViewById<FloatingActionButton>(R.id.edit_knitting_details)
-        edit_knitting_details.setOnClickListener {
+        val fabEdit = v.findViewById<FloatingActionButton>(R.id.edit_knitting_details)
+        fabEdit.setOnClickListener {
             listener?.editKnitting(knitting.id)
         }
         return v
@@ -132,15 +132,15 @@ class KnittingDetailsFragment : Fragment(), AnkoLogger {
             // remove slider dots and on page changed listener. We readd it if we need it
             val sliderDots = it.findViewById<LinearLayout>(R.id.sliderDots)
             sliderDots.removeAllViews()
-            val view_pager = it.findViewById<ViewPager>(R.id.view_pager)
-            view_pager.clearOnPageChangeListeners()
-            view_pager.offscreenPageLimit = 3
+            val viewPager = it.findViewById<ViewPager>(R.id.view_pager)
+            viewPager.clearOnPageChangeListeners()
+            viewPager.offscreenPageLimit = 3
             val photos = datasource.getAllPhotos(knitting)
             photos.sortByDescending { it.id }
             if (photos.size > 0) {
-                view_pager.visibility = View.VISIBLE
+                viewPager.visibility = View.VISIBLE
                 val adapter = ImageAdapter(context!!, photos) //Here we are defining the Imageadapter object
-                view_pager.adapter = adapter // Here we are passing and setting the adapter for the images
+                viewPager.adapter = adapter // Here we are passing and setting the adapter for the images
 
 
                 val dotscount = adapter.count
@@ -157,7 +157,7 @@ class KnittingDetailsFragment : Fragment(), AnkoLogger {
                     }.toTypedArray()
                     // make the first dot active
                     dots[0].setImageDrawable(ContextCompat.getDrawable(context!!.applicationContext, R.drawable.active_dot))
-                    view_pager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
+                    viewPager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
 
                         override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {}
 
@@ -176,36 +176,36 @@ class KnittingDetailsFragment : Fragment(), AnkoLogger {
                     })
                 }
             } else {
-                view_pager.visibility = View.GONE
+                viewPager.visibility = View.GONE
             }
 
-            val knitting_title = it.findViewById<TextView>(R.id.knitting_title)
-            knitting_title.text = knitting.title
+            val knittingTitle = it.findViewById<TextView>(R.id.knitting_title)
+            knittingTitle.text = knitting.title
 
-            val knitting_description = it.findViewById<TextView>(R.id.knitting_description)
-            knitting_description.text = knitting.description
+            val knittingDescription = it.findViewById<TextView>(R.id.knitting_description)
+            knittingDescription.text = knitting.description
 
-            val knitting_started = it.findViewById<TextView>(R.id.knitting_started)
-            knitting_started.text = getString(R.string.knitting_details_started, DateFormat.getDateInstance().format(knitting.started))
+            val knittingStarted = it.findViewById<TextView>(R.id.knitting_started)
+            knittingStarted.text = getString(R.string.knitting_details_started, DateFormat.getDateInstance().format(knitting.started))
 
-            val knitting_finished = it.findViewById<TextView>(R.id.knitting_finished)
-            knitting_finished.text = getString(R.string.knitting_details_finished, if (knitting.finished != null) DateFormat.getDateInstance().format(knitting.finished) else "")
+            val knittingFinished = it.findViewById<TextView>(R.id.knitting_finished)
+            knittingFinished.text = getString(R.string.knitting_details_finished, if (knitting.finished != null) DateFormat.getDateInstance().format(knitting.finished) else "")
 
-            val knitting_needle_diameter = it.findViewById<TextView>(R.id.knitting_needle_diameter)
-            knitting_needle_diameter.text = getString(R.string.knitting_details_needle, knitting.needleDiameter)
+            val knittingNeedleDiameter = it.findViewById<TextView>(R.id.knitting_needle_diameter)
+            knittingNeedleDiameter.text = getString(R.string.knitting_details_needle, knitting.needleDiameter)
 
-            val knitting_size = it.findViewById<TextView>(R.id.knitting_size)
-            knitting_size.text = getString(R.string.knitting_details_size, knitting.size)
+            val knittingSize = it.findViewById<TextView>(R.id.knitting_size)
+            knittingSize.text = getString(R.string.knitting_details_size, knitting.size)
 
-            val knitting_duration = it.findViewById<TextView>(R.id.knitting_duration)
-            knitting_duration.text = getString(R.string.knitting_details_duration, TimeUtils.formatDuration(knitting.duration))
+            val knittingDuration = it.findViewById<TextView>(R.id.knitting_duration)
+            knittingDuration.text = getString(R.string.knitting_details_duration, TimeUtils.formatDuration(knitting.duration))
 
-            val knitting_category = it.findViewById<TextView>(R.id.knitting_category)
+            val knittingCategory = it.findViewById<TextView>(R.id.knitting_category)
             val c = knitting.category
-            knitting_category.text = getString(R.string.knitting_details_category, if (c != null) c.name else "")
+            knittingCategory.text = getString(R.string.knitting_details_category, if (c != null) c.name else "")
 
-            val knitting_status = it.findViewById<TextView>(R.id.knitting_status)
-            knitting_status.text = getString(R.string.knitting_details_status, knitting.status)
+            val knittingStatus = it.findViewById<TextView>(R.id.knitting_status)
+            knittingStatus.text = getString(R.string.knitting_details_status, knitting.status)
 
             val ratingBar = it.findViewById<RatingBar>(R.id.ratingBar)
             ratingBar.rating = knitting.rating.toFloat()
@@ -257,8 +257,7 @@ class KnittingDetailsFragment : Fragment(), AnkoLogger {
         /**
          * Use this factory method to create a new instance of this fragment using the provided parameters.
          *
-         * @param categoryID id of the category that should be edited
-         * @param edit a boolean indicating if EditKnittingFragment should be displayed instead of KnittingDetailsFragment
+         * @param knittingID id of the knitting project that should be displayed
          * @return A new instance of fragment KnittingDetailsFragment
          */
         @JvmStatic
