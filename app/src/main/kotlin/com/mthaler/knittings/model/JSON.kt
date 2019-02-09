@@ -67,6 +67,7 @@ fun Needle.toJSON(): JSONObject {
     result.put("length", length)
     result.put("material", material)
     result.put("inUse", inUse)
+    result.put("type", type)
     return result
 }
 
@@ -161,7 +162,8 @@ fun JSONObject.toNeedle(): Needle {
     val length = getString("length")
     val material = getString("material")
     val inUse = getBoolean("inUse")
-    return Needle(id, name, description, size, length, material, inUse)
+    val type = if (has("type")) getString("type") else ""
+    return Needle(id, name, description, size, length, material, inUse, type)
 }
 
 /**
