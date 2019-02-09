@@ -8,7 +8,7 @@ import org.jetbrains.anko.db.*
 object NeedleTable {
     val NEEDLES = "needles"
 
-    val Columns = arrayOf(Cols.ID, Cols.NAME, Cols.DESCRIPTION, Cols.SIZE, Cols.LENGTH, Cols.MATERIAL, Cols.IN_USE)
+    val Columns = arrayOf(Cols.ID, Cols.NAME, Cols.DESCRIPTION, Cols.SIZE, Cols.LENGTH, Cols.MATERIAL, Cols.IN_USE, Cols.TYPE)
 
     object Cols {
         val ID = "_id"
@@ -18,6 +18,7 @@ object NeedleTable {
         val LENGTH = "length"
         val MATERIAL = "material"
         val IN_USE = "in_use"
+        val TYPE = "type"
     }
 
     fun create(db: SQLiteDatabase) {
@@ -28,7 +29,8 @@ object NeedleTable {
                 Cols.SIZE to TEXT + NOT_NULL,
                 Cols.LENGTH to TEXT + NOT_NULL,
                 Cols.MATERIAL to TEXT + NOT_NULL,
-                Cols.IN_USE to INTEGER)
+                Cols.IN_USE to INTEGER,
+                Cols.TYPE to TEXT + NOT_NULL)
     }
 
     fun cursorToNeedle(cursor: Cursor): Needle {
@@ -39,6 +41,7 @@ object NeedleTable {
         val idLength = cursor.getColumnIndex(Cols.LENGTH)
         val idMaterial = cursor.getColumnIndex(Cols.MATERIAL)
         val idInUse = cursor.getColumnIndex(Cols.IN_USE)
+        val idType = cursor.getColumnIndex(Cols.TYPE)
 
         val id = cursor.getLong(idIndex)
         val name = cursor.getString(idName)
@@ -47,6 +50,9 @@ object NeedleTable {
         val length = cursor.getString(idLength)
         val material = cursor.getString(idMaterial)
         val inUse = cursor.getInt(idInUse)
-        return Needle(id, name, description, size, length, material, inUse > 0)
+        val type = cursor.getString(idType)
+        return Needle(id, name, description, size, length, material, inUse > 0, type)
     }
+
+    val SQL_ADD_STATUS = "ALTER TABLE " + NEEDLES + " ADD COLUMN " + Cols.TYPE + " TEXT"
 }
