@@ -689,7 +689,7 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
      * @return new needle
      */
     @Synchronized
-    fun createNeedle(name: String, description: String, size: String, length: String, material: String, inUse: Boolean): Needle {
+    fun createNeedle(name: String, description: String, size: String, length: String, material: String, inUse: Boolean, type: String): Needle {
         debug("Creating needle $name")
         dbHelper.writableDatabase.use { database ->
             val values = ContentValues()
@@ -699,6 +699,7 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
             values.put(NeedleTable.Cols.LENGTH, length)
             values.put(NeedleTable.Cols.MATERIAL, material)
             values.put(NeedleTable.Cols.IN_USE, inUse)
+            values.put(NeedleTable.Cols.TYPE, type)
 
             val id = database.insert(NeedleTable.NEEDLES, null, values)
 
@@ -732,6 +733,7 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
             values.put(NeedleTable.Cols.LENGTH, needle.length)
             values.put(NeedleTable.Cols.MATERIAL, needle.material)
             values.put(NeedleTable.Cols.IN_USE, needle.inUse)
+            values.put(NeedleTable.Cols.TYPE, needle.type)
             val id = database.insert(NeedleTable.NEEDLES, null, values)
             debug("Added category $needle to database, id=$id")
         }
@@ -754,6 +756,7 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
             values.put(NeedleTable.Cols.LENGTH, needle.length)
             values.put(NeedleTable.Cols.MATERIAL, needle.material)
             values.put(NeedleTable.Cols.IN_USE, needle.inUse)
+            values.put(NeedleTable.Cols.TYPE, needle.type)
             database.update(NeedleTable.NEEDLES,
                     values,
                     NeedleTable.Cols.ID + "=" + needle.id, null)
