@@ -70,7 +70,7 @@ class JSONTest {
 
     @Test
     fun testNeedleToJSON() {
-        val n0 = Needle(42, "needle", "my first needle", "5 mm", "20 cm", "metal", true)
+        val n0 = Needle(42, "needle", "my first needle", "5 mm", "20 cm", "metal", true, "Nadelspiele")
         val j0 = n0.toJSON()
         assertEquals(42, j0.getLong("id"))
         assertEquals("needle", j0.getString("name"))
@@ -79,7 +79,7 @@ class JSONTest {
         assertEquals("20 cm", j0.getString("length"))
         assertEquals("metal", j0.getString("material"))
         assertTrue(j0.getBoolean("inUse"))
-        println(j0)
+        assertEquals("Nadelspiele", j0.getString("type"))
     }
 
     @Test
@@ -176,19 +176,19 @@ class JSONTest {
 
     @Test
     fun testJSONToNeedle() {
-        val s = """{"size":"5 mm","material":"metal","name":"needle","length":"20 cm","inUse":true,"description":"my first needle","id":42}"""
-        assertEquals(Needle(42, "needle", "my first needle", "5 mm", "20 cm", "metal", true), JSONObject(s).toNeedle())
+        val s = """{"size":"5 mm","material":"metal","name":"needle","length":"20 cm","inUse":true,"description":"my first needle","id":42,"type":"Nadelspiele"}"""
+        assertEquals(Needle(42, "needle", "my first needle", "5 mm", "20 cm", "metal", true, "Nadelspiele"), JSONObject(s).toNeedle())
     }
 
     @Test
     fun testJSONArrayNeedles() {
-        val s = """[{"size":"5 mm","material":"metal","name":"needle","length":"20 cm","inUse":true,"description":"my first needle","id":42},
-            |{"size":"6 mm","material":"wood","name":"needle2","length":"21 cm","inUse":false,"description":"my second needle","id":43}]""".trimMargin()
+        val s = """[{"size":"5 mm","material":"metal","name":"needle","length":"20 cm","inUse":true,"description":"my first needle","id":42,"type":"Nadelspiele"},
+            |{"size":"6 mm","material":"wood","name":"needle2","length":"21 cm","inUse":false,"description":"my second needle","id":43,"type":"Rundstricknadeln"}]""".trimMargin()
         val json = JSONArray(s)
         val needles = json.toNeedles()
         assertEquals(2, needles.size)
-        assertEquals(Needle(42, "needle", "my first needle", "5 mm", "20 cm", "metal", true), needles[0])
-        assertEquals(Needle(43, "needle2", "my second needle", "6 mm", "21 cm", "wood", false), needles[1])
+        assertEquals(Needle(42, "needle", "my first needle", "5 mm", "20 cm", "metal", true, "Nadelspiele"), needles[0])
+        assertEquals(Needle(43, "needle2", "my second needle", "6 mm", "21 cm", "wood", false, "Rundstricknadeln"), needles[1])
     }
 
     @Test
