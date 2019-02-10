@@ -4,11 +4,10 @@ import android.content.Context
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
 import android.support.v4.app.Fragment
+import android.support.v7.app.AlertDialog
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import com.mthaler.knittings.R
 import com.mthaler.knittings.database.datasource
 import kotlinx.android.synthetic.main.fragment_needle_list.*
@@ -39,6 +38,8 @@ class NeedleListFragment : Fragment() {
         // Inflate the layout for this fragment
         val v = inflater.inflate(R.layout.fragment_needle_list, container, false)
 
+        setHasOptionsMenu(true)
+
         // add new needle if the user clicks the floating action button and start the
         // EditNeedleActivity to edit the new category
         val fab = v.findViewById<FloatingActionButton>(R.id.fab_create_needle)
@@ -48,6 +49,45 @@ class NeedleListFragment : Fragment() {
         rv.layoutManager = LinearLayoutManager(context)
 
         return v
+    }
+
+    /**
+     * Initialize the contents of the Fragment host's standard options menu. You should place your menu items in to menu.
+     * For this method to be called, you must have first called setHasOptionsMenu(boolean).
+     * See Activity.onCreateOptionsMenu for more information.
+     *
+     * @param menu The options menu in which you place your items.
+     * @param inflater MenuInflater
+     */
+    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+        super.onCreateOptionsMenu(menu, inflater)
+        if (menu != null && inflater != null) {
+            inflater.inflate(R.menu.needle_list, menu)
+        }
+    }
+
+    /**
+     * This hook is called whenever an item in your options menu is selected.
+     *
+     * @param item the menu item that was selected.
+     * @return return false to allow normal menu processing to proceed, true to consume it here.
+     */
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        if (item != null) {
+            return when (item.itemId) {
+                R.id.menu_item_filter -> {
+                    context?.let {
+                        val listItems = (listOf(getString(R.string.filter_show_all)) + datasource.allNeedles.map { it.type }.toList()).toTypedArray()
+                        val builder = AlertDialog.Builder(it)
+
+                    }
+                    true
+                }
+                else -> super.onOptionsItemSelected(item)
+            }
+        } else {
+            return super.onOptionsItemSelected(item)
+        }
     }
 
     override fun onResume() {
