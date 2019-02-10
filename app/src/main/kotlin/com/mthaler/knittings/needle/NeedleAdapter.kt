@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import com.mthaler.knittings.R
 import com.mthaler.knittings.model.Needle
+import java.lang.StringBuilder
 
 class NeedleAdapter(val needles: ArrayList<Needle>, private val onItemClick: (Needle) -> Unit): RecyclerView.Adapter<NeedleAdapter.ViewHolder>() {
 
@@ -46,9 +47,26 @@ class NeedleAdapter(val needles: ArrayList<Needle>, private val onItemClick: (Ne
     class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
         private val textFieldName = itemView.findViewById<TextView>(R.id.needle_list_item_name)
 
-        fun bind(category: Needle, listener: (Needle) -> Unit) {
-            textFieldName.text = category.name
-            itemView.setOnClickListener { v -> listener(category) }
+        fun bind(needle: Needle, listener: (Needle) -> Unit) {
+            val sb = StringBuilder()
+            if (!needle.name.trim().isEmpty()) {
+                sb.append(needle.name.trim())
+            } else {
+                sb.append(needle.type.trim())
+            }
+            if (!needle.length.trim().isEmpty()) {
+                sb.append("  L ")
+                sb.append(needle.length)
+            }
+            if (!needle.size.trim().isEmpty()) {
+                sb.append("  \u2300 ")
+                sb.append(needle.size)
+            }
+            if (needle.inUse) {
+                sb.append("  \u2713")
+            }
+            textFieldName.text = sb.toString()
+            itemView.setOnClickListener { v -> listener(needle) }
         }
     }
 }

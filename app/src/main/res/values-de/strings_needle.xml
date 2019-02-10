@@ -3,7 +3,7 @@
     <string name="activity_needle_list_name">Stricknadeln</string>
     <string name="manage_needles">Stricknadeln verwalten</string>
     <string name="edit_needle_name_hint">Name</string>
-    <string name="edit_needle_size_hint">Größe</string>
+    <string name="edit_needle_size_hint">Durchmesser</string>
     <string name="edit_needle_length_hint">Länge</string>
     <string name="edit_needle_materal_hint">Material:</string>
     <string name="edit_needle_in_use">In Gebrauch</string>

@@ -3,7 +3,7 @@
     <string name="manage_needles">Manage needles</string>
     <string name="activity_needle_list_name">Needles</string>
     <string name="edit_needle_name_hint">Name</string>
-    <string name="edit_needle_size_hint">Size</string>
+    <string name="edit_needle_size_hint">Diameter</string>
     <string name="edit_needle_length_hint">Length</string>
     <string name="edit_needle_materal_hint">Material:</string>
     <string name="edit_needle_in_use">In use</string>
