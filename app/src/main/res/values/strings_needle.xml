@@ -6,15 +6,6 @@
     <string name="edit_needle_size_hint">Size</string>
     <string name="edit_needle_length_hint">Length</string>
     <string name="edit_needle_materal_hint">Material:</string>
-    <string-array name="needle_material">
-        <item/>
-        <item>Aluminum</item>
-        <item>Bamboo</item>
-        <item>Metal</item>
-        <item>Plastic</item>
-        <item>Wood</item>
-        <item>Other</item>
-    </string-array>
     <string name="edit_needle_in_use">In use</string>
     <!-- edit needle menu -->
     <string name="delete_needle">Delete needle</string>
@@ -22,4 +13,11 @@
     <string name="delete_needle_dialog_title">Delete</string>
     <string name="delete_needle_dialog_question">Do you really want to delete the needle?</string>
     <string name="delete_needle_dialog_delete_button">Delete</string>
+    <!-- needle materials -->
+    <string name="needle_material_other">Other</string>
+    <string name="needle_material_aluminum">Aluminum</string>
+    <string name="needle_material_bamboo">Bamboo</string>
+    <string name="needle_material_metal">Metal</string>
+    <string name="needle_material_plastic">Plastic</string>
+    <string name="needle_material_wood">Wood</string>
 </resources>

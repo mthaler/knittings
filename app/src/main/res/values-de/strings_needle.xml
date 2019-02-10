@@ -6,15 +6,6 @@
     <string name="edit_needle_size_hint">Größe</string>
     <string name="edit_needle_length_hint">Länge</string>
     <string name="edit_needle_materal_hint">Material:</string>
-    <string-array name="needle_material">
-        <item/>
-        <item>Aluminium</item>
-        <item>Bambus</item>
-        <item>Metall</item>
-        <item>Plastik</item>
-        <item>Holz</item>
-        <item>Anderes Material</item>
-    </string-array>
     <string name="edit_needle_in_use">In Gebrauch</string>
     <!-- edit needle menu -->
     <string name="delete_needle">Nadel löschen</string>
@@ -22,4 +13,11 @@
     <string name="delete_needle_dialog_title">Nadel Löschen</string>
     <string name="delete_needle_dialog_question">Nadel wirklich löschen?</string>
     <string name="delete_needle_dialog_delete_button">Löschen</string>
+    <!-- needle materials -->
+    <string name="needle_material_other">Anderes Material</string>
+    <string name="needle_material_aluminum">Aluminium</string>
+    <string name="needle_material_bamboo">Bambus</string>
+    <string name="needle_material_metal">Metall</string>
+    <string name="needle_material_plastic">Plastik</string>
+    <string name="needle_material_wood">Holz</string>
 </resources>

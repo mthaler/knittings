@@ -11,6 +11,7 @@ import com.mthaler.knittings.TextWatcher
 import com.mthaler.knittings.database.datasource
 import com.mthaler.knittings.model.Needle
 import org.jetbrains.anko.support.v4.alert
+import com.mthaler.knittings.model.Needle.Companion.materials
 
 class EditNeedleFragment : Fragment() {
 
@@ -75,17 +76,12 @@ class EditNeedleFragment : Fragment() {
 
         val spinnerMaterial = v.findViewById<Spinner>(R.id.needle_material)
         // Create an ArrayAdapter using the string array and a default spinner layout
-        ArrayAdapter.createFromResource(
-                context,
-                R.array.needle_material,
-                android.R.layout.simple_spinner_item
-        ).also { adapter ->
+        ArrayAdapter(context, android.R.layout.simple_spinner_item, materials).also { adapter ->
             // Specify the layout to use when the list of choices appears
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             // Apply the adapter to the spinner
             spinnerMaterial.adapter = adapter
         }
-        val materials = resources.getStringArray(R.array.needle_material)
         val index = materials.indexOf(needle.material)
         if (index >= 0) {
             spinnerMaterial.setSelection(index)
