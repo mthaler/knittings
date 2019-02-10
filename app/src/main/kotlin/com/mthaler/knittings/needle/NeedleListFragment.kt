@@ -98,7 +98,7 @@ class NeedleListFragment : Fragment() {
                                 filter = SingleTypeFilter(type)
                             }
                         }
-                            //updateKnittingList()
+                            updateNeedleList()
                             dialog.dismiss()
                         }
                         builder.setNegativeButton(R.string.dialog_button_cancel) { dialog, which -> dialog.dismiss() }
@@ -123,21 +123,24 @@ class NeedleListFragment : Fragment() {
     * Updates the list of needles
     */
     private fun updateNeedleList() {
-        val rv = view!!.findViewById<RecyclerView>(R.id.needles_recycler_view)
-        val needles = datasource.allNeedles
-        // show image if category list is empty
-        if (needles.isEmpty()) {
-            needles_empty_recycler_view.visibility = View.VISIBLE
-            needles_recycler_view.visibility = View.GONE
-        } else {
-            needles_empty_recycler_view.visibility = View.GONE
-            needles_recycler_view.visibility = View.VISIBLE
+        view?.let {
+            val rv = it.findViewById<RecyclerView>(R.id.needles_recycler_view)
+            val needles = datasource.allNeedles
+            val filtered = filter.filter(needles)
+            // show image if category list is empty
+            if (needles.isEmpty()) {
+                needles_empty_recycler_view.visibility = View.VISIBLE
+                needles_recycler_view.visibility = View.GONE
+            } else {
+                needles_empty_recycler_view.visibility = View.GONE
+                needles_recycler_view.visibility = View.VISIBLE
+            }
+            // start EditCategoryActivity if the users clicks on a category
+            val adapter = NeedleAdapter(NeedleAdapter.groupItems(filtered), { needle ->
+                listener?.needleClicked(needle.id)
+            })
+            rv.adapter = adapter
         }
-        // start EditCategoryActivity if the users clicks on a category
-        val adapter = NeedleAdapter(NeedleAdapter.groupItems(needles), { needle ->
-            listener?.needleClicked(needle.id)
-        })
-        rv.adapter = adapter
     }
 
     /**
