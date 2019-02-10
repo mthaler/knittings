@@ -25,6 +25,6 @@
     <string name="needle_type_circular">Circular</string>
     <string name="needle_type_point">Point</string>
     <string name="needle_type_set">Set</string>
-    <string name="needle_type_round">Rund</string>
+    <string name="needle_type_round">Round</string>
     <string name="needle_type_coat">Coat</string>
 </resources>
