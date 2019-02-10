@@ -51,7 +51,7 @@ object NeedleTable {
         val material = cursor.getString(idMaterial)
         val inUse = cursor.getInt(idInUse)
         val type = cursor.getString(idType)
-        return Needle(id, name, description, size, length, material, inUse > 0, type)
+        return Needle(id, name, description, size, length, material, inUse > 0, if (type != null) type else "")
     }
 
     val SQL_ADD_TYPE = "ALTER TABLE " + NEEDLES + " ADD COLUMN " + Cols.TYPE + " TEXT"
