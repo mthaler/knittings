@@ -10,7 +10,7 @@ import com.mthaler.knittings.model.Needle
 import java.lang.IllegalArgumentException
 import java.lang.StringBuilder
 
-class NeedleAdapter(val needles: ArrayList<Needle>, private val onItemClick: (Needle) -> Unit): RecyclerView.Adapter<NeedleAdapter.ItemViewHolder>() {
+class NeedleAdapter(val needles: ArrayList<Needle>, private val onItemClick: (Needle) -> Unit): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     /**
      * Creates, configures and returns a ViewHolder object for a particular row in the list
@@ -18,10 +18,10 @@ class NeedleAdapter(val needles: ArrayList<Needle>, private val onItemClick: (Ne
      * @param parent a ViewGroup that will hold the views managed by the holder, mostly used for layout inflation
      * @param viewType an int that is the particular view type we are using, for cases where we have multiple view types
      */
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NeedleAdapter.ItemViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val v = LayoutInflater.from(parent.context).inflate(R.layout.list_item_needle, parent, false)
         if (viewType == TypeHeader) {
-            TODO("not implemented")
+            return NeedleAdapter.HeaderViewHolder(v)
         } else if (viewType == TypeItem) {
             return NeedleAdapter.ItemViewHolder(v)
         } else {
@@ -35,8 +35,12 @@ class NeedleAdapter(val needles: ArrayList<Needle>, private val onItemClick: (Ne
      * @param holder ViewHolder object that should be updated
      * @param position model position
      */
-    override fun onBindViewHolder(holder: NeedleAdapter.ItemViewHolder, position: Int) {
-        holder.bind(needles[position], onItemClick)
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        if (holder is HeaderViewHolder) {
+            holder.bind("test")
+        } else if (holder is ItemViewHolder) {
+            holder.bind(needles[position], onItemClick)
+        }
     }
 
     /**
@@ -44,6 +48,14 @@ class NeedleAdapter(val needles: ArrayList<Needle>, private val onItemClick: (Ne
      */
     override fun getItemCount(): Int = needles.size
 
+    class HeaderViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
+
+        private val textViewHeader = itemView.findViewById<TextView>(R.id.needle_list_item_header)
+
+        fun bind(header: String) {
+            textViewHeader.text = header
+        }
+    }
 
     /**
      * The ViewHolder class is responsible for binding data as needed from our model into the widgets
@@ -51,9 +63,9 @@ class NeedleAdapter(val needles: ArrayList<Needle>, private val onItemClick: (Ne
      *
      * @param itemView item view
      */
-    class ItemViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
-        private val textFieldName = itemView.findViewById<TextView>(R.id.needle_list_item_name)
-        private val textFieldDescription= itemView.findViewById<TextView>(R.id.needle_list_item_description)
+    class ItemViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
+        private val textViewName = itemView.findViewById<TextView>(R.id.needle_list_item_name)
+        private val textViewDescription= itemView.findViewById<TextView>(R.id.needle_list_item_description)
 
         fun bind(needle: Needle, listener: (Needle) -> Unit) {
             val sb = StringBuilder()
@@ -70,8 +82,8 @@ class NeedleAdapter(val needles: ArrayList<Needle>, private val onItemClick: (Ne
             if (needle.inUse) {
                 sb.append("  \u2713")
             }
-            textFieldName.text = if (!needle.name.trim().isEmpty()) needle.name.trim() else needle.type.trim()
-            textFieldDescription.text = sb.toString()
+            textViewName.text = if (!needle.name.trim().isEmpty()) needle.name.trim() else needle.type.trim()
+            textViewDescription.text = sb.toString()
             itemView.setOnClickListener { v -> listener(needle) }
         }
     }

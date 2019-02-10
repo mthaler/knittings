@@ -5,7 +5,7 @@
     android:padding="16sp"
     android:orientation="vertical">
     <TextView
-        android:id="@+id/header_id"
+        android:id="@+id/needle_list_item_header"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="18sp"
