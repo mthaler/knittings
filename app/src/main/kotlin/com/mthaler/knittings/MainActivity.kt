@@ -252,7 +252,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         sv.setIconifiedByDefault(true)
         if (initialQuery != null)
         {
-            sv.setIconified(false)
+            sv.isIconified = false
             search.expandActionView()
             sv.setQuery(initialQuery, true)
         }

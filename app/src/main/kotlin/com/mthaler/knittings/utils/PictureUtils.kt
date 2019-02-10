@@ -81,9 +81,7 @@ object PictureUtils : AnkoLogger {
             ex.printStackTrace()
             return ExifInterface.ORIENTATION_UNDEFINED
         } finally {
-            if (inputStream != null) {
-                inputStream.close()
-            }
+            inputStream?.close()
         }
     }
 

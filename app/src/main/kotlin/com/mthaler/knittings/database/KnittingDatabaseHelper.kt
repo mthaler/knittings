@@ -73,15 +73,17 @@ class KnittingDatabaseHelper(context: Context) : ManagedSQLiteOpenHelper(context
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
         info("Updating knitting table from $oldVersion to $newVersion")
-        if (oldVersion == 1) {
-            upgrade12(db)
-            upgrade23(db)
-            upgrade34(db)
-        } else if (oldVersion == 2) {
-            upgrade23(db)
-            upgrade34(db)
-        } else if (oldVersion == 3) {
-            upgrade34(db)
+        when (oldVersion) {
+            1 -> {
+                upgrade12(db)
+                upgrade23(db)
+                upgrade34(db)
+            }
+            2 -> {
+                upgrade23(db)
+                upgrade34(db)
+            }
+            3 -> upgrade34(db)
         }
     }
 
