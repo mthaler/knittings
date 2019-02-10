@@ -74,6 +74,8 @@ class NeedleAdapter(val needles: List<ListItem>, private val onItemClick: (Needl
 
         fun bind(needle: Needle, listener: (Needle) -> Unit) {
             val sb = StringBuilder()
+            sb.append(needle.material)
+            sb.append("  ")
             if (!needle.length.trim().isEmpty()) {
                 sb.append("L ")
                 sb.append(needle.length)

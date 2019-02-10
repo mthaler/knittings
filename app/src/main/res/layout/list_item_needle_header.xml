@@ -2,7 +2,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="16sp"
+    android:paddingTop="4dp"
+    android:paddingBottom="4dp"
+    android:paddingLeft="8dp"
     android:orientation="vertical">
     <TextView
         android:id="@+id/needle_list_item_header"
@@ -10,5 +12,5 @@
         android:layout_height="wrap_content"
         android:textSize="18sp"
         android:textStyle="bold"
-        android:text="test"/>
+        android:textColor="@color/knitting_list_item_title"/>
 </LinearLayout>
