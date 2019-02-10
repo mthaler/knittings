@@ -88,6 +88,21 @@ class NeedleAdapter(val needles: ArrayList<Needle>, private val onItemClick: (Ne
         }
     }
 
+    abstract class ListItem {
+
+        abstract fun getType(): Int
+    }
+
+    data class HeaderItem(val header: String): ListItem() {
+
+        override fun getType(): Int = TypeHeader
+    }
+
+    data class NeedleItem(val needle: Needle): ListItem() {
+
+        override fun getType(): Int = TypeItem
+    }
+
     companion object {
         val TypeHeader = 0
         val TypeItem = 1
