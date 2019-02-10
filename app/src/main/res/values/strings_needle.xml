@@ -20,4 +20,11 @@
     <string name="needle_material_metal">Metal</string>
     <string name="needle_material_plastic">Plastic</string>
     <string name="needle_material_wood">Wood</string>
+    <!-- needle types -->
+    <string name="needle_type_other">Other</string>
+    <string name="needle_type_circular">Circular</string>
+    <string name="needle_type_point">Point</string>
+    <string name="needle_type_set">Set</string>
+    <string name="needle_type_round">Rund</string>
+    <string name="needle_type_coat">Coat</string>
 </resources>

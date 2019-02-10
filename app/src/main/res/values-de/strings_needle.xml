@@ -20,4 +20,11 @@
     <string name="needle_material_metal">Metall</string>
     <string name="needle_material_plastic">Plastik</string>
     <string name="needle_material_wood">Holz</string>
+    <!-- needle types -->
+    <string name="needle_type_other">Andere</string>
+    <string name="needle_type_circular">Seile</string>
+    <string name="needle_type_point">Spitzen</string>
+    <string name="needle_type_set">Nadelspiel</string>
+    <string name="needle_type_round">Rundstricknadeln</string>
+    <string name="needle_type_coat">Jackennadeln</string>
 </resources>
