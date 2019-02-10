@@ -9,6 +9,7 @@ import com.mthaler.knittings.R
 import com.mthaler.knittings.model.Needle
 import java.lang.IllegalArgumentException
 import java.lang.StringBuilder
+import java.util.*
 
 class NeedleAdapter(val needles: ArrayList<Needle>, private val onItemClick: (Needle) -> Unit): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
@@ -106,5 +107,18 @@ class NeedleAdapter(val needles: ArrayList<Needle>, private val onItemClick: (Ne
     companion object {
         val TypeHeader = 0
         val TypeItem = 1
+
+        fun groupItems(needles: List<Needle>): List<ListItem> {
+            // group needles by type
+            val grouped = needles.groupBy { it.type }
+            val result = ArrayList<ListItem>()
+            for (group in grouped) {
+                result.add(HeaderItem(group.key))
+                for (needle in group.value) {
+                    result.add(NeedleItem(needle))
+                }
+            }
+            return result
+        }
     }
 }
