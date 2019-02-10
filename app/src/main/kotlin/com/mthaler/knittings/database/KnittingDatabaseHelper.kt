@@ -23,7 +23,7 @@ class KnittingDatabaseHelper(context: Context) : ManagedSQLiteOpenHelper(context
         } catch (_: ClassNotFoundException) {
             "knittings.db"
         }
-        val DB_VERSION = 3
+        val DB_VERSION = 4
 
         private var instance: KnittingDatabaseHelper? = null
 
@@ -76,8 +76,12 @@ class KnittingDatabaseHelper(context: Context) : ManagedSQLiteOpenHelper(context
         if (oldVersion == 1) {
             upgrade12(db)
             upgrade23(db)
+            upgrade34(db)
         } else if (oldVersion == 2) {
             upgrade23(db)
+            upgrade34(db)
+        } else if (oldVersion == 3) {
+            upgrade34(db)
         }
     }
 
@@ -115,6 +119,10 @@ class KnittingDatabaseHelper(context: Context) : ManagedSQLiteOpenHelper(context
         } catch (ex: Exception) {
             error("Could not create needle table", ex)
         }
+    }
+
+    private fun upgrade34(db: SQLiteDatabase) {
+        db.execSQL(NeedleTable.SQL_ADD_TYPE)
     }
 }
 

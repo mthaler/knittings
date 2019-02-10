@@ -54,5 +54,5 @@ object NeedleTable {
         return Needle(id, name, description, size, length, material, inUse > 0, type)
     }
 
-    val SQL_ADD_STATUS = "ALTER TABLE " + NEEDLES + " ADD COLUMN " + Cols.TYPE + " TEXT"
+    val SQL_ADD_TYPE = "ALTER TABLE " + NEEDLES + " ADD COLUMN " + Cols.TYPE + " TEXT"
 }
