@@ -12,6 +12,7 @@ import com.mthaler.knittings.database.datasource
 import com.mthaler.knittings.model.Needle
 import org.jetbrains.anko.support.v4.alert
 import com.mthaler.knittings.model.Needle.Companion.materials
+import com.mthaler.knittings.model.Needle.Companion.types
 
 class EditNeedleFragment : Fragment() {
 
@@ -82,12 +83,14 @@ class EditNeedleFragment : Fragment() {
             // Apply the adapter to the spinner
             spinnerMaterial.adapter = adapter
         }
-        val index = materials.indexOf(needle.material)
-        if (index >= 0) {
-            spinnerMaterial.setSelection(index)
-        } else {
-            spinnerMaterial.setSelection(0)
+        materials.indexOf(needle.material).also { index ->
+            if (index >= 0) {
+                spinnerMaterial.setSelection(index)
+            } else {
+                spinnerMaterial.setSelection(0)
+            }
         }
+
         spinnerMaterial.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
 
             /**
@@ -125,6 +128,52 @@ class EditNeedleFragment : Fragment() {
             needle = n
         }
         checkBoxinUse.isChecked = needle.inUse
+
+        val spinnerType = v.findViewById<Spinner>(R.id.needle_type)
+        // Create an ArrayAdapter using the string array and a default spinner layout
+        ArrayAdapter(context, android.R.layout.simple_spinner_item, types).also { adapter ->
+            // Specify the layout to use when the list of choices appears
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            // Apply the adapter to the spinner
+            spinnerType.adapter = adapter
+        }
+        types.indexOf(needle.type).also {index ->
+            if (index >= 0) {
+                spinnerType.setSelection(index)
+            } else {
+                spinnerType.setSelection(0)
+            }
+        }
+
+        spinnerType.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+
+            /**
+             * Callback method to be invoked when an item in this view has been selected. This callback is invoked only when the
+             * newly selected position is different from the previously selected position or if there was no selected item.
+             *
+             * Implementers can call getItemAtPosition(position) if they need to access the data associated with the selected item.
+             *
+             * @param parent the AdapterView where the selection happened
+             * @param view the view within the AdapterView that was clicked
+             * @param position the position of the view in the adapter
+             * @param id the row id of the item that is selected
+             */
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                val n = needle.copy(type = types[position])
+                datasource.updateNeedle(n)
+                needle = n
+            }
+
+            /**
+             * Callback method to be invoked when the selection disappears from this view. The selection can disappear
+             * for instance when touch is activated or when the adapter becomes empty.
+             *
+             * @param parent the AdapterView where the selection happened
+             */
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+            }
+
+        }
 
         return v
     }

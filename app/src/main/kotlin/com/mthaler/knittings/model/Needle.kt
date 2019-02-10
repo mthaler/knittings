@@ -20,7 +20,7 @@ data class Needle(val id: Long, val name: String, val description: String, val s
             get() = arrayOf(resources.getString(R.string.needle_type_other), resources.getString(R.string.needle_type_circular),
                     resources.getString(R.string.needle_type_point), resources.getString(R.string.needle_type_set),
                     resources.getString(R.string.needle_type_round), resources.getString(R.string.needle_type_coat))
-        
+
         val Fragment.types: Array<String>
             get() = context?.types ?: emptyArray()
     }
