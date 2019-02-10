@@ -212,11 +212,13 @@ class EditKnittingDetailsFragment : Fragment() {
             datasource.updateKnitting(knitting)
         } else if (requestCode == REQUEST_SELECT_CATEGORY) {
             data?.let {
-                val categoryID = it.getLongExtra(EXTRA_CATEGORY_ID, -1)
-                val c = datasource.getCategory(categoryID)
-                buttonCategory.text = c.name
-                knitting = knitting.copy(category = c)
-                datasource.updateKnitting(knitting)
+                val categoryID = it.getLongExtra(EXTRA_CATEGORY_ID, -1L)
+                if (categoryID != -1L) {
+                    val c = datasource.getCategory(categoryID)
+                    buttonCategory.text = c.name
+                    knitting = knitting.copy(category = c)
+                    datasource.updateKnitting(knitting)
+                }
             }
         }
     }
