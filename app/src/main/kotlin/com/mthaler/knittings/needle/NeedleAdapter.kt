@@ -11,7 +11,7 @@ import java.lang.IllegalArgumentException
 import java.lang.StringBuilder
 import java.util.*
 
-class NeedleAdapter(val needles: ArrayList<Needle>, private val onItemClick: (Needle) -> Unit): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class NeedleAdapter(val needles: List<ListItem>, private val onItemClick: (Needle) -> Unit): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     /**
      * Creates, configures and returns a ViewHolder object for a particular row in the list
@@ -20,10 +20,12 @@ class NeedleAdapter(val needles: ArrayList<Needle>, private val onItemClick: (Ne
      * @param viewType an int that is the particular view type we are using, for cases where we have multiple view types
      */
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        val v = LayoutInflater.from(parent.context).inflate(R.layout.list_item_needle, parent, false)
+
         if (viewType == TypeHeader) {
+            val v = LayoutInflater.from(parent.context).inflate(R.layout.list_item_needle_header, parent, false)
             return NeedleAdapter.HeaderViewHolder(v)
         } else if (viewType == TypeItem) {
+            val v = LayoutInflater.from(parent.context).inflate(R.layout.list_item_needle, parent, false)
             return NeedleAdapter.ItemViewHolder(v)
         } else {
             throw IllegalArgumentException("Unknown view type " + viewType)
@@ -38,11 +40,13 @@ class NeedleAdapter(val needles: ArrayList<Needle>, private val onItemClick: (Ne
      */
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (holder is HeaderViewHolder) {
-            holder.bind("test")
+            holder.bind((needles[position] as HeaderItem).header)
         } else if (holder is ItemViewHolder) {
-            holder.bind(needles[position], onItemClick)
+            holder.bind((needles[position] as NeedleItem).needle, onItemClick)
         }
     }
+
+    override fun getItemViewType(position: Int): Int = needles.get(position).getType();
 
     /**
      * Returns the number of items in the recycler view

@@ -70,7 +70,7 @@ class NeedleListFragment : Fragment() {
             needles_recycler_view.visibility = View.VISIBLE
         }
         // start EditCategoryActivity if the users clicks on a category
-        val adapter = NeedleAdapter(needles, { needle ->
+        val adapter = NeedleAdapter(NeedleAdapter.groupItems(needles), { needle ->
             listener?.needleClicked(needle.id)
         })
         rv.adapter = adapter
