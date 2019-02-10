@@ -15,6 +15,7 @@ import kotlinx.android.synthetic.main.fragment_needle_list.*
 class NeedleListFragment : Fragment() {
 
     private var listener: OnFragmentInteractionListener? = null
+    private var filter: Filter = NoFilter
 
     /**
      * Called to do initial creation of a fragment. This is called after onAttach(Activity) and before
@@ -77,9 +78,32 @@ class NeedleListFragment : Fragment() {
             return when (item.itemId) {
                 R.id.menu_item_filter -> {
                     context?.let {
-                        val listItems = (listOf(getString(R.string.filter_show_all)) + datasource.allNeedles.map { it.type }.toList()).toTypedArray()
+                        val needles = datasource.allNeedles
+                        val types = needles.map { it.type }.toSet().toList().sorted()
+                        val listItems = (listOf(getString(R.string.filter_show_all)) + types).toTypedArray()
                         val builder = AlertDialog.Builder(it)
-
+                        val f = filter
+                        val checkedItem = when (f) {
+                            is NoFilter -> 0
+                            is SingleTypeFilter -> {
+                                val index = types.indexOf(f.type)
+                                index + 1
+                            }
+                            else -> throw Exception("Unknown filter: $f")
+                        }
+                        builder.setSingleChoiceItems(listItems, checkedItem) { dialog, which -> when(which) {
+                            0 -> filter = NoFilter
+                            else -> {
+                                val type = types[which - 1]
+                                filter = SingleTypeFilter(type)
+                            }
+                        }
+                            //updateKnittingList()
+                            dialog.dismiss()
+                        }
+                        builder.setNegativeButton(R.string.dialog_button_cancel) { dialog, which -> dialog.dismiss() }
+                        val dialog = builder.create()
+                        dialog.show()
                     }
                     true
                 }
