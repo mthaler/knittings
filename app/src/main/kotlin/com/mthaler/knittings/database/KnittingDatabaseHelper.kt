@@ -77,11 +77,9 @@ class KnittingDatabaseHelper(context: Context) : ManagedSQLiteOpenHelper(context
             1 -> {
                 upgrade12(db)
                 upgrade23(db)
-                upgrade34(db)
             }
             2 -> {
                 upgrade23(db)
-                upgrade34(db)
             }
             3 -> upgrade34(db)
         }
@@ -112,8 +110,12 @@ class KnittingDatabaseHelper(context: Context) : ManagedSQLiteOpenHelper(context
      * @param db database
      */
     private fun upgrade23(db: SQLiteDatabase) {
-        db.execSQL(KnittingTable.SQL_ADD_STATUS)
-        info("Added status colomn to knitting table")
+        try {
+            db.execSQL(KnittingTable.SQL_ADD_STATUS)
+            info("Added status column to knitting table")
+        } catch (ex: Exception) {
+            error("Could not add status column to knitting table")
+        }
 
         try {
             NeedleTable.create(db)
@@ -125,6 +127,7 @@ class KnittingDatabaseHelper(context: Context) : ManagedSQLiteOpenHelper(context
 
     private fun upgrade34(db: SQLiteDatabase) {
         db.execSQL(NeedleTable.SQL_ADD_TYPE)
+        info("Added type column to needle table")
     }
 }
 
