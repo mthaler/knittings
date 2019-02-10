@@ -46,26 +46,25 @@ class NeedleAdapter(val needles: ArrayList<Needle>, private val onItemClick: (Ne
      */
     class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
         private val textFieldName = itemView.findViewById<TextView>(R.id.needle_list_item_name)
+        private val textFieldDescription= itemView.findViewById<TextView>(R.id.needle_list_item_description)
 
         fun bind(needle: Needle, listener: (Needle) -> Unit) {
             val sb = StringBuilder()
-            if (!needle.name.trim().isEmpty()) {
-                sb.append(needle.name.trim())
-            } else {
-                sb.append(needle.type.trim())
-            }
             if (!needle.length.trim().isEmpty()) {
-                sb.append("  L ")
+                sb.append("L ")
                 sb.append(needle.length)
+                sb.append("  ")
             }
             if (!needle.size.trim().isEmpty()) {
-                sb.append("  \u2300 ")
+                sb.append("\u2300 ")
                 sb.append(needle.size)
+                sb.append("  ")
             }
             if (needle.inUse) {
                 sb.append("  \u2713")
             }
-            textFieldName.text = sb.toString()
+            textFieldName.text = if (!needle.name.trim().isEmpty()) needle.name.trim() else needle.type.trim()
+            textFieldDescription.text = sb.toString()
             itemView.setOnClickListener { v -> listener(needle) }
         }
     }
