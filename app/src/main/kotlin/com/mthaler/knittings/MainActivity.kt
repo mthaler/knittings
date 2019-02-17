@@ -37,7 +37,7 @@ import kotlinx.android.synthetic.main.content_main.*
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener, SearchView.OnQueryTextListener, SearchView.OnCloseListener {
 
     private var sorting: Sorting = Sorting.NewestFirst
-    private var filter: Filter = NoFilter
+    private var filter: CombinedFilter = CombinedFilter.Empty
     private var initialQuery: CharSequence? = null
     private var sv: SearchView? = null
 
@@ -68,7 +68,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         if (savedInstanceState != null) {
             sorting = Sorting.valueOf(savedInstanceState.getString("sorting"))
-            filter = savedInstanceState.getSerializable("filter") as Filter
+            filter = savedInstanceState.getSerializable("filter") as CombinedFilter
             initialQuery = savedInstanceState.getCharSequence(STATE_QUERY)
         }
     }
@@ -154,19 +154,21 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 val listItems = (listOf(getString(R.string.filter_show_all)) + categories.map { it.name }.toList()).toTypedArray()
                 val builder = AlertDialog.Builder(this)
                 val f = filter
-                val checkedItem = when (f) {
-                    is NoFilter -> 0
-                    is SingleCategoryFilter -> {
-                        val index = categories.indexOf(f.category)
+                val checkedItem: Int = let {
+                    val result = f.filters.find { it is SingleCategoryFilter }
+                    if (result != null && result is SingleCategoryFilter) {
+                        val index = categories.indexOf(result.category)
                         index + 1
+                    } else {
+                        0
                     }
-                    else -> throw Exception("Unknown filter: $f")
                 }
                 builder.setSingleChoiceItems(listItems, checkedItem) { dialog, which -> when(which) {
-                    0 -> filter = NoFilter
+                    0 -> filter = CombinedFilter(f.filters.filterNot { it is SingleCategoryFilter })
                     else -> {
                         val category = categories[which - 1]
-                        filter = SingleCategoryFilter(category)
+                        val newFilter = SingleCategoryFilter(category)
+                        filter = CombinedFilter(f.filters.filterNot { it is SingleCategoryFilter } + newFilter)
                     }
                 }
                     updateKnittingList()
@@ -181,19 +183,21 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 val listItems = (listOf(getString(R.string.filter_show_all)) + Status.formattedValues(this)).toTypedArray()
                 val builder = AlertDialog.Builder(this)
                 val f = filter
-                val checkedItem = when (f) {
-                    is NoFilter -> 0
-                    is SingleStatusFilter -> {
-                        val index = Status.values().indexOf(f.status)
+                val checkedItem = let {
+                    val result = f.filters.find { it is SingleStatusFilter }
+                    if (result != null && result is SingleStatusFilter) {
+                        val index = Status.values().indexOf(result.status)
                         index + 1
+                    } else {
+                        0
                     }
-                    else -> throw Exception("Unknown filter: $f")
                 }
                 builder.setSingleChoiceItems(listItems, checkedItem) { dialog, which -> when(which) {
-                    0 -> filter = NoFilter
+                    0 -> filter = CombinedFilter(f.filters.filterNot { it is SingleStatusFilter })
                     else -> {
                         val status = Status.values()[which - 1]
-                        filter = SingleStatusFilter(status)
+                        val newFilter = SingleStatusFilter(status)
+                        filter = CombinedFilter(f.filters.filterNot { it is SingleStatusFilter } + newFilter)
                     }
                 }
                     updateKnittingList()
@@ -297,9 +301,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
      */
     override fun onQueryTextChange(newText: String?): Boolean {
         if (newText == null || TextUtils.isEmpty(newText)) {
-            filter = NoFilter
+            filter = CombinedFilter.Empty
         } else {
-            filter = ContainsFilter(newText)
+            filter = CombinedFilter(listOf(ContainsFilter(newText)))
         }
         updateKnittingList()
         return true
@@ -321,7 +325,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
      * @return true if the listener wants to override the default behavior of clearing the text field and dismissing it, false otherwise.
      */
     override fun onClose(): Boolean {
-        filter = NoFilter
+        filter = CombinedFilter.Empty
         return true
     }
 

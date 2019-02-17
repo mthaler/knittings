@@ -20,14 +20,6 @@ interface Filter : Serializable {
 }
 
 /**
- * A filter that does no filtering: it just returns the given knitting list
- */
-object NoFilter : Filter {
-
-    override fun filter(knittings: List<Knitting>): List<Knitting> = knittings
-}
-
-/**
  * A filter that filters the project list by category
  *
  * @param category category used for filtering
@@ -68,5 +60,11 @@ data class CombinedFilter(val filters: List<Filter>): Filter {
             result = filter.filter(result)
         }
         return result
+    }
+
+    companion object {
+
+        // empty list that does no filtering
+        val Empty = CombinedFilter(emptyList())
     }
 }
