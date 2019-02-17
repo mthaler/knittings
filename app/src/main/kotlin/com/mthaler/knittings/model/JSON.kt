@@ -7,6 +7,7 @@ import org.json.JSONObject
 import java.text.SimpleDateFormat
 import org.json.JSONArray
 import java.io.File
+import java.lang.Exception
 
 private val dateFormat = SimpleDateFormat("yyyy-MM-dd")
 
@@ -87,7 +88,15 @@ fun JSONObject.toKnitting(): Triple<Knitting, Long?, Long?> {
     val rating = getDouble("rating")
     val duration = if (has("duration")) getLong("duration") else 0L
     val category = if (has("category")) getLong("category") else 0L
-    val status = if (has("status")) getString("status") else ""
+    val status = if (has("status")) {
+        try {
+            Status.valueOf(getString("status"))
+        } catch (ex: Exception) {
+            Status.PLANNED
+        }
+    } else {
+        Status.PLANNED
+    }
     return Triple(Knitting(id, title, description, started, finished, needleDiameter, size, null, rating, duration,  status = status), defaultPhoto, category)
 }
 

@@ -16,6 +16,7 @@ import com.mthaler.knittings.photo.ImageAdapter
 import com.mthaler.knittings.R
 import com.mthaler.knittings.database.datasource
 import com.mthaler.knittings.model.Knitting
+import com.mthaler.knittings.model.Status
 import com.mthaler.knittings.utils.TimeUtils
 import org.jetbrains.anko.AnkoLogger
 import java.text.DateFormat
@@ -205,7 +206,7 @@ class KnittingDetailsFragment : Fragment(), AnkoLogger {
             knittingCategory.text = getString(R.string.knitting_details_category, if (c != null) c.name else "")
 
             val knittingStatus = it.findViewById<TextView>(R.id.knitting_status)
-            knittingStatus.text = getString(R.string.knitting_details_status, knitting.status)
+            knittingStatus.text = getString(R.string.knitting_details_status, Status.format(it.context, knitting.status))
 
             val ratingBar = it.findViewById<RatingBar>(R.id.ratingBar)
             ratingBar.rating = knitting.rating.toFloat()

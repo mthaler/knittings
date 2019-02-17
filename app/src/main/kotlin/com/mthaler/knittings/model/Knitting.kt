@@ -17,7 +17,7 @@ data class Knitting(val id: Long,
                     val rating: Double = 0.0,
                     val duration: Long = 0L,
                     val category: Category? = null,
-                    val status: String = "") {
+                    val status: Status = Status.PLANNED) {
 
     val photoFilename: String
         get() {

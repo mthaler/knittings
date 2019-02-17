@@ -77,9 +77,6 @@ class KnittingAdapter(val context: Context, val knittings: List<Knitting>, priva
             } else {
                 categoryIndicator.color = Color.WHITE
             }
-            when(knitting.status) {
-                case
-            }
         }
     }
 

@@ -5,8 +5,6 @@ import android.content.Context
 import android.database.Cursor
 import android.graphics.Bitmap
 import android.os.Environment
-import com.mthaler.knittings.model.Knitting
-import com.mthaler.knittings.model.Photo
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.debug
 import java.io.File
@@ -16,13 +14,13 @@ import android.support.v4.app.Fragment
 import com.mthaler.knittings.database.table.CategoryTable
 import com.mthaler.knittings.database.table.KnittingTable
 import com.mthaler.knittings.database.table.PhotoTable
-import com.mthaler.knittings.model.Category
 import org.jetbrains.anko.error
 import com.mthaler.knittings.database.table.CategoryTable.cursorToCategory
 import com.mthaler.knittings.database.table.NeedleTable
 import com.mthaler.knittings.database.table.PhotoTable.cursorToPhoto
 import com.mthaler.knittings.database.table.NeedleTable.cursorToNeedle
-import com.mthaler.knittings.model.Needle
+import com.mthaler.knittings.model.*
+import java.lang.Exception
 
 class KnittingsDataSource private constructor(context: Context): AnkoLogger {
 
@@ -217,7 +215,7 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
             } else {
                 values.putNull(KnittingTable.Cols.CATEGORY_ID)
             }
-            values.put(KnittingTable.Cols.STATUS, knitting.status)
+            values.put(KnittingTable.Cols.STATUS, knitting.status.name)
 
             val id = database.insert(KnittingTable.KNITTINGS, null, values)
             debug("Added knitting $knitting to database, id=$id")
@@ -256,7 +254,7 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
             } else {
                 values.putNull(KnittingTable.Cols.CATEGORY_ID)
             }
-            values.put(KnittingTable.Cols.STATUS, knitting.status)
+            values.put(KnittingTable.Cols.STATUS, knitting.status.name)
 
             database.update(KnittingTable.KNITTINGS,
                     values,
@@ -830,7 +828,15 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
             val categoryID = cursor.getLong(idCategory)
             category = getCategory(categoryID)
         }
-        val status = if (cursor.isNull(idStatus)) "" else cursor.getString(idStatus)
+        val status = if (cursor.isNull(idStatus)) {
+            Status.PLANNED
+        } else {
+            try {
+                Status.valueOf(cursor.getString(idStatus))
+            } catch (ex: Exception) {
+                Status.PLANNED
+            }
+        }
         return Knitting(id, title = title, description = description, started = started, finished = finished, needleDiameter = needleDiameter,
                 size = size, rating = rating, defaultPhoto = defaultPhoto, duration = duration, category = category, status = status)
     }

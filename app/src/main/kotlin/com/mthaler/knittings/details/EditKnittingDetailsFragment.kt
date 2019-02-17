@@ -22,6 +22,7 @@ import java.util.*
 import com.mthaler.knittings.durationpicker.DurationPickerDialog
 import com.mthaler.knittings.Extras.EXTRA_CATEGORY_ID
 import com.mthaler.knittings.Extras.EXTRA_KNITTING_ID
+import com.mthaler.knittings.model.Status
 
 class EditKnittingDetailsFragment : Fragment() {
 
@@ -119,13 +120,9 @@ class EditKnittingDetailsFragment : Fragment() {
         }
 
         val spinnerStatus = v.findViewById<Spinner>(R.id.knitting_status)
-        val statusList = resources.getStringArray(R.array.knitting_status)
+        val statusList = Status.formattedValues(v.context)
         // Create an ArrayAdapter using the string array and a default spinner layout
-        ArrayAdapter.createFromResource(
-                context,
-                R.array.knitting_status,
-                android.R.layout.simple_spinner_item
-        ).also { adapter ->
+        ArrayAdapter(context, android.R.layout.simple_spinner_item, statusList).also { adapter ->
             // Specify the layout to use when the list of choices appears
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             // Apply the adapter to the spinner
@@ -145,11 +142,15 @@ class EditKnittingDetailsFragment : Fragment() {
              * @param id the row id of the item that is selected
              */
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                val k0 = knitting
-                if (k0 != null) {
-                    val k1 = k0.copy(status = statusList[position])
-                    datasource.updateKnitting(k1)
-                    knitting = k1
+                parent?.let {
+                    val k0 = knitting
+                    if (k0 != null) {
+                        val statusStr = statusList[position]
+                        val status = Status.parse(it.context, statusStr)
+                        val k1 = k0.copy(status = status)
+                        datasource.updateKnitting(k1)
+                        knitting = k1
+                    }
                 }
             }
 
@@ -260,9 +261,9 @@ class EditKnittingDetailsFragment : Fragment() {
                 buttonCategory.text = c.name
             }
 
-            val statusList = resources.getStringArray(R.array.knitting_status)
+            val statusList = Status.formattedValues(it.context)
             val spinnerStatus = it.findViewById<Spinner>(R.id.knitting_status)
-            val index = statusList.indexOf(knitting.status)
+            val index = statusList.indexOf(Status.format(it.context, knitting.status))
             if (index >= 0) {
                 spinnerStatus.setSelection(index)
             } else {

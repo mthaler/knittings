@@ -12,12 +12,10 @@
     <string name="knitting_duration_hint">Dauer</string>
     <string name="knitting_status_hint">Status:</string>
     <string name="knitting_details_status">Status: %1$s</string>
-    <string-array name="knitting_status">
-        <item/>
-        <item>In Arbeit</item>
-        <item>Beendet</item>
-        <item>Geplant</item>
-        <item>Angehalten</item>
-        <item>Verworfen</item>
-    </string-array>
+    <!-- status -->
+    <string name="knitting_status_in_the_works">In Arbeit</string>
+    <string name="knitting_status_finished">Beendet</string>
+    <string name="knitting_status_planned">Geplant</string>
+    <string name="knitting_status_on_hold">Angehalten</string>
+    <string name="knitting_status_discarded">Verworfen</string>
 </resources>

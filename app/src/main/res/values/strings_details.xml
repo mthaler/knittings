@@ -10,12 +10,10 @@
     <string name="knitting_needle_diameter_hint">Needle Diameter</string>
     <string name="knitting_size_hint">Size</string>
     <string name="knitting_duration_hint">Duration</string>
-    <string-array name="knitting_status">
-        <item/>
-        <item>In the works</item>
-        <item>Finished</item>
-        <item>Planned</item>
-        <item>On hold</item>
-        <item>Discarded</item>
-    </string-array>
+    <!-- status -->
+    <string name="knitting_status_in_the_works">In the works</string>
+    <string name="knitting_status_finished">Finished</string>
+    <string name="knitting_status_planned">Planned</string>
+    <string name="knitting_status_on_hold">On hold</string>
+    <string name="knitting_status_discarded">Discarded</string>
 </resources>
