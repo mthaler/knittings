@@ -25,6 +25,7 @@ import com.mthaler.knittings.details.KnittingDetailsActivity
 import com.mthaler.knittings.model.Knitting
 import java.util.*
 import com.mthaler.knittings.Extras.EXTRA_KNITTING_ID
+import com.mthaler.knittings.model.Status
 import com.mthaler.knittings.needle.NeedleListActivity
 import com.mthaler.knittings.settings.SettingsActivity
 import kotlinx.android.synthetic.main.content_main.*
@@ -174,6 +175,34 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 builder.setNegativeButton(R.string.dialog_button_cancel) { dialog, which -> dialog.dismiss() }
                 val dialog = builder.create()
                 dialog.show()
+                true
+            }
+            R.id.menu_item_status -> {
+                val listItems = (listOf(getString(R.string.filter_show_all)) + Status.formattedValues(this)).toTypedArray()
+                val builder = AlertDialog.Builder(this)
+                val f = filter
+                val checkedItem = when (f) {
+                    is NoFilter -> 0
+                    is SingleStatusFilter -> {
+                        val index = Status.values().indexOf(f.status)
+                        index + 1
+                    }
+                    else -> throw Exception("Unknown filter: $f")
+                }
+                builder.setSingleChoiceItems(listItems, checkedItem) { dialog, which -> when(which) {
+                    0 -> filter = NoFilter
+                    else -> {
+                        val status = Status.values()[which - 1]
+                        filter = SingleStatusFilter(status)
+                    }
+                }
+                    updateKnittingList()
+                    dialog.dismiss()
+                }
+                builder.setNegativeButton(R.string.dialog_button_cancel) { dialog, which -> dialog.dismiss() }
+                val dialog = builder.create()
+                dialog.show()
+                true
                 true
             }
             R.id.menu_item_count -> {
