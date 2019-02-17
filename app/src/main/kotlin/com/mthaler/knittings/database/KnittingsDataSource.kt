@@ -729,7 +729,7 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
             values.put(NeedleTable.Cols.DESCRIPTION, needle.description)
             values.put(NeedleTable.Cols.SIZE, needle.size)
             values.put(NeedleTable.Cols.LENGTH, needle.length)
-            values.put(NeedleTable.Cols.MATERIAL, needle.material)
+            values.put(NeedleTable.Cols.MATERIAL, needle.material.name)
             values.put(NeedleTable.Cols.IN_USE, needle.inUse)
             values.put(NeedleTable.Cols.TYPE, needle.type.name)
             val id = database.insert(NeedleTable.NEEDLES, null, values)
@@ -752,7 +752,7 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
             values.put(NeedleTable.Cols.DESCRIPTION, needle.description)
             values.put(NeedleTable.Cols.SIZE, needle.size)
             values.put(NeedleTable.Cols.LENGTH, needle.length)
-            values.put(NeedleTable.Cols.MATERIAL, needle.material)
+            values.put(NeedleTable.Cols.MATERIAL, needle.material.name)
             values.put(NeedleTable.Cols.IN_USE, needle.inUse)
             values.put(NeedleTable.Cols.TYPE, needle.type.name)
             database.update(NeedleTable.NEEDLES,

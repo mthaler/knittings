@@ -171,7 +171,14 @@ fun JSONObject.toNeedle(context: Context): Needle {
     val description = getString("description")
     val size = getString("size")
     val length = getString("length")
-    val material = getString("material")
+    val material = if(has("material")) {
+        val matgerialStr = getString("material")
+        try {
+            NeedleMaterial.valueOf(matgerialStr)
+        } catch (ex: Exception) {
+            NeedleMaterial.parse(context, matgerialStr)
+        }
+    } else NeedleMaterial.OTHER
     val inUse = getBoolean("inUse")
     val type = if (has("type")) {
         val typeStr = getString("type")

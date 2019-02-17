@@ -10,8 +10,8 @@ import com.mthaler.knittings.R
 import com.mthaler.knittings.TextWatcher
 import com.mthaler.knittings.database.datasource
 import com.mthaler.knittings.model.Needle
+import com.mthaler.knittings.model.NeedleMaterial
 import org.jetbrains.anko.support.v4.alert
-import com.mthaler.knittings.model.Needle.Companion.materials
 import com.mthaler.knittings.model.NeedleType
 
 class EditNeedleFragment : Fragment() {
@@ -77,13 +77,13 @@ class EditNeedleFragment : Fragment() {
 
         val spinnerMaterial = v.findViewById<Spinner>(R.id.needle_material)
         // Create an ArrayAdapter using the string array and a default spinner layout
-        ArrayAdapter(context, android.R.layout.simple_spinner_item, materials).also { adapter ->
+        ArrayAdapter(context, android.R.layout.simple_spinner_item, NeedleMaterial.formattedValues(v.context)).also { adapter ->
             // Specify the layout to use when the list of choices appears
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             // Apply the adapter to the spinner
             spinnerMaterial.adapter = adapter
         }
-        materials.indexOf(needle.material).also { index ->
+        NeedleMaterial.values().indexOf(needle.material).also { index ->
             if (index >= 0) {
                 spinnerMaterial.setSelection(index)
             } else {
@@ -105,7 +105,7 @@ class EditNeedleFragment : Fragment() {
              * @param id the row id of the item that is selected
              */
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                val n = needle.copy(material = materials[position])
+                val n = needle.copy(material = NeedleMaterial.values()[position])
                 datasource.updateNeedle(n)
                 needle = n
             }

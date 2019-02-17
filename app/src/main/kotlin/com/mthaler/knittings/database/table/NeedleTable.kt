@@ -4,6 +4,7 @@ import android.content.Context
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import com.mthaler.knittings.model.Needle
+import com.mthaler.knittings.model.NeedleMaterial
 import com.mthaler.knittings.model.NeedleType
 import org.jetbrains.anko.db.*
 import java.lang.Exception
@@ -51,7 +52,12 @@ object NeedleTable {
         val description = cursor.getString(idDescription)
         val size = cursor.getString(idSize)
         val length = cursor.getString(idLength)
-        val material = cursor.getString(idMaterial)
+        val materialStr = cursor.getString(idMaterial)
+        val material = try {
+            NeedleMaterial.valueOf(materialStr)
+        } catch (ex: Exception) {
+            NeedleMaterial.parse(context, materialStr)
+        }
         val inUse = cursor.getInt(idInUse)
         val typeStr = cursor.getString(idType)
         val type = try {
