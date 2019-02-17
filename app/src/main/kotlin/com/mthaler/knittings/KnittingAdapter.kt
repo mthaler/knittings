@@ -10,6 +10,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.mthaler.knittings.model.Knitting
 import java.text.DateFormat
+import com.mthaler.knittings.model.Status.*
 
 class KnittingAdapter(val context: Context, val knittings: List<Knitting>, private val listener: OnItemClickListener): RecyclerView.Adapter<KnittingAdapter.ViewHolder>() {
 
@@ -76,6 +77,13 @@ class KnittingAdapter(val context: Context, val knittings: List<Knitting>, priva
                 }
             } else {
                 categoryIndicator.color = Color.WHITE
+            }
+            when(knitting.status) {
+                IN_THE_WORKS -> statusImageView.setImageResource(R.drawable.ic_play_circle_outline_black_24dp)
+                FINISHED -> statusImageView.setImageResource(R.drawable.ic_check_circle_outline_24px)
+                ON_HOLD -> statusImageView.setImageResource(R.drawable.ic_pause_circle_outline_black_24dp)
+                DISCARDED -> statusImageView.setImageResource(R.drawable.ic_highlight_off_black_24dp)
+                else -> statusImageView.setImageResource(R.drawable.ic_play_circle_outline_black_24dp)
             }
         }
     }
