@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import com.mthaler.knittings.R
 import com.mthaler.knittings.model.Needle
+import com.mthaler.knittings.model.NeedleMaterial
 import com.mthaler.knittings.model.NeedleType
 import java.lang.IllegalArgumentException
 import java.lang.StringBuilder
@@ -76,7 +77,7 @@ class NeedleAdapter(val needles: List<ListItem>, private val onItemClick: (Needl
 
         fun bind(needle: Needle, listener: (Needle) -> Unit) {
             val sb = StringBuilder()
-            sb.append(needle.material)
+            sb.append(NeedleMaterial.format(itemView.context, needle.material))
             sb.append("  ")
             if (!needle.length.trim().isEmpty()) {
                 sb.append("L ")
