@@ -1,6 +1,7 @@
 package com.mthaler.knittings.model
 
 import android.content.Context
+import android.graphics.drawable.Drawable
 import com.mthaler.knittings.R
 
 /**
@@ -48,6 +49,21 @@ enum class Status {
             context.resources.getString(R.string.knitting_status_on_hold) -> ON_HOLD
             context.resources.getString(R.string.knitting_status_discarded) -> DISCARDED
             else -> PLANNED
+        }
+
+        /**
+         * Returns the drawable resource for the given status
+         *
+         * @param context context
+         * @param status status enum value
+         * @return drawable resource for the given status
+         */
+        fun getDrawableResource(context: Context, status: Status): Int = when(status) {
+            IN_THE_WORKS -> R.drawable.ic_play_circle_outline_black_24dp
+            FINISHED -> R.drawable.ic_check_circle_outline_24px
+            PLANNED -> R.drawable.ic_outline_assignment_24px
+            ON_HOLD -> R.drawable.ic_pause_circle_outline_black_24dp
+            DISCARDED -> R.drawable.ic_highlight_off_black_24dp
         }
     }
 }
