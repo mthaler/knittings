@@ -52,6 +52,7 @@ class KnittingAdapter(val context: Context, val knittings: List<Knitting>, priva
         private val startedTextView = itemView.findViewById<TextView>(R.id.knitting_list_item_startedTextView)
         private val photoView = itemView.findViewById<ImageView>(R.id.knitting_list_item_photoImageView)
         private val categoryIndicator = itemView.findViewById<CategoryIndicator>(R.id.knitting_list_item_categoryIndicator)
+        private val statusImageView = itemView.findViewById<ImageView>(R.id.knitting_list_item_statusImageView)
 
         init {
             itemView.setOnClickListener { v -> listener.onItemClick(knittings[adapterPosition] ) }
@@ -75,6 +76,9 @@ class KnittingAdapter(val context: Context, val knittings: List<Knitting>, priva
                 }
             } else {
                 categoryIndicator.color = Color.WHITE
+            }
+            when(knitting.status) {
+                case
             }
         }
     }
