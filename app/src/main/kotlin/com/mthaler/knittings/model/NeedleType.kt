@@ -8,7 +8,7 @@ enum class NeedleType {
 
     companion object {
         /**
-         * Formats the status enum as a string using translated string resources
+         * Formats the needle type enum as a string using translated string resources
          *
          * @param context context
          * @param status needle type enum value
@@ -35,10 +35,10 @@ enum class NeedleType {
          * Parses the needle type enum from a given string
          *
          * @param context context
-         * @param statusStr formatted needle type string
+         * @param typeStr formatted needle type string
          * @return needle type enum value
          */
-        fun parse(context: Context, statusStr: String): NeedleType = when(statusStr) {
+        fun parse(context: Context, typeStr: String): NeedleType = when(typeStr) {
             context.resources.getString(R.string.needle_type_other) -> OTHER
             context.resources.getString(R.string.needle_type_circular) -> CIRCULAR
             context.resources.getString(R.string.needle_type_point) -> POINT
