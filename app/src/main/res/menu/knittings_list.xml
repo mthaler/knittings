@@ -20,6 +20,10 @@
         android:title="@string/filter"
         app:showAsAction="never"/>
     <item
+        android:id="@+id/menu_item_status"
+        android:title="@string/status"
+        app:showAsAction="never"/>
+    <item
         android:id="@+id/menu_item_count"
         android:title="@string/count"
         app:showAsAction="never"/>
