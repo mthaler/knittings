@@ -54,3 +54,19 @@ data class ContainsFilter(val text: String) : Filter {
 
     override fun filter(knittings: List<Knitting>): List<Knitting> = knittings.filter { containsIgnoreCase( it.title, text) || containsIgnoreCase(it.description, text) }
 }
+
+/**
+ * A combined filter that uses several filters to filter the project list
+ *
+ * @param filters list of filters
+ */
+data class CombinedFilter(val filters: List<Filter>): Filter {
+
+    override fun filter(knittings: List<Knitting>): List<Knitting> {
+        var result = knittings
+        for (filter in filters) {
+            result = filter.filter(result)
+        }
+        return result
+    }
+}
