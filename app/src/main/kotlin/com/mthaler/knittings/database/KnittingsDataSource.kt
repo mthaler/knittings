@@ -831,10 +831,11 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
         val status = if (cursor.isNull(idStatus)) {
             Status.PLANNED
         } else {
+            val statusStr = cursor.getString(idStatus)
             try {
-                Status.valueOf(cursor.getString(idStatus))
+                Status.valueOf(statusStr)
             } catch (ex: Exception) {
-                Status.PLANNED
+                Status.parse(context, statusStr)
             }
         }
         return Knitting(id, title = title, description = description, started = started, finished = finished, needleDiameter = needleDiameter,
