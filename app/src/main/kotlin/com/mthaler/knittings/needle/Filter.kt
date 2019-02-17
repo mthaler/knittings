@@ -1,6 +1,7 @@
 package com.mthaler.knittings.needle
 
 import com.mthaler.knittings.model.Needle
+import com.mthaler.knittings.model.NeedleType
 import java.io.Serializable
 
 /**
@@ -29,7 +30,7 @@ object NoFilter : Filter {
  *
  * @param category used for filtering
  */
-data class SingleTypeFilter(val type: String) : Filter {
+data class SingleTypeFilter(val type: NeedleType) : Filter {
 
     override fun filter(needles: List<Needle>): List<Needle> = needles.filter { it.type == type }
 }

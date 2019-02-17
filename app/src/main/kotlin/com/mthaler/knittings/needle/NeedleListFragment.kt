@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView
 import android.view.*
 import com.mthaler.knittings.R
 import com.mthaler.knittings.database.datasource
+import com.mthaler.knittings.model.NeedleType
 import kotlinx.android.synthetic.main.fragment_needle_list.*
 
 class NeedleListFragment : Fragment() {
@@ -74,19 +75,20 @@ class NeedleListFragment : Fragment() {
      * @return return false to allow normal menu processing to proceed, true to consume it here.
      */
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        if (item != null) {
+        val c = context
+        if (item != null && c != null) {
             return when (item.itemId) {
                 R.id.menu_item_filter -> {
                     context?.let {
                         val needles = datasource.allNeedles
-                        val types = needles.map { it.type }.toSet().toList().sorted()
+                        val types = NeedleType.formattedValues(c)
                         val listItems = (listOf(getString(R.string.filter_show_all)) + types).toTypedArray()
                         val builder = AlertDialog.Builder(it)
                         val f = filter
                         val checkedItem = when (f) {
                             is NoFilter -> 0
                             is SingleTypeFilter -> {
-                                val index = types.indexOf(f.type)
+                                val index = NeedleType.values().indexOf(f.type)
                                 index + 1
                             }
                             else -> throw Exception("Unknown filter: $f")
@@ -94,7 +96,7 @@ class NeedleListFragment : Fragment() {
                         builder.setSingleChoiceItems(listItems, checkedItem) { dialog, which -> when(which) {
                             0 -> filter = NoFilter
                             else -> {
-                                val type = types[which - 1]
+                                val type = NeedleType.values()[which - 1]
                                 filter = SingleTypeFilter(type)
                             }
                         }
@@ -136,7 +138,7 @@ class NeedleListFragment : Fragment() {
                 needles_recycler_view.visibility = View.VISIBLE
             }
             // start EditCategoryActivity if the users clicks on a category
-            val adapter = NeedleAdapter(NeedleAdapter.groupItems(filtered), { needle ->
+            val adapter = NeedleAdapter(NeedleAdapter.groupItems(it.context, filtered), { needle ->
                 listener?.needleClicked(needle.id)
             })
             rv.adapter = adapter

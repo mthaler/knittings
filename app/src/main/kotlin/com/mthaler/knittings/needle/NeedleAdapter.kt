@@ -1,5 +1,6 @@
 package com.mthaler.knittings.needle
 
+import android.content.Context
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -7,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import com.mthaler.knittings.R
 import com.mthaler.knittings.model.Needle
+import com.mthaler.knittings.model.NeedleType
 import java.lang.IllegalArgumentException
 import java.lang.StringBuilder
 import java.util.*
@@ -89,7 +91,7 @@ class NeedleAdapter(val needles: List<ListItem>, private val onItemClick: (Needl
             if (needle.inUse) {
                 sb.append("  \u2713")
             }
-            textViewName.text = if (!needle.name.trim().isEmpty()) needle.name.trim() else needle.type.trim()
+            textViewName.text = if (!needle.name.trim().isEmpty()) needle.name.trim() else NeedleType.format(itemView.context, needle.type)
             textViewDescription.text = sb.toString()
             itemView.setOnClickListener { v -> listener(needle) }
         }
@@ -114,12 +116,12 @@ class NeedleAdapter(val needles: List<ListItem>, private val onItemClick: (Needl
         val TypeHeader = 0
         val TypeItem = 1
 
-        fun groupItems(needles: List<Needle>): List<ListItem> {
+        fun groupItems(context: Context, needles: List<Needle>): List<ListItem> {
             // group needles by type
             val grouped = needles.groupBy { it.type }
             val result = ArrayList<ListItem>()
             for (group in grouped) {
-                result.add(HeaderItem(group.key))
+                result.add(HeaderItem(NeedleType.format(context, group.key)))
                 for (needle in group.value) {
                     result.add(NeedleItem(needle))
                 }

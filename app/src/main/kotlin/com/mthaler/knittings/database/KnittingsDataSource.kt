@@ -124,7 +124,7 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
             var needle: Needle
 
             while (!cursor.isAfterLast) {
-                needle = cursorToNeedle(cursor)
+                needle = cursorToNeedle(context, cursor)
                 needles.add(needle)
                 debug("Read category $needle")
                 cursor.moveToNext()
@@ -673,7 +673,7 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
                     NeedleTable.Columns, NeedleTable.Cols.ID + "=" + id, null, null, null, null)
 
             cursor.moveToFirst()
-            val needle = cursorToNeedle(cursor)
+            val needle = cursorToNeedle(context, cursor)
             cursor.close()
 
             return needle
@@ -705,7 +705,7 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
                     NeedleTable.Columns, NeedleTable.Cols.ID + "=" + id, null, null, null, null)
 
             cursor.moveToFirst()
-            val needle = cursorToNeedle(cursor)
+            val needle = cursorToNeedle(context, cursor)
             cursor.close()
 
             return needle
@@ -731,7 +731,7 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
             values.put(NeedleTable.Cols.LENGTH, needle.length)
             values.put(NeedleTable.Cols.MATERIAL, needle.material)
             values.put(NeedleTable.Cols.IN_USE, needle.inUse)
-            values.put(NeedleTable.Cols.TYPE, needle.type)
+            values.put(NeedleTable.Cols.TYPE, needle.type.name)
             val id = database.insert(NeedleTable.NEEDLES, null, values)
             debug("Added category $needle to database, id=$id")
         }
@@ -754,7 +754,7 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
             values.put(NeedleTable.Cols.LENGTH, needle.length)
             values.put(NeedleTable.Cols.MATERIAL, needle.material)
             values.put(NeedleTable.Cols.IN_USE, needle.inUse)
-            values.put(NeedleTable.Cols.TYPE, needle.type)
+            values.put(NeedleTable.Cols.TYPE, needle.type.name)
             database.update(NeedleTable.NEEDLES,
                     values,
                     NeedleTable.Cols.ID + "=" + needle.id, null)
@@ -763,7 +763,7 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
                     NeedleTable.Columns, NeedleTable.Cols.ID + "=" + needle.id, null, null, null, null)
 
             cursor.moveToFirst()
-            val result = cursorToNeedle(cursor)
+            val result = cursorToNeedle(context, cursor)
             cursor.close()
 
             return result

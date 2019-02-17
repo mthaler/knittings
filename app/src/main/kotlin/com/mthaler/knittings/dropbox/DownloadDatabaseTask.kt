@@ -44,7 +44,7 @@ internal class DownloadDatabaseTask(private val context: Context,
             val jsonStr = String(bytes)
             val json = JSONObject(jsonStr)
             val externalFilesDir = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
-            return json.toDatabase(externalFilesDir)
+            return json.toDatabase(context, externalFilesDir)
         } catch (e: Exception) {
             exception = e
             return null

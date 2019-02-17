@@ -1,9 +1,12 @@
 package com.mthaler.knittings.database.table
 
+import android.content.Context
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import com.mthaler.knittings.model.Needle
+import com.mthaler.knittings.model.NeedleType
 import org.jetbrains.anko.db.*
+import java.lang.Exception
 
 object NeedleTable {
     val NEEDLES = "needles"
@@ -33,7 +36,7 @@ object NeedleTable {
                 Cols.TYPE to TEXT + NOT_NULL)
     }
 
-    fun cursorToNeedle(cursor: Cursor): Needle {
+    fun cursorToNeedle(context: Context, cursor: Cursor): Needle {
         val idIndex = cursor.getColumnIndex(Cols.ID)
         val idName = cursor.getColumnIndex(Cols.NAME)
         val idDescription = cursor.getColumnIndex(Cols.DESCRIPTION)
@@ -50,8 +53,13 @@ object NeedleTable {
         val length = cursor.getString(idLength)
         val material = cursor.getString(idMaterial)
         val inUse = cursor.getInt(idInUse)
-        val type = cursor.getString(idType)
-        return Needle(id, name, description, size, length, material, inUse > 0, if (type != null) type else "")
+        val typeStr = cursor.getString(idType)
+        val type = try {
+            NeedleType.valueOf(typeStr)
+        } catch (ex: Exception) {
+            NeedleType.parse(context, typeStr)
+        }
+        return Needle(id, name, description, size, length, material, inUse > 0, type)
     }
 
     val SQL_ADD_TYPE = "ALTER TABLE " + NEEDLES + " ADD COLUMN " + Cols.TYPE + " TEXT"

@@ -5,7 +5,7 @@ import android.support.v4.app.Fragment
 import com.mthaler.knittings.R
 import java.io.Serializable
 
-data class Needle(val id: Long, val name: String, val description: String, val size: String, val length: String, val material: String, val inUse: Boolean, val type: String) : Serializable {
+data class Needle(val id: Long, val name: String, val description: String, val size: String, val length: String, val material: String, val inUse: Boolean, val type: NeedleType) : Serializable {
 
     companion object {
         val Context.materials: Array<String>
@@ -15,13 +15,5 @@ data class Needle(val id: Long, val name: String, val description: String, val s
 
         val Fragment.materials: Array<String>
             get() = context?.materials ?: emptyArray()
-
-        val Context.types: Array<String>
-            get() = arrayOf(resources.getString(R.string.needle_type_other), resources.getString(R.string.needle_type_circular),
-                    resources.getString(R.string.needle_type_point), resources.getString(R.string.needle_type_set),
-                    resources.getString(R.string.needle_type_round), resources.getString(R.string.needle_type_coat))
-
-        val Fragment.types: Array<String>
-            get() = context?.types ?: emptyArray()
     }
 }

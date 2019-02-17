@@ -1,5 +1,6 @@
 package com.mthaler.knittings.model
 
+import android.content.Context
 import android.graphics.Color
 import com.mthaler.knittings.database.KnittingDatabaseHelper
 import com.mthaler.knittings.utils.ColorUtils
@@ -76,7 +77,7 @@ fun Needle.toJSON(): JSONObject {
  * Converts a JSON object to a knitting. The method actually returns a pair of the knitting and
  * and the optional default photo id
  */
-fun JSONObject.toKnitting(): Triple<Knitting, Long?, Long?> {
+fun JSONObject.toKnitting(context: Context): Triple<Knitting, Long?, Long?> {
     val id = getLong("id")
     val title = getString("title")
     val description = getString("description")
@@ -89,10 +90,11 @@ fun JSONObject.toKnitting(): Triple<Knitting, Long?, Long?> {
     val duration = if (has("duration")) getLong("duration") else 0L
     val category = if (has("category")) getLong("category") else 0L
     val status = if (has("status")) {
+        val statusStr = getString("status")
         try {
-            Status.valueOf(getString("status"))
+            Status.valueOf(statusStr)
         } catch (ex: Exception) {
-            Status.PLANNED
+            Status.parse(context, statusStr)
         }
     } else {
         Status.PLANNED
@@ -103,11 +105,11 @@ fun JSONObject.toKnitting(): Triple<Knitting, Long?, Long?> {
 /**
  * Converts a JSON array to a list of knittings
  */
-fun JSONArray.toKnittings(): List<Triple<Knitting, Long?, Long?>> {
+fun JSONArray.toKnittings(context: Context): List<Triple<Knitting, Long?, Long?>> {
     val result = ArrayList<Triple<Knitting, Long?, Long?>>()
     for(i in 0 until length()) {
         val item = getJSONObject(i)
-        val knittingAndDefaultPhoto = item.toKnitting()
+        val knittingAndDefaultPhoto = item.toKnitting(context)
         result.add(knittingAndDefaultPhoto)
     }
     return result
@@ -163,7 +165,7 @@ fun JSONArray.toCategories(): List<Category> {
 /**
  * Converts a JSON object to a needle
  */
-fun JSONObject.toNeedle(): Needle {
+fun JSONObject.toNeedle(context: Context): Needle {
     val id = getLong("id")
     val name = getString("name")
     val description = getString("description")
@@ -171,18 +173,25 @@ fun JSONObject.toNeedle(): Needle {
     val length = getString("length")
     val material = getString("material")
     val inUse = getBoolean("inUse")
-    val type = if (has("type")) getString("type") else ""
+    val type = if (has("type")) {
+        val typeStr = getString("type")
+        try {
+            NeedleType.valueOf(typeStr)
+        } catch (ex: Exception) {
+            NeedleType.parse(context, typeStr)
+        }
+    } else NeedleType.OTHER
     return Needle(id, name, description, size, length, material, inUse, type)
 }
 
 /**
  * Converts a JSON array to a list of needles
  */
-fun JSONArray.toNeedles(): List<Needle> {
+fun JSONArray.toNeedles(context: Context): List<Needle> {
     val result = ArrayList<Needle>()
     for(i in 0 until length()) {
         val item = getJSONObject(i)
-        val needle = item.toNeedle()
+        val needle = item.toNeedle(context)
         result.add(needle)
     }
     return result
@@ -236,7 +245,7 @@ fun Database.toJSON(): JSONObject {
 /**
  * Converts a JSON object to a database object
  */
-fun JSONObject.toDatabase(externalFilesDir: File): Database {
+fun JSONObject.toDatabase(context: Context, externalFilesDir: File): Database {
 
     fun updateKnitting(knitting: Knitting, defaultPhotoID: Long?, idToPhoto: Map<Long, Photo>): Knitting {
         if (defaultPhotoID != null) {
@@ -269,10 +278,10 @@ fun JSONObject.toDatabase(externalFilesDir: File): Database {
     }
 
     // list of knittings and optional default photo
-    val knittingsAndDefaultPhotos = getJSONArray("knittings").toKnittings()
+    val knittingsAndDefaultPhotos = getJSONArray("knittings").toKnittings(context)
     val photos = getJSONArray("photos").toPhotos()
     val categories = if (has("categories")) getJSONArray("categories").toCategories() else ArrayList()
-    val needles = if(has("needles")) getJSONArray("needles").toNeedles() else ArrayList()
+    val needles = if(has("needles")) getJSONArray("needles").toNeedles(context) else ArrayList()
     // we need to update the filename of the photo because the external storage location might be different
     val photosWithUpdatedFilename = photos.map { updatePhotoFilename(it) }
 
