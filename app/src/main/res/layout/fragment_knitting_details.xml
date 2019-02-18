@@ -53,8 +53,9 @@
                 android:layout_marginRight="16dp"
                 android:text="@string/knitting_description_hint"
                 android:textColor="@color/black"
+                android:autoLink="web"
                 />
-
+    
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
