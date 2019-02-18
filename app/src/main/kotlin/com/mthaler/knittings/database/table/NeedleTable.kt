@@ -1,5 +1,6 @@
 package com.mthaler.knittings.database.table
 
+import android.content.ContentValues
 import android.content.Context
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
@@ -66,6 +67,24 @@ object NeedleTable {
             NeedleType.parse(context, typeStr)
         }
         return Needle(id, name, description, size, length, material, inUse > 0, type)
+    }
+
+    /**
+     * Creates the content values map used to insert a needle into the database or update an existing needle
+     */
+    fun createContentValues(needle: Needle, manualID: Boolean = false): ContentValues {
+        val values = ContentValues()
+        if (manualID) {
+            values.put(NeedleTable.Cols.ID, needle.id)
+        }
+        values.put(NeedleTable.Cols.NAME, needle.name)
+        values.put(NeedleTable.Cols.DESCRIPTION, needle.description)
+        values.put(NeedleTable.Cols.SIZE, needle.size)
+        values.put(NeedleTable.Cols.LENGTH, needle.length)
+        values.put(NeedleTable.Cols.MATERIAL, needle.material.name)
+        values.put(NeedleTable.Cols.IN_USE, needle.inUse)
+        values.put(NeedleTable.Cols.TYPE, needle.type.name)
+        return values
     }
 
     val SQL_ADD_TYPE = "ALTER TABLE " + NEEDLES + " ADD COLUMN " + Cols.TYPE + " TEXT"
