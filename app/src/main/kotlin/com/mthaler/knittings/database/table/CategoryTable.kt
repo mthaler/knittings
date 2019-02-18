@@ -1,5 +1,6 @@
 package com.mthaler.knittings.database.table
 
+import android.content.ContentValues
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import com.mthaler.knittings.model.Category
@@ -32,5 +33,26 @@ object CategoryTable {
         val name = cursor.getString(idName)
         val color = if (cursor.isNull(idColor)) null else cursor.getInt(idColor)
         return Category(id, name, color)
+    }
+
+    /**
+     * Creates the content values map used to insert a category into the database or update an existing category
+     *
+     * @param category category
+     * @param manualID should we manually insert id?
+     * @return content values for inserting or updating category
+     */
+    fun createContentValues(category: Category, manualID: Boolean = false): ContentValues {
+        val values = ContentValues()
+        if (manualID) {
+            values.put(CategoryTable.Cols.ID, category.id)
+        }
+        values.put(CategoryTable.Cols.NAME, category.name)
+        if (category.color != null) {
+            values.put(CategoryTable.Cols.COLOR, category.color)
+        } else {
+            values.putNull(CategoryTable.Cols.COLOR)
+        }
+        return values
     }
 }

@@ -66,7 +66,7 @@ class NeedleListActivity : AppCompatActivity(), NeedleListFragment.OnFragmentInt
     }
 
     override fun createNeedle() {
-        val needle = datasource.createNeedle(Needle())
+        val needle = datasource.createNeedle()
         val f = EditNeedleFragment.newInstance(needle.id)
         val fm = supportFragmentManager
         val ft = fm.beginTransaction()

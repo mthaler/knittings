@@ -69,7 +69,7 @@ class CategoryListActivity : AppCompatActivity(), CategoryListFragment.OnFragmen
     }
 
     override fun createCategory() {
-        val category = datasource.createCategory("", null)
+        val category = datasource.createCategory()
         val f = EditCategoryFragment.newInstance(category.id)
         val fm = supportFragmentManager
         val ft = fm.beginTransaction()

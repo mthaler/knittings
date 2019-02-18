@@ -549,16 +549,11 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
      * @return new category
      */
     @Synchronized
-    fun createCategory(name: String, color: Int?): Category {
-        debug("Creating category $name, color: $color")
+    fun createCategory(): Category {
+        val newCategory = Category()
+        debug("Creating category ${newCategory.name}")
         dbHelper.writableDatabase.use { database ->
-            val values = ContentValues()
-            values.put(CategoryTable.Cols.NAME, name)
-            if (color != null) {
-                values.put(CategoryTable.Cols.COLOR, color)
-            } else {
-                values.putNull(CategoryTable.Cols.COLOR)
-            }
+            val values = CategoryTable.createContentValues(newCategory)
 
             val id = database.insert(CategoryTable.CATEGORY, null, values)
 
@@ -582,16 +577,7 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
     @Synchronized
     fun addCategory(category: Category, manualID: Boolean = false) {
         dbHelper.writableDatabase.use { database ->
-            val values = ContentValues()
-            if (manualID) {
-                values.put(CategoryTable.Cols.ID, category.id)
-            }
-            values.put(CategoryTable.Cols.NAME, category.name)
-            if (category.color != null) {
-                values.put(CategoryTable.Cols.COLOR, category.color)
-            } else {
-                values.putNull(CategoryTable.Cols.COLOR)
-            }
+            val values = CategoryTable.createContentValues(category, manualID)
             val id = database.insert(CategoryTable.CATEGORY, null, values)
             debug("Added category $category to database, id=$id")
         }
@@ -607,13 +593,7 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
     fun updateCategory(category: Category): Category {
         debug("Updating category $category")
         dbHelper.writableDatabase.use { database ->
-            val values = ContentValues()
-            values.put(CategoryTable.Cols.NAME, category.name)
-            if (category.color != null) {
-                values.put(CategoryTable.Cols.COLOR, category.color)
-            } else {
-                values.putNull(CategoryTable.Cols.COLOR)
-            }
+            val values = CategoryTable.createContentValues(category)
 
             database.update(CategoryTable.CATEGORY,
                     values,
@@ -687,20 +667,21 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
      * @return new needle
      */
     @Synchronized
-    fun createNeedle(needle: Needle): Needle {
-        debug("Creating needle ${needle.name}")
+    fun createNeedle(): Needle {
+        val newNeedle = Needle()
+        debug("Creating needle ${newNeedle.name}")
         dbHelper.writableDatabase.use { database ->
-            val values = NeedleTable.createContentValues(needle)
+            val values = NeedleTable.createContentValues(newNeedle)
             val id = database.insert(NeedleTable.NEEDLES, null, values)
 
             val cursor = database.query(NeedleTable.NEEDLES,
                     NeedleTable.Columns, NeedleTable.Cols.ID + "=" + id, null, null, null, null)
 
             cursor.moveToFirst()
-            val result = cursorToNeedle(context, cursor)
+            val needle = cursorToNeedle(context, cursor)
             cursor.close()
 
-            return result
+            return needle
         }
     }
 
