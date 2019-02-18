@@ -11,6 +11,7 @@ import android.view.LayoutInflater
 import android.widget.Button
 import com.mthaler.knittings.R
 import com.mthaler.knittings.database.datasource
+import com.mthaler.knittings.model.Photo
 import com.mthaler.knittings.utils.PictureUtils
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.debug
@@ -82,7 +83,7 @@ object TakePhotoDialog : AnkoLogger {
         val orientation = PictureUtils.getOrientation(file.absolutePath)
         val preview = PictureUtils.decodeSampledBitmapFromPath(file.absolutePath, 200, 200)
         val rotatedPreview = PictureUtils.rotateBitmap(preview, orientation)
-        val photo = context.datasource.createPhoto(file,knittingID, rotatedPreview, "")
+        val photo = context.datasource.createPhoto(Photo(-1, file, knittingID, "", rotatedPreview))
         debug("Created new photo from $file, knitting id $knittingID")
         // add first photo as default photo
         val knitting = context.datasource.getKnitting(knittingID)
@@ -115,7 +116,7 @@ object TakePhotoDialog : AnkoLogger {
         val orientation = PictureUtils.getOrientation(file.absolutePath)
         val preview = PictureUtils.decodeSampledBitmapFromPath(file.absolutePath, 200, 200)
         val rotatedPreview = PictureUtils.rotateBitmap(preview, orientation)
-        val photo = context.datasource.createPhoto(file, knittingID, rotatedPreview, "")
+        val photo = context.datasource.createPhoto(Photo(-1, file, knittingID, "", rotatedPreview))
         debug("Created new photo from $file, knitting id $knittingID")
         // add first photo as default photo
         val knitting = context.datasource.getKnitting(knittingID)

@@ -45,13 +45,13 @@ object CategoryTable {
     fun createContentValues(category: Category, manualID: Boolean = false): ContentValues {
         val values = ContentValues()
         if (manualID) {
-            values.put(CategoryTable.Cols.ID, category.id)
+            values.put(Cols.ID, category.id)
         }
-        values.put(CategoryTable.Cols.NAME, category.name)
+        values.put(Cols.NAME, category.name)
         if (category.color != null) {
-            values.put(CategoryTable.Cols.COLOR, category.color)
+            values.put(Cols.COLOR, category.color)
         } else {
-            values.putNull(CategoryTable.Cols.COLOR)
+            values.putNull(Cols.COLOR)
         }
         return values
     }

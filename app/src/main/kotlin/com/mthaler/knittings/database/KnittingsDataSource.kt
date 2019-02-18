@@ -385,20 +385,10 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
      * @return new photo
      */
     @Synchronized
-    fun createPhoto(filename: File, knittingID: Long, preview: Bitmap?, description: String): Photo {
-        debug("Creating photo for $filename, knitting id: $knittingID, preview: $preview, description: $description")
+    fun createPhoto(newPhoto: Photo): Photo {
+        debug("Creating photo for ${newPhoto.filename}, knitting id: ${newPhoto.knittingID}, preview: ${newPhoto.preview}, description: ${newPhoto.description}")
         dbHelper.writableDatabase.use { database ->
-            val values = ContentValues()
-            values.put(PhotoTable.Cols.FILENAME, filename.absolutePath)
-            values.put(PhotoTable.Cols.KNITTING_ID, knittingID)
-            values.put(PhotoTable.Cols.DESCRIPTION, description)
-            val previewBytes = Photo.getBytes(preview)
-            if (previewBytes != null) {
-                values.put(PhotoTable.Cols.PREVIEW, previewBytes)
-            } else {
-                values.putNull(PhotoTable.Cols.PREVIEW)
-            }
-
+            val values = PhotoTable.createContentValues(newPhoto)
             val id = database.insert(PhotoTable.PHOTOS, null, values)
 
             val cursor = database.query(PhotoTable.PHOTOS,
@@ -421,20 +411,7 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
     @Synchronized
     fun addPhoto(photo: Photo, manualID: Boolean = false) {
         dbHelper.writableDatabase.use { database ->
-            val values = ContentValues()
-            if (manualID) {
-                values.put(PhotoTable.Cols.ID, photo.id)
-            }
-            values.put(PhotoTable.Cols.FILENAME, photo.filename.absolutePath)
-            values.put(PhotoTable.Cols.KNITTING_ID, photo.knittingID)
-            values.put(PhotoTable.Cols.DESCRIPTION, photo.description)
-            val previewBytes = Photo.getBytes(photo.preview)
-            if (previewBytes != null) {
-                values.put(PhotoTable.Cols.PREVIEW, previewBytes)
-            } else {
-                values.putNull(PhotoTable.Cols.PREVIEW)
-            }
-
+            val values = PhotoTable.createContentValues(photo, manualID)
             val id = database.insert(PhotoTable.PHOTOS, null, values)
             debug("Added photo $photo to database, id=$id")
         }
@@ -450,16 +427,7 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
     fun updatePhoto(photo: Photo): Photo {
         debug("Updating photo $photo")
         dbHelper.writableDatabase.use { database ->
-            val values = ContentValues()
-            values.put(PhotoTable.Cols.FILENAME, photo.filename.absolutePath)
-            values.put(PhotoTable.Cols.KNITTING_ID, photo.knittingID)
-            values.put(PhotoTable.Cols.DESCRIPTION, photo.description)
-            val previewBytes = Photo.getBytes(photo.preview)
-            if (previewBytes != null) {
-                values.put(PhotoTable.Cols.PREVIEW, previewBytes)
-            } else {
-                values.putNull(PhotoTable.Cols.PREVIEW)
-            }
+            val values = PhotoTable.createContentValues(photo)
 
             database.update(PhotoTable.PHOTOS,
                     values,
@@ -554,7 +522,6 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
         debug("Creating category ${newCategory.name}")
         dbHelper.writableDatabase.use { database ->
             val values = CategoryTable.createContentValues(newCategory)
-
             val id = database.insert(CategoryTable.CATEGORY, null, values)
 
             val cursor = database.query(CategoryTable.CATEGORY,

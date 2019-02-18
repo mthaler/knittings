@@ -1,5 +1,6 @@
 package com.mthaler.knittings.database.table
 
+import android.content.ContentValues
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.graphics.BitmapFactory
@@ -52,5 +53,29 @@ object PhotoTable {
         } else {
             return photo
         }
+    }
+
+    /**
+     * Creates the content values map used to insert a photo into the database or update an existing photo
+     *
+     * @param needle needle
+     * @param manualID should we manually insert id?
+     * @return content values for inserting or updating needle
+     */
+    fun createContentValues(photo: Photo, manualID: Boolean = false): ContentValues {
+        val values = ContentValues()
+        if (manualID) {
+            values.put(Cols.ID, photo.id)
+        }
+        values.put(Cols.FILENAME, photo.filename.absolutePath)
+        values.put(Cols.KNITTING_ID, photo.knittingID)
+        values.put(Cols.DESCRIPTION, photo.description)
+        val previewBytes = Photo.getBytes(photo.preview)
+        if (previewBytes != null) {
+            values.put(Cols.PREVIEW, previewBytes)
+        } else {
+            values.putNull(Cols.PREVIEW)
+        }
+        return values
     }
 }

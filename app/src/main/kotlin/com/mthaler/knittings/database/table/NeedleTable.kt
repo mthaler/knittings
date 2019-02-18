@@ -79,15 +79,15 @@ object NeedleTable {
     fun createContentValues(needle: Needle, manualID: Boolean = false): ContentValues {
         val values = ContentValues()
         if (manualID) {
-            values.put(NeedleTable.Cols.ID, needle.id)
+            values.put(Cols.ID, needle.id)
         }
-        values.put(NeedleTable.Cols.NAME, needle.name)
-        values.put(NeedleTable.Cols.DESCRIPTION, needle.description)
-        values.put(NeedleTable.Cols.SIZE, needle.size)
-        values.put(NeedleTable.Cols.LENGTH, needle.length)
-        values.put(NeedleTable.Cols.MATERIAL, needle.material.name)
-        values.put(NeedleTable.Cols.IN_USE, needle.inUse)
-        values.put(NeedleTable.Cols.TYPE, needle.type.name)
+        values.put(Cols.NAME, needle.name)
+        values.put(Cols.DESCRIPTION, needle.description)
+        values.put(Cols.SIZE, needle.size)
+        values.put(Cols.LENGTH, needle.length)
+        values.put(Cols.MATERIAL, needle.material.name)
+        values.put(Cols.IN_USE, needle.inUse)
+        values.put(Cols.TYPE, needle.type.name)
         return values
     }
 
