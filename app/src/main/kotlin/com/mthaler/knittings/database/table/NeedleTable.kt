@@ -71,6 +71,10 @@ object NeedleTable {
 
     /**
      * Creates the content values map used to insert a needle into the database or update an existing needle
+     *
+     * @param needle needle
+     * @param manualID should we manually insert id?
+     * @return content values for inserting or updating needle
      */
     fun createContentValues(needle: Needle, manualID: Boolean = false): ContentValues {
         val values = ContentValues()
