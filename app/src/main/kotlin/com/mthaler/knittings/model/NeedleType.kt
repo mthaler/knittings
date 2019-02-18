@@ -11,7 +11,7 @@ enum class NeedleType {
          * Formats the needle type enum as a string using translated string resources
          *
          * @param context context
-         * @param status needle type enum value
+         * @param needleType needle type enum value
          * @return formatted needle type enum value
          */
         fun format(context: Context, needleType: NeedleType): String = when(needleType) {

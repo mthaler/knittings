@@ -28,7 +28,7 @@ object NoFilter : Filter {
 /**
  * A filter that filters the project list by category
  *
- * @param category used for filtering
+ * @param type used for filtering
  */
 data class SingleTypeFilter(val type: NeedleType) : Filter {
 

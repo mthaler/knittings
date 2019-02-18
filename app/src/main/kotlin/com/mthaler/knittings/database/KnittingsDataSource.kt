@@ -379,9 +379,7 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
     /**
      * Creates a new photo and adds it to the database
      *
-     * @param filename filename of the photo
-     * @param knittingID id of the knitting this photo belongs to
-     * @param preview preview of the photo. Might be null
+     * @param newPhoto that should be created and added to the database
      * @return new photo
      */
     @Synchronized
@@ -512,8 +510,6 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
     /**
      * Creates a new category and adds it to the database
      *
-     * @param name name of the category
-     * @param color color used for the category
      * @return new category
      */
     @Synchronized
@@ -630,7 +626,6 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
     /**
      * Creates a new needle and adds it to the database
      *
-     * @param name name of the needle
      * @return new needle
      */
     @Synchronized

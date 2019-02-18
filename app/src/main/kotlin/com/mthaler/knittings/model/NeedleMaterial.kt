@@ -11,7 +11,7 @@ enum class NeedleMaterial {
          * Formats the needle material enum as a string using translated string resources
          *
          * @param context context
-         * @param status needle material enum value
+         * @param material needle material enum value
          * @return formatted needle material enum value
          */
         fun format(context: Context, material: NeedleMaterial): String = when(material) {

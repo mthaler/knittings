@@ -58,7 +58,7 @@ object PhotoTable {
     /**
      * Creates the content values map used to insert a photo into the database or update an existing photo
      *
-     * @param needle needle
+     * @param photo photo
      * @param manualID should we manually insert id?
      * @return content values for inserting or updating needle
      */
