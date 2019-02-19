@@ -6,7 +6,7 @@ import java.util.Date
 /**
  * The Knitting class stores data for a single knitting
  */
-data class Knitting(val id: Long,
+data class Knitting(val id: Long = -1,
                     val title: String = "",
                     val description: String = "",
                     val started: Date = Date(),

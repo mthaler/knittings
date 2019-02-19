@@ -23,7 +23,6 @@ import kotlinx.android.synthetic.main.activity_main.*
 import com.mthaler.knittings.database.datasource
 import com.mthaler.knittings.details.KnittingDetailsActivity
 import com.mthaler.knittings.model.Knitting
-import java.util.*
 import com.mthaler.knittings.Extras.EXTRA_KNITTING_ID
 import com.mthaler.knittings.model.Status
 import com.mthaler.knittings.needle.NeedleListActivity
@@ -51,7 +50,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         // set on click handler of floating action button that creates a new knitting
         fab_create_add_knitting.setOnClickListener {
             // start knitting activity with newly created knitting
-            val knitting = datasource.createKnitting("", "", Date(), null, "", "", 0.0, "")
+            val knitting = datasource.createKnitting()
             startActivity<KnittingDetailsActivity>(EXTRA_KNITTING_ID to knitting.id, KnittingDetailsActivity.EXTRA_EDIT_ONLY to true)
         }
 

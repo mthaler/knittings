@@ -1,6 +1,9 @@
 package com.mthaler.knittings.database.table
 
+import android.content.ContentValues
 import android.database.sqlite.SQLiteDatabase
+import com.mthaler.knittings.model.Knitting
+import com.mthaler.knittings.model.Needle
 import org.jetbrains.anko.db.*
 
 /**
@@ -49,4 +52,40 @@ object KnittingTable {
     val SQL_ADD_DURATION = "ALTER TABLE " + KNITTINGS + " ADD COLUMN " + Cols.DURATION + " INTEGER NOT NULL DEFAULT 0"
     val SQL_ADD_CATEGORY = "ALTER TABLE " + KNITTINGS + " ADD COLUMN " + Cols.CATEGORY_ID + " INTEGER"
     val SQL_ADD_STATUS = "ALTER TABLE " + KNITTINGS + " ADD COLUMN " + Cols.STATUS + " TEXT"
+
+    /**
+     * Creates the content values map used to insert a knitting project into the database or update an existing knitting project
+     *
+     * @param knitting knitting project
+     * @param manualID should we manually insert id?
+     * @return content values for inserting or updating needle
+     */
+    fun createContentValues(knitting: Knitting, manualID: Boolean = false): ContentValues {
+        val values = ContentValues()
+        if (manualID) {
+            values.put(Cols.ID, knitting.id)
+        }
+        values.put(Cols.TITLE, knitting.title)
+        values.put(Cols.DESCRIPTION, knitting.description)
+        values.put(Cols.STARTED, knitting.started.time)
+        if (knitting.finished != null) {
+            values.put(Cols.FINISHED, knitting.finished.time)
+        }
+        values.put(Cols.NEEDLE_DIAMETER, knitting.needleDiameter)
+        values.put(Cols.SIZE, knitting.size)
+        if (knitting.defaultPhoto != null) {
+            values.put(Cols.DEFAULT_PHOTO_ID, knitting.defaultPhoto.id)
+        } else {
+            values.putNull(Cols.DEFAULT_PHOTO_ID)
+        }
+        values.put(Cols.RATING, knitting.rating)
+        values.put(Cols.DURATION, knitting.duration)
+        if (knitting.category != null) {
+            values.put(Cols.CATEGORY_ID, knitting.category.id)
+        } else {
+            values.putNull(Cols.CATEGORY_ID)
+        }
+        values.put(Cols.STATUS, knitting.status.name)
+        return values
+    }
 }

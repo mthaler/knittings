@@ -1,9 +1,7 @@
 package com.mthaler.knittings.database
 
-import android.content.ContentValues
 import android.content.Context
 import android.database.Cursor
-import android.graphics.Bitmap
 import android.os.Environment
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.debug
@@ -140,35 +138,15 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
     }
 
     /**
-     * Creates a new knitting and adds it to the database
+     * Creates a new knitting project and adds it to the database
      *
-     * @param title title
-     * @param description description
-     * @param started started date
-     * @param finished finished date
-     * @param needleDiameter needle diameter
-     * @param size size of knitting
-     * @return new knitting
+     * @return new knitting project
      */
     @Synchronized
-    fun createKnitting(title: String, description: String, started: Date, finished: Date?, needleDiameter: String, size: String, rating: Double, status: String): Knitting {
-        debug("Creating knitting, title: " + title + ", description: " + description + ", started: " + started + ", finished: " +
-                finished + ", needle diameter: " + needleDiameter + ", size: " + size + ", rating: " + rating)
+    fun createKnitting(): Knitting {
+        val newKnitting = Knitting()
         dbHelper.writableDatabase.use { database ->
-            val values = ContentValues()
-            values.put(KnittingTable.Cols.TITLE, title)
-            values.put(KnittingTable.Cols.DESCRIPTION, description)
-            values.put(KnittingTable.Cols.STARTED, started.time)
-            if (finished != null) {
-                values.put(KnittingTable.Cols.FINISHED, finished.time)
-            }
-            values.put(KnittingTable.Cols.NEEDLE_DIAMETER, needleDiameter)
-            values.put(KnittingTable.Cols.SIZE, size)
-            values.put(KnittingTable.Cols.RATING, rating)
-            values.put(KnittingTable.Cols.DURATION, 0L)
-            values.put(KnittingTable.Cols.STATUS, status)
-            values.putNull(KnittingTable.Cols.CATEGORY_ID)
-
+            val values = KnittingTable.createContentValues(newKnitting)
             val id = database.insert(KnittingTable.KNITTINGS, null, values)
 
             val cursor = database.query(KnittingTable.KNITTINGS,
@@ -191,32 +169,7 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
     @Synchronized
     fun addKnitting(knitting: Knitting, manualID: Boolean = false) {
         dbHelper.writableDatabase.use { database ->
-            val values = ContentValues()
-            if (manualID) {
-                values.put(KnittingTable.Cols.ID, knitting.id)
-            }
-            values.put(KnittingTable.Cols.TITLE, knitting.title)
-            values.put(KnittingTable.Cols.DESCRIPTION, knitting.description)
-            values.put(KnittingTable.Cols.STARTED, knitting.started.time)
-            if (knitting.finished != null) {
-                values.put(KnittingTable.Cols.FINISHED, knitting.finished.time)
-            }
-            values.put(KnittingTable.Cols.NEEDLE_DIAMETER, knitting.needleDiameter)
-            values.put(KnittingTable.Cols.SIZE, knitting.size)
-            if (knitting.defaultPhoto != null) {
-                debug("Default photo: " + knitting.defaultPhoto)
-                values.put(KnittingTable.Cols.DEFAULT_PHOTO_ID, knitting.defaultPhoto.id)
-            } else {
-                values.putNull(KnittingTable.Cols.DEFAULT_PHOTO_ID)
-            }
-            values.put(KnittingTable.Cols.RATING, knitting.rating)
-            if (knitting.category != null) {
-                values.put(KnittingTable.Cols.CATEGORY_ID, knitting.category.id)
-            } else {
-                values.putNull(KnittingTable.Cols.CATEGORY_ID)
-            }
-            values.put(KnittingTable.Cols.STATUS, knitting.status.name)
-
+            val values = KnittingTable.createContentValues(knitting, manualID)
             val id = database.insert(KnittingTable.KNITTINGS, null, values)
             debug("Added knitting $knitting to database, id=$id")
         }
@@ -232,29 +185,7 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
     fun updateKnitting(knitting: Knitting): Knitting {
         debug("Updating knitting " + knitting + ", default photo: " + knitting.defaultPhoto)
         dbHelper.writableDatabase.use { database ->
-            val values = ContentValues()
-            values.put(KnittingTable.Cols.TITLE, knitting.title)
-            values.put(KnittingTable.Cols.DESCRIPTION, knitting.description)
-            values.put(KnittingTable.Cols.STARTED, knitting.started.time)
-            if (knitting.finished != null) {
-                values.put(KnittingTable.Cols.FINISHED, knitting.finished.time)
-            }
-            values.put(KnittingTable.Cols.NEEDLE_DIAMETER, knitting.needleDiameter)
-            values.put(KnittingTable.Cols.SIZE, knitting.size)
-            if (knitting.defaultPhoto != null) {
-                debug("Default photo: " + knitting.defaultPhoto)
-                values.put(KnittingTable.Cols.DEFAULT_PHOTO_ID, knitting.defaultPhoto.id)
-            } else {
-                values.putNull(KnittingTable.Cols.DEFAULT_PHOTO_ID)
-            }
-            values.put(KnittingTable.Cols.RATING, knitting.rating)
-            values.put(KnittingTable.Cols.DURATION, knitting.duration)
-            if (knitting.category != null) {
-                values.put(KnittingTable.Cols.CATEGORY_ID, knitting.category.id)
-            } else {
-                values.putNull(KnittingTable.Cols.CATEGORY_ID)
-            }
-            values.put(KnittingTable.Cols.STATUS, knitting.status.name)
+            val values = KnittingTable.createContentValues(knitting)
 
             database.update(KnittingTable.KNITTINGS,
                     values,
