@@ -108,7 +108,7 @@ class DropboxImportFragment : AbstractDropboxFragment(), AnkoLogger {
         val ctx = context
         if (ctx != null && result != null) {
             val files = result.entries.map { it.name }.sortedDescending().toTypedArray()
-            val dialogBuilder = AlertDialog.Builder(context!!)
+            val dialogBuilder = AlertDialog.Builder(ctx)
             dialogBuilder.setTitle("Backups")
             dialogBuilder.setItems(files) { dialog, item ->
                 val folderName = files[item]

@@ -140,7 +140,7 @@ class KnittingDetailsFragment : Fragment(), AnkoLogger {
             photos.sortByDescending { it.id }
             if (photos.size > 0) {
                 viewPager.visibility = View.VISIBLE
-                val adapter = ImageAdapter(context!!, photos) //Here we are defining the Imageadapter object
+                val adapter = ImageAdapter(it.context, photos) //Here we are defining the Imageadapter object
                 viewPager.adapter = adapter // Here we are passing and setting the adapter for the images
 
 

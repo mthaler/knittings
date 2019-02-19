@@ -43,7 +43,7 @@ class DatePickerFragment : DialogFragment() {
             date = GregorianCalendar(year, month, day).time
 
             // update argument to preserve selected value on rotation
-            arguments!!.putSerializable(EXTRA_DATE, date)
+            arguments?.putSerializable(EXTRA_DATE, date)
         }
 
         return AlertDialog.Builder(activity)

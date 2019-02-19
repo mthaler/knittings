@@ -76,21 +76,23 @@ class CategoryListFragment : Fragment() {
      * Updates the list of categories
      */
     private fun updateCategoryList() {
-        val rv = view!!.findViewById<RecyclerView>(R.id.category_recycler_view)
-        val categories = datasource.allCategories
-        // show image if category list is empty
-        if (categories.isEmpty()) {
-            category_empty_recycler_view.visibility = View.VISIBLE
-            category_recycler_view.visibility = View.GONE
-        } else {
-            category_empty_recycler_view.visibility = View.GONE
-            category_recycler_view.visibility = View.VISIBLE
+        view?.let {
+            val rv = it.findViewById<RecyclerView>(R.id.category_recycler_view)
+            val categories = datasource.allCategories
+            // show image if category list is empty
+            if (categories.isEmpty()) {
+                category_empty_recycler_view.visibility = View.VISIBLE
+                category_recycler_view.visibility = View.GONE
+            } else {
+                category_empty_recycler_view.visibility = View.GONE
+                category_recycler_view.visibility = View.VISIBLE
+            }
+            // start EditCategoryActivity if the users clicks on a category
+            val adapter = CategoryAdapter(categories, { category ->
+                listener?.categoryClicked(category.id)
+            })
+            rv.adapter = adapter
         }
-        // start EditCategoryActivity if the users clicks on a category
-        val adapter = CategoryAdapter(categories, { category ->
-            listener?.categoryClicked(category.id)
-        })
-        rv.adapter = adapter
     }
 
     /**
