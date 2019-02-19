@@ -235,7 +235,7 @@ class EditKnittingDetailsFragment : Fragment() {
         updateDetails()
     }
 
-    fun updateDetails() {
+    private fun updateDetails() {
         view?.let {
             val editTextTitle = it.findViewById<EditText>(R.id.knitting_title)
             editTextTitle.setText(knitting.title)

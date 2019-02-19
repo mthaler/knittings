@@ -24,14 +24,16 @@ class NeedleAdapter(val needles: List<ListItem>, private val onItemClick: (Needl
      */
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
 
-        if (viewType == TypeHeader) {
-            val v = LayoutInflater.from(parent.context).inflate(R.layout.list_item_needle_header, parent, false)
-            return NeedleAdapter.HeaderViewHolder(v)
-        } else if (viewType == TypeItem) {
-            val v = LayoutInflater.from(parent.context).inflate(R.layout.list_item_needle, parent, false)
-            return NeedleAdapter.ItemViewHolder(v)
-        } else {
-            throw IllegalArgumentException("Unknown view type " + viewType)
+        when (viewType) {
+            TypeHeader -> {
+                val v = LayoutInflater.from(parent.context).inflate(R.layout.list_item_needle_header, parent, false)
+                return NeedleAdapter.HeaderViewHolder(v)
+            }
+            TypeItem -> {
+                val v = LayoutInflater.from(parent.context).inflate(R.layout.list_item_needle, parent, false)
+                return NeedleAdapter.ItemViewHolder(v)
+            }
+            else -> throw IllegalArgumentException("Unknown view type $viewType")
         }
     }
 
@@ -49,7 +51,7 @@ class NeedleAdapter(val needles: List<ListItem>, private val onItemClick: (Needl
         }
     }
 
-    override fun getItemViewType(position: Int): Int = needles.get(position).getType();
+    override fun getItemViewType(position: Int): Int = needles[position].getType()
 
     /**
      * Returns the number of items in the recycler view

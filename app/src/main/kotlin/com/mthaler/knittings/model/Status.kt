@@ -1,7 +1,6 @@
 package com.mthaler.knittings.model
 
 import android.content.Context
-import android.graphics.drawable.Drawable
 import com.mthaler.knittings.R
 
 /**

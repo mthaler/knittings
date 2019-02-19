@@ -3,7 +3,6 @@ package com.mthaler.knittings.database.table
 import android.content.ContentValues
 import android.database.sqlite.SQLiteDatabase
 import com.mthaler.knittings.model.Knitting
-import com.mthaler.knittings.model.Needle
 import org.jetbrains.anko.db.*
 
 /**

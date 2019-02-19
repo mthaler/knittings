@@ -7,7 +7,6 @@ import android.support.v4.app.NavUtils
 import android.view.MenuItem
 import com.mthaler.knittings.R
 import com.mthaler.knittings.database.datasource
-import com.mthaler.knittings.model.Needle
 import kotlinx.android.synthetic.main.activity_needle_list.*
 
 class NeedleListActivity : AppCompatActivity(), NeedleListFragment.OnFragmentInteractionListener {
