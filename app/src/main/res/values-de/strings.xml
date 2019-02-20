@@ -73,6 +73,7 @@
 
     <string name="sort">Sortieren</string>
     <string name="filter">Filtern</string>
+    <string name="category">Kategorie</string>
     <string name="status">Status</string>
     <string name="count">Zählen</string>
 

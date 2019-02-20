@@ -147,7 +147,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 dialog.show()
                 true
             }
-            R.id.menu_item_filter -> {
+            R.id.menu_item_category -> {
                 val categories = datasource.allCategories
                 categories.sortedBy { it.name }
                 val listItems = (listOf(getString(R.string.filter_show_all)) + categories.map { it.name }.toList()).toTypedArray()

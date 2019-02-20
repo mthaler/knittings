@@ -16,13 +16,19 @@
         android:title="@string/sort"
         app:showAsAction="never"/>
     <item
-        android:id="@+id/menu_item_filter"
         android:title="@string/filter"
-        app:showAsAction="never"/>
-    <item
-        android:id="@+id/menu_item_status"
-        android:title="@string/status"
-        app:showAsAction="never"/>
+        app:showAsAction="never">
+        <menu>
+            <item
+                android:id="@+id/menu_item_category"
+                android:title="@string/category"
+                app:showAsAction="never"/>
+            <item
+                android:id="@+id/menu_item_status"
+                android:title="@string/status"
+                app:showAsAction="never"/>
+        </menu>
+    </item>
     <item
         android:id="@+id/menu_item_count"
         android:title="@string/count"

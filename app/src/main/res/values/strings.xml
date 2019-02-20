@@ -73,6 +73,7 @@
 
     <string name="sort">Sort</string>
     <string name="filter">Filter</string>
+    <string name="category">Category</string>
     <string name="status">Status</string>
     <string name="count">Count</string>
 
