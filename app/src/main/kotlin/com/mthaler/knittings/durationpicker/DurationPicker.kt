@@ -122,17 +122,6 @@ class DurationPicker @JvmOverloads constructor(context: Context,
             super.writeToParcel(dest, flags)
             dest.writeLong(duration)
         }
-
-        companion object {
-
-            @JvmField
-            val CREATOR: Parcelable.Creator<SavedState?> = object : Parcelable.Creator<SavedState?> {
-
-                override fun createFromParcel(`in`: Parcel): SavedState = SavedState(`in`)
-
-                override fun newArray(size: Int): Array<SavedState?> = arrayOfNulls(size)
-            }
-        }
     }
 
     override fun onSaveInstanceState(): Parcelable? {

@@ -203,7 +203,7 @@ class KnittingDetailsFragment : Fragment(), AnkoLogger {
 
             val knittingCategory = it.findViewById<TextView>(R.id.knitting_category)
             val c = knitting.category
-            knittingCategory.text = getString(R.string.knitting_details_category, if (c != null) c.name else "")
+            knittingCategory.text = getString(R.string.knitting_details_category, c?.name ?: "")
 
             val knittingStatus = it.findViewById<TextView>(R.id.knitting_status)
             knittingStatus.text = getString(R.string.knitting_details_status, Status.format(it.context, knitting.status))
