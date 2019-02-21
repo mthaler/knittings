@@ -76,6 +76,7 @@
     <string name="category">Category</string>
     <string name="status">Status</string>
     <string name="count">Count</string>
+    <string name="active_filters">Active filters</string>
 
     <string name="edit_knitting_details_category">Category</string>
     <string name="edit_knitting_details_status">Status:</string>

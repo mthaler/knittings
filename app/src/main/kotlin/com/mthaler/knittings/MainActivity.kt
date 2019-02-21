@@ -13,6 +13,7 @@ import android.text.TextUtils
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.TextView
 import com.mthaler.knittings.about.AboutDialog
 import com.mthaler.knittings.category.CategoryListActivity
 import com.mthaler.knittings.dropbox.DropboxExportActivity
@@ -28,6 +29,7 @@ import com.mthaler.knittings.model.Status
 import com.mthaler.knittings.needle.NeedleListActivity
 import com.mthaler.knittings.settings.SettingsActivity
 import kotlinx.android.synthetic.main.content_main.*
+import java.lang.StringBuilder
 
 /**
  * The main activity that gets displayed when the app is started. It displays a list of knitting projects.
@@ -251,6 +253,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
      * Updates the list of categories
      */
     private fun updateKnittingList() {
+        val activeFilters = findViewById<TextView>(R.id.knitting_active_filters)
         val rv = findViewById<RecyclerView>(R.id.knitting_recycler_view)
         val knittings = datasource.allKnittings
         if (knittings.isEmpty()) {
@@ -259,6 +262,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         } else {
             knitting_list_empty_recycler_view.visibility = View.GONE
             knitting_recycler_view.visibility = View.VISIBLE
+        }
+        if (filter.filters.filter { it is SingleCategoryFilter || it is SingleStatusFilter }.isEmpty()) {
+            activeFilters.visibility = View.GONE
+        } else {
+            activeFilters.visibility = View.VISIBLE
         }
         when(sorting) {
             Sorting.NewestFirst -> knittings.sortByDescending { it.started}

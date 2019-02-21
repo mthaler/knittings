@@ -76,6 +76,7 @@
     <string name="category">Kategorie</string>
     <string name="status">Status</string>
     <string name="count">Zählen</string>
+    <string name="active_filters">Aktive Filter</string>
 
     <string name="edit_knitting_details_category">Kategorie</string>
     <string name="edit_knitting_details_status">Status:</string>
