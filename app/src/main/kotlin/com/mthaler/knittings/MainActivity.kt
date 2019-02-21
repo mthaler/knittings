@@ -264,8 +264,24 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             knitting_recycler_view.visibility = View.VISIBLE
         }
         if (filter.filters.filter { it is SingleCategoryFilter || it is SingleStatusFilter }.isEmpty()) {
+            activeFilters.text = ""
             activeFilters.visibility = View.GONE
         } else {
+            val sb = StringBuilder()
+            sb.append(resources.getString(R.string.active_filters))
+            sb.append(": ")
+            val hasCategoryFilter = filter.filters.filter { it is SingleCategoryFilter }.isNotEmpty()
+            val hasStatusFilter = filter.filters.filter { it is SingleStatusFilter }.isNotEmpty()
+            if (hasCategoryFilter) {
+                sb.append(resources.getString(R.string.category))
+            }
+            if (hasCategoryFilter && hasStatusFilter) {
+                sb.append(", ")
+            }
+            if (hasStatusFilter) {
+                sb.append(resources.getString(R.string.status))
+            }
+            activeFilters.text = sb.toString()
             activeFilters.visibility = View.VISIBLE
         }
         when(sorting) {
