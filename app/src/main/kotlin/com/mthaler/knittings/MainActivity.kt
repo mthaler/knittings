@@ -149,7 +149,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 dialog.show()
                 true
             }
-            R.id.menu_item_category -> {
+            R.id.menu_item_clear_filters -> {
+                filter = CombinedFilter.Empty
+                updateKnittingList()
+                true
+            }
+            R.id.menu_item_category_filter -> {
                 val categories = datasource.allCategories
                 categories.sortedBy { it.name }
                 val listItems = (listOf(getString(R.string.filter_show_all)) + categories.map { it.name }.toList()).toTypedArray()
@@ -180,7 +185,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 dialog.show()
                 true
             }
-            R.id.menu_item_status -> {
+            R.id.menu_item_status_filter -> {
                 val listItems = (listOf(getString(R.string.filter_show_all)) + Status.formattedValues(this)).toTypedArray()
                 val builder = AlertDialog.Builder(this)
                 val f = filter

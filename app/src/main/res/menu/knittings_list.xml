@@ -20,11 +20,15 @@
         app:showAsAction="never">
         <menu>
             <item
-                android:id="@+id/menu_item_category"
+                android:id="@+id/menu_item_clear_filters"
+                android:title="@string/clear_filters"
+                app:showAsAction="never"/>
+            <item
+                android:id="@+id/menu_item_category_filter"
                 android:title="@string/category"
                 app:showAsAction="never"/>
             <item
-                android:id="@+id/menu_item_status"
+                android:id="@+id/menu_item_status_filter"
                 android:title="@string/status"
                 app:showAsAction="never"/>
         </menu>
