@@ -138,9 +138,8 @@ class NeedleListFragment : Fragment() {
                 needles_recycler_view.visibility = View.VISIBLE
             }
             // start EditCategoryActivity if the users clicks on a category
-            val adapter = NeedleAdapter(NeedleAdapter.groupItems(it.context, filtered), { needle ->
-                listener?.needleClicked(needle.id)
-            })
+            val adapter = NeedleAdapter(NeedleAdapter.groupItems(it.context, filtered), { needle -> listener?.needleClicked(needle.id) },
+                    { needle -> listener?.needleLongClicked(needle.id) })
             rv.adapter = adapter
         }
     }
@@ -186,5 +185,12 @@ class NeedleListFragment : Fragment() {
          * @param needleID needle ID
          */
         fun needleClicked(needleID: Long)
+
+        /**
+         * Called if the user long-clicks a needle in the list
+         *
+         * @param needleID needle ID
+         */
+        fun needleLongClicked(needleID: Long)
     }
 }

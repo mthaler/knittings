@@ -14,7 +14,9 @@ import java.lang.IllegalArgumentException
 import java.lang.StringBuilder
 import java.util.*
 
-class NeedleAdapter(val needles: List<ListItem>, private val onItemClick: (Needle) -> Unit): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class NeedleAdapter(val needles: List<ListItem>,
+                    private val onItemClick: (Needle) -> Unit,
+                    private val onItemLongLick: (Needle) -> Unit): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     /**
      * Creates, configures and returns a ViewHolder object for a particular row in the list
@@ -47,7 +49,7 @@ class NeedleAdapter(val needles: List<ListItem>, private val onItemClick: (Needl
         if (holder is HeaderViewHolder) {
             holder.bind((needles[position] as HeaderItem).header)
         } else if (holder is ItemViewHolder) {
-            holder.bind((needles[position] as NeedleItem).needle, onItemClick)
+            holder.bind((needles[position] as NeedleItem).needle, onItemClick, onItemLongLick)
         }
     }
 
@@ -77,7 +79,7 @@ class NeedleAdapter(val needles: List<ListItem>, private val onItemClick: (Needl
         private val textViewName = itemView.findViewById<TextView>(R.id.needle_list_item_name)
         private val textViewDescription= itemView.findViewById<TextView>(R.id.needle_list_item_description)
 
-        fun bind(needle: Needle, listener: (Needle) -> Unit) {
+        fun bind(needle: Needle, onItemClick: (Needle) -> Unit, onItemLongLick: (Needle) -> Unit) {
             val sb = StringBuilder()
             sb.append(NeedleMaterial.format(itemView.context, needle.material))
             sb.append("  ")
@@ -96,7 +98,8 @@ class NeedleAdapter(val needles: List<ListItem>, private val onItemClick: (Needl
             }
             textViewName.text = if (!needle.name.trim().isEmpty()) needle.name.trim() else NeedleType.format(itemView.context, needle.type)
             textViewDescription.text = sb.toString()
-            itemView.setOnClickListener { v -> listener(needle) }
+            itemView.setOnClickListener { v -> onItemClick(needle) }
+            itemView.setOnLongClickListener { v -> onItemLongLick(needle); true }
         }
     }
 

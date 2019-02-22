@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v4.app.NavUtils
 import android.view.MenuItem
+import android.widget.Toast
 import com.mthaler.knittings.R
 import com.mthaler.knittings.database.datasource
 import kotlinx.android.synthetic.main.activity_needle_list.*
@@ -81,5 +82,8 @@ class NeedleListActivity : AppCompatActivity(), NeedleListFragment.OnFragmentInt
         ft.replace(R.id.needle_list_container, f)
         ft.addToBackStack(null)
         ft.commit()
+    }
+
+    override fun needleLongClicked(needleID: Long) {
     }
 }
