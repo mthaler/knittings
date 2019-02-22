@@ -11,7 +11,6 @@ import com.mthaler.knittings.TextWatcher
 import com.mthaler.knittings.database.datasource
 import com.mthaler.knittings.model.Needle
 import com.mthaler.knittings.model.NeedleMaterial
-import org.jetbrains.anko.support.v4.alert
 import com.mthaler.knittings.model.NeedleType
 
 class EditNeedleFragment : Fragment() {
@@ -232,18 +231,14 @@ class EditNeedleFragment : Fragment() {
      * Displays a dialog that asks the user to confirm that the knitting should be deleted
      */
     private fun showDeleteDialog() {
-        // show alert asking user to confirm that knitting should be deleted
-        alert {
-            title = resources.getString(R.string.delete_needle_dialog_title)
-            message = resources.getString(R.string.delete_needle_dialog_question)
-            positiveButton(resources.getString(R.string.delete_needle_dialog_delete_button)) {
+        context?.let {
+            DeleteNeedleDialog.create(it, {
                 // delete database entry
                 datasource.deleteNeedle(needle)
                 // go back to the previous fragment which is the category list
-                fragmentManager?.popBackStack()
-            }
-            negativeButton(resources.getString(R.string.dialog_button_cancel)) {}
-        }.show()
+                fragmentManager?.popBackStack() }
+            ).show()
+        }
     }
 
     companion object {
