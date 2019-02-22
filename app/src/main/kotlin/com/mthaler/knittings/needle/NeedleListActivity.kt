@@ -87,20 +87,21 @@ class NeedleListActivity : AppCompatActivity(), NeedleListFragment.OnFragmentInt
 
     override fun needleLongClicked(needleID : Long) {
         startActionMode(object : ActionMode.Callback {
-            override fun onActionItemClicked(p0: ActionMode?, p1: MenuItem?): Boolean {
-                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            override fun onActionItemClicked(mode: ActionMode?, menu: MenuItem?): Boolean {
+               return true
             }
 
-            override fun onCreateActionMode(p0: ActionMode?, p1: Menu?): Boolean {
-                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            override fun onCreateActionMode(mode: ActionMode?, menu: Menu?): Boolean {
+                val inflater = mode?.getMenuInflater()
+                inflater?.inflate(R.menu.needle_list_action, menu)
+                return true
             }
 
-            override fun onPrepareActionMode(p0: ActionMode?, p1: Menu?): Boolean {
-                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            override fun onPrepareActionMode(mode: ActionMode?, menu: Menu?): Boolean {
+                return true
             }
 
-            override fun onDestroyActionMode(p0: ActionMode?) {
-                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            override fun onDestroyActionMode(mode: ActionMode?) {
             }
         })
     }
