@@ -4,7 +4,7 @@ import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v4.app.NavUtils
-import android.view.ActionMode
+import android.support.v7.view.ActionMode
 import android.view.Menu
 import android.view.MenuItem
 import com.mthaler.knittings.R
@@ -86,7 +86,7 @@ class NeedleListActivity : AppCompatActivity(), NeedleListFragment.OnFragmentInt
     }
 
     override fun needleLongClicked(needleID : Long) {
-        startActionMode(object : ActionMode.Callback {
+        startSupportActionMode(object : ActionMode.Callback {
             override fun onActionItemClicked(mode: ActionMode?, menu: MenuItem?): Boolean {
                return true
             }
