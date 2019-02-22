@@ -4,8 +4,9 @@ import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v4.app.NavUtils
+import android.view.ActionMode
+import android.view.Menu
 import android.view.MenuItem
-import android.widget.Toast
 import com.mthaler.knittings.R
 import com.mthaler.knittings.database.datasource
 import kotlinx.android.synthetic.main.activity_needle_list.*
@@ -84,6 +85,23 @@ class NeedleListActivity : AppCompatActivity(), NeedleListFragment.OnFragmentInt
         ft.commit()
     }
 
-    override fun needleLongClicked(needleID: Long) {
+    override fun needleLongClicked(needleID : Long) {
+        startActionMode(object : ActionMode.Callback {
+            override fun onActionItemClicked(p0: ActionMode?, p1: MenuItem?): Boolean {
+                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            }
+
+            override fun onCreateActionMode(p0: ActionMode?, p1: Menu?): Boolean {
+                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            }
+
+            override fun onPrepareActionMode(p0: ActionMode?, p1: Menu?): Boolean {
+                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            }
+
+            override fun onDestroyActionMode(p0: ActionMode?) {
+                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            }
+        })
     }
 }
