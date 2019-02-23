@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v7.content.res.AppCompatResources
 import android.text.Editable
 import android.view.LayoutInflater
 import android.view.View
@@ -78,6 +79,8 @@ class EditKnittingDetailsFragment : Fragment() {
         editTextDescription.addTextChangedListener(createTextWatcher{ c, knitting -> knitting.copy(description = c.toString()) })
 
         textViewStarted = v.findViewById(R.id.knitting_started)
+        // we need to set this in code because older android versions (API <21) do not support vector drawables with drawableLeft
+        textViewStarted.setCompoundDrawablesWithIntrinsicBounds(AppCompatResources.getDrawable(inflater.context, R.drawable.ic_date_range_black_24dp), null, null, null)
         textViewStarted.setOnClickListener {
             val fm = fragmentManager
             val dialog = DatePickerFragment.newInstance(knitting.started)
@@ -86,6 +89,8 @@ class EditKnittingDetailsFragment : Fragment() {
         }
 
         textViewFinished = v.findViewById(R.id.knitting_finished)
+        // we need to set this in code because older android versions (API <21) do not support vector drawables with drawableLeft
+        textViewFinished.setCompoundDrawablesWithIntrinsicBounds(AppCompatResources.getDrawable(inflater.context, R.drawable.ic_date_range_black_24dp), null, null, null)
         textViewFinished.setOnClickListener {
             val fm = fragmentManager
             val dialog = DatePickerFragment.newInstance(if (knitting.finished != null) knitting.finished else Date())
