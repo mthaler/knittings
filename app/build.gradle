@@ -9,8 +9,8 @@ android {
         applicationId "com.mthaler.knittings"
         minSdkVersion 15
         targetSdkVersion 28
-        versionCode 29
-        versionName "0.9.7"
+        versionCode 30
+        versionName "0.9.8"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
     }
