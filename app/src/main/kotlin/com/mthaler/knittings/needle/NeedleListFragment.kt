@@ -163,6 +163,10 @@ class NeedleListFragment : Fragment() {
                                         mode?.finish()
                                         return true
                                     }
+                                    R.id.action_copy -> {
+                                        mode?.finish()
+                                        return true
+                                    }
                                     else -> {
                                         return false
                                     }

@@ -560,8 +560,7 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
      * @return new needle
      */
     @Synchronized
-    fun createNeedle(): Needle {
-        val newNeedle = Needle()
+    fun createNeedle(newNeedle: Needle): Needle {
         debug("Creating needle ${newNeedle.name}")
         dbHelper.writableDatabase.use { database ->
             val values = NeedleTable.createContentValues(newNeedle)
