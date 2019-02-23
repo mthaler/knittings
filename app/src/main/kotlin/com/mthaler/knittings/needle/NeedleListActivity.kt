@@ -98,6 +98,7 @@ class NeedleListActivity : AppCompatActivity(), NeedleListFragment.OnFragmentInt
             override fun onActionItemClicked(mode: ActionMode?, menu: MenuItem?): Boolean {
                when(menu?.itemId) {
                    R.id.action_delete -> {
+                       DeleteNeedleDialog.create(this@NeedleListActivity, {  datasource.deleteNeedle(datasource.getNeedle(needleID)) }).show()
                        mode?.finish()
                        return true
                    }
