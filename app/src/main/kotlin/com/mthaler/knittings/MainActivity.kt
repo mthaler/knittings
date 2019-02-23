@@ -23,7 +23,6 @@ import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.activity_main.*
 import com.mthaler.knittings.database.datasource
 import com.mthaler.knittings.details.KnittingDetailsActivity
-import com.mthaler.knittings.model.Knitting
 import com.mthaler.knittings.Extras.EXTRA_KNITTING_ID
 import com.mthaler.knittings.model.Status
 import com.mthaler.knittings.needle.NeedleListActivity
@@ -296,10 +295,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
         val filtered = filter.filter(knittings)
         // start EditCategoryActivity if the users clicks on a category
-        val adapter = KnittingAdapter(this, filtered, object : OnItemClickListener {
-            override fun onItemClick(item: Knitting) {
-                startActivity<KnittingDetailsActivity>(EXTRA_KNITTING_ID to item.id, KnittingDetailsActivity.EXTRA_EDIT_ONLY to false)
-            }
+        val adapter = KnittingAdapter(this, filtered, {
+            knitting -> startActivity<KnittingDetailsActivity>(EXTRA_KNITTING_ID to knitting.id, KnittingDetailsActivity.EXTRA_EDIT_ONLY to false)
         })
         rv.adapter = adapter
     }
