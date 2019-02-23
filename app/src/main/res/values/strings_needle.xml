@@ -11,7 +11,7 @@
     <string name="delete_needle">Delete needle</string>
     <!-- delete needle dialog -->
     <string name="delete_needle_dialog_title">Delete</string>
-    <string name="delete_needle_dialog_question">Do you really want to delete the needle?</string>
+    <string name="delete_needle_dialog_question">Do you really want to delete needle %1$s?</string>
     <string name="delete_needle_dialog_delete_button">Delete</string>
     <!-- needle materials -->
     <string name="needle_material_other">Other</string>

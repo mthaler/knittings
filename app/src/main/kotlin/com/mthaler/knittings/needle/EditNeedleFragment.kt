@@ -232,7 +232,7 @@ class EditNeedleFragment : Fragment() {
      */
     private fun showDeleteDialog() {
         context?.let {
-            DeleteNeedleDialog.create(it, {
+            DeleteNeedleDialog.create(it, needle, {
                 // delete database entry
                 datasource.deleteNeedle(needle)
                 // go back to the previous fragment which is the category list
