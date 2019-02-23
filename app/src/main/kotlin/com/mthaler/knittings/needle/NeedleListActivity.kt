@@ -87,20 +87,54 @@ class NeedleListActivity : AppCompatActivity(), NeedleListFragment.OnFragmentInt
 
     override fun needleLongClicked(needleID : Long) {
         startSupportActionMode(object : ActionMode.Callback {
+
+            /**
+             * Called to report a user click on an action button.
+             *
+             * @param mode The current ActionMode
+             * @param menu The item that was clicked
+             * @return true if this callback handled the event, false if the standard MenuItem invocation should continue.
+             */
             override fun onActionItemClicked(mode: ActionMode?, menu: MenuItem?): Boolean {
-               return true
+               when(menu?.itemId) {
+                   R.id.action_delete -> {
+                       mode?.finish()
+                       return true
+                   }
+                   else -> {
+                       return false
+                   }
+               }
             }
 
+            /**
+             * Called when action mode is first created. The menu supplied will be used to generate action buttons for the action mode.
+             *
+             * @param mode The current ActionMode
+             * @param menu  Menu used to populate action buttons
+             * @return true if the action mode should be created, false if entering this mode should be aborted.
+             */
             override fun onCreateActionMode(mode: ActionMode?, menu: Menu?): Boolean {
                 val inflater = mode?.getMenuInflater()
                 inflater?.inflate(R.menu.needle_list_action, menu)
                 return true
             }
 
+            /**
+             * Called to refresh an action mode's action menu whenever it is invalidated.
+             *
+             * @param mode The current ActionMode
+             * @param menu  Menu used to populate action buttons
+             */
             override fun onPrepareActionMode(mode: ActionMode?, menu: Menu?): Boolean {
                 return true
             }
 
+            /**
+             * Called when an action mode is about to be exited and destroyed.
+             *
+             * @param mode The current ActionMode
+             */
             override fun onDestroyActionMode(mode: ActionMode?) {
             }
         })
