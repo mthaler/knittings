@@ -443,8 +443,7 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
      * @return new category
      */
     @Synchronized
-    fun createCategory(): Category {
-        val newCategory = Category()
+    fun createCategory(newCategory: Category): Category {
         debug("Creating category ${newCategory.name}")
         dbHelper.writableDatabase.use { database ->
             val values = CategoryTable.createContentValues(newCategory)

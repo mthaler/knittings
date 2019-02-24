@@ -7,6 +7,7 @@ import android.support.v4.app.NavUtils
 import android.view.MenuItem
 import com.mthaler.knittings.R
 import com.mthaler.knittings.database.datasource
+import com.mthaler.knittings.model.Category
 import kotlinx.android.synthetic.main.activity_category_list.*
 
 /**
@@ -69,7 +70,7 @@ class CategoryListActivity : AppCompatActivity(), CategoryListFragment.OnFragmen
     }
 
     override fun createCategory() {
-        val category = datasource.createCategory()
+        val category = datasource.createCategory(Category())
         val f = EditCategoryFragment.newInstance(category.id)
         val fm = supportFragmentManager
         val ft = fm.beginTransaction()

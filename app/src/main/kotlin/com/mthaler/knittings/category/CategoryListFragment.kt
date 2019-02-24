@@ -4,11 +4,11 @@ import android.content.Context
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
 import android.support.v4.app.Fragment
+import android.support.v7.app.AppCompatActivity
+import android.support.v7.view.ActionMode
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import com.mthaler.knittings.Extras
 import com.mthaler.knittings.R
 import com.mthaler.knittings.database.datasource
@@ -90,6 +90,73 @@ class CategoryListFragment : Fragment() {
             // start EditCategoryActivity if the users clicks on a category
             val adapter = CategoryAdapter(categories, { category ->
                 listener?.categoryClicked(category.id)
+            }, { category ->
+                (activity as AppCompatActivity).startSupportActionMode(object : ActionMode.Callback {
+
+                    /**
+                     * Called to report a user click on an action button.
+                     *
+                     * @param mode The current ActionMode
+                     * @param menu The item that was clicked
+                     * @return true if this callback handled the event, false if the standard MenuItem invocation should continue.
+                     */
+                    override fun onActionItemClicked(mode: ActionMode?, menu: MenuItem?): Boolean {
+                        when (menu?.itemId) {
+                            R.id.action_delete -> {
+                                this@CategoryListFragment.activity?.let {
+                                    DeleteCategoryDialog.create(it, category, {
+                                        datasource.deleteCategory(category)
+                                        updateCategoryList()
+                                    }).show()
+                                }
+                                mode?.finish()
+                                return true
+                            }
+                            R.id.action_copy -> {
+                                val newName = "${category.name} - ${getString(R.string.copy)}"
+                                val categoryCopy = category.copy(name = newName)
+                                datasource.createCategory(categoryCopy)
+                                updateCategoryList()
+                                mode?.finish()
+                                return true
+                            }
+                            else -> {
+                                return false
+                            }
+                        }
+                    }
+
+                    /**
+                     * Called when action mode is first created. The menu supplied will be used to generate action buttons for the action mode.
+                     *
+                     * @param mode The current ActionMode
+                     * @param menu  Menu used to populate action buttons
+                     * @return true if the action mode should be created, false if entering this mode should be aborted.
+                     */
+                    override fun onCreateActionMode(mode: ActionMode?, menu: Menu?): Boolean {
+                        val inflater = mode?.getMenuInflater()
+                        inflater?.inflate(R.menu.category_list_action, menu)
+                        return true
+                    }
+
+                    /**
+                     * Called to refresh an action mode's action menu whenever it is invalidated.
+                     *
+                     * @param mode The current ActionMode
+                     * @param menu  Menu used to populate action buttons
+                     */
+                    override fun onPrepareActionMode(mode: ActionMode?, menu: Menu?): Boolean {
+                        return true
+                    }
+
+                    /**
+                     * Called when an action mode is about to be exited and destroyed.
+                     *
+                     * @param mode The current ActionMode
+                     */
+                    override fun onDestroyActionMode(mode: ActionMode?) {
+                    }
+                })
             })
             rv.adapter = adapter
         }

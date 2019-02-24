@@ -8,7 +8,9 @@ import android.widget.TextView
 import com.mthaler.knittings.R
 import com.mthaler.knittings.model.Category
 
-class CategoryAdapter(val categories: ArrayList<Category>, private val onItemClick: (Category) -> Unit): RecyclerView.Adapter<CategoryAdapter.ViewHolder>() {
+class CategoryAdapter(val categories: ArrayList<Category>,
+                      private val onItemClick: (Category) -> Unit,
+                      private val onItemLongClick: (Category) -> Unit): RecyclerView.Adapter<CategoryAdapter.ViewHolder>() {
 
     /**
      * Creates, configures and returns a ViewHolder object for a particular row in the list
@@ -28,7 +30,7 @@ class CategoryAdapter(val categories: ArrayList<Category>, private val onItemCli
      * @param position model position
      */
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(categories[position], onItemClick)
+        holder.bind(categories[position], onItemClick, onItemLongClick)
     }
 
     /**
@@ -46,13 +48,14 @@ class CategoryAdapter(val categories: ArrayList<Category>, private val onItemCli
         private val colorSwatch = itemView.findViewById<ColorSwatch>(R.id.category_list_item_color)
         private val textFieldName = itemView.findViewById<TextView>(R.id.category_list_item_name)
 
-        fun bind(category: Category, listener: (Category) -> Unit) {
+        fun bind(category: Category, onItemClick: (Category) -> Unit, onItemLongClick: (Category) -> Unit) {
             val c = category.color
             if (c != null) {
                 colorSwatch.color = c
             }
             textFieldName.text = category.name
-            itemView.setOnClickListener { v -> listener(category) }
+            itemView.setOnClickListener { v -> onItemClick(category) }
+            itemView.setOnLongClickListener { v -> onItemLongClick(category); true }
         }
     }
 }

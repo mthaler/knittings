@@ -11,6 +11,7 @@ import com.mthaler.knittings.R
 import kotlinx.android.synthetic.main.activity_select_category.*
 import com.mthaler.knittings.Extras.EXTRA_KNITTING_ID
 import com.mthaler.knittings.database.datasource
+import com.mthaler.knittings.model.Category
 
 class SelectCategoryActivity : AppCompatActivity(), CategoryListFragment.OnFragmentInteractionListener {
 
@@ -105,7 +106,7 @@ class SelectCategoryActivity : AppCompatActivity(), CategoryListFragment.OnFragm
     }
 
     override fun createCategory() {
-        val category = datasource.createCategory()
+        val category = datasource.createCategory(Category())
         val f = EditCategoryFragment.newInstance(category.id)
         val fm = supportFragmentManager
         val ft = fm.beginTransaction()
