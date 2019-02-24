@@ -13,7 +13,6 @@ import com.mthaler.knittings.model.Category
 import com.mthaler.knittings.Extras.EXTRA_CATEGORY_ID
 import com.mthaler.knittings.TextWatcher
 import com.mthaler.knittings.database.datasource
-import org.jetbrains.anko.support.v4.alert
 
 class EditCategoryFragment : Fragment() {
 
@@ -116,7 +115,14 @@ class EditCategoryFragment : Fragment() {
         if (item != null) {
             return when (item.itemId) {
                 R.id.menu_item_delete_category -> {
-                    showDeleteDialog()
+                    context?.let {
+                        DeleteCategoryDialog.create(it, category, {
+                            // delete database entry
+                            datasource.deleteCategory(category)
+                            // go back to the previous fragment which is the category list
+                            fragmentManager?.popBackStack()
+                        }).show()
+                    }
                     true
                 }
                 else -> super.onOptionsItemSelected(item)
@@ -125,25 +131,6 @@ class EditCategoryFragment : Fragment() {
             return super.onOptionsItemSelected(item)
         }
     }
-
-    /**
-     * Displays a dialog that asks the user to confirm that the knitting should be deleted
-     */
-    private fun showDeleteDialog() {
-        // show alert asking user to confirm that knitting should be deleted
-        alert {
-            title = resources.getString(R.string.delete_category_dialog_title)
-            message = resources.getString(R.string.delete_category_dialog_question)
-            positiveButton(resources.getString(R.string.delete_category_dialog_delete_button)) {
-                // delete database entry
-                datasource.deleteCategory(category)
-                // go back to the previous fragment which is the category list
-                fragmentManager?.popBackStack()
-            }
-            negativeButton(resources.getString(R.string.dialog_button_cancel)) {}
-        }.show()
-    }
-
 
     /**
      * Creates a text watcher that updates the category using the given update function
