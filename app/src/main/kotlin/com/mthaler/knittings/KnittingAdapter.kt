@@ -13,7 +13,8 @@ import com.mthaler.knittings.model.Status
 import java.text.DateFormat
 
 class KnittingAdapter(val context: Context, val knittings: List<Knitting>,
-                      private val onItemClick: (Knitting) -> Unit): RecyclerView.Adapter<KnittingAdapter.ViewHolder>() {
+                      private val onItemClick: (Knitting) -> Unit,
+                      private val onItemLongClick: (Knitting) -> Unit): RecyclerView.Adapter<KnittingAdapter.ViewHolder>() {
 
     /**
      * Creates, configures and returns a ViewHolder object for a particular row in the list
@@ -57,7 +58,8 @@ class KnittingAdapter(val context: Context, val knittings: List<Knitting>,
         private val statusImageView = itemView.findViewById<ImageView>(R.id.knitting_list_item_statusImageView)
 
         init {
-            itemView.setOnClickListener { v -> onItemClick(knittings[adapterPosition] ) }
+            itemView.setOnClickListener { v -> onItemClick(knittings[adapterPosition]) }
+            itemView.setOnLongClickListener { v -> onItemLongClick(knittings[adapterPosition]); true }
         }
 
         fun bind(knitting: Knitting) {

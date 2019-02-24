@@ -297,7 +297,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         // start EditCategoryActivity if the users clicks on a category
         val adapter = KnittingAdapter(this, filtered, {
             knitting -> startActivity<KnittingDetailsActivity>(EXTRA_KNITTING_ID to knitting.id, KnittingDetailsActivity.EXTRA_EDIT_ONLY to false)
-        })
+        }, { knitting ->})
         rv.adapter = adapter
     }
 
