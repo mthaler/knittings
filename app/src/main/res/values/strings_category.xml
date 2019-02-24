@@ -13,7 +13,7 @@
 
     <!-- delete category dialog -->
     <string name="delete_category_dialog_title">Delete</string>
-    <string name="delete_category_dialog_question">Do you really want to delete the category?</string>
+    <string name="delete_category_dialog_question">Do you really want to delete %1$s?</string>
     <string name="delete_category_dialog_delete_button">Delete</string>
 
     <!-- color dialog -->

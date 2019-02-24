@@ -13,7 +13,7 @@
 
     <!-- delete category dialog -->
     <string name="delete_category_dialog_title">Kategorie Löschen</string>
-    <string name="delete_category_dialog_question">Kategorie wirklich löschen?</string>
+    <string name="delete_category_dialog_question">%1$s wirklich löschen?</string>
     <string name="delete_category_dialog_delete_button">Löschen</string>
 
     <!-- color dialog -->
