@@ -55,7 +55,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         // set on click handler of floating action button that creates a new knitting
         fab_create_add_knitting.setOnClickListener {
             // start knitting activity with newly created knitting
-            val knitting = datasource.createKnitting(Knitting())
+            val knitting = datasource.addKnitting(Knitting())
             startActivity<KnittingDetailsActivity>(EXTRA_KNITTING_ID to knitting.id, KnittingDetailsActivity.EXTRA_EDIT_ONLY to true)
         }
 
@@ -322,7 +322,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     R.id.action_copy -> {
                         val newTitle = "${knitting.title} - ${getString(R.string.copy)}"
                         val knittingCopy = knitting.copy(title = newTitle, started = Date(), finished = null, defaultPhoto = null, rating = 0.0, duration = 0, status = Status.PLANNED)
-                        datasource.createKnitting(knittingCopy)
+                        datasource.addKnitting(knittingCopy)
                         updateKnittingList()
                         mode?.finish()
                         return true

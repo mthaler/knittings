@@ -138,39 +138,23 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
     }
 
     /**
-     * Creates a new knitting project and adds it to the database
-     *
-     * @return new knitting project
-     */
-    @Synchronized
-    fun createKnitting(newKnitting: Knitting): Knitting {
-        dbHelper.writableDatabase.use { database ->
-            val values = KnittingTable.createContentValues(newKnitting)
-            val id = database.insert(KnittingTable.KNITTINGS, null, values)
-
-            val cursor = database.query(KnittingTable.KNITTINGS,
-                    KnittingTable.Columns, KnittingTable.Cols.ID + "=" + id, null, null, null, null)
-
-            cursor.moveToFirst()
-            val knittings = cursorToKnitting(cursor)
-            cursor.close()
-
-            return knittings
-        }
-    }
-
-    /**
      * Adds the given knitting to the database
      *
      * @param knitting knitting that should be added to the database
      * @param manualID: use knitting ID instead of auto-imcremented id
      */
     @Synchronized
-    fun addKnitting(knitting: Knitting, manualID: Boolean = false) {
+    fun addKnitting(knitting: Knitting, manualID: Boolean = false): Knitting {
         dbHelper.writableDatabase.use { database ->
             val values = KnittingTable.createContentValues(knitting, manualID)
             val id = database.insert(KnittingTable.KNITTINGS, null, values)
-            debug("Added knitting $knitting to database, id=$id")
+            val cursor = database.query(KnittingTable.KNITTINGS,
+                    KnittingTable.Columns, KnittingTable.Cols.ID + "=" + id, null, null, null, null)
+            cursor.moveToFirst()
+            val knittings = cursorToKnitting(cursor)
+            cursor.close()
+
+            return knittings
         }
     }
 
