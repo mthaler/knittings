@@ -438,40 +438,23 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
     }
 
     /**
-     * Creates a new category and adds it to the database
-     *
-     * @return new category
-     */
-    @Synchronized
-    fun createCategory(newCategory: Category): Category {
-        debug("Creating category ${newCategory.name}")
-        dbHelper.writableDatabase.use { database ->
-            val values = CategoryTable.createContentValues(newCategory)
-            val id = database.insert(CategoryTable.CATEGORY, null, values)
-
-            val cursor = database.query(CategoryTable.CATEGORY,
-                    CategoryTable.Columns, CategoryTable.Cols.ID + "=" + id, null, null, null, null)
-
-            cursor.moveToFirst()
-            val category = cursorToCategory(cursor)
-            cursor.close()
-
-            return category
-        }
-    }
-
-    /**
      * Adds the given category to the database
      *
      * @param category category that should be added to the database
      * @param manualID: use cagegpry ID instead of auto-imcremented id
      */
     @Synchronized
-    fun addCategory(category: Category, manualID: Boolean = false) {
+    fun addCategory(category: Category, manualID: Boolean = false): Category {
         dbHelper.writableDatabase.use { database ->
             val values = CategoryTable.createContentValues(category, manualID)
             val id = database.insert(CategoryTable.CATEGORY, null, values)
-            debug("Added category $category to database, id=$id")
+            val cursor = database.query(CategoryTable.CATEGORY,
+                    CategoryTable.Columns, CategoryTable.Cols.ID + "=" + id, null, null, null, null)
+            cursor.moveToFirst()
+            val result = cursorToCategory(cursor)
+            cursor.close()
+
+            return result
         }
     }
 

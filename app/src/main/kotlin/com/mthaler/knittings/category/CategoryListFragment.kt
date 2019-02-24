@@ -115,7 +115,7 @@ class CategoryListFragment : Fragment() {
                             R.id.action_copy -> {
                                 val newName = "${category.name} - ${getString(R.string.copy)}"
                                 val categoryCopy = category.copy(name = newName)
-                                datasource.createCategory(categoryCopy)
+                                datasource.addCategory(categoryCopy)
                                 updateCategoryList()
                                 mode?.finish()
                                 return true
