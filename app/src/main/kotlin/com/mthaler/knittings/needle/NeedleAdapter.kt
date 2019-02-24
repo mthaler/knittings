@@ -89,7 +89,7 @@ class NeedleAdapter(val needles: List<ListItem>,
                 sb.append("  ")
             }
             if (!needle.size.trim().isEmpty()) {
-                sb.append("\u2300 ")
+                sb.append("\u00D8 ")
                 sb.append(needle.size)
                 sb.append("  ")
             }
