@@ -553,40 +553,23 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
     }
 
     /**
-     * Creates a new needle and adds it to the database
-     *
-     * @return new needle
-     */
-    @Synchronized
-    fun createNeedle(newNeedle: Needle): Needle {
-        debug("Creating needle ${newNeedle.name}")
-        dbHelper.writableDatabase.use { database ->
-            val values = NeedleTable.createContentValues(newNeedle)
-            val id = database.insert(NeedleTable.NEEDLES, null, values)
-
-            val cursor = database.query(NeedleTable.NEEDLES,
-                    NeedleTable.Columns, NeedleTable.Cols.ID + "=" + id, null, null, null, null)
-
-            cursor.moveToFirst()
-            val needle = cursorToNeedle(context, cursor)
-            cursor.close()
-
-            return needle
-        }
-    }
-
-    /**
      * Adds the given needle to the database
      *
      * @param needle needle that should be added to the database
      * @param manualID: use cagegpry ID instead of auto-imcremented id
      */
     @Synchronized
-    fun addNeedle(needle: Needle, manualID: Boolean = false) {
+    fun addNeedle(needle: Needle, manualID: Boolean = false): Needle {
         dbHelper.writableDatabase.use { database ->
             val values = NeedleTable.createContentValues(needle, manualID)
             val id = database.insert(NeedleTable.NEEDLES, null, values)
-            debug("Added category $needle to database, id=$id")
+            val cursor = database.query(NeedleTable.NEEDLES,
+                    NeedleTable.Columns, NeedleTable.Cols.ID + "=" + id, null, null, null, null)
+            cursor.moveToFirst()
+            val result = cursorToNeedle(context, cursor)
+            cursor.close()
+
+            return result
         }
     }
 

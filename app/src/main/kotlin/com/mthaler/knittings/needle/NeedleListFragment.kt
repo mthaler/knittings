@@ -166,7 +166,7 @@ class NeedleListFragment : Fragment() {
                                     R.id.action_copy -> {
                                         val newName = "${needle.name} - ${getString(R.string.copy)}"
                                         val needleCopy = needle.copy(name = newName)
-                                        datasource.createNeedle(needleCopy)
+                                        datasource.addNeedle(needleCopy)
                                         updateNeedleList()
                                         mode?.finish()
                                         return true
