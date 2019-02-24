@@ -25,6 +25,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 import com.mthaler.knittings.database.datasource
 import com.mthaler.knittings.details.KnittingDetailsActivity
 import com.mthaler.knittings.Extras.EXTRA_KNITTING_ID
+import com.mthaler.knittings.details.DeleteKnittingDialog
 import com.mthaler.knittings.model.Status
 import com.mthaler.knittings.needle.NeedleListActivity
 import com.mthaler.knittings.settings.SettingsActivity
@@ -310,6 +311,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 when(menu?.itemId) {
                     R.id.action_delete -> {
                         mode?.finish()
+                        DeleteKnittingDialog.create(this@MainActivity, knitting, {
+                            datasource.deleteKnitting(knitting)
+                            updateKnittingList()
+                        }).show()
                         return true
                     }
                     else -> {
