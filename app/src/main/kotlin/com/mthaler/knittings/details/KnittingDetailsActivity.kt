@@ -163,24 +163,6 @@ class KnittingDetailsActivity : AppCompatActivity(), KnittingDetailsFragment.OnF
         }
     }
 
-    /**
-     * Displays a dialog that asks the user to confirm that the knitting should be deleted
-     */
-    private fun showDeleteDialog() {
-        // show alert asking user to confirm that knitting should be deleted
-        alert {
-            title = resources.getString(R.string.delete_knitting_dialog_title)
-            message = resources.getString(R.string.delete_knitting_dialog_question)
-            positiveButton(resources.getString(R.string.delete_knitting_dialog_delete_button)) {
-                val knitting = datasource.getKnitting(knittingID)
-                // delete database entry
-                datasource.deleteKnitting(knitting)
-                finish()
-            }
-            negativeButton(resources.getString(R.string.dialog_button_cancel)) {}
-        }.show()
-    }
-
     private fun takePhoto(file: File, intent: Intent) {
         currentPhotoPath = file
         startActivityForResult(intent, REQUEST_IMAGE_CAPTURE)
@@ -205,12 +187,16 @@ class KnittingDetailsActivity : AppCompatActivity(), KnittingDetailsFragment.OnF
     }
 
     override fun deleteKnitting(id: Long) {
-        showDeleteDialog()
+        val knitting = datasource.getKnitting(knittingID)
+        DeleteKnittingDialog.create(this, knitting, {
+            datasource.deleteKnitting(knitting)
+            finish()
+        }).show()
     }
 
     companion object {
 
-        const val EXTRA_EDIT_ONLY = "com.mthaler.knittings.edit_ony"
+        const val EXTRA_EDIT_ONLY = "com.mthaler.knittings.edit_only"
         private const val CURRENT_PHOTO_PATH = "com.mthaler.knittings.CURRENT_PHOTO_PATH"
         private const val REQUEST_IMAGE_CAPTURE = 0
         private const val REQUEST_IMAGE_IMPORT = 1
