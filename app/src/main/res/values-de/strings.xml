@@ -35,7 +35,7 @@
 
     <!-- delete knittings dialog -->
     <string name="delete_knitting_dialog_title">Löschen</string>
-    <string name="delete_knitting_dialog_question">Strickerei wirklich löschen?</string>
+    <string name="delete_knitting_dialog_question">%1$s wirklich löschen?</string>
     <string name="delete_knitting_dialog_delete_button">Löschen</string>
 
     <!-- delete photo dialog -->

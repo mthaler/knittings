@@ -11,7 +11,7 @@
     <string name="delete_needle">Nadel löschen</string>
     <!-- delete category dialog -->
     <string name="delete_needle_dialog_title">Nadel Löschen</string>
-    <string name="delete_needle_dialog_question">Nadel %1$s wirklich löschen?</string>
+    <string name="delete_needle_dialog_question">%1$s wirklich löschen?</string>
     <string name="delete_needle_dialog_delete_button">Löschen</string>
     <!-- needle materials -->
     <string name="needle_material_other">Anderes Material</string>
