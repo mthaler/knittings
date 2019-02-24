@@ -83,7 +83,7 @@ object TakePhotoDialog : AnkoLogger {
         val orientation = PictureUtils.getOrientation(file.absolutePath)
         val preview = PictureUtils.decodeSampledBitmapFromPath(file.absolutePath, 200, 200)
         val rotatedPreview = PictureUtils.rotateBitmap(preview, orientation)
-        val photo = context.datasource.createPhoto(Photo(-1, file, knittingID, "", rotatedPreview))
+        val photo = context.datasource.addPhoto(Photo(-1, file, knittingID, "", rotatedPreview))
         debug("Created new photo from $file, knitting id $knittingID")
         // add first photo as default photo
         val knitting = context.datasource.getKnitting(knittingID)
@@ -116,7 +116,7 @@ object TakePhotoDialog : AnkoLogger {
         val orientation = PictureUtils.getOrientation(file.absolutePath)
         val preview = PictureUtils.decodeSampledBitmapFromPath(file.absolutePath, 200, 200)
         val rotatedPreview = PictureUtils.rotateBitmap(preview, orientation)
-        val photo = context.datasource.createPhoto(Photo(-1, file, knittingID, "", rotatedPreview))
+        val photo = context.datasource.addPhoto(Photo(-1, file, knittingID, "", rotatedPreview))
         debug("Created new photo from $file, knitting id $knittingID")
         // add first photo as default photo
         val knitting = context.datasource.getKnitting(knittingID)

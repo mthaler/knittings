@@ -307,41 +307,22 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
     }
 
     /**
-     * Creates a new photo and adds it to the database
-     *
-     * @param newPhoto that should be created and added to the database
-     * @return new photo
-     */
-    @Synchronized
-    fun createPhoto(newPhoto: Photo): Photo {
-        debug("Creating photo for ${newPhoto.filename}, knitting id: ${newPhoto.knittingID}, preview: ${newPhoto.preview}, description: ${newPhoto.description}")
-        dbHelper.writableDatabase.use { database ->
-            val values = PhotoTable.createContentValues(newPhoto)
-            val id = database.insert(PhotoTable.PHOTOS, null, values)
-
-            val cursor = database.query(PhotoTable.PHOTOS,
-                    PhotoTable.Columns, PhotoTable.Cols.ID + "=" + id, null, null, null, null)
-
-            cursor.moveToFirst()
-            val photo = cursorToPhoto(cursor)
-            cursor.close()
-
-            return photo
-        }
-    }
-
-    /**
      * Adds the given photo to the database
      *
      * @param photo photo that should be added to the database
      * @param manualID: use photo ID instead of auto-imcremented id
      */
     @Synchronized
-    fun addPhoto(photo: Photo, manualID: Boolean = false) {
+    fun addPhoto(photo: Photo, manualID: Boolean = false): Photo {
         dbHelper.writableDatabase.use { database ->
             val values = PhotoTable.createContentValues(photo, manualID)
             val id = database.insert(PhotoTable.PHOTOS, null, values)
-            debug("Added photo $photo to database, id=$id")
+            val cursor = database.query(PhotoTable.PHOTOS,
+                    PhotoTable.Columns, PhotoTable.Cols.ID + "=" + id, null, null, null, null)
+            cursor.moveToFirst()
+            val result = cursorToPhoto(cursor)
+            cursor.close()
+            return result
         }
     }
 
