@@ -143,8 +143,7 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
      * @return new knitting project
      */
     @Synchronized
-    fun createKnitting(): Knitting {
-        val newKnitting = Knitting()
+    fun createKnitting(newKnitting: Knitting): Knitting {
         dbHelper.writableDatabase.use { database ->
             val values = KnittingTable.createContentValues(newKnitting)
             val id = database.insert(KnittingTable.KNITTINGS, null, values)
