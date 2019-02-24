@@ -6,6 +6,7 @@ import android.support.design.widget.NavigationView
 import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AlertDialog
+import android.support.v7.view.ActionMode
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.SearchView
@@ -297,7 +298,58 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         // start EditCategoryActivity if the users clicks on a category
         val adapter = KnittingAdapter(this, filtered, {
             knitting -> startActivity<KnittingDetailsActivity>(EXTRA_KNITTING_ID to knitting.id, KnittingDetailsActivity.EXTRA_EDIT_ONLY to false)
-        }, { knitting ->})
+        }, { knitting -> startSupportActionMode(object : ActionMode.Callback {
+            /**
+             * Called to report a user click on an action button.
+             *
+             * @param mode The current ActionMode
+             * @param menu The item that was clicked
+             * @return true if this callback handled the event, false if the standard MenuItem invocation should continue.
+             */
+            override fun onActionItemClicked(mode: ActionMode?, menu: MenuItem?): Boolean {
+                when(menu?.itemId) {
+                    R.id.action_delete -> {
+                        mode?.finish()
+                        return true
+                    }
+                    else -> {
+                        return false
+                    }
+                }
+            }
+
+            /**
+             * Called when action mode is first created. The menu supplied will be used to generate action buttons for the action mode.
+             *
+             * @param mode The current ActionMode
+             * @param menu  Menu used to populate action buttons
+             * @return true if the action mode should be created, false if entering this mode should be aborted.
+             */
+            override fun onCreateActionMode(mode: ActionMode?, menu: Menu?): Boolean {
+                val inflater = mode?.getMenuInflater()
+                inflater?.inflate(R.menu.knitting_list_action, menu)
+                return true
+            }
+
+            /**
+             * Called to refresh an action mode's action menu whenever it is invalidated.
+             *
+             * @param mode The current ActionMode
+             * @param menu  Menu used to populate action buttons
+             */
+            override fun onPrepareActionMode(mode: ActionMode?, menu: Menu?): Boolean {
+                return true
+            }
+
+            /**
+             * Called when an action mode is about to be exited and destroyed.
+             *
+             * @param mode The current ActionMode
+             */
+            override fun onDestroyActionMode(mode: ActionMode?) {
+            }
+            })
+        })
         rv.adapter = adapter
     }
 
