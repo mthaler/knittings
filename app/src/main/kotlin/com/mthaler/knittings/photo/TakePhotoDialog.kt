@@ -17,6 +17,10 @@ import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.debug
 import org.jetbrains.anko.find
 import java.io.File
+import android.content.ClipData
+import android.os.Build
+
+
 
 object TakePhotoDialog : AnkoLogger {
 
@@ -54,6 +58,10 @@ object TakePhotoDialog : AnkoLogger {
             if (canTakePhoto) {
                 val uri = FileProvider.getUriForFile(context, "com.mthaler.knittings.fileprovider", f!!)
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, uri)
+                if (Build.VERSION.SDK_INT >= 16 && Build.VERSION.SDK_INT <= 21) {
+                    takePictureIntent.clipData = ClipData.newRawUri("", uri)
+                    takePictureIntent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION or Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                }
                 debug("Created take picture intent")
                 takePhoto(f, takePictureIntent)
             }
