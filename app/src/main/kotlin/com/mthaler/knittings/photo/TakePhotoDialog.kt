@@ -57,12 +57,14 @@ object TakePhotoDialog : AnkoLogger {
             val packageManager = context.packageManager
             val canTakePhoto = f != null && takePictureIntent.resolveActivity(packageManager) != null
             if (canTakePhoto) {
+                // on Icecreamsandwich we cannot use the file provider to take photos
                 val uri = if (Build.VERSION.SDK_INT == 15) {
                     Uri.fromFile(f)
                 } else {
                     FileProvider.getUriForFile(context, "com.mthaler.knittings.fileprovider", f!!)
                 }
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, uri)
+                // this is needed on older android versions to net get a security exception
                 if (Build.VERSION.SDK_INT >= 16 && Build.VERSION.SDK_INT <= 21) {
                     takePictureIntent.clipData = ClipData.newRawUri("", uri)
                     takePictureIntent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION or Intent.FLAG_GRANT_READ_URI_PERMISSION)
