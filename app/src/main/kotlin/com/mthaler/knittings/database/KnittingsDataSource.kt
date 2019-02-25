@@ -234,8 +234,8 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
 
     @Synchronized
     fun getPhotoFile(knitting: Knitting): File? {
-        val externalFilesDir = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES) ?: return null
-        return File(externalFilesDir, knitting.photoFilename)
+        val externalFilesDir = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+        return if (externalFilesDir != null) File(externalFilesDir, knitting.photoFilename) else null
     }
 
     /**
