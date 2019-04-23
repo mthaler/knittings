@@ -185,7 +185,7 @@ class NeedleListFragment : Fragment() {
                              * @return true if the action mode should be created, false if entering this mode should be aborted.
                              */
                             override fun onCreateActionMode(mode: ActionMode?, menu: Menu?): Boolean {
-                                val inflater = mode?.getMenuInflater()
+                                val inflater = mode?.menuInflater
                                 inflater?.inflate(R.menu.needle_list_action, menu)
                                 return true
                             }

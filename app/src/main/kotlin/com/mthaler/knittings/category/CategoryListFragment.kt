@@ -134,7 +134,7 @@ class CategoryListFragment : Fragment() {
                      * @return true if the action mode should be created, false if entering this mode should be aborted.
                      */
                     override fun onCreateActionMode(mode: ActionMode?, menu: Menu?): Boolean {
-                        val inflater = mode?.getMenuInflater()
+                        val inflater = mode?.menuInflater
                         inflater?.inflate(R.menu.category_list_action, menu)
                         return true
                     }
