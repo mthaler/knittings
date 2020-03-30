@@ -145,9 +145,7 @@ class CategoryListFragment : Fragment() {
                      * @param mode The current ActionMode
                      * @param menu  Menu used to populate action buttons
                      */
-                    override fun onPrepareActionMode(mode: ActionMode?, menu: Menu?): Boolean {
-                        return true
-                    }
+                    override fun onPrepareActionMode(mode: ActionMode?, menu: Menu?): Boolean = true
 
                     /**
                      * Called when an action mode is about to be exited and destroyed.

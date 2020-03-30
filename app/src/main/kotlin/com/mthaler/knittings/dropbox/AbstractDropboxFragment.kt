@@ -54,7 +54,7 @@ abstract class AbstractDropboxFragment : Fragment(), AnkoLogger {
     protected fun onLoadDataError(ex: Exception) {
         // delete auth token from shared pref_sharing
         context?.let {
-            val prefs = it.getSharedPreferences(AbstractDropboxFragment.SharedPreferencesName, AppCompatActivity.MODE_PRIVATE)
+            val prefs = it.getSharedPreferences(SharedPreferencesName, AppCompatActivity.MODE_PRIVATE)
             val editor = prefs.edit()
             editor.remove("access-token")
             editor.commit()

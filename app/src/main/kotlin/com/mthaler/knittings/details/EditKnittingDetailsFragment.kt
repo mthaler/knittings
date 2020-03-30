@@ -48,7 +48,7 @@ class EditKnittingDetailsFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            val knittingID = it.getLong(Extras.EXTRA_KNITTING_ID)
+            val knittingID = it.getLong(EXTRA_KNITTING_ID)
             knitting = datasource.getKnitting(knittingID)
         }
 
@@ -314,7 +314,7 @@ class EditKnittingDetailsFragment : Fragment() {
         fun newInstance(knittingID: Long) =
             EditKnittingDetailsFragment().apply {
                 arguments = Bundle().apply {
-                    putLong(Extras.EXTRA_KNITTING_ID, knittingID)
+                    putLong(EXTRA_KNITTING_ID, knittingID)
                 }
             }
 

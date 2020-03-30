@@ -19,13 +19,13 @@ class DropboxImportActivity : AppCompatActivity() {
         // enable up navigation
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        val f = supportFragmentManager.findFragmentByTag(DropboxImportActivity.DropboxImportFragmentTag)
+        val f = supportFragmentManager.findFragmentByTag(DropboxImportFragmentTag)
 
         // If the Fragment is non-null, then it is currently being
         // retained across a configuration change.
         if (f == null) {
             val ff = DropboxImportFragment()
-            supportFragmentManager.beginTransaction().add(R.id.frament_container, ff, DropboxImportActivity.DropboxImportFragmentTag).commit()
+            supportFragmentManager.beginTransaction().add(R.id.frament_container, ff, DropboxImportFragmentTag).commit()
         }
     }
 

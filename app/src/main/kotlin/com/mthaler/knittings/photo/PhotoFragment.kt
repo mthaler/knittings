@@ -198,7 +198,7 @@ class PhotoFragment : Fragment(), AnkoLogger {
      * @param uri Uri of image to share.
      */
     private fun shareImageUri(uri: Uri) {
-        val intent = Intent(android.content.Intent.ACTION_SEND)
+        val intent = Intent(Intent.ACTION_SEND)
         intent.putExtra(Intent.EXTRA_STREAM, uri)
         intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
         intent.type = "image/png"

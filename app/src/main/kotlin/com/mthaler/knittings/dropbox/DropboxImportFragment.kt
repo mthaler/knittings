@@ -36,7 +36,7 @@ class DropboxImportFragment : AbstractDropboxFragment(), AnkoLogger {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        login_button.setOnClickListener { Auth.startOAuth2Authentication(context, DropboxImportFragment.AppKey) }
+        login_button.setOnClickListener { Auth.startOAuth2Authentication(context, AppKey) }
 
         import_button.setOnClickListener {
             val ctx = context

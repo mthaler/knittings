@@ -106,7 +106,7 @@ class DurationPicker @JvmOverloads constructor(context: Context,
     /**
      * Used to save / restore state of time picker
      */
-    private class SavedState : View.BaseSavedState {
+    private class SavedState : BaseSavedState {
 
         val duration: Long
 
@@ -217,7 +217,7 @@ class DurationPicker @JvmOverloads constructor(context: Context,
             override fun onDurationChanged(view: DurationPicker, duration: Long) {}
         }
 
-        val TWO_DIGIT_FORMATTER: NumberPicker.Formatter = Formatter { value ->
+        val TWO_DIGIT_FORMATTER: Formatter = Formatter { value ->
             // TODO Auto-generated method stub
             String.format("%02d", value)
         }

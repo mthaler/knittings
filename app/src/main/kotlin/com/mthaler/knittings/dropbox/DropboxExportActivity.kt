@@ -64,7 +64,7 @@ class DropboxExportActivity : AppCompatActivity() {
                     }
                     uiThread {
                         // delete auth token from shared pref_sharing
-                        val prefs = getSharedPreferences(AbstractDropboxFragment.SharedPreferencesName, AppCompatActivity.MODE_PRIVATE)
+                        val prefs = getSharedPreferences(AbstractDropboxFragment.SharedPreferencesName, MODE_PRIVATE)
                         val editor = prefs.edit()
                         editor.remove("access-token")
                         editor.commit()

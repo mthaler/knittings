@@ -29,7 +29,7 @@ enum class NeedleMaterial {
          * @param context context
          * @return list of formatted needle material enum values
          */
-        fun formattedValues(context: Context): List<String> = NeedleMaterial.values().map { NeedleMaterial.format(context, it) }
+        fun formattedValues(context: Context): List<String> = values().map { format(context, it) }
 
         /**
          * Parses the needle material enum from a given string

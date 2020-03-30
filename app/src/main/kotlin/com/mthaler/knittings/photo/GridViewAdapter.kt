@@ -63,7 +63,7 @@ class GridViewAdapter(context: Context, private val layoutResourceId: Int, priva
                         val rotatedPhoto = PictureUtils.rotateBitmap(photo, orientation)
                         uiThread {
                             imageView.setImageBitmap(rotatedPhoto)
-                            if (imageTitle != null && !item.description.isEmpty()) {
+                            if (imageTitle != null && item.description.isNotEmpty()) {
                                 imageTitle.visibility = View.VISIBLE
                                 imageTitle.text = item.description
                             }

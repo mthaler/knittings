@@ -29,11 +29,11 @@ class NeedleAdapter(val needles: List<ListItem>,
         when (viewType) {
             TypeHeader -> {
                 val v = LayoutInflater.from(parent.context).inflate(R.layout.list_item_needle_header, parent, false)
-                return NeedleAdapter.HeaderViewHolder(v)
+                return HeaderViewHolder(v)
             }
             TypeItem -> {
                 val v = LayoutInflater.from(parent.context).inflate(R.layout.list_item_needle, parent, false)
-                return NeedleAdapter.ItemViewHolder(v)
+                return ItemViewHolder(v)
             }
             else -> throw IllegalArgumentException("Unknown view type $viewType")
         }
@@ -83,12 +83,12 @@ class NeedleAdapter(val needles: List<ListItem>,
             val sb = StringBuilder()
             sb.append(NeedleMaterial.format(itemView.context, needle.material))
             sb.append("  ")
-            if (!needle.length.trim().isEmpty()) {
+            if (needle.length.trim().isNotEmpty()) {
                 sb.append("L ")
                 sb.append(needle.length)
                 sb.append("  ")
             }
-            if (!needle.size.trim().isEmpty()) {
+            if (needle.size.trim().isNotEmpty()) {
                 sb.append("\u00D8 ")
                 sb.append(needle.size)
                 sb.append("  ")
@@ -96,7 +96,7 @@ class NeedleAdapter(val needles: List<ListItem>,
             if (needle.inUse) {
                 sb.append("  \u2713")
             }
-            textViewName.text = if (!needle.name.trim().isEmpty()) needle.name.trim() else NeedleType.format(itemView.context, needle.type)
+            textViewName.text = if (needle.name.trim().isNotEmpty()) needle.name.trim() else NeedleType.format(itemView.context, needle.type)
             textViewDescription.text = sb.toString()
             itemView.setOnClickListener { v -> onItemClick(needle) }
             itemView.setOnLongClickListener { v -> onItemLongLick(needle); true }

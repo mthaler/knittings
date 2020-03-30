@@ -32,7 +32,7 @@ enum class Status {
          * @param context context
          * @return list of formatted status enum values
          */
-        fun formattedValues(context: Context): List<String> = Status.values().map { format(context, it) }
+        fun formattedValues(context: Context): List<String> = values().map { format(context, it) }
 
         /**
          * Parses the status enum from a given string
