@@ -13,6 +13,7 @@ android {
         versionName "0.9.10"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
+        multiDexEnabled true
     }
     buildTypes {
         release {
@@ -49,6 +50,7 @@ dependencies {
     implementation "org.jetbrains.anko:anko-support-v4-commons:$anko_version"
     implementation "org.jetbrains.anko:anko-sqlite:$anko_version"
     implementation 'com.dropbox.core:dropbox-core-sdk:3.0.11'
+    implementation 'com.android.support:multidex:1.0.3'
     testImplementation 'junit:junit:4.12'
     testImplementation 'org.json:json:20080701'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
