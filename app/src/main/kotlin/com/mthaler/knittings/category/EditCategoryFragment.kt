@@ -1,18 +1,17 @@
 package com.mthaler.knittings.category
 
-import android.graphics.Color
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.text.Editable
 import android.view.*
 import android.widget.Button
 import android.widget.EditText
-import com.android.colorpicker.ColorPickerDialog
 import com.mthaler.knittings.R
 import com.mthaler.knittings.model.Category
 import com.mthaler.knittings.Extras.EXTRA_CATEGORY_ID
 import com.mthaler.knittings.TextWatcher
 import com.mthaler.knittings.database.datasource
+import petrov.kristiyan.colorpicker.ColorPicker
 
 class EditCategoryFragment : Fragment() {
 
@@ -71,20 +70,28 @@ class EditCategoryFragment : Fragment() {
         val button = v.findViewById<Button>(R.id.button_select_color)
         category.let { if (it.color != null) button.setBackgroundColor(it.color) }
         button.setOnClickListener { view ->
-            val colorPickerDialog = ColorPickerDialog()
-            colorPickerDialog.initialize(R.string.category_color_dialog_title, COLORS, Color.RED, 4, COLORS.size)
-            colorPickerDialog.setOnColorSelectedListener { color -> run {
-                val category0 = category
-                try {
-                    val category1 = category0.copy(color = color)
-                    datasource.updateCategory(category1)
-                    category = category1
+            val colorPicker = ColorPicker(activity)
+            colorPicker.setOnFastChooseColorListener(object : ColorPicker.OnFastChooseColorListener {
+                override fun setOnFastChooseColorListener(position: Int, color: Int) {
+                    val category0 = category
+                    try {
+                        val category1 = category0.copy(color = color)
+                        datasource.updateCategory(category1)
+                        category = category1
+                        button.setBackgroundColor(color)
+                    } catch(ex: Exception) {
+                    }
                     button.setBackgroundColor(color)
-                } catch(ex: Exception) {
                 }
-                button.setBackgroundColor(color)
-            } }
-            colorPickerDialog.show(fragmentManager, null)
+
+                override fun onCancel() {
+                }
+            })
+            colorPicker.setColors(COLORS)
+            colorPicker.setColorButtonDrawable(petrov.kristiyan.colorpicker.R.drawable.round_button)
+            colorPicker.setColorButtonMargin(6, 6,6, 6)
+            colorPicker.setColumns(4)
+            colorPicker.show()
         }
 
         return v
@@ -163,7 +170,7 @@ class EditCategoryFragment : Fragment() {
                 }
             }
 
-        val COLORS = arrayOf("#F6402C", "#EB1460", "#9C1AB1", "#6633B9", "#3D4DB7", "#1093F5", "#00A6F6", "#00BBD5", "#009687", "#46AF4A",
-                "#88C440", "#CCDD1E", "#FFEC16", "#FFC100", "#FF9800", "#FF5505", "#7A5547", "#9D9D9D", "#5E7C8B").map { Color.parseColor(it) }.toIntArray()
+        val COLORS = arrayListOf("#F6402C", "#EB1460", "#9C1AB1", "#6633B9", "#3D4DB7", "#1093F5", "#00A6F6", "#00BBD5", "#009687", "#46AF4A",
+                "#88C440", "#CCDD1E", "#FFEC16", "#FFC100", "#FF9800", "#FF5505", "#7A5547", "#9D9D9D", "#5E7C8B")
     }
 }
