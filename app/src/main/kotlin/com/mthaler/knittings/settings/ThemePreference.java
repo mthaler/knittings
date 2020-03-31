@@ -62,7 +62,7 @@ public class ThemePreference extends Preference {
     @Override
     protected void onClick() {
         super.onClick();
-        Activity activity = scanForActivity(getContext());
+        final Activity activity = scanForActivity(getContext());
         ColorPicker colorPicker = new ColorPicker(activity);
         colorPicker.setColorButtonDrawable(petrov.kristiyan.colorpicker.R.drawable.round_button);
         colorPicker.setColorButtonMargin(6, 6,6, 6);
@@ -72,6 +72,7 @@ public class ThemePreference extends Preference {
             public void setOnFastChooseColorListener(int position, int color) {
                 Theme theme = Theme.Companion.getTheme(position);
                 setValue(theme);
+                activity.recreate();
             }
 
             @Override
