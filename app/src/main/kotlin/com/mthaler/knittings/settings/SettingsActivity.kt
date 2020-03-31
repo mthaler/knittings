@@ -2,14 +2,11 @@ package com.mthaler.knittings.settings
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.mthaler.knittings.BaseActivity
 import com.mthaler.knittings.R
 import kotlinx.android.synthetic.main.activity_settings.*
 
-const val KEY_CURRENT_THEME = "current_theme"
-const val LILAC_THEME = "lilac"
-const val MINT_THEME = "mint"
-
-class SettingsActivity : AppCompatActivity() {
+class SettingsActivity : BaseActivity() {
 
     /**
      * Called when the activity is starting. This is where most initialization should go: calling setContentView(int)

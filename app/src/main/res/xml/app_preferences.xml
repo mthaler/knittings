@@ -4,6 +4,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <androidx.preference.PreferenceCategory
+        android:title="Theme"
+        app:iconSpaceReserved="false">
+        <androidx.preference.SwitchPreferenceCompat
+            android:id="@+id/mintTheme"
+            android:title="Use mint theme"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:key="@string/key_mint_theme"/>
+    </androidx.preference.PreferenceCategory>
+    <androidx.preference.PreferenceCategory
         android:title="@string/pref_header_photos"
         app:iconSpaceReserved="false">
         <androidx.preference.SwitchPreferenceCompat

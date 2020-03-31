@@ -28,7 +28,7 @@
         <item name="android:textSize">30sp</item>
     </style>
     <!-- mint theme -->
-    <style name="Theme.App.Mint" parent="AppTheme">
+    <style name="Theme.App.Mint" parent="AppTheme.NoActionBar">
         <item name="colorPrimary">@color/mintColorPrimary</item>
         <item name="colorPrimaryDark">@color/mintColorPrimaryDark</item>
         <item name="colorAccent">@color/mintColorAccent</item>
