@@ -7,6 +7,7 @@
     <string name="logout">Abmelden</string>
 
     <!-- DropboxExportActivity -->
+    <string name="activity_dropbox_export_name">Dropbox Export</string>
     <string name="dropbox_login">An Dropbox anmelden</string>
     <string name="dropbox_export">Nach Dropbox exportieren</string>
     <string name="dropbox_export_files">Exportiere Dateien:</string>
