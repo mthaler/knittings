@@ -7,6 +7,7 @@ import android.os.Bundle
 import androidx.core.app.NavUtils
 import android.view.Menu
 import android.view.MenuItem
+import com.mthaler.knittings.BaseActivity
 import com.mthaler.knittings.photo.PhotoGalleryActivity
 import com.mthaler.knittings.R
 import com.mthaler.knittings.database.datasource
@@ -20,7 +21,7 @@ import kotlinx.android.synthetic.main.activity_knitting_details.*
 /**
  * Activity that displays knitting details (name, description, start time etc.)
  */
-class KnittingDetailsActivity : AppCompatActivity(), KnittingDetailsFragment.OnFragmentInteractionListener, AnkoLogger {
+class KnittingDetailsActivity : BaseActivity(), KnittingDetailsFragment.OnFragmentInteractionListener, AnkoLogger {
 
     // id of the displayed knitting
     private var knittingID: Long = -1
