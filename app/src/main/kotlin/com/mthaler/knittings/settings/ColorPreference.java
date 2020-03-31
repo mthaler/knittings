@@ -1,12 +1,16 @@
 package com.mthaler.knittings.settings;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import android.widget.ImageView;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceViewHolder;
 import com.mthaler.knittings.R;
+
+import petrov.kristiyan.colorpicker.ColorPicker;
 
 public class ColorPreference extends Preference {
 
@@ -53,6 +57,9 @@ public class ColorPreference extends Preference {
     @Override
     protected void onClick() {
         super.onClick();
+        Activity activity = scanForActivity(getContext());
+        ColorPicker colorPicker = new ColorPicker(activity);
+        colorPicker.show();
     }
 
     @Override
@@ -76,5 +83,16 @@ public class ColorPreference extends Preference {
 
     public int getValue() {
         return value;
+    }
+
+    private static Activity scanForActivity(Context cont) {
+        if (cont == null)
+            return null;
+        else if (cont instanceof Activity)
+            return (Activity)cont;
+        else if (cont instanceof ContextWrapper)
+            return scanForActivity(((ContextWrapper)cont).getBaseContext());
+
+        return null;
     }
 }

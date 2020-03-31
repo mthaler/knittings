@@ -11,7 +11,13 @@
             android:title="Use mint theme"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:key="@string/key_mint_theme"/>
+            android:key="@string/key_mint_theme"
+            app:iconSpaceReserved="false"/>
+        <com.mthaler.knittings.settings.ColorPreference
+            android:title="Color theme"
+            android:defaultValue="#FF0000"
+            android:key="theme"
+            app:iconSpaceReserved="false"/>
     </androidx.preference.PreferenceCategory>
     <androidx.preference.PreferenceCategory
         android:title="@string/pref_header_photos"
