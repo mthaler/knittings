@@ -2,9 +2,9 @@ package com.mthaler.knittings.details
 
 import android.app.Activity
 import android.content.Intent
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.support.v4.app.NavUtils
+import androidx.core.app.NavUtils
 import android.view.Menu
 import android.view.MenuItem
 import com.mthaler.knittings.photo.PhotoGalleryActivity

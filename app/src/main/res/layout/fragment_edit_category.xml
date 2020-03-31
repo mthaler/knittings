@@ -6,19 +6,19 @@
     android:orientation="vertical"
     tools:context=".category.EditCategoryFragment">
 
-    <android.support.design.widget.TextInputLayout
+    <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/category_name_input_layout_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp">
 
-        <android.support.design.widget.TextInputEditText android:id="@+id/category_name"
+        <com.google.android.material.textfield.TextInputEditText android:id="@+id/category_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
             android:hint="@string/edit_category_name_hint" />
-    </android.support.design.widget.TextInputLayout>
+    </com.google.android.material.textfield.TextInputLayout>
 
 
     <Button

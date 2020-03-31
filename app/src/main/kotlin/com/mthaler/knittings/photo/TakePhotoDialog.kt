@@ -6,7 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.preference.PreferenceManager
 import android.provider.MediaStore
-import android.support.v4.content.FileProvider
+import androidx.core.content.FileProvider
 import android.view.LayoutInflater
 import android.widget.Button
 import com.mthaler.knittings.R

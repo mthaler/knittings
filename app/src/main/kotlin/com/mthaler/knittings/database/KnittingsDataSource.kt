@@ -8,7 +8,7 @@ import org.jetbrains.anko.debug
 import java.io.File
 import java.util.ArrayList
 import java.util.Date
-import android.support.v4.app.Fragment
+import androidx.fragment.app.Fragment
 import com.mthaler.knittings.database.table.CategoryTable
 import com.mthaler.knittings.database.table.KnittingTable
 import com.mthaler.knittings.database.table.PhotoTable

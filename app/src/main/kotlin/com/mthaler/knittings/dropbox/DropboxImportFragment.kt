@@ -14,7 +14,7 @@ import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.support.v4.alert
 import org.jetbrains.anko.uiThread
-import android.support.v7.app.AlertDialog
+import androidx.appcompat.app.AlertDialog
 import com.mthaler.knittings.database.datasource
 import com.mthaler.knittings.model.Database
 

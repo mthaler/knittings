@@ -16,19 +16,19 @@
             android:scaleType="centerInside"
             android:contentDescription="@string/photo"/>
 
-        <android.support.design.widget.TextInputLayout
+        <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/photo_description_input_layout_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp">
-            <android.support.design.widget.TextInputEditText android:id="@+id/photo_description"
+            <com.google.android.material.textfield.TextInputEditText android:id="@+id/photo_description"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
                 android:gravity="top"
                 android:hint="@string/photo_description_hint" />
-        </android.support.design.widget.TextInputLayout>
+        </com.google.android.material.textfield.TextInputLayout>
     </LinearLayout>
 </ScrollView>
 

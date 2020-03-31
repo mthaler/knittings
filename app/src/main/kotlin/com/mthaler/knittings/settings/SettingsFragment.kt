@@ -3,8 +3,8 @@ package com.mthaler.knittings.settings
 import android.annotation.SuppressLint
 import android.os.Build
 import android.os.Bundle
-import android.support.v7.preference.*
-import android.support.v7.widget.RecyclerView
+import androidx.preference.*
+import androidx.recyclerview.widget.RecyclerView
 import android.view.View
 import android.view.ViewGroup
 import com.mthaler.knittings.R

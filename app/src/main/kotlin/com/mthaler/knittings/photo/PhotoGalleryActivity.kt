@@ -1,9 +1,9 @@
 package com.mthaler.knittings.photo
 
 import android.content.Intent
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.support.v4.app.NavUtils
+import androidx.core.app.NavUtils
 import android.view.MenuItem
 import com.mthaler.knittings.R
 import org.jetbrains.anko.AnkoLogger

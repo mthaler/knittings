@@ -3,7 +3,7 @@ package com.mthaler.knittings.dropbox
 import android.os.Bundle
 import com.mthaler.knittings.R
 import kotlinx.android.synthetic.main.activity_dropbox_export.*
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
 import org.jetbrains.anko.alert
