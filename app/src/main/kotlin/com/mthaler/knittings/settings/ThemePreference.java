@@ -6,6 +6,7 @@ import android.content.ContextWrapper;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import android.widget.ImageView;
+import androidx.core.content.ContextCompat;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceViewHolder;
 import com.mthaler.knittings.R;
@@ -14,7 +15,7 @@ import petrov.kristiyan.colorpicker.ColorPicker;
 public class ThemePreference extends Preference {
 
     private ColorShape colorShape = ColorShape.CIRCLE;
-    private int value = 0;
+    private Theme theme = Theme.Companion.getDefault();
     private int itemLayoutId = R.layout.pref_color_layout;
     private int itemLayoutLargeId = R.layout.pref_color_layout_large;
 
@@ -45,14 +46,15 @@ public class ThemePreference extends Preference {
         super.onBindViewHolder(holder);
         ImageView colorView = (ImageView) holder.findViewById(R.id.color_view);
         if (colorView != null) {
-            ColorUtils.setColorViewValue(colorView, value, false, colorShape);
+            int color = ContextCompat.getColor(getContext(), theme.getColorId());
+            ColorUtils.setColorViewValue(colorView, color, false, colorShape);
         }
     }
 
-    public void setValue(int value) {
+    public void setValue(Theme value) {
         if (callChangeListener(value)) {
-            this.value = value;
-            persistInt(value);
+            this.theme = value;
+            persistString(value.getName());
             notifyChanged();
         }
     }
@@ -68,7 +70,8 @@ public class ThemePreference extends Preference {
         colorPicker.setOnFastChooseColorListener(new ColorPicker.OnFastChooseColorListener() {
             @Override
             public void setOnFastChooseColorListener(int position, int color) {
-                setValue(color);
+                Theme theme = Theme.Companion.getTheme(position);
+                setValue(theme);
             }
 
             @Override
@@ -86,20 +89,22 @@ public class ThemePreference extends Preference {
 
     @Override
     protected Object onGetDefaultValue(TypedArray a, int index) {
-        return a.getInt(index, 0);
+        return a.getString(index);
     }
 
     @Override
     protected void onSetInitialValue(boolean restoreValue, Object defaultValue) {
-        setValue(restoreValue ? getPersistedInt(0) : (Integer) defaultValue);
+        String name = restoreValue ? getPersistedString("default") : (String) defaultValue;
+        Theme theme = Theme.Companion.getTheme(name);
+        setValue(theme);
     }
 
     public String getFragmentTag() {
         return "color_" + getKey();
     }
 
-    public int getValue() {
-        return value;
+    public Theme getValue() {
+        return theme;
     }
 
     private static Activity scanForActivity(Context cont) {

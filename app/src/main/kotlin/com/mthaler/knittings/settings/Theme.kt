@@ -28,5 +28,12 @@ data class Theme(val name: String, val colorId: Int) {
             return result;
         }
 
+        fun getTheme(index: Int): Theme {
+            if (index >= 0 && index < themes.size) {
+                return themes[index]
+            } else {
+                return default
+            }
+        }
     }
 }

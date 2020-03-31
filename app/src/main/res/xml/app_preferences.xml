@@ -15,7 +15,7 @@
             app:iconSpaceReserved="false"/>
         <com.mthaler.knittings.settings.ThemePreference
             android:title="Color theme"
-            android:defaultValue="#FF0000"
+            android:defaultValue="default"
             android:key="theme"
             app:iconSpaceReserved="false"/>
     </androidx.preference.PreferenceCategory>
