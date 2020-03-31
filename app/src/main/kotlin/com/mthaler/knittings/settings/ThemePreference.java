@@ -11,31 +11,31 @@ import androidx.preference.PreferenceViewHolder;
 import com.mthaler.knittings.R;
 import petrov.kristiyan.colorpicker.ColorPicker;
 
-public class ColorPreference extends Preference {
+public class ThemePreference extends Preference {
 
     private ColorShape colorShape = ColorShape.CIRCLE;
     private int value = 0;
     private int itemLayoutId = R.layout.pref_color_layout;
     private int itemLayoutLargeId = R.layout.pref_color_layout_large;
 
-    public ColorPreference(Context context) {
+    public ThemePreference(Context context) {
         super(context);
         initAttrs(null, 0);
     }
 
-    public ColorPreference(Context context, AttributeSet attrs) {
+    public ThemePreference(Context context, AttributeSet attrs) {
         super(context, attrs);
         initAttrs(attrs, 0);
     }
 
-    public ColorPreference(Context context, AttributeSet attrs, int defStyle) {
+    public ThemePreference(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         initAttrs(attrs, defStyle);
     }
 
     private void initAttrs(AttributeSet attrs, int defStyle) {
         TypedArray a = getContext().getTheme().obtainStyledAttributes(
-                attrs, R.styleable.ColorPreference, defStyle, defStyle);
+                attrs, R.styleable.ThemePreference, defStyle, defStyle);
         PreviewSize previewSize = PreviewSize.NORMAL;
         setWidgetLayoutResource(previewSize == PreviewSize.NORMAL ? itemLayoutId : itemLayoutLargeId);
     }

@@ -13,7 +13,7 @@
             android:layout_height="wrap_content"
             android:key="@string/key_mint_theme"
             app:iconSpaceReserved="false"/>
-        <com.mthaler.knittings.settings.ColorPreference
+        <com.mthaler.knittings.settings.ThemePreference
             android:title="Color theme"
             android:defaultValue="#FF0000"
             android:key="theme"

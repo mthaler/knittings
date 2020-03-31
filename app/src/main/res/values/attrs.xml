@@ -14,7 +14,7 @@
         <enum name="normal" value="1" />
         <enum name="large" value="2" />
     </attr>
-    <declare-styleable name="ColorPreference">
+    <declare-styleable name="ThemePreference">
         <attr name="colorChoices" />
         <attr name="numColumns" />
         <attr name="colorShape" />
