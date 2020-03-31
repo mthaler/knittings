@@ -1,6 +1,5 @@
 package com.mthaler.knittings.settings
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.mthaler.knittings.BaseActivity
 import com.mthaler.knittings.R
