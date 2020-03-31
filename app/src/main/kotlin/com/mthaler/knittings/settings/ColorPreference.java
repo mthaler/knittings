@@ -9,7 +9,6 @@ import android.widget.ImageView;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceViewHolder;
 import com.mthaler.knittings.R;
-
 import petrov.kristiyan.colorpicker.ColorPicker;
 
 public class ColorPreference extends Preference {
@@ -59,6 +58,19 @@ public class ColorPreference extends Preference {
         super.onClick();
         Activity activity = scanForActivity(getContext());
         ColorPicker colorPicker = new ColorPicker(activity);
+        colorPicker.setColorButtonDrawable(petrov.kristiyan.colorpicker.R.drawable.round_button);
+        colorPicker.setColorButtonMargin(6, 6,6, 6);
+        colorPicker.setOnFastChooseColorListener(new ColorPicker.OnFastChooseColorListener() {
+            @Override
+            public void setOnFastChooseColorListener(int position, int color) {
+
+            }
+
+            @Override
+            public void onCancel() {
+
+            }
+        });
         colorPicker.show();
     }
 
