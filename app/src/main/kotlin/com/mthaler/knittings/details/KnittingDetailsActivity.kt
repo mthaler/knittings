@@ -2,7 +2,6 @@ package com.mthaler.knittings.details
 
 import android.app.Activity
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.core.app.NavUtils
 import android.view.Menu

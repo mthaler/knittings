@@ -1,10 +1,10 @@
 package com.mthaler.knittings.photo
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.core.app.NavUtils
 import android.view.MenuItem
+import com.mthaler.knittings.BaseActivity
 import com.mthaler.knittings.R
 import com.mthaler.knittings.database.datasource
 import org.jetbrains.anko.AnkoLogger
@@ -15,7 +15,7 @@ import kotlinx.android.synthetic.main.activity_photo.*
 /**
  * Activity that displays a photo and allow to delete the photo and use photo as preview in knitting list
  */
-class PhotoActivity : AppCompatActivity(), AnkoLogger {
+class PhotoActivity : BaseActivity(), AnkoLogger {
 
     private var knittingID = -1L
 

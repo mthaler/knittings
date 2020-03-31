@@ -1,7 +1,6 @@
 package com.mthaler.knittings.category
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.core.app.NavUtils
 import android.view.MenuItem
