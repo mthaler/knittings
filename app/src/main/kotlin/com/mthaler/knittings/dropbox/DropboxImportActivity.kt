@@ -1,14 +1,14 @@
 package com.mthaler.knittings.dropbox
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.mthaler.knittings.BaseActivity
 import com.mthaler.knittings.R
 import kotlinx.android.synthetic.main.activity_dropbox_import.*
 
 /**
  * Activity that handles Dropbox import
  */
-class DropboxImportActivity : AppCompatActivity() {
+class DropboxImportActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -3,9 +3,9 @@ package com.mthaler.knittings.dropbox
 import android.os.Bundle
 import com.mthaler.knittings.R
 import kotlinx.android.synthetic.main.activity_dropbox_export.*
-import androidx.appcompat.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
+import com.mthaler.knittings.BaseActivity
 import org.jetbrains.anko.alert
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
@@ -13,7 +13,7 @@ import org.jetbrains.anko.uiThread
 /**
  * Activity that handles Dropbox export
  */
-class DropboxExportActivity : AppCompatActivity() {
+class DropboxExportActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
