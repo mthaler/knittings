@@ -16,6 +16,7 @@
     <string name="dropbox_export_dialog_export_button">Export</string>
 
     <!-- DropboxImportActivity -->
+    <string name="activity_dropbox_import_name">Dropbox Import</string>
     <string name="dropbox_import">Import from Dropbox</string>
     <string name="dropbox_import_files">Importing files:</string>
 
