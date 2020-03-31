@@ -27,4 +27,10 @@
         parent="@android:style/Widget.TextView.SpinnerItem">
         <item name="android:textSize">30sp</item>
     </style>
+    <!-- mint theme -->
+    <style name="Theme.App.Mint" parent="AppTheme">
+        <item name="colorPrimary">@color/mintColorPrimary</item>
+        <item name="colorPrimaryDark">@color/mintColorPrimaryDark</item>
+        <item name="colorAccent">@color/mintColorAccent</item>
+    </style>
 </resources>

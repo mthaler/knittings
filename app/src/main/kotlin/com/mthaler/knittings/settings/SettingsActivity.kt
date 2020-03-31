@@ -5,6 +5,10 @@ import android.os.Bundle
 import com.mthaler.knittings.R
 import kotlinx.android.synthetic.main.activity_settings.*
 
+const val KEY_CURRENT_THEME = "current_theme"
+const val LILAC_THEME = "lilac"
+const val MINT_THEME = "mint"
+
 class SettingsActivity : AppCompatActivity() {
 
     /**
