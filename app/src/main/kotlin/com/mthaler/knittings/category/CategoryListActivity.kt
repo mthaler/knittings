@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.core.app.NavUtils
 import android.view.MenuItem
+import com.mthaler.knittings.BaseActivity
 import com.mthaler.knittings.R
 import com.mthaler.knittings.database.datasource
 import com.mthaler.knittings.model.Category
@@ -14,7 +15,7 @@ import kotlinx.android.synthetic.main.activity_category_list.*
  * CategoryListActivity displays a list of categories. The user can add a new category by clicking
  * the floating action button and edit existing categories by clicking the category.
  */
-class CategoryListActivity : AppCompatActivity(), CategoryListFragment.OnFragmentInteractionListener {
+class CategoryListActivity : BaseActivity(), CategoryListFragment.OnFragmentInteractionListener {
 
     /**
      * Called when the activity is starting. This is where most initialization should go: calling setContentView(int)
