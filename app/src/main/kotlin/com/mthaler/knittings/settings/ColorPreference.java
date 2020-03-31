@@ -15,6 +15,8 @@ public class ColorPreference extends Preference {
 
     private ColorShape colorShape = ColorShape.CIRCLE;
     private int value = 0;
+    private int itemLayoutId = R.layout.pref_color_layout;
+    private int itemLayoutLargeId = R.layout.pref_color_layout_large;
 
     public ColorPreference(Context context) {
         super(context);
@@ -34,6 +36,8 @@ public class ColorPreference extends Preference {
     private void initAttrs(AttributeSet attrs, int defStyle) {
         TypedArray a = getContext().getTheme().obtainStyledAttributes(
                 attrs, R.styleable.ColorPreference, defStyle, defStyle);
+        PreviewSize previewSize = PreviewSize.NORMAL;
+        setWidgetLayoutResource(previewSize == PreviewSize.NORMAL ? itemLayoutId : itemLayoutLargeId);
     }
 
     @Override
@@ -63,7 +67,7 @@ public class ColorPreference extends Preference {
         colorPicker.setOnFastChooseColorListener(new ColorPicker.OnFastChooseColorListener() {
             @Override
             public void setOnFastChooseColorListener(int position, int color) {
-
+                setValue(color);
             }
 
             @Override
