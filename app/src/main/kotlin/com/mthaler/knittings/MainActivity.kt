@@ -38,7 +38,7 @@ import java.util.*
  * The main activity that gets displayed when the app is started. It displays a list of knitting projects.
  * The user can add new projects or edit existing ones
  */
-class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener, SearchView.OnQueryTextListener, SearchView.OnCloseListener {
+class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedListener, SearchView.OnQueryTextListener, SearchView.OnCloseListener {
 
     private var sorting: Sorting = Sorting.NewestFirst
     private var filter: CombinedFilter = CombinedFilter.Empty
