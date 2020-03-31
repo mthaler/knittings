@@ -64,6 +64,7 @@ public class ThemePreference extends Preference {
         ColorPicker colorPicker = new ColorPicker(activity);
         colorPicker.setColorButtonDrawable(petrov.kristiyan.colorpicker.R.drawable.round_button);
         colorPicker.setColorButtonMargin(6, 6,6, 6);
+        colorPicker.setColors(Theme.Companion.getColors(getContext()));
         colorPicker.setOnFastChooseColorListener(new ColorPicker.OnFastChooseColorListener() {
             @Override
             public void setOnFastChooseColorListener(int position, int color) {
