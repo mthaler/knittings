@@ -4,14 +4,13 @@ import android.content.Context
 import androidx.core.content.ContextCompat
 import com.mthaler.knittings.R
 
-
-data class Theme(val name: String, val colorId: Int) {
+data class Theme(val name: String, val colorId: Int, val themeId: Int) {
 
     companion object {
 
-        val default = Theme("default", R.color.colorPrimary)
+        val default = Theme("default", R.color.colorPrimary, R.style.AppTheme_NoActionBar)
 
-        val themes = listOf(default, Theme("mint", R.color.mintColorPrimary))
+        val themes = listOf(default, Theme("mint", R.color.mintColorPrimary, R.style.Theme_App_Mint))
 
         fun getTheme(name: String): Theme {
             val result = themes.find { it.name == name }
