@@ -5,12 +5,13 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.core.app.NavUtils
 import android.view.MenuItem
+import com.mthaler.knittings.BaseActivity
 import com.mthaler.knittings.R
 import com.mthaler.knittings.database.datasource
 import com.mthaler.knittings.model.Needle
 import kotlinx.android.synthetic.main.activity_needle_list.*
 
-class NeedleListActivity : AppCompatActivity(), NeedleListFragment.OnFragmentInteractionListener {
+class NeedleListActivity : BaseActivity(), NeedleListFragment.OnFragmentInteractionListener {
 
     /**
      * Called when the activity is starting. This is where most initialization should go: calling setContentView(int)
