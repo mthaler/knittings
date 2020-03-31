@@ -87,7 +87,7 @@ class EditCategoryFragment : Fragment() {
                 override fun onCancel() {
                 }
             })
-            colorPicker.setColors(COLORS)
+            colorPicker.setColors(R.array.category_colors)
             colorPicker.setColorButtonDrawable(petrov.kristiyan.colorpicker.R.drawable.round_button)
             colorPicker.setColorButtonMargin(6, 6,6, 6)
             colorPicker.setColumns(4)
@@ -169,8 +169,5 @@ class EditCategoryFragment : Fragment() {
                     putLong(EXTRA_CATEGORY_ID, categoryID)
                 }
             }
-
-        val COLORS = arrayListOf("#F6402C", "#EB1460", "#9C1AB1", "#6633B9", "#3D4DB7", "#1093F5", "#00A6F6", "#00BBD5", "#009687", "#46AF4A",
-                "#88C440", "#CCDD1E", "#FFEC16", "#FFC100", "#FF9800", "#FF5505", "#7A5547", "#9D9D9D", "#5E7C8B")
     }
 }
