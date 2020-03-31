@@ -7,16 +7,17 @@ import androidx.core.app.NavUtils
 import android.view.MenuItem
 import android.view.View
 import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
+import com.mthaler.knittings.BaseActivity
 import com.mthaler.knittings.R
 import com.mthaler.knittings.database.datasource
 import com.mthaler.knittings.Extras.EXTRA_KNITTING_ID
 import java.util.*
+import kotlinx.android.synthetic.main.activity_stopwatch.*
 
 /**
  * StopWatchActivity shows a stopwatch that can be used to measure the time the user is working on a knitting
  */
-class StopwatchActivity : AppCompatActivity() {
+class StopwatchActivity : BaseActivity() {
 
     private var knittingID: Long = -1
     private var elapsedTime = 0L
@@ -27,6 +28,11 @@ class StopwatchActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_stopwatch)
+
+        setSupportActionBar(toolbar)
+
+        // enable up navigation
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         // get the knitting for the stopwatch
         val id = if (savedInstanceState != null) savedInstanceState.getLong(EXTRA_KNITTING_ID) else intent.getLongExtra(EXTRA_KNITTING_ID, -1L)

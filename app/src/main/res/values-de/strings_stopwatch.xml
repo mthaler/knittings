@@ -2,6 +2,7 @@
 <!-- string resources for stopwatch package -->
 <resources>
     <!-- stopwatch -->
+    <string name="activity_stopwatch_name">Stopwatch</string>
     <string name="stopwatch">Stopwatch</string>
     <string name="stopwatch_start">Start</string>
     <string name="stopwatch_stop">Stop</string>
