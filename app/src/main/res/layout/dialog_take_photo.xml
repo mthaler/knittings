@@ -15,7 +15,7 @@
         android:textColor="#ffffff"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textStyle="normal"
-        android:background="@color/colorPrimaryDark"
+        android:background="?colorPrimaryDark"
         android:paddingLeft="16dp"
         android:paddingRight="16dp"
         android:paddingTop="8dp"
