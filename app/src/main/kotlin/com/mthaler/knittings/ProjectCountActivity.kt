@@ -1,10 +1,9 @@
 package com.mthaler.knittings
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import kotlinx.android.synthetic.main.activity_project_count.*
 
-class ProjectCountActivity : AppCompatActivity() {
+class ProjectCountActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
