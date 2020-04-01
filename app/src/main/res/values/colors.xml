@@ -20,7 +20,7 @@
     <color name="mintButtonText">#FFFFFF</color>
     <!-- rose theme -->
     <color name="roseColorPrimary">#f48fb1</color>
-    <color name="roseColorPrimaryDark">#e91e63</color>
+    <color name="roseColorPrimaryDark">#E14D7F</color>
     <color name="roseColorAccent">#03a9f4</color>
     <color name="rosePrimaryText">#424242</color>
     <color name="roseButtonNormal">#f48fb1</color>
