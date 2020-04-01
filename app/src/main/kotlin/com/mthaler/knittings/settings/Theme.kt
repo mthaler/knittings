@@ -9,8 +9,10 @@ data class Theme(val name: String, val colorId: Int, val themeId: Int) {
     companion object {
 
         val default = Theme("default", R.color.colorPrimary, R.style.AppTheme_NoActionBar)
+        val mint = Theme("mint", R.color.mintColorPrimary, R.style.Theme_App_Mint)
+        val rose = Theme("rose", R.color.roseColorPrimary, R.style.Theme_App_Rose)
 
-        val themes = listOf(default, Theme("mint", R.color.mintColorPrimary, R.style.Theme_App_Mint))
+        val themes = listOf(default, mint, rose)
 
         fun getTheme(name: String): Theme {
             val result = themes.find { it.name == name }

@@ -33,4 +33,10 @@
         <item name="colorPrimaryDark">@color/mintColorPrimaryDark</item>
         <item name="colorAccent">@color/mintColorAccent</item>
     </style>
+    <!-- rose theme -->
+    <style name="Theme.App.Rose" parent="AppTheme.NoActionBar">
+        <item name="colorPrimary">@color/roseColorPrimary</item>
+        <item name="colorPrimaryDark">@color/roseColorPrimaryDark</item>
+        <item name="colorAccent">@color/roseColorAccent</item>
+    </style>
 </resources>
