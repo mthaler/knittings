@@ -4,10 +4,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <androidx.preference.PreferenceCategory
-        android:title="Theme"
+        android:title="@string/pref_header_theme"
         app:iconSpaceReserved="false">
         <com.mthaler.knittings.settings.ThemePreference
-            android:title="Color theme"
+            android:title="@string/pref_color_theme"
             android:defaultValue="default"
             android:key="theme"
             app:iconSpaceReserved="false"/>
