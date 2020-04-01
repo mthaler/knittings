@@ -26,4 +26,12 @@
     <color name="roseButtonNormal">#f48fb1</color>
     <color name="roseButtonHighlight">#f8bbd0</color>
     <color name="roseButtonText">#FFFFFF</color>
+    <!-- sky theme -->
+    <color name="skyColorPrimary">#03a9f4</color>
+    <color name="skyColorPrimaryDark">#1580B1</color>
+    <color name="skyColorAccent">#f44336</color>
+    <color name="skyPrimaryText">#424242</color>
+    <color name="skyButtonNormal">#03a9f4</color>
+    <color name="skyButtonHighlight">#9FD9F3</color>
+    <color name="skyButtonText">#FFFFFF</color>
 </resources>

@@ -39,4 +39,9 @@
         <item name="colorPrimaryDark">@color/roseColorPrimaryDark</item>
         <item name="colorAccent">@color/roseColorAccent</item>
     </style>
+    <style name="Theme.App.Sky" parent="AppTheme.NoActionBar">
+        <item name="colorPrimary">@color/skyColorPrimary</item>
+        <item name="colorPrimaryDark">@color/skyColorPrimaryDark</item>
+        <item name="colorAccent">@color/skyColorAccent</item>
+    </style>
 </resources>
