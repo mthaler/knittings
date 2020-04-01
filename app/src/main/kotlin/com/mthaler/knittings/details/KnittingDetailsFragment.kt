@@ -86,11 +86,9 @@ class KnittingDetailsFragment : Fragment(), AnkoLogger {
      * @param menu The options menu in which you place your items.
      * @param inflater MenuInflater
      */
-    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
-        if (menu != null && inflater != null) {
-            inflater.inflate(R.menu.knitting_details_fragment, menu)
-        }
+        inflater.inflate(R.menu.knitting_details_fragment, menu)
     }
 
     /**
@@ -99,21 +97,17 @@ class KnittingDetailsFragment : Fragment(), AnkoLogger {
      * @param item the menu item that was selected.
      * @return return false to allow normal menu processing to proceed, true to consume it here.
      */
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        if (item != null) {
-            return when (item.itemId) {
-                R.id.menu_item_show_stopwatch -> {
-                    listener?.startStopwatch(knitting.id)
-                    true
-                }
-                R.id.menu_item_delete_knitting -> {
-                    listener?.deleteKnitting(knitting.id)
-                    return true
-                }
-                else -> super.onOptionsItemSelected(item)
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.menu_item_show_stopwatch -> {
+                listener?.startStopwatch(knitting.id)
+                true
             }
-        } else {
-            return super.onOptionsItemSelected(item)
+            R.id.menu_item_delete_knitting -> {
+                listener?.deleteKnitting(knitting.id)
+                return true
+            }
+            else -> super.onOptionsItemSelected(item)
         }
     }
 

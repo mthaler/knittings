@@ -185,11 +185,9 @@ class EditNeedleFragment : Fragment() {
      * @param menu The options menu in which you place your items.
      * @param inflater MenuInflater
      */
-    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
-        if (menu != null && inflater != null) {
-            inflater.inflate(R.menu.edit_needle, menu)
-        }
+        inflater.inflate(R.menu.edit_needle, menu)
     }
 
     /**
@@ -213,17 +211,13 @@ class EditNeedleFragment : Fragment() {
      * @param item the menu item that was selected.
      * @return return false to allow normal menu processing to proceed, true to consume it here.
      */
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        if (item != null) {
-            return when (item.itemId) {
-                R.id.menu_item_delete_needle -> {
-                    showDeleteDialog()
-                    true
-                }
-                else -> super.onOptionsItemSelected(item)
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.menu_item_delete_needle -> {
+                showDeleteDialog()
+                true
             }
-        } else {
-            return super.onOptionsItemSelected(item)
+            else -> super.onOptionsItemSelected(item)
         }
     }
 

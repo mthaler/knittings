@@ -118,11 +118,9 @@ class PhotoGalleryFragment : Fragment(), AnkoLogger {
      * @param menu The options menu in which you place your items.
      * @param inflater MenuInflater
      */
-    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
-        if (menu != null && inflater != null) {
-            inflater.inflate(R.menu.photo_gallery, menu)
-        }
+        inflater.inflate(R.menu.photo_gallery, menu)
     }
 
     /**
@@ -131,20 +129,16 @@ class PhotoGalleryFragment : Fragment(), AnkoLogger {
      * @param item the menu item that was selected.
      * @return return false to allow normal menu processing to proceed, true to consume it here.
      */
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        if (item != null) {
-            return when (item.itemId) {
-                R.id.menu_item_add_photo -> {
-                    context?.let {
-                        val d = TakePhotoDialog.create(it, layoutInflater, knitting.id, this::takePhoto, this::importPhoto)
-                        d.show()
-                    }
-                    true
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.menu_item_add_photo -> {
+                context?.let {
+                    val d = TakePhotoDialog.create(it, layoutInflater, knitting.id, this::takePhoto, this::importPhoto)
+                    d.show()
                 }
-                else -> super.onOptionsItemSelected(item)
+                true
             }
-        } else {
-            return super.onOptionsItemSelected(item)
+            else -> super.onOptionsItemSelected(item)
         }
     }
 

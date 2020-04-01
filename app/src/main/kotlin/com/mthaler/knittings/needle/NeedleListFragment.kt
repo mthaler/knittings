@@ -63,11 +63,9 @@ class NeedleListFragment : Fragment() {
      * @param menu The options menu in which you place your items.
      * @param inflater MenuInflater
      */
-    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
-        if (menu != null && inflater != null) {
-            inflater.inflate(R.menu.needle_list, menu)
-        }
+        inflater.inflate(R.menu.needle_list, menu)
     }
 
     /**
@@ -76,45 +74,40 @@ class NeedleListFragment : Fragment() {
      * @param item the menu item that was selected.
      * @return return false to allow normal menu processing to proceed, true to consume it here.
      */
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        val c = context
-        if (item != null && c != null) {
-            return when (item.itemId) {
-                R.id.menu_item_filter -> {
-                    context?.let {
-                        val needles = datasource.allNeedles
-                        val types = NeedleType.formattedValues(c)
-                        val listItems = (listOf(getString(R.string.filter_show_all)) + types).toTypedArray()
-                        val builder = AlertDialog.Builder(it)
-                        val f = filter
-                        val checkedItem = when (f) {
-                            is NoFilter -> 0
-                            is SingleTypeFilter -> {
-                                val index = NeedleType.values().indexOf(f.type)
-                                index + 1
-                            }
-                            else -> throw Exception("Unknown filter: $f")
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.menu_item_filter -> {
+                context?.let {
+                    val needles = datasource.allNeedles
+                    val types = NeedleType.formattedValues(it)
+                    val listItems = (listOf(getString(R.string.filter_show_all)) + types).toTypedArray()
+                    val builder = AlertDialog.Builder(it)
+                    val f = filter
+                    val checkedItem = when (f) {
+                        is NoFilter -> 0
+                        is SingleTypeFilter -> {
+                            val index = NeedleType.values().indexOf(f.type)
+                            index + 1
                         }
-                        builder.setSingleChoiceItems(listItems, checkedItem) { dialog, which -> when(which) {
-                            0 -> filter = NoFilter
-                            else -> {
-                                val type = NeedleType.values()[which - 1]
-                                filter = SingleTypeFilter(type)
-                            }
-                        }
-                            updateNeedleList()
-                            dialog.dismiss()
-                        }
-                        builder.setNegativeButton(R.string.dialog_button_cancel) { dialog, which -> dialog.dismiss() }
-                        val dialog = builder.create()
-                        dialog.show()
+                        else -> throw Exception("Unknown filter: $f")
                     }
-                    true
+                    builder.setSingleChoiceItems(listItems, checkedItem) { dialog, which -> when(which) {
+                        0 -> filter = NoFilter
+                        else -> {
+                            val type = NeedleType.values()[which - 1]
+                            filter = SingleTypeFilter(type)
+                        }
+                    }
+                        updateNeedleList()
+                        dialog.dismiss()
+                    }
+                    builder.setNegativeButton(R.string.dialog_button_cancel) { dialog, which -> dialog.dismiss() }
+                    val dialog = builder.create()
+                    dialog.show()
                 }
-                else -> super.onOptionsItemSelected(item)
+                true
             }
-        } else {
-            return super.onOptionsItemSelected(item)
+            else -> super.onOptionsItemSelected(item)
         }
     }
 

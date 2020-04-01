@@ -21,7 +21,9 @@ class SettingsFragment : PreferenceFragmentCompat() {
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         // Load the Preferences from the XML file
         addPreferencesFromResource(R.xml.app_preferences)
-        bindPreferenceSummaryToValue(findPreference(resources.getString(R.string.key_share_photo_size)))
+        findPreference<Preference>(resources.getString(R.string.key_share_photo_size))?.let {
+            bindPreferenceSummaryToValue(it)
+        }
     }
 
     // TODO: this is a hack to remove the left margin from the PreferenceCategory

@@ -105,11 +105,9 @@ class EditCategoryFragment : Fragment() {
      * @param menu The options menu in which you place your items.
      * @param inflater MenuInflater
      */
-    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
-        if (menu != null && inflater != null) {
-            inflater.inflate(R.menu.edit_category, menu)
-        }
+        inflater.inflate(R.menu.edit_category, menu)
     }
 
     /**
@@ -118,24 +116,20 @@ class EditCategoryFragment : Fragment() {
      * @param item the menu item that was selected.
      * @return return false to allow normal menu processing to proceed, true to consume it here.
      */
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        if (item != null) {
-            return when (item.itemId) {
-                R.id.menu_item_delete_category -> {
-                    context?.let {
-                        DeleteCategoryDialog.create(it, category, {
-                            // delete database entry
-                            datasource.deleteCategory(category)
-                            // go back to the previous fragment which is the category list
-                            fragmentManager?.popBackStack()
-                        }).show()
-                    }
-                    true
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.menu_item_delete_category -> {
+                context?.let {
+                    DeleteCategoryDialog.create(it, category, {
+                        // delete database entry
+                        datasource.deleteCategory(category)
+                        // go back to the previous fragment which is the category list
+                        fragmentManager?.popBackStack()
+                    }).show()
                 }
-                else -> super.onOptionsItemSelected(item)
+                true
             }
-        } else {
-            return super.onOptionsItemSelected(item)
+            else -> super.onOptionsItemSelected(item)
         }
     }
 

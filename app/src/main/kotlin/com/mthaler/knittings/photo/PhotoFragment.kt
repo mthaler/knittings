@@ -89,14 +89,14 @@ class PhotoFragment : Fragment(), AnkoLogger {
         return v
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        inflater?.inflate(R.menu.photo, menu)
         super.onCreateOptionsMenu(menu, inflater)
+        inflater.inflate(R.menu.photo, menu)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        return when (item!!.itemId) {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
             R.id.menu_item_delete_photo -> {
                 showDeletePhotoDialog()
                 true

@@ -10,7 +10,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
-import com.mthaler.knittings.Extras
 import com.mthaler.knittings.R
 import com.mthaler.knittings.TextWatcher
 import com.mthaler.knittings.category.SelectCategoryActivity
@@ -82,20 +81,22 @@ class EditKnittingDetailsFragment : Fragment() {
         // we need to set this in code because older android versions (API <21) do not support vector drawables with drawableLeft
         textViewStarted.setCompoundDrawablesWithIntrinsicBounds(AppCompatResources.getDrawable(inflater.context, R.drawable.ic_date_range_black_24dp), null, null, null)
         textViewStarted.setOnClickListener {
-            val fm = fragmentManager
-            val dialog = DatePickerFragment.newInstance(knitting.started)
-            dialog.setTargetFragment(this, REQUEST_STARTED)
-            dialog.show(fm, DIALOG_DATE)
+            fragmentManager?.let {
+                val dialog = DatePickerFragment.newInstance(knitting.started)
+                dialog.setTargetFragment(this, REQUEST_STARTED)
+                dialog.show(it, DIALOG_DATE)
+            }
         }
 
         textViewFinished = v.findViewById(R.id.knitting_finished)
         // we need to set this in code because older android versions (API <21) do not support vector drawables with drawableLeft
         textViewFinished.setCompoundDrawablesWithIntrinsicBounds(AppCompatResources.getDrawable(inflater.context, R.drawable.ic_date_range_black_24dp), null, null, null)
         textViewFinished.setOnClickListener {
-            val fm = fragmentManager
-            val dialog = DatePickerFragment.newInstance(if (knitting.finished != null) knitting.finished else Date())
-            dialog.setTargetFragment(this, REQUEST_FINISHED)
-            dialog.show(fm, DIALOG_DATE)
+            fragmentManager?.let {
+                val dialog = DatePickerFragment.newInstance(if (knitting.finished != null) knitting.finished else Date())
+                dialog.setTargetFragment(this, REQUEST_FINISHED)
+                dialog.show(it, DIALOG_DATE)
+            }
         }
 
         val editTextNeedleDiameter = v.findViewById<EditText>(R.id.knitting_needle_diameter)
