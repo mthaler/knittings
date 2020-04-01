@@ -87,8 +87,9 @@ class EditCategoryFragment : Fragment() {
                 override fun onCancel() {
                 }
             })
+            colorPicker.setTitle(resources.getString(R.string.category_color_dialog_title))
             colorPicker.setColors(R.array.category_colors)
-            colorPicker.setColorButtonDrawable(petrov.kristiyan.colorpicker.R.drawable.round_button)
+            colorPicker.setRoundColorButton(true)
             colorPicker.setColorButtonMargin(6, 6,6, 6)
             colorPicker.setColumns(4)
             colorPicker.show()
