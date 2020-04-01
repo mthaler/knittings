@@ -26,7 +26,7 @@ data class Theme(val name: String, val colorId: Int, val themeId: Int) {
                 val s = java.lang.String.format("#%06X", 0xFFFFFF and c)
                 result.add(s)
             }
-            return result;
+            return result
         }
 
         fun getTheme(index: Int): Theme {

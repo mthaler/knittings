@@ -1,6 +1,5 @@
 package com.mthaler.knittings
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.google.android.material.navigation.NavigationView
 import androidx.core.view.GravityCompat
