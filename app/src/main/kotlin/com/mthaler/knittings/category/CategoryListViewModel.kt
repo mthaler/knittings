@@ -19,4 +19,9 @@ class CategoryListViewModel(application: Application): AndroidViewModel(applicat
     override fun databaseChanged() {
         categories.setMutVal(datasource.allCategories)
     }
+
+    override fun onCleared() {
+        super.onCleared()
+        datasource.removeObserver(this)
+    }
 }
