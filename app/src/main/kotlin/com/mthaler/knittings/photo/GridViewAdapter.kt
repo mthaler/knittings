@@ -62,7 +62,7 @@ class GridViewAdapter(context: Context, private val layoutResourceId: Int, priva
                     val height = imageView.measuredHeight
                     val filename = item.filename.absolutePath
                     doAsync {
-                        val imageSize = if (displayPhotoSize) File(item.filename.absolutePath).length() else 0L
+                        val imageSize = if (displayPhotoSize) File(filename).length() else 0L
                         val orientation = PictureUtils.getOrientation(filename)
                         val photo = PictureUtils.decodeSampledBitmapFromPath(filename, width, height)
                         val rotatedPhoto = PictureUtils.rotateBitmap(photo, orientation)
