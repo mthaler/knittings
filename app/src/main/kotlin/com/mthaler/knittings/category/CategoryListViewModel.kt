@@ -9,8 +9,8 @@ import com.mthaler.knittings.utils.setMutVal
 
 class CategoryListViewModel(application: Application): AndroidViewModel(application), DatabaseObserver {
 
-    val datasource = KnittingsDataSource.getInstance(application.applicationContext)
-    private val categories = MutableLiveData(datasource.allCategories)
+    private val datasource = KnittingsDataSource.getInstance(application.applicationContext)
+    val categories = MutableLiveData(datasource.allCategories)
 
     init {
         datasource.addObserver(this)

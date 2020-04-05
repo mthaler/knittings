@@ -9,9 +9,12 @@ import androidx.appcompat.view.ActionMode
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import android.view.*
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import com.mthaler.knittings.Extras
 import com.mthaler.knittings.R
 import com.mthaler.knittings.database.datasource
+import com.mthaler.knittings.model.Category
 import kotlinx.android.synthetic.main.fragment_category_list.*
 
 class CategoryListFragment : Fragment() {
@@ -67,18 +70,20 @@ class CategoryListFragment : Fragment() {
         return v
     }
 
-    override fun onResume() {
-        super.onResume()
-        updateCategoryList()
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        val viewModel = ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory.getInstance(activity!!.application)).get(CategoryListViewModel::class.java)
+        viewModel.categories.observe(viewLifecycleOwner, Observer { categories ->
+            updateCategoryList(categories)
+        })
     }
 
     /**
      * Updates the list of categories
      */
-    private fun updateCategoryList() {
+    private fun updateCategoryList(categories: ArrayList<Category>) {
         view?.let {
             val rv = it.findViewById<RecyclerView>(R.id.category_recycler_view)
-            val categories = datasource.allCategories
             // show image if category list is empty
             if (categories.isEmpty()) {
                 category_empty_recycler_view.visibility = View.VISIBLE
@@ -106,7 +111,6 @@ class CategoryListFragment : Fragment() {
                                 this@CategoryListFragment.activity?.let {
                                     DeleteCategoryDialog.create(it, category, {
                                         datasource.deleteCategory(category)
-                                        updateCategoryList()
                                     }).show()
                                 }
                                 mode?.finish()
@@ -116,7 +120,6 @@ class CategoryListFragment : Fragment() {
                                 val newName = "${category.name} - ${getString(R.string.copy)}"
                                 val categoryCopy = category.copy(name = newName)
                                 datasource.addCategory(categoryCopy)
-                                updateCategoryList()
                                 mode?.finish()
                                 return true
                             }
