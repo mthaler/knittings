@@ -15,7 +15,7 @@
     <androidx.preference.PreferenceCategory
         android:title="@string/pref_header_photos"
         app:iconSpaceReserved="false">
-        <androidx.preference.CheckBoxPreference
+        <androidx.preference.SwitchPreferenceCompat
             android:key="@string/key_photos_use_newest_as_preview"
             android:title="@string/pref_use_newest_photo_as_preview"
             android:defaultValue="true"
@@ -29,6 +29,15 @@
             android:defaultValue="1200"
             android:inputType="number"
             android:title="@string/pref_size_of_shared_photos"
+            app:iconSpaceReserved="false"/>
+    </androidx.preference.PreferenceCategory>
+    <androidx.preference.PreferenceCategory
+        android:title="@string/pref_header_development"
+        app:iconSpaceReserved="false">
+        <androidx.preference.SwitchPreferenceCompat
+            android:key="@string/key_display_photo_size"
+            android:title="@string/pref_display_photo_size"
+            android:defaultValue="false"
             app:iconSpaceReserved="false"/>
     </androidx.preference.PreferenceCategory>
 </androidx.preference.PreferenceScreen>
