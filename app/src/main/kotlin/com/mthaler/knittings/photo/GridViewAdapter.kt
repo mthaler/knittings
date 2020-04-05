@@ -50,7 +50,6 @@ class GridViewAdapter(context: Context, private val layoutResourceId: Int, priva
         val imageTitle = h.imageTitle
         val sharedPref = PreferenceManager.getDefaultSharedPreferences(context)
         val displayPhotoSize = sharedPref.getBoolean("display_photo_size", false)
-        val imageSize = if (displayPhotoSize) File(item.filename.absolutePath).length() else 0L
         if (imageTitle != null) {
             imageTitle.visibility = View.INVISIBLE
         }
@@ -63,6 +62,7 @@ class GridViewAdapter(context: Context, private val layoutResourceId: Int, priva
                     val height = imageView.measuredHeight
                     val filename = item.filename.absolutePath
                     doAsync {
+                        val imageSize = if (displayPhotoSize) File(item.filename.absolutePath).length() else 0L
                         val orientation = PictureUtils.getOrientation(filename)
                         val photo = PictureUtils.decodeSampledBitmapFromPath(filename, width, height)
                         val rotatedPhoto = PictureUtils.rotateBitmap(photo, orientation)
