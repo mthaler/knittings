@@ -18,7 +18,6 @@ import org.jetbrains.anko.debug
 import org.jetbrains.anko.find
 import java.io.File
 import android.content.ClipData
-import android.net.Uri
 import android.os.Build
 
 
@@ -53,24 +52,20 @@ object TakePhotoDialog : AnkoLogger {
             val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
             val knitting = context.datasource.getKnitting(knittingID)
             // create a photo file for the photo
-            val f = context.datasource.getPhotoFile(knitting)
-            val packageManager = context.packageManager
-            val canTakePhoto = f != null && takePictureIntent.resolveActivity(packageManager) != null
-            if (canTakePhoto) {
-                // on Icecreamsandwich we cannot use the file provider to take photos
-                val uri = if (Build.VERSION.SDK_INT == 15) {
-                    Uri.fromFile(f)
-                } else {
-                    FileProvider.getUriForFile(context, "com.mthaler.knittings.fileprovider", f!!)
+            val f = context.datasource.getPhotoFile(knitting)?.let {
+                val packageManager = context.packageManager
+                val canTakePhoto = takePictureIntent.resolveActivity(packageManager) != null
+                if (canTakePhoto) {
+                    val uri = FileProvider.getUriForFile(context, "com.mthaler.knittings.fileprovider", it)
+                    takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, uri)
+                    // this is needed on older android versions to net get a security exception
+                    if (Build.VERSION.SDK_INT >= 16 && Build.VERSION.SDK_INT <= 21) {
+                        takePictureIntent.clipData = ClipData.newRawUri("", uri)
+                        takePictureIntent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION or Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                    }
+                    debug("Created take picture intent")
+                    takePhoto(it, takePictureIntent)
                 }
-                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, uri)
-                // this is needed on older android versions to net get a security exception
-                if (Build.VERSION.SDK_INT >= 16 && Build.VERSION.SDK_INT <= 21) {
-                    takePictureIntent.clipData = ClipData.newRawUri("", uri)
-                    takePictureIntent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION or Intent.FLAG_GRANT_READ_URI_PERMISSION)
-                }
-                debug("Created take picture intent")
-                takePhoto(f!!, takePictureIntent)
             }
         }
         buttonImportPhoto.setOnClickListener {
