@@ -20,7 +20,7 @@ import com.mthaler.knittings.database.table.NeedleTable.cursorToNeedle
 import com.mthaler.knittings.model.*
 import java.lang.Exception
 
-class KnittingsDataSource private constructor(context: Context): AnkoLogger {
+class KnittingsDataSource private constructor(context: Context): AbstractObservableDatabase(), AnkoLogger {
 
     private val context: Context = context.applicationContext
     private val dbHelper: KnittingDatabaseHelper
@@ -34,21 +34,16 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
         @Synchronized
         get() = dbHelper.readableDatabase.use { database ->
             val knittings = ArrayList<Knitting>()
-
             val cursor = database.query(KnittingTable.KNITTINGS, KnittingTable.Columns, null, null, null, null, null)
-
             cursor.moveToFirst()
             var knitting: Knitting
-
             while (!cursor.isAfterLast) {
                 knitting = cursorToKnitting(cursor)
                 knittings.add(knitting)
                 debug("Read knitting " + knitting.id + ", default photo: " + knitting.defaultPhoto)
                 cursor.moveToNext()
             }
-
             cursor.close()
-
             return knittings
         }
 
@@ -61,21 +56,16 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
         @Synchronized
         get() = dbHelper.readableDatabase.use { database ->
             val photos = ArrayList<Photo>()
-
             val cursor = database.query(PhotoTable.PHOTOS, PhotoTable.Columns, null, null, null, null, null)
-
             cursor.moveToFirst()
             var photo: Photo
-
             while (!cursor.isAfterLast) {
                 photo = cursorToPhoto(cursor)
                 photos.add(photo)
                 debug("Read photo " + photo.id + " filename: " + photo.filename)
                 cursor.moveToNext()
             }
-
             cursor.close()
-
             return photos
         }
 
@@ -88,21 +78,16 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
         @Synchronized
         get() = dbHelper.readableDatabase.use { database ->
             val categories = ArrayList<Category>()
-
             val cursor = database.query(CategoryTable.CATEGORY, CategoryTable.Columns, null, null, null, null, null)
-
             cursor.moveToFirst()
             var category: Category
-
             while (!cursor.isAfterLast) {
                 category = cursorToCategory(cursor)
                 categories.add(category)
                 debug("Read category $category")
                 cursor.moveToNext()
             }
-
             cursor.close()
-
             return categories
         }
 
@@ -115,21 +100,16 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
         @Synchronized
         get() = dbHelper.readableDatabase.use { database ->
             val needles = ArrayList<Needle>()
-
             val cursor = database.query(NeedleTable.NEEDLES, NeedleTable.Columns, null, null, null, null, null)
-
             cursor.moveToFirst()
             var needle: Needle
-
             while (!cursor.isAfterLast) {
                 needle = cursorToNeedle(context, cursor)
                 needles.add(needle)
                 debug("Read category $needle")
                 cursor.moveToNext()
             }
-
             cursor.close()
-
             return needles
         }
 
@@ -153,7 +133,7 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
             cursor.moveToFirst()
             val knittings = cursorToKnitting(cursor)
             cursor.close()
-
+            notifyObservers()
             return knittings
         }
     }
@@ -169,18 +149,15 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
         debug("Updating knitting " + knitting + ", default photo: " + knitting.defaultPhoto)
         dbHelper.writableDatabase.use { database ->
             val values = KnittingTable.createContentValues(knitting)
-
             database.update(KnittingTable.KNITTINGS,
                     values,
                     KnittingTable.Cols.ID + "=" + knitting.id, null)
-
             val cursor = database.query(KnittingTable.KNITTINGS,
                     KnittingTable.Columns, KnittingTable.Cols.ID + "=" + knitting.id, null, null, null, null)
-
             cursor.moveToFirst()
             val result = cursorToKnitting(cursor)
             cursor.close()
-
+            notifyObservers()
             return result
         }
     }
@@ -192,13 +169,8 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
      */
     @Synchronized
     fun deleteKnitting(knitting: Knitting) {
-        val id = knitting.id
-        // delete all photos from the database
-        deleteAllPhotos(knitting)
-        dbHelper.writableDatabase.use { database ->
-            database.delete(KnittingTable.KNITTINGS, KnittingTable.Cols.ID + "=" + id, null)
-            debug("Deleted knitting $id: $knitting")
-        }
+        deleteKnittingImpl(knitting)
+        notifyObservers()
     }
 
     /**
@@ -207,7 +179,18 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
     @Synchronized
     fun deleteAllKnittings() {
         for (knitting in allKnittings) {
-            deleteKnitting(knitting)
+            deleteKnittingImpl(knitting)
+        }
+        notifyObservers()
+    }
+
+    private fun deleteKnittingImpl(knitting: Knitting) {
+        val id = knitting.id
+        // delete all photos from the database
+        deleteAllPhotos(knitting)
+        dbHelper.writableDatabase.use { database ->
+            database.delete(KnittingTable.KNITTINGS, KnittingTable.Cols.ID + "=" + id, null)
+            debug("Deleted knitting $id: $knitting")
         }
     }
 
@@ -223,11 +206,10 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
         dbHelper.readableDatabase.use { database ->
             val cursor = database.query(KnittingTable.KNITTINGS,
                     KnittingTable.Columns, KnittingTable.Cols.ID + "=" + id, null, null, null, null)
-
             cursor.moveToFirst()
             val knitting = cursorToKnitting(cursor)
             cursor.close()
-
+            notifyObservers()
             return knitting
         }
     }
@@ -250,11 +232,9 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
         dbHelper.readableDatabase.use { database ->
             val cursor = database.query(PhotoTable.PHOTOS,
                     PhotoTable.Columns, PhotoTable.Cols.ID + "=" + id, null, null, null, null)
-
             cursor.moveToFirst()
             val photo = cursorToPhoto(cursor)
             cursor.close()
-
             return photo
         }
     }
@@ -269,23 +249,18 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
     fun getAllPhotos(knitting: Knitting): ArrayList<Photo> {
         dbHelper.readableDatabase.use { database ->
             val photos = ArrayList<Photo>()
-
             val whereClause = PhotoTable.Cols.KNITTING_ID + " = ?"
             val whereArgs = arrayOf(java.lang.Double.toString(knitting.id.toDouble()))
             val cursor = database.query(PhotoTable.PHOTOS, PhotoTable.Columns, whereClause, whereArgs, null, null, null)
-
             cursor.moveToFirst()
             var photo: Photo
-
             while (!cursor.isAfterLast) {
                 photo = cursorToPhoto(cursor)
                 photos.add(photo)
                 debug("Read photo $photo")
                 cursor.moveToNext()
             }
-
             cursor.close()
-
             return photos
         }
     }
@@ -306,6 +281,7 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
             cursor.moveToFirst()
             val result = cursorToPhoto(cursor)
             cursor.close()
+            notifyObservers()
             return result
         }
     }
@@ -321,18 +297,15 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
         debug("Updating photo $photo")
         dbHelper.writableDatabase.use { database ->
             val values = PhotoTable.createContentValues(photo)
-
             database.update(PhotoTable.PHOTOS,
                     values,
                     PhotoTable.Cols.ID + "=" + photo.id, null)
-
             val cursor = database.query(PhotoTable.PHOTOS,
                     PhotoTable.Columns, PhotoTable.Cols.ID + "=" + photo.id, null, null, null, null)
-
             cursor.moveToFirst()
             val result = cursorToPhoto(cursor)
             cursor.close()
-
+            notifyObservers()
             return result
         }
     }
@@ -344,12 +317,8 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
      */
     @Synchronized
     fun deletePhoto(photo: Photo) {
-        deletePhotoFile(photo.filename)
-        val id = photo.id
-        dbHelper.writableDatabase.use { database ->
-            database.delete(PhotoTable.PHOTOS, PhotoTable.Cols.ID + "=" + id, null)
-            debug("Deleted photo $id: $photo")
-        }
+        deletePhotoImpl(photo)
+        notifyObservers()
     }
 
     /**
@@ -377,7 +346,17 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
     @Synchronized
     fun deleteAllPhotos() {
         for (photo in allPhotos) {
-            deletePhoto(photo)
+            deletePhotoImpl(photo)
+        }
+        notifyObservers()
+    }
+
+    private fun deletePhotoImpl(photo: Photo) {
+        deletePhotoFile(photo.filename)
+        val id = photo.id
+        dbHelper.writableDatabase.use { database ->
+            database.delete(PhotoTable.PHOTOS, PhotoTable.Cols.ID + "=" + id, null)
+            debug("Deleted photo $id: $photo")
         }
     }
 
@@ -393,11 +372,9 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
         dbHelper.readableDatabase.use { database ->
             val cursor = database.query(CategoryTable.CATEGORY,
                     CategoryTable.Columns, CategoryTable.Cols.ID + "=" + id, null, null, null, null)
-
             cursor.moveToFirst()
             val category = cursorToCategory(cursor)
             cursor.close()
-
             return category
         }
     }
@@ -418,7 +395,7 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
             cursor.moveToFirst()
             val result = cursorToCategory(cursor)
             cursor.close()
-
+            notifyObservers()
             return result
         }
     }
@@ -434,18 +411,15 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
         debug("Updating category $category")
         dbHelper.writableDatabase.use { database ->
             val values = CategoryTable.createContentValues(category)
-
             database.update(CategoryTable.CATEGORY,
                     values,
                     CategoryTable.Cols.ID + "=" + category.id, null)
-
             val cursor = database.query(CategoryTable.CATEGORY,
                     CategoryTable.Columns, CategoryTable.Cols.ID + "=" + category.id, null, null, null, null)
-
             cursor.moveToFirst()
             val result = cursorToCategory(cursor)
             cursor.close()
-
+            notifyObservers()
             return result
         }
     }
@@ -457,6 +431,20 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
      */
     @Synchronized
     fun deleteCategory(category: Category) {
+        deleteCategoryImpl(category)
+        notifyObservers()
+    }
+
+
+    @Synchronized
+    fun deleteAllCategories() {
+        for (category in allCategories) {
+            deleteCategoryImpl(category)
+        }
+        notifyObservers()
+    }
+
+    private fun deleteCategoryImpl(category: Category) {
         // get all knittings from the database and remove the category we are going to delete
         // we need to do this before deleting the category
         val knittings = allKnittings.filter { it.category == category }
@@ -468,14 +456,6 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
             // delete the category
             database.delete(CategoryTable.CATEGORY, CategoryTable.Cols.ID + "=" + category.id, null)
             debug("Deleted category " + category.id + ": " + category)
-        }
-    }
-
-
-    @Synchronized
-    fun deleteAllCategories() {
-        for (category in allCategories) {
-            deleteCategory(category)
         }
     }
 
@@ -491,11 +471,9 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
         dbHelper.readableDatabase.use { database ->
             val cursor = database.query(NeedleTable.NEEDLES,
                     NeedleTable.Columns, NeedleTable.Cols.ID + "=" + id, null, null, null, null)
-
             cursor.moveToFirst()
             val needle = cursorToNeedle(context, cursor)
             cursor.close()
-
             return needle
         }
     }
@@ -516,7 +494,7 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
             cursor.moveToFirst()
             val result = cursorToNeedle(context, cursor)
             cursor.close()
-
+            notifyObservers()
             return result
         }
     }
@@ -535,14 +513,12 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
             database.update(NeedleTable.NEEDLES,
                     values,
                     NeedleTable.Cols.ID + "=" + needle.id, null)
-
             val cursor = database.query(NeedleTable.NEEDLES,
                     NeedleTable.Columns, NeedleTable.Cols.ID + "=" + needle.id, null, null, null, null)
-
             cursor.moveToFirst()
             val result = cursorToNeedle(context, cursor)
             cursor.close()
-
+            notifyObservers()
             return result
         }
     }
@@ -554,21 +530,27 @@ class KnittingsDataSource private constructor(context: Context): AnkoLogger {
      */
     @Synchronized
     fun deleteNeedle(needle: Needle) {
-        dbHelper.writableDatabase.use { database ->
-            // delete the category
-            database.delete(NeedleTable.NEEDLES, NeedleTable.Cols.ID + "=" + needle.id, null)
-            debug("Deleted needle " + needle.id + ": " + needle)
-        }
+        deleteNeedleImpl(needle)
+        notifyObservers()
     }
 
 
     @Synchronized
     fun deleteAllNeedles() {
         for (needle in allNeedles) {
-            deleteNeedle(needle)
+            deleteNeedleImpl(needle)
         }
+        notifyObservers()
     }
 
+    private fun deleteNeedleImpl(needle: Needle) {
+        dbHelper.writableDatabase.use { database ->
+            // delete the category
+            database.delete(NeedleTable.NEEDLES, NeedleTable.Cols.ID + "=" + needle.id, null)
+            debug("Deleted needle " + needle.id + ": " + needle)
+        }
+        notifyObservers()
+    }
 
     @Synchronized
     private fun cursorToKnitting(cursor: Cursor): Knitting {
