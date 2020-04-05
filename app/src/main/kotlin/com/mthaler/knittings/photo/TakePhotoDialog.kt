@@ -71,10 +71,11 @@ object TakePhotoDialog : AnkoLogger {
         buttonImportPhoto.setOnClickListener {
             d.dismiss()
             val knitting = context.datasource.getKnitting(knittingID)
-            val f = context.datasource.getPhotoFile(knitting)
-            val photoPickerIntent = Intent(Intent.ACTION_PICK)
-            photoPickerIntent.type = "image/*"
-            importPhoto(f!!, photoPickerIntent)
+            context.datasource.getPhotoFile(knitting)?.let {
+                val photoPickerIntent = Intent(Intent.ACTION_PICK)
+                photoPickerIntent.type = "image/*"
+                importPhoto(it, photoPickerIntent)
+            }
         }
         return d
     }
