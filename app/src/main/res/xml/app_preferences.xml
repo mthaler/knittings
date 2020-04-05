@@ -15,7 +15,7 @@
     <androidx.preference.PreferenceCategory
         android:title="@string/pref_header_photos"
         app:iconSpaceReserved="false">
-        <androidx.preference.SwitchPreferenceCompat
+        <androidx.preference.CheckBoxPreference
             android:key="@string/key_photos_use_newest_as_preview"
             android:title="@string/pref_use_newest_photo_as_preview"
             android:defaultValue="true"
