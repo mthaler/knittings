@@ -74,7 +74,7 @@ class EditCategoryFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory.getInstance(activity!!.application)).get(EditCategoryViewModel::class.java)
-        viewModel.initCategory(categoryID)
+        viewModel.init(categoryID)
         viewModel.category.observe(viewLifecycleOwner, Observer { category ->
             if (category.name != editTextTitle.text.toString()) {
                 editTextTitle.setText(category.name)

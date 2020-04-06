@@ -11,7 +11,7 @@ class EditCategoryViewModel(application: Application) : DatasourceViewModel(appl
     private var categoryID = -1L
     val category = MutableLiveData<Category>()
 
-    fun initCategory(id: Long) {
+    fun init(id: Long) {
         if (id != categoryID) {
             categoryID = id
             val c = datasource.getCategory(id)
