@@ -12,9 +12,23 @@ class EditCategoryViewModel(application: Application) : DatasourceViewModel(appl
     val category = MutableLiveData<Category>()
 
     fun initCategory(id: Long) {
-        categoryID = id
-        val c = datasource.getCategory(id)
-        category.setMutVal(c)
+        if (id != categoryID) {
+            categoryID = id
+            val c = datasource.getCategory(id)
+            category.setMutVal(c)
+        }
+    }
+
+    fun updateCategoryŃame(name: String) {
+        val category = datasource.getCategory(categoryID)
+        val updatedCategory = category.copy(name = name)
+        datasource.updateCategory(updatedCategory)
+    }
+
+    fun updateCategoryColor(color: Int) {
+        val category = datasource.getCategory(categoryID)
+        val updatedCategory = category.copy(color = color)
+        datasource.updateCategory(updatedCategory)
     }
 
     override fun databaseChanged() {
