@@ -21,14 +21,28 @@ class EditCategoryViewModel(application: Application) : DatasourceViewModel(appl
 
     fun updateCategoryŃame(name: String) {
         val category = datasource.getCategory(categoryID)
-        val updatedCategory = category.copy(name = name)
-        datasource.updateCategory(updatedCategory)
+        if (name != category.name) {
+            val updatedCategory = category.copy(name = name)
+            datasource.updateCategory(updatedCategory)
+        }
     }
 
     fun updateCategoryColor(color: Int) {
         val category = datasource.getCategory(categoryID)
-        val updatedCategory = category.copy(color = color)
-        datasource.updateCategory(updatedCategory)
+        if (color != category.color) {
+            val updatedCategory = category.copy(color = color)
+            datasource.updateCategory(updatedCategory)
+        }
+    }
+
+    fun deleteCategory() {
+        val category = datasource.getCategory(categoryID)
+        datasource.deleteCategory(category)
+    }
+
+    fun getCategoryName(): String {
+        val category = datasource.getCategory(categoryID)
+        return category.name
     }
 
     override fun databaseChanged() {

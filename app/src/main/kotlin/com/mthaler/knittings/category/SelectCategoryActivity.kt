@@ -69,7 +69,7 @@ class SelectCategoryActivity : BaseActivity(), CategoryListFragment.OnFragmentIn
         val f = fm.findFragmentById(R.id.select_category_container)
         if (f is EditCategoryFragment) {
             val i = Intent()
-            i.putExtra(Extras.EXTRA_CATEGORY_ID, f.getCategory())
+            i.putExtra(Extras.EXTRA_CATEGORY_ID, f.getCategoryID())
             setResult(Activity.RESULT_OK, i)
         }
         super.onBackPressed()
@@ -88,7 +88,7 @@ class SelectCategoryActivity : BaseActivity(), CategoryListFragment.OnFragmentIn
             if (f is EditCategoryFragment) {
                 val i = Intent()
                 i.putExtra(EXTRA_KNITTING_ID, knittingID)
-                i.putExtra(Extras.EXTRA_CATEGORY_ID, f.getCategory().id)
+                i.putExtra(Extras.EXTRA_CATEGORY_ID, f.getCategoryID())
                 setResult(Activity.RESULT_OK, i)
                 finish()
             } else {
