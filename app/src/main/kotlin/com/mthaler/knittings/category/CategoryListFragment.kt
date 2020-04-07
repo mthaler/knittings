@@ -58,7 +58,7 @@ class CategoryListFragment : Fragment() {
     /**
      * Updates the list of categories
      */
-    private fun updateCategoryList(categories: ArrayList<Category>) {
+    private fun updateCategoryList(categories: List<Category>) {
         view?.let {
             val rv = it.findViewById<RecyclerView>(R.id.category_recycler_view)
             // show image if category list is empty

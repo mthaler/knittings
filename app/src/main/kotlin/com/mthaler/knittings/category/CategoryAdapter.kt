@@ -8,7 +8,7 @@ import android.widget.TextView
 import com.mthaler.knittings.R
 import com.mthaler.knittings.model.Category
 
-class CategoryAdapter(val categories: ArrayList<Category>,
+class CategoryAdapter(val categories: List<Category>,
                       private val onItemClick: (Category) -> Unit,
                       private val onItemLongClick: (Category) -> Unit): RecyclerView.Adapter<CategoryAdapter.ViewHolder>() {
 

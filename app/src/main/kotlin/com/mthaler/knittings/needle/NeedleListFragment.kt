@@ -10,8 +10,11 @@ import androidx.appcompat.view.ActionMode
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import android.view.*
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import com.mthaler.knittings.R
 import com.mthaler.knittings.database.datasource
+import com.mthaler.knittings.model.Needle
 import com.mthaler.knittings.model.NeedleType
 import kotlinx.android.synthetic.main.fragment_needle_list.*
 
@@ -19,18 +22,8 @@ class NeedleListFragment : Fragment() {
 
     private var listener: OnFragmentInteractionListener? = null
     private var filter: Filter = NoFilter
+    private lateinit var viewModel: NeedleListViewModel
 
-    /**
-     * Called to do initial creation of a fragment. This is called after onAttach(Activity) and before
-     * onCreateView(LayoutInflater, ViewGroup, Bundle). Note that this can be called while the fragment's activity
-     * is still in the process of being created. As such, you can not rely on things like the activity's content view
-     * hierarchy being initialized at this point. If you want to do work once the activity itself is created,
-     * see onActivityCreated(Bundle).
-     *
-     * Any restored child fragments will be created before the base Fragment.onCreate method returns.
-     *
-     * @param savedInstanceState If the fragment is being re-created from a previous saved state, this is the state.
-     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -55,25 +48,19 @@ class NeedleListFragment : Fragment() {
         return v
     }
 
-    /**
-     * Initialize the contents of the Fragment host's standard options menu. You should place your menu items in to menu.
-     * For this method to be called, you must have first called setHasOptionsMenu(boolean).
-     * See Activity.onCreateOptionsMenu for more information.
-     *
-     * @param menu The options menu in which you place your items.
-     * @param inflater MenuInflater
-     */
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        viewModel = ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory.getInstance(activity!!.application)).get(NeedleListViewModel::class.java)
+        viewModel.needles.observe(viewLifecycleOwner, Observer { needle ->
+            updateNeedleList(needle)
+        })
+    }
+
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.needle_list, menu)
     }
 
-    /**
-     * This hook is called whenever an item in your options menu is selected.
-     *
-     * @param item the menu item that was selected.
-     * @return return false to allow normal menu processing to proceed, true to consume it here.
-     */
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.menu_item_filter -> {
@@ -98,7 +85,7 @@ class NeedleListFragment : Fragment() {
                             filter = SingleTypeFilter(type)
                         }
                     }
-                        updateNeedleList()
+                        updateNeedleList(viewModel.needles.value ?: emptyList<Needle>())
                         dialog.dismiss()
                     }
                     builder.setNegativeButton(R.string.dialog_button_cancel) { dialog, which -> dialog.dismiss() }
@@ -111,18 +98,9 @@ class NeedleListFragment : Fragment() {
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-        updateNeedleList()
-    }
-
-    /**
-    * Updates the list of needles
-    */
-    private fun updateNeedleList() {
+    private fun updateNeedleList(needles: List<Needle>) {
         view?.let {
             val rv = it.findViewById<RecyclerView>(R.id.needles_recycler_view)
-            val needles = datasource.allNeedles
             val filtered = filter.filter(needles)
             // show image if category list is empty
             if (needles.isEmpty()) {
@@ -137,20 +115,12 @@ class NeedleListFragment : Fragment() {
                     { needle ->
                         (activity as AppCompatActivity).startSupportActionMode(object : ActionMode.Callback {
 
-                            /**
-                             * Called to report a user click on an action button.
-                             *
-                             * @param mode The current ActionMode
-                             * @param menu The item that was clicked
-                             * @return true if this callback handled the event, false if the standard MenuItem invocation should continue.
-                             */
                             override fun onActionItemClicked(mode: ActionMode?, menu: MenuItem?): Boolean {
                                 when(menu?.itemId) {
                                     R.id.action_delete -> {
                                         this@NeedleListFragment.activity?.let {
                                             DeleteNeedleDialog.create(it, needle, {
                                                 datasource.deleteNeedle(needle)
-                                                updateNeedleList()
                                             }).show()
                                         }
                                         mode?.finish()
@@ -160,7 +130,6 @@ class NeedleListFragment : Fragment() {
                                         val newName = "${needle.name} - ${getString(R.string.copy)}"
                                         val needleCopy = needle.copy(name = newName)
                                         datasource.addNeedle(needleCopy)
-                                        updateNeedleList()
                                         mode?.finish()
                                         return true
                                     }
@@ -170,45 +139,21 @@ class NeedleListFragment : Fragment() {
                                 }
                             }
 
-                            /**
-                             * Called when action mode is first created. The menu supplied will be used to generate action buttons for the action mode.
-                             *
-                             * @param mode The current ActionMode
-                             * @param menu  Menu used to populate action buttons
-                             * @return true if the action mode should be created, false if entering this mode should be aborted.
-                             */
                             override fun onCreateActionMode(mode: ActionMode?, menu: Menu?): Boolean {
                                 val inflater = mode?.menuInflater
                                 inflater?.inflate(R.menu.needle_list_action, menu)
                                 return true
                             }
 
-                            /**
-                             * Called to refresh an action mode's action menu whenever it is invalidated.
-                             *
-                             * @param mode The current ActionMode
-                             * @param menu  Menu used to populate action buttons
-                             */
                             override fun onPrepareActionMode(mode: ActionMode?, menu: Menu?): Boolean = true
 
-                            /**
-                             * Called when an action mode is about to be exited and destroyed.
-                             *
-                             * @param mode The current ActionMode
-                             */
-                            override fun onDestroyActionMode(mode: ActionMode?) {
-                            }
+                            override fun onDestroyActionMode(mode: ActionMode?) {}
                         })
                     })
             rv.adapter = adapter
         }
     }
 
-    /**
-     * Called when a fragment is first attached to its context. onCreate(Bundle) will be called after this.
-     *
-     * @param context Context
-     */
     override fun onAttach(context: Context) {
         super.onAttach(context)
         if (context is OnFragmentInteractionListener) {
@@ -218,9 +163,6 @@ class NeedleListFragment : Fragment() {
         }
     }
 
-    /**
-     * Called when the fragment is no longer attached to its activity. This is called after onDestroy().
-     */
     override fun onDetach() {
         super.onDetach()
         listener = null

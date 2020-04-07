@@ -81,7 +81,6 @@ class EditCategoryFragment : Fragment() {
             }
             if (category.color != null) buttonColor.setBackgroundColor(category.color)
         })
-
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
