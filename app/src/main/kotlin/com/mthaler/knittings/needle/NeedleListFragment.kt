@@ -51,8 +51,8 @@ class NeedleListFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory.getInstance(activity!!.application)).get(NeedleListViewModel::class.java)
-        viewModel.needles.observe(viewLifecycleOwner, Observer { needle ->
-            updateNeedleList(needle)
+        viewModel.needles.observe(viewLifecycleOwner, Observer { needles ->
+            updateNeedleList(needles)
         })
     }
 

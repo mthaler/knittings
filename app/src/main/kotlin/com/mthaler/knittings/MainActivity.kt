@@ -14,6 +14,8 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.TextView
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import com.mthaler.knittings.about.AboutDialog
 import com.mthaler.knittings.category.CategoryListActivity
 import com.mthaler.knittings.dropbox.DropboxExportActivity
@@ -32,6 +34,7 @@ import com.mthaler.knittings.settings.SettingsActivity
 import kotlinx.android.synthetic.main.content_main.*
 import java.lang.StringBuilder
 import java.util.*
+import kotlin.collections.ArrayList
 
 /**
  * The main activity that gets displayed when the app is started. It displays a list of knitting projects.
@@ -43,6 +46,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     private var filter: CombinedFilter = CombinedFilter.Empty
     private var initialQuery: CharSequence? = null
     private var sv: SearchView? = null
+    private lateinit var viewModel: MainViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -74,15 +78,11 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
             filter = savedInstanceState.getSerializable("filter") as CombinedFilter
             initialQuery = savedInstanceState.getCharSequence(STATE_QUERY)
         }
-    }
 
-    /**
-     * The onResume method is called when the activity is started or if the user returns from another activity
-     * e.g. the KnittingDetailsActivity.
-     */
-    override fun onResume() {
-        super.onResume()
-        updateKnittingList()
+        viewModel = ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory.getInstance(application)).get(MainViewModel::class.java)
+        viewModel.knittings.observe(this, Observer { knittings ->
+            updateKnittingList(knittings)
+        })
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -104,13 +104,6 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         }
     }
 
-    /**
-     * Initialize the contents of the Activity's standard options menu.
-     * This is only called once, the first time the options menu is displayed.
-     *
-     * @param menu The options menu in which you place your items.
-     * @return you must return true for the menu to be displayed; if you return false it will not be shown.
-     */
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
         menuInflater.inflate(R.menu.knitting_list, menu)
@@ -118,12 +111,6 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         return true
     }
 
-    /**
-     * This hook is called whenever an item in your options menu is selected.
-     *
-     * @param item the menu item that was selected.
-     * @return return false to allow normal menu processing to proceed, true to consume it here.
-     */
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.menu_item_about -> {
@@ -143,7 +130,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
                     1 -> sorting = Sorting.OldestFirst
                     2 -> sorting = Sorting.Alphabetical
                   }
-                    updateKnittingList()
+                    updateKnittingList(viewModel.knittings.value ?: ArrayList())
                     dialog.dismiss()
                 }
                 builder.setNegativeButton(R.string.dialog_button_cancel) { dialog, which -> dialog.dismiss() }
@@ -153,7 +140,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
             }
             R.id.menu_item_clear_filters -> {
                 filter = CombinedFilter.Empty
-                updateKnittingList()
+                updateKnittingList(viewModel.knittings.value ?: ArrayList())
                 true
             }
             R.id.menu_item_category_filter -> {
@@ -179,7 +166,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
                         filter = CombinedFilter(f.filters.filterNot { it is SingleCategoryFilter } + newFilter)
                     }
                 }
-                    updateKnittingList()
+                    updateKnittingList(viewModel.knittings.value ?: ArrayList())
                     dialog.dismiss()
                 }
                 builder.setNegativeButton(R.string.dialog_button_cancel) { dialog, which -> dialog.dismiss() }
@@ -208,7 +195,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
                         filter = CombinedFilter(f.filters.filterNot { it is SingleStatusFilter } + newFilter)
                     }
                 }
-                    updateKnittingList()
+                    updateKnittingList(viewModel.knittings.value ?: ArrayList())
                     dialog.dismiss()
                 }
                 builder.setNegativeButton(R.string.dialog_button_cancel) { dialog, which -> dialog.dismiss() }
@@ -226,12 +213,6 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         }
     }
 
-    /**
-     * Called when an item in the navigation menu is selected.
-     *
-     * @param item the selected item
-     * @return true to display the item as the selected item
-     */
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         // Handle navigation view item clicks here.
         when (item.itemId) {
@@ -256,13 +237,9 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         return true
     }
 
-    /**
-     * Updates the list of categories
-     */
-    private fun updateKnittingList() {
+    private fun updateKnittingList(knittings: ArrayList<Knitting>) {
         val activeFilters = findViewById<TextView>(R.id.knitting_active_filters)
         val rv = findViewById<RecyclerView>(R.id.knitting_recycler_view)
-        val knittings = datasource.allKnittings
         if (knittings.isEmpty()) {
             knitting_list_empty_recycler_view.visibility = View.VISIBLE
             knitting_recycler_view.visibility = View.GONE
@@ -314,7 +291,6 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
                         mode?.finish()
                         DeleteKnittingDialog.create(this@MainActivity, knitting, {
                             datasource.deleteKnitting(knitting)
-                            updateKnittingList()
                         }).show()
                         return true
                     }
@@ -322,7 +298,6 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
                         val newTitle = "${knitting.title} - ${getString(R.string.copy)}"
                         val knittingCopy = knitting.copy(title = newTitle, started = Date(), finished = null, defaultPhoto = null, rating = 0.0, duration = 0, status = Status.PLANNED)
                         datasource.addKnitting(knittingCopy)
-                        updateKnittingList()
                         mode?.finish()
                         return true
                     }
@@ -394,7 +369,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         } else {
             filter = CombinedFilter(listOf(ContainsFilter(newText)))
         }
-        updateKnittingList()
+        updateKnittingList(viewModel.knittings.value ?: ArrayList())
         return true
     }
 
