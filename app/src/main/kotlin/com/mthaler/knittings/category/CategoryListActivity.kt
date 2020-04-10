@@ -58,7 +58,7 @@ class CategoryListActivity : BaseActivity(), CategoryListFragment.OnFragmentInte
                 val fm = supportFragmentManager
                 val f = fm.findFragmentById(R.id.category_list_container)
                 if (f is EditCategoryFragment) {
-                    fm.popBackStack()
+                    f.onBackPressed()
                 } else {
                     NavUtils.navigateUpTo(this, upIntent)
                 }

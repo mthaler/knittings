@@ -11,6 +11,8 @@
     <!-- generic dialog strings -->
     <string name="dialog_button_ok">OK</string>
     <string name="dialog_button_cancel">Abbrechen</string>
+    <string name="dialog_button_yes">Ja</string>
+    <string name="dialog_button_no">Nein</string>
 
     <!-- sorting -->
     <string name="sorting_newest_first">Neueste zuerst</string>

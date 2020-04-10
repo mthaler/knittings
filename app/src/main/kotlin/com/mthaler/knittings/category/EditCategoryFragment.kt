@@ -1,20 +1,18 @@
 package com.mthaler.knittings.category
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.text.Editable
 import android.view.*
 import android.widget.Button
 import android.widget.EditText
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.mthaler.knittings.BaseFragment
 import com.mthaler.knittings.R
 import com.mthaler.knittings.Extras.EXTRA_CATEGORY_ID
-import com.mthaler.knittings.TextWatcher
 import com.mthaler.knittings.model.Category
 import petrov.kristiyan.colorpicker.ColorPicker
 
-class EditCategoryFragment : Fragment() {
+class EditCategoryFragment : BaseFragment() {
 
     private var categoryID: Long = -1
     private lateinit var viewModel: EditCategoryViewModel
@@ -43,11 +41,6 @@ class EditCategoryFragment : Fragment() {
 
         // set edit text title text to category name
         editTextTitle = v.findViewById(R.id.category_name)
-        editTextTitle.addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(c: Editable) {
-                viewModel.updateCategoryŃame(c.toString())
-            }
-        })
 
         // set background color of the button to category color if it is defined
         buttonColor = v.findViewById<Button>(R.id.button_select_color)
@@ -56,7 +49,7 @@ class EditCategoryFragment : Fragment() {
             colorPicker.setOnFastChooseColorListener(object : ColorPicker.OnFastChooseColorListener {
                 override fun setOnFastChooseColorListener(position: Int, c: Int) {
                     color = c
-                    viewModel.updateCategoryColor(c)
+                    buttonColor.setBackgroundColor(c)
                 }
 
                 override fun onCancel() {
@@ -78,9 +71,7 @@ class EditCategoryFragment : Fragment() {
         viewModel = ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory.getInstance(activity!!.application)).get(EditCategoryViewModel::class.java)
         viewModel.init(categoryID)
         viewModel.category.observe(viewLifecycleOwner, Observer { category ->
-            if (category.name != editTextTitle.text.toString()) {
-                editTextTitle.setText(category.name)
-            }
+            editTextTitle.setText(category.name)
             if (category.color != null) {
                 color = category.color
                 buttonColor.setBackgroundColor(category.color)
@@ -110,6 +101,17 @@ class EditCategoryFragment : Fragment() {
                 true
             }
             else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    override fun onBackPressed() {
+        context?.let {
+            SaveChangesDialog.create(it, {
+                viewModel.saveCategory(Category(categoryID, editTextTitle.text.toString(), color))
+                fragmentManager?.popBackStack()
+            }, {
+                fragmentManager?.popBackStack()
+            }).show()
         }
     }
 

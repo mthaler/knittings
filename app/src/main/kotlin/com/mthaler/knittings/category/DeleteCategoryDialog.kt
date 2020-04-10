@@ -4,13 +4,9 @@ import android.app.AlertDialog
 import android.content.Context
 import com.mthaler.knittings.R
 
-/**
- * Displays a dialog that asks the user to confirm that the knitting should be deleted
- */
 object DeleteCategoryDialog {
 
     fun create(context: Context, categoryName: String, onDelete: () -> Unit): AlertDialog {
-        // create the dialog
         val b = AlertDialog.Builder(context)
         b.setTitle(R.string.delete_category_dialog_title)
         b.setMessage(context.resources.getString(R.string.delete_category_dialog_question, categoryName))

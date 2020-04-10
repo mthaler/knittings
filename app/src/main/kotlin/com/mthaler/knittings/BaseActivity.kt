@@ -30,4 +30,13 @@ open class BaseActivity : AppCompatActivity() {
     private fun setAppTheme(theme: Theme) {
         setTheme(theme.themeId)
     }
+
+    protected fun notifyFragmentsBackPressed() {
+        val fragments = supportFragmentManager.fragments
+        for (f in fragments) {
+            if (f != null && f is BaseFragment) {
+                f.onBackPressed()
+            }
+        }
+    }
 }
