@@ -42,7 +42,6 @@ class DownloadPhotosTask(private val dbxClient: DbxClientV2,
             context.datasource.updatePhoto(photoWithPreview)
             // update progress
             publishProgress((index / count.toFloat() * 100).toInt())
-
         }
         return null
     }

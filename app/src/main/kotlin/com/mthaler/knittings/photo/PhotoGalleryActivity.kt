@@ -45,7 +45,6 @@ class PhotoGalleryActivity : BaseActivity(), AnkoLogger {
             val fm = supportFragmentManager
             val ft = fm.beginTransaction()
             ft.add(R.id.photo_gallery_container, f)
-            //ft.addToBackStack(null)
             ft.commit()
         }
     }

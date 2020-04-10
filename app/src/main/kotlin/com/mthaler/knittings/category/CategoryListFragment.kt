@@ -2,13 +2,13 @@ package com.mthaler.knittings.category
 
 import android.content.Context
 import android.os.Bundle
+import android.view.*
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import androidx.fragment.app.Fragment
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ActionMode
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import android.view.*
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.mthaler.knittings.Extras
@@ -31,8 +31,7 @@ class CategoryListFragment : Fragment() {
         retainInstance = true
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
         val v = inflater.inflate(R.layout.fragment_category_list, container, false)
 
@@ -110,7 +109,7 @@ class CategoryListFragment : Fragment() {
                      * Called when action mode is first created. The menu supplied will be used to generate action buttons for the action mode.
                      *
                      * @param mode The current ActionMode
-                     * @param menu  Menu used to populate action buttons
+                     * @param menu Menu used to populate action buttons
                      * @return true if the action mode should be created, false if entering this mode should be aborted.
                      */
                     override fun onCreateActionMode(mode: ActionMode?, menu: Menu?): Boolean {
@@ -123,7 +122,7 @@ class CategoryListFragment : Fragment() {
                      * Called to refresh an action mode's action menu whenever it is invalidated.
                      *
                      * @param mode The current ActionMode
-                     * @param menu  Menu used to populate action buttons
+                     * @param menu Menu used to populate action buttons
                      */
                     override fun onPrepareActionMode(mode: ActionMode?, menu: Menu?): Boolean = true
 

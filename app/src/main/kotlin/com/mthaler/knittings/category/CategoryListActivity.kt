@@ -38,7 +38,6 @@ class CategoryListActivity : BaseActivity(), CategoryListFragment.OnFragmentInte
             val fm = supportFragmentManager
             val ft = fm.beginTransaction()
             ft.add(R.id.category_list_container, f)
-            //ft.addToBackStack(null)
             ft.commit()
         }
     }

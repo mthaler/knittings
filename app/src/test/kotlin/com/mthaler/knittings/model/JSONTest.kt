@@ -103,7 +103,7 @@ class JSONTest {
             |{"size":42,"needleDiameter":3.5,"rating":4.5,"description":"my second knitting","started":"2018-01-11", "finished":"2018-01-12","id":43,"title":"knitting 2"}]
         """.trimMargin()
         val json = JSONArray(s)
-        val knittings = json.toKnittings().map { it.first}
+        val knittings = json.toKnittings().map { it.first }
         assertEquals(2, knittings.size)
         val k = knittings[0]
         assertEquals(42, k.id)

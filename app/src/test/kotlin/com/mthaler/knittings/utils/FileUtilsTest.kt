@@ -32,7 +32,7 @@ class FileUtilsTest {
 
     @Test
     fun testGetExtension() {
-        assertEquals("",  getExtension("test"))
+        assertEquals("", getExtension("test"))
         assertEquals("txt", getExtension("test.txt"))
         assertEquals("txt", getExtension(".txt"))
         assertEquals("txt", getExtension("test.orig.txt"))
@@ -40,7 +40,7 @@ class FileUtilsTest {
 
     @Test
     fun testGetFilenameWithoutExtension() {
-        assertEquals("test",  getFilenameWithoutExtension("test"))
+        assertEquals("test", getFilenameWithoutExtension("test"))
         assertEquals("test", getFilenameWithoutExtension("test.txt"))
         assertEquals("", getFilenameWithoutExtension(".txt"))
         assertEquals("test.orig", getFilenameWithoutExtension("test.orig.txt"))

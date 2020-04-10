@@ -14,7 +14,7 @@ enum class NeedleMaterial {
          * @param material needle material enum value
          * @return formatted needle material enum value
          */
-        fun format(context: Context, material: NeedleMaterial): String = when(material) {
+        fun format(context: Context, material: NeedleMaterial): String = when (material) {
             OTHER -> context.resources.getString(R.string.needle_material_other)
             ALUMINUM -> context.resources.getString(R.string.needle_material_aluminum)
             BAMBOO -> context.resources.getString(R.string.needle_material_bamboo)
@@ -38,7 +38,7 @@ enum class NeedleMaterial {
          * @param materialStr formatted needle material string
          * @return needle material enum value
          */
-        fun parse(context: Context, materialStr: String?): NeedleMaterial = when(materialStr) {
+        fun parse(context: Context, materialStr: String?): NeedleMaterial = when (materialStr) {
             context.resources.getString(R.string.needle_material_other) -> OTHER
             context.resources.getString(R.string.needle_material_aluminum) -> ALUMINUM
             context.resources.getString(R.string.needle_material_bamboo) -> BAMBOO

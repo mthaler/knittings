@@ -124,9 +124,9 @@ class DropboxImportFragment : AbstractDropboxFragment(), AnkoLogger {
                 }.show()
             }
             dialogBuilder.setNegativeButton("Cancel") { dialog, which -> }
-            //Create alert dialog object via builder
+            // Create alert dialog object via builder
             val alertDialogObject = dialogBuilder.create()
-            //Show the dialog
+            // Show the dialog
             alertDialogObject.show()
         } else {
             alert {

@@ -13,8 +13,8 @@ import java.util.*
 
 class ProjectCountFragment : Fragment(), AnkoLogger {
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+
         // Inflate the layout for this fragment
         val v = inflater.inflate(R.layout.fragment_project_count, container, false)
 

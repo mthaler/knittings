@@ -24,7 +24,6 @@ class StopwatchActivity : BaseActivity() {
     private var previousTime = 0L
     private var running = false
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_stopwatch)
@@ -58,18 +57,17 @@ class StopwatchActivity : BaseActivity() {
         super.onSaveInstanceState(outState)
     }
 
-    //Start the stopwatch running when the Start button is clicked.
+    // Start the stopwatch running when the Start button is clicked.
     fun onClickStart(view: View) {
         running = true
         previousTime = System.currentTimeMillis()
     }
 
-    //Stop the stopwatch running when the Stop button is clicked.
+    // Stop the stopwatch running when the Stop button is clicked.
     fun onClickStop(view: View) {
         running = false
         val knitting = datasource.getKnitting(knittingID)
         datasource.updateKnitting(knitting.copy(duration = elapsedTime))
-
     }
 
     fun onClickDiscard(view: View) {
@@ -96,7 +94,6 @@ class StopwatchActivity : BaseActivity() {
                     previousTime = t
                 }
                 handler.postDelayed(this, 500)
-
             }
         })
     }

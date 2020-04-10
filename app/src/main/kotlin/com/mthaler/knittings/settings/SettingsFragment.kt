@@ -3,10 +3,10 @@ package com.mthaler.knittings.settings
 import android.annotation.SuppressLint
 import android.os.Build
 import android.os.Bundle
-import androidx.preference.*
 import androidx.recyclerview.widget.RecyclerView
 import android.view.View
 import android.view.ViewGroup
+import androidx.preference.*
 import com.mthaler.knittings.R
 
 class SettingsFragment : PreferenceFragmentCompat() {
@@ -16,7 +16,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
      * setPreferenceScreen(PreferenceScreen) either directly or via helper methods such as addPreferencesFromResource(int).
      *
      * @param savedInstanceState If the fragment is being re-created from a previous saved state, this is the state.
-     * @param rootKey  If non-null, this preference fragment should be rooted at the PreferenceScreen with this key.
+     * @param rootKey If non-null, this preference fragment should be rooted at the PreferenceScreen with this key.
      */
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         // Load the Preferences from the XML file
@@ -67,12 +67,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
                 val index = preference.findIndexOfValue(stringValue)
 
                 // Set the summary to reflect the new value.
-                preference.setSummary(
-                        if (index >= 0)
-                            preference.entries[index]
-                        else
-                            null)
-
+                preference.setSummary(if (index >= 0) preference.entries[index] else null)
             } else {
                 // For all other pref_sharing, set the summary to the value's
                 // simple string representation.

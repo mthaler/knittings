@@ -42,7 +42,6 @@ class SelectCategoryActivity : BaseActivity(), CategoryListFragment.OnFragmentIn
             val fm = supportFragmentManager
             val ft = fm.beginTransaction()
             ft.add(R.id.select_category_container, f)
-            //ft.addToBackStack(null)
             ft.commit()
         }
     }
@@ -111,7 +110,6 @@ class SelectCategoryActivity : BaseActivity(), CategoryListFragment.OnFragmentIn
         val fm = supportFragmentManager
         val ft = fm.beginTransaction()
         ft.replace(R.id.select_category_container, f)
-        //ft.addToBackStack(null)
         ft.commit()
     }
 

@@ -34,7 +34,6 @@ class KnittingDatabaseHelper(context: Context) : ManagedSQLiteOpenHelper(context
             }
             return instance!!
         }
-
     }
 
     init {

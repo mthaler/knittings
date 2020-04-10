@@ -14,9 +14,7 @@ import java.lang.IllegalArgumentException
 import java.lang.StringBuilder
 import java.util.*
 
-class NeedleAdapter(val needles: List<ListItem>,
-                    private val onItemClick: (Needle) -> Unit,
-                    private val onItemLongLick: (Needle) -> Unit): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class NeedleAdapter(val needles: List<ListItem>, private val onItemClick: (Needle) -> Unit, private val onItemLongLick: (Needle) -> Unit) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     /**
      * Creates, configures and returns a ViewHolder object for a particular row in the list
@@ -60,7 +58,7 @@ class NeedleAdapter(val needles: List<ListItem>,
      */
     override fun getItemCount(): Int = needles.size
 
-    class HeaderViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
+    class HeaderViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         private val textViewHeader = itemView.findViewById<TextView>(R.id.needle_list_item_header)
 
@@ -75,9 +73,9 @@ class NeedleAdapter(val needles: List<ListItem>,
      *
      * @param itemView item view
      */
-    class ItemViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
+    class ItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val textViewName = itemView.findViewById<TextView>(R.id.needle_list_item_name)
-        private val textViewDescription= itemView.findViewById<TextView>(R.id.needle_list_item_description)
+        private val textViewDescription = itemView.findViewById<TextView>(R.id.needle_list_item_description)
 
         fun bind(needle: Needle, onItemClick: (Needle) -> Unit, onItemLongLick: (Needle) -> Unit) {
             val sb = StringBuilder()
@@ -108,12 +106,12 @@ class NeedleAdapter(val needles: List<ListItem>,
         abstract fun getType(): Int
     }
 
-    data class HeaderItem(val header: String): ListItem() {
+    data class HeaderItem(val header: String) : ListItem() {
 
         override fun getType(): Int = TypeHeader
     }
 
-    data class NeedleItem(val needle: Needle): ListItem() {
+    data class NeedleItem(val needle: Needle) : ListItem() {
 
         override fun getType(): Int = TypeItem
     }

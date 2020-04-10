@@ -155,20 +155,19 @@ object PictureUtils : AnkoLogger {
     }
 
     fun copy(src: Uri, dst: File, context: Context) {
-        val chunkSize = 1024  // We'll read in one kB at a time
+        val chunkSize = 1024 // We'll read in one kB at a time
         val imageData = ByteArray(chunkSize)
         var `in`: InputStream? = null
         var out: OutputStream? = null
         try {
             `in` = context.contentResolver.openInputStream(src)
-            out = FileOutputStream(dst)  // I'm assuming you already have the File object for where you're writing to
+            out = FileOutputStream(dst) // I'm assuming you already have the File object for where you're writing to
 
             var bytesRead: Int = `in`.read(imageData)
             while (bytesRead > 0) {
                 out.write(Arrays.copyOfRange(imageData, 0, Math.max(0, bytesRead)))
                 bytesRead = `in`.read(imageData)
             }
-
         } catch (ex: Exception) {
             error("Could not copy data", ex)
         } finally {

@@ -14,7 +14,7 @@ enum class NeedleType {
          * @param needleType needle type enum value
          * @return formatted needle type enum value
          */
-        fun format(context: Context, needleType: NeedleType): String = when(needleType) {
+        fun format(context: Context, needleType: NeedleType): String = when (needleType) {
             OTHER -> context.resources.getString(R.string.needle_type_other)
             CIRCULAR -> context.resources.getString(R.string.needle_type_circular)
             POINT -> context.resources.getString(R.string.needle_type_point)
@@ -38,7 +38,7 @@ enum class NeedleType {
          * @param typeStr formatted needle type string
          * @return needle type enum value
          */
-        fun parse(context: Context, typeStr: String?): NeedleType = when(typeStr) {
+        fun parse(context: Context, typeStr: String?): NeedleType = when (typeStr) {
             context.resources.getString(R.string.needle_type_other) -> OTHER
             context.resources.getString(R.string.needle_type_circular) -> CIRCULAR
             context.resources.getString(R.string.needle_type_point) -> POINT

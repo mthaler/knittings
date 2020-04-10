@@ -12,7 +12,7 @@ object PowerUtils {
      *
      * @param ctx context
      */
-    fun getBatteryLevel(ctx: Context): Float  {
+    fun getBatteryLevel(ctx: Context): Float {
         val batteryIntent = ctx.registerReceiver(null, IntentFilter(Intent.ACTION_BATTERY_CHANGED))
         val level = batteryIntent.getIntExtra(BatteryManager.EXTRA_LEVEL, -1)
         val scale = batteryIntent.getIntExtra(BatteryManager.EXTRA_SCALE, -1)
@@ -22,7 +22,6 @@ object PowerUtils {
         } else {
             return level.toFloat() / scale as Float * 100.0f
         }
-
     }
 
     /**

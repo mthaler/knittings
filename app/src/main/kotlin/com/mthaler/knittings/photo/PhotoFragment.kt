@@ -173,7 +173,7 @@ class PhotoFragment : Fragment(), AnkoLogger {
      * @return Uri of the saved file or null
      */
     private fun saveImage(image: Bitmap): Uri? {
-        //TODO - Should be processed in another thread
+        // TODO - Should be processed in another thread
         var uri: Uri? = null
         context?.let {
             val imagesFolder = File(it.cacheDir, "images")

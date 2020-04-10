@@ -2,7 +2,7 @@ package com.mthaler.knittings.database
 
 abstract class AbstractObservableDatabase : ObservableDatabase {
 
-    private val observers = HashSet<DatabaseObserver>();
+    private val observers = HashSet<DatabaseObserver>()
 
     @Synchronized override fun addObserver(observer: DatabaseObserver) {
         observers.add(observer)

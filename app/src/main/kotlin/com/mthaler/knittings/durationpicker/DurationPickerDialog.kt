@@ -32,9 +32,7 @@ class DurationPickerDialog(context: Context,
      * @param callBack How parent is notified.
      * @param duration initial duration
      */
-    constructor(context: Context,
-                callBack: (DurationPicker, Long) -> Unit,
-                duration: Long) : this(context, 0, callBack, duration)
+    constructor(context: Context, callBack: (DurationPicker, Long) -> Unit, duration: Long) : this(context, 0, callBack, duration)
 
     init {
         requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -43,7 +41,7 @@ class DurationPickerDialog(context: Context,
 
         setButton(context.getText(R.string.durationpicker_set_duration), this)
         setButton2(context.getText(R.string.dialog_button_cancel), null as OnClickListener?)
-        //setIcon(android.R.drawable.ic_dialog_time);
+        // setIcon(android.R.drawable.ic_dialog_time);
 
         val inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         val view = inflater.inflate(R.layout.duration_picker_dialog, null)

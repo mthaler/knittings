@@ -20,8 +20,6 @@ import java.io.File
 import android.content.ClipData
 import android.os.Build
 
-
-
 object TakePhotoDialog : AnkoLogger {
 
     /**
@@ -38,6 +36,7 @@ object TakePhotoDialog : AnkoLogger {
                knittingID: Long,
                takePhoto: (File, Intent) -> Unit,
                importPhoto: (File, Intent) -> Unit): AlertDialog {
+
         // create the dialog
         val b = AlertDialog.Builder(context)
         @SuppressLint("InflateParams")
@@ -87,9 +86,7 @@ object TakePhotoDialog : AnkoLogger {
      * @param knittingID ID of the knitting for which a photo should be added
      * @param file photo file
      */
-    fun handleTakePhotoResult(context: Context,
-                              knittingID: Long,
-                              file: File) {
+    fun handleTakePhotoResult(context: Context, knittingID: Long, file: File) {
         // add photo to database
         val orientation = PictureUtils.getOrientation(file.absolutePath)
         val preview = PictureUtils.decodeSampledBitmapFromPath(file.absolutePath, 200, 200)
@@ -118,10 +115,7 @@ object TakePhotoDialog : AnkoLogger {
      * @param file photo file
      * @param data data returned from import image activity
      */
-    fun handleImageImportResult(context: Context,
-                                knittingID: Long,
-                                file: File,
-                                data: Intent) {
+    fun handleImageImportResult(context: Context, knittingID: Long, file: File, data: Intent) {
         val imageUri = data.data
         PictureUtils.copy(imageUri, file, context)
         val orientation = PictureUtils.getOrientation(file.absolutePath)

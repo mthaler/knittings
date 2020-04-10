@@ -18,7 +18,7 @@ enum class Status {
          * @param status status enum value
          * @return formatted status enum value
          */
-        fun format(context: Context, status: Status): String = when(status) {
+        fun format(context: Context, status: Status): String = when (status) {
             IN_THE_WORKS -> context.resources.getString(R.string.knitting_status_in_the_works)
             FINISHED -> context.resources.getString(R.string.knitting_status_finished)
             PLANNED -> context.resources.getString(R.string.knitting_status_planned)
@@ -41,7 +41,7 @@ enum class Status {
          * @param statusStr formatted status string
          * @return status enum value
          */
-        fun parse(context: Context, statusStr: String): Status = when(statusStr) {
+        fun parse(context: Context, statusStr: String): Status = when (statusStr) {
             context.resources.getString(R.string.knitting_status_in_the_works) -> IN_THE_WORKS
             context.resources.getString(R.string.knitting_status_finished) -> FINISHED
             context.resources.getString(R.string.knitting_status_planned) -> PLANNED
@@ -57,7 +57,7 @@ enum class Status {
          * @param status status enum value
          * @return drawable resource for the given status
          */
-        fun getDrawableResource(context: Context, status: Status): Int = when(status) {
+        fun getDrawableResource(context: Context, status: Status): Int = when (status) {
             IN_THE_WORKS -> R.drawable.ic_play_circle_outline_black_24dp
             FINISHED -> R.drawable.ic_check_circle_outline_24px
             PLANNED -> R.drawable.ic_outline_assignment_24px

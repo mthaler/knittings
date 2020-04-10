@@ -51,8 +51,7 @@ class EditNeedleFragment : Fragment() {
      *                  The fragment should not add the view itself, but this can be used to generate the LayoutParams of the view.
      * @param savedInstanceState If non-null, this fragment is being re-constructed from a previous saved state as given here.
      */
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
         setHasOptionsMenu(true)
 
@@ -117,7 +116,6 @@ class EditNeedleFragment : Fragment() {
              */
             override fun onNothingSelected(parent: AdapterView<*>?) {
             }
-
         }
 
         val checkBoxinUse = v.findViewById<CheckBox>(R.id.needle_in_use)

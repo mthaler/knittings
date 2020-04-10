@@ -34,7 +34,6 @@ class NeedleListActivity : BaseActivity(), NeedleListFragment.OnFragmentInteract
             val fm = supportFragmentManager
             val ft = fm.beginTransaction()
             ft.add(R.id.needle_list_container, f)
-            //ft.addToBackStack(null)
             ft.commit()
         }
     }

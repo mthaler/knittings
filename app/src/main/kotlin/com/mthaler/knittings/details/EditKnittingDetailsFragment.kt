@@ -75,7 +75,7 @@ class EditKnittingDetailsFragment : Fragment() {
         editTextTitle.addTextChangedListener(createTextWatcher { c, knitting -> knitting.copy(title = c.toString()) })
 
         val editTextDescription = v.findViewById<EditText>(R.id.knitting_description)
-        editTextDescription.addTextChangedListener(createTextWatcher{ c, knitting -> knitting.copy(description = c.toString()) })
+        editTextDescription.addTextChangedListener(createTextWatcher { c, knitting -> knitting.copy(description = c.toString()) })
 
         textViewStarted = v.findViewById(R.id.knitting_started)
         // we need to set this in code because older android versions (API <21) do not support vector drawables with drawableLeft
@@ -168,7 +168,6 @@ class EditKnittingDetailsFragment : Fragment() {
              */
             override fun onNothingSelected(parent: AdapterView<*>?) {
             }
-
         }
 
         // update knitting if user changes the rating
@@ -295,9 +294,8 @@ class EditKnittingDetailsFragment : Fragment() {
                         val knitting1 = updateKnitting(c, knitting0)
                         datasource.updateKnitting(knitting1)
                         knitting = knitting1
-                    } catch(ex: Exception) {
+                    } catch (ex: Exception) {
                     }
-
                 }
             }
         }
@@ -318,7 +316,6 @@ class EditKnittingDetailsFragment : Fragment() {
                     putLong(EXTRA_KNITTING_ID, knittingID)
                 }
             }
-
 
         private const val DIALOG_DATE = "date"
         private const val REQUEST_STARTED = 0

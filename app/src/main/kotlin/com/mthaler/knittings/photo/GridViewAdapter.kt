@@ -99,4 +99,3 @@ class GridViewAdapter(context: Context, private val layoutResourceId: Int, priva
         var image: ImageView? = null
     }
 }
-

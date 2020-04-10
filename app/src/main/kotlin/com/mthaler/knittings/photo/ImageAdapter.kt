@@ -41,11 +41,9 @@ class ImageAdapter(val context: Context, private val data: List<Photo>) : PagerA
         })
         (container as ViewPager).addView(imageView, 0)
         return imageView
-
     }
 
     override fun destroyItem(container: ViewGroup, position: Int, obj: Any) {
         (container as ViewPager).removeView(obj as ImageView)
     }
 }
-

@@ -53,8 +53,8 @@ class UploadTask(private val dbxClient: DbxClientV2,
             dbxClient.files().createFolderV2("/$dir")
 
             // upload database to dropbox
-            dbxClient.files().uploadBuilder("/$dir/db.json") //Path in the user's Dropbox to save the file.
-                    .withMode(WriteMode.OVERWRITE) //always overwrite existing file
+            dbxClient.files().uploadBuilder("/$dir/db.json") // Path in the user's Dropbox to save the file.
+                    .withMode(WriteMode.OVERWRITE) // always overwrite existing file
                     .uploadAndFinish(dbInputStream)
 
             // upload photos to dropbox
@@ -62,8 +62,8 @@ class UploadTask(private val dbxClient: DbxClientV2,
             for ((index, photo) in photos.withIndex()) {
                 if (isCancelled) break
                 val inputStream = FileInputStream(photo.filename)
-                dbxClient.files().uploadBuilder("/" + dir + "/" + photo.id + "." + getExtension(photo.filename.name)) //Path in the user's Dropbox to save the file.
-                    .withMode(WriteMode.OVERWRITE) //always overwrite existing file
+                dbxClient.files().uploadBuilder("/" + dir + "/" + photo.id + "." + getExtension(photo.filename.name)) // Path in the user's Dropbox to save the file.
+                    .withMode(WriteMode.OVERWRITE) // always overwrite existing file
                     .uploadAndFinish(inputStream)
                 publishProgress((index / count.toFloat() * 100).toInt())
             }
@@ -97,4 +97,3 @@ class UploadTask(private val dbxClient: DbxClientV2,
         onComplete(true)
     }
 }
-

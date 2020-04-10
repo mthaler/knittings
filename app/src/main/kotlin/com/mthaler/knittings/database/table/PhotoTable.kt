@@ -31,7 +31,6 @@ object PhotoTable {
         val KNITTING_ID = "knitting_id"
     }
 
-
     fun cursorToPhoto(cursor: Cursor): Photo {
         val idIndex = cursor.getColumnIndex(Cols.ID)
         val idPreview = cursor.getColumnIndex(Cols.PREVIEW)

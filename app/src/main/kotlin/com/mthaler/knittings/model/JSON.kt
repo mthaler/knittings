@@ -99,7 +99,7 @@ fun JSONObject.toKnitting(context: Context): Triple<Knitting, Long?, Long?> {
     } else {
         Status.PLANNED
     }
-    return Triple(Knitting(id, title, description, started, finished, needleDiameter, size, null, rating, duration,  status = status), defaultPhoto, category)
+    return Triple(Knitting(id, title, description, started, finished, needleDiameter, size, null, rating, duration, status = status), defaultPhoto, category)
 }
 
 /**
@@ -107,7 +107,7 @@ fun JSONObject.toKnitting(context: Context): Triple<Knitting, Long?, Long?> {
  */
 fun JSONArray.toKnittings(context: Context): List<Triple<Knitting, Long?, Long?>> {
     val result = ArrayList<Triple<Knitting, Long?, Long?>>()
-    for(i in 0 until length()) {
+    for (i in 0 until length()) {
         val item = getJSONObject(i)
         val knittingAndDefaultPhoto = item.toKnitting(context)
         result.add(knittingAndDefaultPhoto)
@@ -131,7 +131,7 @@ fun JSONObject.toPhoto(): Photo {
  */
 fun JSONArray.toPhotos(): List<Photo> {
     val result = ArrayList<Photo>()
-    for(i in 0 until length()) {
+    for (i in 0 until length()) {
         val item = getJSONObject(i)
         val photo = item.toPhoto()
         result.add(photo)
@@ -154,7 +154,7 @@ fun JSONObject.toCategory(): Category {
  */
 fun JSONArray.toCategories(): List<Category> {
     val result = ArrayList<Category>()
-    for(i in 0 until length()) {
+    for (i in 0 until length()) {
         val item = getJSONObject(i)
         val category = item.toCategory()
         result.add(category)
@@ -171,7 +171,7 @@ fun JSONObject.toNeedle(context: Context): Needle {
     val description = getString("description")
     val size = getString("size")
     val length = getString("length")
-    val material = if(has("material")) {
+    val material = if (has("material")) {
         val matgerialStr = getString("material")
         try {
             NeedleMaterial.valueOf(matgerialStr)
@@ -196,7 +196,7 @@ fun JSONObject.toNeedle(context: Context): Needle {
  */
 fun JSONArray.toNeedles(context: Context): List<Needle> {
     val result = ArrayList<Needle>()
-    for(i in 0 until length()) {
+    for (i in 0 until length()) {
         val item = getJSONObject(i)
         val needle = item.toNeedle(context)
         result.add(needle)
@@ -288,7 +288,7 @@ fun JSONObject.toDatabase(context: Context, externalFilesDir: File): Database {
     val knittingsAndDefaultPhotos = getJSONArray("knittings").toKnittings(context)
     val photos = getJSONArray("photos").toPhotos()
     val categories = if (has("categories")) getJSONArray("categories").toCategories() else ArrayList()
-    val needles = if(has("needles")) getJSONArray("needles").toNeedles(context) else ArrayList()
+    val needles = if (has("needles")) getJSONArray("needles").toNeedles(context) else ArrayList()
     // we need to update the filename of the photo because the external storage location might be different
     val photosWithUpdatedFilename = photos.map { updatePhotoFilename(it) }
 
@@ -297,6 +297,6 @@ fun JSONObject.toDatabase(context: Context, externalFilesDir: File): Database {
     // create a map from category id to category
     val idToCategory = categories.map { it.id to it }.toMap()
     // update the list of knittings with default photos
-    val knittings = knittingsAndDefaultPhotos.map { Pair(updateKnitting(it.first, it.second, idToPhoto), it.third) }.map { addCategory(it.first, it.second, idToCategory)  }
+    val knittings = knittingsAndDefaultPhotos.map { Pair(updateKnitting(it.first, it.second, idToPhoto), it.third) }.map { addCategory(it.first, it.second, idToCategory) }
     return Database(knittings, photosWithUpdatedFilename, categories, needles)
 }

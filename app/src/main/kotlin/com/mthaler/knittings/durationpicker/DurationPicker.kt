@@ -27,9 +27,7 @@ import com.mthaler.knittings.R
  *
  * For a dialog using this view, see [android.app.TimePickerDialog].
  */
-class DurationPicker @JvmOverloads constructor(context: Context,
-                                               attrs: AttributeSet? = null,
-                                               defStyle: Int = 0) : FrameLayout(context, attrs, defStyle) {
+class DurationPicker @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyle: Int = 0) : FrameLayout(context, attrs, defStyle) {
 
     // state
     private var currentHours = 0 // 0-9999

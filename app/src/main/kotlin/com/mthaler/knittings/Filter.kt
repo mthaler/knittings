@@ -24,7 +24,7 @@ interface Filter : Serializable {
  *
  * @param category category used for filtering
  */
-data class SingleCategoryFilter(val category: Category): Filter {
+data class SingleCategoryFilter(val category: Category) : Filter {
 
     override fun filter(knittings: List<Knitting>): List<Knitting> = knittings.filter { it.category == category }
 }
@@ -34,7 +34,7 @@ data class SingleCategoryFilter(val category: Category): Filter {
  *
  * @param status status used for filtering
  */
-data class SingleStatusFilter(val status: Status): Filter {
+data class SingleStatusFilter(val status: Status) : Filter {
 
     override fun filter(knittings: List<Knitting>): List<Knitting> = knittings.filter { it.status == status }
 }
@@ -44,7 +44,7 @@ data class SingleStatusFilter(val status: Status): Filter {
  */
 data class ContainsFilter(val text: String) : Filter {
 
-    override fun filter(knittings: List<Knitting>): List<Knitting> = knittings.filter { containsIgnoreCase( it.title, text) || containsIgnoreCase(it.description, text) }
+    override fun filter(knittings: List<Knitting>): List<Knitting> = knittings.filter { containsIgnoreCase(it.title, text) || containsIgnoreCase(it.description, text) }
 }
 
 /**
@@ -52,7 +52,7 @@ data class ContainsFilter(val text: String) : Filter {
  *
  * @param filters list of filters
  */
-data class CombinedFilter(val filters: List<Filter>): Filter {
+data class CombinedFilter(val filters: List<Filter>) : Filter {
 
     override fun filter(knittings: List<Knitting>): List<Knitting> {
         var result = knittings

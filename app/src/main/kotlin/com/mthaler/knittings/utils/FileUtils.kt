@@ -1,7 +1,7 @@
 package com.mthaler.knittings.utils
 
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Date
 
 object FileUtils {
     fun createDateTimeDirectoryName(d: Date): String {

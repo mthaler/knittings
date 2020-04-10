@@ -1,7 +1,6 @@
 package com.mthaler.knittings
 
 import org.junit.Test
-
 import org.junit.Assert.*
 
 /**

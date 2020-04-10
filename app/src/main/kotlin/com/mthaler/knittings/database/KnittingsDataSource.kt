@@ -20,7 +20,7 @@ import com.mthaler.knittings.database.table.NeedleTable.cursorToNeedle
 import com.mthaler.knittings.model.*
 import java.lang.Exception
 
-class KnittingsDataSource private constructor(context: Context): AbstractObservableDatabase(), AnkoLogger {
+class KnittingsDataSource private constructor(context: Context) : AbstractObservableDatabase(), AnkoLogger {
 
     private val context: Context = context.applicationContext
     private val dbHelper: KnittingDatabaseHelper
@@ -328,7 +328,7 @@ class KnittingsDataSource private constructor(context: Context): AbstractObserva
      */
     @Synchronized
     private fun deleteAllPhotos(knitting: Knitting) {
-        for(photo in getAllPhotos(knitting)) {
+        for (photo in getAllPhotos(knitting)) {
             deletePhotoFile(photo.filename)
         }
         val id = knitting.id
@@ -435,7 +435,6 @@ class KnittingsDataSource private constructor(context: Context): AbstractObserva
         notifyObservers()
     }
 
-
     @Synchronized
     fun deleteAllCategories() {
         for (category in allCategories) {
@@ -534,7 +533,6 @@ class KnittingsDataSource private constructor(context: Context): AbstractObserva
         notifyObservers()
     }
 
-
     @Synchronized
     fun deleteAllNeedles() {
         for (needle in allNeedles) {
@@ -604,7 +602,7 @@ class KnittingsDataSource private constructor(context: Context): AbstractObserva
     @Synchronized
     private fun deletePhotoFile(file: File) {
         if (file.exists()) {
-            if(file.delete()) {
+            if (file.delete()) {
                 debug("Deleted photo $file")
             } else {
                 error("Could not delete $file")

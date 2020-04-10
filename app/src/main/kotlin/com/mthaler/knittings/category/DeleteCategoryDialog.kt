@@ -3,7 +3,6 @@ package com.mthaler.knittings.category
 import android.app.AlertDialog
 import android.content.Context
 import com.mthaler.knittings.R
-import com.mthaler.knittings.model.Category
 
 /**
  * Displays a dialog that asks the user to confirm that the knitting should be deleted

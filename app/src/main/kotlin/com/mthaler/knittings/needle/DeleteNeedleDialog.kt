@@ -13,7 +13,7 @@ object DeleteNeedleDialog {
         b.setTitle(R.string.delete_needle_dialog_title)
         b.setMessage(context.resources.getString(R.string.delete_needle_dialog_question, needle.name))
         b.setPositiveButton(R.string.delete_needle_dialog_delete_button, { diaglog, which -> onDelete() })
-        b.setNegativeButton(R.string.dialog_button_cancel, {dialog, which -> })
+        b.setNegativeButton(R.string.dialog_button_cancel, { dialog, which -> })
         return b.create()
     }
 }

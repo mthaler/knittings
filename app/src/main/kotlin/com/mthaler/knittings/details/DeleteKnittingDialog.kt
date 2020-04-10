@@ -16,7 +16,7 @@ object DeleteKnittingDialog {
         b.setTitle(R.string.delete_knitting_dialog_title)
         b.setMessage(context.resources.getString(R.string.delete_knitting_dialog_question, knitting.title))
         b.setPositiveButton(R.string.delete_knitting_dialog_delete_button, { diaglog, which -> onDelete() })
-        b.setNegativeButton(R.string.dialog_button_cancel, {dialog, which -> })
+        b.setNegativeButton(R.string.dialog_button_cancel, { dialog, which -> })
         return b.create()
     }
 }

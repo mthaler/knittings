@@ -120,12 +120,12 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
             R.id.menu_item_sort -> {
                 val listItems = arrayOf(getString(R.string.sorting_newest_first), getString(R.string.sorting_oldest_first), getString(R.string.sorting_alphabetical))
                 val builder = AlertDialog.Builder(this)
-                val checkedItem = when(sorting) {
+                val checkedItem = when (sorting) {
                     Sorting.NewestFirst -> 0
                     Sorting.OldestFirst -> 1
                     Sorting.Alphabetical -> 2
                 }
-                builder.setSingleChoiceItems(listItems, checkedItem) { dialog, which -> when(which) {
+                builder.setSingleChoiceItems(listItems, checkedItem) { dialog, which -> when (which) {
                     0 -> sorting = Sorting.NewestFirst
                     1 -> sorting = Sorting.OldestFirst
                     2 -> sorting = Sorting.Alphabetical
@@ -158,7 +158,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
                         0
                     }
                 }
-                builder.setSingleChoiceItems(listItems, checkedItem) { dialog, which -> when(which) {
+                builder.setSingleChoiceItems(listItems, checkedItem) { dialog, which -> when (which) {
                     0 -> filter = CombinedFilter(f.filters.filterNot { it is SingleCategoryFilter })
                     else -> {
                         val category = categories[which - 1]
@@ -187,7 +187,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
                         0
                     }
                 }
-                builder.setSingleChoiceItems(listItems, checkedItem) { dialog, which -> when(which) {
+                builder.setSingleChoiceItems(listItems, checkedItem) { dialog, which -> when (which) {
                     0 -> filter = CombinedFilter(f.filters.filterNot { it is SingleStatusFilter })
                     else -> {
                         val status = Status.values()[which - 1]
@@ -268,8 +268,8 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
             activeFilters.text = sb.toString()
             activeFilters.visibility = View.VISIBLE
         }
-        when(sorting) {
-            Sorting.NewestFirst -> knittings.sortByDescending { it.started}
+        when (sorting) {
+            Sorting.NewestFirst -> knittings.sortByDescending { it.started }
             Sorting.OldestFirst -> knittings.sortBy { it.started }
             Sorting.Alphabetical -> knittings.sortBy { it.title.toLowerCase() }
         }
@@ -286,7 +286,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
              * @return true if this callback handled the event, false if the standard MenuItem invocation should continue.
              */
             override fun onActionItemClicked(mode: ActionMode?, menu: MenuItem?): Boolean {
-                when(menu?.itemId) {
+                when (menu?.itemId) {
                     R.id.action_delete -> {
                         mode?.finish()
                         DeleteKnittingDialog.create(this@MainActivity, knitting, {
@@ -311,7 +311,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
              * Called when action mode is first created. The menu supplied will be used to generate action buttons for the action mode.
              *
              * @param mode The current ActionMode
-             * @param menu  Menu used to populate action buttons
+             * @param menu Menu used to populate action buttons
              * @return true if the action mode should be created, false if entering this mode should be aborted.
              */
             override fun onCreateActionMode(mode: ActionMode?, menu: Menu?): Boolean {
@@ -324,7 +324,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
              * Called to refresh an action mode's action menu whenever it is invalidated.
              *
              * @param mode The current ActionMode
-             * @param menu  Menu used to populate action buttons
+             * @param menu Menu used to populate action buttons
              */
             override fun onPrepareActionMode(mode: ActionMode?, menu: Menu?): Boolean = true
 
@@ -347,8 +347,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         sv.setOnCloseListener(this)
         sv.isSubmitButtonEnabled = false
         sv.setIconifiedByDefault(true)
-        if (initialQuery != null)
-        {
+        if (initialQuery != null) {
             sv.isIconified = false
             search.expandActionView()
             sv.setQuery(initialQuery, true)

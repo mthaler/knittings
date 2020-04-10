@@ -47,21 +47,19 @@ class KnittingDetailsActivity : BaseActivity(), KnittingDetailsFragment.OnFragme
         // get the id of the knitting that should be displayed. If the application was destroyed because e.g. the device configuration changed
         // because the device was rotated we use the knitting id from the saved instance state. Otherwise we use the id passed to the intent
         knittingID = if (savedInstanceState != null) savedInstanceState.getLong(EXTRA_KNITTING_ID) else intent.getLongExtra(EXTRA_KNITTING_ID, -1L)
-        editOnly =  intent.getBooleanExtra(EXTRA_EDIT_ONLY, false)
+        editOnly = intent.getBooleanExtra(EXTRA_EDIT_ONLY, false)
         if (savedInstanceState == null) {
             if (editOnly) {
                 val f = EditKnittingDetailsFragment.newInstance(knittingID)
                 val fm = supportFragmentManager
                 val ft = fm.beginTransaction()
                 ft.add(R.id.knitting_details_container, f)
-                //ft.addToBackStack(null)
                 ft.commit()
             } else {
                 val f = KnittingDetailsFragment.newInstance(knittingID)
                 val fm = supportFragmentManager
                 val ft = fm.beginTransaction()
                 ft.add(R.id.knitting_details_container, f)
-                //ft.addToBackStack(null)
                 ft.commit()
             }
         } else {
@@ -80,7 +78,7 @@ class KnittingDetailsActivity : BaseActivity(), KnittingDetailsFragment.OnFragme
     override fun onSaveInstanceState(savedInstanceState: Bundle) {
         savedInstanceState.putLong(EXTRA_KNITTING_ID, knittingID)
         savedInstanceState.putBoolean(EXTRA_EDIT_ONLY, editOnly)
-        currentPhotoPath?.let { savedInstanceState.putString(CURRENT_PHOTO_PATH, it.absolutePath)  }
+        currentPhotoPath?.let { savedInstanceState.putString(CURRENT_PHOTO_PATH, it.absolutePath) }
         super.onSaveInstanceState(savedInstanceState)
     }
 

@@ -12,9 +12,10 @@ import com.mthaler.knittings.model.Knitting
 import com.mthaler.knittings.model.Status
 import java.text.DateFormat
 
-class KnittingAdapter(val context: Context, val knittings: List<Knitting>,
+class KnittingAdapter(
+                      val context: Context, val knittings: List<Knitting>,
                       private val onItemClick: (Knitting) -> Unit,
-                      private val onItemLongClick: (Knitting) -> Unit): RecyclerView.Adapter<KnittingAdapter.ViewHolder>() {
+                      private val onItemLongClick: (Knitting) -> Unit) : RecyclerView.Adapter<KnittingAdapter.ViewHolder>() {
 
     /**
      * Creates, configures and returns a ViewHolder object for a particular row in the list
@@ -49,7 +50,7 @@ class KnittingAdapter(val context: Context, val knittings: List<Knitting>,
      * @param context context
      * @param itemView item view
      */
-    inner class ViewHolder(val context: Context, itemView: View): RecyclerView.ViewHolder(itemView){
+    inner class ViewHolder(val context: Context, itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val titleTextView = itemView.findViewById<TextView>(R.id.knitting_list_item_titleTextView)
         private val descriptionTextView = itemView.findViewById<TextView>(R.id.knitting_list_item_descriptionTextView)
         private val startedTextView = itemView.findViewById<TextView>(R.id.knitting_list_item_startedTextView)
@@ -84,5 +85,4 @@ class KnittingAdapter(val context: Context, val knittings: List<Knitting>,
             statusImageView.setImageResource(Status.getDrawableResource(context, knitting.status))
         }
     }
-
 }

@@ -32,8 +32,7 @@ class EditCategoryFragment : Fragment() {
         retainInstance = true
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
         setHasOptionsMenu(true)
 
@@ -63,7 +62,7 @@ class EditCategoryFragment : Fragment() {
             colorPicker.setTitle(resources.getString(R.string.category_color_dialog_title))
             colorPicker.setColors(R.array.category_colors)
             colorPicker.setRoundColorButton(true)
-            colorPicker.setColorButtonMargin(6, 6,6, 6)
+            colorPicker.setColorButtonMargin(6, 6, 6, 6)
             colorPicker.setColumns(4)
             colorPicker.show()
         }

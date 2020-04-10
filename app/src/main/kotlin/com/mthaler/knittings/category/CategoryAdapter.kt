@@ -10,7 +10,7 @@ import com.mthaler.knittings.model.Category
 
 class CategoryAdapter(val categories: List<Category>,
                       private val onItemClick: (Category) -> Unit,
-                      private val onItemLongClick: (Category) -> Unit): RecyclerView.Adapter<CategoryAdapter.ViewHolder>() {
+                      private val onItemLongClick: (Category) -> Unit) : RecyclerView.Adapter<CategoryAdapter.ViewHolder>() {
 
     /**
      * Creates, configures and returns a ViewHolder object for a particular row in the list
@@ -44,7 +44,7 @@ class CategoryAdapter(val categories: List<Category>,
      *
      * @param itemView item view
      */
-    class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
+    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val colorSwatch = itemView.findViewById<ColorSwatch>(R.id.category_list_item_color)
         private val textFieldName = itemView.findViewById<TextView>(R.id.category_list_item_name)
 
