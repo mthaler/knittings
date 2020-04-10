@@ -11,11 +11,11 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.RatingBar
 import android.widget.TextView
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import com.mthaler.knittings.Extras
 import com.mthaler.knittings.photo.ImageAdapter
 import com.mthaler.knittings.R
-import com.mthaler.knittings.database.datasource
-import com.mthaler.knittings.model.Knitting
 import com.mthaler.knittings.model.Status
 import com.mthaler.knittings.utils.TimeUtils
 import org.jetbrains.anko.AnkoLogger
@@ -26,43 +26,20 @@ import java.text.DateFormat
  */
 class KnittingDetailsFragment : Fragment(), AnkoLogger {
 
-    private lateinit var knitting: Knitting
+    private var knittingID: Long = -1
+    private lateinit var viewModel: KnittingDetailsViewModel
     private var listener: OnFragmentInteractionListener? = null
 
-    /**
-     * Called to do initial creation of a fragment. This is called after onAttach(Activity) and before
-     * onCreateView(LayoutInflater, ViewGroup, Bundle). Note that this can be called while the fragment's activity
-     * is still in the process of being created. As such, you can not rely on things like the activity's content view
-     * hierarchy being initialized at this point. If you want to do work once the activity itself is created,
-     * see onActivityCreated(Bundle).
-     *
-     * Any restored child fragments will be created before the base Fragment.onCreate method returns.
-     *
-     * @param savedInstanceState If the fragment is being re-created from a previous saved state, this is the state.
-     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            val knittingID = it.getLong(Extras.EXTRA_KNITTING_ID)
-            knitting = datasource.getKnitting(knittingID)
+            knittingID = it.getLong(Extras.EXTRA_KNITTING_ID)
         }
 
         // Retain this fragment across configuration changes.
         retainInstance = true
     }
 
-    /**
-     * Called to have the fragment instantiate its user interface view. This is optional, and non-graphical
-     * fragments can return null (which is the default implementation). This will be called between onCreate(Bundle)
-     * and onActivityCreated(Bundle).
-     *
-     * If you return a View from here, you will later be called in onDestroyView() when the view is being released.
-     *
-     * @param inflater the LayoutInflater object that can be used to inflate any views in the fragment
-     * @param container If non-null, this is the parent view that the fragment's UI should be attached to.
-     *                  The fragment should not add the view itself, but this can be used to generate the LayoutParams of the view.
-     * @param savedInstanceState If non-null, this fragment is being re-constructed from a previous saved state as given here.
-     */
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
         setHasOptionsMenu(true)
@@ -73,19 +50,20 @@ class KnittingDetailsFragment : Fragment(), AnkoLogger {
         // start edit knitting details fragment if the user clicks the floating action button
         val fabEdit = v.findViewById<FloatingActionButton>(R.id.edit_knitting_details)
         fabEdit.setOnClickListener {
-            listener?.editKnitting(knitting.id)
+            listener?.editKnitting(knittingID)
         }
         return v
     }
 
-    /**
-     * Initialize the contents of the Fragment host's standard options menu. You should place your menu items in to menu.
-     * For this method to be called, you must have first called setHasOptionsMenu(boolean).
-     * See Activity.onCreateOptionsMenu for more information.
-     *
-     * @param menu The options menu in which you place your items.
-     * @param inflater MenuInflater
-     */
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        viewModel = ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory.getInstance(activity!!.application)).get(KnittingDetailsViewModel::class.java)
+        viewModel.init(knittingID)
+        viewModel.knitting.observe(viewLifecycleOwner, Observer { knitting ->
+            updateDetails(knitting)
+        })
+    }
+
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.knitting_details_fragment, menu)
@@ -100,29 +78,18 @@ class KnittingDetailsFragment : Fragment(), AnkoLogger {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.menu_item_show_stopwatch -> {
-                listener?.startStopwatch(knitting.id)
+                listener?.startStopwatch(knittingID)
                 true
             }
             R.id.menu_item_delete_knitting -> {
-                listener?.deleteKnitting(knitting.id)
+                listener?.deleteKnitting(knittingID)
                 return true
             }
             else -> super.onOptionsItemSelected(item)
         }
     }
 
-    /**
-     * Called when the fragment is visible to the user and actively running. This is generally tied to Activity.onResume of the containing Activity's lifecycle.
-     *
-     * If you override this method you must call through to the superclass implementation.
-     */
-    override fun onResume() {
-        super.onResume()
-        knitting = datasource.getKnitting(knitting.id)
-        updateDetails()
-    }
-
-    private fun updateDetails() {
+    private fun updateDetails(knittingWithPhotos: KnittingWithPhotos) {
         view?.let {
             // remove slider dots and on page changed listener. We readd it if we need it
             val sliderDots = it.findViewById<LinearLayout>(R.id.sliderDots)
@@ -130,7 +97,7 @@ class KnittingDetailsFragment : Fragment(), AnkoLogger {
             val viewPager = it.findViewById<ViewPager>(R.id.view_pager)
             viewPager.clearOnPageChangeListeners()
             viewPager.offscreenPageLimit = 3
-            val photos = datasource.getAllPhotos(knitting)
+            val photos = knittingWithPhotos.photos
             photos.sortByDescending { it.id }
             if (photos.size > 0) {
                 viewPager.visibility = View.VISIBLE
@@ -171,6 +138,8 @@ class KnittingDetailsFragment : Fragment(), AnkoLogger {
             } else {
                 viewPager.visibility = View.GONE
             }
+
+            val knitting = knittingWithPhotos.knitting
 
             val knittingTitle = it.findViewById<TextView>(R.id.knitting_title)
             knittingTitle.text = knitting.title

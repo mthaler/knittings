@@ -209,7 +209,6 @@ class KnittingsDataSource private constructor(context: Context) : AbstractObserv
             cursor.moveToFirst()
             val knitting = cursorToKnitting(cursor)
             cursor.close()
-            notifyObservers()
             return knitting
         }
     }
