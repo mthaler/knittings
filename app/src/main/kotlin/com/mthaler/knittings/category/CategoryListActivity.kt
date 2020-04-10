@@ -68,6 +68,16 @@ class CategoryListActivity : BaseActivity(), CategoryListFragment.OnFragmentInte
         else -> super.onOptionsItemSelected(item)
     }
 
+    override fun onBackPressed() {
+        val fm = supportFragmentManager
+        val f = fm.findFragmentById(R.id.category_list_container)
+        if (f is EditCategoryFragment) {
+            f.onBackPressed()
+        } else {
+            super.onBackPressed()
+        }
+    }
+
     override fun createCategory() {
         val category = datasource.addCategory(Category())
         val f = EditCategoryFragment.newInstance(category.id)

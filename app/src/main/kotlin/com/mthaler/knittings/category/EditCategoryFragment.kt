@@ -4,15 +4,15 @@ import android.os.Bundle
 import android.view.*
 import android.widget.Button
 import android.widget.EditText
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.mthaler.knittings.BaseFragment
 import com.mthaler.knittings.R
 import com.mthaler.knittings.Extras.EXTRA_CATEGORY_ID
 import com.mthaler.knittings.model.Category
 import petrov.kristiyan.colorpicker.ColorPicker
 
-class EditCategoryFragment : BaseFragment() {
+class EditCategoryFragment : Fragment() {
 
     private var categoryID: Long = -1
     private lateinit var viewModel: EditCategoryViewModel
@@ -104,7 +104,7 @@ class EditCategoryFragment : BaseFragment() {
         }
     }
 
-    override fun onBackPressed() {
+    fun onBackPressed() {
         context?.let {
             SaveChangesDialog.create(it, {
                 viewModel.saveCategory(Category(categoryID, editTextTitle.text.toString(), color))
@@ -119,10 +119,10 @@ class EditCategoryFragment : BaseFragment() {
 
         @JvmStatic
         fun newInstance(categoryID: Long) =
-            EditCategoryFragment().apply {
-                arguments = Bundle().apply {
-                    putLong(EXTRA_CATEGORY_ID, categoryID)
+                EditCategoryFragment().apply {
+                    arguments = Bundle().apply {
+                        putLong(EXTRA_CATEGORY_ID, categoryID)
+                    }
                 }
-            }
     }
 }
