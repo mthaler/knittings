@@ -45,6 +45,14 @@ class EditCategoryViewModel(application: Application) : DatasourceViewModel(appl
         return category.name
     }
 
+    fun saveCategory(category: Category) {
+        if (category.id == -1L) {
+            datasource.addCategory(category)
+        } else {
+            datasource.updateCategory(category)
+        }
+    }
+
     override fun databaseChanged() {
         val c = datasource.getCategory(categoryID)
         category.setMutVal(c)

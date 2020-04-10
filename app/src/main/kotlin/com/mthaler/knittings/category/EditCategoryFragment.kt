@@ -89,6 +89,9 @@ class EditCategoryFragment : Fragment() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
+            R.id.menu_item_save_category -> {
+                true
+            }
             R.id.menu_item_delete_category -> {
                 context?.let {
                     DeleteCategoryDialog.create(it, viewModel.getCategoryName(), {
