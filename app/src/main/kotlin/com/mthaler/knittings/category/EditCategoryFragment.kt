@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.mthaler.knittings.R
 import com.mthaler.knittings.Extras.EXTRA_CATEGORY_ID
 import com.mthaler.knittings.TextWatcher
+import com.mthaler.knittings.model.Category
 import petrov.kristiyan.colorpicker.ColorPicker
 
 class EditCategoryFragment : Fragment() {
@@ -19,6 +20,7 @@ class EditCategoryFragment : Fragment() {
     private lateinit var viewModel: EditCategoryViewModel
     private lateinit var editTextTitle: EditText
     private lateinit var buttonColor: Button
+    private var color = 0
 
     fun getCategoryID(): Long = categoryID
 
@@ -52,8 +54,9 @@ class EditCategoryFragment : Fragment() {
         buttonColor.setOnClickListener { view ->
             val colorPicker = ColorPicker(activity)
             colorPicker.setOnFastChooseColorListener(object : ColorPicker.OnFastChooseColorListener {
-                override fun setOnFastChooseColorListener(position: Int, color: Int) {
-                    viewModel.updateCategoryColor(color)
+                override fun setOnFastChooseColorListener(position: Int, c: Int) {
+                    color = c
+                    viewModel.updateCategoryColor(c)
                 }
 
                 override fun onCancel() {
@@ -78,7 +81,10 @@ class EditCategoryFragment : Fragment() {
             if (category.name != editTextTitle.text.toString()) {
                 editTextTitle.setText(category.name)
             }
-            if (category.color != null) buttonColor.setBackgroundColor(category.color)
+            if (category.color != null) {
+                color = category.color
+                buttonColor.setBackgroundColor(category.color)
+            }
         })
     }
 
@@ -90,6 +96,8 @@ class EditCategoryFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.menu_item_save_category -> {
+                viewModel.saveCategory(Category(categoryID, editTextTitle.text.toString(), color))
+                fragmentManager?.popBackStack()
                 true
             }
             R.id.menu_item_delete_category -> {
