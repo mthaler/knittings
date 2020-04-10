@@ -9,6 +9,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.mthaler.knittings.R
 import com.mthaler.knittings.Extras.EXTRA_CATEGORY_ID
+import com.mthaler.knittings.TextWatcher
 import com.mthaler.knittings.model.Category
 import petrov.kristiyan.colorpicker.ColorPicker
 
@@ -19,6 +20,7 @@ class EditCategoryFragment : Fragment() {
     private lateinit var editTextTitle: EditText
     private lateinit var buttonColor: Button
     private var color = 0
+    private var moddified = false
 
     fun getCategoryID(): Long = categoryID
 
@@ -41,6 +43,11 @@ class EditCategoryFragment : Fragment() {
 
         // set edit text title text to category name
         editTextTitle = v.findViewById(R.id.category_name)
+        editTextTitle.addTextChangedListener(object : TextWatcher {
+            override fun onTextChanged(c: CharSequence, start: Int, before: Int, count: Int) {
+                moddified = true
+            }
+        })
 
         // set background color of the button to category color if it is defined
         buttonColor = v.findViewById<Button>(R.id.button_select_color)
@@ -50,6 +57,7 @@ class EditCategoryFragment : Fragment() {
                 override fun setOnFastChooseColorListener(position: Int, c: Int) {
                     color = c
                     buttonColor.setBackgroundColor(c)
+                    moddified = true
                 }
 
                 override fun onCancel() {
@@ -76,6 +84,7 @@ class EditCategoryFragment : Fragment() {
                 color = category.color
                 buttonColor.setBackgroundColor(category.color)
             }
+            moddified = false
         })
     }
 
@@ -87,7 +96,9 @@ class EditCategoryFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.menu_item_save_category -> {
-                viewModel.saveCategory(Category(categoryID, editTextTitle.text.toString(), color))
+                if (moddified) {
+                    viewModel.saveCategory(Category(categoryID, editTextTitle.text.toString(), color))
+                }
                 fragmentManager?.popBackStack()
                 true
             }
@@ -106,12 +117,16 @@ class EditCategoryFragment : Fragment() {
 
     fun onBackPressed() {
         context?.let {
-            SaveChangesDialog.create(it, {
-                viewModel.saveCategory(Category(categoryID, editTextTitle.text.toString(), color))
+            if (moddified) {
+                SaveChangesDialog.create(it, {
+                    viewModel.saveCategory(Category(categoryID, editTextTitle.text.toString(), color))
+                    fragmentManager?.popBackStack()
+                }, {
+                    fragmentManager?.popBackStack()
+                }).show()
+            } else {
                 fragmentManager?.popBackStack()
-            }, {
-                fragmentManager?.popBackStack()
-            }).show()
+            }
         }
     }
 
