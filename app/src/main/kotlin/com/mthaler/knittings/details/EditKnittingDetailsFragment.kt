@@ -7,6 +7,7 @@ import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.appcompat.content.res.AppCompatResources
 import android.widget.*
+import androidx.core.app.NavUtils
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.mthaler.knittings.R
@@ -225,17 +226,35 @@ class EditKnittingDetailsFragment : Fragment() {
         }
     }
 
-    fun onBackPressed() {
-        context?.let {
-            if (modified) {
-                SaveChangesDialog.create(it, {
-                    viewModel.saveKnitting(createKnitting())
-                    fragmentManager?.popBackStack()
-                }, {
-                    fragmentManager?.popBackStack()
-                }).show()
+    fun onBackPressed(editOnly: Boolean) {
+        activity?.let {
+            // Respond to the action bar's Up/Home button
+            val upIntent: Intent? = NavUtils.getParentActivityIntent(it)
+            if (upIntent == null) {
+                throw IllegalStateException("No Parent Activity Intent")
             } else {
-                fragmentManager?.popBackStack()
+                if (modified) {
+                    SaveChangesDialog.create(it, {
+                        viewModel.saveKnitting(createKnitting())
+                        if (editOnly) {
+                            NavUtils.navigateUpTo(it, upIntent)
+                        } else {
+                            fragmentManager?.popBackStack()
+                        }
+                    }, {
+                        if (editOnly) {
+                            NavUtils.navigateUpTo(it, upIntent)
+                        } else {
+                            fragmentManager?.popBackStack()
+                        }
+                    }).show()
+                } else {
+                    if (editOnly) {
+                        NavUtils.navigateUpTo(it, upIntent)
+                    } else {
+                        fragmentManager?.popBackStack()
+                    }
+                }
             }
         }
     }

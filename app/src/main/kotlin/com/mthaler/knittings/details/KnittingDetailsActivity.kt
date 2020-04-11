@@ -84,11 +84,7 @@ class KnittingDetailsActivity : BaseActivity(), KnittingDetailsFragment.OnFragme
                 val fm = supportFragmentManager
                 val f = fm.findFragmentById(R.id.knitting_details_container)
                 if (f is EditKnittingDetailsFragment) {
-                    if (editOnly) {
-                        NavUtils.navigateUpTo(this, upIntent)
-                    } else {
-                        fm.popBackStack()
-                    }
+                    f.onBackPressed(editOnly)
                 } else {
                     NavUtils.navigateUpTo(this, upIntent)
                 }
@@ -111,7 +107,7 @@ class KnittingDetailsActivity : BaseActivity(), KnittingDetailsFragment.OnFragme
         val fm = supportFragmentManager
         val f = fm.findFragmentById(R.id.knitting_details_container)
         if (f is EditKnittingDetailsFragment) {
-            f.onBackPressed()
+            f.onBackPressed(editOnly)
         } else {
             super.onBackPressed()
         }
