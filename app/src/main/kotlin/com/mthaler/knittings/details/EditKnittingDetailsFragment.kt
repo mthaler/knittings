@@ -37,17 +37,6 @@ class EditKnittingDetailsFragment : Fragment() {
     private lateinit var buttonCategory: Button
     private var modified = false
 
-    /**
-     * Called to do initial creation of a fragment. This is called after onAttach(Activity) and before
-     * onCreateView(LayoutInflater, ViewGroup, Bundle). Note that this can be called while the fragment's activity
-     * is still in the process of being created. As such, you can not rely on things like the activity's content view
-     * hierarchy being initialized at this point. If you want to do work once the activity itself is created,
-     * see onActivityCreated(Bundle).
-     *
-     * Any restored child fragments will be created before the base Fragment.onCreate method returns.
-     *
-     * @param savedInstanceState If the fragment is being re-created from a previous saved state, this is the state.
-     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -59,18 +48,6 @@ class EditKnittingDetailsFragment : Fragment() {
         retainInstance = true
     }
 
-    /**
-     * Called to have the fragment instantiate its user interface view. This is optional, and non-graphical
-     * fragments can return null (which is the default implementation). This will be called between onCreate(Bundle)
-     * and onActivityCreated(Bundle).
-     *
-     * If you return a View from here, you will later be called in onDestroyView() when the view is being released.
-     *
-     * @param inflater the LayoutInflater object that can be used to inflate any views in the fragment
-     * @param container If non-null, this is the parent view that the fragment's UI should be attached to.
-     *                  The fragment should not add the view itself, but this can be used to generate the LayoutParams of the view.
-     * @param savedInstanceState If non-null, this fragment is being re-constructed from a previous saved state as given here.
-     */
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
         val v = inflater.inflate(R.layout.fragment_edit_knitting_details, container, false)
@@ -140,17 +117,6 @@ class EditKnittingDetailsFragment : Fragment() {
         }
         spinnerStatus.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
 
-            /**
-             * Callback method to be invoked when an item in this view has been selected. This callback is invoked only when the
-             * newly selected position is different from the previously selected position or if there was no selected item.
-             *
-             * Implementers can call getItemAtPosition(position) if they need to access the data associated with the selected item.
-             *
-             * @param parent the AdapterView where the selection happened
-             * @param view the view within the AdapterView that was clicked
-             * @param position the position of the view in the adapter
-             * @param id the row id of the item that is selected
-             */
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 parent?.let {
                     val k0 = knitting
@@ -164,12 +130,6 @@ class EditKnittingDetailsFragment : Fragment() {
                 }
             }
 
-            /**
-             * Callback method to be invoked when the selection disappears from this view. The selection can disappear
-             * for instance when touch is activated or when the adapter becomes empty.
-             *
-             * @param parent the AdapterView where the selection happened
-             */
             override fun onNothingSelected(parent: AdapterView<*>?) {
             }
         }
@@ -193,15 +153,6 @@ class EditKnittingDetailsFragment : Fragment() {
         })
     }
 
-    /**
-     * Called when an activity you launched exits, giving you the requestCode you started it with, the resultCode it returned,
-     * and any additional data from it. The resultCode will be RESULT_CANCELED if the activity explicitly returned that,
-     * didn't return any result, or crashed during its operation.
-     *
-     * @param requestCode The integer request code originally supplied to startActivityForResult(), allowing you to identify who this result came from.
-     * @param resultCode The integer result code returned by the child activity through its setResult().
-     * @param data An Intent, which can return result data to the caller (various data can be attached to Intent "extras").
-     */
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode != Activity.RESULT_OK) {
@@ -242,11 +193,6 @@ class EditKnittingDetailsFragment : Fragment() {
         }
     }
 
-    /**
-     * Called when the fragment is visible to the user and actively running. This is generally tied to Activity.onResume of the containing Activity's lifecycle.
-     *
-     * If you override this method you must call through to the superclass implementation.
-     */
     override fun onResume() {
         super.onResume()
         knitting = datasource.getKnitting(knitting.id)
@@ -293,11 +239,6 @@ class EditKnittingDetailsFragment : Fragment() {
         }
     }
 
-    /**
-     * Creates a textwatcher that updates the knitting using the given update function
-     *
-     * @param updateKnitting function to updated the knitting
-     */
     private fun createTextWatcher(updateKnitting: (CharSequence, Knitting) -> Knitting): TextWatcher {
         return object : TextWatcher {
             override fun afterTextChanged(c: Editable) {
@@ -316,12 +257,6 @@ class EditKnittingDetailsFragment : Fragment() {
 
     companion object {
 
-        /**
-         * Use this factory method to create a new instance of this fragment using the provided parameters.
-         *
-         * @param knittingID id of the knitting project that should be edited
-         * @return A new instance of fragment EditKnittingDetailsFragment
-         */
         @JvmStatic
         fun newInstance(knittingID: Long) =
             EditKnittingDetailsFragment().apply {
