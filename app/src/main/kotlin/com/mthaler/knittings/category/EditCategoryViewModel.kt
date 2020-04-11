@@ -24,11 +24,6 @@ class EditCategoryViewModel(application: Application) : DatasourceViewModel(appl
         datasource.deleteCategory(category)
     }
 
-    fun getCategoryName(): String {
-        val category = datasource.getCategory(categoryID)
-        return category.name
-    }
-
     fun saveCategory(category: Category) {
         if (category.id == -1L) {
             datasource.addCategory(category)

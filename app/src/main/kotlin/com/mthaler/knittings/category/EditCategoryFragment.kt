@@ -106,7 +106,7 @@ class EditCategoryFragment : Fragment() {
             }
             R.id.menu_item_delete_category -> {
                 context?.let {
-                    DeleteDialog.create(it, viewModel.getCategoryName(), {
+                    DeleteDialog.create(it, editTextTitle.text.toString(), {
                         viewModel.deleteCategory()
                         fragmentManager?.popBackStack()
                     }).show()
