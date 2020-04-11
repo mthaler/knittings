@@ -20,6 +20,7 @@ import java.text.DateFormat
 import com.mthaler.knittings.durationpicker.DurationPickerDialog
 import com.mthaler.knittings.Extras.EXTRA_CATEGORY_ID
 import com.mthaler.knittings.Extras.EXTRA_KNITTING_ID
+import com.mthaler.knittings.SaveChangesDialog
 import com.mthaler.knittings.model.Category
 import com.mthaler.knittings.model.Status
 import java.util.Date
@@ -220,6 +221,21 @@ class EditKnittingDetailsFragment : Fragment() {
                     category = c
                     modified = true
                 }
+            }
+        }
+    }
+
+    fun onBackPressed() {
+        context?.let {
+            if (modified) {
+                SaveChangesDialog.create(it, {
+                    viewModel.saveKnitting(createKnitting())
+                    fragmentManager?.popBackStack()
+                }, {
+                    fragmentManager?.popBackStack()
+                }).show()
+            } else {
+                fragmentManager?.popBackStack()
             }
         }
     }

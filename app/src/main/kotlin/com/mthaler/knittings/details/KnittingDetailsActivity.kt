@@ -107,6 +107,16 @@ class KnittingDetailsActivity : BaseActivity(), KnittingDetailsFragment.OnFragme
         else -> super.onOptionsItemSelected(item)
     }
 
+    override fun onBackPressed() {
+        val fm = supportFragmentManager
+        val f = fm.findFragmentById(R.id.knitting_details_container)
+        if (f is EditKnittingDetailsFragment) {
+            f.onBackPressed()
+        } else {
+            super.onBackPressed()
+        }
+    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (resultCode != Activity.RESULT_OK) {
             return
