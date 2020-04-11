@@ -173,7 +173,7 @@ class EditNeedleFragment : Fragment() {
     private fun createNeedle(): Needle {
         val material = NeedleMaterial.values()[spinnerMaterial.selectedItemPosition]
         val type = NeedleType.values()[spinnerType.selectedItemPosition]
-        return Needle(needleID, editTextName.text.toString(), "", editTextSize.text.toString(), editTextLength.text.toString(), material, checkBoxInUse.isSelected, type)
+        return Needle(needleID, editTextName.text.toString(), "", editTextSize.text.toString(), editTextLength.text.toString(), material, checkBoxInUse.isChecked, type)
     }
 
     companion object {
