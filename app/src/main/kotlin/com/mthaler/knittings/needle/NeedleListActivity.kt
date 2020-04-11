@@ -52,7 +52,7 @@ class NeedleListActivity : BaseActivity(), NeedleListFragment.OnFragmentInteract
 
     override fun onBackPressed() {
         val fm = supportFragmentManager
-        val f = fm.findFragmentById(R.id.category_list_container)
+        val f = fm.findFragmentById(R.id.needle_list_container)
         if (f is EditNeedleFragment) {
             f.onBackPressed()
         } else {
