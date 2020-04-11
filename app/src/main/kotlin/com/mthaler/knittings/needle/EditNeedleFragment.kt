@@ -19,20 +19,12 @@ class EditNeedleFragment : Fragment() {
 
     private var needleID: Long = -1
     private lateinit var viewModel: EditNeedleViewModel
+    private lateinit var editTextName: EditText
+    private lateinit var editTextSize: EditText
+    private lateinit var editTextLength: EditText
     private lateinit var needle: Needle
     private var moddified = false
 
-    /**
-     * Called to do initial creation of a fragment. This is called after onAttach(Activity) and before
-     * onCreateView(LayoutInflater, ViewGroup, Bundle). Note that this can be called while the fragment's activity
-     * is still in the process of being created. As such, you can not rely on things like the activity's content view
-     * hierarchy being initialized at this point. If you want to do work once the activity itself is created,
-     * see onActivityCreated(Bundle).
-     *
-     * Any restored child fragments will be created before the base Fragment.onCreate method returns.
-     *
-     * @param savedInstanceState If the fragment is being re-created from a previous saved state, this is the state.
-     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -44,39 +36,20 @@ class EditNeedleFragment : Fragment() {
         retainInstance = true
     }
 
-    /**
-     * Called to have the fragment instantiate its user interface view. This is optional, and non-graphical
-     * fragments can return null (which is the default implementation). This will be called between onCreate(Bundle)
-     * and onActivityCreated(Bundle).
-     *
-     * If you return a View from here, you will later be called in onDestroyView() when the view is being released.
-     *
-     * @param inflater the LayoutInflater object that can be used to inflate any views in the fragment
-     * @param container If non-null, this is the parent view that the fragment's UI should be attached to.
-     *                  The fragment should not add the view itself, but this can be used to generate the LayoutParams of the view.
-     * @param savedInstanceState If non-null, this fragment is being re-constructed from a previous saved state as given here.
-     */
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
         setHasOptionsMenu(true)
 
-        // Inflate the layout for this fragment
         val v = inflater.inflate(R.layout.fragment_edit_needle, container, false)
 
-        // set edit text title text to category name
-        val editTextName = v.findViewById<EditText>(R.id.needle_name)
-        editTextName.addTextChangedListener(createTextWatcher { c, needle -> needle.copy(name = c.toString()) })
-        editTextName.setText(needle.name)
+        editTextName = v.findViewById(R.id.needle_name)
+        editTextName.addTextChangedListener(createTextWatcher())
 
-        // set edit text title text to category name
-        val editTextSize = v.findViewById<EditText>(R.id.needle_size)
-        editTextSize.addTextChangedListener(createTextWatcher { c, needle -> needle.copy(size = c.toString()) })
-        editTextSize.setText(needle.size)
+        editTextSize = v.findViewById(R.id.needle_size)
+        editTextSize.addTextChangedListener(createTextWatcher())
 
-        // set edit text title text to category name
-        val editTextLength = v.findViewById<EditText>(R.id.needle_length)
-        editTextLength.addTextChangedListener(createTextWatcher { c, needle -> needle.copy(length = c.toString()) })
-        editTextLength.setText(needle.length)
+        editTextLength = v.findViewById(R.id.needle_length)
+        editTextLength.addTextChangedListener(createTextWatcher())
 
         val spinnerMaterial = v.findViewById<Spinner>(R.id.needle_material)
         // Create an ArrayAdapter using the string array and a default spinner layout
@@ -207,12 +180,10 @@ class EditNeedleFragment : Fragment() {
      *
      * @param updateNeedle function to updated the needle
      */
-    private fun createTextWatcher(updateNeedle: (CharSequence, Needle) -> Needle): TextWatcher {
+    private fun createTextWatcher(): TextWatcher {
         return object : TextWatcher {
-            override fun afterTextChanged(c: Editable) {
-                val n = updateNeedle(c, needle)
-                datasource.updateNeedle(n)
-                needle = n
+            override fun onTextChanged(c: CharSequence, start: Int, before: Int, count: Int) {
+                moddified = true
             }
         }
     }
