@@ -59,9 +59,6 @@ class EditNeedleFragment : Fragment() {
         spinnerMaterial.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
 
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                //val n = needle.copy(material = NeedleMaterial.values()[position])
-                //datasource.updateNeedle(n)
-                //needle = n
                 moddified = true
             }
 
@@ -85,9 +82,6 @@ class EditNeedleFragment : Fragment() {
         spinnerType.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
 
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-//                val n = needle.copy(type = NeedleType.values()[position])
-//                datasource.updateNeedle(n)
-//                needle = n
                 moddified = true
             }
 

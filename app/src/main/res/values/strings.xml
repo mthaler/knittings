@@ -15,7 +15,7 @@
 
     <!-- save changes dialog strings -->
     <string name="save_changes_dialog_question">Save changes?</string>
-    <string name="save_changes_dialog_button_save">OK</string>
+    <string name="save_changes_dialog_button_save">Save</string>
     <string name="save_changes_dialog_button_discard">Discard</string>
 
     <!-- delete dialog strings -->
