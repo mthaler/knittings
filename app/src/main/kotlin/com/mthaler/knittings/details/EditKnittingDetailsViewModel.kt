@@ -19,16 +19,12 @@ class EditKnittingDetailsViewModel(application: Application) : DatasourceViewMod
         }
     }
 
-    fun deleteKnitting() {
-        val knitting = datasource.getKnitting(knittingID)
-        datasource.deleteKnitting(knitting)
-    }
-
     fun saveKnitting(knitting: Knitting) {
         if (knitting.id == -1L) {
             datasource.addKnitting(knitting)
         } else {
-            datasource.updateKnitting(knitting)
+            val k = datasource.getKnitting(knittingID)
+            datasource.updateKnitting(knitting.copy(defaultPhoto = k.defaultPhoto))
         }
     }
 

@@ -179,6 +179,19 @@ class EditKnittingDetailsFragment : Fragment() {
         inflater.inflate(R.menu.edit_knitting_details, menu)
     }
 
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.menu_item_save_knitting -> {
+                if (modified) {
+                    viewModel.saveKnitting(createKnitting())
+                }
+                fragmentManager?.popBackStack()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode != Activity.RESULT_OK) {
@@ -222,7 +235,7 @@ class EditKnittingDetailsFragment : Fragment() {
     private fun createKnitting(): Knitting {
         val status = Status.values()[spinnerStatus.selectedItemPosition]
         return Knitting(knittingID, editTextTitle.text.toString(), editTextDescription.text.toString(), started, finished, editTextNeedleDiameter.text.toString(),
-        editTextSize.toString(), null, ratingBar.rating.toDouble(), duration, category, status)
+        editTextSize.text.toString(), null, ratingBar.rating.toDouble(), duration, category, status)
     }
 
     companion object {
