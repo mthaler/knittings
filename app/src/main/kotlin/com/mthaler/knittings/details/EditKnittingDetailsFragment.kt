@@ -33,8 +33,11 @@ class EditKnittingDetailsFragment : Fragment() {
     private lateinit var editTextTitle: EditText
     private lateinit var editTextDescription: EditText
     private lateinit var textViewStarted: TextView
+    private lateinit var started: Date
     private lateinit var textViewFinished: TextView
+    private var finished: Date? = null
     private lateinit var textViewDuration: TextView
+    private var duration = 0L
     private lateinit var editTextNeedleDiameter: EditText
     private lateinit var editTextSize: EditText
     private lateinit var buttonCategory: Button
@@ -94,10 +97,9 @@ class EditKnittingDetailsFragment : Fragment() {
         textViewDuration = v.findViewById(R.id.knitting_duration)
         textViewDuration.setOnClickListener {
             context?.let {
-                val d = DurationPickerDialog(it, { durationPicker, duration ->
-                    textViewDuration.text = TimeUtils.formatDuration(duration)
-//                    knitting = knitting.copy(duration = duration)
-//                    datasource.updateKnitting(knitting)
+                val d = DurationPickerDialog(it, { durationPicker, d ->
+                    textViewDuration.text = TimeUtils.formatDuration(d)
+                    duration = d
                 }, knitting.duration)
                 d.show()
             }
@@ -123,16 +125,7 @@ class EditKnittingDetailsFragment : Fragment() {
         spinnerStatus.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
 
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                parent?.let {
-//                    val k0 = knitting
-//                    if (k0 != null) {
-//                        val statusStr = statusList[position]
-//                        val status = Status.parse(it.context, statusStr)
-//                        val k1 = k0.copy(status = status)
-//                        datasource.updateKnitting(k1)
-//                        knitting = k1
-//                    }
-                }
+                modified = true
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -157,7 +150,9 @@ class EditKnittingDetailsFragment : Fragment() {
             editTextTitle.setText(knitting.title)
             editTextDescription.setText(knitting.description)
             textViewStarted.text = DateFormat.getDateInstance().format(knitting.started)
+            started = knitting.started
             textViewFinished.text = if (knitting.finished != null) DateFormat.getDateInstance().format(knitting.finished) else ""
+            finished = knitting.finished
             editTextNeedleDiameter.setText(knitting.needleDiameter)
             editTextSize.setText(knitting.size)
             textViewDuration.text = TimeUtils.formatDuration(knitting.duration)
@@ -190,6 +185,7 @@ class EditKnittingDetailsFragment : Fragment() {
                 knitting = knitting1
                 datasource.updateKnitting(knitting1)
                 textViewStarted.text = DateFormat.getDateInstance().format(date)
+                started = date
             }
         } else if (requestCode == REQUEST_FINISHED) {
             val date = data!!.getSerializableExtra(DatePickerFragment.EXTRA_DATE) as Date
@@ -199,6 +195,7 @@ class EditKnittingDetailsFragment : Fragment() {
                 knitting = knitting1
                 datasource.updateKnitting(knitting1)
                 textViewFinished.text = DateFormat.getDateInstance().format(date)
+                finished = date
             }
 
             knitting = knitting.copy(finished = date)
@@ -223,6 +220,12 @@ class EditKnittingDetailsFragment : Fragment() {
                 modified = true
             }
         }
+    }
+
+    private fun createKnitting(): Knitting {
+        val status = Status.values()[spinnerStatus.selectedItemPosition]
+        return Knitting(knittingID, editTextTitle.text.toString(), editTextDescription.text.toString(), started, finished, editTextNeedleDiameter.text.toString(),
+        editTextSize.toString(), null, ratingBar.rating.toDouble(), duration, null, status)
     }
 
     companion object {
