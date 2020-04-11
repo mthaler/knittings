@@ -12,11 +12,6 @@
     <string name="save_category">Speichern</string>
     <string name="delete_category">Löschen</string>
 
-    <!-- delete category dialog -->
-    <string name="delete_category_dialog_title">Kategorie Löschen</string>
-    <string name="delete_category_dialog_question">%1$s wirklich löschen?</string>
-    <string name="delete_category_dialog_delete_button">Löschen</string>
-
     <!-- color dialog -->
     <string name="category_color_dialog_title">Farbe auswählen</string>
 </resources>

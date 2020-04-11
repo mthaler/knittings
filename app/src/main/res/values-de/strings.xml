@@ -19,6 +19,10 @@
     <string name="save_changes_dialog_button_discard">Discard</string>
     <string name="save_changes_dialog_question">Änderungen speichern?</string>
 
+    <!-- delete category dialog -->
+    <string name="delete_dialog_question">%1$s wirklich löschen?</string>
+    <string name="delete_dialog_delete_button">Löschen</string>
+
     <!-- sorting -->
     <string name="sorting_newest_first">Neueste zuerst</string>
     <string name="sorting_oldest_first">Älteste zuerst</string>

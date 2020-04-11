@@ -12,11 +12,6 @@
     <string name="save_category">Save</string>
     <string name="delete_category">Delete</string>
 
-    <!-- delete category dialog -->
-    <string name="delete_category_dialog_title">Delete</string>
-    <string name="delete_category_dialog_question">Do you really want to delete %1$s?</string>
-    <string name="delete_category_dialog_delete_button">Delete</string>
-
     <!-- color dialog -->
     <string name="category_color_dialog_title">Select color</string>
 </resources>

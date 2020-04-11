@@ -14,10 +14,13 @@
     <string name="dialog_button_no">No</string>
 
     <!-- save changes dialog strings -->
+    <string name="save_changes_dialog_question">Save changes?</string>
     <string name="save_changes_dialog_button_save">OK</string>
     <string name="save_changes_dialog_button_discard">Discard</string>
-    <string name="save_changes_dialog_question">Save changes?</string>
 
+    <!-- delete dialog strings -->
+    <string name="delete_dialog_question">Do you really want to delete %1$s?</string>
+    <string name="delete_dialog_delete_button">Delete</string>
 
     <!-- sorting -->
     <string name="sorting_newest_first">Newest first</string>
