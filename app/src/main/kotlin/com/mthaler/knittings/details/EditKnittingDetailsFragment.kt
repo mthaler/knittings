@@ -31,6 +31,8 @@ class EditKnittingDetailsFragment : Fragment() {
     private lateinit var knitting: Knitting
     private var knittingID: Long = -1
     private lateinit var viewModel: EditKnittingDetailsViewModel
+    private lateinit var editTextTitle: EditText
+    private lateinit var editTextDescription: EditText
     private lateinit var textViewStarted: TextView
     private lateinit var textViewFinished: TextView
     private lateinit var textViewDuration: TextView
@@ -52,10 +54,10 @@ class EditKnittingDetailsFragment : Fragment() {
         // Inflate the layout for this fragment
         val v = inflater.inflate(R.layout.fragment_edit_knitting_details, container, false)
 
-        val editTextTitle = v.findViewById<EditText>(R.id.knitting_title)
+        editTextTitle = v.findViewById<EditText>(R.id.knitting_title)
         editTextTitle.addTextChangedListener(createTextWatcher { c, knitting -> knitting.copy(title = c.toString()) })
 
-        val editTextDescription = v.findViewById<EditText>(R.id.knitting_description)
+        editTextDescription = v.findViewById<EditText>(R.id.knitting_description)
         editTextDescription.addTextChangedListener(createTextWatcher { c, knitting -> knitting.copy(description = c.toString()) })
 
         textViewStarted = v.findViewById(R.id.knitting_started)
@@ -148,7 +150,9 @@ class EditKnittingDetailsFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory.getInstance(activity!!.application)).get(EditKnittingDetailsViewModel::class.java)
         viewModel.init(knittingID)
-        viewModel.knitting.observe(viewLifecycleOwner, Observer { needle ->
+        viewModel.knitting.observe(viewLifecycleOwner, Observer { knitting ->
+            editTextTitle.setText(knitting.title)
+            editTextDescription.setText(knitting.description)
             modified = false
         })
     }
