@@ -85,7 +85,7 @@ class CategoryListFragment : Fragment() {
                         when (menu?.itemId) {
                             R.id.action_delete -> {
                                 this@CategoryListFragment.activity?.let {
-                                    DeleteCategoryDialog.create(it, category.name, {
+                                    DeleteDialog.create(it, category.name, {
                                         datasource.deleteCategory(category)
                                     }).show()
                                 }

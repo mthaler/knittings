@@ -4,7 +4,7 @@ import android.app.AlertDialog
 import android.content.Context
 import com.mthaler.knittings.R
 
-object DeleteCategoryDialog {
+object DeleteDialog {
 
     fun create(context: Context, categoryName: String, onDelete: () -> Unit): AlertDialog {
         val b = AlertDialog.Builder(context)
