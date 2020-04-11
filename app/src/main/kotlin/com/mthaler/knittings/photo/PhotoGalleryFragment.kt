@@ -7,13 +7,12 @@ import androidx.fragment.app.Fragment
 import android.view.*
 import android.widget.AdapterView
 import android.widget.GridView
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import com.mthaler.knittings.R
 import org.jetbrains.anko.support.v4.*
-import com.mthaler.knittings.database.datasource
-import com.mthaler.knittings.model.Knitting
 import com.mthaler.knittings.model.Photo
 import org.jetbrains.anko.AnkoLogger
-import org.jetbrains.anko.debug
 import com.mthaler.knittings.Extras.EXTRA_KNITTING_ID
 import com.mthaler.knittings.Extras.EXTRA_PHOTO_ID
 import java.io.File
@@ -23,41 +22,17 @@ import java.io.File
  */
 class PhotoGalleryFragment : Fragment(), AnkoLogger {
 
-    private lateinit var knitting: Knitting
-    private lateinit var gridView: GridView
+    private var knittingID: Long = -1
     private var currentPhotoPath: File? = null
+    private lateinit var gridView: GridView
 
-    /**
-     * Called to do initial creation of a fragment. This is called after onAttach(Activity) and before
-     * onCreateView(LayoutInflater, ViewGroup, Bundle). Note that this can be called while the fragment's activity
-     * is still in the process of being created. As such, you can not rely on things like the activity's content view
-     * hierarchy being initialized at this point. If you want to do work once the activity itself is created,
-     * see onActivityCreated(Bundle).
-     *
-     * Any restored child fragments will be created before the base Fragment.onCreate method returns.
-     *
-     * @param savedInstanceState If the fragment is being re-created from a previous saved state, this is the state.
-     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            val knittingID = it.getLong(EXTRA_KNITTING_ID)
-            knitting = datasource.getKnitting(knittingID)
+            knittingID = it.getLong(EXTRA_KNITTING_ID)
         }
     }
 
-    /**
-     * Called to have the fragment instantiate its user interface view. This is optional, and non-graphical
-     * fragments can return null (which is the default implementation). This will be called between onCreate(Bundle)
-     * and onActivityCreated(Bundle).
-     *
-     * If you return a View from here, you will later be called in onDestroyView() when the view is being released.
-     *
-     * @param inflater the LayoutInflater object that can be used to inflate any views in the fragment
-     * @param container If non-null, this is the parent view that the fragment's UI should be attached to.
-     *                  The fragment should not add the view itself, but this can be used to generate the LayoutParams of the view.
-     * @param savedInstanceState If non-null, this fragment is being re-constructed from a previous saved state as given here.
-     */
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
         val v = inflater.inflate(R.layout.fragment_photo_gallery, container, false)
@@ -66,10 +41,8 @@ class PhotoGalleryFragment : Fragment(), AnkoLogger {
 
         if (savedInstanceState != null) {
             if (savedInstanceState.containsKey(EXTRA_KNITTING_ID)) {
-                knitting = datasource.getKnitting(savedInstanceState.getLong(EXTRA_KNITTING_ID))
-                debug("Set knitting: $knitting")
+                knittingID = savedInstanceState.getLong(EXTRA_KNITTING_ID)
             }
-            // restore current photo path
             if (savedInstanceState.containsKey(CURRENT_PHOTO_PATH)) {
                 currentPhotoPath = File(savedInstanceState.getString(CURRENT_PHOTO_PATH))
             }
@@ -79,61 +52,40 @@ class PhotoGalleryFragment : Fragment(), AnkoLogger {
         gridView.onItemClickListener = AdapterView.OnItemClickListener { parent, v, position, id ->
             // photo clicked, show photo in photo activity
             val photo = parent.getItemAtPosition(position) as Photo
-            startActivity<PhotoActivity>(EXTRA_PHOTO_ID to photo.id, EXTRA_KNITTING_ID to knitting.id)
+            startActivity<PhotoActivity>(EXTRA_PHOTO_ID to photo.id, EXTRA_KNITTING_ID to knittingID)
         }
 
         return v
     }
 
-    /**
-     * This method is called if the activity gets destroyed because e.g. the device configuration changes because the device is rotated
-     * We need to store instance variables because they are not automatically restored
-     *
-     * @param savedInstanceState saved instance state
-     */
     override fun onSaveInstanceState(savedInstanceState: Bundle) {
-        savedInstanceState.putLong(EXTRA_KNITTING_ID, knitting.id)
+        savedInstanceState.putLong(EXTRA_KNITTING_ID, knittingID)
         currentPhotoPath?.let { savedInstanceState.putString(CURRENT_PHOTO_PATH, it.absolutePath) }
         super.onSaveInstanceState(savedInstanceState)
     }
 
-    override fun onResume() {
-        super.onResume()
-        activity?.let {
-            // get knitting from database because it could have changed
-            knitting = datasource.getKnitting(knitting.id)
-            val photos = datasource.getAllPhotos(knitting)
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        val viewModel = ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory.getInstance(activity!!.application)).get(PhotoGalleryViewModel::class.java)
+        viewModel.init(knittingID)
+        viewModel.photos.observe(viewLifecycleOwner, Observer { photos ->
             // show the newest photos first. The id is incremented for each photo that is added, thus we can sort by id
             photos.sortByDescending { it.id }
-            val gridAdapter = GridViewAdapter(it, R.layout.grid_item_layout, photos)
+            val gridAdapter = GridViewAdapter(activity!!, R.layout.grid_item_layout, photos)
             gridView.adapter = gridAdapter
-        }
+        })
     }
 
-    /**
-     * Initialize the contents of the Fragment host's standard options menu. You should place your menu items in to menu.
-     * For this method to be called, you must have first called setHasOptionsMenu(boolean).
-     * See Activity.onCreateOptionsMenu for more information.
-     *
-     * @param menu The options menu in which you place your items.
-     * @param inflater MenuInflater
-     */
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.photo_gallery, menu)
     }
 
-    /**
-     * This hook is called whenever an item in your options menu is selected.
-     *
-     * @param item the menu item that was selected.
-     * @return return false to allow normal menu processing to proceed, true to consume it here.
-     */
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.menu_item_add_photo -> {
                 context?.let {
-                    val d = TakePhotoDialog.create(it, layoutInflater, knitting.id, this::takePhoto, this::importPhoto)
+                    val d = TakePhotoDialog.create(it, layoutInflater, knittingID, this::takePhoto, this::importPhoto)
                     d.show()
                 }
                 true
@@ -142,27 +94,18 @@ class PhotoGalleryFragment : Fragment(), AnkoLogger {
         }
     }
 
-    /**
-     * Called when an activity you launched exits, giving you the requestCode you started it with, the resultCode it returned,
-     * and any additional data from it. The resultCode will be RESULT_CANCELED if the activity explicitly returned that,
-     * didn't return any result, or crashed during its operation.
-     *
-     * @param requestCode The integer request code originally supplied to startActivityForResult(), allowing you to identify who this result came from.
-     * @param resultCode The integer result code returned by the child activity through its setResult().
-     * @param data An Intent, which can return result data to the caller (various data can be attached to Intent "extras").
-     */
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (resultCode != Activity.RESULT_OK) {
             return
         }
         when (requestCode) {
             REQUEST_IMAGE_CAPTURE -> {
-                currentPhotoPath?.let { TakePhotoDialog.handleTakePhotoResult(context!!, knitting.id, it) }
+                currentPhotoPath?.let { TakePhotoDialog.handleTakePhotoResult(context!!, knittingID, it) }
             }
             REQUEST_IMAGE_IMPORT -> {
                 val f = currentPhotoPath
                 if (f != null && data != null) {
-                    TakePhotoDialog.handleImageImportResult(context!!, knitting.id, f, data)
+                    TakePhotoDialog.handleImageImportResult(context!!, knittingID, f, data)
                 }
             }
             else -> super.onActivityResult(requestCode, resultCode, data)
@@ -180,12 +123,7 @@ class PhotoGalleryFragment : Fragment(), AnkoLogger {
     }
 
     companion object {
-        /**
-         * Use this factory method to create a new instance of this fragment using the provided parameters.
-         *
-         * @param knittingID id of the knitting for which photos should be displayed
-         * @return A new instance of fragment PhotoGalleryFragment.
-         */
+
         @JvmStatic
         fun newInstance(knittingID: Long) =
             PhotoGalleryFragment().apply {
