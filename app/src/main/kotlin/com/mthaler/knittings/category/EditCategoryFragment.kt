@@ -7,6 +7,7 @@ import android.widget.EditText
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.mthaler.knittings.DeleteDialog
 import com.mthaler.knittings.R
 import com.mthaler.knittings.Extras.EXTRA_CATEGORY_ID
 import com.mthaler.knittings.SaveChangesDialog

@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.mthaler.knittings.DeleteDialog
 import com.mthaler.knittings.Extras
 import com.mthaler.knittings.R
 import com.mthaler.knittings.database.datasource

@@ -1,8 +1,7 @@
-package com.mthaler.knittings.category
+package com.mthaler.knittings
 
 import android.app.AlertDialog
 import android.content.Context
-import com.mthaler.knittings.R
 
 object DeleteDialog {
 
