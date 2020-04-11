@@ -5,7 +5,6 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import androidx.appcompat.content.res.AppCompatResources
-import android.text.Editable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -36,7 +35,11 @@ class EditKnittingDetailsFragment : Fragment() {
     private lateinit var textViewStarted: TextView
     private lateinit var textViewFinished: TextView
     private lateinit var textViewDuration: TextView
+    private lateinit var editTextNeedleDiameter: EditText
+    private lateinit var editTextSize: EditText
     private lateinit var buttonCategory: Button
+    private lateinit var spinnerStatus: Spinner
+    private lateinit var ratingBar: RatingBar
     private var modified = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -54,11 +57,11 @@ class EditKnittingDetailsFragment : Fragment() {
         // Inflate the layout for this fragment
         val v = inflater.inflate(R.layout.fragment_edit_knitting_details, container, false)
 
-        editTextTitle = v.findViewById<EditText>(R.id.knitting_title)
-        editTextTitle.addTextChangedListener(createTextWatcher { c, knitting -> knitting.copy(title = c.toString()) })
+        editTextTitle = v.findViewById(R.id.knitting_title)
+        editTextTitle.addTextChangedListener(createTextWatcher())
 
-        editTextDescription = v.findViewById<EditText>(R.id.knitting_description)
-        editTextDescription.addTextChangedListener(createTextWatcher { c, knitting -> knitting.copy(description = c.toString()) })
+        editTextDescription = v.findViewById(R.id.knitting_description)
+        editTextDescription.addTextChangedListener(createTextWatcher())
 
         textViewStarted = v.findViewById(R.id.knitting_started)
         // we need to set this in code because older android versions (API <21) do not support vector drawables with drawableLeft
@@ -82,11 +85,11 @@ class EditKnittingDetailsFragment : Fragment() {
             }
         }
 
-        val editTextNeedleDiameter = v.findViewById<EditText>(R.id.knitting_needle_diameter)
-        editTextNeedleDiameter.addTextChangedListener(createTextWatcher { c, knitting -> knitting.copy(needleDiameter = c.toString()) })
+        editTextNeedleDiameter = v.findViewById(R.id.knitting_needle_diameter)
+        editTextNeedleDiameter.addTextChangedListener(createTextWatcher())
 
-        val editTextSize = v.findViewById<EditText>(R.id.knitting_size)
-        editTextSize.addTextChangedListener(createTextWatcher { c, knitting -> knitting.copy(size = c.toString()) })
+        editTextSize = v.findViewById(R.id.knitting_size)
+        editTextSize.addTextChangedListener(createTextWatcher())
 
         textViewDuration = v.findViewById(R.id.knitting_duration)
         textViewDuration.setOnClickListener {
@@ -108,7 +111,7 @@ class EditKnittingDetailsFragment : Fragment() {
             startActivityForResult(i, REQUEST_SELECT_CATEGORY)
         }
 
-        val spinnerStatus = v.findViewById<Spinner>(R.id.knitting_status)
+        spinnerStatus = v.findViewById(R.id.knitting_status)
         val statusList = Status.formattedValues(v.context)
         // Create an ArrayAdapter using the string array and a default spinner layout
         ArrayAdapter(context, android.R.layout.simple_spinner_item, statusList).also { adapter ->
@@ -137,7 +140,7 @@ class EditKnittingDetailsFragment : Fragment() {
         }
 
         // update knitting if user changes the rating
-        val ratingBar = v.findViewById<RatingBar>(R.id.ratingBar)
+        ratingBar = v.findViewById(R.id.ratingBar)
         ratingBar.onRatingBarChangeListener = RatingBar.OnRatingBarChangeListener { ratingBar, rating, fromUser ->
             knitting = knitting.copy(rating = rating.toDouble())
             datasource.updateKnitting(knitting)
@@ -153,6 +156,8 @@ class EditKnittingDetailsFragment : Fragment() {
         viewModel.knitting.observe(viewLifecycleOwner, Observer { knitting ->
             editTextTitle.setText(knitting.title)
             editTextDescription.setText(knitting.description)
+            editTextNeedleDiameter.setText(knitting.needleDiameter)
+            editTextSize.setText(knitting.size)
             modified = false
         })
     }
@@ -243,18 +248,10 @@ class EditKnittingDetailsFragment : Fragment() {
         }
     }
 
-    private fun createTextWatcher(updateKnitting: (CharSequence, Knitting) -> Knitting): TextWatcher {
+    private fun createTextWatcher(): TextWatcher {
         return object : TextWatcher {
-            override fun afterTextChanged(c: Editable) {
-                val knitting0 = knitting
-                if (knitting0 != null) {
-                    try {
-                        val knitting1 = updateKnitting(c, knitting0)
-                        datasource.updateKnitting(knitting1)
-                        knitting = knitting1
-                    } catch (ex: Exception) {
-                    }
-                }
+            override fun onTextChanged(c: CharSequence, start: Int, before: Int, count: Int) {
+                modified = true
             }
         }
     }
