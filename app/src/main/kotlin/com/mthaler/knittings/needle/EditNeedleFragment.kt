@@ -5,6 +5,8 @@ import androidx.fragment.app.Fragment
 import android.text.Editable
 import android.view.*
 import android.widget.*
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import com.mthaler.knittings.Extras
 import com.mthaler.knittings.R
 import com.mthaler.knittings.TextWatcher
@@ -15,7 +17,10 @@ import com.mthaler.knittings.model.NeedleType
 
 class EditNeedleFragment : Fragment() {
 
+    private var needleID: Long = -1
+    private lateinit var viewModel: EditNeedleViewModel
     private lateinit var needle: Needle
+    private var moddified = false
 
     /**
      * Called to do initial creation of a fragment. This is called after onAttach(Activity) and before
@@ -173,6 +178,15 @@ class EditNeedleFragment : Fragment() {
         }
 
         return v
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        viewModel = ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory.getInstance(activity!!.application)).get(EditNeedleViewModel::class.java)
+        viewModel.init(needleID)
+        viewModel.needle.observe(viewLifecycleOwner, Observer { needle ->
+            moddified = false
+        })
     }
 
     /**
