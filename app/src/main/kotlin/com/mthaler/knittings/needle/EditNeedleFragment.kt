@@ -14,6 +14,7 @@ import com.mthaler.knittings.database.datasource
 import com.mthaler.knittings.model.Needle
 import com.mthaler.knittings.model.NeedleMaterial
 import com.mthaler.knittings.model.NeedleType
+import kotlinx.android.synthetic.main.list_item_needle.*
 
 class EditNeedleFragment : Fragment() {
 
@@ -158,6 +159,9 @@ class EditNeedleFragment : Fragment() {
         viewModel = ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory.getInstance(activity!!.application)).get(EditNeedleViewModel::class.java)
         viewModel.init(needleID)
         viewModel.needle.observe(viewLifecycleOwner, Observer { needle ->
+            editTextName.setText(needle.name)
+            editTextSize.setText(needle.size)
+            editTextLength.setText(needle.length)
             moddified = false
         })
     }
