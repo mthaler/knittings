@@ -2,7 +2,6 @@ package com.mthaler.knittings.needle
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
-import android.text.Editable
 import android.view.*
 import android.widget.*
 import androidx.lifecycle.Observer
@@ -14,7 +13,6 @@ import com.mthaler.knittings.database.datasource
 import com.mthaler.knittings.model.Needle
 import com.mthaler.knittings.model.NeedleMaterial
 import com.mthaler.knittings.model.NeedleType
-import kotlinx.android.synthetic.main.list_item_needle.*
 
 class EditNeedleFragment : Fragment() {
 
@@ -23,14 +21,15 @@ class EditNeedleFragment : Fragment() {
     private lateinit var editTextName: EditText
     private lateinit var editTextSize: EditText
     private lateinit var editTextLength: EditText
-    private lateinit var needle: Needle
+    private lateinit var spinnerMaterial: Spinner
+    private lateinit var checkBoxInUse: CheckBox
+    private lateinit var spinnerType: Spinner
     private var moddified = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            val needleID = it.getLong(Extras.EXTRA_NEEDLE_ID)
-            needle = datasource.getNeedle(needleID)
+            needleID = it.getLong(Extras.EXTRA_NEEDLE_ID)
         }
 
         // Retain this fragment across configuration changes.
@@ -52,7 +51,7 @@ class EditNeedleFragment : Fragment() {
         editTextLength = v.findViewById(R.id.needle_length)
         editTextLength.addTextChangedListener(createTextWatcher())
 
-        val spinnerMaterial = v.findViewById<Spinner>(R.id.needle_material)
+        spinnerMaterial = v.findViewById(R.id.needle_material)
         // Create an ArrayAdapter using the string array and a default spinner layout
         ArrayAdapter(context, android.R.layout.simple_spinner_item, NeedleMaterial.formattedValues(v.context)).also { adapter ->
             // Specify the layout to use when the list of choices appears
@@ -60,52 +59,25 @@ class EditNeedleFragment : Fragment() {
             // Apply the adapter to the spinner
             spinnerMaterial.adapter = adapter
         }
-        NeedleMaterial.values().indexOf(needle.material).also { index ->
-            if (index >= 0) {
-                spinnerMaterial.setSelection(index)
-            } else {
-                spinnerMaterial.setSelection(0)
-            }
-        }
-
         spinnerMaterial.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
 
-            /**
-             * Callback method to be invoked when an item in this view has been selected. This callback is invoked only when the
-             * newly selected position is different from the previously selected position or if there was no selected item.
-             *
-             * Implementers can call getItemAtPosition(position) if they need to access the data associated with the selected item.
-             *
-             * @param parent the AdapterView where the selection happened
-             * @param view the view within the AdapterView that was clicked
-             * @param position the position of the view in the adapter
-             * @param id the row id of the item that is selected
-             */
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                val n = needle.copy(material = NeedleMaterial.values()[position])
-                datasource.updateNeedle(n)
-                needle = n
+                //val n = needle.copy(material = NeedleMaterial.values()[position])
+                //datasource.updateNeedle(n)
+                //needle = n
+                moddified = true
             }
 
-            /**
-             * Callback method to be invoked when the selection disappears from this view. The selection can disappear
-             * for instance when touch is activated or when the adapter becomes empty.
-             *
-             * @param parent the AdapterView where the selection happened
-             */
             override fun onNothingSelected(parent: AdapterView<*>?) {
             }
         }
 
-        val checkBoxinUse = v.findViewById<CheckBox>(R.id.needle_in_use)
-        checkBoxinUse.setOnCheckedChangeListener { view, checked ->
-            val n = needle.copy(inUse = checked)
-            datasource.updateNeedle(n)
-            needle = n
+        checkBoxInUse = v.findViewById(R.id.needle_in_use)
+        checkBoxInUse.setOnCheckedChangeListener { view, checked ->
+            moddified = true
         }
-        checkBoxinUse.isChecked = needle.inUse
 
-        val spinnerType = v.findViewById<Spinner>(R.id.needle_type)
+        spinnerType = v.findViewById(R.id.needle_type)
         // Create an ArrayAdapter using the string array and a default spinner layout
         ArrayAdapter(context, android.R.layout.simple_spinner_item, NeedleType.formattedValues(v.context)).also { adapter ->
             // Specify the layout to use when the list of choices appears
@@ -113,39 +85,15 @@ class EditNeedleFragment : Fragment() {
             // Apply the adapter to the spinner
             spinnerType.adapter = adapter
         }
-        NeedleType.values().indexOf(needle.type).also {index ->
-            if (index >= 0) {
-                spinnerType.setSelection(index)
-            } else {
-                spinnerType.setSelection(0)
-            }
-        }
-
         spinnerType.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
 
-            /**
-             * Callback method to be invoked when an item in this view has been selected. This callback is invoked only when the
-             * newly selected position is different from the previously selected position or if there was no selected item.
-             *
-             * Implementers can call getItemAtPosition(position) if they need to access the data associated with the selected item.
-             *
-             * @param parent the AdapterView where the selection happened
-             * @param view the view within the AdapterView that was clicked
-             * @param position the position of the view in the adapter
-             * @param id the row id of the item that is selected
-             */
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                val n = needle.copy(type = NeedleType.values()[position])
-                datasource.updateNeedle(n)
-                needle = n
+//                val n = needle.copy(type = NeedleType.values()[position])
+//                datasource.updateNeedle(n)
+//                needle = n
+                moddified = true
             }
 
-            /**
-             * Callback method to be invoked when the selection disappears from this view. The selection can disappear
-             * for instance when touch is activated or when the adapter becomes empty.
-             *
-             * @param parent the AdapterView where the selection happened
-             */
             override fun onNothingSelected(parent: AdapterView<*>?) {
             }
 
@@ -162,28 +110,30 @@ class EditNeedleFragment : Fragment() {
             editTextName.setText(needle.name)
             editTextSize.setText(needle.size)
             editTextLength.setText(needle.length)
+            NeedleMaterial.values().indexOf(needle.material).also { index ->
+                if (index >= 0) {
+                    spinnerMaterial.setSelection(index)
+                } else {
+                    spinnerMaterial.setSelection(0)
+                }
+            }
+            checkBoxInUse.isChecked = needle.inUse
+            NeedleType.values().indexOf(needle.type).also {index ->
+                if (index >= 0) {
+                    spinnerType.setSelection(index)
+                } else {
+                    spinnerType.setSelection(0)
+                }
+            }
             moddified = false
         })
     }
 
-    /**
-     * Initialize the contents of the Fragment host's standard options menu. You should place your menu items in to menu.
-     * For this method to be called, you must have first called setHasOptionsMenu(boolean).
-     * See Activity.onCreateOptionsMenu for more information.
-     *
-     * @param menu The options menu in which you place your items.
-     * @param inflater MenuInflater
-     */
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.edit_needle, menu)
     }
 
-    /**
-     * Creates a text watcher that updates the category using the given update function
-     *
-     * @param updateNeedle function to updated the needle
-     */
     private fun createTextWatcher(): TextWatcher {
         return object : TextWatcher {
             override fun onTextChanged(c: CharSequence, start: Int, before: Int, count: Int) {
@@ -192,12 +142,6 @@ class EditNeedleFragment : Fragment() {
         }
     }
 
-    /**
-     * This hook is called whenever an item in your options menu is selected.
-     *
-     * @param item the menu item that was selected.
-     * @return return false to allow normal menu processing to proceed, true to consume it here.
-     */
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.menu_item_delete_needle -> {
@@ -208,28 +152,19 @@ class EditNeedleFragment : Fragment() {
         }
     }
 
-    /**
-     * Displays a dialog that asks the user to confirm that the knitting should be deleted
-     */
     private fun showDeleteDialog() {
         context?.let {
-            DeleteNeedleDialog.create(it, needle, {
-                // delete database entry
-                datasource.deleteNeedle(needle)
-                // go back to the previous fragment which is the category list
-                fragmentManager?.popBackStack() }
-            ).show()
+//            DeleteNeedleDialog.create(it, needle, {
+//                // delete database entry
+//                datasource.deleteNeedle(needle)
+//                // go back to the previous fragment which is the category list
+//                fragmentManager?.popBackStack() }
+//            ).show()
         }
     }
 
     companion object {
 
-        /**
-         * Use this factory method to create a new instance of this fragment using the provided parameters.
-         *
-         * @param needleID id of the needle that should be edited
-         * @return A new instance of fragment EditNeedleFragment.
-         */
         @JvmStatic
         fun newInstance(needleID: Long) =
                 EditNeedleFragment().apply {
