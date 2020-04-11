@@ -6,10 +6,8 @@ import android.view.*
 import android.widget.*
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.mthaler.knittings.DeleteDialog
-import com.mthaler.knittings.Extras
-import com.mthaler.knittings.R
-import com.mthaler.knittings.TextWatcher
+import com.mthaler.knittings.*
+import com.mthaler.knittings.model.Needle
 import com.mthaler.knittings.model.NeedleMaterial
 import com.mthaler.knittings.model.NeedleType
 
@@ -133,6 +131,43 @@ class EditNeedleFragment : Fragment() {
         inflater.inflate(R.menu.edit_needle, menu)
     }
 
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.menu_item_save_needle -> {
+                if (moddified) {
+                    viewModel.saveNeedle(createNeedle())
+                }
+                fragmentManager?.popBackStack()
+                true
+            }
+            R.id.menu_item_delete_needle -> {
+                context?.let {
+                    DeleteDialog.create(it, editTextName.text.toString(), {
+                        viewModel.deleteNeedle()
+                        fragmentManager?.popBackStack() }
+                    ).show()
+                }
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    fun onBackPressed() {
+        context?.let {
+            if (moddified) {
+                SaveChangesDialog.create(it, {
+                    viewModel.saveNeedle(createNeedle())
+                    fragmentManager?.popBackStack()
+                }, {
+                    fragmentManager?.popBackStack()
+                }).show()
+            } else {
+                fragmentManager?.popBackStack()
+            }
+        }
+    }
+
     private fun createTextWatcher(): TextWatcher {
         return object : TextWatcher {
             override fun onTextChanged(c: CharSequence, start: Int, before: Int, count: Int) {
@@ -141,23 +176,10 @@ class EditNeedleFragment : Fragment() {
         }
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            R.id.menu_item_delete_needle -> {
-                showDeleteDialog()
-                true
-            }
-            else -> super.onOptionsItemSelected(item)
-        }
-    }
-
-    private fun showDeleteDialog() {
-        context?.let {
-            DeleteDialog.create(it, editTextName.text.toString(), {
-                viewModel.deleteNeedle()
-                fragmentManager?.popBackStack() }
-            ).show()
-        }
+    private fun createNeedle(): Needle {
+        val material = NeedleMaterial.values()[spinnerMaterial.selectedItemPosition]
+        val type = NeedleType.values()[spinnerType.selectedItemPosition]
+        return Needle(needleID, editTextName.text.toString(), "", editTextSize.text.toString(), editTextLength.text.toString(), material, checkBoxInUse.isSelected, type)
     }
 
     companion object {

@@ -12,14 +12,6 @@ import kotlinx.android.synthetic.main.activity_needle_list.*
 
 class NeedleListActivity : BaseActivity(), NeedleListFragment.OnFragmentInteractionListener {
 
-    /**
-     * Called when the activity is starting. This is where most initialization should go: calling setContentView(int)
-     * to inflate the activity's UI, using findViewById(int) to programmatically interact with widgets in the UI,
-     * calling managedQuery(android.net.Uri, String[], String, String[], String) to retrieve cursors for data being displayed, etc.
-     *
-     * @param savedInstanceState Bundle: If the activity is being re-initialized after previously being shut down then this Bundle contains
-     *                           the data it most recently supplied in onSaveInstanceState(Bundle). Note: Otherwise it is null.
-     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_needle_list)
@@ -38,12 +30,6 @@ class NeedleListActivity : BaseActivity(), NeedleListFragment.OnFragmentInteract
         }
     }
 
-    /**
-     * This hook is called whenever an item in your options menu is selected.
-     *
-     * @param item the menu item that was selected.
-     * @return return false to allow normal menu processing to proceed, true to consume it here.
-     */
     override fun onOptionsItemSelected(item: MenuItem): Boolean = when (item.itemId) {
         android.R.id.home -> {
             // Respond to the action bar's Up/Home button
@@ -54,7 +40,7 @@ class NeedleListActivity : BaseActivity(), NeedleListFragment.OnFragmentInteract
                 val fm = supportFragmentManager
                 val f = fm.findFragmentById(R.id.needle_list_container)
                 if (f is EditNeedleFragment) {
-                    fm.popBackStack()
+                    f.onBackPressed()
                 } else {
                     NavUtils.navigateUpTo(this, upIntent)
                 }
@@ -62,6 +48,16 @@ class NeedleListActivity : BaseActivity(), NeedleListFragment.OnFragmentInteract
             true
         }
         else -> super.onOptionsItemSelected(item)
+    }
+
+    override fun onBackPressed() {
+        val fm = supportFragmentManager
+        val f = fm.findFragmentById(R.id.category_list_container)
+        if (f is EditNeedleFragment) {
+            f.onBackPressed()
+        } else {
+            super.onBackPressed()
+        }
     }
 
     override fun createNeedle() {
