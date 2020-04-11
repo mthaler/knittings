@@ -19,6 +19,14 @@ class EditNeedleViewModel(application: Application) : DatasourceViewModel(applic
         }
     }
 
+    fun saveNeedle(needle: Needle) {
+        if (needle.id == -1L) {
+            datasource.addNeedle(needle)
+        } else {
+            datasource.updateNeedle(needle)
+        }
+    }
+
     override fun databaseChanged() {
         val c = datasource.getNeedle(needleID)
         needle.setMutVal(c)
