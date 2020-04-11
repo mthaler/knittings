@@ -69,12 +69,6 @@ class KnittingDetailsFragment : Fragment(), AnkoLogger {
         inflater.inflate(R.menu.knitting_details_fragment, menu)
     }
 
-    /**
-     * This hook is called whenever an item in your options menu is selected.
-     *
-     * @param item the menu item that was selected.
-     * @return return false to allow normal menu processing to proceed, true to consume it here.
-     */
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.menu_item_show_stopwatch -> {

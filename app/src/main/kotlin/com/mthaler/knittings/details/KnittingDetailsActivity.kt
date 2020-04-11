@@ -27,14 +27,6 @@ class KnittingDetailsActivity : BaseActivity(), KnittingDetailsFragment.OnFragme
     private var editOnly: Boolean = false
     private var currentPhotoPath: File? = null
 
-    /**
-     * Called when the activity is starting. This is where most initialization should go: calling setContentView(int)
-     * to inflate the activity's UI, using findViewById(int) to programmatically interact with widgets in the UI,
-     * calling managedQuery(android.net.Uri, String[], String, String[], String) to retrieve cursors for data being displayed, etc.
-     *
-     * @param savedInstanceState Bundle: If the activity is being re-initialized after previously being shut down then this Bundle contains
-     *                           the data it most recently supplied in onSaveInstanceState(Bundle). Note: Otherwise it is null.
-     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_knitting_details)
@@ -69,12 +61,6 @@ class KnittingDetailsActivity : BaseActivity(), KnittingDetailsFragment.OnFragme
         }
     }
 
-    /**
-     * This method is called if the activity gets destroyed because e.g. the device configuration changes because the device is rotated
-     * We need to store instance variables because they are not automatically restored
-     *
-     * @param savedInstanceState saved instance state
-     */
     override fun onSaveInstanceState(savedInstanceState: Bundle) {
         savedInstanceState.putLong(EXTRA_KNITTING_ID, knittingID)
         savedInstanceState.putBoolean(EXTRA_EDIT_ONLY, editOnly)
@@ -82,25 +68,12 @@ class KnittingDetailsActivity : BaseActivity(), KnittingDetailsFragment.OnFragme
         super.onSaveInstanceState(savedInstanceState)
     }
 
-    /**
-     * Initialize the contents of the Activity's standard options menu.
-     * This is only called once, the first time the options menu is displayed.
-     *
-     * @param menu The options menu in which you place your items.
-     * @return you must return true for the menu to be displayed; if you return false it will not be shown.
-     */
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
         menuInflater.inflate(R.menu.knitting_details, menu)
         return true
     }
 
-    /**
-     * This hook is called whenever an item in your options menu is selected.
-     *
-     * @param item the menu item that was selected.
-     * @return return false to allow normal menu processing to proceed, true to consume it here.
-     */
     override fun onOptionsItemSelected(item: MenuItem): Boolean = when (item.itemId) {
         android.R.id.home -> {
             // Respond to the action bar's Up/Home button
@@ -134,15 +107,6 @@ class KnittingDetailsActivity : BaseActivity(), KnittingDetailsFragment.OnFragme
         else -> super.onOptionsItemSelected(item)
     }
 
-    /**
-     * Called when an activity you launched exits, giving you the requestCode you started it with, the resultCode it returned,
-     * and any additional data from it. The resultCode will be RESULT_CANCELED if the activity explicitly returned that,
-     * didn't return any result, or crashed during its operation.
-     *
-     * @param requestCode The integer request code originally supplied to startActivityForResult(), allowing you to identify who this result came from.
-     * @param resultCode The integer result code returned by the child activity through its setResult().
-     * @param data An Intent, which can return result data to the caller (various data can be attached to Intent "extras").
-     */
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (resultCode != Activity.RESULT_OK) {
             return
