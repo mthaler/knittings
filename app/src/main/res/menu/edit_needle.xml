@@ -6,4 +6,9 @@
         android:icon="@drawable/ic_delete_white_36dp"
         android:title="@string/delete_category"
         app:showAsAction="ifRoom|withText"/>
+    <item
+        android:id="@+id/menu_item_save_needle"
+        android:icon="@drawable/ic_check_white_36dp"
+        android:title="@string/save_category"
+        app:showAsAction="ifRoom|withText"/>
 </menu>

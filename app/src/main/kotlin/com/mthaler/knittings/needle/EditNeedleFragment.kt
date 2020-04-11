@@ -6,11 +6,10 @@ import android.view.*
 import android.widget.*
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.mthaler.knittings.DeleteDialog
 import com.mthaler.knittings.Extras
 import com.mthaler.knittings.R
 import com.mthaler.knittings.TextWatcher
-import com.mthaler.knittings.database.datasource
-import com.mthaler.knittings.model.Needle
 import com.mthaler.knittings.model.NeedleMaterial
 import com.mthaler.knittings.model.NeedleType
 
@@ -154,12 +153,10 @@ class EditNeedleFragment : Fragment() {
 
     private fun showDeleteDialog() {
         context?.let {
-//            DeleteNeedleDialog.create(it, needle, {
-//                // delete database entry
-//                datasource.deleteNeedle(needle)
-//                // go back to the previous fragment which is the category list
-//                fragmentManager?.popBackStack() }
-//            ).show()
+            DeleteDialog.create(it, editTextName.text.toString(), {
+                viewModel.deleteNeedle()
+                fragmentManager?.popBackStack() }
+            ).show()
         }
     }
 

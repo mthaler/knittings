@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import android.view.*
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.mthaler.knittings.DeleteDialog
 import com.mthaler.knittings.R
 import com.mthaler.knittings.database.datasource
 import com.mthaler.knittings.model.Needle
@@ -119,7 +120,7 @@ class NeedleListFragment : Fragment() {
                                 when(menu?.itemId) {
                                     R.id.action_delete -> {
                                         this@NeedleListFragment.activity?.let {
-                                            DeleteNeedleDialog.create(it, needle, {
+                                            DeleteDialog.create(it, needle.name, {
                                                 datasource.deleteNeedle(needle)
                                             }).show()
                                         }

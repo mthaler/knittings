@@ -19,6 +19,11 @@ class EditNeedleViewModel(application: Application) : DatasourceViewModel(applic
         }
     }
 
+    fun deleteNeedle() {
+        val needle = datasource.getNeedle(needleID)
+        datasource.deleteNeedle(needle)
+    }
+
     fun saveNeedle(needle: Needle) {
         if (needle.id == -1L) {
             datasource.addNeedle(needle)
