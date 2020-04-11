@@ -8,10 +8,6 @@
     <string name="edit_category_select_color">Select color</string>
     <string name="edit_category_name_hint">Name</string>
 
-    <!-- edit category menu -->
-    <string name="save_category">Save</string>
-    <string name="delete_category">Delete</string>
-
     <!-- color dialog -->
     <string name="category_color_dialog_title">Select color</string>
 </resources>

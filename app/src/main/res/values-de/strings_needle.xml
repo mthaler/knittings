@@ -8,11 +8,6 @@
     <string name="edit_needle_materal_hint">Material:</string>
     <string name="edit_needle_in_use">In Gebrauch</string>
 
-    <!-- edit needle menu -->
-    <string name="save_needle">Speichern</string>
-    <string name="delete_needle">Nadel löschen</string>
-
-
     <!-- needle materials -->
     <string name="needle_material_other">Anderes Material</string>
     <string name="needle_material_aluminum">Aluminium</string>

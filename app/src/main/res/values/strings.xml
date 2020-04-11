@@ -22,6 +22,10 @@
     <string name="delete_dialog_question">Do you really want to delete %1$s?</string>
     <string name="delete_dialog_delete_button">Delete</string>
 
+    <!-- generic menu entries-->
+    <string name="menu_entry_save">Save</string>
+    <string name="menu_entry_delete">Delete</string>
+
     <!-- sorting -->
     <string name="sorting_newest_first">Newest first</string>
     <string name="sorting_oldest_first">Oldest first</string>

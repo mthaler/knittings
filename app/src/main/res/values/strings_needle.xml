@@ -8,10 +8,6 @@
     <string name="edit_needle_materal_hint">Material:</string>
     <string name="edit_needle_in_use">In use</string>
 
-    <!-- edit needle menu -->
-    <string name="save_needle">Save</string>
-    <string name="delete_needle">Delete needle</string>
-
     <!-- needle materials -->
     <string name="needle_material_other">Other</string>
     <string name="needle_material_aluminum">Aluminum</string>

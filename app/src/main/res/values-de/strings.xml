@@ -23,6 +23,10 @@
     <string name="delete_dialog_question">%1$s wirklich löschen?</string>
     <string name="delete_dialog_delete_button">Löschen</string>
 
+    <!-- generic menu entries-->
+    <string name="menu_entry_save">Speichern</string>
+    <string name="menu_entry_delete">Löschen</string>
+
     <!-- sorting -->
     <string name="sorting_newest_first">Neueste zuerst</string>
     <string name="sorting_oldest_first">Älteste zuerst</string>

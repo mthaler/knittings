@@ -4,11 +4,11 @@
     <item
         android:id="@+id/menu_item_delete_category"
         android:icon="@drawable/ic_delete_white_36dp"
-        android:title="@string/delete_category"
+        android:title="@string/menu_entry_delete"
         app:showAsAction="ifRoom|withText"/>
     <item
         android:id="@+id/menu_item_save_category"
         android:icon="@drawable/ic_check_white_36dp"
-        android:title="@string/save_category"
+        android:title="@string/menu_entry_save"
         app:showAsAction="ifRoom|withText"/>
 </menu>
