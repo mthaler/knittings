@@ -10,6 +10,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import com.mthaler.knittings.R
 import com.mthaler.knittings.TextWatcher
 import com.mthaler.knittings.category.SelectCategoryActivity
@@ -18,20 +20,22 @@ import com.mthaler.knittings.datepicker.DatePickerFragment
 import com.mthaler.knittings.model.Knitting
 import com.mthaler.knittings.utils.TimeUtils
 import java.text.DateFormat
-import java.util.*
 import com.mthaler.knittings.durationpicker.DurationPickerDialog
 import com.mthaler.knittings.Extras.EXTRA_CATEGORY_ID
 import com.mthaler.knittings.Extras.EXTRA_KNITTING_ID
 import com.mthaler.knittings.model.Status
+import java.util.Date
 
 class EditKnittingDetailsFragment : Fragment() {
 
     private lateinit var knitting: Knitting
-
+    private var knittingID: Long = -1
+    private lateinit var viewModel: EditKnittingDetailsViewModel
     private lateinit var textViewStarted: TextView
     private lateinit var textViewFinished: TextView
     private lateinit var textViewDuration: TextView
     private lateinit var buttonCategory: Button
+    private var modified = false
 
     /**
      * Called to do initial creation of a fragment. This is called after onAttach(Activity) and before
@@ -47,7 +51,7 @@ class EditKnittingDetailsFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            val knittingID = it.getLong(EXTRA_KNITTING_ID)
+            knittingID = it.getLong(EXTRA_KNITTING_ID)
             knitting = datasource.getKnitting(knittingID)
         }
 
@@ -178,6 +182,15 @@ class EditKnittingDetailsFragment : Fragment() {
         }
 
         return v
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        viewModel = ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory.getInstance(activity!!.application)).get(EditKnittingDetailsViewModel::class.java)
+        viewModel.init(knittingID)
+        viewModel.knitting.observe(viewLifecycleOwner, Observer { needle ->
+            modified = false
+        })
     }
 
     /**

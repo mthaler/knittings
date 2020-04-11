@@ -21,7 +21,7 @@ class EditNeedleFragment : Fragment() {
     private lateinit var spinnerMaterial: Spinner
     private lateinit var checkBoxInUse: CheckBox
     private lateinit var spinnerType: Spinner
-    private var moddified = false
+    private var modified = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,7 +59,7 @@ class EditNeedleFragment : Fragment() {
         spinnerMaterial.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
 
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                moddified = true
+                modified = true
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -68,7 +68,7 @@ class EditNeedleFragment : Fragment() {
 
         checkBoxInUse = v.findViewById(R.id.needle_in_use)
         checkBoxInUse.setOnCheckedChangeListener { view, checked ->
-            moddified = true
+            modified = true
         }
 
         spinnerType = v.findViewById(R.id.needle_type)
@@ -82,7 +82,7 @@ class EditNeedleFragment : Fragment() {
         spinnerType.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
 
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                moddified = true
+                modified = true
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -116,7 +116,7 @@ class EditNeedleFragment : Fragment() {
                     spinnerType.setSelection(0)
                 }
             }
-            moddified = false
+            modified = false
         })
     }
 
@@ -128,7 +128,7 @@ class EditNeedleFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.menu_item_save_needle -> {
-                if (moddified) {
+                if (modified) {
                     viewModel.saveNeedle(createNeedle())
                 }
                 fragmentManager?.popBackStack()
@@ -149,7 +149,7 @@ class EditNeedleFragment : Fragment() {
 
     fun onBackPressed() {
         context?.let {
-            if (moddified) {
+            if (modified) {
                 SaveChangesDialog.create(it, {
                     viewModel.saveNeedle(createNeedle())
                     fragmentManager?.popBackStack()
@@ -165,7 +165,7 @@ class EditNeedleFragment : Fragment() {
     private fun createTextWatcher(): TextWatcher {
         return object : TextWatcher {
             override fun onTextChanged(c: CharSequence, start: Int, before: Int, count: Int) {
-                moddified = true
+                modified = true
             }
         }
     }

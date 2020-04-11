@@ -22,7 +22,7 @@ class EditCategoryFragment : Fragment() {
     private lateinit var editTextTitle: EditText
     private lateinit var buttonColor: Button
     private var color = 0
-    private var moddified = false
+    private var modified = false
 
     fun getCategoryID(): Long = categoryID
 
@@ -47,7 +47,7 @@ class EditCategoryFragment : Fragment() {
         editTextTitle = v.findViewById(R.id.category_name)
         editTextTitle.addTextChangedListener(object : TextWatcher {
             override fun onTextChanged(c: CharSequence, start: Int, before: Int, count: Int) {
-                moddified = true
+                modified = true
             }
         })
 
@@ -59,7 +59,7 @@ class EditCategoryFragment : Fragment() {
                 override fun setOnFastChooseColorListener(position: Int, c: Int) {
                     color = c
                     buttonColor.setBackgroundColor(c)
-                    moddified = true
+                    modified = true
                 }
 
                 override fun onCancel() {
@@ -86,7 +86,7 @@ class EditCategoryFragment : Fragment() {
                 color = category.color
                 buttonColor.setBackgroundColor(category.color)
             }
-            moddified = false
+            modified = false
         })
     }
 
@@ -98,7 +98,7 @@ class EditCategoryFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.menu_item_save_category -> {
-                if (moddified) {
+                if (modified) {
                     viewModel.saveCategory(Category(categoryID, editTextTitle.text.toString(), color))
                 }
                 fragmentManager?.popBackStack()
@@ -119,7 +119,7 @@ class EditCategoryFragment : Fragment() {
 
     fun onBackPressed() {
         context?.let {
-            if (moddified) {
+            if (modified) {
                 SaveChangesDialog.create(it, {
                     viewModel.saveCategory(Category(categoryID, editTextTitle.text.toString(), color))
                     fragmentManager?.popBackStack()
