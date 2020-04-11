@@ -96,8 +96,8 @@ class EditKnittingDetailsFragment : Fragment() {
             context?.let {
                 val d = DurationPickerDialog(it, { durationPicker, duration ->
                     textViewDuration.text = TimeUtils.formatDuration(duration)
-                    knitting = knitting.copy(duration = duration)
-                    datasource.updateKnitting(knitting)
+//                    knitting = knitting.copy(duration = duration)
+//                    datasource.updateKnitting(knitting)
                 }, knitting.duration)
                 d.show()
             }
@@ -124,14 +124,14 @@ class EditKnittingDetailsFragment : Fragment() {
 
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 parent?.let {
-                    val k0 = knitting
-                    if (k0 != null) {
-                        val statusStr = statusList[position]
-                        val status = Status.parse(it.context, statusStr)
-                        val k1 = k0.copy(status = status)
-                        datasource.updateKnitting(k1)
-                        knitting = k1
-                    }
+//                    val k0 = knitting
+//                    if (k0 != null) {
+//                        val statusStr = statusList[position]
+//                        val status = Status.parse(it.context, statusStr)
+//                        val k1 = k0.copy(status = status)
+//                        datasource.updateKnitting(k1)
+//                        knitting = k1
+//                    }
                 }
             }
 
@@ -156,8 +156,23 @@ class EditKnittingDetailsFragment : Fragment() {
         viewModel.knitting.observe(viewLifecycleOwner, Observer { knitting ->
             editTextTitle.setText(knitting.title)
             editTextDescription.setText(knitting.description)
+            textViewStarted.text = DateFormat.getDateInstance().format(knitting.started)
+            textViewFinished.text = if (knitting.finished != null) DateFormat.getDateInstance().format(knitting.finished) else ""
             editTextNeedleDiameter.setText(knitting.needleDiameter)
             editTextSize.setText(knitting.size)
+            textViewDuration.text = TimeUtils.formatDuration(knitting.duration)
+            val c = knitting.category
+            if (c != null) {
+                buttonCategory.text = c.name
+            }
+            val statusList = Status.formattedValues(context!!)
+            val index = statusList.indexOf(Status.format(context!!, knitting.status))
+            if (index >= 0) {
+                spinnerStatus.setSelection(index)
+            } else {
+                spinnerStatus.setSelection(0)
+            }
+            ratingBar.rating = knitting.rating.toFloat()
             modified = false
         })
     }
@@ -199,52 +214,6 @@ class EditKnittingDetailsFragment : Fragment() {
                     datasource.updateKnitting(knitting)
                 }
             }
-        }
-    }
-
-    override fun onResume() {
-        super.onResume()
-        knitting = datasource.getKnitting(knitting.id)
-        updateDetails()
-    }
-
-    private fun updateDetails() {
-        view?.let {
-            val editTextTitle = it.findViewById<EditText>(R.id.knitting_title)
-            editTextTitle.setText(knitting.title)
-
-            val editTextDescription = it.findViewById<EditText>(R.id.knitting_description)
-            editTextDescription.setText(knitting.description)
-
-            textViewStarted.text = DateFormat.getDateInstance().format(knitting.started)
-
-            textViewFinished.text = if (knitting.finished != null) DateFormat.getDateInstance().format(knitting.finished) else ""
-
-            val editTextNeedleDiameter = it.findViewById<EditText>(R.id.knitting_needle_diameter)
-            editTextNeedleDiameter.setText(knitting.needleDiameter)
-
-            val editTextSize = it.findViewById<EditText>(R.id.knitting_size)
-            editTextSize.setText(knitting.size)
-
-            textViewDuration.text = TimeUtils.formatDuration(knitting.duration)
-
-            val c = knitting.category
-            if (c != null) {
-                val buttonCategory = it.findViewById<Button>(R.id.knitting_category)
-                buttonCategory.text = c.name
-            }
-
-            val statusList = Status.formattedValues(it.context)
-            val spinnerStatus = it.findViewById<Spinner>(R.id.knitting_status)
-            val index = statusList.indexOf(Status.format(it.context, knitting.status))
-            if (index >= 0) {
-                spinnerStatus.setSelection(index)
-            } else {
-                spinnerStatus.setSelection(0)
-            }
-
-            val ratingBar = it.findViewById<RatingBar>(R.id.ratingBar)
-            ratingBar.rating = knitting.rating.toFloat()
         }
     }
 
