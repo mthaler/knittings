@@ -102,7 +102,7 @@ class KnittingDetailsFragment : Fragment(), AnkoLogger {
 
                 if (photos.size > 1) {
                     // create array of dots that are displayed at the bottom of the photo
-                    val dots = (0 .. dotscount - 1).map {
+                    val dots = (0..dotscount - 1).map {
                         val dot = ImageView(context)
                         dot.setImageDrawable(ContextCompat.getDrawable(context!!.applicationContext, R.drawable.non_active_dot))
                         val params = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT)

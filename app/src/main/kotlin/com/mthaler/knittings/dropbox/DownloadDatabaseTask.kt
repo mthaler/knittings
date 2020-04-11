@@ -16,10 +16,12 @@ import com.mthaler.knittings.model.*
  * @param onDataLoaded callback that is executed when the data is loaded
  * @param onError callback that is executed if an error happens
  */
-internal class DownloadDatabaseTask(private val context: Context,
-                                    private val dbxClient: DbxClientV2,
-                                    private val onDataLoaded: (Database?) -> Unit,
-                                    private val onError: (Exception) -> Unit) : AsyncTask<String, Void, Database?>() {
+internal class DownloadDatabaseTask(
+    private val context: Context,
+    private val dbxClient: DbxClientV2,
+    private val onDataLoaded: (Database?) -> Unit,
+    private val onError: (Exception) -> Unit
+) : AsyncTask<String, Void, Database?>() {
 
     private var exception: Exception? = null
 

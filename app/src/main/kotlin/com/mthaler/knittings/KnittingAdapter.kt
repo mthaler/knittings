@@ -13,9 +13,11 @@ import com.mthaler.knittings.model.Status
 import java.text.DateFormat
 
 class KnittingAdapter(
-                      val context: Context, val knittings: List<Knitting>,
-                      private val onItemClick: (Knitting) -> Unit,
-                      private val onItemLongClick: (Knitting) -> Unit) : RecyclerView.Adapter<KnittingAdapter.ViewHolder>() {
+    val context: Context,
+    val knittings: List<Knitting>,
+    private val onItemClick: (Knitting) -> Unit,
+    private val onItemLongClick: (Knitting) -> Unit
+) : RecyclerView.Adapter<KnittingAdapter.ViewHolder>() {
 
     /**
      * Creates, configures and returns a ViewHolder object for a particular row in the list

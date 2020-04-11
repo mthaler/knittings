@@ -20,10 +20,12 @@ import com.mthaler.knittings.utils.TimeUtils
  * @param callback How parent is notified.
  * @param initialDuration initial duration
  */
-class DurationPickerDialog(context: Context,
-                           theme: Int,
-                           private val callback: (DurationPicker, Long) -> Unit,
-                           initialDuration: Long) : AlertDialog(context, theme), OnClickListener, OnDurationChangedListener {
+class DurationPickerDialog(
+    context: Context,
+    theme: Int,
+    private val callback: (DurationPicker, Long) -> Unit,
+    initialDuration: Long
+) : AlertDialog(context, theme), OnClickListener, OnDurationChangedListener {
 
     private val mTimePicker: DurationPicker
 
@@ -91,6 +93,4 @@ class DurationPickerDialog(context: Context,
 
         private const val DURATION = "duration"
     }
-
-
 }

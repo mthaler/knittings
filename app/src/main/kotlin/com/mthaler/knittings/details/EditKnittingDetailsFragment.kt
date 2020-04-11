@@ -175,7 +175,6 @@ class EditKnittingDetailsFragment : Fragment() {
         })
     }
 
-
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.edit_knitting_details, menu)

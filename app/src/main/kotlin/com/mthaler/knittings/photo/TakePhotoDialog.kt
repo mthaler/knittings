@@ -31,11 +31,13 @@ object TakePhotoDialog : AnkoLogger {
      * @param takePhoto function that is called if the user wants to take a photo
      * @param importPhoto function that is called if the user wants to import a photo
      */
-    fun create(context: Context,
-               layoutInflater: LayoutInflater,
-               knittingID: Long,
-               takePhoto: (File, Intent) -> Unit,
-               importPhoto: (File, Intent) -> Unit): AlertDialog {
+    fun create(
+        context: Context,
+        layoutInflater: LayoutInflater,
+        knittingID: Long,
+        takePhoto: (File, Intent) -> Unit,
+        importPhoto: (File, Intent) -> Unit
+    ): AlertDialog {
 
         // create the dialog
         val b = AlertDialog.Builder(context)

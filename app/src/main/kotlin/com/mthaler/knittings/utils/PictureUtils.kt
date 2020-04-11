@@ -131,7 +131,6 @@ object PictureUtils : AnkoLogger {
             ex.printStackTrace()
             bitmap
         }
-
     }
 
     fun resize(image: Bitmap, maxWidth: Int, maxHeight: Int): Bitmap {

@@ -54,7 +54,7 @@ class DropboxExportFragment : AbstractDropboxFragment(), AnkoLogger {
                         }
                         negativeButton(resources.getString(R.string.dialog_button_cancel)) {}
                     }.show()
-                } else  {
+                } else {
                     exportTask = UploadTask(DropboxClientFactory.getClient(), ctx.applicationContext, progressBar::setProgress, ::onUploadComplete, ::onUploadError).execute()
                     setMode(true)
                 }

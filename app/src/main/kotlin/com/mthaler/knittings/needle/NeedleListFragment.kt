@@ -31,8 +31,11 @@ class NeedleListFragment : Fragment() {
         retainInstance = true
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         // Inflate the layout for this fragment
         val v = inflater.inflate(R.layout.fragment_needle_list, container, false)
 
@@ -79,7 +82,7 @@ class NeedleListFragment : Fragment() {
                         }
                         else -> throw Exception("Unknown filter: $f")
                     }
-                    builder.setSingleChoiceItems(listItems, checkedItem) { dialog, which -> when(which) {
+                    builder.setSingleChoiceItems(listItems, checkedItem) { dialog, which -> when (which) {
                         0 -> filter = NoFilter
                         else -> {
                             val type = NeedleType.values()[which - 1]
@@ -117,7 +120,7 @@ class NeedleListFragment : Fragment() {
                         (activity as AppCompatActivity).startSupportActionMode(object : ActionMode.Callback {
 
                             override fun onActionItemClicked(mode: ActionMode?, menu: MenuItem?): Boolean {
-                                when(menu?.itemId) {
+                                when (menu?.itemId) {
                                     R.id.action_delete -> {
                                         this@NeedleListFragment.activity?.let {
                                             DeleteDialog.create(it, needle.name, {

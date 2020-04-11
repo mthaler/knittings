@@ -265,7 +265,7 @@ fun JSONObject.toDatabase(context: Context, externalFilesDir: File): Database {
             return knitting
         }
     }
-    
+
     fun updatePhotoFilename(photo: Photo): Photo {
         val oldFilename = photo.filename
         val newFilename = File(externalFilesDir, oldFilename.name)

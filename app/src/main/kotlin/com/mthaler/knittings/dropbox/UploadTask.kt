@@ -22,11 +22,13 @@ import java.util.*
  * @param onComplete function that is called when upload is completed
  * @param onError function that is called when an error happens during upload
  */
-class UploadTask(private val dbxClient: DbxClientV2,
-                 private val context: Context,
-                 private val updateProgress: (Int) -> Unit,
-                 private val onComplete: (Boolean) -> Unit,
-                 private val onError: (Exception) -> Unit) : AsyncTask<Void, Int?, Any?>() {
+class UploadTask(
+    private val dbxClient: DbxClientV2,
+    private val context: Context,
+    private val updateProgress: (Int) -> Unit,
+    private val onComplete: (Boolean) -> Unit,
+    private val onError: (Exception) -> Unit
+) : AsyncTask<Void, Int?, Any?>() {
 
     private var exception: Exception? = null
 

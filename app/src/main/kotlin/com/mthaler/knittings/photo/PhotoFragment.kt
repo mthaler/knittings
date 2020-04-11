@@ -139,7 +139,6 @@ class PhotoFragment : Fragment(), AnkoLogger {
         }.show()
     }
 
-
     private fun deletePhoto() {
         // check if the photo is used as default photo
         photo?.let {

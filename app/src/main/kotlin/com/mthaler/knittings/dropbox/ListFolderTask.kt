@@ -11,9 +11,11 @@ import com.dropbox.core.v2.files.ListFolderResult
  * @param onDataLoaded callback that is executed when the data is loaded
  * @param onError callback that is executed if an error happens
  */
-internal class ListFolderTask(private val dbxClient: DbxClientV2,
-                              private val onDataLoaded: (ListFolderResult?) -> Unit,
-                              private val onError: (Exception) -> Unit) : AsyncTask<String, Void, ListFolderResult?>() {
+internal class ListFolderTask(
+    private val dbxClient: DbxClientV2,
+    private val onDataLoaded: (ListFolderResult?) -> Unit,
+    private val onError: (Exception) -> Unit
+) : AsyncTask<String, Void, ListFolderResult?>() {
 
     private var exception: Exception? = null
 

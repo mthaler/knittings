@@ -19,12 +19,14 @@ import java.io.FileOutputStream
  * @param updateProgress function to update progess
  * @param onComplete function that is called when task is completed
  */
-class DownloadPhotosTask(private val dbxClient: DbxClientV2,
-                         private val context: Context,
-                         private val directory: String,
-                         private val database: Database,
-                         private val updateProgress: (Int) -> Unit,
-                         private val onComplete: () -> Unit) : AsyncTask<Any, Int?, Any?>() {
+class DownloadPhotosTask(
+    private val dbxClient: DbxClientV2,
+    private val context: Context,
+    private val directory: String,
+    private val database: Database,
+    private val updateProgress: (Int) -> Unit,
+    private val onComplete: () -> Unit
+) : AsyncTask<Any, Int?, Any?>() {
 
     override fun doInBackground(params: Array<Any>): Any? {
         val count = database.photos.size

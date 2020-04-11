@@ -87,7 +87,6 @@ class EditNeedleFragment : Fragment() {
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
             }
-
         }
 
         return v
@@ -109,7 +108,7 @@ class EditNeedleFragment : Fragment() {
                 }
             }
             checkBoxInUse.isChecked = needle.inUse
-            NeedleType.values().indexOf(needle.type).also {index ->
+            NeedleType.values().indexOf(needle.type).also { index ->
                 if (index >= 0) {
                     spinnerType.setSelection(index)
                 } else {

@@ -220,4 +220,3 @@ class DurationPicker @JvmOverloads constructor(context: Context, attrs: Attribut
         }
     }
 }
-
