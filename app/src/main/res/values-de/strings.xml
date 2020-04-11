@@ -14,6 +14,11 @@
     <string name="dialog_button_yes">Ja</string>
     <string name="dialog_button_no">Nein</string>
 
+    <!-- save changes dialog strings -->
+    <string name="save_changes_dialog_button_save">OK</string>
+    <string name="save_changes_dialog_button_discard">Discard</string>
+    <string name="save_changes_dialog_question">Änderungen speichern?</string>
+
     <!-- sorting -->
     <string name="sorting_newest_first">Neueste zuerst</string>
     <string name="sorting_oldest_first">Älteste zuerst</string>

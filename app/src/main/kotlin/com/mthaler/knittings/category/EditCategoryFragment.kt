@@ -9,6 +9,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.mthaler.knittings.R
 import com.mthaler.knittings.Extras.EXTRA_CATEGORY_ID
+import com.mthaler.knittings.SaveChangesDialog
 import com.mthaler.knittings.TextWatcher
 import com.mthaler.knittings.model.Category
 import petrov.kristiyan.colorpicker.ColorPicker
