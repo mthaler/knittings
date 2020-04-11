@@ -51,9 +51,6 @@ class EditKnittingDetailsFragment : Fragment() {
         arguments?.let {
             knittingID = it.getLong(EXTRA_KNITTING_ID)
         }
-
-        // Retain this fragment across configuration changes.
-        retainInstance = true
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
