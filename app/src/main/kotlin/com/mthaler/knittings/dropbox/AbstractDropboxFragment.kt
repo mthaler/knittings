@@ -3,23 +3,20 @@ package com.mthaler.knittings.dropbox
 import androidx.fragment.app.Fragment
 import androidx.appcompat.app.AppCompatActivity
 import com.dropbox.core.android.Auth
-import org.jetbrains.anko.AnkoLogger
-import org.jetbrains.anko.wtf
 
 /**
  * Base class for Dropbox fragments
  *
  * The base class handles loging into Dropbox
  */
-abstract class AbstractDropboxFragment : Fragment(), AnkoLogger {
+abstract class AbstractDropboxFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
 
-        val ctx = context
-        if (ctx != null) {
+        context?.let {
             // get the access token from shared pref_sharing
-            val prefs = ctx.getSharedPreferences(SharedPreferencesName, AppCompatActivity.MODE_PRIVATE)
+            val prefs = it.getSharedPreferences(SharedPreferencesName, AppCompatActivity.MODE_PRIVATE)
             var accessToken = prefs.getString("access-token", null)
             if (accessToken == null) {
                 // no access token, we need to login
@@ -39,8 +36,6 @@ abstract class AbstractDropboxFragment : Fragment(), AnkoLogger {
             if (uid != null && uid != storedUid) {
                 prefs.edit().putString("user-id", uid).apply()
             }
-        } else {
-            wtf("context null")
         }
     }
 
@@ -76,7 +71,6 @@ abstract class AbstractDropboxFragment : Fragment(), AnkoLogger {
             val accessToken = prefs.getString("access-token", null)
             return accessToken != null
         } else {
-            wtf("context null")
             return false
         }
     }
