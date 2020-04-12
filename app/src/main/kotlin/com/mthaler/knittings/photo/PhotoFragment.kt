@@ -16,7 +16,8 @@ import com.mthaler.knittings.TextWatcher
 import com.mthaler.knittings.database.datasource
 import com.mthaler.knittings.model.Photo
 import com.mthaler.knittings.utils.PictureUtils
-import org.jetbrains.anko.*
+import org.jetbrains.anko.doAsync
+import org.jetbrains.anko.uiThread
 import org.jetbrains.anko.support.v4.alert
 import com.mthaler.knittings.Extras.EXTRA_PHOTO_ID
 import java.io.File
@@ -27,7 +28,7 @@ import android.preference.PreferenceManager
 /**
  * PhotoFragment displays a photo and the description
  */
-class PhotoFragment : Fragment(), AnkoLogger {
+class PhotoFragment : Fragment() {
 
     var photo: Photo? = null
 
@@ -159,7 +160,6 @@ class PhotoFragment : Fragment(), AnkoLogger {
         photo?.let {
             val knitting = datasource.getKnitting(it.knittingID)
             datasource.updateKnitting(knitting.copy(defaultPhoto = it))
-            debug("Set $it as default photo")
             view?.let {
                 Snackbar.make(it, "Used as main photo", Snackbar.LENGTH_SHORT).show()
             }
