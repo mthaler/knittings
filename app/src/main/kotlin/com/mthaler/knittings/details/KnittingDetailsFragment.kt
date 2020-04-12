@@ -18,13 +18,12 @@ import com.mthaler.knittings.photo.ImageAdapter
 import com.mthaler.knittings.R
 import com.mthaler.knittings.model.Status
 import com.mthaler.knittings.utils.TimeUtils
-import org.jetbrains.anko.AnkoLogger
 import java.text.DateFormat
 
 /**
  * Fragment that displays knitting details (name, description, start time etc.)
  */
-class KnittingDetailsFragment : Fragment(), AnkoLogger {
+class KnittingDetailsFragment : Fragment() {
 
     private var knittingID: Long = -1
     private lateinit var viewModel: KnittingDetailsViewModel
