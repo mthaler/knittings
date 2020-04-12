@@ -7,12 +7,10 @@ import androidx.core.app.NavUtils
 import android.view.MenuItem
 import com.mthaler.knittings.BaseActivity
 import com.mthaler.knittings.R
-import org.jetbrains.anko.AnkoLogger
-import org.jetbrains.anko.error
 import com.mthaler.knittings.Extras.EXTRA_KNITTING_ID
 import kotlinx.android.synthetic.main.activity_photo_gallery.*
 
-class PhotoGalleryActivity : BaseActivity(), AnkoLogger {
+class PhotoGalleryActivity : BaseActivity() {
 
     private var knittingID: Long = -1
 
