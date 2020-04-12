@@ -97,22 +97,16 @@ class EditKnittingDetailsFragment : Fragment() {
         }
         ratingBar = v.findViewById(R.id.ratingBar)
 
+        val knitting = datasource.getKnitting(knittingID)
         if (savedInstanceState == null) {
-            val knitting = datasource.getKnitting(knittingID)
             editTextTitle.setText(knitting.title)
             editTextDescription.setText(knitting.description)
-            textViewStarted.text = DateFormat.getDateInstance().format(knitting.started)
             started = knitting.started
-            textViewFinished.text = if (knitting.finished != null) DateFormat.getDateInstance().format(knitting.finished) else ""
             finished = knitting.finished
             editTextNeedleDiameter.setText(knitting.needleDiameter)
             editTextSize.setText(knitting.size)
-            textViewDuration.text = TimeUtils.formatDuration(knitting.duration)
-            val c = knitting.category
-            if (c != null) {
-                buttonCategory.text = c.name
-            }
-            category = c
+            duration = knitting.duration
+            category = knitting.category
             val statusList = Status.formattedValues(context!!)
             val index = statusList.indexOf(Status.format(context!!, knitting.status))
             if (index >= 0) {
@@ -121,6 +115,13 @@ class EditKnittingDetailsFragment : Fragment() {
                 spinnerStatus.setSelection(0)
             }
             ratingBar.rating = knitting.rating.toFloat()
+        }
+        textViewStarted.text = DateFormat.getDateInstance().format(knitting.started)
+        textViewFinished.text = if (knitting.finished != null) DateFormat.getDateInstance().format(knitting.finished) else ""
+        textViewDuration.text = TimeUtils.formatDuration(knitting.duration)
+        val c = knitting.category
+        if (c != null) {
+            buttonCategory.text = c.name
         }
 
         textViewStarted.setOnClickListener {
@@ -180,9 +181,9 @@ class EditKnittingDetailsFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.menu_item_save_knitting -> {
-                val oldKnitting = datasource.getKnitting(knittingID)
-                val newKnitting = createKnitting().copy(defaultPhoto = oldKnitting.defaultPhoto)
-                if (oldKnitting != newKnitting) {
+                val oldKnitting = if (knittingID != -1L) datasource.getKnitting(knittingID) else null
+                val newKnitting = if (oldKnitting != null) createKnitting().copy(defaultPhoto = oldKnitting.defaultPhoto) else createKnitting()
+                if (newKnitting != oldKnitting) {
                     saveKnitting(newKnitting)
                 }
                 fragmentManager?.popBackStack()
@@ -228,9 +229,9 @@ class EditKnittingDetailsFragment : Fragment() {
             if (upIntent == null) {
                 throw IllegalStateException("No Parent Activity Intent")
             } else {
-                val oldKnitting = datasource.getKnitting(knittingID)
-                val newKnitting = createKnitting().copy(defaultPhoto = oldKnitting.defaultPhoto)
-                if (oldKnitting != newKnitting) {
+                val oldKnitting = if (knittingID != -1L) datasource.getKnitting(knittingID) else null
+                val newKnitting = if (oldKnitting != null) createKnitting().copy(defaultPhoto = oldKnitting.defaultPhoto) else createKnitting()
+                if (newKnitting != oldKnitting) {
                     SaveChangesDialog.create(it, {
                         saveKnitting(newKnitting)
                         if (editOnly) {
