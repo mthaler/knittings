@@ -98,9 +98,9 @@ class EditNeedleFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.menu_item_save_needle -> {
-                val oldNeedle = datasource.getNeedle(needleID)
+                val oldNeedle = if (needleID != -1L) datasource.getNeedle(needleID) else null
                 val newNeedle = createNeedle()
-                if (oldNeedle != newNeedle) {
+                if (newNeedle != oldNeedle) {
                     saveNeedle(newNeedle)
                 }
                 fragmentManager?.popBackStack()
@@ -121,9 +121,9 @@ class EditNeedleFragment : Fragment() {
 
     fun onBackPressed() {
         context?.let {
-            val oldNeedle = datasource.getNeedle(needleID)
+            val oldNeedle = if (needleID != -1L) datasource.getNeedle(needleID) else null
             val newNeedle = createNeedle()
-            if (oldNeedle != newNeedle) {
+            if (newNeedle != oldNeedle) {
                 SaveChangesDialog.create(it, {
                     saveNeedle(newNeedle)
                     fragmentManager?.popBackStack()

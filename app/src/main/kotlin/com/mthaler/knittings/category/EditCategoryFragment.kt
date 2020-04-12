@@ -96,9 +96,9 @@ class EditCategoryFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.menu_item_save_category -> {
-                val oldCategory = datasource.getCategory(categoryID)
+                val oldCategory = if (categoryID != -1L) datasource.getCategory(categoryID) else null
                 val newCategory = Category(categoryID, editTextTitle.text.toString(), color)
-                if (oldCategory != newCategory) {
+                if (newCategory != oldCategory) {
                     saveCategory(newCategory)
                 }
                 fragmentManager?.popBackStack()
@@ -119,9 +119,9 @@ class EditCategoryFragment : Fragment() {
 
     fun onBackPressed() {
         context?.let {
-            val oldCategory = datasource.getCategory(categoryID)
+            val oldCategory = if (categoryID != -1L) datasource.getCategory(categoryID) else null
             val newCategory = Category(categoryID, editTextTitle.text.toString(), color)
-            if (oldCategory != newCategory) {
+            if (newCategory != oldCategory) {
                 SaveChangesDialog.create(it, {
                     saveCategory(newCategory)
                     fragmentManager?.popBackStack()
