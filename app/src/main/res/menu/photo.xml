@@ -20,7 +20,7 @@
         android:title="@string/share_photo"
         app:showAsAction="never" />
     <item
-        android:id="@+id/menu_item_save_category"
+        android:id="@+id/menu_item_save_photo"
         android:icon="@drawable/ic_check_white_36dp"
         android:title="@string/menu_entry_save"
         app:showAsAction="always|withText"/>

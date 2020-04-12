@@ -8,12 +8,10 @@ import android.os.Bundle
 import com.google.android.material.snackbar.Snackbar
 import androidx.fragment.app.Fragment
 import androidx.core.content.FileProvider
-import android.text.Editable
 import android.view.*
 import android.widget.EditText
 import android.widget.ImageView
 import com.mthaler.knittings.R
-import com.mthaler.knittings.TextWatcher
 import com.mthaler.knittings.database.datasource
 import com.mthaler.knittings.model.Photo
 import com.mthaler.knittings.utils.PictureUtils
@@ -64,15 +62,13 @@ class PhotoFragment : Fragment() {
                 val width = imageView.measuredWidth
                 val height = imageView.measuredHeight
                 // loading and scaling the bitmap is expensive, use async task to do the work
-                photo?.let {
-                    val path = it.filename.absolutePath
-                    doAsync {
-                        val orientation = PictureUtils.getOrientation(path)
-                        val scaled = PictureUtils.decodeSampledBitmapFromPath(path, width, height)
-                        val rotated = PictureUtils.rotateBitmap(scaled, orientation)
-                        uiThread {
-                            imageView.setImageBitmap(rotated)
-                        }
+                val path = photo.filename.absolutePath
+                doAsync {
+                    val orientation = PictureUtils.getOrientation(path)
+                    val scaled = PictureUtils.decodeSampledBitmapFromPath(path, width, height)
+                    val rotated = PictureUtils.rotateBitmap(scaled, orientation)
+                    uiThread {
+                        imageView.setImageBitmap(rotated)
                     }
                 }
                 return true
@@ -82,7 +78,7 @@ class PhotoFragment : Fragment() {
         editTextDescription = v.findViewById(R.id.photo_description)
 
         if (savedInstanceState == null) {
-            editTextDescription.setText(photo.description ?: "")
+            editTextDescription.setText(photo.description)
         }
 
         return v
@@ -113,14 +109,19 @@ class PhotoFragment : Fragment() {
                 true
             }
             R.id.menu_item_share -> {
-                photo?.let {
-                    val path = it.filename.absolutePath
-                    val prefs = PreferenceManager.getDefaultSharedPreferences(activity)
-                    val size = Integer.parseInt(prefs.getString(resources.getString(R.string.key_share_photo_size), "1200"))
-                    val scaled = PictureUtils.decodeSampledBitmapFromPath(path, size, size)
-                    val uri = saveImage(scaled)
-                    uri?.let { shareImageUri(it) }
+                val path = photo.filename.absolutePath
+                val prefs = PreferenceManager.getDefaultSharedPreferences(activity)
+                val size = Integer.parseInt(prefs.getString(resources.getString(R.string.key_share_photo_size), "1200"))
+                val scaled = PictureUtils.decodeSampledBitmapFromPath(path, size, size)
+                val uri = saveImage(scaled)
+                uri?.let { shareImageUri(it) }
+                true
+            }
+            R.id.menu_item_save_photo -> {
+                if (editTextDescription.text.toString() != photo.description) {
+                    savePhoto(photo.copy(description = editTextDescription.text.toString()))
                 }
+                activity?.finish()
                 true
             }
             else -> super.onOptionsItemSelected(item)
