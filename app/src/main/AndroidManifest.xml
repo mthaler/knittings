@@ -41,13 +41,6 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".photo.PhotoActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".photo.PhotoGalleryActivity" />
-        </activity>
-        <activity
             android:name=".details.KnittingDetailsActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
