@@ -1,6 +1,7 @@
 package com.mthaler.knittings.photo
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -22,6 +23,7 @@ class PhotoGalleryFragment : Fragment() {
     private var knittingID: Long = -1
     private var currentPhotoPath: File? = null
     private lateinit var gridView: GridView
+    private var listener: OnFragmentInteractionListener? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,7 +51,7 @@ class PhotoGalleryFragment : Fragment() {
         gridView.onItemClickListener = AdapterView.OnItemClickListener { parent, v, position, id ->
             // photo clicked, show photo in photo activity
             val photo = parent.getItemAtPosition(position) as Photo
-            startActivity(PhotoActivity.newIntent(context!!, photo.id))
+            listener?.let { it.photoClicked(photo.id) }
         }
 
         return v
@@ -117,6 +119,30 @@ class PhotoGalleryFragment : Fragment() {
     private fun importPhoto(file: File, intent: Intent) {
         currentPhotoPath = file
         startActivityForResult(intent, REQUEST_IMAGE_IMPORT)
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        if (context is OnFragmentInteractionListener) {
+            listener = context
+        } else {
+            throw RuntimeException("$context must implement OnFragmentInteractionListener")
+        }
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        listener = null
+    }
+
+    interface OnFragmentInteractionListener {
+
+        /**
+         * Called if the user clicks on a photo
+         *
+         * @param categoryID category ID
+         */
+        fun photoClicked(photoID: Long)
     }
 
     companion object {

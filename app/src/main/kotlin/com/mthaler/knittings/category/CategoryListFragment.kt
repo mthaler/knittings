@@ -140,11 +140,6 @@ class CategoryListFragment : Fragment() {
         }
     }
 
-    /**
-     * Called when a fragment is first attached to its context. onCreate(Bundle) will be called after this.
-     *
-     * @param context Context
-     */
     override fun onAttach(context: Context) {
         super.onAttach(context)
         if (context is OnFragmentInteractionListener) {
@@ -154,9 +149,6 @@ class CategoryListFragment : Fragment() {
         }
     }
 
-    /**
-     * Called when the fragment is no longer attached to its activity. This is called after onDestroy().
-     */
     override fun onDetach() {
         super.onDetach()
         listener = null

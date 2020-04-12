@@ -10,7 +10,7 @@ import com.mthaler.knittings.R
 import com.mthaler.knittings.Extras.EXTRA_KNITTING_ID
 import kotlinx.android.synthetic.main.activity_photo_gallery.*
 
-class PhotoGalleryActivity : BaseActivity() {
+class PhotoGalleryActivity : BaseActivity(), PhotoGalleryFragment.OnFragmentInteractionListener {
 
     private var knittingID: Long = -1
 
@@ -58,6 +58,15 @@ class PhotoGalleryActivity : BaseActivity() {
             true
         }
         else -> super.onOptionsItemSelected(item)
+    }
+
+    override fun photoClicked(photoID: Long) {
+        val f = PhotoFragment.newInstance(photoID)
+        val fm = supportFragmentManager
+        val ft = fm.beginTransaction()
+        ft.replace(R.id.photo_gallery_container, f)
+        ft.addToBackStack(null)
+        ft.commit()
     }
 
     companion object {
