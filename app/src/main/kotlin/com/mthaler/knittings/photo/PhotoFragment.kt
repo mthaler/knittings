@@ -30,25 +30,30 @@ import android.preference.PreferenceManager
  */
 class PhotoFragment : Fragment() {
 
-    var photo: Photo? = null
+    private lateinit var photo: Photo
+    private lateinit var editTextDescription: EditText
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // we need to call setHasOptionsMenu(true) to indicate that we are interested in participating in the action bar
-        setHasOptionsMenu(true)
+        arguments?.let {
+            val photoID = it.getLong(EXTRA_PHOTO_ID)
+            photo = datasource.getPhoto(photoID)
+        }
+        savedInstanceState?.let {
+            if (it.containsKey(EXTRA_PHOTO_ID)) {
+                val photoID = it.getLong(EXTRA_PHOTO_ID)
+                photo = datasource.getPhoto(photoID)
+            }
+        }
     }
 
     override fun onCreateView(inflater: LayoutInflater, parent: ViewGroup?, savedInstanceState: Bundle?): View? {
 
-        val v = inflater.inflate(R.layout.fragment_photo, parent, false)
+        // we need to call setHasOptionsMenu(true) to indicate that we are interested in participating in the action bar
+        setHasOptionsMenu(true)
 
-        arguments?.let {
-            val id = it.getLong(EXTRA_PHOTO_ID, -1L)
-            if (id != -1L) {
-                photo = datasource.getPhoto(id)
-            }
-        }
+        val v = inflater.inflate(R.layout.fragment_photo, parent, false)
 
         val imageView = v.findViewById<ImageView>(R.id.image)
         // we use a view tree observer to get the width and the height of the image view and scale the image accordingly reduce memory usage
@@ -74,20 +79,18 @@ class PhotoFragment : Fragment() {
             }
         })
 
-        val editTextDescription = v.findViewById<EditText>(R.id.photo_description)
-        editTextDescription.setText(photo?.description ?: "")
-        editTextDescription.addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(c: Editable) {
-                val p0 = photo
-                if (p0 != null) {
-                    val p1 = p0.copy(description = c.toString())
-                    datasource.updatePhoto(p1)
-                    photo = p1
-                }
-            }
-        })
+        editTextDescription = v.findViewById(R.id.photo_description)
+
+        if (savedInstanceState == null) {
+            editTextDescription.setText(photo.description ?: "")
+        }
 
         return v
+    }
+
+    override fun onSaveInstanceState(savedInstanceState: Bundle) {
+        savedInstanceState.putLong(EXTRA_PHOTO_ID, photo.id)
+        super.onSaveInstanceState(savedInstanceState)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -142,29 +145,27 @@ class PhotoFragment : Fragment() {
         }
     }
 
-    private fun deletePhoto() {
+//    private fun deletePhoto() {
         // check if the photo is used as default photo
-        photo?.let {
-            val knitting = datasource.getKnitting(it.knittingID)
-            if (knitting.defaultPhoto != null && knitting.defaultPhoto.id == it.id) {
-                datasource.updateKnitting(knitting.copy(defaultPhoto = null))
-            }
-            // delete database entry
-            datasource.deletePhoto(it)
-            photo = null
-        }
-    }
+//        photo?.let {
+//            val knitting = datasource.getKnitting(it.knittingID)
+//            if (knitting.defaultPhoto != null && knitting.defaultPhoto.id == it.id) {
+//                datasource.updateKnitting(knitting.copy(defaultPhoto = null))
+//            }
+//            // delete database entry
+//            datasource.deletePhoto(it)
+//            photo = null
+//        }
+//    }
 
     /**
      * Sets the current photo as the default photo used as preview for knittings list
      */
     private fun setDefaultPhoto() {
-        photo?.let {
-            val knitting = datasource.getKnitting(it.knittingID)
-            datasource.updateKnitting(knitting.copy(defaultPhoto = it))
-            view?.let {
-                Snackbar.make(it, "Used as main photo", Snackbar.LENGTH_SHORT).show()
-            }
+        val knitting = datasource.getKnitting(photo.knittingID)
+        datasource.updateKnitting(knitting.copy(defaultPhoto = photo))
+        view?.let {
+            Snackbar.make(it, "Used as main photo", Snackbar.LENGTH_SHORT).show()
         }
     }
 
@@ -204,6 +205,22 @@ class PhotoFragment : Fragment() {
         intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
         intent.type = "image/png"
         startActivity(intent)
+    }
+
+    private fun deletePhoto() {
+        val knitting = datasource.getKnitting(photo.knittingID)
+        if (knitting.defaultPhoto != null && knitting.defaultPhoto.id == photo.id) {
+                datasource.updateKnitting(knitting.copy(defaultPhoto = null))
+        }
+        datasource.deletePhoto(photo)
+    }
+
+    private fun savePhoto(photo: Photo) {
+        if (photo.id == -1L) {
+            datasource.addPhoto(photo)
+        } else {
+            datasource.updatePhoto(photo)
+        }
     }
 
     companion object {

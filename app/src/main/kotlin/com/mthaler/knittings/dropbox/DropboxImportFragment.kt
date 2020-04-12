@@ -11,7 +11,6 @@ import com.mthaler.knittings.R
 import com.mthaler.knittings.utils.NetworkUtils
 import kotlinx.android.synthetic.main.fragment_dropbox_import.*
 import org.jetbrains.anko.doAsync
-import org.jetbrains.anko.support.v4.alert
 import org.jetbrains.anko.uiThread
 import androidx.appcompat.app.AlertDialog
 import com.mthaler.knittings.database.datasource
@@ -113,15 +112,17 @@ class DropboxImportFragment : AbstractDropboxFragment() {
                 dialogBuilder.setItems(files) { dialog, item ->
                     val folderName = files[item]
                     backupDirectory = folderName
-                    alert {
-                        title = resources.getString(R.string.dropbox_import)
-                        message = "Do you really want to import from Dropbox? This will delete all existing data!"
-                        positiveButton("Import") {
-                            DownloadDatabaseTask(ctx.applicationContext, DropboxClientFactory.getClient(), ::onDownloadDatabase, ::onDownloadDatabaseError).execute(folderName)
+                    val builder = AlertDialog.Builder(it)
+                    with(builder) {
+                        setTitle(resources.getString(R.string.dropbox_import))
+                        setMessage("Do you really want to import from Dropbox? This will delete all existing data!")
+                        setPositiveButton("Import", { dialog, which ->
+                            DownloadDatabaseTask(it.applicationContext, DropboxClientFactory.getClient(), ::onDownloadDatabase, ::onDownloadDatabaseError).execute(folderName)
                             setMode(true)
-                        }
-                        negativeButton(resources.getString(R.string.dialog_button_cancel)) {}
-                    }.show()
+                        })
+                        setNegativeButton(resources.getString(R.string.dialog_button_cancel), { dialog, which -> })
+                        show()
+                    }
                 }
                 dialogBuilder.setNegativeButton("Cancel") { dialog, which -> }
                 // Create alert dialog object via builder
