@@ -52,12 +52,28 @@ class PhotoGalleryActivity : BaseActivity(), PhotoGalleryFragment.OnFragmentInte
             if (upIntent == null) {
                 throw IllegalStateException("No Parent Activity Intent")
             } else {
-                upIntent.putExtra(EXTRA_KNITTING_ID, knittingID)
-                NavUtils.navigateUpTo(this, upIntent)
+                val fm = supportFragmentManager
+                val f = fm.findFragmentById(R.id.category_list_container)
+                if (f is PhotoFragment) {
+                    f.onBackPressed()
+                } else {
+                    upIntent.putExtra(EXTRA_KNITTING_ID, knittingID)
+                    NavUtils.navigateUpTo(this, upIntent)
+                }
             }
             true
         }
         else -> super.onOptionsItemSelected(item)
+    }
+
+    override fun onBackPressed() {
+        val fm = supportFragmentManager
+        val f = fm.findFragmentById(R.id.category_list_container)
+        if (f is PhotoFragment) {
+            f.onBackPressed()
+        } else {
+            super.onBackPressed()
+        }
     }
 
     override fun photoClicked(photoID: Long) {

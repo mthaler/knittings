@@ -22,6 +22,7 @@ import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
 import android.preference.PreferenceManager
+import com.mthaler.knittings.SaveChangesDialog
 
 /**
  * PhotoFragment displays a photo and the description
@@ -121,10 +122,25 @@ class PhotoFragment : Fragment() {
                 if (editTextDescription.text.toString() != photo.description) {
                     savePhoto(photo.copy(description = editTextDescription.text.toString()))
                 }
-                activity?.finish()
+                fragmentManager?.popBackStack()
                 true
             }
             else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    fun onBackPressed() {
+        context?.let {
+            if (editTextDescription.text.toString() != photo.description) {
+                SaveChangesDialog.create(it, {
+                    savePhoto(photo.copy(description = editTextDescription.text.toString()))
+                    fragmentManager?.popBackStack()
+                }, {
+                    fragmentManager?.popBackStack()
+                }).show()
+            } else {
+                fragmentManager?.popBackStack()
+            }
         }
     }
 
