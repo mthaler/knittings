@@ -31,7 +31,7 @@ import com.mthaler.knittings.needle.NeedleListActivity
 import com.mthaler.knittings.settings.SettingsActivity
 import kotlinx.android.synthetic.main.content_main.*
 import java.lang.StringBuilder
-import java.util.*
+import java.util.Date
 import kotlin.collections.ArrayList
 
 /**

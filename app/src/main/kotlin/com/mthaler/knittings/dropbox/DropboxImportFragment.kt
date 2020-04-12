@@ -42,7 +42,7 @@ class DropboxImportFragment : AbstractDropboxFragment() {
                 val isWiFi = NetworkUtils.isWifiConnected(it)
                 if (!isWiFi) {
                     val builder = AlertDialog.Builder(it)
-                    with (builder) {
+                    with(builder) {
                         setTitle(resources.getString(R.string.dropbox_import))
                         setMessage(resources.getString(R.string.dropbox_export_no_wifi_question))
                         setPositiveButton(resources.getString(R.string.dropbox_export_dialog_export_button), { dialog, which ->
@@ -130,7 +130,7 @@ class DropboxImportFragment : AbstractDropboxFragment() {
                 alertDialogObject.show()
             } else {
                 val builder = AlertDialog.Builder(it)
-                with (builder) {
+                with(builder) {
                     setTitle("List folders")
                     setMessage("Error when listing folders: null")
                     setPositiveButton("OK", { dialog, which -> })
@@ -148,7 +148,7 @@ class DropboxImportFragment : AbstractDropboxFragment() {
     private fun onListFolderError(ex: Exception) {
         context?.let {
             val builder = AlertDialog.Builder(it)
-            with (builder) {
+            with(builder) {
                 setTitle("List folders")
                 setMessage("Error when listing folders: " + ex.message)
                 setPositiveButton("OK", { dialog, which -> })
@@ -181,7 +181,7 @@ class DropboxImportFragment : AbstractDropboxFragment() {
                 DownloadPhotosTask(DropboxClientFactory.getClient(), it, backupDirectory, database, progressBar::setProgress, ::onDownloadPhotosComplete).execute()
             } else {
                 val builder = AlertDialog.Builder(it)
-                with (builder) {
+                with(builder) {
                     setTitle("Download database")
                     setMessage("Could not download database: null")
                     setPositiveButton("OK", { dialog, which -> })
@@ -198,7 +198,7 @@ class DropboxImportFragment : AbstractDropboxFragment() {
      */
     private fun onDownloadDatabaseError(ex: Exception) {
         val builder = AlertDialog.Builder(context!!)
-        with (builder) {
+        with(builder) {
             setTitle("Download database")
             setMessage("Could not download database: " + ex.message)
             setPositiveButton("OK", { dialog, which -> })
@@ -209,7 +209,7 @@ class DropboxImportFragment : AbstractDropboxFragment() {
     private fun onDownloadPhotosComplete() {
         setMode(false)
         val builder = AlertDialog.Builder(context!!)
-        with (builder) {
+        with(builder) {
             setTitle(resources.getString(R.string.dropbox_import))
             setMessage("Dropbox import completed")
             setPositiveButton("OK", { dialog, which -> })

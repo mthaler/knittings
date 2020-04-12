@@ -43,7 +43,7 @@ class DropboxExportFragment : AbstractDropboxFragment() {
                 val isWiFi = NetworkUtils.isWifiConnected(it)
                 if (!isWiFi) {
                     val builder = AlertDialog.Builder(it)
-                    with (builder) {
+                    with(builder) {
                         setTitle(resources.getString(R.string.dropbox_export))
                         setMessage(resources.getString(R.string.dropbox_export_no_wifi_question))
                         setPositiveButton(resources.getString(R.string.dropbox_export_dialog_export_button), { dialog, which ->
@@ -118,7 +118,7 @@ class DropboxExportFragment : AbstractDropboxFragment() {
         if (cancelled) {
             context?.let {
                 val builder = AlertDialog.Builder(it)
-                with (builder) {
+                with(builder) {
                     setTitle(resources.getString(R.string.dropbox_export))
                     setMessage("Dropbox export was cancelled")
                     setPositiveButton("OK", { dialog, which -> })
@@ -128,7 +128,7 @@ class DropboxExportFragment : AbstractDropboxFragment() {
         } else {
             context?.let {
                 val builder = AlertDialog.Builder(it)
-                with (builder) {
+                with(builder) {
                     setTitle(resources.getString(R.string.dropbox_export))
                     setMessage("Dropbox export completed")
                     setPositiveButton("OK", { dialog, which -> })
@@ -141,7 +141,7 @@ class DropboxExportFragment : AbstractDropboxFragment() {
     private fun onUploadError(ex: Exception) {
         context?.let {
             val builder = AlertDialog.Builder(it)
-            with (builder) {
+            with(builder) {
                 setTitle(resources.getString(R.string.dropbox_export))
                 setMessage("Dropbox export failed: " + ex.message)
                 setPositiveButton("OK", { dialog, which -> })

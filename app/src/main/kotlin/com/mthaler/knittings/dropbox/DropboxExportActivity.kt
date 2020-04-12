@@ -79,7 +79,7 @@ class DropboxExportActivity : BaseActivity() {
                         ft.addToBackStack(null)
                         ft.commit()
                         val builder = AlertDialog.Builder(this@DropboxExportActivity)
-                        with (builder) {
+                        with(builder) {
                             setTitle(resources.getString(R.string.dropbox_export))
                             setMessage("Logged out of Dropbox")
                             setPositiveButton("OK", { dialog, which -> })

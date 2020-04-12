@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import android.widget.*
 import com.mthaler.knittings.database.datasource
 import com.mthaler.knittings.model.Knitting
-import java.util.*
+import java.util.Calendar
 
 class ProjectCountFragment : Fragment() {
 
