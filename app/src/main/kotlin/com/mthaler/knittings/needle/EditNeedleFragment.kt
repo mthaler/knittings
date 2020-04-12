@@ -4,9 +4,8 @@ import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.*
 import android.widget.*
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import com.mthaler.knittings.*
+import com.mthaler.knittings.database.datasource
 import com.mthaler.knittings.model.Needle
 import com.mthaler.knittings.model.NeedleMaterial
 import com.mthaler.knittings.model.NeedleType
@@ -14,7 +13,6 @@ import com.mthaler.knittings.model.NeedleType
 class EditNeedleFragment : Fragment() {
 
     private var needleID: Long = -1
-    private lateinit var viewModel: EditNeedleViewModel
     private lateinit var editTextName: EditText
     private lateinit var editTextSize: EditText
     private lateinit var editTextLength: EditText
@@ -28,9 +26,11 @@ class EditNeedleFragment : Fragment() {
         arguments?.let {
             needleID = it.getLong(Extras.EXTRA_NEEDLE_ID)
         }
-
-        // Retain this fragment across configuration changes.
-        retainInstance = true
+        savedInstanceState?.let {
+            if (it.containsKey(EXTRA_MODIFIED)) {
+                modified = it.getBoolean(EXTRA_MODIFIED)
+            }
+        }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -40,14 +40,8 @@ class EditNeedleFragment : Fragment() {
         val v = inflater.inflate(R.layout.fragment_edit_needle, container, false)
 
         editTextName = v.findViewById(R.id.needle_name)
-        editTextName.addTextChangedListener(createTextWatcher())
-
         editTextSize = v.findViewById(R.id.needle_size)
-        editTextSize.addTextChangedListener(createTextWatcher())
-
         editTextLength = v.findViewById(R.id.needle_length)
-        editTextLength.addTextChangedListener(createTextWatcher())
-
         spinnerMaterial = v.findViewById(R.id.needle_material)
         // Create an ArrayAdapter using the string array and a default spinner layout
         ArrayAdapter(context, android.R.layout.simple_spinner_item, NeedleMaterial.formattedValues(v.context)).also { adapter ->
@@ -56,21 +50,7 @@ class EditNeedleFragment : Fragment() {
             // Apply the adapter to the spinner
             spinnerMaterial.adapter = adapter
         }
-        spinnerMaterial.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                modified = true
-            }
-
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-            }
-        }
-
         checkBoxInUse = v.findViewById(R.id.needle_in_use)
-        checkBoxInUse.setOnCheckedChangeListener { view, checked ->
-            modified = true
-        }
-
         spinnerType = v.findViewById(R.id.needle_type)
         // Create an ArrayAdapter using the string array and a default spinner layout
         ArrayAdapter(context, android.R.layout.simple_spinner_item, NeedleType.formattedValues(v.context)).also { adapter ->
@@ -79,24 +59,9 @@ class EditNeedleFragment : Fragment() {
             // Apply the adapter to the spinner
             spinnerType.adapter = adapter
         }
-        spinnerType.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
 
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                modified = true
-            }
-
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-            }
-        }
-
-        return v
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory.getInstance(activity!!.application)).get(EditNeedleViewModel::class.java)
-        viewModel.init(needleID)
-        viewModel.needle.observe(viewLifecycleOwner, Observer { needle ->
+        if (savedInstanceState == null) {
+            val needle = datasource.getNeedle(needleID)
             editTextName.setText(needle.name)
             editTextSize.setText(needle.size)
             editTextLength.setText(needle.length)
@@ -115,8 +80,39 @@ class EditNeedleFragment : Fragment() {
                     spinnerType.setSelection(0)
                 }
             }
-            modified = false
-        })
+        }
+
+        editTextName.addTextChangedListener(createTextWatcher())
+        editTextSize.addTextChangedListener(createTextWatcher())
+        editTextLength.addTextChangedListener(createTextWatcher())
+        spinnerMaterial.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                modified = true
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+            }
+        }
+        checkBoxInUse.setOnCheckedChangeListener { view, checked ->
+            modified = true
+        }
+        spinnerType.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                modified = true
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+            }
+        }
+
+        return v
+    }
+
+    override fun onSaveInstanceState(savedInstanceState: Bundle) {
+        savedInstanceState.putBoolean(EXTRA_MODIFIED, modified)
+        super.onSaveInstanceState(savedInstanceState)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -128,7 +124,7 @@ class EditNeedleFragment : Fragment() {
         return when (item.itemId) {
             R.id.menu_item_save_needle -> {
                 if (modified) {
-                    viewModel.saveNeedle(createNeedle())
+                    saveNeedle(createNeedle())
                 }
                 fragmentManager?.popBackStack()
                 true
@@ -136,7 +132,7 @@ class EditNeedleFragment : Fragment() {
             R.id.menu_item_delete_needle -> {
                 context?.let {
                     DeleteDialog.create(it, editTextName.text.toString(), {
-                        viewModel.deleteNeedle()
+                        deleteNeedle()
                         fragmentManager?.popBackStack() }
                     ).show()
                 }
@@ -150,7 +146,7 @@ class EditNeedleFragment : Fragment() {
         context?.let {
             if (modified) {
                 SaveChangesDialog.create(it, {
-                    viewModel.saveNeedle(createNeedle())
+                    saveNeedle(createNeedle())
                     fragmentManager?.popBackStack()
                 }, {
                     fragmentManager?.popBackStack()
@@ -175,7 +171,22 @@ class EditNeedleFragment : Fragment() {
         return Needle(needleID, editTextName.text.toString(), "", editTextSize.text.toString(), editTextLength.text.toString(), material, checkBoxInUse.isChecked, type)
     }
 
+    private fun deleteNeedle() {
+        val needle = datasource.getNeedle(needleID)
+        datasource.deleteNeedle(needle)
+    }
+
+    private fun saveNeedle(needle: Needle) {
+        if (needle.id == -1L) {
+            datasource.addNeedle(needle)
+        } else {
+            datasource.updateNeedle(needle)
+        }
+    }
+
     companion object {
+
+        const val EXTRA_MODIFIED = "com.mthaler.knittings.needle.MODIFIED"
 
         @JvmStatic
         fun newInstance(needleID: Long) =

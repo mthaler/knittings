@@ -136,12 +136,12 @@ class EditCategoryFragment : Fragment() {
         }
     }
 
-    fun deleteCategory() {
+    private fun deleteCategory() {
         val category = datasource.getCategory(categoryID)
         datasource.deleteCategory(category)
     }
 
-    fun saveCategory(category: Category) {
+    private fun saveCategory(category: Category) {
         if (category.id == -1L) {
             datasource.addCategory(category)
         } else {
