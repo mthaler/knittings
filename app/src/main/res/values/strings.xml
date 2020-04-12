@@ -51,10 +51,6 @@
     <string name="delete_knitting_dialog_title">Delete</string>
     <string name="delete_knitting_dialog_question">Do you really want to delete %1$s?</string>
     <string name="delete_knitting_dialog_delete_button">Delete</string>
-    <!-- delete photo dialog -->
-    <string name="delete_photo_dialog_title">Delete</string>
-    <string name="delete_photo_dialog_question">Do you really want to delete the photo?</string>
-    <string name="delete_photo_dialog_delete_button">Delete</string>
 
     <string name="rating">Rating:</string>
     <string name="photo">Photo</string>

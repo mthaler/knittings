@@ -22,6 +22,7 @@ import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
 import android.preference.PreferenceManager
+import com.mthaler.knittings.DeleteDialog
 import com.mthaler.knittings.SaveChangesDialog
 
 /**
@@ -99,7 +100,12 @@ class PhotoFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.menu_item_delete_photo -> {
-                showDeletePhotoDialog()
+                context?.let {
+                    DeleteDialog.create(it, editTextDescription.text.toString(), {
+                        deletePhoto()
+                        fragmentManager?.popBackStack()
+                    }).show()
+                }
                 true
             }
             R.id.menu_item_set_main_photo -> {
@@ -143,37 +149,6 @@ class PhotoFragment : Fragment() {
             }
         }
     }
-
-    /**
-     * how alert asking user to confirm that photo should be deleted
-     */
-    private fun showDeletePhotoDialog() {
-        val builder = AlertDialog.Builder(context)
-        with(builder) {
-            setTitle(resources.getString(R.string.delete_photo_dialog_title))
-            setMessage(resources.getString(R.string.delete_photo_dialog_question))
-            setPositiveButton(resources.getString(R.string.delete_photo_dialog_delete_button), { dialog, which ->
-                deletePhoto()
-                // close activity
-                activity?.finish()
-            })
-            setNegativeButton(resources.getString(R.string.dialog_button_cancel), { dialog, which -> })
-            show()
-        }
-    }
-
-//    private fun deletePhoto() {
-        // check if the photo is used as default photo
-//        photo?.let {
-//            val knitting = datasource.getKnitting(it.knittingID)
-//            if (knitting.defaultPhoto != null && knitting.defaultPhoto.id == it.id) {
-//                datasource.updateKnitting(knitting.copy(defaultPhoto = null))
-//            }
-//            // delete database entry
-//            datasource.deletePhoto(it)
-//            photo = null
-//        }
-//    }
 
     /**
      * Sets the current photo as the default photo used as preview for knittings list

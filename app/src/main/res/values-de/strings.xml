@@ -53,11 +53,6 @@
     <string name="delete_knitting_dialog_question">%1$s wirklich löschen?</string>
     <string name="delete_knitting_dialog_delete_button">Löschen</string>
 
-    <!-- delete photo dialog -->
-    <string name="delete_photo_dialog_title">Löschen</string>
-    <string name="delete_photo_dialog_question">Foto wirklich löschen?</string>
-    <string name="delete_photo_dialog_delete_button">Löschen</string>
-
     <string name="rating">Bewertung:</string>
     <string name="photo">Foto</string>
 
