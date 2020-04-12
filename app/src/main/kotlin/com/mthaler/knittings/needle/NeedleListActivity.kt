@@ -1,5 +1,6 @@
 package com.mthaler.knittings.needle
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.core.app.NavUtils
@@ -77,5 +78,13 @@ class NeedleListActivity : BaseActivity(), NeedleListFragment.OnFragmentInteract
         ft.replace(R.id.needle_list_container, f)
         ft.addToBackStack(null)
         ft.commit()
+    }
+
+    companion object {
+
+        fun newIntent(context: Context): Intent {
+            val intent = Intent(context, NeedleListActivity::class.java)
+            return intent
+        }
     }
 }

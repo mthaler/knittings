@@ -1,5 +1,7 @@
 package com.mthaler.knittings.settings
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import com.mthaler.knittings.BaseActivity
 import com.mthaler.knittings.R
@@ -7,14 +9,6 @@ import kotlinx.android.synthetic.main.activity_settings.*
 
 class SettingsActivity : BaseActivity() {
 
-    /**
-     * Called when the activity is starting. This is where most initialization should go: calling setContentView(int)
-     * to inflate the activity's UI, using findViewById(int) to programmatically interact with widgets in the UI,
-     * calling managedQuery(android.net.Uri, String[], String, String[], String) to retrieve cursors for data being displayed, etc.
-     *
-     * @param savedInstanceState Bundle: If the activity is being re-initialized after previously being shut down then this Bundle contains
-     *                           the data it most recently supplied in onSaveInstanceState(Bundle). Note: Otherwise it is null.
-     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
@@ -29,6 +23,14 @@ class SettingsActivity : BaseActivity() {
             val ft = supportFragmentManager.beginTransaction()
             ft.add(R.id.settings_container, preferenceFragment)
             ft.commit()
+        }
+    }
+
+    companion object {
+
+        fun newIntent(context: Context): Intent {
+            val intent = Intent(context, SettingsActivity::class.java)
+            return intent
         }
     }
 }

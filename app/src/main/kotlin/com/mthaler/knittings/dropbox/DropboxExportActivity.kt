@@ -1,5 +1,7 @@
 package com.mthaler.knittings.dropbox
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import com.mthaler.knittings.R
 import kotlinx.android.synthetic.main.activity_dropbox_export.*
@@ -91,5 +93,10 @@ class DropboxExportActivity : BaseActivity() {
 
     companion object {
         const val DropboxExportFragmentTag = "dropbox_export_fragment"
+
+        fun newIntent(context: Context): Intent {
+            val intent = Intent(context, DropboxExportActivity::class.java)
+            return intent
+        }
     }
 }

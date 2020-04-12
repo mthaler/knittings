@@ -1,5 +1,6 @@
 package com.mthaler.knittings.category
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.core.app.NavUtils
@@ -77,5 +78,13 @@ class CategoryListActivity : BaseActivity(), CategoryListFragment.OnFragmentInte
         ft.replace(R.id.category_list_container, f)
         ft.addToBackStack(null)
         ft.commit()
+    }
+
+    companion object {
+
+        fun newIntent(context: Context): Intent {
+            val intent = Intent(context, CategoryListActivity::class.java)
+            return intent
+        }
     }
 }

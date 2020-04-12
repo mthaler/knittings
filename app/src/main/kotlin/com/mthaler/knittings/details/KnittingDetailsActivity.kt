@@ -1,6 +1,7 @@
 package com.mthaler.knittings.details
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.core.app.NavUtils
@@ -168,5 +169,12 @@ class KnittingDetailsActivity : BaseActivity(), KnittingDetailsFragment.OnFragme
         private const val CURRENT_PHOTO_PATH = "com.mthaler.knittings.CURRENT_PHOTO_PATH"
         private const val REQUEST_IMAGE_CAPTURE = 0
         private const val REQUEST_IMAGE_IMPORT = 1
+
+        fun newIntent(context: Context, knittingID: Long, editOnly: Boolean): Intent {
+            val intent = Intent(context, KnittingDetailsActivity::class.java)
+            intent.putExtra(EXTRA_KNITTING_ID, knittingID)
+            intent.putExtra(EXTRA_EDIT_ONLY, editOnly)
+            return intent
+        }
     }
 }

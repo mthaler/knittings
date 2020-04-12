@@ -20,12 +20,10 @@ import com.mthaler.knittings.about.AboutDialog
 import com.mthaler.knittings.category.CategoryListActivity
 import com.mthaler.knittings.dropbox.DropboxExportActivity
 import com.mthaler.knittings.dropbox.DropboxImportActivity
-import org.jetbrains.anko.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.activity_main.*
 import com.mthaler.knittings.database.datasource
 import com.mthaler.knittings.details.KnittingDetailsActivity
-import com.mthaler.knittings.Extras.EXTRA_KNITTING_ID
 import com.mthaler.knittings.details.DeleteKnittingDialog
 import com.mthaler.knittings.model.Knitting
 import com.mthaler.knittings.model.Status
@@ -59,7 +57,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         fab_create_add_knitting.setOnClickListener {
             // start knitting activity with newly created knitting
             val knitting = datasource.addKnitting(Knitting())
-            startActivity<KnittingDetailsActivity>(EXTRA_KNITTING_ID to knitting.id, KnittingDetailsActivity.EXTRA_EDIT_ONLY to true)
+            startActivity(KnittingDetailsActivity.newIntent(this, knitting.id, true))
         }
 
         val toggle = ActionBarDrawerToggle(
@@ -206,7 +204,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
             }
             R.id.menu_item_count -> {
                 val builder = AlertDialog.Builder(this)
-                startActivity<ProjectCountActivity>()
+                startActivity(ProjectCountActivity.newIntent(this))
                 true
             }
             else -> super.onOptionsItemSelected(item)
@@ -217,19 +215,19 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         // Handle navigation view item clicks here.
         when (item.itemId) {
             R.id.nav_dropbox_export -> {
-                startActivity<DropboxExportActivity>()
+                startActivity(DropboxExportActivity.newIntent(this))
             }
             R.id.nav_dropbox_import -> {
-                startActivity<DropboxImportActivity>()
+                startActivity(DropboxImportActivity.newIntent(this))
             }
             R.id.nav_edit_categories -> {
-                startActivity<CategoryListActivity>()
+                startActivity(CategoryListActivity.newIntent(this))
             }
             R.id.nav_edit_needles -> {
-                startActivity<NeedleListActivity>()
+                startActivity(NeedleListActivity.newIntent(this))
             }
             R.id.nav_edit_settings -> {
-                startActivity<SettingsActivity>()
+                startActivity(SettingsActivity.newIntent(this))
             }
         }
 
@@ -276,7 +274,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         val filtered = filter.filter(knittings)
         // start EditCategoryActivity if the users clicks on a category
         val adapter = KnittingAdapter(this, filtered, {
-            knitting -> startActivity<KnittingDetailsActivity>(EXTRA_KNITTING_ID to knitting.id, KnittingDetailsActivity.EXTRA_EDIT_ONLY to false)
+            knitting -> startActivity(KnittingDetailsActivity.newIntent(this, knitting.id, false))
         }, { knitting -> startSupportActionMode(object : ActionMode.Callback {
             /**
              * Called to report a user click on an action button.

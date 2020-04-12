@@ -1,5 +1,7 @@
 package com.mthaler.knittings.dropbox
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import com.mthaler.knittings.BaseActivity
 import com.mthaler.knittings.R
@@ -31,5 +33,10 @@ class DropboxImportActivity : BaseActivity() {
 
     companion object {
         const val DropboxImportFragmentTag = "dropbox_import_fragment"
+
+        fun newIntent(context: Context): Intent {
+            val intent = Intent(context, DropboxImportActivity::class.java)
+            return intent
+        }
     }
 }
