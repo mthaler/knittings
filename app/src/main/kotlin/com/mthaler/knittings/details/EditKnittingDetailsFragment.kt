@@ -64,7 +64,6 @@ class EditKnittingDetailsFragment : Fragment() {
                 category = datasource.getCategory(categoryID)
             }
         }
-
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
