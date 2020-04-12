@@ -1,5 +1,6 @@
 package com.mthaler.knittings.dropbox
 
+import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -8,7 +9,6 @@ import kotlinx.android.synthetic.main.activity_dropbox_export.*
 import android.view.Menu
 import android.view.MenuItem
 import com.mthaler.knittings.BaseActivity
-import org.jetbrains.anko.alert
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
 
@@ -78,11 +78,13 @@ class DropboxExportActivity : BaseActivity() {
                         ft.replace(R.id.frament_container, f)
                         ft.addToBackStack(null)
                         ft.commit()
-                        alert {
-                            title = resources.getString(R.string.dropbox_export)
-                            message = "Logged out of Dropbox"
-                            positiveButton("OK") {}
-                        }.show()
+                        val builder = AlertDialog.Builder(this@DropboxExportActivity)
+                        with (builder) {
+                            setTitle(resources.getString(R.string.dropbox_export))
+                            setMessage("Logged out of Dropbox")
+                            setPositiveButton("OK", { dialog, which -> })
+                            show()
+                        }
                     }
                 }
                 true
