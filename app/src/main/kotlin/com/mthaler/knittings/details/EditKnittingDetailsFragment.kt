@@ -9,7 +9,6 @@ import androidx.appcompat.content.res.AppCompatResources
 import android.widget.*
 import androidx.core.app.NavUtils
 import com.mthaler.knittings.R
-import com.mthaler.knittings.TextWatcher
 import com.mthaler.knittings.category.SelectCategoryActivity
 import com.mthaler.knittings.database.datasource
 import com.mthaler.knittings.datepicker.DatePickerFragment
@@ -41,7 +40,6 @@ class EditKnittingDetailsFragment : Fragment() {
     private var category: Category? = null
     private lateinit var spinnerStatus: Spinner
     private lateinit var ratingBar: RatingBar
-    private var modified = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,6 +47,9 @@ class EditKnittingDetailsFragment : Fragment() {
             knittingID = it.getLong(EXTRA_KNITTING_ID)
         }
         savedInstanceState?.let {
+            if (it.containsKey(EXTRA_KNITTING_ID)) {
+                knittingID = it.getLong(EXTRA_KNITTING_ID)
+            }
             if (it.containsKey(EXTRA_STARTED)) {
                 started = Date(it.getLong(EXTRA_STARTED))
             }
@@ -57,9 +58,6 @@ class EditKnittingDetailsFragment : Fragment() {
             }
             if (it.containsKey(EXTRA_DURATION)) {
                 duration = it.getLong(EXTRA_DURATION)
-            }
-            if (it.containsKey(EXTRA_MODIFIED)) {
-                modified = it.getBoolean(EXTRA_MODIFIED)
             }
             if (it.containsKey(EXTRA_CATEGORY)) {
                 val categoryID = it.getLong(EXTRA_CATEGORY)
@@ -125,8 +123,6 @@ class EditKnittingDetailsFragment : Fragment() {
             ratingBar.rating = knitting.rating.toFloat()
         }
 
-        editTextTitle.addTextChangedListener(createTextWatcher())
-        editTextDescription.addTextChangedListener(createTextWatcher())
         textViewStarted.setOnClickListener {
             fragmentManager?.let {
                 val dialog = DatePickerFragment.newInstance(started)
@@ -141,8 +137,6 @@ class EditKnittingDetailsFragment : Fragment() {
                 dialog.show(it, DIALOG_DATE)
             }
         }
-        editTextNeedleDiameter.addTextChangedListener(createTextWatcher())
-        editTextSize.addTextChangedListener(createTextWatcher())
         textViewDuration.setOnClickListener {
             context?.let {
                 val d = DurationPickerDialog(it, { durationPicker, d ->
@@ -158,26 +152,15 @@ class EditKnittingDetailsFragment : Fragment() {
             i.putExtra(EXTRA_KNITTING_ID, knittingID)
             startActivityForResult(i, REQUEST_SELECT_CATEGORY)
         }
-        spinnerStatus.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                modified = true
-            }
-
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-            }
-        }
 
         // update knitting if user changes the rating
         ratingBar = v.findViewById(R.id.ratingBar)
-        ratingBar.onRatingBarChangeListener = RatingBar.OnRatingBarChangeListener { ratingBar, rating, fromUser ->
-            modified = true
-        }
 
         return v
     }
 
     override fun onSaveInstanceState(savedInstanceState: Bundle) {
+        savedInstanceState.putLong(EXTRA_KNITTING_ID, knittingID)
         savedInstanceState.putLong(EXTRA_STARTED, started.time)
         finished?.let {
             savedInstanceState.putLong(EXTRA_FINISHED, it.time)
@@ -186,7 +169,6 @@ class EditKnittingDetailsFragment : Fragment() {
         category?.let {
             savedInstanceState.putLong(EXTRA_CATEGORY, it.id)
         }
-        savedInstanceState.putBoolean(EXTRA_MODIFIED, modified)
         super.onSaveInstanceState(savedInstanceState)
     }
 
@@ -198,8 +180,10 @@ class EditKnittingDetailsFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.menu_item_save_knitting -> {
-                if (modified) {
-                    saveKnitting(createKnitting())
+                val oldKnitting = datasource.getKnitting(knittingID)
+                val newKnitting = createKnitting().copy(defaultPhoto = oldKnitting.defaultPhoto)
+                if (oldKnitting != newKnitting) {
+                    saveKnitting(newKnitting)
                 }
                 fragmentManager?.popBackStack()
                 true
@@ -218,14 +202,12 @@ class EditKnittingDetailsFragment : Fragment() {
             if (date != started) {
                 textViewStarted.text = DateFormat.getDateInstance().format(date)
                 started = date
-                modified = true
             }
         } else if (requestCode == REQUEST_FINISHED) {
             val date = data!!.getSerializableExtra(DatePickerFragment.EXTRA_DATE) as Date
             if (date != finished) {
                 textViewFinished.text = DateFormat.getDateInstance().format(date)
                 finished = date
-                modified = true
             }
         } else if (requestCode == REQUEST_SELECT_CATEGORY) {
             data?.let {
@@ -234,7 +216,6 @@ class EditKnittingDetailsFragment : Fragment() {
                     val c = datasource.getCategory(categoryID)
                     buttonCategory.text = c.name
                     category = c
-                    modified = true
                 }
             }
         }
@@ -247,9 +228,11 @@ class EditKnittingDetailsFragment : Fragment() {
             if (upIntent == null) {
                 throw IllegalStateException("No Parent Activity Intent")
             } else {
-                if (modified) {
+                val oldKnitting = datasource.getKnitting(knittingID)
+                val newKnitting = createKnitting().copy(defaultPhoto = oldKnitting.defaultPhoto)
+                if (oldKnitting != newKnitting) {
                     SaveChangesDialog.create(it, {
-                        saveKnitting(createKnitting())
+                        saveKnitting(newKnitting)
                         if (editOnly) {
                             NavUtils.navigateUpTo(it, upIntent)
                         } else {
@@ -273,14 +256,6 @@ class EditKnittingDetailsFragment : Fragment() {
         }
     }
 
-    private fun createTextWatcher(): TextWatcher {
-        return object : TextWatcher {
-            override fun onTextChanged(c: CharSequence, start: Int, before: Int, count: Int) {
-                modified = true
-            }
-        }
-    }
-
     private fun createKnitting(): Knitting {
         val status = Status.values()[spinnerStatus.selectedItemPosition]
         return Knitting(knittingID, editTextTitle.text.toString(), editTextDescription.text.toString(), started, finished, editTextNeedleDiameter.text.toString(),
@@ -291,8 +266,7 @@ class EditKnittingDetailsFragment : Fragment() {
         if (knitting.id == -1L) {
             datasource.addKnitting(knitting)
         } else {
-            val k = datasource.getKnitting(knittingID)
-            datasource.updateKnitting(knitting.copy(defaultPhoto = k.defaultPhoto))
+            datasource.updateKnitting(knitting)
         }
     }
 
@@ -302,7 +276,6 @@ class EditKnittingDetailsFragment : Fragment() {
         private const val EXTRA_FINISHED = "com.mthaler.knittings.needle.FINISHED"
         private const val EXTRA_DURATION = "com.mthaler.knittings.needle.DURATION"
         private const val EXTRA_CATEGORY = "com.mthaler.knittings.needle.CATEGORY"
-        private const val EXTRA_MODIFIED = "com.mthaler.knittings.needle.MODIFIED"
         private const val DIALOG_DATE = "date"
         private const val REQUEST_STARTED = 0
         private const val REQUEST_FINISHED = 1

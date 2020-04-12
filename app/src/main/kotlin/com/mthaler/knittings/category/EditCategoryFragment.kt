@@ -150,7 +150,6 @@ class EditCategoryFragment : Fragment() {
     companion object {
 
         private const val EXTRA_COLOR = "com.mthaler.knittings.category.COLOR"
-        private const val EXTRA_MODIFIED = "com.mthaler.knittings.category.MODIFIED"
 
         @JvmStatic
         fun newInstance(categoryID: Long) =
