@@ -1,5 +1,6 @@
 package com.mthaler.knittings.stopwatch
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
@@ -117,5 +118,11 @@ class StopwatchActivity : BaseActivity() {
         const val EXTRA_STOPWATCH_RUNNING = "com.mthaler.knitting.STOPWATCH_RUNNING"
         const val EXTRA_STOPWATCH_ELAPSED_TIME = "com.mthaler.knitting.STOPWATCH_ELAPSED_TIME"
         const val EXTRA_STOPWATCH_ACTIVITY_STOPPED_TIME = "com.mthaler.knitting.STOPWATCH_ACTIVITY_STOPPED_TIME"
+
+        fun newIntent(context: Context, knittingID: Long): Intent {
+            val intent = Intent(context, StopwatchActivity::class.java)
+            intent.putExtra(EXTRA_KNITTING_ID, knittingID)
+            return intent
+        }
     }
 }

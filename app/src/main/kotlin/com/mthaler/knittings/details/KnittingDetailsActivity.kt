@@ -12,7 +12,6 @@ import com.mthaler.knittings.photo.PhotoGalleryActivity
 import com.mthaler.knittings.R
 import com.mthaler.knittings.database.datasource
 import com.mthaler.knittings.stopwatch.StopwatchActivity
-import org.jetbrains.anko.*
 import java.io.File
 import com.mthaler.knittings.Extras.EXTRA_KNITTING_ID
 import com.mthaler.knittings.photo.TakePhotoDialog
@@ -21,7 +20,7 @@ import kotlinx.android.synthetic.main.activity_knitting_details.*
 /**
  * Activity that displays knitting details (name, description, start time etc.)
  */
-class KnittingDetailsActivity : BaseActivity(), KnittingDetailsFragment.OnFragmentInteractionListener, AnkoLogger {
+class KnittingDetailsActivity : BaseActivity(), KnittingDetailsFragment.OnFragmentInteractionListener {
 
     // id of the displayed knitting
     private var knittingID: Long = -1
@@ -93,7 +92,7 @@ class KnittingDetailsActivity : BaseActivity(), KnittingDetailsFragment.OnFragme
             true
         }
         R.id.menu_item_show_gallery -> {
-            startActivity<PhotoGalleryActivity>(EXTRA_KNITTING_ID to knittingID)
+            startActivity(PhotoGalleryActivity.newIntent(this, knittingID))
             true
         }
         R.id.menu_item_add_photo -> {
@@ -152,7 +151,7 @@ class KnittingDetailsActivity : BaseActivity(), KnittingDetailsFragment.OnFragme
     }
 
     override fun startStopwatch(id: Long) {
-        startActivity<StopwatchActivity>(EXTRA_KNITTING_ID to knittingID)
+        startActivity(StopwatchActivity.newIntent(this, knittingID))
     }
 
     override fun deleteKnitting(id: Long) {
