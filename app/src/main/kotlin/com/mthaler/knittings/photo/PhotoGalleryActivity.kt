@@ -53,7 +53,7 @@ class PhotoGalleryActivity : BaseActivity(), PhotoGalleryFragment.OnFragmentInte
                 throw IllegalStateException("No Parent Activity Intent")
             } else {
                 val fm = supportFragmentManager
-                val f = fm.findFragmentById(R.id.category_list_container)
+                val f = fm.findFragmentById(R.id.photo_gallery_container)
                 if (f is PhotoFragment) {
                     f.onBackPressed()
                 } else {
