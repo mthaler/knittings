@@ -54,7 +54,10 @@ class EditCategoryFragment : Fragment() {
 
         if (savedInstanceState == null) {
             editTextTitle.setText(category.name)
-            if (category.color != null) buttonColor.setBackgroundColor(category.color)
+            if (category.color != null) {
+                buttonColor.setBackgroundColor(category.color)
+                color = category.color
+            }
         } else {
             color?.let { buttonColor.setBackgroundColor(it) }
         }
