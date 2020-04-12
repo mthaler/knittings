@@ -20,7 +20,6 @@ class EditCategoryFragment : Fragment() {
     private lateinit var editTextTitle: EditText
     private lateinit var buttonColor: Button
     private var color: Int? = 0
-    private var modified = false
 
     fun getCategoryID(): Long = categoryID
 
@@ -32,9 +31,6 @@ class EditCategoryFragment : Fragment() {
         savedInstanceState?.let {
             if (it.containsKey(EXTRA_COLOR)) {
                 color = it.getInt(EXTRA_COLOR)
-            }
-            if (it.containsKey(EXTRA_MODIFIED)) {
-                modified = it.getBoolean(EXTRA_MODIFIED)
             }
         }
     }
@@ -62,18 +58,12 @@ class EditCategoryFragment : Fragment() {
             color?.let { buttonColor.setBackgroundColor(it) }
         }
 
-        editTextTitle.addTextChangedListener(object : TextWatcher {
-            override fun onTextChanged(c: CharSequence, start: Int, before: Int, count: Int) {
-                modified = true
-            }
-        })
         buttonColor.setOnClickListener { view ->
             val colorPicker = ColorPicker(activity)
             colorPicker.setOnFastChooseColorListener(object : ColorPicker.OnFastChooseColorListener {
                 override fun setOnFastChooseColorListener(position: Int, c: Int) {
                     color = c
                     buttonColor.setBackgroundColor(c)
-                    modified = true
                 }
 
                 override fun onCancel() {
@@ -93,7 +83,6 @@ class EditCategoryFragment : Fragment() {
     override fun onSaveInstanceState(savedInstanceState: Bundle) {
         savedInstanceState.putLong(EXTRA_CATEGORY_ID, categoryID)
         color?.let { savedInstanceState.putInt(EXTRA_COLOR, it) }
-        savedInstanceState.putBoolean(EXTRA_MODIFIED, modified)
         super.onSaveInstanceState(savedInstanceState)
     }
 
@@ -105,8 +94,10 @@ class EditCategoryFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.menu_item_save_category -> {
-                if (modified) {
-                    saveCategory(Category(categoryID, editTextTitle.text.toString(), color))
+                val oldCategory = datasource.getCategory(categoryID)
+                val newCategory = Category(categoryID, editTextTitle.text.toString(), color)
+                if (oldCategory != newCategory) {
+                    saveCategory(newCategory)
                 }
                 fragmentManager?.popBackStack()
                 true
@@ -126,9 +117,11 @@ class EditCategoryFragment : Fragment() {
 
     fun onBackPressed() {
         context?.let {
-            if (modified) {
+            val oldCategory = datasource.getCategory(categoryID)
+            val newCategory = Category(categoryID, editTextTitle.text.toString(), color)
+            if (oldCategory != newCategory) {
                 SaveChangesDialog.create(it, {
-                    saveCategory(Category(categoryID, editTextTitle.text.toString(), color))
+                    saveCategory(newCategory)
                     fragmentManager?.popBackStack()
                 }, {
                     fragmentManager?.popBackStack()
