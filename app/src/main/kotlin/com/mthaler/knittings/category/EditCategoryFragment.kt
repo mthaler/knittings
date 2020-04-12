@@ -9,7 +9,6 @@ import com.mthaler.knittings.DeleteDialog
 import com.mthaler.knittings.R
 import com.mthaler.knittings.Extras.EXTRA_CATEGORY_ID
 import com.mthaler.knittings.SaveChangesDialog
-import com.mthaler.knittings.TextWatcher
 import com.mthaler.knittings.database.datasource
 import com.mthaler.knittings.model.Category
 import petrov.kristiyan.colorpicker.ColorPicker
@@ -29,6 +28,9 @@ class EditCategoryFragment : Fragment() {
             categoryID = it.getLong(EXTRA_CATEGORY_ID)
         }
         savedInstanceState?.let {
+            if (it.containsKey(EXTRA_CATEGORY_ID)) {
+                categoryID = it.getLong(EXTRA_CATEGORY_ID)
+            }
             if (it.containsKey(EXTRA_COLOR)) {
                 color = it.getInt(EXTRA_COLOR)
             }

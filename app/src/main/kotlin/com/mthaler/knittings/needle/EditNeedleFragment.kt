@@ -9,6 +9,7 @@ import com.mthaler.knittings.database.datasource
 import com.mthaler.knittings.model.Needle
 import com.mthaler.knittings.model.NeedleMaterial
 import com.mthaler.knittings.model.NeedleType
+import com.mthaler.knittings.Extras.EXTRA_NEEDLE_ID
 
 class EditNeedleFragment : Fragment() {
 
@@ -19,16 +20,15 @@ class EditNeedleFragment : Fragment() {
     private lateinit var spinnerMaterial: Spinner
     private lateinit var checkBoxInUse: CheckBox
     private lateinit var spinnerType: Spinner
-    private var modified = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            needleID = it.getLong(Extras.EXTRA_NEEDLE_ID)
+            needleID = it.getLong(EXTRA_NEEDLE_ID)
         }
         savedInstanceState?.let {
-            if (it.containsKey(EXTRA_MODIFIED)) {
-                modified = it.getBoolean(EXTRA_MODIFIED)
+            if (it.containsKey(EXTRA_NEEDLE_ID)) {
+                needleID = it.getLong(EXTRA_NEEDLE_ID)
             }
         }
     }
@@ -82,36 +82,11 @@ class EditNeedleFragment : Fragment() {
             }
         }
 
-        editTextName.addTextChangedListener(createTextWatcher())
-        editTextSize.addTextChangedListener(createTextWatcher())
-        editTextLength.addTextChangedListener(createTextWatcher())
-        spinnerMaterial.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                modified = true
-            }
-
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-            }
-        }
-        checkBoxInUse.setOnCheckedChangeListener { view, checked ->
-            modified = true
-        }
-        spinnerType.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                modified = true
-            }
-
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-            }
-        }
-
         return v
     }
 
     override fun onSaveInstanceState(savedInstanceState: Bundle) {
-        savedInstanceState.putBoolean(EXTRA_MODIFIED, modified)
+        savedInstanceState.putLong(EXTRA_NEEDLE_ID, needleID)
         super.onSaveInstanceState(savedInstanceState)
     }
 
@@ -123,8 +98,10 @@ class EditNeedleFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.menu_item_save_needle -> {
-                if (modified) {
-                    saveNeedle(createNeedle())
+                val oldNeedle = datasource.getNeedle(needleID)
+                val newNeedle = createNeedle()
+                if (oldNeedle != newNeedle) {
+                    saveNeedle(newNeedle)
                 }
                 fragmentManager?.popBackStack()
                 true
@@ -144,23 +121,17 @@ class EditNeedleFragment : Fragment() {
 
     fun onBackPressed() {
         context?.let {
-            if (modified) {
+            val oldNeedle = datasource.getNeedle(needleID)
+            val newNeedle = createNeedle()
+            if (oldNeedle != newNeedle) {
                 SaveChangesDialog.create(it, {
-                    saveNeedle(createNeedle())
+                    saveNeedle(newNeedle)
                     fragmentManager?.popBackStack()
                 }, {
                     fragmentManager?.popBackStack()
                 }).show()
             } else {
                 fragmentManager?.popBackStack()
-            }
-        }
-    }
-
-    private fun createTextWatcher(): TextWatcher {
-        return object : TextWatcher {
-            override fun onTextChanged(c: CharSequence, start: Int, before: Int, count: Int) {
-                modified = true
             }
         }
     }
