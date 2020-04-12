@@ -10,11 +10,9 @@ import android.widget.GridView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.mthaler.knittings.R
-import org.jetbrains.anko.support.v4.*
 import com.mthaler.knittings.model.Photo
 import org.jetbrains.anko.AnkoLogger
 import com.mthaler.knittings.Extras.EXTRA_KNITTING_ID
-import com.mthaler.knittings.Extras.EXTRA_PHOTO_ID
 import java.io.File
 
 /**
@@ -52,7 +50,7 @@ class PhotoGalleryFragment : Fragment(), AnkoLogger {
         gridView.onItemClickListener = AdapterView.OnItemClickListener { parent, v, position, id ->
             // photo clicked, show photo in photo activity
             val photo = parent.getItemAtPosition(position) as Photo
-            startActivity<PhotoActivity>(EXTRA_PHOTO_ID to photo.id, EXTRA_KNITTING_ID to knittingID)
+            startActivity(PhotoActivity.newIntent(context!!, photo.id))
         }
 
         return v

@@ -1,5 +1,6 @@
 package com.mthaler.knittings.photo
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.core.app.NavUtils
@@ -59,5 +60,14 @@ class PhotoActivity : BaseActivity(), AnkoLogger {
             true
         }
         else -> super.onOptionsItemSelected(item)
+    }
+
+    companion object {
+
+        fun newIntent(context: Context, photoID: Long): Intent {
+            val intent = Intent(context, PhotoActivity::class.java)
+            intent.putExtra(EXTRA_PHOTO_ID, photoID)
+            return intent
+        }
     }
 }
