@@ -1,5 +1,6 @@
 package com.mthaler.knittings.photo
 
+import android.app.AlertDialog
 import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
@@ -18,7 +19,6 @@ import com.mthaler.knittings.model.Photo
 import com.mthaler.knittings.utils.PictureUtils
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
-import org.jetbrains.anko.support.v4.alert
 import com.mthaler.knittings.Extras.EXTRA_PHOTO_ID
 import java.io.File
 import java.io.FileOutputStream
@@ -128,16 +128,18 @@ class PhotoFragment : Fragment() {
      * how alert asking user to confirm that photo should be deleted
      */
     private fun showDeletePhotoDialog() {
-        alert {
-            title = resources.getString(R.string.delete_photo_dialog_title)
-            message = resources.getString(R.string.delete_photo_dialog_question)
-            positiveButton(resources.getString(R.string.delete_photo_dialog_delete_button)) {
+        val builder = AlertDialog.Builder(context)
+        with(builder) {
+            setTitle(resources.getString(R.string.delete_photo_dialog_title))
+            setMessage(resources.getString(R.string.delete_photo_dialog_question))
+            setPositiveButton(resources.getString(R.string.delete_photo_dialog_delete_button), { dialog, which ->
                 deletePhoto()
                 // close activity
                 activity?.finish()
-            }
-            negativeButton(resources.getString(R.string.dialog_button_cancel)) {}
-        }.show()
+            })
+            setNegativeButton(resources.getString(R.string.dialog_button_cancel), { dialog, which -> })
+            show()
+        }
     }
 
     private fun deletePhoto() {

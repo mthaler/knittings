@@ -40,9 +40,8 @@ class DropboxExportFragment : AbstractDropboxFragment() {
         login_button.setOnClickListener { Auth.startOAuth2Authentication(context, AppKey) }
 
         export_button.setOnClickListener {
-            val ctx = context
-            if (ctx != null) {
-                val isWiFi = NetworkUtils.isWifiConnected(ctx)
+            context?.let {
+                val isWiFi = NetworkUtils.isWifiConnected(it)
                 if (!isWiFi) {
                     alert {
                         title = resources.getString(R.string.dropbox_export)
@@ -54,11 +53,9 @@ class DropboxExportFragment : AbstractDropboxFragment() {
                         negativeButton(resources.getString(R.string.dialog_button_cancel)) {}
                     }.show()
                 } else {
-                    exportTask = UploadTask(DropboxClientFactory.getClient(), ctx.applicationContext, progressBar::setProgress, ::onUploadComplete, ::onUploadError).execute()
+                    exportTask = UploadTask(DropboxClientFactory.getClient(), it.applicationContext, progressBar::setProgress, ::onUploadComplete, ::onUploadError).execute()
                     setMode(true)
                 }
-            } else {
-                wtf("context null")
             }
         }
 
