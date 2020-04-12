@@ -1,5 +1,6 @@
 package com.mthaler.knittings.dropbox
 
+import android.app.AlertDialog
 import android.os.AsyncTask
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -14,7 +15,6 @@ import kotlinx.android.synthetic.main.fragment_dropbox_export.*
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.support.v4.alert
 import org.jetbrains.anko.uiThread
-import org.jetbrains.anko.wtf
 import com.mthaler.knittings.utils.StringUtils.formatBytes
 
 /**
@@ -43,15 +43,17 @@ class DropboxExportFragment : AbstractDropboxFragment() {
             context?.let {
                 val isWiFi = NetworkUtils.isWifiConnected(it)
                 if (!isWiFi) {
-                    alert {
-                        title = resources.getString(R.string.dropbox_export)
-                        message = resources.getString(R.string.dropbox_export_no_wifi_question)
-                        positiveButton(resources.getString(R.string.dropbox_export_dialog_export_button)) {
-                            exportTask = UploadTask(DropboxClientFactory.getClient(), ctx.applicationContext, progressBar::setProgress, ::onUploadComplete, ::onUploadError).execute()
+                    val builder = AlertDialog.Builder(it)
+                    with (builder) {
+                        setTitle(resources.getString(R.string.dropbox_export))
+                        setMessage(resources.getString(R.string.dropbox_export_no_wifi_question))
+                        setPositiveButton(resources.getString(R.string.dropbox_export_dialog_export_button), { dialog, which ->
+                            exportTask = UploadTask(DropboxClientFactory.getClient(), it.applicationContext, progressBar::setProgress, ::onUploadComplete, ::onUploadError).execute()
                             setMode(true)
-                        }
-                        negativeButton(resources.getString(R.string.dialog_button_cancel)) {}
-                    }.show()
+                        })
+                        setNegativeButton(resources.getString(R.string.dialog_button_cancel), { dialog, which -> })
+                        show()
+                    }
                 } else {
                     exportTask = UploadTask(DropboxClientFactory.getClient(), it.applicationContext, progressBar::setProgress, ::onUploadComplete, ::onUploadError).execute()
                     setMode(true)
