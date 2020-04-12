@@ -41,14 +41,16 @@ class DropboxImportFragment : AbstractDropboxFragment() {
             context?.let {
                 val isWiFi = NetworkUtils.isWifiConnected(it)
                 if (!isWiFi) {
-                    alert {
-                        title = resources.getString(R.string.dropbox_import)
-                        message = resources.getString(R.string.dropbox_export_no_wifi_question)
-                        positiveButton(resources.getString(R.string.dropbox_export_dialog_export_button)) {
+                    val builder = AlertDialog.Builder(it)
+                    with (builder) {
+                        setTitle(resources.getString(R.string.dropbox_import))
+                        setMessage(resources.getString(R.string.dropbox_export_no_wifi_question))
+                        setPositiveButton(resources.getString(R.string.dropbox_export_dialog_export_button), { dialog, which ->
                             importTask = ListFolderTask(DropboxClientFactory.getClient(), ::onListFolder, ::onListFolderError).execute("")
-                        }
-                        negativeButton(resources.getString(R.string.dialog_button_cancel)) {}
-                    }.show()
+                        })
+                        setNegativeButton(resources.getString(R.string.dialog_button_cancel), { dialog, which -> })
+                        show()
+                    }
                 } else {
                     importTask = ListFolderTask(DropboxClientFactory.getClient(), ::onListFolder, ::onListFolderError).execute("")
                 }
