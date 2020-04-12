@@ -11,7 +11,6 @@ import com.dropbox.core.v2.users.SpaceUsage
 import com.mthaler.knittings.R
 import com.mthaler.knittings.utils.NetworkUtils
 import kotlinx.android.synthetic.main.fragment_dropbox_export.*
-import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.support.v4.alert
 import org.jetbrains.anko.uiThread
@@ -21,7 +20,7 @@ import com.mthaler.knittings.utils.StringUtils.formatBytes
 /**
  * Fragment used for Dropbox export
  */
-class DropboxExportFragment : AbstractDropboxFragment(), AnkoLogger {
+class DropboxExportFragment : AbstractDropboxFragment() {
 
     private var exportTask: AsyncTask<Void, Int?, Any?>? = null
     private var exporting = false

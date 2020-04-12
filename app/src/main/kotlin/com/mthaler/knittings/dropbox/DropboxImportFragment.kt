@@ -10,7 +10,6 @@ import com.dropbox.core.v2.files.ListFolderResult
 import com.mthaler.knittings.R
 import com.mthaler.knittings.utils.NetworkUtils
 import kotlinx.android.synthetic.main.fragment_dropbox_import.*
-import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.support.v4.alert
 import org.jetbrains.anko.uiThread
@@ -18,7 +17,7 @@ import androidx.appcompat.app.AlertDialog
 import com.mthaler.knittings.database.datasource
 import com.mthaler.knittings.model.Database
 
-class DropboxImportFragment : AbstractDropboxFragment(), AnkoLogger {
+class DropboxImportFragment : AbstractDropboxFragment() {
 
     private var importTask: AsyncTask<String, Void, ListFolderResult?>? = null
     private var importing = false
