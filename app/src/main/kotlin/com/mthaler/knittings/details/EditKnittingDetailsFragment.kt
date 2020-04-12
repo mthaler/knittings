@@ -97,8 +97,8 @@ class EditKnittingDetailsFragment : Fragment() {
         }
         ratingBar = v.findViewById(R.id.ratingBar)
 
-        val knitting = datasource.getKnitting(knittingID)
         if (savedInstanceState == null) {
+            val knitting = datasource.getKnitting(knittingID)
             editTextTitle.setText(knitting.title)
             editTextDescription.setText(knitting.description)
             started = knitting.started
@@ -116,12 +116,11 @@ class EditKnittingDetailsFragment : Fragment() {
             }
             ratingBar.rating = knitting.rating.toFloat()
         }
-        textViewStarted.text = DateFormat.getDateInstance().format(knitting.started)
-        textViewFinished.text = if (knitting.finished != null) DateFormat.getDateInstance().format(knitting.finished) else ""
-        textViewDuration.text = TimeUtils.formatDuration(knitting.duration)
-        val c = knitting.category
-        if (c != null) {
-            buttonCategory.text = c.name
+        textViewStarted.text = DateFormat.getDateInstance().format(started)
+        textViewFinished.text = if (finished != null) DateFormat.getDateInstance().format(finished) else ""
+        textViewDuration.text = TimeUtils.formatDuration(duration)
+        category?.let {
+            buttonCategory.text = it.name
         }
 
         textViewStarted.setOnClickListener {
