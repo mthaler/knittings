@@ -13,7 +13,6 @@ import com.mthaler.knittings.R
 import com.mthaler.knittings.utils.NetworkUtils
 import kotlinx.android.synthetic.main.fragment_dropbox_export.*
 import org.jetbrains.anko.doAsync
-import org.jetbrains.anko.support.v4.alert
 import org.jetbrains.anko.uiThread
 import com.mthaler.knittings.utils.StringUtils.formatBytes
 
@@ -117,26 +116,38 @@ class DropboxExportFragment : AbstractDropboxFragment() {
     private fun onUploadComplete(cancelled: Boolean) {
         setMode(false)
         if (cancelled) {
-            alert {
-                title = resources.getString(R.string.dropbox_export)
-                message = "Dropbox export was cancelled"
-                positiveButton("OK") {}
-            }.show()
+            context?.let {
+                val builder = AlertDialog.Builder(it)
+                with (builder) {
+                    setTitle(resources.getString(R.string.dropbox_export))
+                    setMessage("Dropbox export was cancelled")
+                    setPositiveButton("OK", { dialog, which -> })
+                    show()
+                }
+            }
         } else {
-            alert {
-                title = resources.getString(R.string.dropbox_export)
-                message = "Dropbox export completed"
-                positiveButton("OK") {}
-            }.show()
+            context?.let {
+                val builder = AlertDialog.Builder(it)
+                with (builder) {
+                    setTitle(resources.getString(R.string.dropbox_export))
+                    setMessage("Dropbox export completed")
+                    setPositiveButton("OK", { dialog, which -> })
+                    show()
+                }
+            }
         }
     }
 
     private fun onUploadError(ex: Exception) {
-        alert {
-            title = resources.getString(R.string.dropbox_export)
-            message = "Dropbox export failed: " + ex.message
-            positiveButton("OK") {}
-        }.show()
+        context?.let {
+            val builder = AlertDialog.Builder(it)
+            with (builder) {
+                setTitle(resources.getString(R.string.dropbox_export))
+                setMessage("Dropbox export failed: " + ex.message)
+                setPositiveButton("OK", { dialog, which -> })
+                show()
+            }
+        }
     }
 
     private fun setMode(exporting: Boolean) {

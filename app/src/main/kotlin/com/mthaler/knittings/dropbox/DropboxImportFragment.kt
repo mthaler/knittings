@@ -146,11 +146,15 @@ class DropboxImportFragment : AbstractDropboxFragment() {
      * @param ex exception that happened when executing ListFolderTask
      */
     private fun onListFolderError(ex: Exception) {
-        alert {
-            title = "List folders"
-            message = "Error when listing folders: " + ex.message
-            positiveButton("OK") {}
-        }.show()
+        context?.let {
+            val builder = AlertDialog.Builder(it)
+            with (builder) {
+                setTitle("List folders")
+                setMessage("Error when listing folders: " + ex.message)
+                setPositiveButton("OK", { dialog, which -> })
+                show()
+            }
+        }
     }
 
     private fun onDownloadDatabase(database: Database?) {
