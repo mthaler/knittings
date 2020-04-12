@@ -8,10 +8,9 @@ import android.view.ViewGroup
 import android.widget.*
 import com.mthaler.knittings.database.datasource
 import com.mthaler.knittings.model.Knitting
-import org.jetbrains.anko.AnkoLogger
 import java.util.*
 
-class ProjectCountFragment : Fragment(), AnkoLogger {
+class ProjectCountFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
