@@ -186,7 +186,7 @@ class EditNeedleFragment : Fragment() {
 
     companion object {
 
-        const val EXTRA_MODIFIED = "com.mthaler.knittings.needle.MODIFIED"
+        private const val EXTRA_MODIFIED = "com.mthaler.knittings.needle.MODIFIED"
 
         @JvmStatic
         fun newInstance(needleID: Long) =

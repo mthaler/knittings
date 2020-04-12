@@ -51,6 +51,25 @@ class EditKnittingDetailsFragment : Fragment() {
         arguments?.let {
             knittingID = it.getLong(EXTRA_KNITTING_ID)
         }
+        savedInstanceState?.let {
+            if (it.containsKey(EXTRA_STARTED)) {
+                started = Date(it.getLong(EXTRA_STARTED))
+            }
+            if (it.containsKey(EXTRA_FINISHED)) {
+                finished = Date(it.getLong(EXTRA_FINISHED))
+            }
+            if (it.containsKey(EXTRA_DURATION)) {
+                duration = it.getLong(EXTRA_DURATION)
+            }
+            if (it.containsKey(EXTRA_MODIFIED)) {
+                modified = it.getBoolean(EXTRA_MODIFIED)
+            }
+            if (it.containsKey(EXTRA_CATEGORY)) {
+                val categoryID = it.getLong(EXTRA_CATEGORY)
+                category = datasource.getCategory(categoryID)
+            }
+        }
+
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -139,6 +158,19 @@ class EditKnittingDetailsFragment : Fragment() {
         }
 
         return v
+    }
+
+    override fun onSaveInstanceState(savedInstanceState: Bundle) {
+        savedInstanceState.putLong(EXTRA_STARTED, started.time)
+        finished?.let {
+            savedInstanceState.putLong(EXTRA_FINISHED, it.time)
+        }
+        savedInstanceState.putLong(EXTRA_DURATION, duration)
+        category?.let {
+            savedInstanceState.putLong(EXTRA_CATEGORY, it.id)
+        }
+        savedInstanceState.putBoolean(EXTRA_MODIFIED, modified)
+        super.onSaveInstanceState(savedInstanceState)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -271,6 +303,16 @@ class EditKnittingDetailsFragment : Fragment() {
 
     companion object {
 
+        private const val EXTRA_STARTED = "com.mthaler.knittings.needle.STARTED"
+        private const val EXTRA_FINISHED = "com.mthaler.knittings.needle.FINISHED"
+        private const val EXTRA_DURATION = "com.mthaler.knittings.needle.DURATION"
+        private const val EXTRA_CATEGORY = "com.mthaler.knittings.needle.CATEGORY"
+        private const val EXTRA_MODIFIED = "com.mthaler.knittings.needle.MODIFIED"
+        private const val DIALOG_DATE = "date"
+        private const val REQUEST_STARTED = 0
+        private const val REQUEST_FINISHED = 1
+        private const val REQUEST_SELECT_CATEGORY = 2
+
         @JvmStatic
         fun newInstance(knittingID: Long) =
             EditKnittingDetailsFragment().apply {
@@ -278,10 +320,5 @@ class EditKnittingDetailsFragment : Fragment() {
                     putLong(EXTRA_KNITTING_ID, knittingID)
                 }
             }
-
-        private const val DIALOG_DATE = "date"
-        private const val REQUEST_STARTED = 0
-        private const val REQUEST_FINISHED = 1
-        private const val REQUEST_SELECT_CATEGORY = 2
     }
 }
