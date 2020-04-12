@@ -11,14 +11,13 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.mthaler.knittings.R
 import com.mthaler.knittings.model.Photo
-import org.jetbrains.anko.AnkoLogger
 import com.mthaler.knittings.Extras.EXTRA_KNITTING_ID
 import java.io.File
 
 /**
  * A fragment that displays a list of photos using a grid
  */
-class PhotoGalleryFragment : Fragment(), AnkoLogger {
+class PhotoGalleryFragment : Fragment() {
 
     private var knittingID: Long = -1
     private var currentPhotoPath: File? = null
