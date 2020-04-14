@@ -3,8 +3,7 @@ package com.mthaler.knittings.database
 import android.content.Context
 import android.database.Cursor
 import android.os.Environment
-import org.jetbrains.anko.AnkoLogger
-import org.jetbrains.anko.debug
+import android.util.Log
 import java.io.File
 import java.util.ArrayList
 import java.util.Date
@@ -12,7 +11,6 @@ import androidx.fragment.app.Fragment
 import com.mthaler.knittings.database.table.CategoryTable
 import com.mthaler.knittings.database.table.KnittingTable
 import com.mthaler.knittings.database.table.PhotoTable
-import org.jetbrains.anko.error
 import com.mthaler.knittings.database.table.CategoryTable.cursorToCategory
 import com.mthaler.knittings.database.table.NeedleTable
 import com.mthaler.knittings.database.table.PhotoTable.cursorToPhoto
@@ -20,7 +18,7 @@ import com.mthaler.knittings.database.table.NeedleTable.cursorToNeedle
 import com.mthaler.knittings.model.*
 import java.lang.Exception
 
-class KnittingsDataSource private constructor(context: Context) : AbstractObservableDatabase(), AnkoLogger {
+class KnittingsDataSource private constructor(context: Context) : AbstractObservableDatabase() {
 
     private val context: Context = context.applicationContext
     private val dbHelper: KnittingDatabaseHelper
@@ -40,7 +38,7 @@ class KnittingsDataSource private constructor(context: Context) : AbstractObserv
             while (!cursor.isAfterLast) {
                 knitting = cursorToKnitting(cursor)
                 knittings.add(knitting)
-                debug("Read knitting " + knitting.id + ", default photo: " + knitting.defaultPhoto)
+                Log.d(TAG,"Read knitting " + knitting.id + ", default photo: " + knitting.defaultPhoto)
                 cursor.moveToNext()
             }
             cursor.close()
@@ -62,7 +60,7 @@ class KnittingsDataSource private constructor(context: Context) : AbstractObserv
             while (!cursor.isAfterLast) {
                 photo = cursorToPhoto(cursor)
                 photos.add(photo)
-                debug("Read photo " + photo.id + " filename: " + photo.filename)
+                Log.d(TAG,"Read photo " + photo.id + " filename: " + photo.filename)
                 cursor.moveToNext()
             }
             cursor.close()
@@ -84,7 +82,7 @@ class KnittingsDataSource private constructor(context: Context) : AbstractObserv
             while (!cursor.isAfterLast) {
                 category = cursorToCategory(cursor)
                 categories.add(category)
-                debug("Read category $category")
+                Log.d(TAG, "Read category $category")
                 cursor.moveToNext()
             }
             cursor.close()
@@ -106,7 +104,7 @@ class KnittingsDataSource private constructor(context: Context) : AbstractObserv
             while (!cursor.isAfterLast) {
                 needle = cursorToNeedle(context, cursor)
                 needles.add(needle)
-                debug("Read category $needle")
+                Log.d(TAG, "Read category $needle")
                 cursor.moveToNext()
             }
             cursor.close()
@@ -146,7 +144,7 @@ class KnittingsDataSource private constructor(context: Context) : AbstractObserv
      */
     @Synchronized
     fun updateKnitting(knitting: Knitting): Knitting {
-        debug("Updating knitting " + knitting + ", default photo: " + knitting.defaultPhoto)
+        Log.d(TAG, "Updating knitting " + knitting + ", default photo: " + knitting.defaultPhoto)
         dbHelper.writableDatabase.use { database ->
             val values = KnittingTable.createContentValues(knitting)
             database.update(KnittingTable.KNITTINGS,
@@ -190,7 +188,7 @@ class KnittingsDataSource private constructor(context: Context) : AbstractObserv
         deleteAllPhotos(knitting)
         dbHelper.writableDatabase.use { database ->
             database.delete(KnittingTable.KNITTINGS, KnittingTable.Cols.ID + "=" + id, null)
-            debug("Deleted knitting $id: $knitting")
+            Log.d(TAG, "Deleted knitting $id: $knitting")
         }
     }
 
@@ -202,7 +200,7 @@ class KnittingsDataSource private constructor(context: Context) : AbstractObserv
      */
     @Synchronized
     fun getKnitting(id: Long): Knitting {
-        debug("Getting knitting for id $id")
+        Log.d(TAG, "Getting knitting for id $id")
         dbHelper.readableDatabase.use { database ->
             val cursor = database.query(KnittingTable.KNITTINGS,
                     KnittingTable.Columns, KnittingTable.Cols.ID + "=" + id, null, null, null, null)
@@ -227,7 +225,7 @@ class KnittingsDataSource private constructor(context: Context) : AbstractObserv
      */
     @Synchronized
     fun getPhoto(id: Long): Photo {
-        debug("Getting photo for id $id")
+        Log.d(TAG, "Getting photo for id $id")
         dbHelper.readableDatabase.use { database ->
             val cursor = database.query(PhotoTable.PHOTOS,
                     PhotoTable.Columns, PhotoTable.Cols.ID + "=" + id, null, null, null, null)
@@ -256,7 +254,7 @@ class KnittingsDataSource private constructor(context: Context) : AbstractObserv
             while (!cursor.isAfterLast) {
                 photo = cursorToPhoto(cursor)
                 photos.add(photo)
-                debug("Read photo $photo")
+                Log.d(TAG, "Read photo $photo")
                 cursor.moveToNext()
             }
             cursor.close()
@@ -293,7 +291,7 @@ class KnittingsDataSource private constructor(context: Context) : AbstractObserv
      */
     @Synchronized
     fun updatePhoto(photo: Photo): Photo {
-        debug("Updating photo $photo")
+        Log.d(TAG, "Updating photo $photo")
         dbHelper.writableDatabase.use { database ->
             val values = PhotoTable.createContentValues(photo)
             database.update(PhotoTable.PHOTOS,
@@ -335,7 +333,7 @@ class KnittingsDataSource private constructor(context: Context) : AbstractObserv
             val whereClause = PhotoTable.Cols.KNITTING_ID + "= ?"
             val whereArgs = arrayOf(java.lang.Long.toString(id))
             database.delete(PhotoTable.PHOTOS, whereClause, whereArgs)
-            debug("Removed knitting $id: $knitting")
+            Log.d(TAG, "Removed knitting $id: $knitting")
         }
     }
 
@@ -355,7 +353,7 @@ class KnittingsDataSource private constructor(context: Context) : AbstractObserv
         val id = photo.id
         dbHelper.writableDatabase.use { database ->
             database.delete(PhotoTable.PHOTOS, PhotoTable.Cols.ID + "=" + id, null)
-            debug("Deleted photo $id: $photo")
+            Log.d(TAG, "Deleted photo $id: $photo")
         }
     }
 
@@ -367,7 +365,7 @@ class KnittingsDataSource private constructor(context: Context) : AbstractObserv
      */
     @Synchronized
     fun getCategory(id: Long): Category {
-        debug("Getting category for id $id")
+        Log.d(TAG, "Getting category for id $id")
         dbHelper.readableDatabase.use { database ->
             val cursor = database.query(CategoryTable.CATEGORY,
                     CategoryTable.Columns, CategoryTable.Cols.ID + "=" + id, null, null, null, null)
@@ -407,7 +405,7 @@ class KnittingsDataSource private constructor(context: Context) : AbstractObserv
      */
     @Synchronized
     fun updateCategory(category: Category): Category {
-        debug("Updating category $category")
+        Log.d(TAG, "Updating category $category")
         dbHelper.writableDatabase.use { database ->
             val values = CategoryTable.createContentValues(category)
             database.update(CategoryTable.CATEGORY,
@@ -449,11 +447,11 @@ class KnittingsDataSource private constructor(context: Context) : AbstractObserv
         for (knitting in knittings) {
             updateKnitting(knitting.copy(category = null))
         }
-        debug("Removed category " + category.id + " from " + knittings.size + "knittings")
+        Log.d(TAG, "Removed category " + category.id + " from " + knittings.size + "knittings")
         dbHelper.writableDatabase.use { database ->
             // delete the category
             database.delete(CategoryTable.CATEGORY, CategoryTable.Cols.ID + "=" + category.id, null)
-            debug("Deleted category " + category.id + ": " + category)
+            Log.d(TAG, "Deleted category " + category.id + ": " + category)
         }
     }
 
@@ -465,7 +463,7 @@ class KnittingsDataSource private constructor(context: Context) : AbstractObserv
      */
     @Synchronized
     fun getNeedle(id: Long): Needle {
-        debug("Getting needle for id $id")
+        Log.d(TAG, "Getting needle for id $id")
         dbHelper.readableDatabase.use { database ->
             val cursor = database.query(NeedleTable.NEEDLES,
                     NeedleTable.Columns, NeedleTable.Cols.ID + "=" + id, null, null, null, null)
@@ -505,7 +503,7 @@ class KnittingsDataSource private constructor(context: Context) : AbstractObserv
      */
     @Synchronized
     fun updateNeedle(needle: Needle): Needle {
-        debug("Updating needle $needle")
+        Log.d(TAG, "Updating needle $needle")
         dbHelper.writableDatabase.use { database ->
             val values = NeedleTable.createContentValues(needle)
             database.update(NeedleTable.NEEDLES,
@@ -544,7 +542,7 @@ class KnittingsDataSource private constructor(context: Context) : AbstractObserv
         dbHelper.writableDatabase.use { database ->
             // delete the category
             database.delete(NeedleTable.NEEDLES, NeedleTable.Cols.ID + "=" + needle.id, null)
-            debug("Deleted needle " + needle.id + ": " + needle)
+            Log.d(TAG,"Deleted needle " + needle.id + ": " + needle)
         }
         notifyObservers()
     }
@@ -602,16 +600,18 @@ class KnittingsDataSource private constructor(context: Context) : AbstractObserv
     private fun deletePhotoFile(file: File) {
         if (file.exists()) {
             if (file.delete()) {
-                debug("Deleted photo $file")
+                Log.d(TAG,"Deleted photo $file")
             } else {
-                error("Could not delete $file")
+                Log.e(TAG,"Could not delete $file")
             }
         } else {
-            error("Could not delete $file}, file does not exist")
+            Log.e(TAG, "Could not delete $file}, file does not exist")
         }
     }
 
     companion object {
+
+        private const val TAG = "KnittingsDataSource"
 
         private var sKnittingsDataSource: KnittingsDataSource? = null
 
