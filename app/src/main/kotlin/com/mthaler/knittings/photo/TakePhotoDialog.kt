@@ -2,25 +2,25 @@ package com.mthaler.knittings.photo
 
 import android.annotation.SuppressLint
 import android.app.AlertDialog
+import android.content.ClipData
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.preference.PreferenceManager
 import android.provider.MediaStore
-import androidx.core.content.FileProvider
+import android.util.Log
 import android.view.LayoutInflater
 import android.widget.Button
+import androidx.core.content.FileProvider
 import com.mthaler.knittings.R
 import com.mthaler.knittings.database.datasource
 import com.mthaler.knittings.model.Photo
 import com.mthaler.knittings.utils.PictureUtils
-import org.jetbrains.anko.AnkoLogger
-import org.jetbrains.anko.debug
-import org.jetbrains.anko.find
 import java.io.File
-import android.content.ClipData
-import android.os.Build
 
-object TakePhotoDialog : AnkoLogger {
+object TakePhotoDialog {
+
+    private const val TAG = "TakePhotoDialog"
 
     /**
      * Creates the take photo dialog used to ask the user if he wants to take a photo or import a photo
@@ -43,8 +43,8 @@ object TakePhotoDialog : AnkoLogger {
         val b = AlertDialog.Builder(context)
         @SuppressLint("InflateParams")
         val layout = layoutInflater.inflate(R.layout.dialog_take_photo, null)
-        val buttonTakePhoto = layout.find<Button>(R.id.button_take_photo)
-        val buttonImportPhoto = layout.find<Button>(R.id.buttom_import_photo)
+        val buttonTakePhoto = layout.findViewById<Button>(R.id.button_take_photo)
+        val buttonImportPhoto = layout.findViewById<Button>(R.id.buttom_import_photo)
         b.setView(layout)
         val d = b.create()
         // take a photo if the user clicks the take photo button
@@ -64,7 +64,7 @@ object TakePhotoDialog : AnkoLogger {
                         takePictureIntent.clipData = ClipData.newRawUri("", uri)
                         takePictureIntent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION or Intent.FLAG_GRANT_READ_URI_PERMISSION)
                     }
-                    debug("Created take picture intent")
+                    Log.d(TAG, "Created take picture intent")
                     takePhoto(it, takePictureIntent)
                 }
             }
@@ -94,7 +94,7 @@ object TakePhotoDialog : AnkoLogger {
         val preview = PictureUtils.decodeSampledBitmapFromPath(file.absolutePath, 200, 200)
         val rotatedPreview = PictureUtils.rotateBitmap(preview, orientation)
         val photo = context.datasource.addPhoto(Photo(-1, file, knittingID, "", rotatedPreview))
-        debug("Created new photo from $file, knitting id $knittingID")
+        Log.d(TAG, "Created new photo from $file, knitting id $knittingID")
         // add first photo as default photo
         val knitting = context.datasource.getKnitting(knittingID)
         val prefs = PreferenceManager.getDefaultSharedPreferences(context)
@@ -103,7 +103,7 @@ object TakePhotoDialog : AnkoLogger {
             context.datasource.updateKnitting(knitting.copy(defaultPhoto = photo))
         } else {
             if (knitting.defaultPhoto == null) {
-                debug("Set $photo as default photo")
+                Log.d(TAG, "Set $photo as default photo")
                 context.datasource.updateKnitting(knitting.copy(defaultPhoto = photo))
             }
         }
@@ -124,7 +124,7 @@ object TakePhotoDialog : AnkoLogger {
         val preview = PictureUtils.decodeSampledBitmapFromPath(file.absolutePath, 200, 200)
         val rotatedPreview = PictureUtils.rotateBitmap(preview, orientation)
         val photo = context.datasource.addPhoto(Photo(-1, file, knittingID, "", rotatedPreview))
-        debug("Created new photo from $file, knitting id $knittingID")
+        Log.d(TAG, "Created new photo from $file, knitting id $knittingID")
         // add first photo as default photo
         val knitting = context.datasource.getKnitting(knittingID)
         val prefs = PreferenceManager.getDefaultSharedPreferences(context)
@@ -133,7 +133,7 @@ object TakePhotoDialog : AnkoLogger {
             context.datasource.updateKnitting(knitting.copy(defaultPhoto = photo))
         } else {
             if (knitting.defaultPhoto == null) {
-                debug("Set $photo as default photo")
+                Log.d(TAG, "Set $photo as default photo")
                 context.datasource.updateKnitting(knitting.copy(defaultPhoto = photo))
             }
         }
