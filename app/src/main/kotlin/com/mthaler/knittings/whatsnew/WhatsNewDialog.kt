@@ -1,4 +1,4 @@
-package com.mthaler.knittings.about
+package com.mthaler.knittings.whatsnew
 
 import android.annotation.SuppressLint
 import android.app.Activity
@@ -7,12 +7,12 @@ import android.widget.TextView
 import com.mthaler.knittings.BuildConfig
 import com.mthaler.knittings.R
 
-object AboutDialog {
+object WhatsNewDialog {
 
     fun show(activity: Activity) {
         @SuppressLint("InflateParams")
         val layoutInflater = activity.layoutInflater
-        val v = layoutInflater.inflate(R.layout.dialog_about, null)
+        val v = layoutInflater.inflate(R.layout.dialog_whats_new, null)
         val appName = v.findViewById<TextView>(R.id.about_app_name)
         appName.text = (appName.text.toString() + " " + BuildConfig.VERSION_NAME)
         val b = AlertDialog.Builder(activity)
