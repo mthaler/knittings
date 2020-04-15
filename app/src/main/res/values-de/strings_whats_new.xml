@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="whats_new">
+        <h1>Version 0.9.12</h1>
+        <li>Changes can now be discarded</li>
+        <li>New app icon</li>
+    </string>
+</resources>
