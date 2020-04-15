@@ -39,7 +39,7 @@ class CategoryListFragment : Fragment() {
         // add new category if the user clicks the floating action button and start the
         // EditCategoryActivity to edit the new category
         val fab = v.findViewById<FloatingActionButton>(R.id.fab_create_category)
-        fab.setOnClickListener { _ -> listener?.createCategory() }
+        fab.setOnClickListener { listener?.createCategory() }
 
         val rv = v.findViewById<RecyclerView>(R.id.category_recycler_view)
         rv.layoutManager = LinearLayoutManager(context)

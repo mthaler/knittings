@@ -28,9 +28,6 @@ class SettingsActivity : BaseActivity() {
 
     companion object {
 
-        fun newIntent(context: Context): Intent {
-            val intent = Intent(context, SettingsActivity::class.java)
-            return intent
-        }
+        fun newIntent(context: Context): Intent = Intent(context, SettingsActivity::class.java)
     }
 }

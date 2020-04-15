@@ -82,9 +82,6 @@ class CategoryListActivity : BaseActivity(), CategoryListFragment.OnFragmentInte
 
     companion object {
 
-        fun newIntent(context: Context): Intent {
-            val intent = Intent(context, CategoryListActivity::class.java)
-            return intent
-        }
+        fun newIntent(context: Context): Intent = Intent(context, CategoryListActivity::class.java)
     }
 }

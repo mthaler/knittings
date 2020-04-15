@@ -82,9 +82,6 @@ class NeedleListActivity : BaseActivity(), NeedleListFragment.OnFragmentInteract
 
     companion object {
 
-        fun newIntent(context: Context): Intent {
-            val intent = Intent(context, NeedleListActivity::class.java)
-            return intent
-        }
+        fun newIntent(context: Context): Intent = Intent(context, NeedleListActivity::class.java)
     }
 }

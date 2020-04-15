@@ -34,9 +34,6 @@ class DropboxImportActivity : BaseActivity() {
     companion object {
         const val DropboxImportFragmentTag = "dropbox_import_fragment"
 
-        fun newIntent(context: Context): Intent {
-            val intent = Intent(context, DropboxImportActivity::class.java)
-            return intent
-        }
+        fun newIntent(context: Context): Intent = Intent(context, DropboxImportActivity::class.java)
     }
 }

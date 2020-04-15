@@ -89,7 +89,7 @@ class NeedleListFragment : Fragment() {
                             filter = SingleTypeFilter(type)
                         }
                     }
-                        updateNeedleList(viewModel.needles.value ?: emptyList<Needle>())
+                        updateNeedleList(viewModel.needles.value ?: emptyList())
                         dialog.dismiss()
                     }
                     builder.setNegativeButton(R.string.dialog_button_cancel) { dialog, which -> dialog.dismiss() }

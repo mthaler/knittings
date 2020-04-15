@@ -7,7 +7,6 @@ import com.mthaler.knittings.database.table.CategoryTable
 import com.mthaler.knittings.database.table.KnittingTable
 import com.mthaler.knittings.database.table.NeedleTable
 import com.mthaler.knittings.database.table.PhotoTable
-import org.jetbrains.anko.*
 import org.jetbrains.anko.db.*
 
 /**

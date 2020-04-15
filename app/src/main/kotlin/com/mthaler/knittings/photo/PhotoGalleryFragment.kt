@@ -51,7 +51,7 @@ class PhotoGalleryFragment : Fragment() {
         gridView.onItemClickListener = AdapterView.OnItemClickListener { parent, v, position, id ->
             // photo clicked, show photo in photo activity
             val photo = parent.getItemAtPosition(position) as Photo
-            listener?.let { it.photoClicked(photo.id) }
+            listener?.photoClicked(photo.id)
         }
 
         return v

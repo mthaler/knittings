@@ -96,9 +96,6 @@ class DropboxExportActivity : BaseActivity() {
     companion object {
         const val DropboxExportFragmentTag = "dropbox_export_fragment"
 
-        fun newIntent(context: Context): Intent {
-            val intent = Intent(context, DropboxExportActivity::class.java)
-            return intent
-        }
+        fun newIntent(context: Context): Intent = Intent(context, DropboxExportActivity::class.java)
     }
 }

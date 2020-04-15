@@ -161,7 +161,7 @@ class EditNeedleFragment : Fragment() {
         fun newInstance(needleID: Long) =
                 EditNeedleFragment().apply {
                     arguments = Bundle().apply {
-                        putLong(Extras.EXTRA_NEEDLE_ID, needleID)
+                        putLong(EXTRA_NEEDLE_ID, needleID)
                     }
                 }
     }

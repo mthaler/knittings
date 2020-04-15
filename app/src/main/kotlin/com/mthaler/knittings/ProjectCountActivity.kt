@@ -19,9 +19,6 @@ class ProjectCountActivity : BaseActivity() {
 
     companion object {
 
-        fun newIntent(context: Context): Intent {
-            val intent = Intent(context, ProjectCountActivity::class.java)
-            return intent
-        }
+        fun newIntent(context: Context): Intent = Intent(context, ProjectCountActivity::class.java)
     }
 }
