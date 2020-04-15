@@ -7,7 +7,7 @@ import com.dropbox.core.v2.DbxClientV2
 import com.mthaler.knittings.model.Database
 import org.json.JSONObject
 import java.io.ByteArrayOutputStream
-import com.mthaler.knittings.model.*
+import com.mthaler.knittings.model.toDatabase
 
 /**
  * Async task that downloads the database file from Dropbox

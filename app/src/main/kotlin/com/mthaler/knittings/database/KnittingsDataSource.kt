@@ -38,7 +38,7 @@ class KnittingsDataSource private constructor(context: Context) : AbstractObserv
             while (!cursor.isAfterLast) {
                 knitting = cursorToKnitting(cursor)
                 knittings.add(knitting)
-                Log.d(TAG,"Read knitting " + knitting.id + ", default photo: " + knitting.defaultPhoto)
+                Log.d(TAG, "Read knitting " + knitting.id + ", default photo: " + knitting.defaultPhoto)
                 cursor.moveToNext()
             }
             cursor.close()
@@ -60,7 +60,7 @@ class KnittingsDataSource private constructor(context: Context) : AbstractObserv
             while (!cursor.isAfterLast) {
                 photo = cursorToPhoto(cursor)
                 photos.add(photo)
-                Log.d(TAG,"Read photo " + photo.id + " filename: " + photo.filename)
+                Log.d(TAG, "Read photo " + photo.id + " filename: " + photo.filename)
                 cursor.moveToNext()
             }
             cursor.close()
@@ -542,7 +542,7 @@ class KnittingsDataSource private constructor(context: Context) : AbstractObserv
         dbHelper.writableDatabase.use { database ->
             // delete the category
             database.delete(NeedleTable.NEEDLES, NeedleTable.Cols.ID + "=" + needle.id, null)
-            Log.d(TAG,"Deleted needle " + needle.id + ": " + needle)
+            Log.d(TAG, "Deleted needle " + needle.id + ": " + needle)
         }
         notifyObservers()
     }
@@ -600,9 +600,9 @@ class KnittingsDataSource private constructor(context: Context) : AbstractObserv
     private fun deletePhotoFile(file: File) {
         if (file.exists()) {
             if (file.delete()) {
-                Log.d(TAG,"Deleted photo $file")
+                Log.d(TAG, "Deleted photo $file")
             } else {
-                Log.e(TAG,"Could not delete $file")
+                Log.e(TAG, "Could not delete $file")
             }
         } else {
             Log.e(TAG, "Could not delete $file}, file does not exist")
