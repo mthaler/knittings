@@ -4,29 +4,21 @@
     android:layout_height="match_parent">
 
     <TextView
-        android:id="@+id/about_app_name"
+        android:id="@+id/header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="@string/app_name"
+        android:text="Whats New"
         android:textSize="32sp"
-        android:textColor="@color/about_text_color"
-        android:padding="8dp"
-        android:drawableLeft="@mipmap/ic_knittings"/>
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="@string/idea_and_concept"
-        android:textSize="18sp"
         android:textColor="@color/about_text_color"
         android:padding="8dp"/>
     <TextView
+        android:id="@+id/version_history"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
+        android:text="Blah"
         android:textSize="18sp"
-        android:text="@string/programming"
         android:textColor="@color/about_text_color"
         android:padding="8dp"/>
 </LinearLayout>

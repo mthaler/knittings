@@ -1,38 +1,40 @@
 package com.mthaler.knittings
 
 import android.os.Bundle
-import com.google.android.material.navigation.NavigationView
-import androidx.core.view.GravityCompat
-import androidx.appcompat.app.ActionBarDrawerToggle
-import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.view.ActionMode
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import androidx.appcompat.widget.SearchView
+import android.preference.PreferenceManager
 import android.text.TextUtils
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.TextView
+import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.view.ActionMode
+import androidx.appcompat.widget.SearchView
+import androidx.core.view.GravityCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.navigation.NavigationView
 import com.mthaler.knittings.about.AboutDialog
 import com.mthaler.knittings.category.CategoryListActivity
+import com.mthaler.knittings.database.datasource
+import com.mthaler.knittings.details.DeleteKnittingDialog
+import com.mthaler.knittings.details.KnittingDetailsActivity
 import com.mthaler.knittings.dropbox.DropboxExportActivity
 import com.mthaler.knittings.dropbox.DropboxImportActivity
-import kotlinx.android.synthetic.main.app_bar_main.*
-import kotlinx.android.synthetic.main.activity_main.*
-import com.mthaler.knittings.database.datasource
-import com.mthaler.knittings.details.KnittingDetailsActivity
-import com.mthaler.knittings.details.DeleteKnittingDialog
 import com.mthaler.knittings.model.Knitting
 import com.mthaler.knittings.model.Status
 import com.mthaler.knittings.needle.NeedleListActivity
 import com.mthaler.knittings.settings.SettingsActivity
+import com.mthaler.knittings.whatsnew.WhatsNewDialog
+import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.content_main.*
-import java.lang.StringBuilder
-import java.util.Date
+import java.util.*
 import kotlin.collections.ArrayList
+
 
 /**
  * The main activity that gets displayed when the app is started. It displays a list of knitting projects.
@@ -81,6 +83,25 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         viewModel.knittings.observe(this, Observer { knittings ->
             updateKnittingList(knittings)
         })
+
+        init()
+    }
+
+    private fun init() {
+        val sharedPref = PreferenceManager.getDefaultSharedPreferences(this)
+        var currentVersionNumber = 0
+        val savedVersionNumber = sharedPref.getInt(VERSION_KEY, 0)
+        try {
+            val pi = packageManager.getPackageInfo(packageName, 0)
+            currentVersionNumber = pi.versionCode
+        } catch (e: Exception) {
+        }
+        if (currentVersionNumber > savedVersionNumber) {
+            WhatsNewDialog.show(this)
+//            val editor = sharedPref.edit()
+//            editor.putInt(VERSION_KEY, currentVersionNumber)
+//            editor.commit()
+        }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -392,5 +413,6 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
     companion object {
         private val STATE_QUERY = "q"
+        private const val VERSION_KEY = "version_number"
     }
 }
