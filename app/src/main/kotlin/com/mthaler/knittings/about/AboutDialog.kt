@@ -6,7 +6,6 @@ import android.app.AlertDialog
 import android.widget.TextView
 import com.mthaler.knittings.BuildConfig
 import com.mthaler.knittings.R
-import org.jetbrains.anko.find
 
 object AboutDialog {
 
@@ -19,7 +18,7 @@ object AboutDialog {
         @SuppressLint("InflateParams")
         val layoutInflater = activity.layoutInflater
         val v = layoutInflater.inflate(R.layout.dialog_about, null)
-        val appName = v.find<TextView>(R.id.about_app_name)
+        val appName = v.findViewById<TextView>(R.id.about_app_name)
         appName.text = (appName.text.toString() + " " + BuildConfig.VERSION_NAME)
         val b = AlertDialog.Builder(activity)
         b.setView(v)
