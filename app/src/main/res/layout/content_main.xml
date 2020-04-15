@@ -21,7 +21,7 @@
             android:paddingBottom="48dp"
             android:paddingLeft="24dp"
             android:paddingRight="24dp"
-            app:srcCompat="@drawable/knittings6"
+            app:srcCompat="@drawable/knittings"
             android:visibility="gone" />
 
         <LinearLayout
