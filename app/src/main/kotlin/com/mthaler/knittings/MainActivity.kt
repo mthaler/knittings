@@ -98,9 +98,9 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         }
         if (currentVersionNumber > savedVersionNumber) {
             WhatsNewDialog.show(this)
-//            val editor = sharedPref.edit()
-//            editor.putInt(VERSION_KEY, currentVersionNumber)
-//            editor.commit()
+            val editor = sharedPref.edit()
+            editor.putInt(VERSION_KEY, currentVersionNumber)
+            editor.commit()
         }
     }
 

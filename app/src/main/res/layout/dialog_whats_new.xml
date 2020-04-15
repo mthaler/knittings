@@ -8,7 +8,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="left"
-        android:text="Whats New"
+        android:text="@string/whats_new_title"
         android:textSize="32dp"
         android:textColor="@color/about_text_color"
         android:padding="8dp"/>

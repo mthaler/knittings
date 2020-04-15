@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="whats_new_title">Whats New</string>
     <string name="whats_new"><![CDATA[
         <h3>Version 0.9.12</h3>
-        - Changes can now be discarded<br>
-        - New app icon<br>
+        - Neuigkeiten Dialog<br>
+        - Änderungen können jetzt verworfen werden<br>
+        - Neues Icon<br>
         ]]>
     </string>
 </resources>
