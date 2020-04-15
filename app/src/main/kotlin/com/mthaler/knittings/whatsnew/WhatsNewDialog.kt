@@ -14,10 +14,7 @@ object WhatsNewDialog {
         val layoutInflater = activity.layoutInflater
         val v = layoutInflater.inflate(R.layout.dialog_whats_new, null)
         val versionHistory = v.findViewById<TextView>(R.id.version_history)
-        val text = HtmlCompat.fromHtml(
-                "TextView first line... <br />" +
-                        "<b>Bold Text</b> | <i>Italic Text</i> and <br/>" +
-                        "<u>Underlined text</u>", 0)
+        val text = HtmlCompat.fromHtml(activity.getString(R.string.whats_new), 0)
         versionHistory.text = text
         val b = AlertDialog.Builder(activity)
         b.setView(v)

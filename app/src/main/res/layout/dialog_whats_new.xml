@@ -7,9 +7,9 @@
         android:id="@+id/header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
+        android:gravity="left"
         android:text="Whats New"
-        android:textSize="32sp"
+        android:textSize="32dp"
         android:textColor="@color/about_text_color"
         android:padding="8dp"/>
     <ImageView
@@ -22,9 +22,8 @@
         android:id="@+id/version_history"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="Blah"
-        android:textSize="18sp"
+        android:gravity="left"
+        android:textSize="14sp"
         android:textColor="@color/about_text_color"
         android:padding="8dp"/>
 </LinearLayout>
