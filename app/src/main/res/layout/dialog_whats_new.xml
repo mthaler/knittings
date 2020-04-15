@@ -12,6 +12,12 @@
         android:textSize="32sp"
         android:textColor="@color/about_text_color"
         android:padding="8dp"/>
+    <ImageView
+        android:layout_width="fill_parent"
+        android:layout_height="2dp"
+        android:layout_marginTop="5dp"
+        android:background="?attr/colorPrimaryDark"
+        />
     <TextView
         android:id="@+id/version_history"
         android:layout_width="match_parent"
