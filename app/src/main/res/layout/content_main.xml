@@ -18,8 +18,10 @@
             android:id="@+id/knitting_list_empty_recycler_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:padding="48dp"
-            app:srcCompat="@drawable/knittings"
+            android:paddingBottom="48dp"
+            android:paddingLeft="24dp"
+            android:paddingRight="24dp"
+            app:srcCompat="@drawable/knittings6"
             android:visibility="gone" />
 
         <LinearLayout
