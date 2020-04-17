@@ -12,7 +12,7 @@ import com.mthaler.knittings.BaseActivity
 import com.mthaler.knittings.R
 import com.mthaler.knittings.database.datasource
 import com.mthaler.knittings.Extras.EXTRA_KNITTING_ID
-import java.util.*
+import java.util.Locale
 import kotlinx.android.synthetic.main.activity_stopwatch.*
 
 /**

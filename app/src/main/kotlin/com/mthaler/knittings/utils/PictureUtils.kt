@@ -8,7 +8,7 @@ import android.net.Uri
 import android.util.Log
 import androidx.exifinterface.media.ExifInterface
 import java.io.*
-import java.util.*
+import java.util.Arrays
 
 object PictureUtils {
 

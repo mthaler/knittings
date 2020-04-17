@@ -35,7 +35,6 @@ import kotlinx.android.synthetic.main.content_main.*
 import java.util.*
 import kotlin.collections.ArrayList
 
-
 /**
  * The main activity that gets displayed when the app is started. It displays a list of knitting projects.
  * The user can add new projects or edit existing ones

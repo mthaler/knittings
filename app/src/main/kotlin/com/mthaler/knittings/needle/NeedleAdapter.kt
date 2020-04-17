@@ -12,7 +12,6 @@ import com.mthaler.knittings.model.NeedleMaterial
 import com.mthaler.knittings.model.NeedleType
 import java.lang.IllegalArgumentException
 import java.lang.StringBuilder
-import java.util.*
 
 class NeedleAdapter(val needles: List<ListItem>, private val onItemClick: (Needle) -> Unit, private val onItemLongLick: (Needle) -> Unit) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 

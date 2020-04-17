@@ -11,7 +11,7 @@ import com.mthaler.knittings.model.*
 import java.io.ByteArrayInputStream
 import com.mthaler.knittings.utils.FileUtils.createDateTimeDirectoryName
 import com.mthaler.knittings.utils.FileUtils.getExtension
-import java.util.*
+import java.util.Date
 
 /**
  * Tasks that uploads the application data to Dropbox
