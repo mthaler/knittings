@@ -41,7 +41,7 @@ class EditCategoryFragment : Fragment() {
 
         setHasOptionsMenu(true)
 
-        val category = datasource.getCategory(categoryID)
+        val category = if (categoryID != -1L) datasource.getCategory(categoryID) else Category()
 
         // Inflate the layout for this fragment
         val v = inflater.inflate(R.layout.fragment_edit_category, container, false)

@@ -57,8 +57,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         // set on click handler of floating action button that creates a new knitting
         fab_create_add_knitting.setOnClickListener {
             // start knitting activity with newly created knitting
-            val knitting = datasource.addKnitting(Knitting())
-            startActivity(KnittingDetailsActivity.newIntent(this, knitting.id, true))
+            startActivity(KnittingDetailsActivity.newIntent(this, -1L, true))
         }
 
         val toggle = ActionBarDrawerToggle(
