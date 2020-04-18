@@ -97,7 +97,7 @@ class EditKnittingDetailsFragment : Fragment() {
         ratingBar = v.findViewById(R.id.ratingBar)
 
         if (savedInstanceState == null) {
-            val knitting = datasource.getKnitting(knittingID)
+            val knitting = if (knittingID != -1L) datasource.getKnitting(knittingID) else Knitting()
             editTextTitle.setText(knitting.title)
             editTextDescription.setText(knitting.description)
             started = knitting.started
