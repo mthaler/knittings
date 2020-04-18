@@ -65,12 +65,12 @@ class PhotoGalleryFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        val viewModel = ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory.getInstance(activity!!.application)).get(PhotoGalleryViewModel::class.java)
+        val viewModel = ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory.getInstance(requireActivity().application)).get(PhotoGalleryViewModel::class.java)
         viewModel.init(knittingID)
         viewModel.photos.observe(viewLifecycleOwner, Observer { photos ->
             // show the newest photos first. The id is incremented for each photo that is added, thus we can sort by id
             photos.sortByDescending { it.id }
-            val gridAdapter = GridViewAdapter(activity!!, R.layout.grid_item_layout, photos)
+            val gridAdapter = GridViewAdapter(requireContext(), R.layout.grid_item_layout, photos)
             gridView.adapter = gridAdapter
         })
     }
@@ -99,12 +99,12 @@ class PhotoGalleryFragment : Fragment() {
         }
         when (requestCode) {
             REQUEST_IMAGE_CAPTURE -> {
-                currentPhotoPath?.let { TakePhotoDialog.handleTakePhotoResult(context!!, knittingID, it) }
+                currentPhotoPath?.let { TakePhotoDialog.handleTakePhotoResult(requireContext(), knittingID, it) }
             }
             REQUEST_IMAGE_IMPORT -> {
                 val f = currentPhotoPath
                 if (f != null && data != null) {
-                    TakePhotoDialog.handleImageImportResult(context!!, knittingID, f, data)
+                    TakePhotoDialog.handleImageImportResult(requireContext(), knittingID, f, data)
                 }
             }
             else -> super.onActivityResult(requestCode, resultCode, data)
