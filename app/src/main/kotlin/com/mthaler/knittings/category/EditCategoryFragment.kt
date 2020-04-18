@@ -101,14 +101,14 @@ class EditCategoryFragment : Fragment() {
                 if (newCategory != oldCategory) {
                     saveCategory(newCategory)
                 }
-                fragmentManager?.popBackStack()
+                parentFragmentManager.popBackStack()
                 true
             }
             R.id.menu_item_delete_category -> {
                 context?.let {
                     DeleteDialog.create(it, editTextTitle.text.toString(), {
                         deleteCategory()
-                        fragmentManager?.popBackStack()
+                        parentFragmentManager.popBackStack()
                     }).show()
                 }
                 true
@@ -124,12 +124,12 @@ class EditCategoryFragment : Fragment() {
             if (newCategory != oldCategory) {
                 SaveChangesDialog.create(it, {
                     saveCategory(newCategory)
-                    fragmentManager?.popBackStack()
+                    parentFragmentManager.popBackStack()
                 }, {
-                    fragmentManager?.popBackStack()
+                    parentFragmentManager.popBackStack()
                 }).show()
             } else {
-                fragmentManager?.popBackStack()
+                parentFragmentManager.popBackStack()
             }
         }
     }
