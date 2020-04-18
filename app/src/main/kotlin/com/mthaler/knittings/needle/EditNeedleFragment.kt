@@ -103,14 +103,14 @@ class EditNeedleFragment : Fragment() {
                 if (newNeedle != oldNeedle) {
                     saveNeedle(newNeedle)
                 }
-                fragmentManager?.popBackStack()
+                parentFragmentManager.popBackStack()
                 true
             }
             R.id.menu_item_delete_needle -> {
                 context?.let {
                     DeleteDialog.create(it, editTextName.text.toString(), {
                         deleteNeedle()
-                        fragmentManager?.popBackStack() }
+                        parentFragmentManager.popBackStack() }
                     ).show()
                 }
                 true
@@ -126,12 +126,12 @@ class EditNeedleFragment : Fragment() {
             if (newNeedle != oldNeedle) {
                 SaveChangesDialog.create(it, {
                     saveNeedle(newNeedle)
-                    fragmentManager?.popBackStack()
+                    parentFragmentManager.popBackStack()
                 }, {
-                    fragmentManager?.popBackStack()
+                    parentFragmentManager.popBackStack()
                 }).show()
             } else {
-                fragmentManager?.popBackStack()
+                parentFragmentManager.popBackStack()
             }
         }
     }
