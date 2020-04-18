@@ -198,7 +198,7 @@ class DropboxImportFragment : AbstractDropboxFragment() {
      * @param ex exception that happened when executing DownloadDatabaseTask
      */
     private fun onDownloadDatabaseError(ex: Exception) {
-        val builder = AlertDialog.Builder(context!!)
+        val builder = AlertDialog.Builder(requireContext())
         with(builder) {
             setTitle("Download database")
             setMessage("Could not download database: " + ex.message)
@@ -209,7 +209,7 @@ class DropboxImportFragment : AbstractDropboxFragment() {
 
     private fun onDownloadPhotosComplete() {
         setMode(false)
-        val builder = AlertDialog.Builder(context!!)
+        val builder = AlertDialog.Builder(requireContext())
         with(builder) {
             setTitle(resources.getString(R.string.dropbox_import))
             setMessage("Dropbox import completed")

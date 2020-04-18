@@ -137,11 +137,6 @@ class PhotoGalleryFragment : Fragment() {
 
     interface OnFragmentInteractionListener {
 
-        /**
-         * Called if the user clicks on a photo
-         *
-         * @param categoryID category ID
-         */
         fun photoClicked(photoID: Long)
     }
 
