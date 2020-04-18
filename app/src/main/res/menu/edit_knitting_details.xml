@@ -6,5 +6,5 @@
         android:icon="@drawable/ic_check_white_36dp"
         android:title="@string/menu_entry_save"
         android:orderInCategory="1000"
-        app:showAsAction="ifRoom|withText"/>
+        app:showAsAction="always|withText"/>
 </menu>

@@ -26,6 +26,7 @@ import java.util.Date
 class EditKnittingDetailsFragment : Fragment() {
 
     private var knittingID: Long = -1
+    private var editOnly: Boolean = false
     private lateinit var editTextTitle: EditText
     private lateinit var editTextDescription: EditText
     private lateinit var textViewStarted: TextView
@@ -45,10 +46,14 @@ class EditKnittingDetailsFragment : Fragment() {
         super.onCreate(savedInstanceState)
         arguments?.let {
             knittingID = it.getLong(EXTRA_KNITTING_ID)
+            editOnly = it.getBoolean(EXTRA_EDIT_ONLY)
         }
         savedInstanceState?.let {
             if (it.containsKey(EXTRA_KNITTING_ID)) {
                 knittingID = it.getLong(EXTRA_KNITTING_ID)
+            }
+            if (it.containsKey(EXTRA_EDIT_ONLY)) {
+                editOnly = it.getBoolean(EXTRA_EDIT_ONLY)
             }
             if (it.containsKey(EXTRA_STARTED)) {
                 started = Date(it.getLong(EXTRA_STARTED))
@@ -88,7 +93,7 @@ class EditKnittingDetailsFragment : Fragment() {
         spinnerStatus = v.findViewById(R.id.knitting_status)
         val statusList = Status.formattedValues(v.context)
         // Create an ArrayAdapter using the string array and a default spinner layout
-        ArrayAdapter(context, android.R.layout.simple_spinner_item, statusList).also { adapter ->
+        ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, statusList).also { adapter ->
             // Specify the layout to use when the list of choices appears
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             // Apply the adapter to the spinner
@@ -156,6 +161,7 @@ class EditKnittingDetailsFragment : Fragment() {
 
     override fun onSaveInstanceState(savedInstanceState: Bundle) {
         savedInstanceState.putLong(EXTRA_KNITTING_ID, knittingID)
+        savedInstanceState.putBoolean(EXTRA_EDIT_ONLY, editOnly)
         savedInstanceState.putLong(EXTRA_STARTED, started.time)
         finished?.let {
             savedInstanceState.putLong(EXTRA_FINISHED, it.time)
@@ -180,7 +186,15 @@ class EditKnittingDetailsFragment : Fragment() {
                 if (newKnitting != oldKnitting) {
                     saveKnitting(newKnitting)
                 }
-                parentFragmentManager.popBackStack()
+                if (editOnly) {
+                    val upIntent: Intent? = NavUtils.getParentActivityIntent(requireActivity())
+                    if (upIntent == null) {
+                        throw IllegalStateException("No Parent Activity Intent")
+                    }
+                    NavUtils.navigateUpTo(requireActivity(), upIntent)
+                } else {
+                    parentFragmentManager.popBackStack()
+                }
                 true
             }
             else -> super.onOptionsItemSelected(item)
@@ -216,7 +230,7 @@ class EditKnittingDetailsFragment : Fragment() {
         }
     }
 
-    fun onBackPressed(editOnly: Boolean) {
+    fun onBackPressed() {
         activity?.let {
             // Respond to the action bar's Up/Home button
             val upIntent: Intent? = NavUtils.getParentActivityIntent(it)
@@ -244,7 +258,7 @@ class EditKnittingDetailsFragment : Fragment() {
                     if (editOnly) {
                         NavUtils.navigateUpTo(it, upIntent)
                     } else {
-                        fragmentManager?.popBackStack()
+                        parentFragmentManager.popBackStack()
                     }
                 }
             }
@@ -271,16 +285,18 @@ class EditKnittingDetailsFragment : Fragment() {
         private const val EXTRA_FINISHED = "com.mthaler.knittings.needle.FINISHED"
         private const val EXTRA_DURATION = "com.mthaler.knittings.needle.DURATION"
         private const val EXTRA_CATEGORY = "com.mthaler.knittings.needle.CATEGORY"
+        private const val EXTRA_EDIT_ONLY = "com.mthaler.knittings.edit_only"
         private const val DIALOG_DATE = "date"
         private const val REQUEST_STARTED = 0
         private const val REQUEST_FINISHED = 1
         private const val REQUEST_SELECT_CATEGORY = 2
 
         @JvmStatic
-        fun newInstance(knittingID: Long) =
+        fun newInstance(knittingID: Long, editOnly: Boolean) =
             EditKnittingDetailsFragment().apply {
                 arguments = Bundle().apply {
                     putLong(EXTRA_KNITTING_ID, knittingID)
+                    putBoolean(EXTRA_EDIT_ONLY, editOnly)
                 }
             }
     }
