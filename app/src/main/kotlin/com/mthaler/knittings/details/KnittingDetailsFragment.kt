@@ -56,7 +56,7 @@ class KnittingDetailsFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory.getInstance(activity!!.application)).get(KnittingDetailsViewModel::class.java)
+        viewModel = ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory.getInstance(requireActivity().application)).get(KnittingDetailsViewModel::class.java)
         viewModel.init(knittingID)
         viewModel.knitting.observe(viewLifecycleOwner, Observer { knitting ->
             updateDetails(knitting)
@@ -103,14 +103,14 @@ class KnittingDetailsFragment : Fragment() {
                     // create array of dots that are displayed at the bottom of the photo
                     val dots = (0..dotscount - 1).map {
                         val dot = ImageView(context)
-                        dot.setImageDrawable(ContextCompat.getDrawable(context!!.applicationContext, R.drawable.non_active_dot))
+                        dot.setImageDrawable(ContextCompat.getDrawable(requireContext().applicationContext, R.drawable.non_active_dot))
                         val params = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT)
                         params.setMargins(8, 0, 8, 0)
                         sliderDots.addView(dot, params)
                         dot
                     }.toTypedArray()
                     // make the first dot active
-                    dots[0].setImageDrawable(ContextCompat.getDrawable(context!!.applicationContext, R.drawable.active_dot))
+                    dots[0].setImageDrawable(ContextCompat.getDrawable(requireContext().applicationContext, R.drawable.active_dot))
                     viewPager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
 
                         override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {}
