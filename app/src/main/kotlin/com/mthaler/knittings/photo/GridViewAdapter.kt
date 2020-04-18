@@ -21,13 +21,6 @@ import java.io.File
  */
 class GridViewAdapter(context: Context, private val layoutResourceId: Int, private val data: List<Photo>) : ArrayAdapter<Photo>(context, layoutResourceId, data) {
 
-    /**
-     * Creates a view for the item at the given position in the list
-     *
-     * @param position position of the item in the list
-     * @param convertView the old view to reuse, if possible
-     * @param parent the parent that this view will eventually be attached to, never null
-     */
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
 
         var row: View? = convertView

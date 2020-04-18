@@ -102,7 +102,7 @@ class PhotoFragment : Fragment() {
                 context?.let {
                     DeleteDialog.create(it, editTextDescription.text.toString(), {
                         deletePhoto()
-                        fragmentManager?.popBackStack()
+                        parentFragmentManager.popBackStack()
                     }).show()
                 }
                 true
@@ -127,7 +127,7 @@ class PhotoFragment : Fragment() {
                 if (editTextDescription.text.toString() != photo.description) {
                     savePhoto(photo.copy(description = editTextDescription.text.toString()))
                 }
-                fragmentManager?.popBackStack()
+                parentFragmentManager.popBackStack()
                 true
             }
             else -> super.onOptionsItemSelected(item)
@@ -139,12 +139,12 @@ class PhotoFragment : Fragment() {
             if (editTextDescription.text.toString() != photo.description) {
                 SaveChangesDialog.create(it, {
                     savePhoto(photo.copy(description = editTextDescription.text.toString()))
-                    fragmentManager?.popBackStack()
+                    parentFragmentManager.popBackStack()
                 }, {
-                    fragmentManager?.popBackStack()
+                    parentFragmentManager.popBackStack()
                 }).show()
             } else {
-                fragmentManager?.popBackStack()
+                parentFragmentManager.popBackStack()
             }
         }
     }
