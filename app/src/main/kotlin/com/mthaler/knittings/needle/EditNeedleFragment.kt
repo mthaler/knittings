@@ -61,7 +61,7 @@ class EditNeedleFragment : Fragment() {
         }
 
         if (savedInstanceState == null) {
-            val needle = datasource.getNeedle(needleID)
+            val needle = if (needleID != -1L) datasource.getNeedle(needleID) else Needle()
             editTextName.setText(needle.name)
             editTextSize.setText(needle.size)
             editTextLength.setText(needle.length)
