@@ -64,9 +64,11 @@ class CategoryListFragment : Fragment() {
             // show image if category list is empty
             if (categories.isEmpty()) {
                 category_empty_recycler_view.visibility = View.VISIBLE
+                category_nonempty_recycler_view.visibility = View.GONE
                 category_recycler_view.visibility = View.GONE
             } else {
                 category_empty_recycler_view.visibility = View.GONE
+                category_nonempty_recycler_view.visibility = View.VISIBLE
                 category_recycler_view.visibility = View.VISIBLE
             }
             // start EditCategoryActivity if the users clicks on a category

@@ -17,6 +17,16 @@
         app:srcCompat="@drawable/categories"
         android:visibility="gone" />
 
+    <ImageView
+        android:id="@+id/category_nonempty_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingBottom="48dp"
+        android:paddingLeft="24dp"
+        android:paddingRight="24dp"
+        app:srcCompat="@drawable/categories2"
+        android:visibility="gone" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/category_recycler_view"
         android:layout_width="match_parent"
