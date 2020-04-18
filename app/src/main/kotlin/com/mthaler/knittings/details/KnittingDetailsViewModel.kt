@@ -1,6 +1,7 @@
 package com.mthaler.knittings.details
 
 import android.app.Application
+import android.database.CursorIndexOutOfBoundsException
 import androidx.lifecycle.MutableLiveData
 import com.mthaler.knittings.DatasourceViewModel
 import com.mthaler.knittings.utils.setMutVal
@@ -21,9 +22,13 @@ class KnittingDetailsViewModel(application: Application) : DatasourceViewModel(a
     }
 
     override fun databaseChanged() {
-        val k = datasource.getKnitting(knittingID)
-        val photos = datasource.getAllPhotos(k)
-        val knittingWithPhotos = KnittingWithPhotos(k, photos)
-        knitting.setMutVal(knittingWithPhotos)
+        try {
+            val k = datasource.getKnitting(knittingID)
+            val photos = datasource.getAllPhotos(k)
+            val knittingWithPhotos = KnittingWithPhotos(k, photos)
+            knitting.setMutVal(knittingWithPhotos)
+        } catch(ex: CursorIndexOutOfBoundsException) {
+            // We get an exception when a knitting is deleted from the details fragment, ignore for now
+        }
     }
 }
