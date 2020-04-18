@@ -15,12 +15,6 @@ import java.lang.StringBuilder
 
 class NeedleAdapter(val needles: List<ListItem>, private val onItemClick: (Needle) -> Unit, private val onItemLongLick: (Needle) -> Unit) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    /**
-     * Creates, configures and returns a ViewHolder object for a particular row in the list
-     *
-     * @param parent a ViewGroup that will hold the views managed by the holder, mostly used for layout inflation
-     * @param viewType an int that is the particular view type we are using, for cases where we have multiple view types
-     */
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
 
         when (viewType) {
@@ -36,12 +30,6 @@ class NeedleAdapter(val needles: List<ListItem>, private val onItemClick: (Needl
         }
     }
 
-    /**
-     * Updates the ViewHolder based upon the model data for a certain position
-     *
-     * @param holder ViewHolder object that should be updated
-     * @param position model position
-     */
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (holder is HeaderViewHolder) {
             holder.bind((needles[position] as HeaderItem).header)
@@ -52,9 +40,6 @@ class NeedleAdapter(val needles: List<ListItem>, private val onItemClick: (Needl
 
     override fun getItemViewType(position: Int): Int = needles[position].getType()
 
-    /**
-     * Returns the number of items in the recycler view
-     */
     override fun getItemCount(): Int = needles.size
 
     class HeaderViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -66,12 +51,6 @@ class NeedleAdapter(val needles: List<ListItem>, private val onItemClick: (Needl
         }
     }
 
-    /**
-     * The ViewHolder class is responsible for binding data as needed from our model into the widgets
-     * for a row in our list
-     *
-     * @param itemView item view
-     */
     class ItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val textViewName = itemView.findViewById<TextView>(R.id.needle_list_item_name)
         private val textViewDescription = itemView.findViewById<TextView>(R.id.needle_list_item_description)
