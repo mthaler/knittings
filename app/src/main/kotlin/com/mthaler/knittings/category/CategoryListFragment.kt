@@ -49,7 +49,7 @@ class CategoryListFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        val viewModel = ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory.getInstance(activity!!.application)).get(CategoryListViewModel::class.java)
+        val viewModel = ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory.getInstance(requireActivity().application)).get(CategoryListViewModel::class.java)
         viewModel.categories.observe(viewLifecycleOwner, Observer { categories ->
             updateCategoryList(categories)
         })
