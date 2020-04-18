@@ -106,8 +106,8 @@ class EditKnittingDetailsFragment : Fragment() {
             editTextSize.setText(knitting.size)
             duration = knitting.duration
             category = knitting.category
-            val statusList = Status.formattedValues(context!!)
-            val index = statusList.indexOf(Status.format(context!!, knitting.status))
+            val statusList = Status.formattedValues(requireContext())
+            val index = statusList.indexOf(Status.format(requireContext(), knitting.status))
             if (index >= 0) {
                 spinnerStatus.setSelection(index)
             } else {
@@ -123,18 +123,14 @@ class EditKnittingDetailsFragment : Fragment() {
         }
 
         textViewStarted.setOnClickListener {
-            fragmentManager?.let {
-                val dialog = DatePickerFragment.newInstance(started)
-                dialog.setTargetFragment(this, REQUEST_STARTED)
-                dialog.show(it, DIALOG_DATE)
-            }
+            val dialog = DatePickerFragment.newInstance(started)
+            dialog.setTargetFragment(this, REQUEST_STARTED)
+            dialog.show(parentFragmentManager, DIALOG_DATE)
         }
         textViewFinished.setOnClickListener {
-            fragmentManager?.let {
-                val dialog = DatePickerFragment.newInstance(if (finished != null) finished else Date())
-                dialog.setTargetFragment(this, REQUEST_FINISHED)
-                dialog.show(it, DIALOG_DATE)
-            }
+            val dialog = DatePickerFragment.newInstance(if (finished != null) finished else Date())
+            dialog.setTargetFragment(this, REQUEST_FINISHED)
+            dialog.show(parentFragmentManager, DIALOG_DATE)
         }
         textViewDuration.setOnClickListener {
             context?.let {
@@ -184,7 +180,7 @@ class EditKnittingDetailsFragment : Fragment() {
                 if (newKnitting != oldKnitting) {
                     saveKnitting(newKnitting)
                 }
-                fragmentManager?.popBackStack()
+                parentFragmentManager.popBackStack()
                 true
             }
             else -> super.onOptionsItemSelected(item)
@@ -235,13 +231,13 @@ class EditKnittingDetailsFragment : Fragment() {
                         if (editOnly) {
                             NavUtils.navigateUpTo(it, upIntent)
                         } else {
-                            fragmentManager?.popBackStack()
+                           parentFragmentManager.popBackStack()
                         }
                     }, {
                         if (editOnly) {
                             NavUtils.navigateUpTo(it, upIntent)
                         } else {
-                            fragmentManager?.popBackStack()
+                            parentFragmentManager.popBackStack()
                         }
                     }).show()
                 } else {
