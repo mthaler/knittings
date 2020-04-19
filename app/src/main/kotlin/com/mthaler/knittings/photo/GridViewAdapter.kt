@@ -9,17 +9,19 @@ import android.view.ViewTreeObserver
 import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.lifecycle.LifecycleCoroutineScope
 import com.mthaler.knittings.R
 import com.mthaler.knittings.model.Photo
 import com.mthaler.knittings.utils.PictureUtils
-import org.jetbrains.anko.doAsync
-import org.jetbrains.anko.uiThread
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.io.File
 
 /**
  * An adapter that creates the views to display photos in a grid view
  */
-class GridViewAdapter(context: Context, private val layoutResourceId: Int, private val data: List<Photo>) : ArrayAdapter<Photo>(context, layoutResourceId, data) {
+class GridViewAdapter(context: Context, private val lifecycleScope: LifecycleCoroutineScope, private val layoutResourceId: Int, private val data: List<Photo>) : ArrayAdapter<Photo>(context, layoutResourceId, data) {
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
 
@@ -54,27 +56,28 @@ class GridViewAdapter(context: Context, private val layoutResourceId: Int, priva
                     val width = imageView.measuredWidth
                     val height = imageView.measuredHeight
                     val filename = item.filename.absolutePath
-                    doAsync {
-                        val imageSize = if (displayPhotoSize) File(filename).length() else 0L
-                        val orientation = PictureUtils.getOrientation(filename)
-                        val photo = PictureUtils.decodeSampledBitmapFromPath(filename, width, height)
-                        val rotatedPhoto = PictureUtils.rotateBitmap(photo, orientation)
-                        uiThread {
-                            imageView.setImageBitmap(rotatedPhoto)
-                            if (imageTitle != null) {
-                                if (displayPhotoSize) {
-                                    if (item.description.isNotEmpty()) {
-                                        imageTitle.visibility = View.VISIBLE
-                                        imageTitle.text = item.description + " (" + imageSize / 1024 + " KB)"
-                                    } else {
-                                        imageTitle.visibility = View.VISIBLE
-                                        imageTitle.text = "" + imageSize / 1024 + " KB"
-                                    }
+                    lifecycleScope.launch {
+                        val (imageSize, rotatedPhoto) = withContext(Dispatchers.Default) {
+                            val imageSize = if (displayPhotoSize) File(filename).length() else 0L
+                            val orientation = PictureUtils.getOrientation(filename)
+                            val photo = PictureUtils.decodeSampledBitmapFromPath(filename, width, height)
+                            val rotatedPhoto = PictureUtils.rotateBitmap(photo, orientation)
+                            Pair(imageSize, rotatedPhoto)
+                        }
+                        imageView.setImageBitmap(rotatedPhoto)
+                        if (imageTitle != null) {
+                            if (displayPhotoSize) {
+                                if (item.description.isNotEmpty()) {
+                                    imageTitle.visibility = View.VISIBLE
+                                    imageTitle.text = item.description + " (" + imageSize / 1024 + " KB)"
                                 } else {
-                                    if (item.description.isNotEmpty()) {
-                                        imageTitle.visibility = View.VISIBLE
-                                        imageTitle.text = item.description
-                                    }
+                                    imageTitle.visibility = View.VISIBLE
+                                    imageTitle.text = "" + imageSize / 1024 + " KB"
+                                }
+                            } else {
+                                if (item.description.isNotEmpty()) {
+                                    imageTitle.visibility = View.VISIBLE
+                                    imageTitle.text = item.description
                                 }
                             }
                         }

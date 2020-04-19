@@ -10,6 +10,7 @@ import android.widget.AdapterView
 import android.widget.GridView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import com.mthaler.knittings.R
 import com.mthaler.knittings.model.Photo
 import com.mthaler.knittings.Extras.EXTRA_KNITTING_ID
@@ -70,7 +71,7 @@ class PhotoGalleryFragment : Fragment() {
         viewModel.photos.observe(viewLifecycleOwner, Observer { photos ->
             // show the newest photos first. The id is incremented for each photo that is added, thus we can sort by id
             photos.sortByDescending { it.id }
-            val gridAdapter = GridViewAdapter(requireContext(), R.layout.grid_item_layout, photos)
+            val gridAdapter = GridViewAdapter(requireContext(), viewLifecycleOwner.lifecycleScope, R.layout.grid_item_layout, photos)
             gridView.adapter = gridAdapter
         })
     }
