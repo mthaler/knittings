@@ -14,15 +14,17 @@ import com.mthaler.knittings.R
 import com.mthaler.knittings.database.datasource
 import com.mthaler.knittings.model.Photo
 import com.mthaler.knittings.utils.PictureUtils
-import org.jetbrains.anko.doAsync
-import org.jetbrains.anko.uiThread
 import com.mthaler.knittings.Extras.EXTRA_PHOTO_ID
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
 import android.preference.PreferenceManager
+import androidx.lifecycle.lifecycleScope
 import com.mthaler.knittings.DeleteDialog
 import com.mthaler.knittings.SaveChangesDialog
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 /**
  * PhotoFragment displays a photo and the description
@@ -64,13 +66,13 @@ class PhotoFragment : Fragment() {
                 val height = imageView.measuredHeight
                 // loading and scaling the bitmap is expensive, use async task to do the work
                 val path = photo.filename.absolutePath
-                doAsync {
-                    val orientation = PictureUtils.getOrientation(path)
-                    val scaled = PictureUtils.decodeSampledBitmapFromPath(path, width, height)
-                    val rotated = PictureUtils.rotateBitmap(scaled, orientation)
-                    uiThread {
-                        imageView.setImageBitmap(rotated)
+                viewLifecycleOwner.lifecycleScope.launch {
+                    val rotated = withContext(Dispatchers.Default) {
+                        val orientation = PictureUtils.getOrientation(path)
+                        val scaled = PictureUtils.decodeSampledBitmapFromPath(path, width, height)
+                        PictureUtils.rotateBitmap(scaled, orientation)
                     }
+                    imageView.setImageBitmap(rotated)
                 }
                 return true
             }
