@@ -11,8 +11,10 @@
         android:id="@+id/needles_empty_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="48dp"
-        app:srcCompat="@drawable/needle"
+        android:paddingBottom="48dp"
+        android:paddingLeft="24dp"
+        android:paddingRight="24dp"
+        app:srcCompat="@drawable/needles"
         android:visibility="gone" />
 
     <androidx.recyclerview.widget.RecyclerView
