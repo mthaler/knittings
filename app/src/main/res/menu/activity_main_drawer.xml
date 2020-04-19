@@ -21,7 +21,7 @@
         <item
             android:id="@+id/nav_edit_categories"
             android:title="@string/manage_categories"
-            android:icon="@drawable/ic_color_lens_black_24dp" />
+            android:icon="@drawable/categories" />
     </group>
     <group
         android:id="@+id/menu_needles"
@@ -29,7 +29,7 @@
         <item
             android:id="@+id/nav_edit_needles"
             android:title="@string/manage_needles"
-            android:icon="@drawable/needle" />
+            android:icon="@drawable/needles" />
     </group>
     <group
         android:id="@+id/menu_settings"
