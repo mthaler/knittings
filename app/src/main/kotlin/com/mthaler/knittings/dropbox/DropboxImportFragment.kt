@@ -10,11 +10,13 @@ import com.dropbox.core.v2.files.ListFolderResult
 import com.mthaler.knittings.R
 import com.mthaler.knittings.utils.NetworkUtils
 import kotlinx.android.synthetic.main.fragment_dropbox_import.*
-import org.jetbrains.anko.doAsync
-import org.jetbrains.anko.uiThread
 import androidx.appcompat.app.AlertDialog
+import androidx.lifecycle.lifecycleScope
 import com.mthaler.knittings.database.datasource
 import com.mthaler.knittings.model.Database
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class DropboxImportFragment : AbstractDropboxFragment() {
 
@@ -77,15 +79,16 @@ class DropboxImportFragment : AbstractDropboxFragment() {
     }
 
     override fun loadData(onError: (Exception) -> Unit) {
-        doAsync {
-            val client = DropboxClientFactory.getClient()
-            val account = client.users().currentAccount
-            val spaceUsage = client.users().spaceUsage
-            uiThread {
-                email_text.text = account.email
-                name_text.text = account.name.displayName
-                type_text.text = account.accountType.name
+        viewLifecycleOwner.lifecycleScope.launch {
+            val account = withContext(Dispatchers.IO) {
+                val client = DropboxClientFactory.getClient()
+                val account = client.users().currentAccount
+                //val spaceUsage = client.users().spaceUsage
+                account
             }
+            email_text.text = account.email
+            name_text.text = account.name.displayName
+            type_text.text = account.accountType.name
         }
     }
 
