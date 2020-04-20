@@ -2,9 +2,12 @@ package com.mthaler.knittings.photo
 
 import android.app.Application
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.mthaler.knittings.DatasourceViewModel
 import com.mthaler.knittings.model.Photo
-import com.mthaler.knittings.utils.setMutVal
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class PhotoGalleryViewModel(application: Application) : DatasourceViewModel(application) {
 
@@ -14,15 +17,23 @@ class PhotoGalleryViewModel(application: Application) : DatasourceViewModel(appl
     fun init(id: Long) {
         if (id != knittingID) {
             knittingID = id
-            val k = datasource.getKnitting(id)
-            val ps = datasource.getAllPhotos(k)
-            photos.setMutVal(ps)
+            viewModelScope.launch {
+                val ps = withContext(Dispatchers.IO) {
+                    val k = datasource.getKnitting(id)
+                    datasource.getAllPhotos(k)
+                }
+                photos.value = ps
+            }
         }
     }
 
     override fun databaseChanged() {
-        val k = datasource.getKnitting(knittingID)
-        val ps = datasource.getAllPhotos(k)
-        photos.setMutVal(ps)
+        viewModelScope.launch {
+            val ps = withContext(Dispatchers.IO) {
+                val k = datasource.getKnitting(knittingID)
+                datasource.getAllPhotos(k)
+            }
+            photos.value = ps
+        }
     }
 }

@@ -3,8 +3,11 @@ package com.mthaler.knittings.details
 import android.app.Application
 import android.database.CursorIndexOutOfBoundsException
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.mthaler.knittings.DatasourceViewModel
-import com.mthaler.knittings.utils.setMutVal
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class KnittingDetailsViewModel(application: Application) : DatasourceViewModel(application) {
 
@@ -14,19 +17,27 @@ class KnittingDetailsViewModel(application: Application) : DatasourceViewModel(a
     fun init(id: Long) {
         if (id != knittingID) {
             knittingID = id
-            val k = datasource.getKnitting(id)
-            val photos = datasource.getAllPhotos(k)
-            val knittingWithPhotos = KnittingWithPhotos(k, photos)
-            knitting.setMutVal(knittingWithPhotos)
+            viewModelScope.launch {
+                val knittingWithPhotos =  withContext(Dispatchers.IO) {
+                    val k = datasource.getKnitting(id)
+                    val photos = datasource.getAllPhotos(k)
+                    KnittingWithPhotos(k, photos)
+                }
+                knitting.value = knittingWithPhotos
+            }
         }
     }
 
     override fun databaseChanged() {
         try {
-            val k = datasource.getKnitting(knittingID)
-            val photos = datasource.getAllPhotos(k)
-            val knittingWithPhotos = KnittingWithPhotos(k, photos)
-            knitting.setMutVal(knittingWithPhotos)
+            viewModelScope.launch {
+                val knittingWithPhotos =  withContext(Dispatchers.IO) {
+                    val k = datasource.getKnitting(knittingID)
+                    val photos = datasource.getAllPhotos(k)
+                    KnittingWithPhotos(k, photos)
+                }
+                knitting.value = knittingWithPhotos
+            }
         } catch(ex: CursorIndexOutOfBoundsException) {
             // We get an exception when a knitting is deleted from the details fragment, ignore for now
         }
