@@ -8,9 +8,11 @@ import com.mthaler.knittings.R
 import kotlinx.android.synthetic.main.activity_dropbox_export.*
 import android.view.Menu
 import android.view.MenuItem
+import androidx.lifecycle.lifecycleScope
 import com.mthaler.knittings.BaseActivity
-import org.jetbrains.anko.doAsync
-import org.jetbrains.anko.uiThread
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 /**
  * Activity that handles Dropbox export
@@ -58,33 +60,33 @@ class DropboxExportActivity : BaseActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.menu_item_dropbox_logout -> {
-                doAsync {
-                    try {
-                        // remove auth token from Dropbox server
-                        DropboxClientFactory.getClient().auth().tokenRevoke()
-                    } catch (ex: Exception) {
-                    }
-                    uiThread {
-                        // delete auth token from shared pref_sharing
-                        val prefs = getSharedPreferences(AbstractDropboxFragment.SharedPreferencesName, MODE_PRIVATE)
-                        val editor = prefs.edit()
-                        editor.remove("access-token")
-                        editor.commit()
-                        // clear client so that it is not reused next time we connect to Dropbox
-                        DropboxClientFactory.clearClient()
-                        // replace the Dropbox export fragment with a new one
-                        val ft = supportFragmentManager.beginTransaction()
-                        val f = DropboxExportFragment()
-                        ft.replace(R.id.frament_container, f)
-                        ft.addToBackStack(null)
-                        ft.commit()
-                        val builder = AlertDialog.Builder(this@DropboxExportActivity)
-                        with(builder) {
-                            setTitle(resources.getString(R.string.dropbox_export))
-                            setMessage("Logged out of Dropbox")
-                            setPositiveButton("OK", { dialog, which -> })
-                            show()
+                lifecycleScope.launch {
+                    withContext(Dispatchers.IO) {
+                        try {
+                            // remove auth token from Dropbox server
+                            DropboxClientFactory.getClient().auth().tokenRevoke()
+                        } catch (ex: Exception) {
                         }
+                    }
+                    // delete auth token from shared pref_sharing
+                    val prefs = getSharedPreferences(AbstractDropboxFragment.SharedPreferencesName, MODE_PRIVATE)
+                    val editor = prefs.edit()
+                    editor.remove("access-token")
+                    editor.commit()
+                    // clear client so that it is not reused next time we connect to Dropbox
+                    DropboxClientFactory.clearClient()
+                    // replace the Dropbox export fragment with a new one
+                    val ft = supportFragmentManager.beginTransaction()
+                    val f = DropboxExportFragment()
+                    ft.replace(R.id.frament_container, f)
+                    ft.addToBackStack(null)
+                    ft.commit()
+                    val builder = AlertDialog.Builder(this@DropboxExportActivity)
+                    with(builder) {
+                        setTitle(resources.getString(R.string.dropbox_export))
+                        setMessage("Logged out of Dropbox")
+                        setPositiveButton("OK", { dialog, which -> })
+                        show()
                     }
                 }
                 true

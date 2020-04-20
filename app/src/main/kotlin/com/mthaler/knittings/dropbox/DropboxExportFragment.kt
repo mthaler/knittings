@@ -6,15 +6,17 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.lifecycleScope
 import com.dropbox.core.android.Auth
 import com.dropbox.core.v2.users.FullAccount
 import com.dropbox.core.v2.users.SpaceUsage
 import com.mthaler.knittings.R
 import com.mthaler.knittings.utils.NetworkUtils
 import kotlinx.android.synthetic.main.fragment_dropbox_export.*
-import org.jetbrains.anko.doAsync
-import org.jetbrains.anko.uiThread
 import com.mthaler.knittings.utils.StringUtils.formatBytes
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 /**
  * Fragment used for Dropbox export
@@ -83,31 +85,32 @@ class DropboxExportFragment : AbstractDropboxFragment() {
     }
 
     override fun loadData(onError: (Exception) -> Unit) {
-        doAsync {
-            val client = DropboxClientFactory.getClient()
-            var account: FullAccount? = null
-            var spaceUsage: SpaceUsage? = null
-            var exception: Exception? = null
-            try {
-                account = client.users().currentAccount
-                spaceUsage = client.users().spaceUsage
-            } catch (ex: Exception) {
-                exception = ex
+        lifecycleScope.launch {
+            val(exception, account, spaceUsage) = withContext(Dispatchers.IO) {
+                val client = DropboxClientFactory.getClient()
+                var account: FullAccount? = null
+                var spaceUsage: SpaceUsage? = null
+                var exception: Exception? = null
+                try {
+                    account = client.users().currentAccount
+                    spaceUsage = client.users().spaceUsage
+                } catch (ex: Exception) {
+                    exception = ex
+                }
+                Triple(exception, account, spaceUsage)
             }
-            uiThread {
-                if (exception != null) {
-                    onError(exception)
-                } else {
-                    if (account != null) {
-                        email_text.text = account.email
-                        name_text.text = account.name.displayName
-                        type_text.text = account.accountType.name
-                    }
-                    if (spaceUsage != null) {
-                        max_space_text.text = "Max: " + formatBytes(spaceUsage.allocation.individualValue.allocated)
-                        used_space_text.text = "Used: " + formatBytes(spaceUsage.used)
-                        free_space_text.text = "Free: " + formatBytes(spaceUsage.allocation.individualValue.allocated - spaceUsage.used)
-                    }
+            if (exception != null) {
+                onError(exception)
+            } else {
+                if (account != null) {
+                    email_text.text = account.email
+                    name_text.text = account.name.displayName
+                    type_text.text = account.accountType.name
+                }
+                if (spaceUsage != null) {
+                    max_space_text.text = "Max: " + formatBytes(spaceUsage.allocation.individualValue.allocated)
+                    used_space_text.text = "Used: " + formatBytes(spaceUsage.used)
+                    free_space_text.text = "Free: " + formatBytes(spaceUsage.allocation.individualValue.allocated - spaceUsage.used)
                 }
             }
         }

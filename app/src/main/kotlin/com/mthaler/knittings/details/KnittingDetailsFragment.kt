@@ -13,6 +13,7 @@ import android.widget.RatingBar
 import android.widget.TextView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import com.mthaler.knittings.Extras
 import com.mthaler.knittings.photo.ImageAdapter
 import com.mthaler.knittings.R
@@ -94,7 +95,7 @@ class KnittingDetailsFragment : Fragment() {
             photos.sortByDescending { it.id }
             if (photos.size > 0) {
                 viewPager.visibility = View.VISIBLE
-                val adapter = ImageAdapter(it.context, photos) // Here we are defining the Imageadapter object
+                val adapter = ImageAdapter(it.context, viewLifecycleOwner.lifecycleScope, photos) // Here we are defining the Imageadapter object
                 viewPager.adapter = adapter // Here we are passing and setting the adapter for the images
 
                 val dotscount = adapter.count
