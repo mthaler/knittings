@@ -7,6 +7,7 @@ import android.os.Bundle
 import androidx.core.app.NavUtils
 import android.view.Menu
 import android.view.MenuItem
+import androidx.lifecycle.lifecycleScope
 import com.mthaler.knittings.BaseActivity
 import com.mthaler.knittings.photo.PhotoGalleryActivity
 import com.mthaler.knittings.R
@@ -16,6 +17,9 @@ import java.io.File
 import com.mthaler.knittings.Extras.EXTRA_KNITTING_ID
 import com.mthaler.knittings.photo.TakePhotoDialog
 import kotlinx.android.synthetic.main.activity_knitting_details.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 /**
  * Activity that displays knitting details (name, description, start time etc.)
@@ -119,7 +123,12 @@ class KnittingDetailsActivity : BaseActivity(), KnittingDetailsFragment.OnFragme
         }
         when (requestCode) {
             REQUEST_IMAGE_CAPTURE -> {
-                currentPhotoPath?.let { TakePhotoDialog.handleTakePhotoResult(this, knittingID, it) }
+                currentPhotoPath?.let {
+                    lifecycleScope.launch {
+                        withContext(Dispatchers.IO) {
+                            TakePhotoDialog.handleTakePhotoResult(this@KnittingDetailsActivity, knittingID, it) }
+                        }
+                    }
             }
             REQUEST_IMAGE_IMPORT -> {
                 val f = currentPhotoPath

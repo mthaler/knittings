@@ -14,6 +14,9 @@ import androidx.lifecycle.lifecycleScope
 import com.mthaler.knittings.R
 import com.mthaler.knittings.model.Photo
 import com.mthaler.knittings.Extras.EXTRA_KNITTING_ID
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.io.File
 
 /**
@@ -100,7 +103,12 @@ class PhotoGalleryFragment : Fragment() {
         }
         when (requestCode) {
             REQUEST_IMAGE_CAPTURE -> {
-                currentPhotoPath?.let { TakePhotoDialog.handleTakePhotoResult(requireContext(), knittingID, it) }
+                currentPhotoPath?.let {
+                    viewLifecycleOwner.lifecycleScope.launch {
+                        withContext(Dispatchers.IO) {
+                            TakePhotoDialog.handleTakePhotoResult(requireContext(), knittingID, it) }
+                        }
+                    }
             }
             REQUEST_IMAGE_IMPORT -> {
                 val f = currentPhotoPath
