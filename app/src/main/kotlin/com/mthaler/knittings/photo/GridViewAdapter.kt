@@ -21,7 +21,7 @@ import java.io.File
 /**
  * An adapter that creates the views to display photos in a grid view
  */
-class GridViewAdapter(context: Context, private val lifecycleScope: LifecycleCoroutineScope, private val layoutResourceId: Int, private val data: List<Photo>) : ArrayAdapter<Photo>(context, layoutResourceId, data) {
+class GridViewAdapter(context: Context, private val lifecycleScope: LifecycleCoroutineScope, private val layoutResourceId: Int) : ArrayAdapter<Photo>(context, layoutResourceId) {
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
 
@@ -39,7 +39,7 @@ class GridViewAdapter(context: Context, private val lifecycleScope: LifecycleCor
             h = row.tag as ViewHolder
         }
 
-        val item = data[position]
+        val item = getItem(position)
         // we use a view tree observer to get the width and the height of the image view and scale the image accordingly reduce memory usage
         val imageView = h.image
         val imageTitle = h.imageTitle

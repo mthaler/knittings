@@ -27,6 +27,7 @@ class PhotoGalleryFragment : Fragment() {
     private var knittingID: Long = -1
     private var currentPhotoPath: File? = null
     private lateinit var gridView: GridView
+    private lateinit var gridViewAdapter: GridViewAdapter
     private var listener: OnFragmentInteractionListener? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -52,6 +53,8 @@ class PhotoGalleryFragment : Fragment() {
         }
 
         gridView = v.findViewById(R.id.gridView)
+        gridViewAdapter = GridViewAdapter(requireContext(), viewLifecycleOwner.lifecycleScope, R.layout.grid_item_layout)
+        gridView.adapter = gridViewAdapter
         gridView.onItemClickListener = AdapterView.OnItemClickListener { parent, v, position, id ->
             // photo clicked, show photo in photo activity
             val photo = parent.getItemAtPosition(position) as Photo
@@ -74,8 +77,8 @@ class PhotoGalleryFragment : Fragment() {
         viewModel.photos.observe(viewLifecycleOwner, Observer { photos ->
             // show the newest photos first. The id is incremented for each photo that is added, thus we can sort by id
             photos.sortByDescending { it.id }
-            val gridAdapter = GridViewAdapter(requireContext(), viewLifecycleOwner.lifecycleScope, R.layout.grid_item_layout, photos)
-            gridView.adapter = gridAdapter
+            gridViewAdapter.clear()
+            gridViewAdapter.addAll(photos)
         })
     }
 
