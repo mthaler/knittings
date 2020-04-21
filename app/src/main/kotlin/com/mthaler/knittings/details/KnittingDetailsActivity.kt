@@ -133,7 +133,11 @@ class KnittingDetailsActivity : BaseActivity(), KnittingDetailsFragment.OnFragme
             REQUEST_IMAGE_IMPORT -> {
                 val f = currentPhotoPath
                 if (f != null && data != null) {
-                    TakePhotoDialog.handleImageImportResult(this, knittingID, f, data)
+                    lifecycleScope.launch {
+                        withContext(Dispatchers.IO) {
+                            TakePhotoDialog.handleImageImportResult(this@KnittingDetailsActivity, knittingID, f, data)
+                        }
+                    }
                 }
             }
             else -> super.onActivityResult(requestCode, resultCode, data)

@@ -113,7 +113,11 @@ class PhotoGalleryFragment : Fragment() {
             REQUEST_IMAGE_IMPORT -> {
                 val f = currentPhotoPath
                 if (f != null && data != null) {
-                    TakePhotoDialog.handleImageImportResult(requireContext(), knittingID, f, data)
+                    viewLifecycleOwner.lifecycleScope.launch {
+                        withContext(Dispatchers.IO) {
+                            TakePhotoDialog.handleImageImportResult(requireContext(), knittingID, f, data)
+                        }
+                    }
                 }
             }
             else -> super.onActivityResult(requestCode, resultCode, data)
