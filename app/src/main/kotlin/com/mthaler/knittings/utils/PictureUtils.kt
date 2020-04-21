@@ -7,6 +7,11 @@ import android.graphics.Matrix
 import android.net.Uri
 import android.util.Log
 import androidx.exifinterface.media.ExifInterface
+import id.zelory.compressor.Compressor
+import id.zelory.compressor.constraint.format
+import id.zelory.compressor.constraint.quality
+import id.zelory.compressor.constraint.resolution
+import id.zelory.compressor.constraint.size
 import java.io.*
 import java.util.Arrays
 
@@ -174,5 +179,15 @@ object PictureUtils {
             `in`?.close()
             out?.close()
         }
+    }
+
+    suspend fun compress(context: Context, imageFile: File): File {
+        val compressedImageFile = Compressor.compress(context, imageFile) {
+            resolution(1280, 1024)
+            quality(80)
+            format(Bitmap.CompressFormat.JPEG)
+            size(204_800 ) // 100 KB
+        }
+        return compressedImageFile
     }
 }
