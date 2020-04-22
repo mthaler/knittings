@@ -4,18 +4,15 @@ import android.content.Context
 import android.os.Bundle
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import androidx.fragment.app.Fragment
-import androidx.core.content.ContextCompat
-import androidx.viewpager.widget.ViewPager
 import android.view.*
-import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.RatingBar
 import android.widget.TextView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.viewpager2.widget.ViewPager2
 import com.mthaler.knittings.Extras
-import com.mthaler.knittings.photo.ImageAdapter
 import com.mthaler.knittings.R
 import com.mthaler.knittings.model.Status
 import com.mthaler.knittings.utils.TimeUtils
@@ -28,6 +25,7 @@ class KnittingDetailsFragment : Fragment() {
 
     private var knittingID: Long = -1
     private lateinit var viewModel: KnittingDetailsViewModel
+    private var onPageChangeCallback: ViewPager2.OnPageChangeCallback? = null
     private var listener: OnFragmentInteractionListener? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -88,8 +86,8 @@ class KnittingDetailsFragment : Fragment() {
             // remove slider dots and on page changed listener. We readd it if we need it
             val sliderDots = it.findViewById<LinearLayout>(R.id.sliderDots)
             sliderDots.removeAllViews()
-            val viewPager = it.findViewById<ViewPager>(R.id.view_pager)
-            viewPager.clearOnPageChangeListeners()
+            val viewPager = it.findViewById<ViewPager2>(R.id.view_pager)
+            onPageChangeCallback?.let { viewPager.registerOnPageChangeCallback(it) }
             viewPager.offscreenPageLimit = 3
             val photos = knittingWithPhotos.photos
             photos.sortByDescending { it.id }
@@ -98,36 +96,12 @@ class KnittingDetailsFragment : Fragment() {
                 val adapter = ImageAdapter(it.context, viewLifecycleOwner.lifecycleScope, photos) // Here we are defining the Imageadapter object
                 viewPager.adapter = adapter // Here we are passing and setting the adapter for the images
 
-                val dotscount = adapter.count
+                val dotscount = adapter.itemCount
 
                 if (photos.size > 1) {
-                    // create array of dots that are displayed at the bottom of the photo
-                    val dots = (0..dotscount - 1).map {
-                        val dot = ImageView(context)
-                        dot.setImageDrawable(ContextCompat.getDrawable(requireContext().applicationContext, R.drawable.non_active_dot))
-                        val params = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT)
-                        params.setMargins(8, 0, 8, 0)
-                        sliderDots.addView(dot, params)
-                        dot
-                    }.toTypedArray()
-                    // make the first dot active
-                    dots[0].setImageDrawable(ContextCompat.getDrawable(requireContext().applicationContext, R.drawable.active_dot))
-                    viewPager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
-
-                        override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {}
-
-                        override fun onPageSelected(position: Int) {
-                            context?.let {
-                                for (i in 0 until dotscount) {
-                                    dots[i].setImageDrawable(ContextCompat.getDrawable(it.applicationContext, R.drawable.non_active_dot))
-                                }
-                                // mark the dot for the selected page as active
-                                dots[position].setImageDrawable(ContextCompat.getDrawable(it.applicationContext, R.drawable.active_dot))
-                            }
-                        }
-
-                        override fun onPageScrollStateChanged(state: Int) {}
-                    })
+                    val cb = DotsOnPageChangeCallback(requireContext(), dotscount, sliderDots)
+                    onPageChangeCallback = cb
+                    viewPager.registerOnPageChangeCallback(cb)
                 }
             } else {
                 viewPager.visibility = View.GONE
