@@ -15,6 +15,7 @@ import androidx.core.content.FileProvider
 import com.mthaler.knittings.R
 import com.mthaler.knittings.database.datasource
 import com.mthaler.knittings.model.Photo
+import com.mthaler.knittings.utils.FileUtils
 import com.mthaler.knittings.utils.PictureUtils
 import java.io.File
 
@@ -88,8 +89,16 @@ object TakePhotoDialog {
      * @param knittingID ID of the knitting for which a photo should be added
      * @param file photo file
      */
-    fun handleTakePhotoResult(context: Context, knittingID: Long, file: File) {
+    suspend fun handleTakePhotoResult(context: Context, knittingID: Long, file: File) {
         // add photo to database
+        val compressed = PictureUtils.compress(context, file)
+        if (!file.delete()) {
+            error("Could not delete " + file)
+        }
+        FileUtils.copy(compressed, file)
+        if (!compressed.delete()) {
+            error("Could not delete " + file)
+        }
         val orientation = PictureUtils.getOrientation(file.absolutePath)
         val preview = PictureUtils.decodeSampledBitmapFromPath(file.absolutePath, 200, 200)
         val rotatedPreview = PictureUtils.rotateBitmap(preview, orientation)
