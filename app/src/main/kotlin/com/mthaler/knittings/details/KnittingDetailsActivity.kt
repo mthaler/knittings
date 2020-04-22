@@ -163,10 +163,6 @@ class KnittingDetailsActivity : BaseActivity(), KnittingDetailsFragment.OnFragme
         ft.commit()
     }
 
-    override fun startStopwatch(id: Long) {
-        startActivity(StopwatchActivity.newIntent(this, knittingID))
-    }
-
     override fun deleteKnitting(id: Long) {
         val knitting = datasource.getKnitting(knittingID)
         DeleteKnittingDialog.create(this, knitting, {

@@ -15,6 +15,7 @@ import androidx.viewpager2.widget.ViewPager2
 import com.mthaler.knittings.Extras
 import com.mthaler.knittings.R
 import com.mthaler.knittings.model.Status
+import com.mthaler.knittings.stopwatch.StopwatchActivity
 import com.mthaler.knittings.utils.TimeUtils
 import java.text.DateFormat
 
@@ -77,7 +78,7 @@ class KnittingDetailsFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.menu_item_show_stopwatch -> {
-                listener?.startStopwatch(knittingID)
+                startActivity(StopwatchActivity.newIntent(requireContext(), knittingID))
                 true
             }
             R.id.menu_item_delete_knitting -> {
@@ -182,8 +183,6 @@ class KnittingDetailsFragment : Fragment() {
          * Called if the user clicks the floating action button to edit a knitting project
          */
         fun editKnitting(id: Long)
-
-        fun startStopwatch(id: Long)
 
         fun deleteKnitting(id: Long)
     }
