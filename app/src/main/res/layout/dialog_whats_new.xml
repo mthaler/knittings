@@ -18,12 +18,16 @@
         android:layout_marginTop="5dp"
         android:background="?attr/colorPrimaryDark"
         />
-    <TextView
-        android:id="@+id/version_history"
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="left"
-        android:textSize="14sp"
-        android:textColor="@color/about_text_color"
-        android:padding="8dp"/>
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/version_history"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="left"
+            android:textSize="14sp"
+            android:textColor="@color/about_text_color"
+            android:padding="8dp"/>
+    </androidx.core.widget.NestedScrollView>
 </LinearLayout>
