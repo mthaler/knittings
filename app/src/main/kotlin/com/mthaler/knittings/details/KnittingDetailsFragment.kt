@@ -25,6 +25,7 @@ class KnittingDetailsFragment : Fragment() {
 
     private var knittingID: Long = -1
     private lateinit var viewModel: KnittingDetailsViewModel
+    private lateinit var photoAdapter: PhotoAdapter
     private var onPageChangeCallback: ViewPager2.OnPageChangeCallback? = null
     private var listener: OnFragmentInteractionListener? = null
 
@@ -50,6 +51,12 @@ class KnittingDetailsFragment : Fragment() {
         fabEdit.setOnClickListener {
             listener?.editKnitting(knittingID)
         }
+
+        val viewPager = v.findViewById<ViewPager2>(R.id.view_pager)
+        val adapter = PhotoAdapter(requireContext(), viewLifecycleOwner.lifecycleScope)
+        viewPager.adapter = adapter
+        photoAdapter = adapter
+
         return v
     }
 
@@ -93,10 +100,9 @@ class KnittingDetailsFragment : Fragment() {
             photos.sortByDescending { it.id }
             if (photos.size > 0) {
                 viewPager.visibility = View.VISIBLE
-                val adapter = ImageAdapter(it.context, viewLifecycleOwner.lifecycleScope, photos) // Here we are defining the Imageadapter object
-                viewPager.adapter = adapter // Here we are passing and setting the adapter for the images
+                photoAdapter.setPhotos(photos)
 
-                val dotscount = adapter.itemCount
+                val dotscount = photos.size
 
                 if (photos.size > 1) {
                     val cb = DotsOnPageChangeCallback(requireContext(), dotscount, sliderDots)

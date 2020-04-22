@@ -15,9 +15,17 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class ImageAdapter(val context: Context, private val lifecycleScope: LifecycleCoroutineScope, private val photos: List<Photo>) : RecyclerView.Adapter<ImageAdapter.ViewHolder>() {
+class PhotoAdapter(val context: Context, private val lifecycleScope: LifecycleCoroutineScope) : RecyclerView.Adapter<PhotoAdapter.ViewHolder>() {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ImageAdapter.ViewHolder {
+    private val photos = ArrayList<Photo>()
+
+    fun setPhotos(photos: List<Photo>) {
+        this.photos.clear()
+        this.photos.addAll(photos)
+        notifyDataSetChanged()
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PhotoAdapter.ViewHolder {
         val v = LayoutInflater.from(parent.context).inflate(R.layout.pager_item_photo, parent, false)
         return this.ViewHolder(v)
     }
