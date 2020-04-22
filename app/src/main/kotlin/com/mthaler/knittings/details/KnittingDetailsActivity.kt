@@ -163,14 +163,6 @@ class KnittingDetailsActivity : BaseActivity(), KnittingDetailsFragment.OnFragme
         ft.commit()
     }
 
-    override fun deleteKnitting(id: Long) {
-        val knitting = datasource.getKnitting(knittingID)
-        DeleteKnittingDialog.create(this, knitting, {
-            datasource.deleteKnitting(knitting)
-            finish()
-        }).show()
-    }
-
     companion object {
 
         const val EXTRA_EDIT_ONLY = "com.mthaler.knittings.edit_only"

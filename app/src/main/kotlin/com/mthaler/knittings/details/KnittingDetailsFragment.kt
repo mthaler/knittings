@@ -14,6 +14,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.viewpager2.widget.ViewPager2
 import com.mthaler.knittings.Extras
 import com.mthaler.knittings.R
+import com.mthaler.knittings.database.datasource
 import com.mthaler.knittings.model.Status
 import com.mthaler.knittings.stopwatch.StopwatchActivity
 import com.mthaler.knittings.utils.TimeUtils
@@ -82,7 +83,11 @@ class KnittingDetailsFragment : Fragment() {
                 true
             }
             R.id.menu_item_delete_knitting -> {
-                listener?.deleteKnitting(knittingID)
+                val knitting = datasource.getKnitting(knittingID)
+                DeleteKnittingDialog.create(requireContext(), knitting, {
+                    viewModel.delete()
+                    requireActivity().finish()
+                }).show()
                 return true
             }
             else -> super.onOptionsItemSelected(item)
@@ -183,8 +188,6 @@ class KnittingDetailsFragment : Fragment() {
          * Called if the user clicks the floating action button to edit a knitting project
          */
         fun editKnitting(id: Long)
-
-        fun deleteKnitting(id: Long)
     }
 
     companion object {
