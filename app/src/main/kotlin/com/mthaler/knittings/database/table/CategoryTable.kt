@@ -25,7 +25,7 @@ object CategoryTable {
     fun create(db: SQLiteDatabase) {
         val CREATE_CATEGORY_TABLE = "CREATE TABLE $IF_NOT_EXISTS $CATEGORY ( " +
                 "${Cols.ID} $INTEGER $PRIMARY_KEY $AUTOINCREMENT, " +
-                "${Cols.NAME} $TEXT $NOT_NULL," +
+                "${Cols.NAME} $TEXT $NOT_NULL, " +
                 "${Cols.COLOR} $INTEGER )"
         db.execSQL(CREATE_CATEGORY_TABLE)
     }

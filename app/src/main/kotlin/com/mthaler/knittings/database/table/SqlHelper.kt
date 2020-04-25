@@ -13,5 +13,7 @@ object SqlHelper {
     const val UNIQUE = "UNIQUE"
 
     const val IF_NOT_EXISTS = "IF NOT EXISTS"
+
+    fun DEFAULT(value: Any): String = "DEFAULT $value"
 }
 

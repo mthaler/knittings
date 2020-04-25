@@ -7,8 +7,13 @@ import android.database.sqlite.SQLiteDatabase
 import com.mthaler.knittings.model.Needle
 import com.mthaler.knittings.model.NeedleMaterial
 import com.mthaler.knittings.model.NeedleType
-import org.jetbrains.anko.db.*
 import java.lang.Exception
+import com.mthaler.knittings.database.table.SqlHelper.INTEGER
+import com.mthaler.knittings.database.table.SqlHelper.TEXT
+import com.mthaler.knittings.database.table.SqlHelper.PRIMARY_KEY
+import com.mthaler.knittings.database.table.SqlHelper.AUTOINCREMENT
+import com.mthaler.knittings.database.table.SqlHelper.NOT_NULL
+import com.mthaler.knittings.database.table.SqlHelper.IF_NOT_EXISTS
 
 object NeedleTable {
     val NEEDLES = "needles"
@@ -27,15 +32,16 @@ object NeedleTable {
     }
 
     fun create(db: SQLiteDatabase) {
-        db.createTable(NEEDLES, true,
-                Cols.ID to INTEGER + PRIMARY_KEY + AUTOINCREMENT,
-                Cols.NAME to TEXT + NOT_NULL,
-                Cols.DESCRIPTION to TEXT + NOT_NULL,
-                Cols.SIZE to TEXT + NOT_NULL,
-                Cols.LENGTH to TEXT + NOT_NULL,
-                Cols.MATERIAL to TEXT + NOT_NULL,
-                Cols.IN_USE to INTEGER,
-                Cols.TYPE to TEXT + NOT_NULL)
+        val CREATE_NEEDLE_TABLE = "CREATE TABLE $IF_NOT_EXISTS $NEEDLES ( " +
+                "${Cols.ID} $INTEGER $PRIMARY_KEY $AUTOINCREMENT, " +
+                "${Cols.NAME} $TEXT $NOT_NULL, " +
+                "${Cols.DESCRIPTION} $TEXT $NOT_NULL, " +
+                "${Cols.SIZE} $TEXT $NOT_NULL, " +
+                "${Cols.LENGTH} $TEXT $NOT_NULL, " +
+                "${Cols.MATERIAL} $TEXT $NOT_NULL, " +
+                "${Cols.IN_USE} $INTEGER, " +
+                "${Cols.TYPE} $TEXT $NOT_NULL )"
+        db.execSQL(CREATE_NEEDLE_TABLE)
     }
 
     fun cursorToNeedle(context: Context, cursor: Cursor): Needle {
