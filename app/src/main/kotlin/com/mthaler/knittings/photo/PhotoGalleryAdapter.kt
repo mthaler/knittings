@@ -1,7 +1,6 @@
 package com.mthaler.knittings.photo
 
 import android.content.Context
-import android.preference.PreferenceManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,9 +11,7 @@ import com.mthaler.knittings.R
 import com.mthaler.knittings.model.Photo
 import com.squareup.picasso.Picasso
 
-class PhotoGalleryAdapter(val context: Context,
-                                   private val onItemClick: (Photo) -> Unit,
-                                   private val onItemLongClick: (Photo) -> Unit) : RecyclerView.Adapter<PhotoGalleryAdapter.ViewHolder>() {
+class PhotoGalleryAdapter(val context: Context, private val onItemClick: (Photo) -> Unit) : RecyclerView.Adapter<PhotoGalleryAdapter.ViewHolder>() {
 
     private val photos = ArrayList<Photo>()
 
@@ -42,10 +39,14 @@ class PhotoGalleryAdapter(val context: Context,
 
         init {
             image.setOnClickListener { v -> onItemClick(photos[adapterPosition]) }
-            image.setOnLongClickListener { v -> onItemLongClick(photos[adapterPosition]); true }
         }
 
         fun bind(photo: Photo) {
+            title.visibility = View.INVISIBLE
+            if (photo.description.isNotEmpty()) {
+                title.visibility = View.VISIBLE
+                title.text = photo.description
+            }
             Picasso.get().load(photo.filename).into(image);
         }
     }
