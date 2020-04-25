@@ -6,10 +6,10 @@
     android:background="@drawable/grid_color_selector"
     android:padding="5dp">
 
-    <ImageView
+    <com.mthaler.knittings.photo.SquareImageView
         android:id="@+id/image"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:scaleType="centerCrop"
         android:contentDescription="@string/photo"/>
 
