@@ -4,16 +4,10 @@
     android:layout_height="match_parent"
     tools:context="com.mthaler.knittings.photo.PhotoGalleryFragment">
 
-    <GridView
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/gridView"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_margin="5dp"
-        android:drawSelectorOnTop="true"
-        android:gravity="center"
-        android:numColumns="2"
-        android:stretchMode="columnWidth"
-        android:verticalSpacing="5dp"
-        android:focusable="true"
-        android:clickable="true"/>
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="5dp">
+    </androidx.recyclerview.widget.RecyclerView>
 </FrameLayout>

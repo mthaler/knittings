@@ -6,13 +6,12 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.*
-import android.widget.AdapterView
-import android.widget.GridView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.mthaler.knittings.R
-import com.mthaler.knittings.model.Photo
 import com.mthaler.knittings.Extras.EXTRA_KNITTING_ID
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -26,8 +25,8 @@ class PhotoGalleryFragment : Fragment() {
 
     private var knittingID: Long = -1
     private var currentPhotoPath: File? = null
-    private lateinit var gridView: GridView
-    private lateinit var gridViewAdapter: GridViewAdapter
+//    private lateinit var gridView: GridView
+//    private lateinit var gridViewAdapter: GridViewAdapter
     private var listener: OnFragmentInteractionListener? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -52,14 +51,14 @@ class PhotoGalleryFragment : Fragment() {
             }
         }
 
-        gridView = v.findViewById(R.id.gridView)
-        gridViewAdapter = GridViewAdapter(requireContext(), viewLifecycleOwner.lifecycleScope, R.layout.grid_item_layout)
-        gridView.adapter = gridViewAdapter
-        gridView.onItemClickListener = AdapterView.OnItemClickListener { parent, v, position, id ->
-            // photo clicked, show photo in photo activity
-            val photo = parent.getItemAtPosition(position) as Photo
-            listener?.photoClicked(photo.id)
-        }
+//        gridView = v.findViewById(R.id.gridView)
+//        gridViewAdapter = GridViewAdapter(requireContext(), viewLifecycleOwner.lifecycleScope, R.layout.grid_item_layout)
+//        gridView.adapter = gridViewAdapter
+//        gridView.onItemClickListener = AdapterView.OnItemClickListener { parent, v, position, id ->
+//            // photo clicked, show photo in photo activity
+//            val photo = parent.getItemAtPosition(position) as Photo
+//            listener?.photoClicked(photo.id)
+//        }
 
         return v
     }
@@ -72,13 +71,19 @@ class PhotoGalleryFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        val photoGalleryAdapter = PhotoGalleryAdapter(requireContext(), { photo -> }, { photo -> })
+        view?.let {
+            val gridView = it.findViewById<RecyclerView>(R.id.gridView)
+            val gridLayoutManager = GridLayoutManager(requireContext(), 2)
+            gridView.layoutManager = gridLayoutManager
+            gridView.adapter = photoGalleryAdapter
+        }
         val viewModel = ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory.getInstance(requireActivity().application)).get(PhotoGalleryViewModel::class.java)
         viewModel.init(knittingID)
         viewModel.photos.observe(viewLifecycleOwner, Observer { photos ->
             // show the newest photos first. The id is incremented for each photo that is added, thus we can sort by id
             photos.sortByDescending { it.id }
-            gridViewAdapter.clear()
-            gridViewAdapter.addAll(photos)
+            photoGalleryAdapter.setPhotos(photos)
         })
     }
 
