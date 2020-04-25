@@ -9,10 +9,17 @@ import com.mthaler.knittings.R
 import com.mthaler.knittings.model.Category
 
 class CategoryAdapter(
-    val categories: List<Category>,
     private val onItemClick: (Category) -> Unit,
     private val onItemLongClick: (Category) -> Unit
 ) : RecyclerView.Adapter<CategoryAdapter.ViewHolder>() {
+
+    private val categories = ArrayList<Category>()
+
+    fun setCategories(categories: List<Category>) {
+        this.categories.clear()
+        this.categories.addAll(categories)
+        notifyDataSetChanged()
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val v = LayoutInflater.from(parent.context).inflate(R.layout.list_item_category, parent, false)
