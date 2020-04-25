@@ -10,8 +10,9 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.mthaler.knittings.R
 import com.mthaler.knittings.model.Photo
+import com.squareup.picasso.Picasso
 
-abstract class PhotoGalleryAdapter(val context: Context,
+class PhotoGalleryAdapter(val context: Context,
                                    private val onItemClick: (Photo) -> Unit,
                                    private val onItemLongClick: (Photo) -> Unit) : RecyclerView.Adapter<PhotoGalleryAdapter.ViewHolder>() {
 
@@ -31,12 +32,12 @@ abstract class PhotoGalleryAdapter(val context: Context,
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        TODO("Not yet implemented")
+        holder.bind(photos[position])
     }
 
     inner class ViewHolder(context: Context, view: View) : RecyclerView.ViewHolder(view) {
 
-        var imageTitle: TextView = view.findViewById(R.id.text)
+        var title: TextView = view.findViewById(R.id.text)
         var image: ImageView = view.findViewById(R.id.image)
 
         init {
@@ -45,8 +46,7 @@ abstract class PhotoGalleryAdapter(val context: Context,
         }
 
         fun bind(photo: Photo) {
-            val sharedPref = PreferenceManager.getDefaultSharedPreferences(context)
-            val displayPhotoSize = sharedPref.getBoolean("display_photo_size", false)
+            Picasso.get().load(photo.filename).into(image);
         }
     }
 }
