@@ -15,5 +15,7 @@ object SqlHelper {
     const val IF_NOT_EXISTS = "IF NOT EXISTS"
 
     fun DEFAULT(value: Any): String = "DEFAULT $value"
+
+    fun FOREIGN_KEY(columnName: String, referenceTable: String, referenceColumn: String): String =  "FOREIGN KEY($columnName) REFERENCES $referenceTable($referenceColumn)"
 }
 
