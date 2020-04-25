@@ -126,9 +126,17 @@ object TakePhotoDialog {
      * @param file photo file
      * @param data data returned from import image activity
      */
-    fun handleImageImportResult(context: Context, knittingID: Long, file: File, data: Intent) {
+    suspend fun handleImageImportResult(context: Context, knittingID: Long, file: File, data: Intent) {
         val imageUri = data.data
         PictureUtils.copy(imageUri, file, context)
+        val compressed = PictureUtils.compress(context, file)
+        if (!file.delete()) {
+            error("Could not delete " + file)
+        }
+        FileUtils.copy(compressed, file)
+        if (!compressed.delete()) {
+            error("Could not delete " + file)
+        }
         val orientation = PictureUtils.getOrientation(file.absolutePath)
         val preview = PictureUtils.decodeSampledBitmapFromPath(file.absolutePath, 200, 200)
         val rotatedPreview = PictureUtils.rotateBitmap(preview, orientation)
