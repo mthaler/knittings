@@ -144,6 +144,12 @@ class KnittingsDataSource private constructor(context: Context) : AbstractObserv
      */
     @Synchronized
     fun updateKnitting(knitting: Knitting): Knitting {
+        val result = updateKnittingImpl(knitting)
+        notifyObservers()
+        return result
+    }
+
+    private fun updateKnittingImpl(knitting: Knitting): Knitting {
         Log.d(TAG, "Updating knitting " + knitting + ", default photo: " + knitting.defaultPhoto)
         dbHelper.writableDatabase.use { database ->
             val values = KnittingTable.createContentValues(knitting)
@@ -155,7 +161,6 @@ class KnittingsDataSource private constructor(context: Context) : AbstractObserv
             cursor.moveToFirst()
             val result = cursorToKnitting(cursor)
             cursor.close()
-            notifyObservers()
             return result
         }
     }
@@ -314,6 +319,10 @@ class KnittingsDataSource private constructor(context: Context) : AbstractObserv
      */
     @Synchronized
     fun deletePhoto(photo: Photo) {
+        val knitting = getKnitting(photo.knittingID)
+        if (knitting.defaultPhoto != null && knitting.defaultPhoto.id == photo.id) {
+            updateKnittingImpl(knitting.copy(defaultPhoto = null))
+        }
         deletePhotoImpl(photo)
         notifyObservers()
     }

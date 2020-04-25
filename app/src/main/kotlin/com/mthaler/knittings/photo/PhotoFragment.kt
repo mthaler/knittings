@@ -201,10 +201,6 @@ class PhotoFragment : Fragment() {
     }
 
     private fun deletePhoto() {
-        val knitting = datasource.getKnitting(photo.knittingID)
-        if (knitting.defaultPhoto != null && knitting.defaultPhoto.id == photo.id) {
-                datasource.updateKnitting(knitting.copy(defaultPhoto = null))
-        }
         datasource.deletePhoto(photo)
     }
 
