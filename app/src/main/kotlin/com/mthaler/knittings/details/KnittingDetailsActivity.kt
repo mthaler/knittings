@@ -11,8 +11,6 @@ import androidx.lifecycle.lifecycleScope
 import com.mthaler.knittings.BaseActivity
 import com.mthaler.knittings.photo.PhotoGalleryActivity
 import com.mthaler.knittings.R
-import com.mthaler.knittings.database.datasource
-import com.mthaler.knittings.stopwatch.StopwatchActivity
 import java.io.File
 import com.mthaler.knittings.Extras.EXTRA_KNITTING_ID
 import com.mthaler.knittings.photo.TakePhotoDialog
