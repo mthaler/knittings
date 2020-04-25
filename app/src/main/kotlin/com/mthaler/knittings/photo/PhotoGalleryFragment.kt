@@ -25,8 +25,6 @@ class PhotoGalleryFragment : Fragment() {
 
     private var knittingID: Long = -1
     private var currentPhotoPath: File? = null
-//    private lateinit var gridView: GridView
-//    private lateinit var gridViewAdapter: GridViewAdapter
     private var listener: OnFragmentInteractionListener? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -51,15 +49,6 @@ class PhotoGalleryFragment : Fragment() {
             }
         }
 
-//        gridView = v.findViewById(R.id.gridView)
-//        gridViewAdapter = GridViewAdapter(requireContext(), viewLifecycleOwner.lifecycleScope, R.layout.grid_item_layout)
-//        gridView.adapter = gridViewAdapter
-//        gridView.onItemClickListener = AdapterView.OnItemClickListener { parent, v, position, id ->
-//            // photo clicked, show photo in photo activity
-//            val photo = parent.getItemAtPosition(position) as Photo
-//            listener?.photoClicked(photo.id)
-//        }
-
         return v
     }
 
@@ -71,7 +60,7 @@ class PhotoGalleryFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        val photoGalleryAdapter = PhotoGalleryAdapter(requireContext(), { photo -> }, { photo -> })
+        val photoGalleryAdapter = PhotoGalleryAdapter(requireContext(), { photo -> listener?.photoClicked(photo.id) }, { photo -> })
         view?.let {
             val gridView = it.findViewById<RecyclerView>(R.id.gridView)
             val gridLayoutManager = GridLayoutManager(requireContext(), 2)
