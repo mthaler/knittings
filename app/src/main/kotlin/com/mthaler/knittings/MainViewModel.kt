@@ -10,8 +10,17 @@ import kotlinx.coroutines.withContext
 class MainViewModel(application: Application) : DatasourceViewModel(application) {
 
     val knittings = MutableLiveData(datasource.allKnittings)
+    var filter: CombinedFilter = CombinedFilter.Empty
+        get() = field
+        set(value) {
+            field = value
+        }
 
     override fun databaseChanged() {
+        updateKnittings()
+    }
+
+    private fun updateKnittings() {
         viewModelScope.launch {
             val allKnittings = withContext(Dispatchers.IO) {
                 datasource.allKnittings
