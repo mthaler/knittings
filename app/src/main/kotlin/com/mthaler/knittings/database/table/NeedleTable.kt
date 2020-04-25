@@ -8,12 +8,6 @@ import com.mthaler.knittings.model.Needle
 import com.mthaler.knittings.model.NeedleMaterial
 import com.mthaler.knittings.model.NeedleType
 import java.lang.Exception
-import com.mthaler.knittings.database.table.SqlHelper.INTEGER
-import com.mthaler.knittings.database.table.SqlHelper.TEXT
-import com.mthaler.knittings.database.table.SqlHelper.PRIMARY_KEY
-import com.mthaler.knittings.database.table.SqlHelper.AUTOINCREMENT
-import com.mthaler.knittings.database.table.SqlHelper.NOT_NULL
-import com.mthaler.knittings.database.table.SqlHelper.IF_NOT_EXISTS
 
 object NeedleTable {
     val NEEDLES = "needles"

@@ -3,16 +3,6 @@ package com.mthaler.knittings.database.table
 import android.content.ContentValues
 import android.database.sqlite.SQLiteDatabase
 import com.mthaler.knittings.model.Knitting
-//import org.jetbrains.anko.db.DE
-import com.mthaler.knittings.database.table.SqlHelper.INTEGER
-import com.mthaler.knittings.database.table.SqlHelper.TEXT
-import com.mthaler.knittings.database.table.SqlHelper.PRIMARY_KEY
-import com.mthaler.knittings.database.table.SqlHelper.AUTOINCREMENT
-import com.mthaler.knittings.database.table.SqlHelper.NOT_NULL
-import com.mthaler.knittings.database.table.SqlHelper.IF_NOT_EXISTS
-import com.mthaler.knittings.database.table.SqlHelper.DEFAULT
-import com.mthaler.knittings.database.table.SqlHelper.REAL
-import com.mthaler.knittings.database.table.SqlHelper.FOREIGN_KEY
 
 /**
  * Class that defines the knittings database table schema
@@ -56,21 +46,6 @@ object KnittingTable {
                 "${FOREIGN_KEY(Cols.DEFAULT_PHOTO_ID, PhotoTable.PHOTOS, PhotoTable.Cols.ID)}, " +
                 "${FOREIGN_KEY(Cols.CATEGORY_ID, CategoryTable.CATEGORY, CategoryTable.Cols.ID)} )"
         db.execSQL(CREATE_KNITTING_TABLE)
-//        db.createTable(KNITTINGS, true,
-//                Cols.ID to INTEGER + PRIMARY_KEY + AUTOINCREMENT,
-//                Cols.TITLE to TEXT + NOT_NULL,
-//                Cols.DESCRIPTION to TEXT + NOT_NULL,
-//                Cols.STARTED to INTEGER + NOT_NULL + DEFAULT("0"),
-//                Cols.FINISHED to INTEGER,
-//                Cols.NEEDLE_DIAMETER to TEXT + NOT_NULL,
-//                Cols.SIZE to TEXT + NOT_NULL,
-//                Cols.DEFAULT_PHOTO_ID to INTEGER,
-//                Cols.RATING to REAL + NOT_NULL + DEFAULT("0.0"),
-//                Cols.DURATION to INTEGER + NOT_NULL + DEFAULT("0"),
-//                Cols.CATEGORY_ID to INTEGER,
-//                Cols.STATUS to TEXT + NOT_NULL,
-//                FOREIGN_KEY(Cols.DEFAULT_PHOTO_ID, PhotoTable.PHOTOS, PhotoTable.Cols.ID),
-//                FOREIGN_KEY(Cols.CATEGORY_ID, CategoryTable.CATEGORY, CategoryTable.Cols.ID))
     }
 
     val SQL_ADD_DURATION = "ALTER TABLE " + KNITTINGS + " ADD COLUMN " + Cols.DURATION + " INTEGER NOT NULL DEFAULT 0"

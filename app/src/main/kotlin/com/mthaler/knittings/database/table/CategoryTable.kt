@@ -4,12 +4,6 @@ import android.content.ContentValues
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import com.mthaler.knittings.model.Category
-import com.mthaler.knittings.database.table.SqlHelper.INTEGER
-import com.mthaler.knittings.database.table.SqlHelper.TEXT
-import com.mthaler.knittings.database.table.SqlHelper.PRIMARY_KEY
-import com.mthaler.knittings.database.table.SqlHelper.AUTOINCREMENT
-import com.mthaler.knittings.database.table.SqlHelper.NOT_NULL
-import com.mthaler.knittings.database.table.SqlHelper.IF_NOT_EXISTS
 
 object CategoryTable {
     val CATEGORY = "category"
