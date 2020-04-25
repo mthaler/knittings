@@ -60,7 +60,7 @@ class PhotoGalleryFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        val photoGalleryAdapter = PhotoGalleryAdapter(requireContext(), { photo -> listener?.photoClicked(photo.id) })
+        val photoGalleryAdapter = PhotoGalleryAdapter(requireContext(), viewLifecycleOwner.lifecycleScope, { photo -> listener?.photoClicked(photo.id) })
         view?.let {
             val gridView = it.findViewById<RecyclerView>(R.id.gridView)
             val gridLayoutManager = GridLayoutManager(requireContext(), 2)
