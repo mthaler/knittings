@@ -23,12 +23,6 @@ class NeedleListFragment : Fragment() {
     private var listener: OnFragmentInteractionListener? = null
     private lateinit var viewModel: NeedleListViewModel
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        retainInstance = true
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -121,7 +115,7 @@ class NeedleListFragment : Fragment() {
                     val types = NeedleType.formattedValues(it)
                     val listItems = (listOf(getString(R.string.filter_show_all)) + types).toTypedArray()
                     val builder = AlertDialog.Builder(it)
-                    val f = viewModel.getFilter()
+                    val f = viewModel.filter
                     val checkedItem = when (f) {
                         is NoFilter -> 0
                         is SingleTypeFilter -> {
@@ -131,10 +125,10 @@ class NeedleListFragment : Fragment() {
                         else -> throw Exception("Unknown filter: $f")
                     }
                     builder.setSingleChoiceItems(listItems, checkedItem) { dialog, which -> when (which) {
-                            0 -> viewModel.setFilter(NoFilter)
+                            0 -> viewModel.filter = NoFilter
                             else -> {
                                 val type = NeedleType.values()[which - 1]
-                                viewModel.setFilter(SingleTypeFilter(type))
+                                viewModel.filter = SingleTypeFilter(type)
                             }
                         }
                         dialog.dismiss()

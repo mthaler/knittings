@@ -11,20 +11,17 @@ import kotlinx.coroutines.withContext
 
 class NeedleListViewModel(application: Application) : DatasourceViewModel(application) {
 
-    private var filter: Filter = NoFilter
-
     val needles = MutableLiveData<List<Needle>>(emptyList())
+    var filter: Filter = NoFilter
+        get() = field
+        set(value) {
+            field = value
+            updateNeedles()
+        }
 
     init {
         updateNeedles()
     }
-
-    fun setFilter(filter: Filter) {
-        this.filter = filter
-        updateNeedles()
-    }
-
-    fun getFilter(): Filter = filter
 
     override fun databaseChanged() {
         updateNeedles()
