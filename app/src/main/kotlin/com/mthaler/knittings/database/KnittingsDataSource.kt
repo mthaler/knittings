@@ -321,7 +321,12 @@ class KnittingsDataSource private constructor(context: Context) : AbstractObserv
     fun deletePhoto(photo: Photo) {
         val knitting = getKnitting(photo.knittingID)
         if (knitting.defaultPhoto != null && knitting.defaultPhoto.id == photo.id) {
-            updateKnittingImpl(knitting.copy(defaultPhoto = null))
+            val photos = getAllPhotos(knitting).filter { it.id != photo.id }.sortedBy { it.id }
+            if (photos.isNotEmpty()) {
+                updateKnittingImpl(knitting.copy(defaultPhoto = photos.last()))
+            } else {
+                updateKnittingImpl(knitting.copy(defaultPhoto = null))
+            }
         }
         deletePhotoImpl(photo)
         notifyObservers()
