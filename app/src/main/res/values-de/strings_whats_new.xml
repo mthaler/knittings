@@ -2,6 +2,9 @@
 <resources>
     <string name="whats_new_title">Whats New</string>
     <string name="whats_new"><![CDATA[
+        <h3>Version 0.9.15</h3>
+        - Verbesserte Foto-Galerie<br>
+        - Importierte Fotos werden jetzt verkleinert und komprimiert<br>
         <h3>Version 0.9.14</h3>
         - Viele Datenbankoperationen werden jetzt asynchron ausgeführt<br>
         - Neue Platzhalter-Grafik für leere Nadel-Liste<br>

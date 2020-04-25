@@ -2,6 +2,9 @@
 <resources>
     <string name="whats_new_title">Whats New</string>
     <string name="whats_new"><![CDATA[
+        <h3>Version 0.9.15</h3>
+        - Improved photo gallery<br>
+        - Imported photos are now also downsized and compressed<br>
         <h3>Version 0.9.14</h3>
         - Many database operations are executed asynchronously<br>
         - New placeholder image for empty needles list<br>
