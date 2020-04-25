@@ -1,6 +1,7 @@
 package com.mthaler.knittings.photo
 
 import android.content.Context
+import android.preference.PreferenceManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,12 +9,11 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.mthaler.knittings.R
-import com.mthaler.knittings.model.Knitting
 import com.mthaler.knittings.model.Photo
 
 abstract class PhotoGalleryAdapter(val context: Context,
-                                   private val onItemClick: (Knitting) -> Unit,
-                                   private val onItemLongClick: (Knitting) -> Unit) : RecyclerView.Adapter<PhotoGalleryAdapter.ViewHolder>() {
+                                   private val onItemClick: (Photo) -> Unit,
+                                   private val onItemLongClick: (Photo) -> Unit) : RecyclerView.Adapter<PhotoGalleryAdapter.ViewHolder>() {
 
     private val photos = ArrayList<Photo>()
 
@@ -38,5 +38,15 @@ abstract class PhotoGalleryAdapter(val context: Context,
 
         var imageTitle: TextView = view.findViewById(R.id.text)
         var image: ImageView = view.findViewById(R.id.image)
+
+        init {
+            image.setOnClickListener { v -> onItemClick(photos[adapterPosition]) }
+            image.setOnLongClickListener { v -> onItemLongClick(photos[adapterPosition]); true }
+        }
+
+        fun bind(photo: Photo) {
+            val sharedPref = PreferenceManager.getDefaultSharedPreferences(context)
+            val displayPhotoSize = sharedPref.getBoolean("display_photo_size", false)
+        }
     }
 }
