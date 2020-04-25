@@ -292,7 +292,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         }
         val filtered = filter.filter(knittings)
         // start EditCategoryActivity if the users clicks on a category
-        val adapter = KnittingAdapter(this, filtered, {
+        val adapter = KnittingAdapter(this, {
             knitting -> startActivity(KnittingDetailsActivity.newIntent(this, knitting.id, false))
         }, { knitting -> startSupportActionMode(object : ActionMode.Callback {
             /**
@@ -354,6 +354,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
             }
             })
         })
+        adapter.setKnittings(filtered)
         rv.adapter = adapter
     }
 

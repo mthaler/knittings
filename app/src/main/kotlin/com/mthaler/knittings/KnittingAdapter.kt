@@ -14,10 +14,17 @@ import java.text.DateFormat
 
 class KnittingAdapter(
     val context: Context,
-    val knittings: List<Knitting>,
     private val onItemClick: (Knitting) -> Unit,
     private val onItemLongClick: (Knitting) -> Unit
 ) : RecyclerView.Adapter<KnittingAdapter.ViewHolder>() {
+
+    private var knittings = ArrayList<Knitting>()
+
+    fun setKnittings(knittings: List<Knitting>) {
+        this.knittings.clear()
+        this.knittings.addAll(knittings)
+        notifyDataSetChanged()
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val v = LayoutInflater.from(parent.context).inflate(R.layout.list_item_knitting, parent, false)
