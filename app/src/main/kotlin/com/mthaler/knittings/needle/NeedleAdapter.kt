@@ -13,7 +13,15 @@ import com.mthaler.knittings.model.NeedleType
 import java.lang.IllegalArgumentException
 import java.lang.StringBuilder
 
-class NeedleAdapter(val needles: List<ListItem>, private val onItemClick: (Needle) -> Unit, private val onItemLongLick: (Needle) -> Unit) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class NeedleAdapter(private val onItemClick: (Needle) -> Unit, private val onItemLongLick: (Needle) -> Unit) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+
+    private val items = ArrayList<ListItem>()
+
+    fun setItems(items: List<ListItem>) {
+        this.items.clear()
+        this.items.addAll(items)
+        notifyDataSetChanged()
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
 
@@ -32,15 +40,15 @@ class NeedleAdapter(val needles: List<ListItem>, private val onItemClick: (Needl
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (holder is HeaderViewHolder) {
-            holder.bind((needles[position] as HeaderItem).header)
+            holder.bind((items[position] as HeaderItem).header)
         } else if (holder is ItemViewHolder) {
-            holder.bind((needles[position] as NeedleItem).needle, onItemClick, onItemLongLick)
+            holder.bind((items[position] as NeedleItem).needle, onItemClick, onItemLongLick)
         }
     }
 
-    override fun getItemViewType(position: Int): Int = needles[position].getType()
+    override fun getItemViewType(position: Int): Int = items[position].getType()
 
-    override fun getItemCount(): Int = needles.size
+    override fun getItemCount(): Int = items.size
 
     class HeaderViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
