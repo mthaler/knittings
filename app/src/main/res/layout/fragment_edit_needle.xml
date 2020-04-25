@@ -66,7 +66,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Material:"/>
+            android:text="@string/edit_needle_material"/>
         <Spinner
             android:id="@+id/needle_material"
             android:layout_width="wrap_content"

@@ -5,7 +5,8 @@
     <string name="edit_needle_name_hint">Name</string>
     <string name="edit_needle_size_hint">Durchmesser</string>
     <string name="edit_needle_length_hint">Länge</string>
-    <string name="edit_needle_materal_hint">Material:</string>
+    <string name="edit_needle_material">Material:</string>
+    <string name="edit_needle_type">Typ:</string>
     <string name="edit_needle_in_use">In Gebrauch</string>
 
     <!-- needle materials -->

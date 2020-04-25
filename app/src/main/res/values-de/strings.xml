@@ -93,4 +93,7 @@
     <string name="edit_knitting_details_status">Status:</string>
 
     <string name="copy">Kopie</string>
+
+    <string name="action_copy">Kopieren</string>
+    <string name="action_delete">Löschen</string>
 </resources>
