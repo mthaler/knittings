@@ -182,12 +182,11 @@ object PictureUtils {
     }
 
     suspend fun compress(context: Context, imageFile: File): File {
-        val compressedImageFile = Compressor.compress(context, imageFile) {
+        return Compressor.compress(context, imageFile) {
             resolution(1280, 1024)
             quality(80)
             format(Bitmap.CompressFormat.JPEG)
             size(204_800 ) // 100 KB
         }
-        return compressedImageFile
     }
 }

@@ -27,7 +27,7 @@ class DatePickerFragment : DialogFragment() {
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        date = arguments!!.getSerializable(EXTRA_DATE) as Date
+        date = requireArguments().getSerializable(EXTRA_DATE) as Date
 
         val calendar = Calendar.getInstance()
         calendar.time = date
@@ -36,7 +36,7 @@ class DatePickerFragment : DialogFragment() {
         val day = calendar.get(Calendar.DAY_OF_MONTH)
 
         @SuppressLint("InflateParams")
-        val v = activity!!.layoutInflater.inflate(R.layout.dialog_date, null)
+        val v = requireActivity().layoutInflater.inflate(R.layout.dialog_date, null)
 
         val datePicker = v.findViewById<DatePicker>(R.id.dialog_date_datePicker)
         datePicker.init(year, month, day) { view, year, month, day ->
