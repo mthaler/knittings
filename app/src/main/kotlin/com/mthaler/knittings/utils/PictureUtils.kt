@@ -183,10 +183,10 @@ object PictureUtils {
 
     suspend fun compress(context: Context, imageFile: File): File {
         return Compressor.compress(context, imageFile) {
-            resolution(1280, 1024)
+            resolution(1024, 1024)
             quality(80)
             format(Bitmap.CompressFormat.JPEG)
-            size(204_800 ) // 100 KB
+            size(307_200 ) // 300 KB
         }
     }
 }
