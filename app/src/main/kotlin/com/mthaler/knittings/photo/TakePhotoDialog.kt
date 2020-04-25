@@ -93,11 +93,11 @@ object TakePhotoDialog {
         // add photo to database
         val compressed = PictureUtils.compress(context, file)
         if (!file.delete()) {
-            error("Could not delete " + file)
+            error("Could not delete $file")
         }
         FileUtils.copy(compressed, file)
         if (!compressed.delete()) {
-            error("Could not delete " + file)
+            error("Could not delete $file")
         }
         val orientation = PictureUtils.getOrientation(file.absolutePath)
         val preview = PictureUtils.decodeSampledBitmapFromPath(file.absolutePath, 200, 200)
@@ -131,11 +131,11 @@ object TakePhotoDialog {
         PictureUtils.copy(imageUri, file, context)
         val compressed = PictureUtils.compress(context, file)
         if (!file.delete()) {
-            error("Could not delete " + file)
+            error("Could not delete $file")
         }
         FileUtils.copy(compressed, file)
         if (!compressed.delete()) {
-            error("Could not delete " + file)
+            error("Could not delete $file")
         }
         val orientation = PictureUtils.getOrientation(file.absolutePath)
         val preview = PictureUtils.decodeSampledBitmapFromPath(file.absolutePath, 200, 200)
