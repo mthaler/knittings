@@ -15,15 +15,12 @@ import androidx.lifecycle.ViewModelProvider
 import com.mthaler.knittings.DeleteDialog
 import com.mthaler.knittings.R
 import com.mthaler.knittings.database.datasource
-import com.mthaler.knittings.model.Needle
 import com.mthaler.knittings.model.NeedleType
 import kotlinx.android.synthetic.main.fragment_needle_list.*
 
 class NeedleListFragment : Fragment() {
 
     private var listener: OnFragmentInteractionListener? = null
-    private var filter: Filter = NoFilter
-    private lateinit var adapter: NeedleAdapter
     private lateinit var viewModel: NeedleListViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -96,7 +93,6 @@ class NeedleListFragment : Fragment() {
                     })
                 })
         rv.adapter = adapter
-        this.adapter = adapter
 
         viewModel = ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory.getInstance(requireActivity().application)).get(NeedleListViewModel::class.java)
         viewModel.needles.observe(viewLifecycleOwner, Observer { needles ->
@@ -108,8 +104,7 @@ class NeedleListFragment : Fragment() {
                 needles_empty_recycler_view.visibility = View.GONE
                 needles_recycler_view.visibility = View.VISIBLE
             }
-            val filtered = filter.filter(needles)
-            val items = NeedleAdapter.groupItems(requireContext(), filtered)
+            val items = NeedleAdapter.groupItems(requireContext(), needles)
             adapter.setItems(items)
         })
     }
@@ -123,11 +118,10 @@ class NeedleListFragment : Fragment() {
         return when (item.itemId) {
             R.id.menu_item_filter -> {
                 context?.let {
-                    val needles = datasource.allNeedles
                     val types = NeedleType.formattedValues(it)
                     val listItems = (listOf(getString(R.string.filter_show_all)) + types).toTypedArray()
                     val builder = AlertDialog.Builder(it)
-                    val f = filter
+                    val f = viewModel.getFilter()
                     val checkedItem = when (f) {
                         is NoFilter -> 0
                         is SingleTypeFilter -> {
@@ -137,17 +131,12 @@ class NeedleListFragment : Fragment() {
                         else -> throw Exception("Unknown filter: $f")
                     }
                     builder.setSingleChoiceItems(listItems, checkedItem) { dialog, which -> when (which) {
-                        0 -> filter = NoFilter
-                        else -> {
-                            val type = NeedleType.values()[which - 1]
-                            filter = SingleTypeFilter(type)
+                            0 -> viewModel.setFilter(NoFilter)
+                            else -> {
+                                val type = NeedleType.values()[which - 1]
+                                viewModel.setFilter(SingleTypeFilter(type))
+                            }
                         }
-                    }
-                        val needles = viewModel.needles.value ?: emptyList<Needle>()
-                        val filtered = filter.filter(needles)
-                        val items = NeedleAdapter.groupItems(requireContext(), filtered)
-                        adapter.setItems(items)
-
                         dialog.dismiss()
                     }
                     builder.setNegativeButton(R.string.dialog_button_cancel) { dialog, which -> dialog.dismiss() }
