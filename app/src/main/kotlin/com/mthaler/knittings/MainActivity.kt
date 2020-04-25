@@ -24,7 +24,6 @@ import com.mthaler.knittings.details.DeleteKnittingDialog
 import com.mthaler.knittings.details.KnittingDetailsActivity
 import com.mthaler.knittings.dropbox.DropboxExportActivity
 import com.mthaler.knittings.dropbox.DropboxImportActivity
-import com.mthaler.knittings.model.Knitting
 import com.mthaler.knittings.model.Status
 import com.mthaler.knittings.needle.NeedleListActivity
 import com.mthaler.knittings.settings.SettingsActivity
@@ -33,7 +32,6 @@ import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.content_main.*
 import java.util.*
-import kotlin.collections.ArrayList
 
 /**
  * The main activity that gets displayed when the app is started. It displays a list of knitting projects.
@@ -41,14 +39,17 @@ import kotlin.collections.ArrayList
  */
 class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedListener, SearchView.OnQueryTextListener, SearchView.OnCloseListener {
 
-    private var sorting: Sorting = Sorting.NewestFirst
-    private var filter: CombinedFilter = CombinedFilter.Empty
     private var initialQuery: CharSequence? = null
     private var sv: SearchView? = null
     private lateinit var viewModel: MainViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        if (savedInstanceState != null) {
+            initialQuery = savedInstanceState.getCharSequence(STATE_QUERY)
+        }
+
         setContentView(R.layout.activity_main)
 
         // add toolbar to activity
@@ -71,227 +72,6 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         val rv = findViewById<RecyclerView>(R.id.knitting_recycler_view)
         rv.layoutManager = LinearLayoutManager(this)
 
-        if (savedInstanceState != null) {
-            sorting = Sorting.valueOf(savedInstanceState.getString("sorting"))
-            filter = savedInstanceState.getSerializable("filter") as CombinedFilter
-            initialQuery = savedInstanceState.getCharSequence(STATE_QUERY)
-        }
-
-        viewModel = ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory.getInstance(application)).get(MainViewModel::class.java)
-        viewModel.knittings.observe(this, Observer { knittings ->
-            updateKnittingList(knittings)
-        })
-
-        init()
-    }
-
-    private fun init() {
-        val sharedPref = PreferenceManager.getDefaultSharedPreferences(this)
-        var currentVersionNumber = 0
-        val savedVersionNumber = sharedPref.getInt(VERSION_KEY, 0)
-        try {
-            val pi = packageManager.getPackageInfo(packageName, 0)
-            currentVersionNumber = pi.versionCode
-        } catch (e: Exception) {
-        }
-        if (currentVersionNumber > savedVersionNumber) {
-            WhatsNewDialog.show(this)
-            val editor = sharedPref.edit()
-            editor.putInt(VERSION_KEY, currentVersionNumber)
-            editor.commit()
-        }
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        outState.putString("sorting", sorting.name)
-        outState.putSerializable("filter", filter)
-        val sv = this.sv
-        if (sv != null && !sv.isIconified) {
-            outState.putCharSequence(STATE_QUERY, sv.query)
-        }
-
-        super.onSaveInstanceState(outState)
-    }
-
-    override fun onBackPressed() {
-        if (drawer_layout.isDrawerOpen(GravityCompat.START)) {
-            drawer_layout.closeDrawer(GravityCompat.START)
-        } else {
-            super.onBackPressed()
-        }
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        menuInflater.inflate(R.menu.knitting_list, menu)
-        configureSearchView(menu)
-        return true
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            R.id.menu_item_about -> {
-                AboutDialog.show(this)
-                true
-            }
-            R.id.menu_item_sort -> {
-                val listItems = arrayOf(getString(R.string.sorting_newest_first), getString(R.string.sorting_oldest_first), getString(R.string.sorting_alphabetical))
-                val builder = AlertDialog.Builder(this)
-                val checkedItem = when (sorting) {
-                    Sorting.NewestFirst -> 0
-                    Sorting.OldestFirst -> 1
-                    Sorting.Alphabetical -> 2
-                }
-                builder.setSingleChoiceItems(listItems, checkedItem) { dialog, which -> when (which) {
-                    0 -> sorting = Sorting.NewestFirst
-                    1 -> sorting = Sorting.OldestFirst
-                    2 -> sorting = Sorting.Alphabetical
-                  }
-                    updateKnittingList(viewModel.knittings.value ?: ArrayList())
-                    dialog.dismiss()
-                }
-                builder.setNegativeButton(R.string.dialog_button_cancel) { dialog, which -> dialog.dismiss() }
-                val dialog = builder.create()
-                dialog.show()
-                true
-            }
-            R.id.menu_item_clear_filters -> {
-                filter = CombinedFilter.Empty
-                updateKnittingList(viewModel.knittings.value ?: ArrayList())
-                true
-            }
-            R.id.menu_item_category_filter -> {
-                val categories = datasource.allCategories
-                categories.sortedBy { it.name }
-                val listItems = (listOf(getString(R.string.filter_show_all)) + categories.map { it.name }.toList()).toTypedArray()
-                val builder = AlertDialog.Builder(this)
-                val f = filter
-                val checkedItem: Int = let {
-                    val result = f.filters.find { it is SingleCategoryFilter }
-                    if (result != null && result is SingleCategoryFilter) {
-                        val index = categories.indexOf(result.category)
-                        index + 1
-                    } else {
-                        0
-                    }
-                }
-                builder.setSingleChoiceItems(listItems, checkedItem) { dialog, which -> when (which) {
-                    0 -> filter = CombinedFilter(f.filters.filterNot { it is SingleCategoryFilter })
-                    else -> {
-                        val category = categories[which - 1]
-                        val newFilter = SingleCategoryFilter(category)
-                        filter = CombinedFilter(f.filters.filterNot { it is SingleCategoryFilter } + newFilter)
-                    }
-                }
-                    updateKnittingList(viewModel.knittings.value ?: ArrayList())
-                    dialog.dismiss()
-                }
-                builder.setNegativeButton(R.string.dialog_button_cancel) { dialog, which -> dialog.dismiss() }
-                val dialog = builder.create()
-                dialog.show()
-                true
-            }
-            R.id.menu_item_status_filter -> {
-                val listItems = (listOf(getString(R.string.filter_show_all)) + Status.formattedValues(this)).toTypedArray()
-                val builder = AlertDialog.Builder(this)
-                val f = filter
-                val checkedItem = let {
-                    val result = f.filters.find { it is SingleStatusFilter }
-                    if (result != null && result is SingleStatusFilter) {
-                        val index = Status.values().indexOf(result.status)
-                        index + 1
-                    } else {
-                        0
-                    }
-                }
-                builder.setSingleChoiceItems(listItems, checkedItem) { dialog, which -> when (which) {
-                    0 -> filter = CombinedFilter(f.filters.filterNot { it is SingleStatusFilter })
-                    else -> {
-                        val status = Status.values()[which - 1]
-                        val newFilter = SingleStatusFilter(status)
-                        filter = CombinedFilter(f.filters.filterNot { it is SingleStatusFilter } + newFilter)
-                    }
-                }
-                    updateKnittingList(viewModel.knittings.value ?: ArrayList())
-                    dialog.dismiss()
-                }
-                builder.setNegativeButton(R.string.dialog_button_cancel) { dialog, which -> dialog.dismiss() }
-                val dialog = builder.create()
-                dialog.show()
-                true
-                true
-            }
-            R.id.menu_item_count -> {
-                val builder = AlertDialog.Builder(this)
-                startActivity(ProjectCountActivity.newIntent(this))
-                true
-            }
-            else -> super.onOptionsItemSelected(item)
-        }
-    }
-
-    override fun onNavigationItemSelected(item: MenuItem): Boolean {
-        // Handle navigation view item clicks here.
-        when (item.itemId) {
-            R.id.nav_dropbox_export -> {
-                startActivity(DropboxExportActivity.newIntent(this))
-            }
-            R.id.nav_dropbox_import -> {
-                startActivity(DropboxImportActivity.newIntent(this))
-            }
-            R.id.nav_edit_categories -> {
-                startActivity(CategoryListActivity.newIntent(this))
-            }
-            R.id.nav_edit_needles -> {
-                startActivity(NeedleListActivity.newIntent(this))
-            }
-            R.id.nav_edit_settings -> {
-                startActivity(SettingsActivity.newIntent(this))
-            }
-        }
-
-        drawer_layout.closeDrawer(GravityCompat.START)
-        return true
-    }
-
-    private fun updateKnittingList(knittings: ArrayList<Knitting>) {
-        val activeFilters = findViewById<TextView>(R.id.knitting_active_filters)
-        val rv = findViewById<RecyclerView>(R.id.knitting_recycler_view)
-        if (knittings.isEmpty()) {
-            knitting_list_empty_recycler_view.visibility = View.VISIBLE
-            knitting_recycler_view.visibility = View.GONE
-        } else {
-            knitting_list_empty_recycler_view.visibility = View.GONE
-            knitting_recycler_view.visibility = View.VISIBLE
-        }
-        if (filter.filters.filter { it is SingleCategoryFilter || it is SingleStatusFilter }.isEmpty()) {
-            activeFilters.text = ""
-            activeFilters.visibility = View.GONE
-        } else {
-            val sb = StringBuilder()
-            sb.append(resources.getString(R.string.active_filters))
-            sb.append(": ")
-            val hasCategoryFilter = filter.filters.filter { it is SingleCategoryFilter }.isNotEmpty()
-            val hasStatusFilter = filter.filters.filter { it is SingleStatusFilter }.isNotEmpty()
-            if (hasCategoryFilter) {
-                sb.append(resources.getString(R.string.category))
-            }
-            if (hasCategoryFilter && hasStatusFilter) {
-                sb.append(", ")
-            }
-            if (hasStatusFilter) {
-                sb.append(resources.getString(R.string.status))
-            }
-            activeFilters.text = sb.toString()
-            activeFilters.visibility = View.VISIBLE
-        }
-        when (sorting) {
-            Sorting.NewestFirst -> knittings.sortByDescending { it.started }
-            Sorting.OldestFirst -> knittings.sortBy { it.started }
-            Sorting.Alphabetical -> knittings.sortBy { it.title.toLowerCase() }
-        }
-        val filtered = filter.filter(knittings)
-        // start EditCategoryActivity if the users clicks on a category
         val adapter = KnittingAdapter(this, {
             knitting -> startActivity(KnittingDetailsActivity.newIntent(this, knitting.id, false))
         }, { knitting -> startSupportActionMode(object : ActionMode.Callback {
@@ -352,10 +132,209 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
              */
             override fun onDestroyActionMode(mode: ActionMode?) {
             }
-            })
         })
-        adapter.setKnittings(filtered)
+        })
         rv.adapter = adapter
+
+        val activeFilters = findViewById<TextView>(R.id.knitting_active_filters)
+
+        viewModel = ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory.getInstance(application)).get(MainViewModel::class.java)
+        viewModel.knittings.observe(this, Observer { knittings ->
+
+            if (knittings.isEmpty()) {
+                knitting_list_empty_recycler_view.visibility = View.VISIBLE
+                knitting_recycler_view.visibility = View.GONE
+            } else {
+                knitting_list_empty_recycler_view.visibility = View.GONE
+                knitting_recycler_view.visibility = View.VISIBLE
+            }
+            if (viewModel.filter.filters.filter { it is SingleCategoryFilter || it is SingleStatusFilter }.isEmpty()) {
+                activeFilters.text = ""
+                activeFilters.visibility = View.GONE
+            } else {
+                val sb = StringBuilder()
+                sb.append(resources.getString(R.string.active_filters))
+                sb.append(": ")
+                val hasCategoryFilter = viewModel.filter.filters.filter { it is SingleCategoryFilter }.isNotEmpty()
+                val hasStatusFilter = viewModel.filter.filters.filter { it is SingleStatusFilter }.isNotEmpty()
+                if (hasCategoryFilter) {
+                    sb.append(resources.getString(R.string.category))
+                }
+                if (hasCategoryFilter && hasStatusFilter) {
+                    sb.append(", ")
+                }
+                if (hasStatusFilter) {
+                    sb.append(resources.getString(R.string.status))
+                }
+                activeFilters.text = sb.toString()
+                activeFilters.visibility = View.VISIBLE
+            }
+            adapter.setKnittings(knittings)
+        })
+
+        init()
+    }
+
+    private fun init() {
+        val sharedPref = PreferenceManager.getDefaultSharedPreferences(this)
+        var currentVersionNumber = 0
+        val savedVersionNumber = sharedPref.getInt(VERSION_KEY, 0)
+        try {
+            val pi = packageManager.getPackageInfo(packageName, 0)
+            currentVersionNumber = pi.versionCode
+        } catch (e: Exception) {
+        }
+        if (currentVersionNumber > savedVersionNumber) {
+            WhatsNewDialog.show(this)
+            val editor = sharedPref.edit()
+            editor.putInt(VERSION_KEY, currentVersionNumber)
+            editor.commit()
+        }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        val sv = this.sv
+        if (sv != null && !sv.isIconified) {
+            outState.putCharSequence(STATE_QUERY, sv.query)
+        }
+
+        super.onSaveInstanceState(outState)
+    }
+
+    override fun onBackPressed() {
+        if (drawer_layout.isDrawerOpen(GravityCompat.START)) {
+            drawer_layout.closeDrawer(GravityCompat.START)
+        } else {
+            super.onBackPressed()
+        }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        menuInflater.inflate(R.menu.knitting_list, menu)
+        configureSearchView(menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.menu_item_about -> {
+                AboutDialog.show(this)
+                true
+            }
+            R.id.menu_item_sort -> {
+                val listItems = arrayOf(getString(R.string.sorting_newest_first), getString(R.string.sorting_oldest_first), getString(R.string.sorting_alphabetical))
+                val builder = AlertDialog.Builder(this)
+                val checkedItem = when (viewModel.sorting) {
+                    Sorting.NewestFirst -> 0
+                    Sorting.OldestFirst -> 1
+                    Sorting.Alphabetical -> 2
+                }
+                builder.setSingleChoiceItems(listItems, checkedItem) { dialog, which -> when (which) {
+                        0 -> viewModel.sorting = Sorting.NewestFirst
+                        1 -> viewModel.sorting = Sorting.OldestFirst
+                        2 -> viewModel.sorting = Sorting.Alphabetical
+                      }
+                    dialog.dismiss()
+                }
+                builder.setNegativeButton(R.string.dialog_button_cancel) { dialog, which -> dialog.dismiss() }
+                val dialog = builder.create()
+                dialog.show()
+                true
+            }
+            R.id.menu_item_clear_filters -> {
+                viewModel.filter = CombinedFilter.Empty
+                true
+            }
+            R.id.menu_item_category_filter -> {
+                val categories = datasource.allCategories
+                categories.sortedBy { it.name }
+                val listItems = (listOf(getString(R.string.filter_show_all)) + categories.map { it.name }.toList()).toTypedArray()
+                val builder = AlertDialog.Builder(this)
+                val f = viewModel.filter
+                val checkedItem: Int = let {
+                    val result = f.filters.find { it is SingleCategoryFilter }
+                    if (result != null && result is SingleCategoryFilter) {
+                        val index = categories.indexOf(result.category)
+                        index + 1
+                    } else {
+                        0
+                    }
+                }
+                builder.setSingleChoiceItems(listItems, checkedItem) { dialog, which -> when (which) {
+                        0 -> viewModel.filter = CombinedFilter(f.filters.filterNot { it is SingleCategoryFilter })
+                        else -> {
+                            val category = categories[which - 1]
+                            val newFilter = SingleCategoryFilter(category)
+                            viewModel.filter = CombinedFilter(f.filters.filterNot { it is SingleCategoryFilter } + newFilter)
+                        }
+                    }
+                    dialog.dismiss()
+                }
+                builder.setNegativeButton(R.string.dialog_button_cancel) { dialog, which -> dialog.dismiss() }
+                val dialog = builder.create()
+                dialog.show()
+                true
+            }
+            R.id.menu_item_status_filter -> {
+                val listItems = (listOf(getString(R.string.filter_show_all)) + Status.formattedValues(this)).toTypedArray()
+                val builder = AlertDialog.Builder(this)
+                val f = viewModel.filter
+                val checkedItem = let {
+                    val result = f.filters.find { it is SingleStatusFilter }
+                    if (result != null && result is SingleStatusFilter) {
+                        val index = Status.values().indexOf(result.status)
+                        index + 1
+                    } else {
+                        0
+                    }
+                }
+                builder.setSingleChoiceItems(listItems, checkedItem) { dialog, which -> when (which) {
+                        0 -> viewModel.filter = CombinedFilter(f.filters.filterNot { it is SingleStatusFilter })
+                        else -> {
+                            val status = Status.values()[which - 1]
+                            val newFilter = SingleStatusFilter(status)
+                            viewModel.filter = CombinedFilter(f.filters.filterNot { it is SingleStatusFilter } + newFilter)
+                        }
+                    }
+                    dialog.dismiss()
+                }
+                builder.setNegativeButton(R.string.dialog_button_cancel) { dialog, which -> dialog.dismiss() }
+                val dialog = builder.create()
+                dialog.show()
+                true
+                true
+            }
+            R.id.menu_item_count -> {
+                startActivity(ProjectCountActivity.newIntent(this))
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    override fun onNavigationItemSelected(item: MenuItem): Boolean {
+        // Handle navigation view item clicks here.
+        when (item.itemId) {
+            R.id.nav_dropbox_export -> {
+                startActivity(DropboxExportActivity.newIntent(this))
+            }
+            R.id.nav_dropbox_import -> {
+                startActivity(DropboxImportActivity.newIntent(this))
+            }
+            R.id.nav_edit_categories -> {
+                startActivity(CategoryListActivity.newIntent(this))
+            }
+            R.id.nav_edit_needles -> {
+                startActivity(NeedleListActivity.newIntent(this))
+            }
+            R.id.nav_edit_settings -> {
+                startActivity(SettingsActivity.newIntent(this))
+            }
+        }
+
+        drawer_layout.closeDrawer(GravityCompat.START)
+        return true
     }
 
     private fun configureSearchView(menu: Menu) {
@@ -382,11 +361,10 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
      */
     override fun onQueryTextChange(newText: String?): Boolean {
         if (newText == null || TextUtils.isEmpty(newText)) {
-            filter = CombinedFilter.Empty
+            viewModel.filter = CombinedFilter.Empty
         } else {
-            filter = CombinedFilter(listOf(ContainsFilter(newText)))
+            viewModel.filter = CombinedFilter(listOf(ContainsFilter(newText)))
         }
-        updateKnittingList(viewModel.knittings.value ?: ArrayList())
         return true
     }
 
@@ -406,7 +384,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
      * @return true if the listener wants to override the default behavior of clearing the text field and dismissing it, false otherwise.
      */
     override fun onClose(): Boolean {
-        filter = CombinedFilter.Empty
+        viewModel.filter = CombinedFilter.Empty
         return true
     }
 
