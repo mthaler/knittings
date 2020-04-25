@@ -90,7 +90,7 @@ class PhotoGalleryAdapter(context: Context, private val lifecycleScope: Lifecycl
                                 }
                             }
                         } else {
-                            image.setImageResource(R.drawable.outline_insert_photo_black_48dp)
+                            image.setImageResource(R.drawable.ic_insert_photo_black_48dp)
                         }
                     }
                     return true
