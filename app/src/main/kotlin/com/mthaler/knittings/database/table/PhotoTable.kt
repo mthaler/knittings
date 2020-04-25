@@ -5,8 +5,15 @@ import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.graphics.BitmapFactory
 import com.mthaler.knittings.model.Photo
-import org.jetbrains.anko.db.*
 import java.io.File
+import com.mthaler.knittings.database.table.SqlHelper.INTEGER
+import com.mthaler.knittings.database.table.SqlHelper.BLOB
+import com.mthaler.knittings.database.table.SqlHelper.TEXT
+import com.mthaler.knittings.database.table.SqlHelper.PRIMARY_KEY
+import com.mthaler.knittings.database.table.SqlHelper.AUTOINCREMENT
+import com.mthaler.knittings.database.table.SqlHelper.NOT_NULL
+import com.mthaler.knittings.database.table.SqlHelper.IF_NOT_EXISTS
+import com.mthaler.knittings.database.table.SqlHelper.FOREIGN_KEY
 
 object PhotoTable {
     val PHOTOS = "photos"
@@ -14,13 +21,14 @@ object PhotoTable {
     val Columns = arrayOf(Cols.ID, Cols.FILENAME, Cols.PREVIEW, Cols.DESCRIPTION, Cols.KNITTING_ID)
 
     fun create(db: SQLiteDatabase) {
-        db.createTable(PHOTOS, true,
-                Cols.ID to INTEGER + PRIMARY_KEY + AUTOINCREMENT,
-                Cols.FILENAME to TEXT + NOT_NULL,
-                Cols.PREVIEW to BLOB,
-                Cols.DESCRIPTION to TEXT + NOT_NULL,
-                Cols.KNITTING_ID to INTEGER + NOT_NULL,
-                FOREIGN_KEY(Cols.KNITTING_ID, KnittingTable.KNITTINGS, KnittingTable.Cols.ID))
+        val CREATE_PHOTO_TABLE = "CREATE TABLE $IF_NOT_EXISTS $PHOTOS ( " +
+                "${Cols.ID} $INTEGER $PRIMARY_KEY $AUTOINCREMENT, " +
+                "${Cols.FILENAME} $TEXT $NOT_NULL, " +
+                "${Cols.PREVIEW} $BLOB, " +
+                "${Cols.DESCRIPTION} $TEXT $NOT_NULL, " +
+                "${Cols.KNITTING_ID} $INTEGER $NOT_NULL, " +
+                "${FOREIGN_KEY(Cols.KNITTING_ID, KnittingTable.KNITTINGS, KnittingTable.Cols.ID)} )"
+        db.execSQL(CREATE_PHOTO_TABLE)
     }
 
     object Cols {
