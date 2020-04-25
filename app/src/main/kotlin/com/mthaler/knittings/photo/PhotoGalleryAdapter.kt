@@ -37,8 +37,8 @@ class PhotoGalleryAdapter(val context: Context, private val onItemClick: (Photo)
         var title: TextView = view.findViewById(R.id.text)
         var image: ImageView = view.findViewById(R.id.image)
 
-        init {
-            image.setOnClickListener { v -> onItemClick(photos[adapterPosition]) }
+        init { 
+            view.setOnClickListener { v -> onItemClick(photos[adapterPosition]) }
         }
 
         fun bind(photo: Photo) {
