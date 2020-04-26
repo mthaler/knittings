@@ -28,13 +28,10 @@ class NeedleListFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         val v = inflater.inflate(R.layout.fragment_needle_list, container, false)
 
         setHasOptionsMenu(true)
 
-        // add new needle if the user clicks the floating action button and start the
-        // EditNeedleActivity to edit the new category
         val fab = v.findViewById<FloatingActionButton>(R.id.fab_create_needle)
         fab.setOnClickListener { v -> listener?.createNeedle() }
 
@@ -47,45 +44,44 @@ class NeedleListFragment : Fragment() {
         val rv = requireView().findViewById<RecyclerView>(R.id.needles_recycler_view)
         rv.layoutManager = LinearLayoutManager(context)
 
-        val adapter = NeedleAdapter({ needle -> listener?.needleClicked(needle.id) },
-                { needle ->
-                    (activity as AppCompatActivity).startSupportActionMode(object : ActionMode.Callback {
+        val adapter = NeedleAdapter({ needle -> listener?.needleClicked(needle.id) }, { needle ->
+            (activity as AppCompatActivity).startSupportActionMode(object : ActionMode.Callback {
 
-                        override fun onActionItemClicked(mode: ActionMode?, menu: MenuItem?): Boolean {
-                            when (menu?.itemId) {
-                                R.id.action_delete -> {
-                                    this@NeedleListFragment.activity?.let {
-                                        DeleteDialog.create(it, needle.name, {
-                                            datasource.deleteNeedle(needle)
-                                        }).show()
-                                    }
-                                    mode?.finish()
-                                    return true
-                                }
-                                R.id.action_copy -> {
-                                    val newName = "${needle.name} - ${getString(R.string.copy)}"
-                                    val needleCopy = needle.copy(name = newName)
-                                    datasource.addNeedle(needleCopy)
-                                    mode?.finish()
-                                    return true
-                                }
-                                else -> {
-                                    return false
-                                }
+                override fun onActionItemClicked(mode: ActionMode?, menu: MenuItem?): Boolean {
+                    when (menu?.itemId) {
+                        R.id.action_delete -> {
+                            this@NeedleListFragment.activity?.let {
+                                DeleteDialog.create(it, needle.name, {
+                                    datasource.deleteNeedle(needle)
+                                }).show()
                             }
-                        }
-
-                        override fun onCreateActionMode(mode: ActionMode?, menu: Menu?): Boolean {
-                            val inflater = mode?.menuInflater
-                            inflater?.inflate(R.menu.needle_list_action, menu)
+                            mode?.finish()
                             return true
                         }
+                        R.id.action_copy -> {
+                            val newName = "${needle.name} - ${getString(R.string.copy)}"
+                            val needleCopy = needle.copy(name = newName)
+                            datasource.addNeedle(needleCopy)
+                            mode?.finish()
+                            return true
+                        }
+                        else -> {
+                            return false
+                        }
+                    }
+                }
 
-                        override fun onPrepareActionMode(mode: ActionMode?, menu: Menu?): Boolean = true
+                override fun onCreateActionMode(mode: ActionMode?, menu: Menu?): Boolean {
+                    val inflater = mode?.menuInflater
+                    inflater?.inflate(R.menu.needle_list_action, menu)
+                    return true
+                }
 
-                        override fun onDestroyActionMode(mode: ActionMode?) {}
-                    })
-                })
+                override fun onPrepareActionMode(mode: ActionMode?, menu: Menu?): Boolean = true
+
+                override fun onDestroyActionMode(mode: ActionMode?) {}
+            })
+        })
         rv.adapter = adapter
 
         viewModel = ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory.getInstance(requireActivity().application)).get(NeedleListViewModel::class.java)
@@ -111,32 +107,30 @@ class NeedleListFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.menu_item_filter -> {
-                context?.let {
-                    val types = NeedleType.formattedValues(it)
-                    val listItems = (listOf(getString(R.string.filter_show_all)) + types).toTypedArray()
-                    val builder = AlertDialog.Builder(it)
-                    val f = viewModel.filter
-                    val checkedItem = when (f) {
-                        is NoFilter -> 0
-                        is SingleTypeFilter -> {
-                            val index = NeedleType.values().indexOf(f.type)
-                            index + 1
-                        }
-                        else -> throw Exception("Unknown filter: $f")
+                val types = NeedleType.formattedValues(requireContext())
+                val listItems = (listOf(getString(R.string.filter_show_all)) + types).toTypedArray()
+                val builder = AlertDialog.Builder(requireContext())
+                val f = viewModel.filter
+                val checkedItem = when (f) {
+                    is NoFilter -> 0
+                    is SingleTypeFilter -> {
+                        val index = NeedleType.values().indexOf(f.type)
+                        index + 1
                     }
-                    builder.setSingleChoiceItems(listItems, checkedItem) { dialog, which -> when (which) {
-                            0 -> viewModel.filter = NoFilter
-                            else -> {
-                                val type = NeedleType.values()[which - 1]
-                                viewModel.filter = SingleTypeFilter(type)
-                            }
-                        }
-                        dialog.dismiss()
-                    }
-                    builder.setNegativeButton(R.string.dialog_button_cancel) { dialog, which -> dialog.dismiss() }
-                    val dialog = builder.create()
-                    dialog.show()
+                    else -> throw Exception("Unknown filter: $f")
                 }
+                builder.setSingleChoiceItems(listItems, checkedItem) { dialog, which -> when (which) {
+                    0 -> viewModel.filter = NoFilter
+                    else -> {
+                        val type = NeedleType.values()[which - 1]
+                        viewModel.filter = SingleTypeFilter(type)
+                    }
+                }
+                    dialog.dismiss()
+                }
+                builder.setNegativeButton(R.string.dialog_button_cancel) { dialog, which -> dialog.dismiss() }
+                val dialog = builder.create()
+                dialog.show()
                 true
             }
             else -> super.onOptionsItemSelected(item)
