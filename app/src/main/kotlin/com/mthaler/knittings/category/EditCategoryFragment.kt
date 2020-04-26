@@ -1,5 +1,6 @@
 package com.mthaler.knittings.category
 
+import android.content.Context
 import android.os.Bundle
 import android.view.*
 import android.widget.Button
@@ -19,7 +20,8 @@ class EditCategoryFragment : Fragment() {
     private var categoryID: Long = -1
     private lateinit var editTextTitle: EditText
     private lateinit var buttonColor: Button
-    private var color: Int? = 0
+    private var color: Int? = null
+    private var listener: OnFragmentInteractionListener? = null
 
     fun getCategoryID(): Long = categoryID
 
@@ -78,12 +80,12 @@ class EditCategoryFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.menu_item_save_category -> {
-                val oldCategory = if (categoryID != -1L) datasource.getCategory(categoryID) else null
+                val oldCategory = if (categoryID != -1L) datasource.getCategory(categoryID) else Category(-1L, "", null)
                 val newCategory = Category(categoryID, editTextTitle.text.toString(), color)
                 if (newCategory != oldCategory) {
                     saveCategory(newCategory)
                 }
-                parentFragmentManager.popBackStack()
+                listener?.categorySaved(categoryID)
                 true
             }
             R.id.menu_item_delete_category -> {
@@ -103,20 +105,18 @@ class EditCategoryFragment : Fragment() {
         }
     }
 
-    fun onBackPressed() {
-        context?.let {
-            val oldCategory = if (categoryID != -1L) datasource.getCategory(categoryID) else null
-            val newCategory = Category(categoryID, editTextTitle.text.toString(), color)
-            if (newCategory != oldCategory) {
-                SaveChangesDialog.create(it, {
-                    saveCategory(newCategory)
-                    parentFragmentManager.popBackStack()
-                }, {
-                    parentFragmentManager.popBackStack()
-                }).show()
-            } else {
-                parentFragmentManager.popBackStack()
-            }
+    fun onBackPressed(action: (Long) -> Unit) {
+        val oldCategory = if (categoryID != -1L) datasource.getCategory(categoryID) else Category(-1L, "", null)
+        val newCategory = Category(categoryID, editTextTitle.text.toString(), color)
+        if (newCategory != oldCategory) {
+            SaveChangesDialog.create(requireContext(), {
+                saveCategory(newCategory)
+                action(categoryID)
+            }, {
+                action(categoryID)
+            }).show()
+        } else {
+            action(categoryID)
         }
     }
 
@@ -146,10 +146,30 @@ class EditCategoryFragment : Fragment() {
 
     private fun saveCategory(category: Category) {
         if (category.id == -1L) {
-            datasource.addCategory(category)
+            val result = datasource.addCategory(category)
+            categoryID = result.id
         } else {
             datasource.updateCategory(category)
         }
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        if (context is OnFragmentInteractionListener) {
+            listener = context
+        } else {
+            throw RuntimeException("$context must implement OnFragmentInteractionListener")
+        }
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        listener = null
+    }
+
+    interface OnFragmentInteractionListener {
+
+        fun categorySaved(categoryID: Long)
     }
 
     companion object {

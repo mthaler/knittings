@@ -9,7 +9,7 @@ import com.mthaler.knittings.BaseActivity
 import com.mthaler.knittings.R
 import kotlinx.android.synthetic.main.activity_category_list.*
 
-class CategoryListActivity : BaseActivity(), CategoryListFragment.OnFragmentInteractionListener {
+class CategoryListActivity : BaseActivity(), CategoryListFragment.OnFragmentInteractionListener, EditCategoryFragment.OnFragmentInteractionListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,7 +39,7 @@ class CategoryListActivity : BaseActivity(), CategoryListFragment.OnFragmentInte
                 val fm = supportFragmentManager
                 val f = fm.findFragmentById(R.id.category_list_container)
                 if (f is EditCategoryFragment) {
-                    f.onBackPressed()
+                    f.onBackPressed { fm.popBackStack() }
                 } else {
                     NavUtils.navigateUpTo(this, upIntent)
                 }
@@ -53,7 +53,7 @@ class CategoryListActivity : BaseActivity(), CategoryListFragment.OnFragmentInte
         val fm = supportFragmentManager
         val f = fm.findFragmentById(R.id.category_list_container)
         if (f is EditCategoryFragment) {
-            f.onBackPressed()
+            f.onBackPressed { fm.popBackStack() }
         } else {
             super.onBackPressed()
         }
@@ -75,6 +75,10 @@ class CategoryListActivity : BaseActivity(), CategoryListFragment.OnFragmentInte
         ft.replace(R.id.category_list_container, f)
         ft.addToBackStack(null)
         ft.commit()
+    }
+
+    override fun categorySaved(categoryID: Long) {
+        supportFragmentManager.popBackStack()
     }
 
     companion object {

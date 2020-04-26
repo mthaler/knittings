@@ -13,7 +13,7 @@ import com.mthaler.knittings.Extras.EXTRA_KNITTING_ID
 import com.mthaler.knittings.database.datasource
 import com.mthaler.knittings.model.Category
 
-class SelectCategoryActivity : BaseActivity(), CategoryListFragment.OnFragmentInteractionListener {
+class SelectCategoryActivity : BaseActivity(), CategoryListFragment.OnFragmentInteractionListener, EditCategoryFragment.OnFragmentInteractionListener {
 
     var knittingID = -1L
 
@@ -47,11 +47,15 @@ class SelectCategoryActivity : BaseActivity(), CategoryListFragment.OnFragmentIn
         val fm = supportFragmentManager
         val f = fm.findFragmentById(R.id.select_category_container)
         if (f is EditCategoryFragment) {
-            val i = Intent()
-            i.putExtra(Extras.EXTRA_CATEGORY_ID, f.getCategoryID())
-            setResult(Activity.RESULT_OK, i)
+            f.onBackPressed { categoryID ->
+                val i = Intent()
+                i.putExtra(Extras.EXTRA_CATEGORY_ID, f.getCategoryID())
+                setResult(Activity.RESULT_OK, i)
+                super.onBackPressed()
+            }
+        } else {
+            super.onBackPressed()
         }
-        super.onBackPressed()
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean = when (item.itemId) {
@@ -59,14 +63,16 @@ class SelectCategoryActivity : BaseActivity(), CategoryListFragment.OnFragmentIn
             val fm = supportFragmentManager
             val f = fm.findFragmentById(R.id.select_category_container)
             if (f is EditCategoryFragment) {
-                if (f.getCategoryID() == -1L) {
-                    finish()
-                } else {
-                    val i = Intent()
-                    i.putExtra(EXTRA_KNITTING_ID, knittingID)
-                    i.putExtra(Extras.EXTRA_CATEGORY_ID, f.getCategoryID())
-                    setResult(Activity.RESULT_OK, i)
-                    finish()
+                f.onBackPressed { categoryID ->
+                    if (f.getCategoryID() == -1L) {
+                        finish()
+                    } else {
+                        val i = Intent()
+                        i.putExtra(EXTRA_KNITTING_ID, knittingID)
+                        i.putExtra(Extras.EXTRA_CATEGORY_ID, f.getCategoryID())
+                        setResult(Activity.RESULT_OK, i)
+                        finish()
+                    }
                 }
             } else {
                 finish()
@@ -77,8 +83,7 @@ class SelectCategoryActivity : BaseActivity(), CategoryListFragment.OnFragmentIn
     }
 
     override fun createCategory() {
-        val category = datasource.addCategory(Category())
-        val f = EditCategoryFragment.newInstance(category.id)
+        val f = EditCategoryFragment.newInstance(-1L)
         val fm = supportFragmentManager
         val ft = fm.beginTransaction()
         ft.replace(R.id.select_category_container, f)
@@ -90,5 +95,17 @@ class SelectCategoryActivity : BaseActivity(), CategoryListFragment.OnFragmentIn
         i.putExtra(Extras.EXTRA_CATEGORY_ID, categoryID)
         setResult(Activity.RESULT_OK, i)
         finish()
+    }
+
+    override fun categorySaved(categoryID: Long) {
+        if (categoryID == -1L) {
+            finish()
+        } else {
+            val i = Intent()
+            i.putExtra(EXTRA_KNITTING_ID, knittingID)
+            i.putExtra(Extras.EXTRA_CATEGORY_ID, categoryID)
+            setResult(Activity.RESULT_OK, i)
+            finish()
+        }
     }
 }
