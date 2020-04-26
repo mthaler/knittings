@@ -59,19 +59,17 @@ class SelectCategoryActivity : BaseActivity(), CategoryListFragment.OnFragmentIn
             val fm = supportFragmentManager
             val f = fm.findFragmentById(R.id.select_category_container)
             if (f is EditCategoryFragment) {
-                val i = Intent()
-                i.putExtra(EXTRA_KNITTING_ID, knittingID)
-                i.putExtra(Extras.EXTRA_CATEGORY_ID, f.getCategoryID())
-                setResult(Activity.RESULT_OK, i)
-                finish()
-            } else {
-                val upIntent: Intent? = NavUtils.getParentActivityIntent(this)
-                if (upIntent == null) {
-                    throw IllegalStateException("No Parent Activity Intent")
+                if (f.getCategoryID() == -1L) {
+                    finish()
                 } else {
-                    upIntent.putExtra(EXTRA_KNITTING_ID, knittingID)
-                    NavUtils.navigateUpTo(this, upIntent)
+                    val i = Intent()
+                    i.putExtra(EXTRA_KNITTING_ID, knittingID)
+                    i.putExtra(Extras.EXTRA_CATEGORY_ID, f.getCategoryID())
+                    setResult(Activity.RESULT_OK, i)
+                    finish()
                 }
+            } else {
+                finish()
             }
             true
         }
