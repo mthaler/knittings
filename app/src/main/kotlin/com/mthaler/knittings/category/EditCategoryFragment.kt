@@ -6,6 +6,7 @@ import android.widget.Button
 import android.widget.EditText
 import androidx.fragment.app.Fragment
 import com.mthaler.knittings.DeleteDialog
+import com.mthaler.knittings.DiscardChangesDialog
 import com.mthaler.knittings.R
 import com.mthaler.knittings.Extras.EXTRA_CATEGORY_ID
 import com.mthaler.knittings.SaveChangesDialog
@@ -86,8 +87,12 @@ class EditCategoryFragment : Fragment() {
                 true
             }
             R.id.menu_item_delete_category -> {
-                context?.let {
-                    DeleteDialog.create(it, editTextTitle.text.toString(), {
+                if (categoryID == -1L) {
+                    DiscardChangesDialog.create(requireContext(), {
+                        parentFragmentManager.popBackStack()
+                    }).show()
+                } else {
+                    DeleteDialog.create(requireContext(), editTextTitle.text.toString(), {
                         deleteCategory()
                         parentFragmentManager.popBackStack()
                     }).show()
