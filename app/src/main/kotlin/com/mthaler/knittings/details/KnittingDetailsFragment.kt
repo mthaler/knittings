@@ -16,6 +16,7 @@ import com.mthaler.knittings.Extras
 import com.mthaler.knittings.R
 import com.mthaler.knittings.database.datasource
 import com.mthaler.knittings.model.Status
+import com.mthaler.knittings.photo.PhotoGalleryActivity
 import com.mthaler.knittings.stopwatch.StopwatchActivity
 import com.mthaler.knittings.utils.TimeUtils
 import java.text.DateFormat
@@ -78,6 +79,10 @@ class KnittingDetailsFragment : Fragment() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
+            R.id.menu_item_show_gallery -> {
+                startActivity(PhotoGalleryActivity.newIntent(requireContext(), knittingID))
+                true
+            }
             R.id.menu_item_show_stopwatch -> {
                 startActivity(StopwatchActivity.newIntent(requireContext(), knittingID))
                 true

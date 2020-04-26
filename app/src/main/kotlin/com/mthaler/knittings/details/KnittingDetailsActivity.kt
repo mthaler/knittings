@@ -93,10 +93,6 @@ class KnittingDetailsActivity : BaseActivity(), KnittingDetailsFragment.OnFragme
             }
             true
         }
-        R.id.menu_item_show_gallery -> {
-            startActivity(PhotoGalleryActivity.newIntent(this, knittingID))
-            true
-        }
         R.id.menu_item_add_photo -> {
             val d = TakePhotoDialog.create(this, layoutInflater, knittingID, this::takePhoto, this::importPhoto)
             d.show()
