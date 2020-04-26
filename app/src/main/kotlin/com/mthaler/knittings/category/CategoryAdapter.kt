@@ -37,10 +37,7 @@ class CategoryAdapter(
         private val textFieldName = itemView.findViewById<TextView>(R.id.category_list_item_name)
 
         fun bind(category: Category, onItemClick: (Category) -> Unit, onItemLongClick: (Category) -> Unit) {
-            val c = category.color
-            if (c != null) {
-                colorSwatch.color = c
-            }
+            category.color?.let { colorSwatch.color = it }
             textFieldName.text = category.name
             itemView.setOnClickListener { v -> onItemClick(category) }
             itemView.setOnLongClickListener { v -> onItemLongClick(category); true }

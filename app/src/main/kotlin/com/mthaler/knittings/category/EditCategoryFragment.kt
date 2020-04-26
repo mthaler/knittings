@@ -43,10 +43,8 @@ class EditCategoryFragment : Fragment() {
 
         val category = if (categoryID != -1L) datasource.getCategory(categoryID) else Category()
 
-        // Inflate the layout for this fragment
         val v = inflater.inflate(R.layout.fragment_edit_category, container, false)
 
-        // set edit text title text to category name
         editTextTitle = v.findViewById(R.id.category_name)
         buttonColor = v.findViewById(R.id.button_select_color)
 
@@ -60,24 +58,7 @@ class EditCategoryFragment : Fragment() {
             color?.let { buttonColor.setBackgroundColor(it) }
         }
 
-        buttonColor.setOnClickListener { view ->
-            val colorPicker = ColorPicker(activity)
-            colorPicker.setOnFastChooseColorListener(object : ColorPicker.OnFastChooseColorListener {
-                override fun setOnFastChooseColorListener(position: Int, c: Int) {
-                    color = c
-                    buttonColor.setBackgroundColor(c)
-                }
-
-                override fun onCancel() {
-                }
-            })
-            colorPicker.setTitle(resources.getString(R.string.category_color_dialog_title))
-            colorPicker.setColors(R.array.category_colors)
-            colorPicker.setRoundColorButton(true)
-            colorPicker.setColorButtonMargin(6, 6, 6, 6)
-            colorPicker.setColumns(4)
-            colorPicker.show()
-        }
+        buttonColor.setOnClickListener { view -> showColorPicker() }
 
         return v
     }
@@ -132,6 +113,25 @@ class EditCategoryFragment : Fragment() {
                 parentFragmentManager.popBackStack()
             }
         }
+    }
+
+    private fun showColorPicker() {
+        val colorPicker = ColorPicker(activity)
+        colorPicker.setOnFastChooseColorListener(object : ColorPicker.OnFastChooseColorListener {
+            override fun setOnFastChooseColorListener(position: Int, c: Int) {
+                color = c
+                buttonColor.setBackgroundColor(c)
+            }
+
+            override fun onCancel() {
+            }
+        })
+        colorPicker.setTitle(resources.getString(R.string.category_color_dialog_title))
+        colorPicker.setColors(R.array.category_colors)
+        colorPicker.setRoundColorButton(true)
+        colorPicker.setColorButtonMargin(6, 6, 6, 6)
+        colorPicker.setColumns(4)
+        colorPicker.show()
     }
 
     private fun deleteCategory() {
