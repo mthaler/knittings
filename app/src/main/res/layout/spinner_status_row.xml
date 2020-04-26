@@ -4,7 +4,10 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="8dp">
+    android:paddingLeft="8dp"
+    android:paddingRight="8dp"
+    android:paddingTop="14dp"
+    android:paddingBottom="14dp">
     <ImageView
         android:id="@+id/statusImage"
         android:layout_width="wrap_content"
@@ -14,9 +17,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_toRightOf="@+id/statusImage"
+        android:layout_alignBottom="@id/statusImage"
         android:singleLine="true"
         android:ellipsize="marquee"
         android:textColor="@color/black"
-        android:textSize="18sp"
+        android:textSize="20sp"
         android:paddingLeft="4dp"/>
 </RelativeLayout>

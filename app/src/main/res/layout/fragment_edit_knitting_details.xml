@@ -206,7 +206,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/edit_knitting_details_status"
-                android:paddingTop="10dp"/>
+                android:paddingTop="9dp"/>
             <Spinner
                 android:id="@+id/knitting_status"
                 android:layout_width="wrap_content"
