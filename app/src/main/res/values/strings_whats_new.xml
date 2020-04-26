@@ -2,6 +2,12 @@
 <resources>
     <string name="whats_new_title">Whats New</string>
     <string name="whats_new"><![CDATA[
+        <h3>Version 0.9.16</h3>
+        - Set different photo as preview if photo used as preview is deleted<br>
+        - Deleting new categories no longer crashes the app<br>
+        - Deleting new needles no longer crashes the app<br>
+        - Import from gallery now works on older Android versions<br>
+        - Show icon when selecting status<br>
         <h3>Version 0.9.15</h3>
         - Improved photo gallery<br>
         - Imported photos are now also downsized and compressed<br>

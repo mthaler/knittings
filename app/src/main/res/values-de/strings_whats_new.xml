@@ -2,6 +2,12 @@
 <resources>
     <string name="whats_new_title">Whats New</string>
     <string name="whats_new"><![CDATA[
+        <h3>Version 0.9.16</h3>
+        - Wenn Vorschau-Foto gelöscht wird, wird jetzt ein anderes Foto als Vorschau benutzt<br>
+        - Löschen neuer Kategorien bringt nicht mehr die App zum Absturz<br>
+        - Löschen neuer Nadeln bringt nicht mehr die App zum Absturz<br>
+        - Aus Galerie importieren funktioniert jetzt mit älteren Android-Versionen<br>
+        - Status-Auswahl zeigt nun Icon neben Status<br>
         <h3>Version 0.9.15</h3>
         - Verbesserte Foto-Galerie<br>
         - Importierte Fotos werden jetzt verkleinert und komprimiert<br>
