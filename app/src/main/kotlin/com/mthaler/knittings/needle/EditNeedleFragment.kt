@@ -107,8 +107,12 @@ class EditNeedleFragment : Fragment() {
                 true
             }
             R.id.menu_item_delete_needle -> {
-                context?.let {
-                    DeleteDialog.create(it, editTextName.text.toString(), {
+                if (needleID == -1L) {
+                    DiscardChangesDialog.create(requireContext(), {
+                        parentFragmentManager.popBackStack()
+                    }).show()
+                } else {
+                    DeleteDialog.create(requireContext(), editTextName.text.toString(), {
                         deleteNeedle()
                         parentFragmentManager.popBackStack() }
                     ).show()
@@ -120,19 +124,17 @@ class EditNeedleFragment : Fragment() {
     }
 
     fun onBackPressed() {
-        context?.let {
-            val oldNeedle = if (needleID != -1L) datasource.getNeedle(needleID) else null
-            val newNeedle = createNeedle()
-            if (newNeedle != oldNeedle) {
-                SaveChangesDialog.create(it, {
-                    saveNeedle(newNeedle)
-                    parentFragmentManager.popBackStack()
-                }, {
-                    parentFragmentManager.popBackStack()
-                }).show()
-            } else {
+        val oldNeedle = if (needleID != -1L) datasource.getNeedle(needleID) else null
+        val newNeedle = createNeedle()
+        if (newNeedle != oldNeedle) {
+            SaveChangesDialog.create(requireContext(), {
+                saveNeedle(newNeedle)
                 parentFragmentManager.popBackStack()
-            }
+            }, {
+                parentFragmentManager.popBackStack()
+            }).show()
+        } else {
+            parentFragmentManager.popBackStack()
         }
     }
 
