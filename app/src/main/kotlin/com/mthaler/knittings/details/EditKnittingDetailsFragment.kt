@@ -131,13 +131,11 @@ class EditKnittingDetailsFragment : Fragment() {
             dialog.show(parentFragmentManager, DIALOG_DATE)
         }
         textViewDuration.setOnClickListener {
-            context?.let {
-                val d = DurationPickerDialog(it, { durationPicker, d ->
-                    textViewDuration.text = TimeUtils.formatDuration(d)
-                    duration = d
-                }, duration)
-                d.show()
-            }
+            val d = DurationPickerDialog(requireContext(), { durationPicker, d ->
+                textViewDuration.text = TimeUtils.formatDuration(d)
+                duration = d
+            }, duration)
+            d.show()
         }
         buttonCategory.setOnClickListener {
             val i = Intent(context, SelectCategoryActivity::class.java)

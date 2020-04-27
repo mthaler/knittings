@@ -39,22 +39,20 @@ class DropboxImportFragment : AbstractDropboxFragment() {
         login_button.setOnClickListener { Auth.startOAuth2Authentication(context, AppKey) }
 
         import_button.setOnClickListener {
-            context?.let {
-                val isWiFi = NetworkUtils.isWifiConnected(it)
-                if (!isWiFi) {
-                    val builder = AlertDialog.Builder(it)
-                    with(builder) {
-                        setTitle(resources.getString(R.string.dropbox_import))
-                        setMessage(resources.getString(R.string.dropbox_export_no_wifi_question))
-                        setPositiveButton(resources.getString(R.string.dropbox_export_dialog_export_button), { dialog, which ->
-                            importTask = ListFolderTask(DropboxClientFactory.getClient(), ::onListFolder, ::onListFolderError).execute("")
-                        })
-                        setNegativeButton(resources.getString(R.string.dialog_button_cancel), { dialog, which -> })
-                        show()
-                    }
-                } else {
-                    importTask = ListFolderTask(DropboxClientFactory.getClient(), ::onListFolder, ::onListFolderError).execute("")
+            val isWiFi = NetworkUtils.isWifiConnected(requireContext())
+            if (!isWiFi) {
+                val builder = AlertDialog.Builder(requireContext())
+                with(builder) {
+                    setTitle(resources.getString(R.string.dropbox_import))
+                    setMessage(resources.getString(R.string.dropbox_export_no_wifi_question))
+                    setPositiveButton(resources.getString(R.string.dropbox_export_dialog_export_button), { dialog, which ->
+                        importTask = ListFolderTask(DropboxClientFactory.getClient(), ::onListFolder, ::onListFolderError).execute("")
+                    })
+                    setNegativeButton(resources.getString(R.string.dialog_button_cancel), { dialog, which -> })
+                    show()
                 }
+            } else {
+                importTask = ListFolderTask(DropboxClientFactory.getClient(), ::onListFolder, ::onListFolderError).execute("")
             }
         }
     }
@@ -107,39 +105,37 @@ class DropboxImportFragment : AbstractDropboxFragment() {
     }
 
     private fun onListFolder(result: ListFolderResult?) {
-        context?.let {
-            if (result != null) {
-                val files = result.entries.map { it.name }.sortedDescending().toTypedArray()
-                val dialogBuilder = AlertDialog.Builder(it)
-                dialogBuilder.setTitle("Backups")
-                dialogBuilder.setItems(files) { dialog, item ->
-                    val folderName = files[item]
-                    backupDirectory = folderName
-                    val builder = AlertDialog.Builder(it)
-                    with(builder) {
-                        setTitle(resources.getString(R.string.dropbox_import))
-                        setMessage("Do you really want to import from Dropbox? This will delete all existing data!")
-                        setPositiveButton("Import", { dialog, which ->
-                            DownloadDatabaseTask(it.applicationContext, DropboxClientFactory.getClient(), ::onDownloadDatabase, ::onDownloadDatabaseError).execute(folderName)
-                            setMode(true)
-                        })
-                        setNegativeButton(resources.getString(R.string.dialog_button_cancel), { dialog, which -> })
-                        show()
-                    }
-                }
-                dialogBuilder.setNegativeButton("Cancel") { dialog, which -> }
-                // Create alert dialog object via builder
-                val alertDialogObject = dialogBuilder.create()
-                // Show the dialog
-                alertDialogObject.show()
-            } else {
-                val builder = AlertDialog.Builder(it)
+        if (result != null) {
+            val files = result.entries.map { it.name }.sortedDescending().toTypedArray()
+            val dialogBuilder = AlertDialog.Builder(requireContext())
+            dialogBuilder.setTitle("Backups")
+            dialogBuilder.setItems(files) { dialog, item ->
+                val folderName = files[item]
+                backupDirectory = folderName
+                val builder = AlertDialog.Builder(requireContext())
                 with(builder) {
-                    setTitle("List folders")
-                    setMessage("Error when listing folders: null")
-                    setPositiveButton("OK", { dialog, which -> })
+                    setTitle(resources.getString(R.string.dropbox_import))
+                    setMessage("Do you really want to import from Dropbox? This will delete all existing data!")
+                    setPositiveButton("Import", { dialog, which ->
+                        DownloadDatabaseTask(requireContext().applicationContext, DropboxClientFactory.getClient(), ::onDownloadDatabase, ::onDownloadDatabaseError).execute(folderName)
+                        setMode(true)
+                    })
+                    setNegativeButton(resources.getString(R.string.dialog_button_cancel), { dialog, which -> })
                     show()
                 }
+            }
+            dialogBuilder.setNegativeButton("Cancel") { dialog, which -> }
+            // Create alert dialog object via builder
+            val alertDialogObject = dialogBuilder.create()
+            // Show the dialog
+            alertDialogObject.show()
+        } else {
+            val builder = AlertDialog.Builder(requireContext())
+            with(builder) {
+                setTitle("List folders")
+                setMessage("Error when listing folders: null")
+                setPositiveButton("OK", { dialog, which -> })
+                show()
             }
         }
     }
@@ -150,14 +146,12 @@ class DropboxImportFragment : AbstractDropboxFragment() {
      * @param ex exception that happened when executing ListFolderTask
      */
     private fun onListFolderError(ex: Exception) {
-        context?.let {
-            val builder = AlertDialog.Builder(it)
-            with(builder) {
-                setTitle("List folders")
-                setMessage("Error when listing folders: " + ex.message)
-                setPositiveButton("OK", { dialog, which -> })
-                show()
-            }
+        val builder = AlertDialog.Builder(requireContext())
+        with(builder) {
+            setTitle("List folders")
+            setMessage("Error when listing folders: " + ex.message)
+            setPositiveButton("OK", { dialog, which -> })
+            show()
         }
     }
 

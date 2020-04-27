@@ -17,7 +17,7 @@ import petrov.kristiyan.colorpicker.ColorPicker
 
 class EditCategoryFragment : Fragment() {
 
-    private var categoryID: Long = -1
+    private var categoryID: Long = Category.EMPTY.id
     private lateinit var editTextTitle: EditText
     private lateinit var buttonColor: Button
     private var color: Int? = null
@@ -44,7 +44,7 @@ class EditCategoryFragment : Fragment() {
 
         setHasOptionsMenu(true)
 
-        val category = if (categoryID != -1L) datasource.getCategory(categoryID) else Category()
+        val category = if (categoryID != Category.EMPTY.id) datasource.getCategory(categoryID) else Category()
 
         val v = inflater.inflate(R.layout.fragment_edit_category, container, false)
 
@@ -80,7 +80,7 @@ class EditCategoryFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.menu_item_save_category -> {
-                val oldCategory = if (categoryID != -1L) datasource.getCategory(categoryID) else Category(-1L, "", null)
+                val oldCategory = if (categoryID != Category.EMPTY.id) datasource.getCategory(categoryID) else Category.EMPTY
                 val newCategory = Category(categoryID, editTextTitle.text.toString(), color)
                 if (newCategory != oldCategory) {
                     saveCategory(newCategory)
@@ -89,7 +89,7 @@ class EditCategoryFragment : Fragment() {
                 true
             }
             R.id.menu_item_delete_category -> {
-                if (categoryID == -1L) {
+                if (categoryID == Category.EMPTY.id) {
                     DiscardChangesDialog.create(requireContext(), {
                         parentFragmentManager.popBackStack()
                     }).show()
@@ -106,7 +106,7 @@ class EditCategoryFragment : Fragment() {
     }
 
     fun onBackPressed(action: (Long) -> Unit) {
-        val oldCategory = if (categoryID != -1L) datasource.getCategory(categoryID) else Category(-1L, "", null)
+        val oldCategory = if (categoryID != Category.EMPTY.id) datasource.getCategory(categoryID) else Category.EMPTY
         val newCategory = Category(categoryID, editTextTitle.text.toString(), color)
         if (newCategory != oldCategory) {
             SaveChangesDialog.create(requireContext(), {
@@ -145,7 +145,7 @@ class EditCategoryFragment : Fragment() {
     }
 
     private fun saveCategory(category: Category) {
-        if (category.id == -1L) {
+        if (category.id == Category.EMPTY.id) {
             val result = datasource.addCategory(category)
             categoryID = result.id
         } else {

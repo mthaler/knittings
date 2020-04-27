@@ -41,24 +41,22 @@ class DropboxExportFragment : AbstractDropboxFragment() {
         login_button.setOnClickListener { Auth.startOAuth2Authentication(context, AppKey) }
 
         export_button.setOnClickListener {
-            context?.let {
-                val isWiFi = NetworkUtils.isWifiConnected(it)
-                if (!isWiFi) {
-                    val builder = AlertDialog.Builder(it)
-                    with(builder) {
-                        setTitle(resources.getString(R.string.dropbox_export))
-                        setMessage(resources.getString(R.string.dropbox_export_no_wifi_question))
-                        setPositiveButton(resources.getString(R.string.dropbox_export_dialog_export_button), { dialog, which ->
-                            exportTask = UploadTask(DropboxClientFactory.getClient(), it.applicationContext, progressBar::setProgress, ::onUploadComplete, ::onUploadError).execute()
-                            setMode(true)
-                        })
-                        setNegativeButton(resources.getString(R.string.dialog_button_cancel), { dialog, which -> })
-                        show()
-                    }
-                } else {
-                    exportTask = UploadTask(DropboxClientFactory.getClient(), it.applicationContext, progressBar::setProgress, ::onUploadComplete, ::onUploadError).execute()
-                    setMode(true)
+            val isWiFi = NetworkUtils.isWifiConnected(requireContext())
+            if (!isWiFi) {
+                val builder = AlertDialog.Builder(requireContext())
+                with(builder) {
+                    setTitle(resources.getString(R.string.dropbox_export))
+                    setMessage(resources.getString(R.string.dropbox_export_no_wifi_question))
+                    setPositiveButton(resources.getString(R.string.dropbox_export_dialog_export_button), { dialog, which ->
+                        exportTask = UploadTask(DropboxClientFactory.getClient(), requireContext().applicationContext, progressBar::setProgress, ::onUploadComplete, ::onUploadError).execute()
+                        setMode(true)
+                    })
+                    setNegativeButton(resources.getString(R.string.dialog_button_cancel), { dialog, which -> })
+                    show()
                 }
+            } else {
+                exportTask = UploadTask(DropboxClientFactory.getClient(), requireContext().applicationContext, progressBar::setProgress, ::onUploadComplete, ::onUploadError).execute()
+                setMode(true)
             }
         }
 

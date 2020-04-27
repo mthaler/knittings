@@ -64,7 +64,7 @@ class SelectCategoryActivity : BaseActivity(), CategoryListFragment.OnFragmentIn
             val f = fm.findFragmentById(R.id.select_category_container)
             if (f is EditCategoryFragment) {
                 f.onBackPressed { categoryID ->
-                    if (f.getCategoryID() == -1L) {
+                    if (f.getCategoryID() == Category.EMPTY.id) {
                         finish()
                     } else {
                         val i = Intent()
@@ -83,7 +83,7 @@ class SelectCategoryActivity : BaseActivity(), CategoryListFragment.OnFragmentIn
     }
 
     override fun createCategory() {
-        val f = EditCategoryFragment.newInstance(-1L)
+        val f = EditCategoryFragment.newInstance(Category.EMPTY.id)
         val fm = supportFragmentManager
         val ft = fm.beginTransaction()
         ft.replace(R.id.select_category_container, f)
@@ -98,7 +98,7 @@ class SelectCategoryActivity : BaseActivity(), CategoryListFragment.OnFragmentIn
     }
 
     override fun categorySaved(categoryID: Long) {
-        if (categoryID == -1L) {
+        if (categoryID == Category.EMPTY.id) {
             finish()
         } else {
             val i = Intent()

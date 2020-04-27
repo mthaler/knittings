@@ -101,12 +101,10 @@ class PhotoFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.menu_item_delete_photo -> {
-                context?.let {
-                    DeleteDialog.create(it, editTextDescription.text.toString(), {
-                        deletePhoto()
-                        parentFragmentManager.popBackStack()
-                    }).show()
-                }
+                DeleteDialog.create(requireContext(), editTextDescription.text.toString(), {
+                    deletePhoto()
+                    parentFragmentManager.popBackStack()
+                }).show()
                 true
             }
             R.id.menu_item_set_main_photo -> {
@@ -137,23 +135,18 @@ class PhotoFragment : Fragment() {
     }
 
     fun onBackPressed() {
-        context?.let {
-            if (editTextDescription.text.toString() != photo.description) {
-                SaveChangesDialog.create(it, {
-                    savePhoto(photo.copy(description = editTextDescription.text.toString()))
-                    parentFragmentManager.popBackStack()
-                }, {
-                    parentFragmentManager.popBackStack()
-                }).show()
-            } else {
+        if (editTextDescription.text.toString() != photo.description) {
+            SaveChangesDialog.create(requireContext(), {
+                savePhoto(photo.copy(description = editTextDescription.text.toString()))
                 parentFragmentManager.popBackStack()
-            }
+            }, {
+                parentFragmentManager.popBackStack()
+            }).show()
+        } else {
+            parentFragmentManager.popBackStack()
         }
     }
 
-    /**
-     * Sets the current photo as the default photo used as preview for knittings list
-     */
     private fun setDefaultPhoto() {
         val knitting = datasource.getKnitting(photo.knittingID)
         datasource.updateKnitting(knitting.copy(defaultPhoto = photo))
@@ -162,36 +155,25 @@ class PhotoFragment : Fragment() {
         }
     }
 
-    /**
-     * Saves the image as PNG to the app's cache directory.
-     * @param image Bitmap to save.
-     * @return Uri of the saved file or null
-     */
     private fun saveImage(image: Bitmap): Uri? {
         // TODO - Should be processed in another thread
         var uri: Uri? = null
-        context?.let {
-            val imagesFolder = File(it.cacheDir, "images")
-            try {
-                imagesFolder.mkdirs()
-                val file = File(imagesFolder, "shared_image.jpg")
+        val imagesFolder = File(requireContext().cacheDir, "images")
+        try {
+            imagesFolder.mkdirs()
+            val file = File(imagesFolder, "shared_image.jpg")
 
-                val stream = FileOutputStream(file)
-                image.compress(Bitmap.CompressFormat.JPEG, 90, stream)
-                stream.flush()
-                stream.close()
-                uri = FileProvider.getUriForFile(it, "com.mthaler.knittings.fileprovider", file)
-            } catch (e: IOException) {
-                error("IOException while trying to write file for sharing: " + e.message)
-            }
+            val stream = FileOutputStream(file)
+            image.compress(Bitmap.CompressFormat.JPEG, 90, stream)
+            stream.flush()
+            stream.close()
+            uri = FileProvider.getUriForFile(requireContext(), "com.mthaler.knittings.fileprovider", file)
+        } catch (e: IOException) {
+            error("IOException while trying to write file for sharing: " + e.message)
         }
         return uri
     }
 
-    /**
-     * Shares the PNG image from Uri.
-     * @param uri Uri of image to share.
-     */
     private fun shareImageUri(uri: Uri) {
         val intent = Intent(Intent.ACTION_SEND)
         intent.putExtra(Intent.EXTRA_STREAM, uri)
