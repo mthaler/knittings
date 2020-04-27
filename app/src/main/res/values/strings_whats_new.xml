@@ -5,7 +5,6 @@
         <h3>Version 0.9.17</h3>
         - Bugfixes<br>
         - Reworked knitting details display<br>
-        - Show icon when selecting status<br>
         <h3>Version 0.9.16</h3>
         - Set different photo as preview if photo used as preview is deleted<br>
         - Deleting new categories no longer crashes the app<br>
