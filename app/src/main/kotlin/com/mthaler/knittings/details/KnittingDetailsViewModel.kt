@@ -4,13 +4,14 @@ import android.app.Application
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.mthaler.knittings.DatasourceViewModel
+import com.mthaler.knittings.model.Knitting
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class KnittingDetailsViewModel(application: Application) : DatasourceViewModel(application) {
 
-    private var knittingID = -1L
+    private var knittingID = Knitting.EMPTY.id
     private var deleted = false
     val knitting = MutableLiveData<KnittingWithPhotos>()
 

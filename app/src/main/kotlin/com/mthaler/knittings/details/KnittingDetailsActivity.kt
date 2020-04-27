@@ -13,6 +13,7 @@ import com.mthaler.knittings.photo.PhotoGalleryActivity
 import com.mthaler.knittings.R
 import java.io.File
 import com.mthaler.knittings.Extras.EXTRA_KNITTING_ID
+import com.mthaler.knittings.model.Knitting
 import com.mthaler.knittings.photo.TakePhotoDialog
 import kotlinx.android.synthetic.main.activity_knitting_details.*
 import kotlinx.coroutines.Dispatchers
@@ -25,7 +26,7 @@ import kotlinx.coroutines.withContext
 class KnittingDetailsActivity : BaseActivity(), KnittingDetailsFragment.OnFragmentInteractionListener {
 
     // id of the displayed knitting
-    private var knittingID: Long = -1
+    private var knittingID: Long = Knitting.EMPTY.id
     private var editOnly: Boolean = false
     private var currentPhotoPath: File? = null
 
@@ -40,7 +41,7 @@ class KnittingDetailsActivity : BaseActivity(), KnittingDetailsFragment.OnFragme
 
         // get the id of the knitting that should be displayed. If the application was destroyed because e.g. the device configuration changed
         // because the device was rotated we use the knitting id from the saved instance state. Otherwise we use the id passed to the intent
-        knittingID = if (savedInstanceState != null) savedInstanceState.getLong(EXTRA_KNITTING_ID) else intent.getLongExtra(EXTRA_KNITTING_ID, -1L)
+        knittingID = if (savedInstanceState != null) savedInstanceState.getLong(EXTRA_KNITTING_ID) else intent.getLongExtra(EXTRA_KNITTING_ID, Knitting.EMPTY.id)
         editOnly = intent.getBooleanExtra(EXTRA_EDIT_ONLY, false)
         if (savedInstanceState == null) {
             if (editOnly) {
@@ -71,7 +72,6 @@ class KnittingDetailsActivity : BaseActivity(), KnittingDetailsFragment.OnFragme
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        // Inflate the menu; this adds items to the action bar if it is present.
         menuInflater.inflate(R.menu.knitting_details, menu)
         return true
     }

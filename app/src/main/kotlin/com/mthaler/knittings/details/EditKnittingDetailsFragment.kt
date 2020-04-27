@@ -25,7 +25,7 @@ import java.util.Date
 
 class EditKnittingDetailsFragment : Fragment() {
 
-    private var knittingID: Long = -1
+    private var knittingID: Long = Knitting.EMPTY.id
     private var editOnly: Boolean = false
     private lateinit var editTextTitle: EditText
     private lateinit var editTextDescription: EditText
@@ -75,7 +75,6 @@ class EditKnittingDetailsFragment : Fragment() {
 
         setHasOptionsMenu(true)
 
-        // Inflate the layout for this fragment
         val v = inflater.inflate(R.layout.fragment_edit_knitting_details, container, false)
 
         editTextTitle = v.findViewById(R.id.knitting_title)
@@ -95,7 +94,7 @@ class EditKnittingDetailsFragment : Fragment() {
         ratingBar = v.findViewById(R.id.ratingBar)
 
         if (savedInstanceState == null) {
-            val knitting = if (knittingID != -1L) datasource.getKnitting(knittingID) else Knitting()
+            val knitting = if (knittingID != Knitting.EMPTY.id) datasource.getKnitting(knittingID) else Knitting.EMPTY
             editTextTitle.setText(knitting.title)
             editTextDescription.setText(knitting.description)
             started = knitting.started
@@ -172,8 +171,8 @@ class EditKnittingDetailsFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.menu_item_save_knitting -> {
-                val oldKnitting = if (knittingID != -1L) datasource.getKnitting(knittingID) else null
-                val newKnitting = if (oldKnitting != null) createKnitting().copy(defaultPhoto = oldKnitting.defaultPhoto) else createKnitting()
+                val oldKnitting = if (knittingID != Knitting.EMPTY.id) datasource.getKnitting(knittingID) else Knitting.EMPTY
+                val newKnitting = createKnitting().copy(defaultPhoto = oldKnitting.defaultPhoto)
                 if (newKnitting != oldKnitting) {
                     saveKnitting(newKnitting)
                 }
@@ -211,8 +210,8 @@ class EditKnittingDetailsFragment : Fragment() {
             }
         } else if (requestCode == REQUEST_SELECT_CATEGORY) {
             data?.let {
-                val categoryID = it.getLongExtra(EXTRA_CATEGORY_ID, -1L)
-                if (categoryID != -1L) {
+                val categoryID = it.getLongExtra(EXTRA_CATEGORY_ID, Category.EMPTY.id)
+                if (categoryID != Category.EMPTY.id) {
                     val c = datasource.getCategory(categoryID)
                     buttonCategory.text = c.name
                     category = c
@@ -228,8 +227,8 @@ class EditKnittingDetailsFragment : Fragment() {
             if (upIntent == null) {
                 throw IllegalStateException("No Parent Activity Intent")
             } else {
-                val oldKnitting = if (knittingID != -1L) datasource.getKnitting(knittingID) else null
-                val newKnitting = if (oldKnitting != null) createKnitting().copy(defaultPhoto = oldKnitting.defaultPhoto) else createKnitting()
+                val oldKnitting = if (knittingID != Knitting.EMPTY.id) datasource.getKnitting(knittingID) else Knitting.EMPTY
+                val newKnitting = createKnitting().copy(defaultPhoto = oldKnitting.defaultPhoto)
                 if (newKnitting != oldKnitting) {
                     SaveChangesDialog.create(it, {
                         saveKnitting(newKnitting)
@@ -263,7 +262,7 @@ class EditKnittingDetailsFragment : Fragment() {
     }
 
     private fun saveKnitting(knitting: Knitting) {
-        if (knitting.id == -1L) {
+        if (knitting.id == Knitting.EMPTY.id) {
             datasource.addKnitting(knitting)
         } else {
             datasource.updateKnitting(knitting)

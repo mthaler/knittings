@@ -26,4 +26,9 @@ data class Knitting(
             val timeStamp = SimpleDateFormat("yyyy_MM_dd_HH_mm_ss").format(Date())
             return "IMG_$timeStamp.jpg"
         }
+
+    companion object {
+
+        val EMPTY = Knitting()
+    }
 }

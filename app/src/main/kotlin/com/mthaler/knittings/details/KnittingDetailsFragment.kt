@@ -15,6 +15,7 @@ import androidx.viewpager2.widget.ViewPager2
 import com.mthaler.knittings.Extras
 import com.mthaler.knittings.R
 import com.mthaler.knittings.database.datasource
+import com.mthaler.knittings.model.Knitting
 import com.mthaler.knittings.model.Status
 import com.mthaler.knittings.photo.PhotoGalleryActivity
 import com.mthaler.knittings.stopwatch.StopwatchActivity
@@ -26,7 +27,7 @@ import java.text.DateFormat
  */
 class KnittingDetailsFragment : Fragment() {
 
-    private var knittingID: Long = -1
+    private var knittingID: Long = Knitting.EMPTY.id
     private lateinit var viewModel: KnittingDetailsViewModel
     private lateinit var photoAdapter: PhotoAdapter
     private var onPageChangeCallback: ViewPager2.OnPageChangeCallback? = null
@@ -37,19 +38,14 @@ class KnittingDetailsFragment : Fragment() {
         arguments?.let {
             knittingID = it.getLong(Extras.EXTRA_KNITTING_ID)
         }
-
-        // Retain this fragment across configuration changes.
-        retainInstance = true
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
         setHasOptionsMenu(true)
 
-        // Inflate the layout for this fragment
         val v = inflater.inflate(R.layout.fragment_knitting_details, container, false)
 
-        // start edit knitting details fragment if the user clicks the floating action button
         val fabEdit = v.findViewById<FloatingActionButton>(R.id.edit_knitting_details)
         fabEdit.setOnClickListener {
             listener?.editKnitting(knittingID)
@@ -159,11 +155,6 @@ class KnittingDetailsFragment : Fragment() {
         }
     }
 
-    /**
-     * Called when a fragment is first attached to its context. onCreate(Bundle) will be called after this.
-     *
-     * @param context Context
-     */
     override fun onAttach(context: Context) {
         super.onAttach(context)
         if (context is OnFragmentInteractionListener) {
@@ -173,36 +164,18 @@ class KnittingDetailsFragment : Fragment() {
         }
     }
 
-    /**
-     * Called when the fragment is no longer attached to its activity. This is called after onDestroy().
-     */
     override fun onDetach() {
         super.onDetach()
         listener = null
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     */
     interface OnFragmentInteractionListener {
 
-        /**
-         * Called if the user clicks the floating action button to edit a knitting project
-         */
         fun editKnitting(id: Long)
     }
 
     companion object {
 
-        /**
-         * Use this factory method to create a new instance of this fragment using the provided parameters.
-         *
-         * @param knittingID id of the knitting project that should be displayed
-         * @return A new instance of fragment KnittingDetailsFragment
-         */
         @JvmStatic
         fun newInstance(knittingID: Long) =
             KnittingDetailsFragment().apply {
