@@ -18,7 +18,7 @@ import com.mthaler.knittings.database.table.NeedleTable.cursorToNeedle
 import com.mthaler.knittings.model.*
 import java.lang.Exception
 
-class KnittingsDataSource private constructor(context: Context) : AbstractObservableDatabase() {
+class KnittingsDataSource private constructor(context: Context) : AbstractObservableDatabase(), KnittingRepository {
 
     private val context: Context = context.applicationContext
     private val dbHelper: KnittingDatabaseHelper
@@ -28,7 +28,7 @@ class KnittingsDataSource private constructor(context: Context) : AbstractObserv
      *
      * @return all knittings from database
      */
-    val allKnittings: ArrayList<Knitting>
+    override val allKnittings: ArrayList<Knitting>
         @Synchronized
         get() = dbHelper.readableDatabase.use { database ->
             val knittings = ArrayList<Knitting>()
@@ -122,7 +122,7 @@ class KnittingsDataSource private constructor(context: Context) : AbstractObserv
      * @param manualID: use knitting ID instead of auto-imcremented id
      */
     @Synchronized
-    fun addKnitting(knitting: Knitting, manualID: Boolean = false): Knitting {
+    override fun addKnitting(knitting: Knitting, manualID: Boolean): Knitting {
         dbHelper.writableDatabase.use { database ->
             val values = KnittingTable.createContentValues(knitting, manualID)
             val id = database.insert(KnittingTable.KNITTINGS, null, values)
@@ -143,7 +143,7 @@ class KnittingsDataSource private constructor(context: Context) : AbstractObserv
      * @return updated knitting
      */
     @Synchronized
-    fun updateKnitting(knitting: Knitting): Knitting {
+    override fun updateKnitting(knitting: Knitting): Knitting {
         val result = updateKnittingImpl(knitting)
         notifyObservers()
         return result
@@ -171,7 +171,7 @@ class KnittingsDataSource private constructor(context: Context) : AbstractObserv
      * @param knitting knitting that should be deleted
      */
     @Synchronized
-    fun deleteKnitting(knitting: Knitting) {
+    override fun deleteKnitting(knitting: Knitting) {
         deleteKnittingImpl(knitting)
         notifyObservers()
     }
@@ -180,7 +180,7 @@ class KnittingsDataSource private constructor(context: Context) : AbstractObserv
      * Deletes all knittings from the database
      */
     @Synchronized
-    fun deleteAllKnittings() {
+    override fun deleteAllKnittings() {
         for (knitting in allKnittings) {
             deleteKnittingImpl(knitting)
         }
@@ -204,7 +204,7 @@ class KnittingsDataSource private constructor(context: Context) : AbstractObserv
      * @return knitting for the given id
      */
     @Synchronized
-    fun getKnitting(id: Long): Knitting {
+    override fun getKnitting(id: Long): Knitting {
         Log.d(TAG, "Getting knitting for id $id")
         dbHelper.readableDatabase.use { database ->
             val cursor = database.query(KnittingTable.KNITTINGS,
