@@ -122,18 +122,32 @@
                     android:textColor="@color/black" />
             </LinearLayout>
 
-            <LinearLayout
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:layout_margin="16dp">
+                <TextView
+                    android:id="@+id/knitting_status_hint"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:text="@string/knitting_status_hint"
+                    android:textColor="@color/black"/>
+                <ImageView
+                    android:id="@+id/knitting_status_image"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@id/knitting_status_hint"
+                    android:layout_alignBottom="@id/knitting_status_hint"
+                    android:paddingLeft="4dp"/>
                 <TextView
                     android:id="@+id/knitting_status"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_margin="16dp"
-                    android:text="@string/knitting_status_hint"
-                    android:textColor="@color/black" />
-            </LinearLayout>
+                    android:textColor="@color/black"
+                    android:layout_toRightOf="@id/knitting_status_image"/>
+            </RelativeLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"

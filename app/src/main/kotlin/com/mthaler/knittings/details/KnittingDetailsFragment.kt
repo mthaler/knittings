@@ -5,6 +5,7 @@ import android.os.Bundle
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import androidx.fragment.app.Fragment
 import android.view.*
+import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.RatingBar
 import android.widget.TextView
@@ -147,8 +148,11 @@ class KnittingDetailsFragment : Fragment() {
             val c = knitting.category
             knittingCategory.text = getString(R.string.knitting_details_category, c?.name ?: "")
 
+            val knittingStatusImage = it.findViewById<ImageView>(R.id.knitting_status_image)
+            knittingStatusImage.setImageResource(Status.getDrawableResource(it.context, knitting.status))
+
             val knittingStatus = it.findViewById<TextView>(R.id.knitting_status)
-            knittingStatus.text = getString(R.string.knitting_details_status, Status.format(it.context, knitting.status))
+            knittingStatus.text = Status.format(it.context, knitting.status)
 
             val ratingBar = it.findViewById<RatingBar>(R.id.ratingBar)
             ratingBar.rating = knitting.rating.toFloat()
