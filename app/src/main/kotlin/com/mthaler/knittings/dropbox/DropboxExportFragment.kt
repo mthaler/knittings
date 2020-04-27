@@ -47,11 +47,11 @@ class DropboxExportFragment : AbstractDropboxFragment() {
                 with(builder) {
                     setTitle(resources.getString(R.string.dropbox_export))
                     setMessage(resources.getString(R.string.dropbox_export_no_wifi_question))
-                    setPositiveButton(resources.getString(R.string.dropbox_export_dialog_export_button), { dialog, which ->
+                    setPositiveButton(resources.getString(R.string.dropbox_export_dialog_export_button)) { dialog, which ->
                         exportTask = UploadTask(DropboxClientFactory.getClient(), requireContext().applicationContext, progressBar::setProgress, ::onUploadComplete, ::onUploadError).execute()
                         setMode(true)
-                    })
-                    setNegativeButton(resources.getString(R.string.dialog_button_cancel), { dialog, which -> })
+                    }
+                    setNegativeButton(resources.getString(R.string.dialog_button_cancel)) { dialog, which -> }
                     show()
                 }
             } else {
@@ -122,7 +122,7 @@ class DropboxExportFragment : AbstractDropboxFragment() {
                 with(builder) {
                     setTitle(resources.getString(R.string.dropbox_export))
                     setMessage("Dropbox export was cancelled")
-                    setPositiveButton("OK", { dialog, which -> })
+                    setPositiveButton("OK") { dialog, which -> }
                     show()
                 }
             }
@@ -132,7 +132,7 @@ class DropboxExportFragment : AbstractDropboxFragment() {
                 with(builder) {
                     setTitle(resources.getString(R.string.dropbox_export))
                     setMessage("Dropbox export completed")
-                    setPositiveButton("OK", { dialog, which -> })
+                    setPositiveButton("OK") { dialog, which -> }
                     show()
                 }
             }
@@ -145,7 +145,7 @@ class DropboxExportFragment : AbstractDropboxFragment() {
             with(builder) {
                 setTitle(resources.getString(R.string.dropbox_export))
                 setMessage("Dropbox export failed: " + ex.message)
-                setPositiveButton("OK", { dialog, which -> })
+                setPositiveButton("OK") { dialog, which -> }
                 show()
             }
         }

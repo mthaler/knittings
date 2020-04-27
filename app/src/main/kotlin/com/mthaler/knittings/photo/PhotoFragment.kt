@@ -101,10 +101,10 @@ class PhotoFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.menu_item_delete_photo -> {
-                DeleteDialog.create(requireContext(), editTextDescription.text.toString(), {
+                DeleteDialog.create(requireContext(), editTextDescription.text.toString()) {
                     deletePhoto()
                     parentFragmentManager.popBackStack()
-                }).show()
+                }.show()
                 true
             }
             R.id.menu_item_set_main_photo -> {

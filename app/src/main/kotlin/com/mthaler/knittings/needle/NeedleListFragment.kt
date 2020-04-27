@@ -51,9 +51,9 @@ class NeedleListFragment : Fragment() {
                     when (menu?.itemId) {
                         R.id.action_delete -> {
                             this@NeedleListFragment.activity?.let {
-                                DeleteDialog.create(it, needle.name, {
+                                DeleteDialog.create(it, needle.name) {
                                     datasource.deleteNeedle(needle)
-                                }).show()
+                                }.show()
                             }
                             mode?.finish()
                             return true

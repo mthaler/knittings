@@ -89,10 +89,10 @@ class KnittingDetailsFragment : Fragment() {
             }
             R.id.menu_item_delete_knitting -> {
                 val knitting = datasource.getKnitting(knittingID)
-                DeleteKnittingDialog.create(requireContext(), knitting, {
+                DeleteKnittingDialog.create(requireContext(), knitting) {
                     viewModel.delete()
                     requireActivity().finish()
-                }).show()
+                }.show()
                 return true
             }
             else -> super.onOptionsItemSelected(item)

@@ -61,7 +61,7 @@ class PhotoGalleryFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        val photoGalleryAdapter = PhotoGalleryAdapter(requireContext(), viewLifecycleOwner.lifecycleScope, { photo -> listener?.photoClicked(photo.id) })
+        val photoGalleryAdapter = PhotoGalleryAdapter(requireContext(), viewLifecycleOwner.lifecycleScope) { photo -> listener?.photoClicked(photo.id) }
         val orientation = this.resources.configuration.orientation
         val columns = if (orientation == Configuration.ORIENTATION_PORTRAIT) 2 else 3
         view?.let {

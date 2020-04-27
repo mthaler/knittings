@@ -90,14 +90,14 @@ class EditCategoryFragment : Fragment() {
             }
             R.id.menu_item_delete_category -> {
                 if (categoryID == Category.EMPTY.id) {
-                    DiscardChangesDialog.create(requireContext(), {
+                    DiscardChangesDialog.create(requireContext()) {
                         parentFragmentManager.popBackStack()
-                    }).show()
+                    }.show()
                 } else {
-                    DeleteDialog.create(requireContext(), editTextTitle.text.toString(), {
+                    DeleteDialog.create(requireContext(), editTextTitle.text.toString()) {
                         deleteCategory()
                         parentFragmentManager.popBackStack()
-                    }).show()
+                    }.show()
                 }
                 true
             }

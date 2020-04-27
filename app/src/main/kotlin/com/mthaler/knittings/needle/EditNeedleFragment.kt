@@ -108,14 +108,15 @@ class EditNeedleFragment : Fragment() {
             }
             R.id.menu_item_delete_needle -> {
                 if (needleID == Needle.EMPTY.id) {
-                    DiscardChangesDialog.create(requireContext(), {
+                    DiscardChangesDialog.create(requireContext()) {
                         parentFragmentManager.popBackStack()
-                    }).show()
+                    }.show()
                 } else {
-                    DeleteDialog.create(requireContext(), editTextName.text.toString(), {
+                    DeleteDialog.create(requireContext(), editTextName.text.toString()
+                    ) {
                         deleteNeedle()
-                        parentFragmentManager.popBackStack() }
-                    ).show()
+                        parentFragmentManager.popBackStack()
+                    }.show()
                 }
                 true
             }

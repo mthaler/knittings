@@ -131,7 +131,6 @@
                     android:layout_marginLeft="16dp"
                     android:layout_marginRight="16dp"
                     android:inputType="text"
-                    android:editable="false"
                     android:hint="@string/knitting_size_hint" />
             </com.google.android.material.textfield.TextInputLayout>
 

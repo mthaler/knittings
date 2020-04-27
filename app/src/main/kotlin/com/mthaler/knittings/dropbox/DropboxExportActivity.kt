@@ -85,7 +85,7 @@ class DropboxExportActivity : BaseActivity() {
                     with(builder) {
                         setTitle(resources.getString(R.string.dropbox_export))
                         setMessage("Logged out of Dropbox")
-                        setPositiveButton("OK", { dialog, which -> })
+                        setPositiveButton("OK") { dialog, which -> }
                         show()
                     }
                 }

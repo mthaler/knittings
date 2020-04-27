@@ -86,9 +86,9 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
                 when (menu?.itemId) {
                     R.id.action_delete -> {
                         mode?.finish()
-                        DeleteKnittingDialog.create(this@MainActivity, knitting, {
+                        DeleteKnittingDialog.create(this@MainActivity, knitting) {
                             datasource.deleteKnitting(knitting)
-                        }).show()
+                        }.show()
                         return true
                     }
                     R.id.action_copy -> {
