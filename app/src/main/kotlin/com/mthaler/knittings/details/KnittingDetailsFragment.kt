@@ -145,10 +145,10 @@ class KnittingDetailsFragment : Fragment() {
             knittingFinished.text = if (knitting.finished != null) DateFormat.getDateInstance().format(knitting.finished) else ""
 
             val knittingNeedleDiameter = it.findViewById<TextView>(R.id.knitting_needle_diameter)
-            knittingNeedleDiameter.text = getString(R.string.knitting_details_needle, knitting.needleDiameter)
+            knittingNeedleDiameter.text = knitting.needleDiameter
 
             val knittingSize = it.findViewById<TextView>(R.id.knitting_size)
-            knittingSize.text = getString(R.string.knitting_details_size, knitting.size)
+            knittingSize.text = knitting.size
 
             val knittingDuration = it.findViewById<TextView>(R.id.knitting_duration)
             knittingDuration.text = TimeUtils.formatDuration(knitting.duration)

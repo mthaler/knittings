@@ -53,11 +53,12 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:columnCount="2">
+
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="6dp"
-                            android:layout_marginBottom="6dp"
+                            android:layout_marginTop="8dp"
+                            android:layout_marginBottom="8dp"
                             android:layout_marginLeft="4dp"
                             android:layout_marginRight="4dp"
                             android:text="@string/knitting_started_hint"/>
@@ -66,15 +67,15 @@
                             android:id="@+id/knitting_started"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="6dp"
-                            android:layout_marginBottom="6dp"
+                            android:layout_marginTop="8dp"
+                            android:layout_marginBottom="8dp"
                             android:textColor="@color/black" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="6dp"
-                            android:layout_marginBottom="6dp"
+                            android:layout_marginTop="8dp"
+                            android:layout_marginBottom="8dp"
                             android:layout_marginLeft="4dp"
                             android:layout_marginRight="4dp"
                             android:text="@string/knitting_finished_hint"/>
@@ -83,15 +84,15 @@
                             android:id="@+id/knitting_finished"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="6dp"
-                            android:layout_marginBottom="6dp"
+                            android:layout_marginTop="8dp"
+                            android:layout_marginBottom="8dp"
                             android:textColor="@color/black" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="6dp"
-                            android:layout_marginBottom="6dp"
+                            android:layout_marginTop="8dp"
+                            android:layout_marginBottom="8dp"
                             android:layout_marginLeft="4dp"
                             android:layout_marginRight="4dp"
                             android:text="@string/knitting_duration_hint"/>
@@ -100,15 +101,15 @@
                             android:id="@+id/knitting_duration"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="6dp"
-                            android:layout_marginBottom="6dp"
+                            android:layout_marginTop="8dp"
+                            android:layout_marginBottom="8dp"
                             android:textColor="@color/black" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="6dp"
-                            android:layout_marginBottom="6dp"
+                            android:layout_marginTop="8dp"
+                            android:layout_marginBottom="8dp"
                             android:layout_marginLeft="4dp"
                             android:layout_marginRight="4dp"
                             android:text="@string/knitting_category_hint"/>
@@ -117,16 +118,16 @@
                             android:id="@+id/knitting_category"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="6dp"
-                            android:layout_marginBottom="6dp"
+                            android:layout_marginTop="8dp"
+                            android:layout_marginBottom="8dp"
                             android:textColor="@color/black" />
 
                         <TextView
                             android:id="@+id/knitting_status_hint"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="6dp"
-                            android:layout_marginBottom="6dp"
+                            android:layout_marginTop="8dp"
+                            android:layout_marginBottom="8dp"
                             android:layout_marginLeft="4dp"
                             android:layout_marginRight="4dp"
                             android:text="@string/knitting_status_hint" />
@@ -135,8 +136,8 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="horizontal"
-                            android:layout_marginTop="6dp"
-                            android:layout_marginBottom="6dp">
+                            android:layout_marginTop="8dp"
+                            android:layout_marginBottom="8dp">
                             <ImageView
                                 android:id="@+id/knitting_status_image"
                                 android:layout_width="wrap_content"
@@ -170,50 +171,72 @@
 
             <View style="@style/Divider"/>
 
-            <TextView
-                android:id="@+id/knitting_needle_diameter"
+            <GridLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="16dp"
-                android:text="@string/knitting_needle_diameter_hint"
-                android:textColor="@color/black" />
+                android:columnCount="2"
+                android:layout_marginTop="8dp">
 
-            <TextView
-                android:id="@+id/knitting_size"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="16dp"
-                android:text="@string/knitting_size_hint"
-                android:textColor="@color/black" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="4dp"
+                    android:text="@string/knitting_needle_diameter_hint"/>
+
+                <TextView
+                    android:id="@+id/knitting_needle_diameter"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:textColor="@color/black" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="4dp"
+                    android:text="@string/knitting_size_hint"/>
+
+                <TextView
+                    android:id="@+id/knitting_size"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:textColor="@color/black" />
+
+            </GridLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
+                android:orientation="horizontal"
+                android:layout_marginTop="2dp">
+                <TextView
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_marginTop="16dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:text="@string/rating"
-                        android:gravity="center"
-                        android:textColor="@color/black"
-                        android:layout_marginLeft="16dp"
-                        android:layout_marginRight="16dp" />
-                    <RatingBar
-                        android:id="@+id/ratingBar"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:numStars="5"
-                        android:rating="1.0"
-                        android:stepSize="1.0"
-                        android:isIndicator="true" />
-                </LinearLayout>
+                    android:text="@string/rating"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_marginTop="6dp" />
+                <RatingBar
+                    android:id="@+id/ratingBar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:numStars="5"
+                    android:rating="1.0"
+                    android:stepSize="1.0"
+                    android:isIndicator="true"
+                    android:scaleX=".6"
+                    android:scaleY=".6"
+                    android:transformPivotX="0dp"
+                    android:transformPivotY="0dp" />
             </LinearLayout>
         </LinearLayout>
     </ScrollView>

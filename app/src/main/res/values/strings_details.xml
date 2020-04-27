@@ -7,8 +7,8 @@
     <string name="knitting_description_hint">Description</string>
     <string name="knitting_started_hint">Started:</string>
     <string name="knitting_finished_hint">Finished:</string>
-    <string name="knitting_needle_diameter_hint">Needle Diameter</string>
-    <string name="knitting_size_hint">Size</string>
+    <string name="knitting_needle_diameter_hint">Needle:</string>
+    <string name="knitting_size_hint">Size:</string>
     <string name="knitting_duration_hint">Duration:</string>
     <!-- status -->
     <string name="knitting_status_in_the_works">In the works</string>
