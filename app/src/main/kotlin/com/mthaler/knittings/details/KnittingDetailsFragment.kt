@@ -97,32 +97,40 @@ class KnittingDetailsFragment : Fragment() {
         }
     }
 
-    private fun updateDetails(knittingWithPhotos: KnittingWithPhotos) {
+    private fun updateDetails(knitting: Knitting) {
         view?.let {
-            val knitting = knittingWithPhotos.knitting
-
             val imageView = it.findViewById<SquareImageView>(R.id.image)
             imageView.setImageBitmap(null)
-            if (knitting.defaultPhoto != null) {
-                viewLifecycleOwner.lifecycleScope.launch {
-                    val result = withContext(Dispatchers.Default) {
-                        val file = knitting.defaultPhoto.filename
-                        if (file.exists()) {
-                            val orientation = PictureUtils.getOrientation(file.absolutePath)
-                            val photo = PictureUtils.decodeSampledBitmapFromPath(file.absolutePath, imageView.width, imageView.height)
-                            val rotatedPhoto = PictureUtils.rotateBitmap(photo, orientation)
-                           rotatedPhoto
-                        } else {
-                            null
+            val viewTreeObserver = imageView.viewTreeObserver
+            viewTreeObserver.addOnPreDrawListener(object : ViewTreeObserver.OnPreDrawListener {
+                override fun onPreDraw(): Boolean {
+                    imageView.viewTreeObserver.removeOnPreDrawListener(this)
+                    val width = imageView.measuredWidth
+                    val height = imageView.measuredHeight
+                    if (knitting.defaultPhoto != null) {
+                        viewLifecycleOwner.lifecycleScope.launch {
+                            val result = withContext(Dispatchers.Default) {
+                                val file = knitting.defaultPhoto.filename
+                                if (file.exists()) {
+                                    val orientation = PictureUtils.getOrientation(file.absolutePath)
+                                    val photo = PictureUtils.decodeSampledBitmapFromPath(file.absolutePath, imageView.width, imageView.height)
+                                    val rotatedPhoto = PictureUtils.rotateBitmap(photo, orientation)
+                                    rotatedPhoto
+                                } else {
+                                    null
+                                }
+                            }
+                            if (result != null) {
+                                imageView.setImageBitmap(result)
+                            }
                         }
+                    } else {
+                        imageView.setImageResource(R.drawable.categories)
                     }
-                    if (result != null) {
-                        imageView.setImageBitmap(result)
-                    }
+                    return true
                 }
-            } else {
-                imageView.setImageResource(R.drawable.categories)
-            }
+            })
+
 
             val knittingTitle = it.findViewById<TextView>(R.id.knitting_title)
             knittingTitle.text = knitting.title

@@ -13,18 +13,16 @@ class KnittingDetailsViewModel(application: Application) : DatasourceViewModel(a
 
     private var knittingID = Knitting.EMPTY.id
     private var deleted = false
-    val knitting = MutableLiveData<KnittingWithPhotos>()
+    val knitting = MutableLiveData<Knitting>()
 
     fun init(id: Long) {
         if (id != knittingID) {
             knittingID = id
             viewModelScope.launch {
-                val knittingWithPhotos =  withContext(Dispatchers.IO) {
-                    val k = datasource.getKnitting(id)
-                    val photos = datasource.getAllPhotos(k)
-                    KnittingWithPhotos(k, photos)
+                val k =  withContext(Dispatchers.IO) {
+                    datasource.getKnitting(id)
                 }
-                knitting.value = knittingWithPhotos
+                knitting.value = k
             }
         }
     }
@@ -42,12 +40,10 @@ class KnittingDetailsViewModel(application: Application) : DatasourceViewModel(a
     override fun databaseChanged() {
         if (!deleted) {
             viewModelScope.launch {
-                val knittingWithPhotos =  withContext(Dispatchers.IO) {
-                    val k = datasource.getKnitting(knittingID)
-                    val photos = datasource.getAllPhotos(k)
-                    KnittingWithPhotos(k, photos)
+                val k =  withContext(Dispatchers.IO) {
+                    datasource.getKnitting(knittingID)
                 }
-                knitting.value = knittingWithPhotos
+                knitting.value = k
             }
         }
     }
