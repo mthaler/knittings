@@ -6,13 +6,11 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import androidx.fragment.app.Fragment
 import android.view.*
 import android.widget.ImageView
-import android.widget.LinearLayout
 import android.widget.RatingBar
 import android.widget.TextView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import androidx.viewpager2.widget.ViewPager2
 import com.mthaler.knittings.Extras
 import com.mthaler.knittings.R
 import com.mthaler.knittings.database.datasource
@@ -26,7 +24,6 @@ import com.mthaler.knittings.utils.TimeUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.io.File
 import java.text.DateFormat
 
 /**
@@ -36,8 +33,6 @@ class KnittingDetailsFragment : Fragment() {
 
     private var knittingID: Long = Knitting.EMPTY.id
     private lateinit var viewModel: KnittingDetailsViewModel
-    private lateinit var photoAdapter: PhotoAdapter
-    private var onPageChangeCallback: ViewPager2.OnPageChangeCallback? = null
     private var listener: OnFragmentInteractionListener? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -52,6 +47,11 @@ class KnittingDetailsFragment : Fragment() {
         setHasOptionsMenu(true)
 
         val v = inflater.inflate(R.layout.fragment_knitting_details, container, false)
+
+        val imageView = v.findViewById<SquareImageView>(R.id.image)
+        imageView.setOnClickListener {
+            startActivity(PhotoGalleryActivity.newIntent(requireContext(), knittingID))
+        }
 
         val fabEdit = v.findViewById<FloatingActionButton>(R.id.edit_knitting_details)
         fabEdit.setOnClickListener {
