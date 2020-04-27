@@ -151,24 +151,10 @@ class NeedleListFragment : Fragment() {
         listener = null
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     */
     interface OnFragmentInteractionListener {
 
-        /**
-         * Called if the user clicks the floating action button to create a category
-         */
         fun createNeedle()
 
-        /**
-         * Called if the user clicks a needle in the list
-         *
-         * @param needleID needle ID
-         */
         fun needleClicked(needleID: Long)
     }
 }

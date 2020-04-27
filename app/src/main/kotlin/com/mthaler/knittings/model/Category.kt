@@ -6,6 +6,6 @@ data class Category(val id: Long = -1, val name: String = "", val color: Int? = 
 
     companion object {
 
-        val EMPTY = Category(-1L, "", null)
+        val EMPTY = Category()
     }
 }

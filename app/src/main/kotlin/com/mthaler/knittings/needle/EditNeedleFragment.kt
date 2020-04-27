@@ -13,7 +13,7 @@ import com.mthaler.knittings.Extras.EXTRA_NEEDLE_ID
 
 class EditNeedleFragment : Fragment() {
 
-    private var needleID: Long = -1
+    private var needleID: Long = Needle.EMPTY.id
     private lateinit var editTextName: EditText
     private lateinit var editTextSize: EditText
     private lateinit var editTextLength: EditText
@@ -61,7 +61,7 @@ class EditNeedleFragment : Fragment() {
         }
 
         if (savedInstanceState == null) {
-            val needle = if (needleID != -1L) datasource.getNeedle(needleID) else Needle()
+            val needle = if (needleID != Needle.EMPTY.id) datasource.getNeedle(needleID) else Needle.EMPTY
             editTextName.setText(needle.name)
             editTextSize.setText(needle.size)
             editTextLength.setText(needle.length)
@@ -98,7 +98,7 @@ class EditNeedleFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.menu_item_save_needle -> {
-                val oldNeedle = if (needleID != -1L) datasource.getNeedle(needleID) else null
+                val oldNeedle = if (needleID != Needle.EMPTY.id) datasource.getNeedle(needleID) else Needle.EMPTY
                 val newNeedle = createNeedle()
                 if (newNeedle != oldNeedle) {
                     saveNeedle(newNeedle)
@@ -107,7 +107,7 @@ class EditNeedleFragment : Fragment() {
                 true
             }
             R.id.menu_item_delete_needle -> {
-                if (needleID == -1L) {
+                if (needleID == Needle.EMPTY.id) {
                     DiscardChangesDialog.create(requireContext(), {
                         parentFragmentManager.popBackStack()
                     }).show()
@@ -124,7 +124,7 @@ class EditNeedleFragment : Fragment() {
     }
 
     fun onBackPressed() {
-        val oldNeedle = if (needleID != -1L) datasource.getNeedle(needleID) else null
+        val oldNeedle = if (needleID != Needle.EMPTY.id) datasource.getNeedle(needleID) else Needle.EMPTY
         val newNeedle = createNeedle()
         if (newNeedle != oldNeedle) {
             SaveChangesDialog.create(requireContext(), {
@@ -150,7 +150,7 @@ class EditNeedleFragment : Fragment() {
     }
 
     private fun saveNeedle(needle: Needle) {
-        if (needle.id == -1L) {
+        if (needle.id == Needle.EMPTY.id) {
             datasource.addNeedle(needle)
         } else {
             datasource.updateNeedle(needle)

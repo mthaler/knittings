@@ -7,6 +7,7 @@ import androidx.core.app.NavUtils
 import android.view.MenuItem
 import com.mthaler.knittings.BaseActivity
 import com.mthaler.knittings.R
+import com.mthaler.knittings.model.Needle
 import kotlinx.android.synthetic.main.activity_needle_list.*
 
 class NeedleListActivity : BaseActivity(), NeedleListFragment.OnFragmentInteractionListener {
@@ -60,7 +61,7 @@ class NeedleListActivity : BaseActivity(), NeedleListFragment.OnFragmentInteract
     }
 
     override fun createNeedle() {
-        val f = EditNeedleFragment.newInstance(-1L)
+        val f = EditNeedleFragment.newInstance(Needle.EMPTY.id)
         val fm = supportFragmentManager
         val ft = fm.beginTransaction()
         ft.replace(R.id.needle_list_container, f)

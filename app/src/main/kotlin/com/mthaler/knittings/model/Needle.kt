@@ -11,4 +11,10 @@ data class Needle(
     val material: NeedleMaterial = NeedleMaterial.OTHER,
     val inUse: Boolean = false,
     val type: NeedleType = NeedleType.OTHER
-) : Serializable
+) : Serializable {
+
+    companion object {
+
+        val EMPTY = Needle()
+    }
+}
