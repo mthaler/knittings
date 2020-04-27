@@ -5,7 +5,7 @@
         android:id="@+id/menu_item_show_gallery"
         android:icon="@drawable/ic_grid_on_white_36dp"
         android:title="@string/show_gallery"
-        android:orderInCategory="1"
+        android:orderInCategory="4"
         app:showAsAction="ifRoom|withText"/>
     <item
         android:id="@+id/menu_item_show_stopwatch"
