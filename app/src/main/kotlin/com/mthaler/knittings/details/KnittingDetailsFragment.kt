@@ -19,8 +19,14 @@ import com.mthaler.knittings.database.datasource
 import com.mthaler.knittings.model.Knitting
 import com.mthaler.knittings.model.Status
 import com.mthaler.knittings.photo.PhotoGalleryActivity
+import com.mthaler.knittings.photo.SquareImageView
 import com.mthaler.knittings.stopwatch.StopwatchActivity
+import com.mthaler.knittings.utils.PictureUtils
 import com.mthaler.knittings.utils.TimeUtils
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.io.File
 import java.text.DateFormat
 
 /**
@@ -51,11 +57,6 @@ class KnittingDetailsFragment : Fragment() {
         fabEdit.setOnClickListener {
             listener?.editKnitting(knittingID)
         }
-
-//        val viewPager = v.findViewById<ViewPager2>(R.id.view_pager)
-//        val adapter = PhotoAdapter(requireContext(), viewLifecycleOwner.lifecycleScope)
-//        viewPager.adapter = adapter
-//        photoAdapter = adapter
 
         return v
     }
@@ -98,30 +99,30 @@ class KnittingDetailsFragment : Fragment() {
 
     private fun updateDetails(knittingWithPhotos: KnittingWithPhotos) {
         view?.let {
-            // remove slider dots and on page changed listener. We readd it if we need it
-//            val sliderDots = it.findViewById<LinearLayout>(R.id.sliderDots)
-//            sliderDots.removeAllViews()
-//            val viewPager = it.findViewById<ViewPager2>(R.id.view_pager)
-//            onPageChangeCallback?.let { viewPager.registerOnPageChangeCallback(it) }
-//            viewPager.offscreenPageLimit = 3
-//            val photos = knittingWithPhotos.photos
-//            photos.sortByDescending { it.id }
-//            if (photos.size > 0) {
-//                viewPager.visibility = View.VISIBLE
-//                photoAdapter.setPhotos(photos)
-//
-//                val dotscount = photos.size
-//
-//                if (photos.size > 1) {
-//                    val cb = DotsOnPageChangeCallback(requireContext(), dotscount, sliderDots)
-//                    onPageChangeCallback = cb
-//                    viewPager.registerOnPageChangeCallback(cb)
-//                }
-//            } else {
-//                viewPager.visibility = View.GONE
-//            }
-
             val knitting = knittingWithPhotos.knitting
+
+            val imageView = it.findViewById<SquareImageView>(R.id.image)
+            imageView.setImageBitmap(null)
+            if (knitting.defaultPhoto != null) {
+                viewLifecycleOwner.lifecycleScope.launch {
+                    val result = withContext(Dispatchers.Default) {
+                        val file = knitting.defaultPhoto.filename
+                        if (file.exists()) {
+                            val orientation = PictureUtils.getOrientation(file.absolutePath)
+                            val photo = PictureUtils.decodeSampledBitmapFromPath(file.absolutePath, imageView.width, imageView.height)
+                            val rotatedPhoto = PictureUtils.rotateBitmap(photo, orientation)
+                           rotatedPhoto
+                        } else {
+                            null
+                        }
+                    }
+                    if (result != null) {
+                        imageView.setImageBitmap(result)
+                    }
+                }
+            } else {
+                imageView.setImageResource(R.drawable.categories)
+            }
 
             val knittingTitle = it.findViewById<TextView>(R.id.knitting_title)
             knittingTitle.text = knitting.title

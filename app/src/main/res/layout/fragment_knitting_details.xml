@@ -22,10 +22,13 @@
                 android:layout_marginBottom="8dp">
 
                 <com.mthaler.knittings.photo.SquareImageView
+                    android:id="@+id/image"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="3"
-                    android:padding="5dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="4"
+                    android:layout_margin="8dp"
+                    android:layout_gravity="center_vertical"
+                    android:scaleType="centerCrop"
                     app:srcCompat="@drawable/categories">
                 </com.mthaler.knittings.photo.SquareImageView>
 
@@ -43,6 +46,7 @@
                         android:text="@string/knitting_title_hint"
                         android:textColor="@color/black"
                         android:textStyle="bold"
+                        android:textSize="20sp"
                         />
 
                     <TextView
@@ -77,6 +81,33 @@
                         android:layout_margin="8dp"
                         android:text="@string/knitting_category_hint"
                         android:textColor="@color/black" />
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_margin="8dp">
+                        <TextView
+                            android:id="@+id/knitting_status_hint"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentLeft="true"
+                            android:text="@string/knitting_status_hint"
+                            android:textColor="@color/black"/>
+                        <ImageView
+                            android:id="@+id/knitting_status_image"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_toRightOf="@id/knitting_status_hint"
+                            android:layout_alignBottom="@id/knitting_status_hint"
+                            android:paddingLeft="4dp"/>
+                        <TextView
+                            android:id="@+id/knitting_status"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/black"
+                            android:layout_toRightOf="@id/knitting_status_image"/>
+                    </RelativeLayout>
                 </LinearLayout>
             </LinearLayout>
 
@@ -127,33 +158,6 @@
                     android:orientation="horizontal">
 
                 </LinearLayout>
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_margin="16dp">
-                    <TextView
-                        android:id="@+id/knitting_status_hint"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentLeft="true"
-                        android:text="@string/knitting_status_hint"
-                        android:textColor="@color/black"/>
-                    <ImageView
-                        android:id="@+id/knitting_status_image"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_toRightOf="@id/knitting_status_hint"
-                        android:layout_alignBottom="@id/knitting_status_hint"
-                        android:paddingLeft="4dp"/>
-                    <TextView
-                        android:id="@+id/knitting_status"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/black"
-                        android:layout_toRightOf="@id/knitting_status_image"/>
-                </RelativeLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
