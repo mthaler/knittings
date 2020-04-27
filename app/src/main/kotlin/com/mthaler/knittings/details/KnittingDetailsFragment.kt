@@ -139,10 +139,10 @@ class KnittingDetailsFragment : Fragment() {
             knittingDescription.text = knitting.description
 
             val knittingStarted = it.findViewById<TextView>(R.id.knitting_started)
-            knittingStarted.text = getString(R.string.knitting_details_started, DateFormat.getDateInstance().format(knitting.started))
+            knittingStarted.text = DateFormat.getDateInstance().format(knitting.started)
 
             val knittingFinished = it.findViewById<TextView>(R.id.knitting_finished)
-            knittingFinished.text = getString(R.string.knitting_details_finished, if (knitting.finished != null) DateFormat.getDateInstance().format(knitting.finished) else "")
+            knittingFinished.text = if (knitting.finished != null) DateFormat.getDateInstance().format(knitting.finished) else ""
 
             val knittingNeedleDiameter = it.findViewById<TextView>(R.id.knitting_needle_diameter)
             knittingNeedleDiameter.text = getString(R.string.knitting_details_needle, knitting.needleDiameter)
@@ -151,11 +151,11 @@ class KnittingDetailsFragment : Fragment() {
             knittingSize.text = getString(R.string.knitting_details_size, knitting.size)
 
             val knittingDuration = it.findViewById<TextView>(R.id.knitting_duration)
-            knittingDuration.text = getString(R.string.knitting_details_duration, TimeUtils.formatDuration(knitting.duration))
+            knittingDuration.text = TimeUtils.formatDuration(knitting.duration)
 
             val knittingCategory = it.findViewById<TextView>(R.id.knitting_category)
             val c = knitting.category
-            knittingCategory.text = getString(R.string.knitting_details_category, c?.name ?: "")
+            knittingCategory.text = c?.name ?: ""
 
             val knittingStatusImage = it.findViewById<ImageView>(R.id.knitting_status_image)
             knittingStatusImage.setImageResource(Status.getDrawableResource(it.context, knitting.status))
