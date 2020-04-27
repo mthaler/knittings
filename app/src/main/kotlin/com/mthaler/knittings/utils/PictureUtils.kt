@@ -186,7 +186,7 @@ object PictureUtils {
             resolution(1024, 1024)
             quality(80)
             format(Bitmap.CompressFormat.JPEG)
-            size(307_200 ) // 300 KB
+            size(350 * 1024) // 350 KB
         }
     }
 }
