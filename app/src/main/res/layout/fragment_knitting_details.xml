@@ -12,165 +12,172 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <FrameLayout
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="8dp">
 
-                <androidx.viewpager2.widget.ViewPager2
-                    android:id="@+id/view_pager"
-                    android:layout_width="match_parent"
-                    android:layout_height="200dp" />
+                <com.mthaler.knittings.photo.SquareImageView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="3"
+                    android:padding="5dp"
+                    app:srcCompat="@drawable/categories">
+                </com.mthaler.knittings.photo.SquareImageView>
 
                 <LinearLayout
-                    android:id="@+id/sliderDots"
-                    android:orientation="horizontal"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal|bottom"
-                    android:layout_marginBottom="8dp"/>
-            </FrameLayout>
-
-            <TextView
-                android:id="@+id/knitting_title"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
-                android:text="@string/knitting_title_hint"
-                android:textColor="@color/black"
-                android:textStyle="bold"
-                />
-
-            <TextView
-                android:id="@+id/knitting_description"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
-                android:text="@string/knitting_description_hint"
-                android:textColor="@color/black"
-                android:autoLink="web"
-                />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-                <TextView
-                    android:id="@+id/knitting_started"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_margin="16dp"
-                    android:layout_weight="1"
-                    android:text="@string/knitting_started_hint"
-                    android:textColor="@color/black" />
-                <TextView
-                    android:id="@+id/knitting_finished"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="16dp"
-                    android:layout_weight="1"
-                    android:text="@string/knitting_finished_hint"
-                    android:textColor="@color/black" />
+                    android:orientation="vertical"
+                    android:layout_weight="5">
+
+                    <TextView
+                        android:id="@+id/knitting_title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="8dp"
+                        android:text="@string/knitting_title_hint"
+                        android:textColor="@color/black"
+                        android:textStyle="bold"
+                        />
+
+                    <TextView
+                        android:id="@+id/knitting_started"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="8dp"
+                        android:text="@string/knitting_started_hint"
+                        android:textColor="@color/black" />
+
+
+                    <TextView
+                        android:id="@+id/knitting_finished"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="8dp"
+                        android:text="@string/knitting_finished_hint"
+                        android:textColor="@color/black" />
+
+                    <TextView
+                        android:id="@+id/knitting_duration"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="8dp"
+                        android:text="@string/knitting_duration_hint"
+                        android:textColor="@color/black" />
+
+                    <TextView
+                        android:id="@+id/knitting_category"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="8dp"
+                        android:text="@string/knitting_category_hint"
+                        android:textColor="@color/black" />
+                </LinearLayout>
             </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-                <TextView
-                    android:id="@+id/knitting_needle_diameter"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="16dp"
-                    android:layout_weight="1"
-                    android:text="@string/knitting_needle_diameter_hint"
-                    android:textColor="@color/black" />
-                <TextView
-                    android:id="@+id/knitting_size"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="16dp"
-                    android:layout_weight="1"
-                    android:text="@string/knitting_size_hint"
-                    android:textColor="@color/black" />
-            </LinearLayout>
+            <View style="@style/Divider"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-                <TextView
-                    android:id="@+id/knitting_duration"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="16dp"
-                    android:layout_weight="1"
-                    android:text="@string/knitting_duration_hint"
-                    android:textColor="@color/black" />
-                <TextView
-                    android:id="@+id/knitting_category"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="16dp"
-                    android:layout_weight="1"
-                    android:text="@string/knitting_category_hint"
-                    android:textColor="@color/black" />
-            </LinearLayout>
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_margin="16dp">
-                <TextView
-                    android:id="@+id/knitting_status_hint"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:text="@string/knitting_status_hint"
-                    android:textColor="@color/black"/>
-                <ImageView
-                    android:id="@+id/knitting_status_image"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_toRightOf="@id/knitting_status_hint"
-                    android:layout_alignBottom="@id/knitting_status_hint"
-                    android:paddingLeft="4dp"/>
-                <TextView
-                    android:id="@+id/knitting_status"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/black"
-                    android:layout_toRightOf="@id/knitting_status_image"/>
-            </RelativeLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="16dp">
+                android:layout_height="match_parent"
+                android:layout_marginTop="8dp"
+                android:orientation="vertical">
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:text="@string/rating"
-                    android:gravity="center"
-                    android:textColor="@color/black"
+                    android:id="@+id/knitting_description"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_marginLeft="16dp"
-                    android:layout_marginRight="16dp" />
-                <RatingBar
-                    android:id="@+id/ratingBar"
-                    android:layout_width="wrap_content"
+                    android:layout_marginRight="16dp"
+                    android:text="@string/knitting_description_hint"
+                    android:textColor="@color/black"
+                    android:autoLink="web"
+                    />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:numStars="5"
-                    android:rating="1.0"
-                    android:stepSize="1.0"
-                    android:isIndicator="true" />
+                    android:orientation="horizontal">
+                    <TextView
+                        android:id="@+id/knitting_needle_diameter"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="16dp"
+                        android:layout_weight="1"
+                        android:text="@string/knitting_needle_diameter_hint"
+                        android:textColor="@color/black" />
+                    <TextView
+                        android:id="@+id/knitting_size"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="16dp"
+                        android:layout_weight="1"
+                        android:text="@string/knitting_size_hint"
+                        android:textColor="@color/black" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                </LinearLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_margin="16dp">
+                    <TextView
+                        android:id="@+id/knitting_status_hint"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:text="@string/knitting_status_hint"
+                        android:textColor="@color/black"/>
+                    <ImageView
+                        android:id="@+id/knitting_status_image"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_toRightOf="@id/knitting_status_hint"
+                        android:layout_alignBottom="@id/knitting_status_hint"
+                        android:paddingLeft="4dp"/>
+                    <TextView
+                        android:id="@+id/knitting_status"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/black"
+                        android:layout_toRightOf="@id/knitting_status_image"/>
+                </RelativeLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="16dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:text="@string/rating"
+                        android:gravity="center"
+                        android:textColor="@color/black"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginRight="16dp" />
+                    <RatingBar
+                        android:id="@+id/ratingBar"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:numStars="5"
+                        android:rating="1.0"
+                        android:stepSize="1.0"
+                        android:isIndicator="true" />
+                </LinearLayout>
             </LinearLayout>
         </LinearLayout>
     </ScrollView>
