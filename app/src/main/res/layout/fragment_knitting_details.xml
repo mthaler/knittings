@@ -29,7 +29,8 @@
                     android:layout_margin="8dp"
                     android:layout_gravity="center_vertical"
                     android:scaleType="centerCrop"
-                    app:srcCompat="@drawable/categories">
+                    app:srcCompat="@drawable/categories"
+                    android:foreground="?android:attr/selectableItemBackground">
                 </com.mthaler.knittings.photo.SquareImageView>
 
                 <LinearLayout
