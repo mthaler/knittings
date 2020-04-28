@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.navigation.NavigationView
 import com.mthaler.knittings.about.AboutDialog
 import com.mthaler.knittings.category.CategoryListActivity
+import com.mthaler.knittings.compressphotos.CompressPhotosActivity
 import com.mthaler.knittings.database.datasource
 import com.mthaler.knittings.details.DeleteKnittingDialog
 import com.mthaler.knittings.details.KnittingDetailsActivity
@@ -316,17 +317,20 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         // Handle navigation view item clicks here.
         when (item.itemId) {
-            R.id.nav_dropbox_export -> {
-                startActivity(DropboxExportActivity.newIntent(this))
-            }
-            R.id.nav_dropbox_import -> {
-                startActivity(DropboxImportActivity.newIntent(this))
-            }
             R.id.nav_edit_categories -> {
                 startActivity(CategoryListActivity.newIntent(this))
             }
             R.id.nav_edit_needles -> {
                 startActivity(NeedleListActivity.newIntent(this))
+            }
+            R.id.nav_compress_photos -> {
+                startActivity(CompressPhotosActivity.newIntent(this))
+            }
+            R.id.nav_dropbox_export -> {
+                startActivity(DropboxExportActivity.newIntent(this))
+            }
+            R.id.nav_dropbox_import -> {
+                startActivity(DropboxImportActivity.newIntent(this))
             }
             R.id.nav_edit_settings -> {
                 startActivity(SettingsActivity.newIntent(this))

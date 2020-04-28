@@ -1,14 +1,15 @@
 package com.mthaler.knittings.compressphotos
 
+import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.Bundle
 import android.view.View
-import androidx.appcompat.app.AppCompatActivity
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import com.mthaler.knittings.BaseActivity
 import com.mthaler.knittings.R
 
-class CompressPhotosActivity : AppCompatActivity() {
+class CompressPhotosActivity : BaseActivity() {
 
     private val broadcastReceiver = CompressPhotosBroadcastReceiver()
 
@@ -27,5 +28,9 @@ class CompressPhotosActivity : AppCompatActivity() {
         val intent = Intent("MY_ACTION")
         intent.putExtra("data", "Hello World!")
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent)
+    }
+
+    companion object {
+        fun newIntent(context: Context): Intent = Intent(context, CompressPhotosActivity::class.java)
     }
 }
