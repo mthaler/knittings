@@ -4,24 +4,27 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <androidx.preference.PreferenceCategory
+        android:key="category_theme"
         android:title="@string/pref_header_theme"
         app:iconSpaceReserved="false">
         <com.mthaler.knittings.settings.ThemePreference
             android:title="@string/pref_color_theme"
             android:defaultValue="default"
             android:key="theme"
-            app:iconSpaceReserved="false"/>
+            android:icon="@drawable/ic_palette_black_24dp"/>
     </androidx.preference.PreferenceCategory>
     <androidx.preference.PreferenceCategory
+        android:key="category_photos"
         android:title="@string/pref_header_photos"
         app:iconSpaceReserved="false">
         <androidx.preference.SwitchPreferenceCompat
             android:key="@string/key_photos_use_newest_as_preview"
             android:title="@string/pref_use_newest_photo_as_preview"
             android:defaultValue="true"
-            app:iconSpaceReserved="false"/>
+            app:icon="@drawable/ic_photo_camera_black_24dp"/>
     </androidx.preference.PreferenceCategory>
     <androidx.preference.PreferenceCategory
+        android:key="category_sharing"
         android:title="@string/pref_header_sharing"
         app:iconSpaceReserved="false">
         <androidx.preference.EditTextPreference
@@ -29,15 +32,17 @@
             android:defaultValue="1200"
             android:inputType="number"
             android:title="@string/pref_size_of_shared_photos"
-            app:iconSpaceReserved="false"/>
+            app:useSimpleSummaryProvider="true"
+            app:icon="@drawable/ic_photo_size_select_large_black_24dp"/>
     </androidx.preference.PreferenceCategory>
     <androidx.preference.PreferenceCategory
+        android:key="category_development"
         android:title="@string/pref_header_development"
         app:iconSpaceReserved="false">
         <androidx.preference.SwitchPreferenceCompat
             android:key="@string/key_display_photo_size"
             android:title="@string/pref_display_photo_size"
             android:defaultValue="false"
-            app:iconSpaceReserved="false"/>
+            app:icon="@drawable/ic_description_black_24dp"/>
     </androidx.preference.PreferenceCategory>
 </androidx.preference.PreferenceScreen>
