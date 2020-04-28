@@ -11,8 +11,8 @@ android {
         applicationId "com.mthaler.knittings"
         minSdkVersion 16
         targetSdkVersion 28
-        versionCode 39
-        versionName "0.9.17"
+        versionCode 40
+        versionName "0.9.18"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
         multiDexEnabled true
