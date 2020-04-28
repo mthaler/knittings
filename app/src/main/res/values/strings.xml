@@ -63,17 +63,6 @@
     <string name="idea_and_concept">Idea and concept: Ulrike Jordan</string>
     <string name="programming">Programming: Michael Thaler</string>
 
-    <!-- knitting details -->
-    <string name="knitting_details_started">Started: %1$s</string>
-    <string name="knitting_details_finished">Finished: %1$s</string>
-    <string name="knitting_details_needle">Needle: %1$s</string>
-    <string name="knitting_details_size">Size: %1$s</string>
-    <string name="knitting_details_duration">Duration: %1$s</string>
-    <string name="knitting_details_category">Category: %1$s</string>
-    <string name="knitting_category_hint">Category:</string>
-    <string name="knitting_details_status">Status: %1$s</string>
-    <string name="knitting_status_hint">Status:</string>
-
     <!-- network error -->
     <string name="network_error_title">Network Error</string>
     <string name="network_error_dropbox">Could not connect to Dropbox</string>
