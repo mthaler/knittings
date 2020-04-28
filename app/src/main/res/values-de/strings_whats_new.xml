@@ -5,7 +5,8 @@
         <h3>Version 0.9.18</h3>
         - Foto aufnehmen Aktion vom Editier-Bildschirm entfernt<br>
         - Einstellungen überarbeitet<br>
-        - Details-Bildschirm schneidet Texte nicht mehr abs<br>
+        - Details-Bildschirm schneidet Texte nicht mehr ab<br>
+        - Strickereien-Liste zeigt jetzt Platzhalter-Bild wenn kein Vorschaubild vorhanden ist<br>
         <h3>Version 0.9.17</h3>
         - Fehler behoben<br>
         - Neue Strickerei Details Anzeige<br>

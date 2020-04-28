@@ -6,6 +6,7 @@
         - Removed take photo action from edit knitting display<br>
         - Reworked settings screen<br>
         - Knitting details screen no longer truncates long texts<br>
+        - Knittling list now uses placeholder image if no preview image is defined<br>
         <h3>Version 0.9.17</h3>
         - Bugfixes<br>
         - Reworked knitting details display<br>
