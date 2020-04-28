@@ -3,25 +3,20 @@
 <resources>
 
     <!-- knitting details -->
-    <string name="knitting_details_started">Started: %1$s</string>
-    <string name="knitting_details_finished">Finished: %1$s</string>
-    <string name="knitting_details_needle">Needle: %1$s</string>
-    <string name="knitting_details_size">Size: %1$s</string>
-    <string name="knitting_details_duration">Duration: %1$s</string>
-    <string name="knitting_details_category">Category: %1$s</string>
-    <string name="knitting_category_hint">Category:</string>
-    <string name="knitting_details_status">Status: %1$s</string>
-    <string name="knitting_status_hint">Status:</string>
+    <string name="knitting_details_started">Started:</string>
+    <string name="knitting_details_finished">Finished:</string>
+    <string name="knitting_details_needle">Needle:</string>
+    <string name="knitting_details_size">Size:</string>
+    <string name="knitting_details_duration">Duration:</string>
+    <string name="knitting_details_category">Category:</string>
+    <string name="knitting_details_status">Status:</string>
 
     <!-- knitting details -->
     <string name="delete_knitting">Delete Knitting</string>
-    <string name="knitting_title_hint">Title</string>
-    <string name="knitting_description_hint">Description</string>
-    <string name="knitting_started_hint">Started:</string>
-    <string name="knitting_finished_hint">Finished:</string>
-    <string name="knitting_needle_diameter_hint">Needle:</string>
-    <string name="knitting_size_hint">Size:</string>
-    <string name="knitting_duration_hint">Duration:</string>
+    <string name="edit_knitting_details_title_hint">Title</string>
+    <string name="edit_knitting_details_description_hint">Description</string>
+    <string name="edit_knitting_details_needle_diameter_hint">Needle</string>
+    <string name="edit_knitting_details_size_hint">Size</string>
 
     <!-- status -->
     <string name="knitting_status_in_the_works">In the works</string>
