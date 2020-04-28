@@ -1,6 +1,8 @@
 package com.mthaler.knittings.details
 
+import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import androidx.fragment.app.Fragment
@@ -18,12 +20,14 @@ import com.mthaler.knittings.model.Knitting
 import com.mthaler.knittings.model.Status
 import com.mthaler.knittings.photo.PhotoGalleryActivity
 import com.mthaler.knittings.photo.SquareImageView
+import com.mthaler.knittings.photo.TakePhotoDialog
 import com.mthaler.knittings.stopwatch.StopwatchActivity
 import com.mthaler.knittings.utils.PictureUtils
 import com.mthaler.knittings.utils.TimeUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.io.File
 import java.text.DateFormat
 
 /**
@@ -33,6 +37,7 @@ class KnittingDetailsFragment : Fragment() {
 
     private var knittingID: Long = Knitting.EMPTY.id
     private lateinit var viewModel: KnittingDetailsViewModel
+    private var currentPhotoPath: File? = null
     private var listener: OnFragmentInteractionListener? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -45,6 +50,12 @@ class KnittingDetailsFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
         setHasOptionsMenu(true)
+
+        if (savedInstanceState != null) {
+            if (savedInstanceState.containsKey(CURRENT_PHOTO_PATH)) {
+                currentPhotoPath = File(savedInstanceState.getString(CURRENT_PHOTO_PATH))
+            }
+        }
 
         val v = inflater.inflate(R.layout.fragment_knitting_details, container, false)
 
@@ -70,13 +81,23 @@ class KnittingDetailsFragment : Fragment() {
         })
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        currentPhotoPath?.let { outState.putString(CURRENT_PHOTO_PATH, it.absolutePath) }
+    }
+
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
-        inflater.inflate(R.menu.knitting_details_fragment, menu)
+        inflater.inflate(R.menu.knitting_details, menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
+            R.id.menu_item_add_photo -> {
+                val d = TakePhotoDialog.create(requireContext(), layoutInflater, knittingID, this::takePhoto, this::importPhoto)
+                d.show()
+                true
+            }
             R.id.menu_item_show_gallery -> {
                 startActivity(PhotoGalleryActivity.newIntent(requireContext(), knittingID))
                 true
@@ -95,6 +116,43 @@ class KnittingDetailsFragment : Fragment() {
             }
             else -> super.onOptionsItemSelected(item)
         }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (resultCode != Activity.RESULT_OK) {
+            return
+        }
+        when (requestCode) {
+            REQUEST_IMAGE_CAPTURE -> {
+                currentPhotoPath?.let {
+                    lifecycleScope.launch {
+                        withContext(Dispatchers.IO) {
+                            TakePhotoDialog.handleTakePhotoResult(requireContext(), knittingID, it) }
+                    }
+                }
+            }
+            REQUEST_IMAGE_IMPORT -> {
+                val f = currentPhotoPath
+                if (f != null && data != null) {
+                    lifecycleScope.launch {
+                        withContext(Dispatchers.IO) {
+                            TakePhotoDialog.handleImageImportResult(requireContext(), knittingID, f, data)
+                        }
+                    }
+                }
+            }
+            else -> super.onActivityResult(requestCode, resultCode, data)
+        }
+    }
+
+    private fun takePhoto(file: File, intent: Intent) {
+        currentPhotoPath = file
+        startActivityForResult(intent, REQUEST_IMAGE_CAPTURE)
+    }
+
+    private fun importPhoto(file: File, intent: Intent) {
+        currentPhotoPath = file
+        startActivityForResult(intent, REQUEST_IMAGE_IMPORT)
     }
 
     private fun updateDetails(knitting: Knitting) {
@@ -188,6 +246,10 @@ class KnittingDetailsFragment : Fragment() {
     }
 
     companion object {
+
+        private const val REQUEST_IMAGE_CAPTURE = 0
+        private const val REQUEST_IMAGE_IMPORT = 1
+        private const val CURRENT_PHOTO_PATH = "com.mthaler.knittings.CURRENT_PHOTO_PATH"
 
         @JvmStatic
         fun newInstance(knittingID: Long) =

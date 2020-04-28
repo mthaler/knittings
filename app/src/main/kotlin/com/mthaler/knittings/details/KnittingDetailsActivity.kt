@@ -1,24 +1,15 @@
 package com.mthaler.knittings.details
 
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.core.app.NavUtils
-import android.view.Menu
 import android.view.MenuItem
-import androidx.lifecycle.lifecycleScope
 import com.mthaler.knittings.BaseActivity
-import com.mthaler.knittings.photo.PhotoGalleryActivity
 import com.mthaler.knittings.R
-import java.io.File
 import com.mthaler.knittings.Extras.EXTRA_KNITTING_ID
 import com.mthaler.knittings.model.Knitting
-import com.mthaler.knittings.photo.TakePhotoDialog
 import kotlinx.android.synthetic.main.activity_knitting_details.*
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 /**
  * Activity that displays knitting details (name, description, start time etc.)
@@ -28,7 +19,6 @@ class KnittingDetailsActivity : BaseActivity(), KnittingDetailsFragment.OnFragme
     // id of the displayed knitting
     private var knittingID: Long = Knitting.EMPTY.id
     private var editOnly: Boolean = false
-    private var currentPhotoPath: File? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,8 +48,8 @@ class KnittingDetailsActivity : BaseActivity(), KnittingDetailsFragment.OnFragme
                 ft.commit()
             }
         } else {
-            if (savedInstanceState.containsKey(CURRENT_PHOTO_PATH)) {
-                currentPhotoPath = File(savedInstanceState.getString(CURRENT_PHOTO_PATH))
+            if (savedInstanceState.containsKey(EXTRA_EDIT_ONLY)) {
+                editOnly = savedInstanceState.getBoolean(EXTRA_EDIT_ONLY)
             }
         }
     }
@@ -67,13 +57,7 @@ class KnittingDetailsActivity : BaseActivity(), KnittingDetailsFragment.OnFragme
     override fun onSaveInstanceState(savedInstanceState: Bundle) {
         savedInstanceState.putLong(EXTRA_KNITTING_ID, knittingID)
         savedInstanceState.putBoolean(EXTRA_EDIT_ONLY, editOnly)
-        currentPhotoPath?.let { savedInstanceState.putString(CURRENT_PHOTO_PATH, it.absolutePath) }
         super.onSaveInstanceState(savedInstanceState)
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.knitting_details, menu)
-        return true
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean = when (item.itemId) {
@@ -93,11 +77,6 @@ class KnittingDetailsActivity : BaseActivity(), KnittingDetailsFragment.OnFragme
             }
             true
         }
-        R.id.menu_item_add_photo -> {
-            val d = TakePhotoDialog.create(this, layoutInflater, knittingID, this::takePhoto, this::importPhoto)
-            d.show()
-            true
-        }
         else -> super.onOptionsItemSelected(item)
     }
 
@@ -109,43 +88,6 @@ class KnittingDetailsActivity : BaseActivity(), KnittingDetailsFragment.OnFragme
         } else {
             super.onBackPressed()
         }
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (resultCode != Activity.RESULT_OK) {
-            return
-        }
-        when (requestCode) {
-            REQUEST_IMAGE_CAPTURE -> {
-                currentPhotoPath?.let {
-                    lifecycleScope.launch {
-                        withContext(Dispatchers.IO) {
-                            TakePhotoDialog.handleTakePhotoResult(this@KnittingDetailsActivity, knittingID, it) }
-                        }
-                    }
-            }
-            REQUEST_IMAGE_IMPORT -> {
-                val f = currentPhotoPath
-                if (f != null && data != null) {
-                    lifecycleScope.launch {
-                        withContext(Dispatchers.IO) {
-                            TakePhotoDialog.handleImageImportResult(this@KnittingDetailsActivity, knittingID, f, data)
-                        }
-                    }
-                }
-            }
-            else -> super.onActivityResult(requestCode, resultCode, data)
-        }
-    }
-
-    private fun takePhoto(file: File, intent: Intent) {
-        currentPhotoPath = file
-        startActivityForResult(intent, REQUEST_IMAGE_CAPTURE)
-    }
-
-    private fun importPhoto(file: File, intent: Intent) {
-        currentPhotoPath = file
-        startActivityForResult(intent, REQUEST_IMAGE_IMPORT)
     }
 
     override fun editKnitting(id: Long) {
@@ -160,9 +102,6 @@ class KnittingDetailsActivity : BaseActivity(), KnittingDetailsFragment.OnFragme
     companion object {
 
         const val EXTRA_EDIT_ONLY = "com.mthaler.knittings.edit_only"
-        private const val CURRENT_PHOTO_PATH = "com.mthaler.knittings.CURRENT_PHOTO_PATH"
-        private const val REQUEST_IMAGE_CAPTURE = 0
-        private const val REQUEST_IMAGE_IMPORT = 1
 
         fun newIntent(context: Context, knittingID: Long, editOnly: Boolean): Intent {
             val intent = Intent(context, KnittingDetailsActivity::class.java)
