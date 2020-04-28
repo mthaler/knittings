@@ -58,7 +58,7 @@ class KnittingAdapter(
             if (knitting.defaultPhoto?.preview != null) {
                 photoView.setImageBitmap(knitting.defaultPhoto.preview)
             } else {
-                photoView.setImageBitmap(null)
+                photoView.setImageResource(R.drawable.categories)
             }
             if (knitting.category != null) {
                 if (knitting.category.color != null) {
