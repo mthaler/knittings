@@ -9,18 +9,18 @@
     <string name="knitting_details_size">Größe:</string>
     <string name="knitting_details_duration">Dauer:</string>
     <string name="knitting_details_category">Kategorie:</string>
+    <string name="knitting_details_status">Status:</string>
 
     <!-- knitting details -->
     <string name="delete_knitting">Strickerei löschen</string>
     <string name="edit_knitting_details_title_hint">Titel</string>
     <string name="edit_knitting_details_description_hint">Beschreibung</string>
-    <string name="knitting_started_hint">Angefangen:</string>
-    <string name="knitting_finished_hint">Fertig:</string>
+    <string name="edit_knitting_details_started_hint">Angefangen</string>
+    <string name="edit_knitting_details_finished_hint">Fertig</string>
     <string name="edit_knitting_details_needle_diameter_hint">Nadel</string>
+    <string name="edit_knitting_details_duration_hint">Dauer</string>
+    <string name="edit_knitting_details_category_hint">Kategorie</string>
     <string name="edit_knitting_details_size_hint">Größe</string>
-    <string name="knitting_duration_hint">Dauer:</string>
-    <string name="knitting_status_hint">Status:</string>
-    <string name="knitting_details_status">Status: %1$s</string>
 
     <!-- status -->
     <string name="knitting_status_in_the_works">In Arbeit</string>

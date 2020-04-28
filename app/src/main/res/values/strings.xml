@@ -75,9 +75,6 @@
     <string name="active_filters">Active filters</string>
     <string name="clear_filters">Clear Filters</string>
 
-    <string name="edit_knitting_details_category">Category</string>
-    <string name="edit_knitting_details_status">Status:</string>
-
     <string name="copy">Copy</string>
 
     <string name="action_copy">Copy</string>
