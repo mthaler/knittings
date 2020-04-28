@@ -8,10 +8,7 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <!-- generic dialog strings -->
-    <string name="dialog_button_ok">OK</string>
     <string name="dialog_button_cancel">Cancel</string>
-    <string name="dialog_button_yes">Yes</string>
-    <string name="dialog_button_no">No</string>
 
     <!-- save changes dialog strings -->
     <string name="save_changes_dialog_question">Save changes?</string>
@@ -40,13 +37,8 @@
 
     <!-- activities -->
     <string name="activity_knitting_details">Knitting Details</string>
-    <string name="activity_edit_knitting_details">Edit Knitting Details</string>
     <string name="activity_photo_gallery">Photos</string>
-    <string name="activity_photo">Edit Photo</string>
     <string name="activity_project_count">Count Projects</string>
-
-    <!-- knittings list -->
-    <string name="knittings_title">Knittings</string>
 
     <!-- date picker -->
     <string name="date_picker_title">Date</string>
