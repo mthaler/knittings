@@ -5,6 +5,7 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.os.Bundle
 import android.view.View
+import android.widget.Button
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.mthaler.knittings.BaseActivity
 import com.mthaler.knittings.R
@@ -24,6 +25,12 @@ class CompressPhotosActivity : BaseActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         LocalBroadcastManager.getInstance(this).registerReceiver(broadcastReceiver, IntentFilter("MY_ACTION"))
+
+        val button = findViewById<Button>(R.id.button)
+        button.setOnClickListener {
+            val intent = Intent(this@CompressPhotosActivity, CompressPhotosService::class.java)
+            startService(intent);
+        }
     }
 
     override fun onStop() {

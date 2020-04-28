@@ -3,6 +3,11 @@ package com.mthaler.knittings.compressphotos
 import android.app.IntentService
 import android.content.Intent
 import android.content.Context
+import android.view.View
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 // TODO: Rename actions, choose action names that describe tasks that this
 // IntentService can perform, e.g. ACTION_FETCH_NEW_ITEMS
@@ -34,6 +39,10 @@ class CompressPhotosService : IntentService("CompressPhotosService") {
                 handleActionBaz(param1, param2)
             }
         }
+        GlobalScope.launch {
+            delay(5000)
+            sendBroadcast()
+        }
     }
 
     /**
@@ -50,6 +59,12 @@ class CompressPhotosService : IntentService("CompressPhotosService") {
      */
     private fun handleActionBaz(param1: String, param2: String) {
         TODO("Handle action Baz")
+    }
+
+    private fun sendBroadcast() {
+        val intent = Intent("MY_ACTION")
+        intent.putExtra("data", "Hello World!")
+        LocalBroadcastManager.getInstance(this).sendBroadcast(intent)
     }
 
     companion object {
