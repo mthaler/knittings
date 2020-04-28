@@ -3,14 +3,12 @@ package com.mthaler.knittings.category
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import androidx.core.app.NavUtils
 import android.view.MenuItem
 import com.mthaler.knittings.BaseActivity
 import com.mthaler.knittings.Extras
 import com.mthaler.knittings.R
 import kotlinx.android.synthetic.main.activity_select_category.*
 import com.mthaler.knittings.Extras.EXTRA_KNITTING_ID
-import com.mthaler.knittings.database.datasource
 import com.mthaler.knittings.model.Category
 
 class SelectCategoryActivity : BaseActivity(), CategoryListFragment.OnFragmentInteractionListener, EditCategoryFragment.OnFragmentInteractionListener {
