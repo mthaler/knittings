@@ -8,6 +8,7 @@ import android.view.View
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.mthaler.knittings.BaseActivity
 import com.mthaler.knittings.R
+import kotlinx.android.synthetic.main.activity_stopwatch.*
 
 class CompressPhotosActivity : BaseActivity() {
 
@@ -16,6 +17,12 @@ class CompressPhotosActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_compress_photos)
+
+        setSupportActionBar(toolbar)
+
+        // enable up navigation
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
         LocalBroadcastManager.getInstance(this).registerReceiver(broadcastReceiver, IntentFilter("MY_ACTION"))
     }
 
