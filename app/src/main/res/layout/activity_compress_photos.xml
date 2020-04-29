@@ -23,6 +23,24 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
+    <GridLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:columnCount="2">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Number of photos:" />
+
+        <TextView
+            android:id="@+id/number_of_photos"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:text="1234" />
+    </GridLayout>
+
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
