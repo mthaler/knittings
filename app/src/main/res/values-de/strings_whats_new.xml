@@ -2,6 +2,8 @@
 <resources>
     <string name="whats_new_title">Whats New</string>
     <string name="whats_new"><![CDATA[
+        <h3>Version 0.9.19</h3>
+        - Geändertes Start-Icon<br>
         <h3>Version 0.9.18</h3>
         - Foto aufnehmen Aktion vom Editier-Bildschirm entfernt<br>
         - Einstellungen überarbeitet<br>
