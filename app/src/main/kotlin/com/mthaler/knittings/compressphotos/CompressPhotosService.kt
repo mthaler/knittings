@@ -8,9 +8,7 @@ import android.os.IBinder
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
 import com.mthaler.knittings.R
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 
 class CompressPhotosService : Service() {
 
@@ -24,15 +22,19 @@ class CompressPhotosService : Service() {
                 0, notificationIntent, 0
         )
         val notification = NotificationCompat.Builder(this, CHANNEL_ID)
+                .setOngoing(true)
                 .setContentTitle("Compress Photos Service")
                 .setContentText(input)
-                .setSmallIcon(R.drawable.knittings)
+                .setSmallIcon(R.drawable.ic_photo_size_select_large_black_24dp)
                 .setContentIntent(pendingIntent)
                 .build()
         startForeground(1, notification)
         GlobalScope.launch {
-            delay(5000)
-            ServiceManager.getInstance().statusUpdated(Status.Success)
+            withContext(Dispatchers.Default) {
+                delay(5000)
+                ServiceManager.getInstance().statusUpdated(Status.Success)
+            }
+            stopForeground(true)
         }
         return START_NOT_STICKY
     }
@@ -43,22 +45,24 @@ class CompressPhotosService : Service() {
 
     private fun createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val serviceChannel = NotificationChannel(CHANNEL_ID, "Foreground Service Channel",
-                    NotificationManager.IMPORTANCE_DEFAULT)
-            val manager = getSystemService(NotificationManager::class.java)
-            manager!!.createNotificationChannel(serviceChannel)
+            getSystemService(NotificationManager::class.java).let {
+                if (it.getNotificationChannel(CHANNEL_ID) == null) {
+                    it.createNotificationChannel(NotificationChannel(CHANNEL_ID, "Compress Photos Channel", NotificationManager.IMPORTANCE_DEFAULT))
+                }
+            }
         }
     }
 
     companion object {
 
-        private val CHANNEL_ID = "CompressPhotos"
+        private val CHANNEL_ID = "com.mthaler.knittings.compressphotos"
 
         fun startService(context: Context, message: String) {
             val startIntent = Intent(context, CompressPhotosService::class.java)
             startIntent.putExtra("inputExtra", message)
             ContextCompat.startForegroundService(context, startIntent)
         }
+
         fun stopService(context: Context) {
             val stopIntent = Intent(context, CompressPhotosService::class.java)
             context.stopService(stopIntent)
