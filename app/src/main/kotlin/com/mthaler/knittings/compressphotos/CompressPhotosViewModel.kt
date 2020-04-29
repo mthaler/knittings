@@ -1,5 +1,23 @@
 package com.mthaler.knittings.compressphotos
 
-class CompressPhotosViewModel {
+import android.app.Application
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
+import com.mthaler.knittings.DatasourceViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
+class CompressPhotosViewModel(application: Application) : DatasourceViewModel(application) {
+
+    val photoCount = MutableLiveData(0)
+
+    override fun databaseChanged() {
+        viewModelScope.launch {
+            val allPhotos = withContext(Dispatchers.IO) {
+                datasource.allPhotos
+            }
+            photoCount.value = allPhotos.size
+        }
+    }
 }
