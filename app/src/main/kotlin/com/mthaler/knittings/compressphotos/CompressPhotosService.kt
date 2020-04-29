@@ -6,6 +6,7 @@ import android.content.Context
 import android.os.Build
 import android.os.IBinder
 import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import com.mthaler.knittings.R
 import kotlinx.coroutines.*
@@ -20,19 +21,29 @@ class CompressPhotosService : Service() {
             this.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         }
         val pendingIntent = PendingIntent.getActivity(this, 0, intent, 0)
-        val notification = NotificationCompat.Builder(this, CHANNEL_ID)
-                .setOngoing(true)
-                .setContentTitle("Compress Photos Service")
-                .setContentText(input)
-                .setSmallIcon(R.drawable.ic_photo_size_select_large_black_24dp)
-                .setContentIntent(pendingIntent)
-                .build()
-        startForeground(1, notification)
+
+        val notificationManager = NotificationManagerCompat.from(this);
+        val builder = NotificationCompat.Builder(this, CHANNEL_ID).apply {
+            setOngoing(true)
+            setContentTitle("Compress Photos")
+            setContentText("Compressing photos in progress")
+            setSmallIcon(R.drawable.ic_photo_size_select_large_black_24dp)
+            setContentIntent(pendingIntent)
+        }
+        startForeground(1, builder.build())
         GlobalScope.launch {
+            val sm = ServiceManager.getInstance()
             withContext(Dispatchers.Default) {
-                delay(5000)
+                for(i in 1..10) {
+                    delay(1000)
+                    builder.setProgress(100, i * 10, false)
+                    notificationManager.notify(1, builder.build())
+                    sm.statusUpdated(Status.Progress(i * 10))
+                }
                 ServiceManager.getInstance().statusUpdated(Status.Success)
             }
+            builder.setContentText("Compressing photos done")
+            builder.setProgress(0, 0, false)
             stopForeground(true)
         }
         return START_NOT_STICKY
