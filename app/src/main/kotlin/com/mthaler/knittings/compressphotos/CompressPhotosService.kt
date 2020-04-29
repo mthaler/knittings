@@ -41,7 +41,7 @@ class CompressPhotosService : IntentService("CompressPhotosService") {
         }
         GlobalScope.launch {
             delay(5000)
-            ServiceManager.statusUpdated(Status.Success)
+            ServiceManager.getInstance().statusUpdated(Status.Success)
         }
     }
 
