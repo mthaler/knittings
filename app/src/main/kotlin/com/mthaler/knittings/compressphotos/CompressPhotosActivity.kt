@@ -45,6 +45,7 @@ class CompressPhotosActivity : BaseActivity() {
         viewModel.statistics.observe(this, Observer { statistics ->
             number_of_photos.setText(statistics.photos.toString())
             total_size.setText(Format.humanReadableByteCountBin(statistics.totalSize))
+            will_be_compressed.setText(statistics.photosToCompress.toString())
         })
     }
 

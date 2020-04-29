@@ -26,15 +26,21 @@ class CompressPhotosViewModel(application: Application) : DatasourceViewModel(ap
             val s = withContext(Dispatchers.IO) {
                 val photos = datasource.allPhotos
                 var totalSize = 0L
+                var photosToCompress = 0
                 for (p in photos) {
                     try {
-                        if (p.filename.exists())
-                            totalSize += p.filename.length()
+                        if (p.filename.exists()) {
+                            val size = p.filename.length()
+                            totalSize += size
+                            if (size > 350 * 1024) {
+                                photosToCompress += 1
+                            }
+                        }
                     } catch(ex: Exception) {
                         // ignore
                     }
                 }
-                Statistics(photos.size, totalSize)
+                Statistics(photos.size, totalSize, photosToCompress)
             }
             statistics.value = s
         }
