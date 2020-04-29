@@ -28,10 +28,14 @@ class CompressPhotosActivity : BaseActivity() {
             }
         })
 
-        val button = findViewById<Button>(R.id.button)
-        button.setOnClickListener {
-            val intent = Intent(this@CompressPhotosActivity, CompressPhotosService::class.java)
-            startService(intent);
+        val buttonStart = findViewById<Button>(R.id.buttonStart)
+        buttonStart.setOnClickListener {
+            CompressPhotosService.startService(this, "Foreground Service is running...")
+        }
+
+        val buttonStop = findViewById<Button>(R.id.buttonStop)
+        buttonStop.setOnClickListener {
+            CompressPhotosService.stopService(this)
         }
     }
 
