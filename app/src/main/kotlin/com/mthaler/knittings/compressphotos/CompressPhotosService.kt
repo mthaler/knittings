@@ -39,6 +39,7 @@ class CompressPhotosService : Service() {
     }
 
     override fun onBind(intent: Intent): IBinder? {
+        // don't allow binding
         return null
     }
 
@@ -55,7 +56,7 @@ class CompressPhotosService : Service() {
 
     companion object {
 
-        private val CHANNEL_ID = "com.mthaler.knittings.compressphotos"
+        private val CHANNEL_ID = "com.mthaler.knittings.compressphotos.CompressPhotosService"
 
         fun startService(context: Context, message: String) {
             val startIntent = Intent(context, CompressPhotosService::class.java)
