@@ -16,11 +16,10 @@ class CompressPhotosService : Service() {
         //do heavy work on a background thread
         val input = intent?.getStringExtra("inputExtra")
         createNotificationChannel()
-        val notificationIntent = Intent(this, CompressPhotosActivity::class.java)
-        val pendingIntent = PendingIntent.getActivity(
-                this,
-                0, notificationIntent, 0
-        )
+        val intent = Intent(this, CompressPhotosActivity::class.java).apply {
+            this.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        }
+        val pendingIntent = PendingIntent.getActivity(this, 0, intent, 0)
         val notification = NotificationCompat.Builder(this, CHANNEL_ID)
                 .setOngoing(true)
                 .setContentTitle("Compress Photos Service")
@@ -46,9 +45,10 @@ class CompressPhotosService : Service() {
     private fun createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             getSystemService(NotificationManager::class.java).let {
-                if (it.getNotificationChannel(CHANNEL_ID) == null) {
-                    it.createNotificationChannel(NotificationChannel(CHANNEL_ID, "Compress Photos Channel", NotificationManager.IMPORTANCE_DEFAULT))
-                }
+                val name = "compress photos"
+                val importance =  NotificationManager.IMPORTANCE_DEFAULT
+                val channel = NotificationChannel(CHANNEL_ID, name, importance)
+                it.createNotificationChannel(channel)
             }
         }
     }
