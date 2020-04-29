@@ -4,11 +4,13 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
+import android.widget.TextView
 import android.widget.Toast
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import com.mthaler.knittings.BaseActivity
 import com.mthaler.knittings.R
-import kotlinx.android.synthetic.main.activity_stopwatch.*
+import kotlinx.android.synthetic.main.activity_compress_photos.*
 
 class CompressPhotosActivity : BaseActivity() {
 
@@ -28,6 +30,8 @@ class CompressPhotosActivity : BaseActivity() {
             }
         })
 
+        val photoCount = findViewById<TextView>(R.id.number_of_photos)
+
         val buttonStart = findViewById<Button>(R.id.buttonStart)
         buttonStart.setOnClickListener {
             CompressPhotosService.startService(this, "Foreground Service is running...")
@@ -37,6 +41,11 @@ class CompressPhotosActivity : BaseActivity() {
         buttonStop.setOnClickListener {
             CompressPhotosService.stopService(this)
         }
+
+        val viewModel = ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory.getInstance(this.application)).get(CompressPhotosViewModel::class.java)
+        viewModel.photoCount.observe(this, Observer { photoCount ->
+            number_of_photos.setText(photoCount.toString())
+        })
     }
 
     companion object {

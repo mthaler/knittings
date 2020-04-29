@@ -12,7 +12,15 @@ class CompressPhotosViewModel(application: Application) : DatasourceViewModel(ap
 
     val photoCount = MutableLiveData(0)
 
+    init {
+        updatePhotoCount()
+    }
+
     override fun databaseChanged() {
+        updatePhotoCount()
+    }
+
+    private fun updatePhotoCount() {
         viewModelScope.launch {
             val allPhotos = withContext(Dispatchers.IO) {
                 datasource.allPhotos
