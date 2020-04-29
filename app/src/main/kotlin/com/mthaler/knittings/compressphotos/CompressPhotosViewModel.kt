@@ -7,10 +7,11 @@ import com.mthaler.knittings.DatasourceViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.lang.Exception
 
 class CompressPhotosViewModel(application: Application) : DatasourceViewModel(application) {
 
-    val photoCount = MutableLiveData(0)
+    val statistics = MutableLiveData(Statistics.EMPTY)
 
     init {
         updatePhotoCount()
@@ -22,10 +23,20 @@ class CompressPhotosViewModel(application: Application) : DatasourceViewModel(ap
 
     private fun updatePhotoCount() {
         viewModelScope.launch {
-            val allPhotos = withContext(Dispatchers.IO) {
-                datasource.allPhotos
+            val s = withContext(Dispatchers.IO) {
+                val photos = datasource.allPhotos
+                var totalSize = 0L
+                for (p in photos) {
+                    try {
+                        if (p.filename.exists())
+                            totalSize += p.filename.length()
+                    } catch(ex: Exception) {
+                        // ignore
+                    }
+                }
+                Statistics(photos.size, totalSize)
             }
-            photoCount.value = allPhotos.size
+            statistics.value = s
         }
     }
 }

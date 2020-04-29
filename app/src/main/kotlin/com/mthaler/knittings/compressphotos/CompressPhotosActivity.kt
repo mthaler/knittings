@@ -30,8 +30,6 @@ class CompressPhotosActivity : BaseActivity() {
             }
         })
 
-        val photoCount = findViewById<TextView>(R.id.number_of_photos)
-
         val buttonStart = findViewById<Button>(R.id.buttonStart)
         buttonStart.setOnClickListener {
             CompressPhotosService.startService(this, "Foreground Service is running...")
@@ -43,8 +41,9 @@ class CompressPhotosActivity : BaseActivity() {
         }
 
         val viewModel = ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory.getInstance(this.application)).get(CompressPhotosViewModel::class.java)
-        viewModel.photoCount.observe(this, Observer { photoCount ->
-            number_of_photos.setText(photoCount.toString())
+        viewModel.statistics.observe(this, Observer { statistics ->
+            number_of_photos.setText(statistics.photos.toString())
+            total_size.setText(Format.humanReadableByteCountBin(statistics.totalSize))
         })
     }
 
