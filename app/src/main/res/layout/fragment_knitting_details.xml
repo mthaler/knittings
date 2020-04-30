@@ -53,7 +53,8 @@
                     <GridLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:columnCount="2">
+                        android:columnCount="2"
+                        android:orientation="horizontal">
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -66,8 +67,9 @@
 
                         <TextView
                             android:id="@+id/knitting_started"
-                            android:layout_width="match_parent"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
+                            android:layout_gravity="fill_horizontal"
                             android:layout_marginTop="8dp"
                             android:layout_marginBottom="8dp"
                             android:textColor="@color/black" />
@@ -83,8 +85,9 @@
 
                         <TextView
                             android:id="@+id/knitting_finished"
-                            android:layout_width="match_parent"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
+                            android:layout_gravity="fill_horizontal"
                             android:layout_marginTop="8dp"
                             android:layout_marginBottom="8dp"
                             android:textColor="@color/black" />
@@ -100,8 +103,9 @@
 
                         <TextView
                             android:id="@+id/knitting_duration"
-                            android:layout_width="match_parent"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
+                            android:layout_gravity="fill_horizontal"
                             android:layout_marginTop="8dp"
                             android:layout_marginBottom="8dp"
                             android:textColor="@color/black" />
@@ -117,8 +121,9 @@
 
                         <TextView
                             android:id="@+id/knitting_category"
-                            android:layout_width="match_parent"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
+                            android:layout_gravity="fill_horizontal"
                             android:layout_marginTop="8dp"
                             android:layout_marginBottom="8dp"
                             android:textColor="@color/black" />
@@ -134,8 +139,9 @@
                             android:text="@string/knitting_details_status" />
 
                         <RelativeLayout
-                            android:layout_width="match_parent"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
+                            android:layout_gravity="fill_horizontal"
                             android:orientation="horizontal"
                             android:layout_marginTop="8dp"
                             android:layout_marginBottom="8dp">
