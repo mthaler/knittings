@@ -4,10 +4,12 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import androidx.fragment.app.Fragment
 import android.view.*
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.RatingBar
 import android.widget.TextView
 import androidx.lifecycle.Observer
@@ -57,11 +59,21 @@ class KnittingDetailsFragment : Fragment() {
             }
         }
 
+        val metrics = resources.displayMetrics
+        val ratio = metrics.heightPixels / metrics.widthPixels.toDouble()
+
+
         val v = inflater.inflate(R.layout.fragment_knitting_details, container, false)
 
         val imageView = v.findViewById<SquareImageView>(R.id.image)
         imageView.setOnClickListener {
             startActivity(PhotoGalleryActivity.newIntent(requireContext(), knittingID))
+        }
+        if (ratio >= 1.9) {
+            // make the image smaller on devices like the Samsung Galaxy A9 that has a 18:9 aspect ratio
+            val layoutParams = imageView.layoutParams as LinearLayout.LayoutParams
+            layoutParams.weight = 3.0f
+            imageView.layoutParams = layoutParams
         }
 
         val fabEdit = v.findViewById<FloatingActionButton>(R.id.edit_knitting_details)
