@@ -2,6 +2,9 @@
 <resources>
     <string name="whats_new_title">Whats New</string>
     <string name="whats_new"><![CDATA[
+        <h3>Version 0.9.20</h3>
+        - Strickereien Details Anzeige schneidet Texte neben dem Bild nicht mehr ab<br>
+        - Strickereien Details Bild ist jetzt auf Geräten mit 18:9 Bildschirmen kleiner<br>
         <h3>Version 0.9.19</h3>
         - Geändertes Start-Icon<br>
         <h3>Version 0.9.18</h3>
