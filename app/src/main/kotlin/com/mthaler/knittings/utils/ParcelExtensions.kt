@@ -1,6 +1,26 @@
 package com.mthaler.knittings.utils
 
 import android.os.Parcel
+import java.io.IOException
+
+fun Parcel.writeBoolean(value: Boolean) {
+    if (value) {
+        writeByte(1)
+    } else {
+        writeByte(0)
+    }
+}
+
+fun Parcel.readBoolean(): Boolean {
+    val value = readByte()
+    if (value == 1.toByte()) {
+        return true
+    } else if (value == 0.toByte()) {
+        return false
+    } else {
+        throw IOException("Value $value not a valid boolean")
+    }
+}
 
 fun Parcel.writeOptionalInt(value: Int?) {
     if (value != null) {
