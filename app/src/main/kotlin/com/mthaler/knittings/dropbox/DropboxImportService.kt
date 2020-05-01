@@ -9,6 +9,7 @@ import android.content.Intent
 import android.os.Build
 import android.os.Environment
 import android.os.IBinder
+import android.os.PowerManager
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
@@ -48,11 +49,20 @@ class DropboxImportService : Service() {
         startForeground(1, builder.build())
 
         GlobalScope.launch {
-            val sm = DropboxImportServiceManager.getInstance()
             withContext(Dispatchers.IO) {
                 if (directory != null) {
-                    val database = downloadDatabase(directory)
-                    downloadPhotos(database, directory, builder)
+                    val wakeLock: PowerManager.WakeLock =
+                            (getSystemService(Context.POWER_SERVICE) as PowerManager).run {
+                                newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "Knittings::DropboxImport").apply {
+                                    acquire()
+                                }
+                            }
+                    try {
+                        val database = downloadDatabase(directory)
+                        downloadPhotos(database, directory, builder)
+                    } finally {
+                        wakeLock.release()
+                    }
                 }
             }
             builder.setContentText("Dropbox import done")
