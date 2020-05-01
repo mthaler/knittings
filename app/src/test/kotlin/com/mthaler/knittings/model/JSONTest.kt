@@ -212,7 +212,7 @@ class JSONTest {
         val photos = listOf(p0, p1)
         val db = Database(knittings, photos, ArrayList(), ArrayList())
         val json = db.toJSON()
-        assertEquals(3, json.getInt("version"))
+        assertEquals(4, json.getInt("version"))
         // get the JSON array containing the knittings
         val ks = json.getJSONArray("knittings")
         assertEquals(2, ks.length())
@@ -250,42 +250,42 @@ class JSONTest {
         assertEquals("shirt", j3.getString("description"))
     }
 
-//    @Test
-//    fun testJSONObjectToDatabase() {
-//        val s = """{"knittings":[{"size":41,"needleDiameter":3,"rating":5,"description":"my first knitting","started":"2018-01-10","id":42,"title":"knitting"},
-//            {"size":41.5,"needleDiameter":3.5,"rating":4.5,"description":"my second knitting","started":"2018-01-11","finished":"2018-01-12","id":44,"title":"knitting 2"}],
-//            "photos":[{"knittingID":43,"filename":"/tmp/photo1.jpg","description":"socks","id":42},{"knittingID":44,"filename":"/tmp/photo2.jpg","description":"shirt","id":43}]}"""
-//        val json = JSONObject(s)
-//        val db = json.toDatabase(File("/tmp"))
-//        assertEquals(2, db.knittings.size)
-//        assertEquals(2, db.photos.size)
-//        val k = db.knittings[0]
-//        assertEquals(42, k.id)
-//        assertEquals("knitting", k.title)
-//        assertEquals("my first knitting", k.description)
-//        assertEquals("2018-01-10", dateFormat.format(k.started))
-//        assertNull(k.finished)
-//        assertEquals("3", k.needleDiameter)
-//        assertEquals("41", k.size)
-//        assertEquals(5.0, k.rating, 0.00001)
-//        val k2 = db.knittings[1]
-//        assertEquals(44, k2.id)
-//        assertEquals("knitting 2", k2.title)
-//        assertEquals("my second knitting", k2.description)
-//        assertEquals("2018-01-11", dateFormat.format(k2.started))
-//        assertEquals("2018-01-12", dateFormat.format(k2.finished))
-//        assertEquals("3.5", k2.needleDiameter)
-//        assertEquals("41.5", k2.size)
-//        assertEquals(4.5, k2.rating, 0.00001)
-//        val p = db.photos[0]
-//        assertEquals(42, p.id)
-//        assertEquals(File("/tmp/photo1.jpg"), p.filename)
-//        assertEquals(43, p.knittingID)
-//        assertEquals("socks", p.description)
-//        val p2 = db.photos[1]
-//        assertEquals(43, p2.id)
-//        assertEquals(File("/tmp/photo2.jpg"), p2.filename)
-//        assertEquals(44, p2.knittingID)
-//        assertEquals("shirt", p2.description)
-//    }
+    @Test
+    fun testJSONObjectToDatabase() {
+        val s = """{"knittings":[{"size":41,"needleDiameter":3,"rating":5,"description":"my first knitting","started":"2018-01-10","id":42,"title":"knitting"},
+            {"size":41.5,"needleDiameter":3.5,"rating":4.5,"description":"my second knitting","started":"2018-01-11","finished":"2018-01-12","id":44,"title":"knitting 2"}],
+            "photos":[{"knittingID":43,"filename":"/tmp/photo1.jpg","description":"socks","id":42},{"knittingID":44,"filename":"/tmp/photo2.jpg","description":"shirt","id":43}]}"""
+        val json = JSONObject(s)
+        val db = json.toDatabase(ApplicationProvider.getApplicationContext(), File("/tmp"))
+        assertEquals(2, db.knittings.size)
+        assertEquals(2, db.photos.size)
+        val k = db.knittings[0]
+        assertEquals(42, k.id)
+        assertEquals("knitting", k.title)
+        assertEquals("my first knitting", k.description)
+        assertEquals("2018-01-10", dateFormat.format(k.started))
+        assertNull(k.finished)
+        assertEquals("3", k.needleDiameter)
+        assertEquals("41", k.size)
+        assertEquals(5.0, k.rating, 0.00001)
+        val k2 = db.knittings[1]
+        assertEquals(44, k2.id)
+        assertEquals("knitting 2", k2.title)
+        assertEquals("my second knitting", k2.description)
+        assertEquals("2018-01-11", dateFormat.format(k2.started))
+        assertEquals("2018-01-12", dateFormat.format(k2.finished))
+        assertEquals("3.5", k2.needleDiameter)
+        assertEquals("41.5", k2.size)
+        assertEquals(4.5, k2.rating, 0.00001)
+        val p = db.photos[0]
+        assertEquals(42, p.id)
+        assertEquals(File("/tmp/photo1.jpg"), p.filename)
+        assertEquals(43, p.knittingID)
+        assertEquals("socks", p.description)
+        val p2 = db.photos[1]
+        assertEquals(43, p2.id)
+        assertEquals(File("/tmp/photo2.jpg"), p2.filename)
+        assertEquals(44, p2.knittingID)
+        assertEquals("shirt", p2.description)
+    }
 }
