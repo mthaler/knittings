@@ -24,17 +24,33 @@ fun Parcel.readBoolean(): Boolean {
 
 fun Parcel.writeOptionalInt(value: Int?) {
     if (value != null) {
-        writeByte(1)
+        writeBoolean(true)
         writeInt(value)
     } else {
-        writeByte(0)
+        writeBoolean(false)
     }
 }
 
 fun Parcel.readOptionalInt(): Int? {
-    val flag = readByte()
-    if (flag == 1.toByte()) {
+    if (readBoolean()) {
         return readInt()
+    } else {
+        return null
+    }
+}
+
+fun Parcel.writeOptionalLong(value: Long?) {
+    if (value != null) {
+        writeBoolean(true)
+        writeLong(value)
+    } else {
+        writeBoolean(false)
+    }
+}
+
+fun Parcel.readOptionalLong(): Long? {
+    if (readBoolean()) {
+        return readLong()
     } else {
         return null
     }
