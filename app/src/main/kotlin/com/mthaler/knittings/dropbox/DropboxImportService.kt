@@ -23,7 +23,6 @@ import kotlinx.coroutines.*
 import org.json.JSONObject
 import java.io.ByteArrayOutputStream
 import java.io.FileOutputStream
-import java.lang.Exception
 
 class DropboxImportService : Service() {
 
@@ -41,7 +40,7 @@ class DropboxImportService : Service() {
             setOngoing(true)
             setContentTitle("Dropbox import")
             setContentText("Dropbox import in progress")
-            setSmallIcon(R.drawable.ic_photo_size_select_large_black_24dp)
+            setSmallIcon(R.drawable.ic_file_download_black_24dp)
             setContentIntent(pendingIntent)
         }
 
