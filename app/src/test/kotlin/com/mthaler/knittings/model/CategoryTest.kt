@@ -2,10 +2,13 @@ package com.mthaler.knittings.model
 
 import android.graphics.Color
 import android.os.Parcel
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.mthaler.knittings.utils.SerializeUtils
 import org.junit.Assert.*
 import org.junit.Test
+import org.junit.runner.RunWith
 
+@RunWith(AndroidJUnit4::class)
 class CategoryTest {
 
     @Test
@@ -24,7 +27,7 @@ class CategoryTest {
         val p0 = Parcel.obtain()
         c0.writeToParcel(p0, 0)
         p0.setDataPosition(0)
-        val p1 = Category.CREATOR.createFromParcel(p0)
-        println(p1)
+        val c1 = Category.CREATOR.createFromParcel(p0)
+        assertEquals(c0, c1)
     }
 }
