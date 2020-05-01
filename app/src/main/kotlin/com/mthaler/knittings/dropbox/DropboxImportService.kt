@@ -7,17 +7,20 @@ import android.app.Service
 import android.content.Context
 import android.content.Intent
 import android.os.Build
+import android.os.Environment
 import android.os.IBinder
-import android.os.Parcelable
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import com.mthaler.knittings.R
 import com.mthaler.knittings.database.datasource
 import com.mthaler.knittings.model.Database
+import com.mthaler.knittings.model.toDatabase
 import com.mthaler.knittings.utils.FileUtils
 import com.mthaler.knittings.utils.PictureUtils
 import kotlinx.coroutines.*
+import org.json.JSONObject
+import java.io.ByteArrayOutputStream
 import java.io.FileOutputStream
 import java.lang.Exception
 
@@ -26,8 +29,7 @@ class DropboxImportService : Service() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         createNotificationChannel()
 
-        val database = intent?.getParcelableExtra<Database>(EXTRA_DATABASE)
-        val directory = intent?.getStringExtra(EXTRA_DIRECTORY)
+        val directory = intent?.getStringExtra(EXTRA_DIRECTORY)!!
 
         val intent = Intent(this, DropboxImportActivity::class.java).apply {
             this.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
@@ -47,8 +49,9 @@ class DropboxImportService : Service() {
 
         GlobalScope.launch {
             val sm = DropboxImportServiceManager.getInstance()
-            withContext(Dispatchers.Default) {
-                if (database != null && directory != null) {
+            withContext(Dispatchers.IO) {
+                if (directory != null) {
+                    val database = downloadDatabase(directory)
                     downloadPhotos(database, directory, builder)
                 }
             }
@@ -74,6 +77,36 @@ class DropboxImportService : Service() {
                 it.createNotificationChannel(channel)
             }
         }
+    }
+
+    private fun downloadDatabase(directory: String): Database {
+        val dbxClient = DropboxClientFactory.getClient()
+        val os = ByteArrayOutputStream()
+        dbxClient.files().download("/$directory/db.json").download(os)
+        val bytes = os.toByteArray()
+        val jsonStr = String(bytes)
+        val json = JSONObject(jsonStr)
+        val externalFilesDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+        val database = json.toDatabase(this, externalFilesDir)
+        // remove all existing entries from the database
+        datasource.deleteAllKnittings()
+        datasource.deleteAllPhotos()
+        datasource.deleteAllCategories()
+        datasource.deleteAllNeedles()
+        // add downloaded database
+        for (photo in database.photos) {
+            datasource.addPhoto(photo, manualID = true)
+        }
+        for (category in database.categories) {
+            datasource.addCategory(category, manualID = true)
+        }
+        for (needle in database.needles) {
+            datasource.addNeedle(needle, manualID = true)
+        }
+        for (knitting in database.knittings) {
+            datasource.addKnitting(knitting, manualID = true)
+        }
+        return database
     }
 
     private fun downloadPhotos(database: Database, directory: String, builder: NotificationCompat.Builder) {
@@ -106,12 +139,10 @@ class DropboxImportService : Service() {
 
     companion object {
         private val CHANNEL_ID = "com.mthaler.knittings.compressphotos.DropboxImportService"
-        private val EXTRA_DATABASE = "database"
         private val EXTRA_DIRECTORY = "directory"
 
-        fun startService(context: Context, database: Database, directory: String) {
+        fun startService(context: Context, directory: String) {
             val startIntent = Intent(context, DropboxImportService::class.java)
-            startIntent.putExtra(EXTRA_DATABASE, database as Parcelable)
             startIntent.putExtra(EXTRA_DIRECTORY, directory)
             ContextCompat.startForegroundService(context, startIntent)
         }

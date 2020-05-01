@@ -117,7 +117,7 @@ class DropboxImportFragment : AbstractDropboxFragment() {
                     setTitle(resources.getString(R.string.dropbox_import))
                     setMessage("Do you really want to import from Dropbox? This will delete all existing data!")
                     setPositiveButton("Import", { dialog, which ->
-                        DownloadDatabaseTask(requireContext().applicationContext, DropboxClientFactory.getClient(), ::onDownloadDatabase, ::onDownloadDatabaseError).execute(folderName)
+                        DropboxImportService.startService(requireContext(), folderName)
                         setMode(true)
                     })
                     setNegativeButton(resources.getString(R.string.dialog_button_cancel), { dialog, which -> })
@@ -150,67 +150,6 @@ class DropboxImportFragment : AbstractDropboxFragment() {
         with(builder) {
             setTitle("List folders")
             setMessage("Error when listing folders: " + ex.message)
-            setPositiveButton("OK", { dialog, which -> })
-            show()
-        }
-    }
-
-    private fun onDownloadDatabase(database: Database?) {
-        context?.let {
-            if (database != null) {
-                // remove all existing entries from the database
-                datasource.deleteAllKnittings()
-                datasource.deleteAllPhotos()
-                datasource.deleteAllCategories()
-                datasource.deleteAllNeedles()
-                // add downloaded database
-                for (photo in database.photos) {
-                    datasource.addPhoto(photo, manualID = true)
-                }
-                for (category in database.categories) {
-                    datasource.addCategory(category, manualID = true)
-                }
-                for (needle in database.needles) {
-                    datasource.addNeedle(needle, manualID = true)
-                }
-                for (knitting in database.knittings) {
-                    datasource.addKnitting(knitting, manualID = true)
-                }
-                DropboxImportService.startService(requireContext(), database, backupDirectory)
-                //DownloadPhotosTask(DropboxClientFactory.getClient(), it, backupDirectory, database, progressBar::setProgress, ::onDownloadPhotosComplete).execute()
-            } else {
-                val builder = AlertDialog.Builder(it)
-                with(builder) {
-                    setTitle("Download database")
-                    setMessage("Could not download database: null")
-                    setPositiveButton("OK", { dialog, which -> })
-                    show()
-                }
-            }
-        }
-    }
-
-    /**
-     * The onDownloadDatabaseError method is called if an exception happens when the DownloadDatabaseTask is executed,
-     *
-     * @param ex exception that happened when executing DownloadDatabaseTask
-     */
-    private fun onDownloadDatabaseError(ex: Exception) {
-        val builder = AlertDialog.Builder(requireContext())
-        with(builder) {
-            setTitle("Download database")
-            setMessage("Could not download database: " + ex.message)
-            setPositiveButton("OK", { dialog, which -> })
-            show()
-        }
-    }
-
-    private fun onDownloadPhotosComplete() {
-        setMode(false)
-        val builder = AlertDialog.Builder(requireContext())
-        with(builder) {
-            setTitle(resources.getString(R.string.dropbox_import))
-            setMessage("Dropbox import completed")
             setPositiveButton("OK", { dialog, which -> })
             show()
         }
