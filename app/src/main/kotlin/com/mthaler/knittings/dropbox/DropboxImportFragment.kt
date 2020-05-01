@@ -62,7 +62,19 @@ class DropboxImportFragment : AbstractDropboxFragment() {
         super.onActivityCreated(savedInstanceState)
         DropboxImportServiceManager.getInstance().status.observe(viewLifecycleOwner, Observer { status ->
             when(status) {
-                is Status.Progress -> progressBar.progress = status.value
+                is Status.Progress -> {
+                    progressBar.progress = status.value
+                }
+                is Status.Success -> {
+                    setMode(false)
+                    val builder = AlertDialog.Builder(requireContext())
+                    with(builder) {
+                        setTitle(resources.getString(R.string.dropbox_import))
+                        setMessage("Dropbox import completed")
+                        setPositiveButton("OK", { dialog, which -> })
+                        show()
+                    }
+                }
             }
         })
     }

@@ -60,6 +60,7 @@ class DropboxImportService : Service() {
                     try {
                         val database = downloadDatabase(directory)
                         downloadPhotos(database, directory, builder)
+                        DropboxImportServiceManager.getInstance().statusUpdated(Status.Success)
                     } finally {
                         wakeLock.release()
                     }
