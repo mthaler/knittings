@@ -26,6 +26,7 @@ class DropboxImportService : Service() {
         createNotificationChannel()
 
         val database = intent?.getParcelableExtra<Database>(EXTRA_DATABASE)
+        val directory = intent?.getStringExtra(EXTRA_DIRECTORY)
 
         val intent = Intent(this, DropboxImportActivity::class.java).apply {
             this.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
@@ -77,32 +78,35 @@ class DropboxImportService : Service() {
         }
     }
 
-    private fun downloadPhotos(database: Database) {
+    private fun downloadPhotos(database: Database, directory: String) {
         val count = database.photos.size
+        val dbxClient = DropboxClientFactory.getClient()
         for ((index, photo) in database.photos.withIndex()) {
             // Download the file.
-//            val filename = "/" + directory + "/" + photo.id + "." + FileUtils.getExtension(photo.filename.name)
-//            FileOutputStream(photo.filename).use {
-//                dbxClient.files().download(filename).download(it)
-//            }
-//            // generate preview
-//            val orientation = PictureUtils.getOrientation(photo.filename.absolutePath)
-//            val preview = PictureUtils.decodeSampledBitmapFromPath(photo.filename.absolutePath, 200, 200)
-//            val rotatedPreview = PictureUtils.rotateBitmap(preview, orientation)
-//            val photoWithPreview = photo.copy(preview = rotatedPreview)
-//            this.datasource.updatePhoto(photoWithPreview)
-//            // update progress
-//            publishProgress((index / count.toFloat() * 100).toInt())
+            val filename = "/" + directory + "/" + photo.id + "." + FileUtils.getExtension(photo.filename.name)
+            FileOutputStream(photo.filename).use {
+                dbxClient.files().download(filename).download(it)
+            }
+            // generate preview
+            val orientation = PictureUtils.getOrientation(photo.filename.absolutePath)
+            val preview = PictureUtils.decodeSampledBitmapFromPath(photo.filename.absolutePath, 200, 200)
+            val rotatedPreview = PictureUtils.rotateBitmap(preview, orientation)
+            val photoWithPreview = photo.copy(preview = rotatedPreview)
+            this.datasource.updatePhoto(photoWithPreview)
+            // update progress
+            //publishProgress((index / count.toFloat() * 100).toInt())
         }
     }
 
     companion object {
         private val CHANNEL_ID = "com.mthaler.knittings.compressphotos.DropboxImportService"
         private val EXTRA_DATABASE = "database"
+        private val EXTRA_DIRECTORY = "directory"
 
-        fun startService(context: Context, database: Database) {
+        fun startService(context: Context, database: Database, directory: String) {
             val startIntent = Intent(context, DropboxImportService::class.java)
             startIntent.putExtra(EXTRA_DATABASE, database as Parcelable)
+            startIntent.putExtra(EXTRA_DIRECTORY, directory)
             ContextCompat.startForegroundService(context, startIntent)
         }
 
