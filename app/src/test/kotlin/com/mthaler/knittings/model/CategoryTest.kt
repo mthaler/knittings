@@ -29,5 +29,11 @@ class CategoryTest {
         p0.setDataPosition(0)
         val c1 = Category.CREATOR.createFromParcel(p0)
         assertEquals(c0, c1)
+        val c2 = Category(43, "test2", Color.RED)
+        val p1 = Parcel.obtain()
+        c2.writeToParcel(p1, 0)
+        p1.setDataPosition(0)
+        val c3 = Category.CREATOR.createFromParcel(p1)
+        assertEquals(c2, c3)
     }
 }
