@@ -164,9 +164,6 @@ class DropboxImportFragment : AbstractDropboxFragment() {
                 datasource.deleteAllCategories()
                 datasource.deleteAllNeedles()
                 // add downloaded database
-                for (knitting in database.knittings) {
-                    datasource.addKnitting(knitting, manualID = true)
-                }
                 for (photo in database.photos) {
                     datasource.addPhoto(photo, manualID = true)
                 }
@@ -176,7 +173,11 @@ class DropboxImportFragment : AbstractDropboxFragment() {
                 for (needle in database.needles) {
                     datasource.addNeedle(needle, manualID = true)
                 }
-                DownloadPhotosTask(DropboxClientFactory.getClient(), it, backupDirectory, database, progressBar::setProgress, ::onDownloadPhotosComplete).execute()
+                for (knitting in database.knittings) {
+                    datasource.addKnitting(knitting, manualID = true)
+                }
+                DropboxImportService.startService(requireContext(), database, backupDirectory)
+                //DownloadPhotosTask(DropboxClientFactory.getClient(), it, backupDirectory, database, progressBar::setProgress, ::onDownloadPhotosComplete).execute()
             } else {
                 val builder = AlertDialog.Builder(it)
                 with(builder) {

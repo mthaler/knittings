@@ -34,7 +34,6 @@ class DropboxImportService : Service() {
         }
         val pendingIntent = PendingIntent.getActivity(this, 0, intent, 0)
 
-        val notificationManager = NotificationManagerCompat.from(this);
         val builder = NotificationCompat.Builder(this, CHANNEL_ID).apply {
             setOngoing(true)
             setContentTitle("Dropbox import")
@@ -43,13 +42,14 @@ class DropboxImportService : Service() {
             setContentIntent(pendingIntent)
         }
 
+
         startForeground(1, builder.build())
 
         GlobalScope.launch {
             val sm = DropboxImportServiceManager.getInstance()
             withContext(Dispatchers.Default) {
                 if (database != null && directory != null) {
-                    downloadPhotos(database, directory)
+                    downloadPhotos(database, directory, builder)
                 }
             }
             builder.setContentText("Dropbox import done")
@@ -76,7 +76,8 @@ class DropboxImportService : Service() {
         }
     }
 
-    private fun downloadPhotos(database: Database, directory: String) {
+    private fun downloadPhotos(database: Database, directory: String, builder: NotificationCompat.Builder) {
+        val notificationManager = NotificationManagerCompat.from(this);
         val sm = DropboxImportServiceManager.getInstance()
         val count = database.photos.size
         val dbxClient = DropboxClientFactory.getClient()
@@ -93,7 +94,10 @@ class DropboxImportService : Service() {
                 val rotatedPreview = PictureUtils.rotateBitmap(preview, orientation)
                 val photoWithPreview = photo.copy(preview = rotatedPreview)
                 this.datasource.updatePhoto(photoWithPreview)
-                sm.statusUpdated(Status.Progress((index / count.toFloat() * 100).toInt()))
+                val progress = (index / count.toFloat() * 100).toInt()
+                builder.setProgress(100, progress, false)
+                notificationManager.notify(1, builder.build())
+                sm.statusUpdated(Status.Progress(progress))
             } catch(excetion: Exception) {
                 sm.statusUpdated(Status.Error(excetion))
             }
