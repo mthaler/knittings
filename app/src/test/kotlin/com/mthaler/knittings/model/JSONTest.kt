@@ -1,14 +1,18 @@
 package com.mthaler.knittings.model
 
 import android.graphics.Color
+import androidx.test.core.app.ApplicationProvider
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.json.JSONArray
 import org.json.JSONObject
 import org.junit.Assert.*
 import org.junit.Test
+import org.junit.runner.RunWith
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
 
+@RunWith(AndroidJUnit4::class)
 class JSONTest {
 
     private val dateFormat = SimpleDateFormat("yyyy-MM-dd")
@@ -46,6 +50,21 @@ class JSONTest {
     }
 
     @Test
+    fun testJSONToKnitting() {
+        val s = """{"size":41,"needleDiameter":3,"rating":5,"description":"my first knitting","started":"2018-01-10","id":42,"title":"knitting"}"""
+        val json = JSONObject(s)
+        val k = json.toKnitting(ApplicationProvider.getApplicationContext()).first
+        assertEquals(42, k.id)
+        assertEquals("knitting", k.title)
+        assertEquals("my first knitting", k.description)
+        assertEquals("2018-01-10", dateFormat.format(k.started))
+        assertNull(k.finished)
+        assertEquals("3", k.needleDiameter)
+        assertEquals("41", k.size)
+        assertEquals(5.0, k.rating, 0.000001)
+    }
+
+    @Test
     fun testPhotoToJSON() {
         val p0 = Photo(42, File("/tmp/photo1.jpg"), 43, "socks", null)
         val j0 = p0.toJSON()
@@ -53,6 +72,17 @@ class JSONTest {
         assertEquals("/tmp/photo1.jpg", j0.getString("filename"))
         assertEquals(43, j0.getLong("knittingID"))
         assertEquals("socks", j0.getString("description"))
+    }
+
+    @Test
+    fun testJSONToPhoto() {
+        val s = """{"knittingID":43,"filename":"/tmp/photo1.jpg","description":"socks","id":42}"""
+        val json = JSONObject(s)
+        val p = json.toPhoto()
+        assertEquals(42, p.id)
+        assertEquals(File("/tmp/photo1.jpg"), p.filename)
+        assertEquals(43, p.knittingID)
+        assertEquals("socks", p.description)
     }
 
     @Test
@@ -65,36 +95,35 @@ class JSONTest {
         val j1 = c1.toJSON()
         assertEquals(43, j1.getLong("id"))
         assertEquals("socks", j1.getString("name"))
-        assertEquals(Color.RED, j1.getInt("color"))
+        assertEquals(Color.RED, Color.parseColor(j1.getString("color")))
+    }
+
+    @Test
+    fun testJSONToCategory() {
+        val s1 = """{"name":"test","id":42}"""
+        assertEquals(Category(42, "test", null), JSONObject(s1).toCategory())
+        val s2 = """{"color":"#FFFF0000","name":"socks","id":43}"""
+        assertEquals(Category(43, "socks", Color.RED), JSONObject(s2).toCategory())
     }
 
     @Test
     fun testNeedleToJSON() {
-        val n0 = Needle(42, "needle", "my first needle", "5 mm", "20 cm", "metal", true, "Nadelspiele")
+        val n0 = Needle(42, "needle", "my first needle", "5 mm", "20 cm", NeedleMaterial.METAL, true, NeedleType.SET)
         val j0 = n0.toJSON()
         assertEquals(42, j0.getLong("id"))
         assertEquals("needle", j0.getString("name"))
         assertEquals("my first needle", j0.getString("description"))
         assertEquals("5 mm", j0.getString("size"))
         assertEquals("20 cm", j0.getString("length"))
-        assertEquals("metal", j0.getString("material"))
+        assertEquals("METAL", j0.getString("material"))
         assertTrue(j0.getBoolean("inUse"))
-        assertEquals("Nadelspiele", j0.getString("type"))
+        assertEquals("SET", j0.getString("type"))
     }
 
     @Test
-    fun testJSONToKnitting() {
-        val s = """{"size":41,"needleDiameter":3,"rating":5,"description":"my first knitting","started":"2018-01-10","id":42,"title":"knitting"}"""
-        val json = JSONObject(s)
-        val k = json.toKnitting().first
-        assertEquals(42, k.id)
-        assertEquals("knitting", k.title)
-        assertEquals("my first knitting", k.description)
-        assertEquals("2018-01-10", dateFormat.format(k.started))
-        assertNull(k.finished)
-        assertEquals("3", k.needleDiameter)
-        assertEquals("41", k.size)
-        assertEquals(5.0, k.rating, 0.000001)
+    fun testJSONToNeedle() {
+        val s = """{"size":"5 mm","material":"METAL","name":"needle","length":"20 cm","inUse":true,"description":"my first needle","id":42,"type":"SET"}"""
+        assertEquals(Needle(42, "needle", "my first needle", "5 mm", "20 cm", NeedleMaterial.METAL, true, NeedleType.SET), JSONObject(s).toNeedle(ApplicationProvider.getApplicationContext()))
     }
 
     @Test
@@ -103,7 +132,7 @@ class JSONTest {
             |{"size":42,"needleDiameter":3.5,"rating":4.5,"description":"my second knitting","started":"2018-01-11", "finished":"2018-01-12","id":43,"title":"knitting 2"}]
         """.trimMargin()
         val json = JSONArray(s)
-        val knittings = json.toKnittings().map { it.first }
+        val knittings = json.toKnittings(ApplicationProvider.getApplicationContext()).map { it.first }
         assertEquals(2, knittings.size)
         val k = knittings[0]
         assertEquals(42, k.id)
@@ -123,17 +152,6 @@ class JSONTest {
         assertEquals("3.5", k2.needleDiameter)
         assertEquals("42", k2.size)
         assertEquals(4.5, k2.rating, 0.000001)
-    }
-
-    @Test
-    fun testJSONToPhoto() {
-        val s = """{"knittingID":43,"filename":"/tmp/photo1.jpg","description":"socks","id":42}"""
-        val json = JSONObject(s)
-        val p = json.toPhoto()
-        assertEquals(42, p.id)
-        assertEquals(File("/tmp/photo1.jpg"), p.filename)
-        assertEquals(43, p.knittingID)
-        assertEquals("socks", p.description)
     }
 
     @Test
@@ -157,16 +175,8 @@ class JSONTest {
     }
 
     @Test
-    fun testJSONToCategory() {
-        val s1 = """{"name":"test","id":42}"""
-        assertEquals(Category(42, "test", null), JSONObject(s1).toCategory())
-        val s2 = """{"color":-65536,"name":"socks","id":43}"""
-        assertEquals(Category(43, "socks", Color.RED), JSONObject(s2).toCategory())
-    }
-
-    @Test
     fun testJSONArrayToCategories() {
-        val s = """[{"name":"test","id":42},{"color":-65536,"name":"socks","id":43}]"""
+        val s = """[{"name":"test","id":42},{"color":"#FFFF0000","name":"socks","id":43}]"""
         val json = JSONArray(s)
         val categories = json.toCategories()
         assertEquals(2, categories.size)
@@ -175,20 +185,14 @@ class JSONTest {
     }
 
     @Test
-    fun testJSONToNeedle() {
-        val s = """{"size":"5 mm","material":"metal","name":"needle","length":"20 cm","inUse":true,"description":"my first needle","id":42,"type":"Nadelspiele"}"""
-        assertEquals(Needle(42, "needle", "my first needle", "5 mm", "20 cm", "metal", true, "Nadelspiele"), JSONObject(s).toNeedle())
-    }
-
-    @Test
     fun testJSONArrayNeedles() {
-        val s = """[{"size":"5 mm","material":"metal","name":"needle","length":"20 cm","inUse":true,"description":"my first needle","id":42,"type":"Nadelspiele"},
-            |{"size":"6 mm","material":"wood","name":"needle2","length":"21 cm","inUse":false,"description":"my second needle","id":43,"type":"Rundstricknadeln"}]""".trimMargin()
+        val s = """[{"size":"5 mm","material":"METAL","name":"needle","length":"20 cm","inUse":true,"description":"my first needle","id":42,"type":"SET"},
+            |{"size":"6 mm","material":"WOOD","name":"needle2","length":"21 cm","inUse":false,"description":"my second needle","id":43,"type":"ROUND"}]""".trimMargin()
         val json = JSONArray(s)
-        val needles = json.toNeedles()
+        val needles = json.toNeedles(ApplicationProvider.getApplicationContext())
         assertEquals(2, needles.size)
-        assertEquals(Needle(42, "needle", "my first needle", "5 mm", "20 cm", "metal", true, "Nadelspiele"), needles[0])
-        assertEquals(Needle(43, "needle2", "my second needle", "6 mm", "21 cm", "wood", false, "Rundstricknadeln"), needles[1])
+        assertEquals(Needle(42, "needle", "my first needle", "5 mm", "20 cm", NeedleMaterial.METAL, true, NeedleType.SET), needles[0])
+        assertEquals(Needle(43, "needle2", "my second needle", "6 mm", "21 cm", NeedleMaterial.WOOD, false, NeedleType.ROUND), needles[1])
     }
 
     @Test
@@ -208,7 +212,7 @@ class JSONTest {
         val photos = listOf(p0, p1)
         val db = Database(knittings, photos, ArrayList(), ArrayList())
         val json = db.toJSON()
-        assertEquals(3, json.getInt("version"))
+        assertEquals(4, json.getInt("version"))
         // get the JSON array containing the knittings
         val ks = json.getJSONArray("knittings")
         assertEquals(2, ks.length())
@@ -252,7 +256,7 @@ class JSONTest {
             {"size":41.5,"needleDiameter":3.5,"rating":4.5,"description":"my second knitting","started":"2018-01-11","finished":"2018-01-12","id":44,"title":"knitting 2"}],
             "photos":[{"knittingID":43,"filename":"/tmp/photo1.jpg","description":"socks","id":42},{"knittingID":44,"filename":"/tmp/photo2.jpg","description":"shirt","id":43}]}"""
         val json = JSONObject(s)
-        val db = json.toDatabase(File("/tmp"))
+        val db = json.toDatabase(ApplicationProvider.getApplicationContext(), File("/tmp"))
         assertEquals(2, db.knittings.size)
         assertEquals(2, db.photos.size)
         val k = db.knittings[0]
