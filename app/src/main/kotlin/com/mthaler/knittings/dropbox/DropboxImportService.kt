@@ -55,6 +55,7 @@ class DropboxImportService : Service() {
             builder.setContentText("Dropbox import done")
             builder.setProgress(0, 0, false)
             stopForeground(true)
+            stopSelf()
         }
 
         return START_NOT_STICKY
