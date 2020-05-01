@@ -50,6 +50,7 @@ data class Knitting(
         parcel.writeLong(started.time)
         parcel.writeOptionalLong(finished?.time)
         parcel.writeString(needleDiameter)
+        parcel.writeString(size)
         parcel.writeParcelable(defaultPhoto, 0)
         parcel.writeDouble(rating)
         parcel.writeLong(duration)
