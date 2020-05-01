@@ -1,14 +1,17 @@
 package com.mthaler.knittings.model
 
 import android.graphics.Color
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.json.JSONArray
 import org.json.JSONObject
 import org.junit.Assert.*
 import org.junit.Test
+import org.junit.runner.RunWith
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
 
+@RunWith(AndroidJUnit4::class)
 class JSONTest {
 
     private val dateFormat = SimpleDateFormat("yyyy-MM-dd")
