@@ -19,6 +19,7 @@ import com.mthaler.knittings.utils.FileUtils
 import com.mthaler.knittings.utils.PictureUtils
 import kotlinx.coroutines.*
 import java.io.FileOutputStream
+import java.lang.Exception
 
 class DropboxImportService : Service() {
 
@@ -47,13 +48,9 @@ class DropboxImportService : Service() {
         GlobalScope.launch {
             val sm = DropboxImportServiceManager.getInstance()
             withContext(Dispatchers.Default) {
-                for(i in 1..10) {
-                    delay(1000)
-                    builder.setProgress(100, i * 10, false)
-                    notificationManager.notify(1, builder.build())
-                    sm.statusUpdated(Status.Progress(i * 10))
+                if (database != null && directory != null) {
+                    downloadPhotos(database, directory)
                 }
-                DropboxImportServiceManager.getInstance().statusUpdated(Status.Success)
             }
             builder.setContentText("Dropbox import done")
             builder.setProgress(0, 0, false)
@@ -83,18 +80,22 @@ class DropboxImportService : Service() {
         val count = database.photos.size
         val dbxClient = DropboxClientFactory.getClient()
         for ((index, photo) in database.photos.withIndex()) {
-            // Download the file.
-            val filename = "/" + directory + "/" + photo.id + "." + FileUtils.getExtension(photo.filename.name)
-            FileOutputStream(photo.filename).use {
-                dbxClient.files().download(filename).download(it)
+            try {
+                // Download the file.
+                val filename = "/" + directory + "/" + photo.id + "." + FileUtils.getExtension(photo.filename.name)
+                FileOutputStream(photo.filename).use {
+                    dbxClient.files().download(filename).download(it)
+                }
+                // generate preview
+                val orientation = PictureUtils.getOrientation(photo.filename.absolutePath)
+                val preview = PictureUtils.decodeSampledBitmapFromPath(photo.filename.absolutePath, 200, 200)
+                val rotatedPreview = PictureUtils.rotateBitmap(preview, orientation)
+                val photoWithPreview = photo.copy(preview = rotatedPreview)
+                this.datasource.updatePhoto(photoWithPreview)
+                sm.statusUpdated(Status.Progress((index / count.toFloat() * 100).toInt()))
+            } catch(excetion: Exception) {
+                sm.statusUpdated(Status.Error(excetion))
             }
-            // generate preview
-            val orientation = PictureUtils.getOrientation(photo.filename.absolutePath)
-            val preview = PictureUtils.decodeSampledBitmapFromPath(photo.filename.absolutePath, 200, 200)
-            val rotatedPreview = PictureUtils.rotateBitmap(preview, orientation)
-            val photoWithPreview = photo.copy(preview = rotatedPreview)
-            this.datasource.updatePhoto(photoWithPreview)
-            sm.statusUpdated(Status.Progress((index / count.toFloat() * 100).toInt()))
         }
     }
 
