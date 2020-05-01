@@ -115,8 +115,8 @@
         </provider>
         <service
             android:name=".dropbox.DropboxImportService"
-            android:enabled="false"
-            android:exported="true"></service>
+            android:enabled="true"
+            android:exported="false"></service>
     </application>
     <uses-feature
         android:name="android.hardware.camera"
