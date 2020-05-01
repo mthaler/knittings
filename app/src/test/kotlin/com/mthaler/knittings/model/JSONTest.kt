@@ -176,7 +176,7 @@ class JSONTest {
 
     @Test
     fun testJSONArrayToCategories() {
-        val s = """[{"name":"test","id":42},{"color":-65536,"name":"socks","id":43}]"""
+        val s = """[{"name":"test","id":42},{"color":"#FFFF0000","name":"socks","id":43}]"""
         val json = JSONArray(s)
         val categories = json.toCategories()
         assertEquals(2, categories.size)
