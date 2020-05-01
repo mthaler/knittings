@@ -11,6 +11,7 @@ import com.mthaler.knittings.R
 import com.mthaler.knittings.utils.NetworkUtils
 import kotlinx.android.synthetic.main.fragment_dropbox_import.*
 import androidx.appcompat.app.AlertDialog
+import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import com.mthaler.knittings.database.datasource
 import com.mthaler.knittings.model.Database
@@ -55,6 +56,15 @@ class DropboxImportFragment : AbstractDropboxFragment() {
                 importTask = ListFolderTask(DropboxClientFactory.getClient(), ::onListFolder, ::onListFolderError).execute("")
             }
         }
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        DropboxImportServiceManager.getInstance().status.observe(viewLifecycleOwner, Observer { status ->
+            when(status) {
+                is Status.Progress -> progressBar.progress = status.value
+            }
+        })
     }
 
     override fun onResume() {
