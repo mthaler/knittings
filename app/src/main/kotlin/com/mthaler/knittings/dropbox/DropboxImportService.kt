@@ -79,6 +79,7 @@ class DropboxImportService : Service() {
     }
 
     private fun downloadPhotos(database: Database, directory: String) {
+        val sm = DropboxImportServiceManager.getInstance()
         val count = database.photos.size
         val dbxClient = DropboxClientFactory.getClient()
         for ((index, photo) in database.photos.withIndex()) {
@@ -93,8 +94,7 @@ class DropboxImportService : Service() {
             val rotatedPreview = PictureUtils.rotateBitmap(preview, orientation)
             val photoWithPreview = photo.copy(preview = rotatedPreview)
             this.datasource.updatePhoto(photoWithPreview)
-            // update progress
-            //publishProgress((index / count.toFloat() * 100).toInt())
+            sm.statusUpdated(Status.Progress((index / count.toFloat() * 100).toInt()))
         }
     }
 
