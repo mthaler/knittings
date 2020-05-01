@@ -12,6 +12,7 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import com.mthaler.knittings.R
+import kotlinx.coroutines.*
 
 class DropboxImportService : Service() {
 
@@ -34,6 +35,22 @@ class DropboxImportService : Service() {
 
         startForeground(1, builder.build())
 
+        GlobalScope.launch {
+            val sm = DropboxImportServiceManager.getInstance()
+            withContext(Dispatchers.Default) {
+                for(i in 1..10) {
+                    delay(1000)
+                    builder.setProgress(100, i * 10, false)
+                    notificationManager.notify(1, builder.build())
+                    sm.statusUpdated(Status.Progress(i * 10))
+                }
+                DropboxImportServiceManager.getInstance().statusUpdated(Status.Success)
+            }
+            builder.setContentText("Dropbox import done")
+            builder.setProgress(0, 0, false)
+            stopForeground(true)
+        }
+
         return START_NOT_STICKY
     }
 
@@ -44,7 +61,7 @@ class DropboxImportService : Service() {
     private fun createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             getSystemService(NotificationManager::class.java).let {
-                val name = "compress photos"
+                val name = "dropbox import"
                 val importance =  NotificationManager.IMPORTANCE_DEFAULT
                 val channel = NotificationChannel(CHANNEL_ID, name, importance)
                 it.createNotificationChannel(channel)
