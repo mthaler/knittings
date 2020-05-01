@@ -8,11 +8,13 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.IBinder
+import android.os.Parcelable
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import com.mthaler.knittings.R
 import com.mthaler.knittings.database.datasource
+import com.mthaler.knittings.model.Database
 import com.mthaler.knittings.utils.FileUtils
 import com.mthaler.knittings.utils.PictureUtils
 import kotlinx.coroutines.*
@@ -22,6 +24,8 @@ class DropboxImportService : Service() {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         createNotificationChannel()
+
+        val database = intent?.getParcelableExtra<Database>(EXTRA_DATABASE)
 
         val intent = Intent(this, DropboxImportActivity::class.java).apply {
             this.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
@@ -73,10 +77,10 @@ class DropboxImportService : Service() {
         }
     }
 
-//    private fun downloadPhotos() {
-//        val count = database.photos.size
-//        for ((index, photo) in database.photos.withIndex()) {
-//            // Download the file.
+    private fun downloadPhotos(database: Database) {
+        val count = database.photos.size
+        for ((index, photo) in database.photos.withIndex()) {
+            // Download the file.
 //            val filename = "/" + directory + "/" + photo.id + "." + FileUtils.getExtension(photo.filename.name)
 //            FileOutputStream(photo.filename).use {
 //                dbxClient.files().download(filename).download(it)
@@ -89,14 +93,16 @@ class DropboxImportService : Service() {
 //            this.datasource.updatePhoto(photoWithPreview)
 //            // update progress
 //            publishProgress((index / count.toFloat() * 100).toInt())
-//        }
-//    }
+        }
+    }
 
     companion object {
         private val CHANNEL_ID = "com.mthaler.knittings.compressphotos.DropboxImportService"
+        private val EXTRA_DATABASE = "database"
 
-        fun startService(context: Context, message: String) {
+        fun startService(context: Context, database: Database) {
             val startIntent = Intent(context, DropboxImportService::class.java)
+            startIntent.putExtra(EXTRA_DATABASE, database as Parcelable)
             ContextCompat.startForegroundService(context, startIntent)
         }
 
