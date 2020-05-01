@@ -12,9 +12,6 @@ import java.lang.Exception
 
 private val dateFormat = SimpleDateFormat("yyyy-MM-dd")
 
-/**
- * Converts a knitting to a JSON object
- */
 fun Knitting.toJSON(): JSONObject {
     val result = JSONObject()
     result.put("id", id)
@@ -38,45 +35,6 @@ fun Knitting.toJSON(): JSONObject {
     return result
 }
 
-/**
- * Converts a photo to a JSON object
- */
-fun Photo.toJSON(): JSONObject {
-    val result = JSONObject()
-    result.put("id", id)
-    result.put("filename", filename.absolutePath)
-    result.put("knittingID", knittingID)
-    result.put("description", description)
-    return result
-}
-
-fun Category.toJSON(): JSONObject {
-    val result = JSONObject()
-    result.put("id", id)
-    result.put("name", name)
-    if (color != null) {
-        result.put("color", ColorUtils.colorToHex(color))
-    }
-    return result
-}
-
-fun Needle.toJSON(): JSONObject {
-    val result = JSONObject()
-    result.put("id", id)
-    result.put("name", name)
-    result.put("description", description)
-    result.put("size", size)
-    result.put("length", length)
-    result.put("material", material)
-    result.put("inUse", inUse)
-    result.put("type", type)
-    return result
-}
-
-/**
- * Converts a JSON object to a knitting. The method actually returns a pair of the knitting and
- * and the optional default photo id
- */
 fun JSONObject.toKnitting(context: Context): Triple<Knitting, Long?, Long?> {
     val id = getLong("id")
     val title = getString("title")
@@ -102,22 +60,15 @@ fun JSONObject.toKnitting(context: Context): Triple<Knitting, Long?, Long?> {
     return Triple(Knitting(id, title, description, started, finished, needleDiameter, size, null, rating, duration, status = status), defaultPhoto, category)
 }
 
-/**
- * Converts a JSON array to a list of knittings
- */
-fun JSONArray.toKnittings(context: Context): List<Triple<Knitting, Long?, Long?>> {
-    val result = ArrayList<Triple<Knitting, Long?, Long?>>()
-    for (i in 0 until length()) {
-        val item = getJSONObject(i)
-        val knittingAndDefaultPhoto = item.toKnitting(context)
-        result.add(knittingAndDefaultPhoto)
-    }
+fun Photo.toJSON(): JSONObject {
+    val result = JSONObject()
+    result.put("id", id)
+    result.put("filename", filename.absolutePath)
+    result.put("knittingID", knittingID)
+    result.put("description", description)
     return result
 }
 
-/**
- * Converts a JSON object to a photo
- */
 fun JSONObject.toPhoto(): Photo {
     val id = getLong("id")
     val filename = File(getString("filename"))
@@ -126,22 +77,16 @@ fun JSONObject.toPhoto(): Photo {
     return Photo(id, filename, knittingID, description)
 }
 
-/**
- * Converts a JSON array to a list of photos
- */
-fun JSONArray.toPhotos(): List<Photo> {
-    val result = ArrayList<Photo>()
-    for (i in 0 until length()) {
-        val item = getJSONObject(i)
-        val photo = item.toPhoto()
-        result.add(photo)
+fun Category.toJSON(): JSONObject {
+    val result = JSONObject()
+    result.put("id", id)
+    result.put("name", name)
+    if (color != null) {
+        result.put("color", ColorUtils.colorToHex(color))
     }
     return result
 }
 
-/**
- * Converts a JSON object to a category
- */
 fun JSONObject.toCategory(): Category {
     val id = getLong("id")
     val name = getString("name")
@@ -149,22 +94,19 @@ fun JSONObject.toCategory(): Category {
     return Category(id, name, color)
 }
 
-/**
- * Converts a JSON array to a list of categories
- */
-fun JSONArray.toCategories(): List<Category> {
-    val result = ArrayList<Category>()
-    for (i in 0 until length()) {
-        val item = getJSONObject(i)
-        val category = item.toCategory()
-        result.add(category)
-    }
+fun Needle.toJSON(): JSONObject {
+    val result = JSONObject()
+    result.put("id", id)
+    result.put("name", name)
+    result.put("description", description)
+    result.put("size", size)
+    result.put("length", length)
+    result.put("material", material)
+    result.put("inUse", inUse)
+    result.put("type", type)
     return result
 }
 
-/**
- * Converts a JSON object to a needle
- */
 fun JSONObject.toNeedle(context: Context): Needle {
     val id = getLong("id")
     val name = getString("name")
@@ -189,6 +131,45 @@ fun JSONObject.toNeedle(context: Context): Needle {
         }
     } else NeedleType.OTHER
     return Needle(id, name, description, size, length, material, inUse, type)
+}
+
+/**
+ * Converts a JSON array to a list of knittings
+ */
+fun JSONArray.toKnittings(context: Context): List<Triple<Knitting, Long?, Long?>> {
+    val result = ArrayList<Triple<Knitting, Long?, Long?>>()
+    for (i in 0 until length()) {
+        val item = getJSONObject(i)
+        val knittingAndDefaultPhoto = item.toKnitting(context)
+        result.add(knittingAndDefaultPhoto)
+    }
+    return result
+}
+
+/**
+ * Converts a JSON array to a list of photos
+ */
+fun JSONArray.toPhotos(): List<Photo> {
+    val result = ArrayList<Photo>()
+    for (i in 0 until length()) {
+        val item = getJSONObject(i)
+        val photo = item.toPhoto()
+        result.add(photo)
+    }
+    return result
+}
+
+/**
+ * Converts a JSON array to a list of categories
+ */
+fun JSONArray.toCategories(): List<Category> {
+    val result = ArrayList<Category>()
+    for (i in 0 until length()) {
+        val item = getJSONObject(i)
+        val category = item.toCategory()
+        result.add(category)
+    }
+    return result
 }
 
 /**

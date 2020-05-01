@@ -50,6 +50,21 @@ class JSONTest {
     }
 
     @Test
+    fun testJSONToKnitting() {
+        val s = """{"size":41,"needleDiameter":3,"rating":5,"description":"my first knitting","started":"2018-01-10","id":42,"title":"knitting"}"""
+        val json = JSONObject(s)
+        val k = json.toKnitting(ApplicationProvider.getApplicationContext()).first
+        assertEquals(42, k.id)
+        assertEquals("knitting", k.title)
+        assertEquals("my first knitting", k.description)
+        assertEquals("2018-01-10", dateFormat.format(k.started))
+        assertNull(k.finished)
+        assertEquals("3", k.needleDiameter)
+        assertEquals("41", k.size)
+        assertEquals(5.0, k.rating, 0.000001)
+    }
+
+    @Test
     fun testPhotoToJSON() {
         val p0 = Photo(42, File("/tmp/photo1.jpg"), 43, "socks", null)
         val j0 = p0.toJSON()
@@ -57,6 +72,17 @@ class JSONTest {
         assertEquals("/tmp/photo1.jpg", j0.getString("filename"))
         assertEquals(43, j0.getLong("knittingID"))
         assertEquals("socks", j0.getString("description"))
+    }
+
+    @Test
+    fun testJSONToPhoto() {
+        val s = """{"knittingID":43,"filename":"/tmp/photo1.jpg","description":"socks","id":42}"""
+        val json = JSONObject(s)
+        val p = json.toPhoto()
+        assertEquals(42, p.id)
+        assertEquals(File("/tmp/photo1.jpg"), p.filename)
+        assertEquals(43, p.knittingID)
+        assertEquals("socks", p.description)
     }
 
     @Test
@@ -69,7 +95,15 @@ class JSONTest {
         val j1 = c1.toJSON()
         assertEquals(43, j1.getLong("id"))
         assertEquals("socks", j1.getString("name"))
-        assertEquals(Color.RED, j1.getInt("color"))
+        assertEquals(Color.RED, Color.parseColor(j1.getString("color")))
+    }
+
+    @Test
+    fun testJSONToCategory() {
+        val s1 = """{"name":"test","id":42}"""
+        assertEquals(Category(42, "test", null), JSONObject(s1).toCategory())
+        val s2 = """{"color":"#FFFF0000","name":"socks","id":43}"""
+        assertEquals(Category(43, "socks", Color.RED), JSONObject(s2).toCategory())
     }
 
     @Test
@@ -84,21 +118,6 @@ class JSONTest {
         assertEquals("METAL", j0.getString("material"))
         assertTrue(j0.getBoolean("inUse"))
         assertEquals("SET", j0.getString("type"))
-    }
-
-    @Test
-    fun testJSONToKnitting() {
-        val s = """{"size":41,"needleDiameter":3,"rating":5,"description":"my first knitting","started":"2018-01-10","id":42,"title":"knitting"}"""
-        val json = JSONObject(s)
-        val k = json.toKnitting(ApplicationProvider.getApplicationContext()).first
-        assertEquals(42, k.id)
-        assertEquals("knitting", k.title)
-        assertEquals("my first knitting", k.description)
-        assertEquals("2018-01-10", dateFormat.format(k.started))
-        assertNull(k.finished)
-        assertEquals("3", k.needleDiameter)
-        assertEquals("41", k.size)
-        assertEquals(5.0, k.rating, 0.000001)
     }
 
     @Test
@@ -130,17 +149,6 @@ class JSONTest {
     }
 
     @Test
-    fun testJSONToPhoto() {
-        val s = """{"knittingID":43,"filename":"/tmp/photo1.jpg","description":"socks","id":42}"""
-        val json = JSONObject(s)
-        val p = json.toPhoto()
-        assertEquals(42, p.id)
-        assertEquals(File("/tmp/photo1.jpg"), p.filename)
-        assertEquals(43, p.knittingID)
-        assertEquals("socks", p.description)
-    }
-
-    @Test
     fun testJSONArrayToPhotos() {
         val s = """[{"knittingID":43,"filename":"/tmp/photo1.jpg","description":"socks","id":42},
             |{"knittingID":44,"filename":"/tmp/photo2.jpg","description":"shirt","id":43}]
@@ -158,14 +166,6 @@ class JSONTest {
         assertEquals(File("/tmp/photo2.jpg"), p2.filename)
         assertEquals(44, p2.knittingID)
         assertEquals("shirt", p2.description)
-    }
-
-    @Test
-    fun testJSONToCategory() {
-        val s1 = """{"name":"test","id":42}"""
-        assertEquals(Category(42, "test", null), JSONObject(s1).toCategory())
-        val s2 = """{"color":-65536,"name":"socks","id":43}"""
-        assertEquals(Category(43, "socks", Color.RED), JSONObject(s2).toCategory())
     }
 
     @Test
