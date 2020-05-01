@@ -114,7 +114,7 @@
                 android:resource="@xml/file_paths" />
         </provider>
         <service
-            android:name=".DropboxImportService"
+            android:name=".dropbox.DropboxImportService"
             android:enabled="false"
             android:exported="true"></service>
     </application>
