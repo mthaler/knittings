@@ -126,25 +126,21 @@ class DropboxImportService : Service() {
         val count = database.photos.size
         val dbxClient = DropboxClientFactory.getClient()
         for ((index, photo) in database.photos.withIndex()) {
-            try {
-                // Download the file.
-                val filename = "/" + directory + "/" + photo.id + "." + FileUtils.getExtension(photo.filename.name)
-                FileOutputStream(photo.filename).use {
-                    dbxClient.files().download(filename).download(it)
-                }
-                // generate preview
-                val orientation = PictureUtils.getOrientation(photo.filename.absolutePath)
-                val preview = PictureUtils.decodeSampledBitmapFromPath(photo.filename.absolutePath, 200, 200)
-                val rotatedPreview = PictureUtils.rotateBitmap(preview, orientation)
-                val photoWithPreview = photo.copy(preview = rotatedPreview)
-                this.datasource.updatePhoto(photoWithPreview)
-                val progress = (index / count.toFloat() * 100).toInt()
-                builder.setProgress(100, progress, false)
-                notificationManager.notify(1, builder.build())
-                sm.statusUpdated(Status.Progress(progress))
-            } catch(excetion: Exception) {
-                sm.statusUpdated(Status.Error(excetion))
+            // Download the file.
+            val filename = "/" + directory + "/" + photo.id + "." + FileUtils.getExtension(photo.filename.name)
+            FileOutputStream(photo.filename).use {
+                dbxClient.files().download(filename).download(it)
             }
+            // generate preview
+            val orientation = PictureUtils.getOrientation(photo.filename.absolutePath)
+            val preview = PictureUtils.decodeSampledBitmapFromPath(photo.filename.absolutePath, 200, 200)
+            val rotatedPreview = PictureUtils.rotateBitmap(preview, orientation)
+            val photoWithPreview = photo.copy(preview = rotatedPreview)
+            this.datasource.updatePhoto(photoWithPreview)
+            val progress = (index / count.toFloat() * 100).toInt()
+            builder.setProgress(100, progress, false)
+            notificationManager.notify(1, builder.build())
+            sm.statusUpdated(Status.Progress(progress))
         }
     }
 
