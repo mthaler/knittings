@@ -121,6 +121,12 @@ class JSONTest {
     }
 
     @Test
+    fun testJSONToNeedle() {
+        val s = """{"size":"5 mm","material":"METAL","name":"needle","length":"20 cm","inUse":true,"description":"my first needle","id":42,"type":"SET"}"""
+        assertEquals(Needle(42, "needle", "my first needle", "5 mm", "20 cm", NeedleMaterial.METAL, true, NeedleType.SET), JSONObject(s).toNeedle(ApplicationProvider.getApplicationContext()))
+    }
+
+    @Test
     fun testJSONArrayToKnittings() {
         val s = """[{"size":41,"needleDiameter":3,"rating":5,"description":"my first knitting","started":"2018-01-10","id":42,"title":"knitting"},
             |{"size":42,"needleDiameter":3.5,"rating":4.5,"description":"my second knitting","started":"2018-01-11", "finished":"2018-01-12","id":43,"title":"knitting 2"}]
@@ -177,12 +183,6 @@ class JSONTest {
         assertEquals(Category(42, "test", null), categories[0])
         assertEquals(Category(43, "socks", Color.RED), categories[1])
     }
-
-//    @Test
-//    fun testJSONToNeedle() {
-//        val s = """{"size":"5 mm","material":"metal","name":"needle","length":"20 cm","inUse":true,"description":"my first needle","id":42,"type":"Nadelspiele"}"""
-//        assertEquals(Needle(42, "needle", "my first needle", "5 mm", "20 cm", "metal", true, "Nadelspiele"), JSONObject(s).toNeedle())
-//    }
 //
 //    @Test
 //    fun testJSONArrayNeedles() {
