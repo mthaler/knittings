@@ -7,10 +7,10 @@ import java.io.Serializable
 data class Database(val knittings: List<Knitting>, val photos: List<Photo>, val categories: List<Category>, val needles: List<Needle>) : Serializable, Parcelable {
 
     private constructor(parcel: Parcel) : this(
-            knittings = (parcel.readParcelableArray(null) as Array<Knitting>).toList(),
-            photos = (parcel.readParcelableArray(null) as Array<Photo>).toList(),
-            categories = (parcel.readParcelableArray(null) as Array<Category>).toList(),
-            needles = (parcel.readParcelableArray(null) as Array<Needle>).toList()
+            knittings = parcel.readParcelableArray(null).map { it as Knitting },
+            photos = parcel.readParcelableArray(null).map { it as Photo },
+            categories = parcel.readParcelableArray(null).map { it as Category },
+            needles = parcel.readParcelableArray(null).map { it as Needle }
     )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
