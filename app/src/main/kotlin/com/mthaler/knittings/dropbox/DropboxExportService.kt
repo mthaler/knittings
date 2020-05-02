@@ -41,7 +41,7 @@ class DropboxExportService : Service() {
             setOngoing(true)
             setContentTitle("Dropbox export")
             setContentText("Dropbox export in progress")
-            setSmallIcon(R.drawable.ic_file_upload_black_24dp)
+            setSmallIcon(R.drawable.ic_cloud_upload_black_24dp)
             setContentIntent(pendingIntent)
         }
 

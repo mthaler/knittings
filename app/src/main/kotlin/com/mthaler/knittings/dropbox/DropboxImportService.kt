@@ -40,7 +40,7 @@ class DropboxImportService : Service() {
             setOngoing(true)
             setContentTitle("Dropbox import")
             setContentText("Dropbox import in progress")
-            setSmallIcon(R.drawable.ic_file_download_black_24dp)
+            setSmallIcon(R.drawable.ic_cloud_download_black_24dp)
             setContentIntent(pendingIntent)
         }
 
