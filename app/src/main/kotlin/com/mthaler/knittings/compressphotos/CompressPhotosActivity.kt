@@ -11,6 +11,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.mthaler.knittings.BaseActivity
 import com.mthaler.knittings.R
+import com.mthaler.knittings.service.Status
 import kotlinx.android.synthetic.main.activity_compress_photos.*
 
 class CompressPhotosActivity : BaseActivity() {

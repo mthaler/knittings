@@ -17,6 +17,7 @@ import com.mthaler.knittings.R
 import com.mthaler.knittings.database.datasource
 import com.mthaler.knittings.model.Database
 import com.mthaler.knittings.model.toJSON
+import com.mthaler.knittings.service.Status
 import com.mthaler.knittings.utils.FileUtils.createDateTimeDirectoryName
 import com.mthaler.knittings.utils.FileUtils.getExtension
 import kotlinx.coroutines.Dispatchers

@@ -9,6 +9,7 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import com.mthaler.knittings.R
+import com.mthaler.knittings.service.Status
 import kotlinx.coroutines.*
 
 class CompressPhotosService : Service() {

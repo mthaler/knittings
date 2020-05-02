@@ -12,6 +12,7 @@ import kotlinx.android.synthetic.main.fragment_dropbox_import.*
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
+import com.mthaler.knittings.service.Status
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext

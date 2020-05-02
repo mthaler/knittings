@@ -1,4 +1,4 @@
-package com.mthaler.knittings.compressphotos
+package com.mthaler.knittings.service
 
 import java.lang.Exception
 

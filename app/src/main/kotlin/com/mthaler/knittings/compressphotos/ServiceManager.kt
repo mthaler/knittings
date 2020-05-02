@@ -1,6 +1,7 @@
 package com.mthaler.knittings.compressphotos
 
 import androidx.lifecycle.MutableLiveData
+import com.mthaler.knittings.service.Status
 import com.mthaler.knittings.utils.setMutVal
 
 class ServiceManager {

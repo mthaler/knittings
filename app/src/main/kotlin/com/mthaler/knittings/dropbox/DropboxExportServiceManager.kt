@@ -1,6 +1,7 @@
 package com.mthaler.knittings.dropbox
 
 import androidx.lifecycle.MutableLiveData
+import com.mthaler.knittings.service.Status
 import com.mthaler.knittings.utils.setMutVal
 
 class DropboxExportServiceManager {

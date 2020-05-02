@@ -17,6 +17,7 @@ import com.mthaler.knittings.R
 import com.mthaler.knittings.database.datasource
 import com.mthaler.knittings.model.Database
 import com.mthaler.knittings.model.toDatabase
+import com.mthaler.knittings.service.Status
 import com.mthaler.knittings.utils.FileUtils
 import com.mthaler.knittings.utils.PictureUtils
 import kotlinx.coroutines.*
