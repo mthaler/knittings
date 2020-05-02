@@ -25,7 +25,7 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
-        </activity>
+        </activity> <!-- we define our own toolbar in MainActivity, use theme without toolbar -->
         <activity
             android:name=".photo.PhotoGalleryActivity"
             android:theme="@style/AppTheme.NoActionBar">
@@ -104,6 +104,13 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
         </activity>
+        <activity
+            android:name=".compressphotos.CompressPhotosActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity" />
+        </activity>
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="com.mthaler.knittings.fileprovider"
@@ -123,6 +130,11 @@
             android:name=".dropbox.DropboxImportService"
             android:enabled="true"
             android:exported="false" />
+
+        <service
+            android:name=".compressphotos.CompressPhotosService"
+            android:enabled="true"
+            android:exported="false"></service>
     </application>
 
     <uses-feature
@@ -139,5 +151,4 @@
     <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <uses-permission android:name="android.permission.INTERNET" />
-
 </manifest>

@@ -4,18 +4,6 @@
     tools:showIn="navigation_view">
 
     <group
-        android:id="@+id/menu_export"
-        android:checkableBehavior="none">
-        <item
-            android:id="@+id/nav_dropbox_export"
-            android:title="@string/dropbox_export"
-            android:icon="@drawable/ic_import_export_black_24dp" />
-        <item
-            android:id="@+id/nav_dropbox_import"
-            android:title="@string/dropbox_import"
-            android:icon="@drawable/ic_import_export_black_24dp" />
-    </group>
-    <group
         android:id="@+id/menu_categories"
         android:checkableBehavior="none">
         <item
@@ -30,6 +18,26 @@
             android:id="@+id/nav_edit_needles"
             android:title="@string/manage_needles"
             android:icon="@drawable/needles" />
+    </group>
+    <group
+        android:id="@+id/menu_compress_photos"
+        android:checkableBehavior="none">
+        <item
+            android:id="@+id/nav_compress_photos"
+            android:title="Compress photos"
+            android:icon="@drawable/ic_photo_size_select_large_black_24dp" />
+    </group>
+    <group
+        android:id="@+id/menu_export"
+        android:checkableBehavior="none">
+        <item
+            android:id="@+id/nav_dropbox_export"
+            android:title="@string/dropbox_export"
+            android:icon="@drawable/ic_import_export_black_24dp" />
+        <item
+            android:id="@+id/nav_dropbox_import"
+            android:title="@string/dropbox_import"
+            android:icon="@drawable/ic_import_export_black_24dp" />
     </group>
     <group
         android:id="@+id/menu_settings"
