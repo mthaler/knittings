@@ -4,6 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import com.mthaler.knittings.utils.setMutVal
 
 class DropboxExportServiceManager {
+
     val status: MutableLiveData<Status> = MutableLiveData(Status.Progress(0))
 
     fun statusUpdated(status: Status) {
