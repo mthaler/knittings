@@ -44,7 +44,6 @@ class DropboxImportService : Service() {
             setContentIntent(pendingIntent)
         }
 
-
         startForeground(1, builder.build())
 
         GlobalScope.launch {
