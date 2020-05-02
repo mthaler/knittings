@@ -25,7 +25,7 @@ class CompressPhotosActivity : BaseActivity() {
         // enable up navigation
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        ServiceManager.getInstance().jobStatus.observe(this, Observer { status ->
+        CompressPhotosServiceManager.getInstance().jobStatus.observe(this, Observer { status ->
             when(status) {
                 is JobStatus.Success ->
                     Toast.makeText(this, "Compress photo service finished", Toast.LENGTH_LONG).show()

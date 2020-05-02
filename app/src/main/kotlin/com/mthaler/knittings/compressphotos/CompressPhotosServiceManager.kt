@@ -2,16 +2,16 @@ package com.mthaler.knittings.compressphotos
 
 import com.mthaler.knittings.service.AbstractServiceManager
 
-class ServiceManager : AbstractServiceManager() {
+class CompressPhotosServiceManager : AbstractServiceManager() {
 
     companion object {
 
-        private var sServiceManager: ServiceManager? = null
+        private var sServiceManager: CompressPhotosServiceManager? = null
 
         @Synchronized
-        fun getInstance(): ServiceManager {
+        fun getInstance(): CompressPhotosServiceManager {
             if (sServiceManager == null) {
-                sServiceManager = ServiceManager()
+                sServiceManager = CompressPhotosServiceManager()
             }
             return sServiceManager!!
         }

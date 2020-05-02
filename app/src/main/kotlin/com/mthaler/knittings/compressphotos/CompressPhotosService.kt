@@ -16,7 +16,7 @@ import kotlinx.coroutines.*
 class CompressPhotosService : Service() {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        ServiceManager.getInstance().updateServiceStatus(ServiceStatus.Started)
+        CompressPhotosServiceManager.getInstance().updateServiceStatus(ServiceStatus.Started)
         createNotificationChannel()
         val intent = Intent(this, CompressPhotosActivity::class.java).apply {
             this.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
@@ -33,7 +33,7 @@ class CompressPhotosService : Service() {
         }
         startForeground(1, builder.build())
         GlobalScope.launch {
-            val sm = ServiceManager.getInstance()
+            val sm = CompressPhotosServiceManager.getInstance()
             withContext(Dispatchers.Default) {
                 for(i in 1..10) {
                     delay(1000)
@@ -41,7 +41,7 @@ class CompressPhotosService : Service() {
                     notificationManager.notify(1, builder.build())
                     sm.updateJobStatus(JobStatus.Progress(i * 10))
                 }
-                ServiceManager.getInstance().updateJobStatus(JobStatus.Success)
+                CompressPhotosServiceManager.getInstance().updateJobStatus(JobStatus.Success)
             }
             builder.setContentText("Compressing photos done")
             builder.setProgress(0, 0, false)
@@ -58,7 +58,7 @@ class CompressPhotosService : Service() {
 
     override fun onDestroy() {
         super.onDestroy()
-        ServiceManager.getInstance().updateServiceStatus(ServiceStatus.Stopped)
+        CompressPhotosServiceManager.getInstance().updateServiceStatus(ServiceStatus.Stopped)
     }
 
     private fun createNotificationChannel() {
