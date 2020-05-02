@@ -12,7 +12,7 @@ import kotlinx.android.synthetic.main.fragment_dropbox_import.*
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
-import com.mthaler.knittings.service.Status
+import com.mthaler.knittings.service.JobStatus
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -67,12 +67,12 @@ class DropboxImportFragment : AbstractDropboxFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        DropboxImportServiceManager.getInstance().status.observe(viewLifecycleOwner, Observer { status ->
+        DropboxImportServiceManager.getInstance().jobStatus.observe(viewLifecycleOwner, Observer { status ->
             when(status) {
-                is Status.Progress -> {
+                is JobStatus.Progress -> {
                     progressBar.progress = status.value
                 }
-                is Status.Success -> {
+                is JobStatus.Success -> {
                     setMode(false)
                     val builder = AlertDialog.Builder(requireContext())
                     with(builder) {

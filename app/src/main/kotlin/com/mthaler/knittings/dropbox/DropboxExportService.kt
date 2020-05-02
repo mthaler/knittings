@@ -17,7 +17,7 @@ import com.mthaler.knittings.R
 import com.mthaler.knittings.database.datasource
 import com.mthaler.knittings.model.Database
 import com.mthaler.knittings.model.toJSON
-import com.mthaler.knittings.service.Status
+import com.mthaler.knittings.service.JobStatus
 import com.mthaler.knittings.utils.FileUtils.createDateTimeDirectoryName
 import com.mthaler.knittings.utils.FileUtils.getExtension
 import kotlinx.coroutines.Dispatchers
@@ -58,7 +58,7 @@ class DropboxExportService : Service() {
                         }
                 try {
                     upload(builder)
-                    DropboxExportServiceManager.getInstance().statusUpdated(Status.Success)
+                    DropboxExportServiceManager.getInstance().statusUpdated(JobStatus.Success)
                 } finally {
                     wakeLock.release()
                 }
@@ -119,7 +119,7 @@ class DropboxExportService : Service() {
             val progress = (index / count.toFloat() * 100).toInt()
             builder.setProgress(100, progress, false)
             notificationManager.notify(1, builder.build())
-            sm.statusUpdated(Status.Progress(progress))
+            sm.statusUpdated(JobStatus.Progress(progress))
         }
     }
 

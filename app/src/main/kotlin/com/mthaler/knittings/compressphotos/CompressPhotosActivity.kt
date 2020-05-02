@@ -11,7 +11,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.mthaler.knittings.BaseActivity
 import com.mthaler.knittings.R
-import com.mthaler.knittings.service.Status
+import com.mthaler.knittings.service.JobStatus
 import kotlinx.android.synthetic.main.activity_compress_photos.*
 
 class CompressPhotosActivity : BaseActivity() {
@@ -25,9 +25,9 @@ class CompressPhotosActivity : BaseActivity() {
         // enable up navigation
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        ServiceManager.getInstance().status.observe(this, Observer { status ->
+        ServiceManager.getInstance().jobStatus.observe(this, Observer { status ->
             when(status) {
-                is Status.Success ->
+                is JobStatus.Success ->
                     Toast.makeText(this, "Compress photo service finished", Toast.LENGTH_LONG).show()
             }
         })

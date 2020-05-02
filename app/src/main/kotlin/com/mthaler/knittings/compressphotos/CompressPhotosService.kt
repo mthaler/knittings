@@ -9,7 +9,7 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import com.mthaler.knittings.R
-import com.mthaler.knittings.service.Status
+import com.mthaler.knittings.service.JobStatus
 import kotlinx.coroutines.*
 
 class CompressPhotosService : Service() {
@@ -39,9 +39,9 @@ class CompressPhotosService : Service() {
                     delay(1000)
                     builder.setProgress(100, i * 10, false)
                     notificationManager.notify(1, builder.build())
-                    sm.statusUpdated(Status.Progress(i * 10))
+                    sm.statusUpdated(JobStatus.Progress(i * 10))
                 }
-                ServiceManager.getInstance().statusUpdated(Status.Success)
+                ServiceManager.getInstance().statusUpdated(JobStatus.Success)
             }
             builder.setContentText("Compressing photos done")
             builder.setProgress(0, 0, false)

@@ -17,7 +17,7 @@ import com.mthaler.knittings.R
 import com.mthaler.knittings.database.datasource
 import com.mthaler.knittings.model.Database
 import com.mthaler.knittings.model.toDatabase
-import com.mthaler.knittings.service.Status
+import com.mthaler.knittings.service.JobStatus
 import com.mthaler.knittings.utils.FileUtils
 import com.mthaler.knittings.utils.PictureUtils
 import kotlinx.coroutines.*
@@ -59,7 +59,7 @@ class DropboxImportService : Service() {
                     try {
                         val database = downloadDatabase(directory)
                         downloadPhotos(database, directory, builder)
-                        DropboxImportServiceManager.getInstance().statusUpdated(Status.Success)
+                        DropboxImportServiceManager.getInstance().statusUpdated(JobStatus.Success)
                     } finally {
                         wakeLock.release()
                     }
@@ -139,7 +139,7 @@ class DropboxImportService : Service() {
             val progress = (index / count.toFloat() * 100).toInt()
             builder.setProgress(100, progress, false)
             notificationManager.notify(1, builder.build())
-            sm.statusUpdated(Status.Progress(progress))
+            sm.statusUpdated(JobStatus.Progress(progress))
         }
     }
 
