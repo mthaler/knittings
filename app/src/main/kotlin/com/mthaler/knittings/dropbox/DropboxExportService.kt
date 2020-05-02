@@ -11,6 +11,7 @@ import android.os.IBinder
 import android.os.PowerManager
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import androidx.core.content.ContextCompat
 import com.dropbox.core.v2.files.WriteMode
 import com.mthaler.knittings.R
 import com.mthaler.knittings.database.datasource
@@ -123,5 +124,15 @@ class DropboxExportService : Service() {
 
     companion object {
         private val CHANNEL_ID = "com.mthaler.knittings.compressphotos.DropboxExportService"
+
+        fun startService(context: Context, directory: String) {
+            val startIntent = Intent(context, DropboxExportService::class.java)
+            ContextCompat.startForegroundService(context, startIntent)
+        }
+
+        fun stopService(context: Context) {
+            val stopIntent = Intent(context, DropboxExportService::class.java)
+            context.stopService(stopIntent)
+        }
     }
 }
