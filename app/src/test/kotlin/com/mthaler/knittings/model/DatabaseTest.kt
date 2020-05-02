@@ -1,11 +1,9 @@
 package com.mthaler.knittings.model
 
 import android.graphics.Color
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.mthaler.knittings.utils.SerializeUtils
 import org.junit.Assert.*
 import org.junit.Test
-import org.junit.runner.RunWith
 import java.io.File
 import java.util.*
 
