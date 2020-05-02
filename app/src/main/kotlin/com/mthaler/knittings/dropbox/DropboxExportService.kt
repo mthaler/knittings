@@ -1,7 +1,10 @@
 package com.mthaler.knittings.dropbox
 
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.app.Service
 import android.content.Intent
+import android.os.Build
 import android.os.IBinder
 import com.dropbox.core.v2.files.WriteMode
 import com.mthaler.knittings.database.datasource
@@ -15,8 +18,24 @@ import java.util.*
 
 class DropboxExportService : Service() {
 
-    override fun onBind(intent: Intent): IBinder {
-        TODO("Return the communication channel to the service.")
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        createNotificationChannel()
+        return START_NOT_STICKY
+    }
+
+    override fun onBind(intent: Intent): IBinder? {
+        return null
+    }
+
+    private fun createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            getSystemService(NotificationManager::class.java).let {
+                val name = "dropbox export"
+                val importance =  NotificationManager.IMPORTANCE_DEFAULT
+                val channel = NotificationChannel(DropboxExportService.CHANNEL_ID, name, importance)
+                it.createNotificationChannel(channel)
+            }
+        }
     }
 
     private fun upload() {
@@ -49,5 +68,9 @@ class DropboxExportService : Service() {
                     .uploadAndFinish(inputStream)
             //publishProgress((index / count.toFloat() * 100).toInt())
         }
+    }
+
+    companion object {
+        private val CHANNEL_ID = "com.mthaler.knittings.compressphotos.DropboxExportService"
     }
 }
