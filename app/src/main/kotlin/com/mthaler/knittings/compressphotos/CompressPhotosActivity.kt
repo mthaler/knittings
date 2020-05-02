@@ -12,6 +12,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.mthaler.knittings.BaseActivity
 import com.mthaler.knittings.R
 import com.mthaler.knittings.service.JobStatus
+import com.mthaler.knittings.service.ServiceStatus
 import kotlinx.android.synthetic.main.activity_compress_photos.*
 
 class CompressPhotosActivity : BaseActivity() {
@@ -37,16 +38,18 @@ class CompressPhotosActivity : BaseActivity() {
             CompressPhotosService.startService(this, "Foreground Service is running...")
         }
 
-        val buttonStop = findViewById<Button>(R.id.buttonStop)
-        buttonStop.setOnClickListener {
-            CompressPhotosService.stopService(this)
-        }
-
         val viewModel = ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory.getInstance(this.application)).get(CompressPhotosViewModel::class.java)
         viewModel.statistics.observe(this, Observer { statistics ->
             number_of_photos.setText(statistics.photos.toString())
             total_size.setText(Format.humanReadableByteCountBin(statistics.totalSize))
             will_be_compressed.setText(statistics.photosToCompress.toString())
+        })
+
+        CompressPhotosServiceManager.getInstance().serviceStatus.observe(this, Observer { serviceStatus ->
+            when (serviceStatus) {
+                ServiceStatus.Stopped -> buttonStart.isEnabled = true
+                ServiceStatus.Started -> buttonStart.isEnabled = false
+            }
         })
     }
 

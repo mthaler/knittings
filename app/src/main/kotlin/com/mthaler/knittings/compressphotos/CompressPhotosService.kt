@@ -33,20 +33,23 @@ class CompressPhotosService : Service() {
         }
         startForeground(1, builder.build())
         GlobalScope.launch {
-            val sm = CompressPhotosServiceManager.getInstance()
-            withContext(Dispatchers.Default) {
-                for(i in 1..10) {
-                    delay(1000)
-                    builder.setProgress(100, i * 10, false)
-                    notificationManager.notify(1, builder.build())
-                    sm.updateJobStatus(JobStatus.Progress(i * 10))
+            try {
+                val sm = CompressPhotosServiceManager.getInstance()
+                withContext(Dispatchers.Default) {
+                    for(i in 1..10) {
+                        delay(1000)
+                        builder.setProgress(100, i * 10, false)
+                        notificationManager.notify(1, builder.build())
+                        sm.updateJobStatus(JobStatus.Progress(i * 10))
+                    }
+                    CompressPhotosServiceManager.getInstance().updateJobStatus(JobStatus.Success)
                 }
-                CompressPhotosServiceManager.getInstance().updateJobStatus(JobStatus.Success)
+                builder.setContentText("Compressing photos done")
+                builder.setProgress(0, 0, false)
+            } finally {
+                stopForeground(true)
+                stopSelf()
             }
-            builder.setContentText("Compressing photos done")
-            builder.setProgress(0, 0, false)
-            stopForeground(true)
-            stopSelf()
         }
         return START_NOT_STICKY
     }
