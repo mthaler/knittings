@@ -10,7 +10,7 @@ public class DropboxClientFactory {
 
     private static DbxClientV2 sDbxClient;
 
-    public static void init(String accessToken) {
+    public synchronized static void init(String accessToken) {
         if (sDbxClient == null) {
             DbxRequestConfig requestConfig = DbxRequestConfig.newBuilder("Knittings")
                     .build();
@@ -19,7 +19,7 @@ public class DropboxClientFactory {
         }
     }
 
-    public static DbxClientV2 getClient() {
+    public synchronized static DbxClientV2 getClient() {
         if (sDbxClient == null) {
             throw new IllegalStateException("Client not initialized.");
         }

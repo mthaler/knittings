@@ -4,10 +4,13 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.app.Service
+import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.IBinder
+import android.os.PowerManager
 import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
 import com.dropbox.core.v2.files.WriteMode
 import com.mthaler.knittings.R
 import com.mthaler.knittings.database.datasource
@@ -15,6 +18,10 @@ import com.mthaler.knittings.model.Database
 import com.mthaler.knittings.model.toJSON
 import com.mthaler.knittings.utils.FileUtils.createDateTimeDirectoryName
 import com.mthaler.knittings.utils.FileUtils.getExtension
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.io.ByteArrayInputStream
 import java.io.FileInputStream
 import java.util.*
@@ -36,8 +43,29 @@ class DropboxExportService : Service() {
             setSmallIcon(R.drawable.ic_file_upload_black_24dp)
             setContentIntent(pendingIntent)
         }
-        
+
         startForeground(1, builder.build())
+
+        GlobalScope.launch {
+            withContext(Dispatchers.IO) {
+                val wakeLock: PowerManager.WakeLock =
+                        (getSystemService(Context.POWER_SERVICE) as PowerManager).run {
+                            newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "Knittings::DropboxImport").apply {
+                                acquire()
+                            }
+                        }
+                try {
+                    upload(builder)
+                    DropboxExportServiceManager.getInstance().statusUpdated(Status.Success)
+                } finally {
+                    wakeLock.release()
+                }
+            }
+            builder.setContentText("Dropbox import done")
+            builder.setProgress(0, 0, false)
+            stopForeground(true)
+            stopSelf()
+        }
 
         return START_NOT_STICKY
     }
@@ -57,9 +85,10 @@ class DropboxExportService : Service() {
         }
     }
 
-    private fun upload() {
+    private fun upload(builder: NotificationCompat.Builder) {
         val dbxClient = DropboxClientFactory.getClient()
-
+        val notificationManager = NotificationManagerCompat.from(this);
+        val sm = DropboxExportServiceManager.getInstance()
         val knittings = datasource.allKnittings
         val photos = datasource.allPhotos
         val categories = datasource.allCategories
@@ -85,7 +114,10 @@ class DropboxExportService : Service() {
             dbxClient.files().uploadBuilder("/" + dir + "/" + photo.id + "." + getExtension(photo.filename.name)) // Path in the user's Dropbox to save the file.
                     .withMode(WriteMode.OVERWRITE) // always overwrite existing file
                     .uploadAndFinish(inputStream)
-            //publishProgress((index / count.toFloat() * 100).toInt())
+            val progress = (index / count.toFloat() * 100).toInt()
+            builder.setProgress(100, progress, false)
+            notificationManager.notify(1, builder.build())
+            sm.statusUpdated(Status.Progress(progress))
         }
     }
 
