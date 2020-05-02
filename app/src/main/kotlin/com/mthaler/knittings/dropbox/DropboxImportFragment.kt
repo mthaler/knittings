@@ -1,6 +1,5 @@
 package com.mthaler.knittings.dropbox
 
-import android.os.AsyncTask
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -13,15 +12,12 @@ import kotlinx.android.synthetic.main.fragment_dropbox_import.*
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
-import com.mthaler.knittings.database.datasource
-import com.mthaler.knittings.model.Database
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class DropboxImportFragment : AbstractDropboxFragment() {
 
-    private var importTask: AsyncTask<String, Void, ListFolderResult?>? = null
     private var importing = false
     private var backupDirectory = ""
 
@@ -47,13 +43,23 @@ class DropboxImportFragment : AbstractDropboxFragment() {
                     setTitle(resources.getString(R.string.dropbox_import))
                     setMessage(resources.getString(R.string.dropbox_export_no_wifi_question))
                     setPositiveButton(resources.getString(R.string.dropbox_export_dialog_export_button), { dialog, which ->
-                        importTask = ListFolderTask(DropboxClientFactory.getClient(), ::onListFolder, ::onListFolderError).execute("")
+                        lifecycleScope.launch {
+                            val result = withContext(Dispatchers.IO) {
+                                DropboxClientFactory.getClient().files().listFolder("")
+                            }
+                            onListFolder(result)
+                        }
                     })
                     setNegativeButton(resources.getString(R.string.dialog_button_cancel), { dialog, which -> })
                     show()
                 }
             } else {
-                importTask = ListFolderTask(DropboxClientFactory.getClient(), ::onListFolder, ::onListFolderError).execute("")
+                lifecycleScope.launch {
+                    val result = withContext(Dispatchers.IO) {
+                        DropboxClientFactory.getClient().files().listFolder("")
+                    }
+                    onListFolder(result)
+                }
             }
         }
     }
@@ -159,21 +165,6 @@ class DropboxImportFragment : AbstractDropboxFragment() {
                 setPositiveButton("OK", { dialog, which -> })
                 show()
             }
-        }
-    }
-
-    /**
-     * The onListFolderError method is called if an exception happens when the ListFolderTask is executed,
-     *
-     * @param ex exception that happened when executing ListFolderTask
-     */
-    private fun onListFolderError(ex: Exception) {
-        val builder = AlertDialog.Builder(requireContext())
-        with(builder) {
-            setTitle("List folders")
-            setMessage("Error when listing folders: " + ex.message)
-            setPositiveButton("OK", { dialog, which -> })
-            show()
         }
     }
 
