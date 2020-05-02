@@ -10,12 +10,13 @@ import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import com.mthaler.knittings.R
 import com.mthaler.knittings.service.JobStatus
+import com.mthaler.knittings.service.ServiceStatus
 import kotlinx.coroutines.*
 
 class CompressPhotosService : Service() {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        //do heavy work on a background thread
+        ServiceManager.getInstance().updateServiceStatus(ServiceStatus.Started)
         createNotificationChannel()
         val intent = Intent(this, CompressPhotosActivity::class.java).apply {
             this.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
@@ -45,6 +46,7 @@ class CompressPhotosService : Service() {
             builder.setContentText("Compressing photos done")
             builder.setProgress(0, 0, false)
             stopForeground(true)
+            stopSelf()
         }
         return START_NOT_STICKY
     }
@@ -52,6 +54,11 @@ class CompressPhotosService : Service() {
     override fun onBind(intent: Intent): IBinder? {
         // don't allow binding
         return null
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        ServiceManager.getInstance().updateServiceStatus(ServiceStatus.Stopped)
     }
 
     private fun createNotificationChannel() {
