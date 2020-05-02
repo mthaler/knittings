@@ -1,11 +1,11 @@
 package com.mthaler.knittings.dropbox
 
 import android.app.AlertDialog
-import android.os.AsyncTask
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import com.dropbox.core.android.Auth
 import com.dropbox.core.v2.users.FullAccount
@@ -23,7 +23,6 @@ import kotlinx.coroutines.withContext
  */
 class DropboxExportFragment : AbstractDropboxFragment() {
 
-    private var exportTask: AsyncTask<Void, Int?, Any?>? = null
     private var exporting = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -48,19 +47,40 @@ class DropboxExportFragment : AbstractDropboxFragment() {
                     setTitle(resources.getString(R.string.dropbox_export))
                     setMessage(resources.getString(R.string.dropbox_export_no_wifi_question))
                     setPositiveButton(resources.getString(R.string.dropbox_export_dialog_export_button)) { dialog, which ->
-                        exportTask = UploadTask(DropboxClientFactory.getClient(), requireContext().applicationContext, progressBar::setProgress, ::onUploadComplete, ::onUploadError).execute()
+                        DropboxExportService.startService(requireContext())
                         setMode(true)
                     }
                     setNegativeButton(resources.getString(R.string.dialog_button_cancel)) { dialog, which -> }
                     show()
                 }
             } else {
-                exportTask = UploadTask(DropboxClientFactory.getClient(), requireContext().applicationContext, progressBar::setProgress, ::onUploadComplete, ::onUploadError).execute()
+                DropboxExportService.startService(requireContext())
                 setMode(true)
             }
         }
 
-        cancel_button.setOnClickListener { exportTask?.cancel(true) }
+        cancel_button.setOnClickListener { /*exportTask?.cancel(true)*/ }
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        DropboxExportServiceManager.getInstance().status.observe(viewLifecycleOwner, Observer { status ->
+            when(status) {
+                is Status.Progress -> {
+                    progressBar.progress = status.value
+                }
+                is Status.Success -> {
+                    setMode(false)
+                    val builder = AlertDialog.Builder(requireContext())
+                    with(builder) {
+                        setTitle(resources.getString(R.string.dropbox_export))
+                        setMessage("Dropbox export completed")
+                        setPositiveButton("OK", { dialog, which -> })
+                        show()
+                    }
+                }
+            }
+        })
     }
 
     override fun onResume() {

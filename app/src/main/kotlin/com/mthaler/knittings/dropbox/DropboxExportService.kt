@@ -32,7 +32,7 @@ class DropboxExportService : Service() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         createNotificationChannel()
 
-        val intent = Intent(this, DropboxImportActivity::class.java).apply {
+        val intent = Intent(this, DropboxExportActivity::class.java).apply {
             this.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         }
         val pendingIntent = PendingIntent.getActivity(this, 0, intent, 0)
@@ -125,7 +125,7 @@ class DropboxExportService : Service() {
     companion object {
         private val CHANNEL_ID = "com.mthaler.knittings.compressphotos.DropboxExportService"
 
-        fun startService(context: Context, directory: String) {
+        fun startService(context: Context) {
             val startIntent = Intent(context, DropboxExportService::class.java)
             ContextCompat.startForegroundService(context, startIntent)
         }
