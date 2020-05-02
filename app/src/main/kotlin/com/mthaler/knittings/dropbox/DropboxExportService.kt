@@ -58,7 +58,7 @@ class DropboxExportService : Service() {
                         }
                 try {
                     upload(builder)
-                    DropboxExportServiceManager.getInstance().statusUpdated(JobStatus.Success)
+                    DropboxExportServiceManager.getInstance().updateJobStatus(JobStatus.Success)
                 } finally {
                     wakeLock.release()
                 }
@@ -119,7 +119,7 @@ class DropboxExportService : Service() {
             val progress = (index / count.toFloat() * 100).toInt()
             builder.setProgress(100, progress, false)
             notificationManager.notify(1, builder.build())
-            sm.statusUpdated(JobStatus.Progress(progress))
+            sm.updateJobStatus(JobStatus.Progress(progress))
         }
     }
 
