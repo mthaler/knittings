@@ -18,6 +18,7 @@ import com.mthaler.knittings.database.datasource
 import com.mthaler.knittings.model.Database
 import com.mthaler.knittings.model.toDatabase
 import com.mthaler.knittings.service.JobStatus
+import com.mthaler.knittings.service.ServiceStatus
 import com.mthaler.knittings.utils.FileUtils
 import com.mthaler.knittings.utils.PictureUtils
 import kotlinx.coroutines.*
@@ -28,6 +29,7 @@ import java.io.FileOutputStream
 class DropboxImportService : Service() {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        DropboxImportServiceManager.getInstance().updateServiceStatus(ServiceStatus.Started)
         createNotificationChannel()
 
         val directory = intent?.getStringExtra(EXTRA_DIRECTORY)!!
@@ -48,27 +50,30 @@ class DropboxImportService : Service() {
         startForeground(1, builder.build())
 
         GlobalScope.launch {
-            withContext(Dispatchers.IO) {
-                if (directory != null) {
-                    val wakeLock: PowerManager.WakeLock =
-                            (getSystemService(Context.POWER_SERVICE) as PowerManager).run {
-                                newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "Knittings::DropboxImport").apply {
-                                    acquire()
+            try {
+                withContext(Dispatchers.IO) {
+                    if (directory != null) {
+                        val wakeLock: PowerManager.WakeLock =
+                                (getSystemService(Context.POWER_SERVICE) as PowerManager).run {
+                                    newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "Knittings::DropboxImport").apply {
+                                        acquire()
+                                    }
                                 }
-                            }
-                    try {
-                        val database = downloadDatabase(directory)
-                        downloadPhotos(database, directory, builder)
-                        DropboxImportServiceManager.getInstance().updateJobStatus(JobStatus.Success)
-                    } finally {
-                        wakeLock.release()
+                        try {
+                            val database = downloadDatabase(directory)
+                            downloadPhotos(database, directory, builder)
+                            DropboxImportServiceManager.getInstance().updateJobStatus(JobStatus.Success)
+                        } finally {
+                            wakeLock.release()
+                        }
                     }
                 }
+                builder.setContentText("Dropbox import done")
+                builder.setProgress(0, 0, false)
+            } finally {
+                stopForeground(true)
+                stopSelf()
             }
-            builder.setContentText("Dropbox import done")
-            builder.setProgress(0, 0, false)
-            stopForeground(true)
-            stopSelf()
         }
 
         return START_NOT_STICKY
@@ -76,6 +81,11 @@ class DropboxImportService : Service() {
 
     override fun onBind(intent: Intent): IBinder? {
         return null
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        DropboxImportServiceManager.getInstance().updateServiceStatus(ServiceStatus.Stopped)
     }
 
     private fun createNotificationChannel() {
