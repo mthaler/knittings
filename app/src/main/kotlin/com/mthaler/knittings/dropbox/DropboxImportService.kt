@@ -59,7 +59,7 @@ class DropboxImportService : Service() {
                     try {
                         val database = downloadDatabase(directory)
                         downloadPhotos(database, directory, builder)
-                        DropboxImportServiceManager.getInstance().statusUpdated(JobStatus.Success)
+                        DropboxImportServiceManager.getInstance().updateJobStatus(JobStatus.Success)
                     } finally {
                         wakeLock.release()
                     }
@@ -139,7 +139,7 @@ class DropboxImportService : Service() {
             val progress = (index / count.toFloat() * 100).toInt()
             builder.setProgress(100, progress, false)
             notificationManager.notify(1, builder.build())
-            sm.statusUpdated(JobStatus.Progress(progress))
+            sm.updateJobStatus(JobStatus.Progress(progress))
         }
     }
 

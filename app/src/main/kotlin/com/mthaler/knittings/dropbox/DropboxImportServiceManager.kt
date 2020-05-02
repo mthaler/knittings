@@ -1,16 +1,8 @@
 package com.mthaler.knittings.dropbox
 
-import androidx.lifecycle.MutableLiveData
-import com.mthaler.knittings.service.JobStatus
-import com.mthaler.knittings.utils.setMutVal
+import com.mthaler.knittings.service.AbstractServiceManager
 
-class DropboxImportServiceManager {
-
-    val jobStatus: MutableLiveData<JobStatus> = MutableLiveData(JobStatus.Progress(0))
-
-    fun statusUpdated(jobStatus: JobStatus) {
-        this.jobStatus.setMutVal(jobStatus)
-    }
+class DropboxImportServiceManager : AbstractServiceManager() {
 
     companion object {
 
