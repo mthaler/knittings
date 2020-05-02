@@ -16,7 +16,6 @@ class CompressPhotosService : Service() {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         //do heavy work on a background thread
-        val input = intent?.getStringExtra("inputExtra")
         createNotificationChannel()
         val intent = Intent(this, CompressPhotosActivity::class.java).apply {
             this.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
@@ -39,9 +38,9 @@ class CompressPhotosService : Service() {
                     delay(1000)
                     builder.setProgress(100, i * 10, false)
                     notificationManager.notify(1, builder.build())
-                    sm.statusUpdated(JobStatus.Progress(i * 10))
+                    sm.updateJobStatus(JobStatus.Progress(i * 10))
                 }
-                ServiceManager.getInstance().statusUpdated(JobStatus.Success)
+                ServiceManager.getInstance().updateJobStatus(JobStatus.Success)
             }
             builder.setContentText("Compressing photos done")
             builder.setProgress(0, 0, false)

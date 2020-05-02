@@ -1,16 +1,8 @@
 package com.mthaler.knittings.compressphotos
 
-import androidx.lifecycle.MutableLiveData
-import com.mthaler.knittings.service.JobStatus
-import com.mthaler.knittings.utils.setMutVal
+import com.mthaler.knittings.service.AbstractServiceManager
 
-class ServiceManager {
-
-    val jobStatus: MutableLiveData<JobStatus> = MutableLiveData(JobStatus.Progress(0))
-
-    fun statusUpdated(jobStatus: JobStatus) {
-        this.jobStatus.setMutVal(jobStatus)
-    }
+class ServiceManager : AbstractServiceManager() {
 
     companion object {
 
