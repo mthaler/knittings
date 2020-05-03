@@ -37,7 +37,7 @@ class DropboxImportService : Service() {
         }
         val pendingIntent = PendingIntent.getActivity(this, 0, intent, 0)
 
-        val builder = NotificationCompat.Builder(this, CHANNEL_ID).apply {
+        val builder = NotificationCompat.Builder(this, channelID).apply {
             setOngoing(true)
             setContentTitle("Dropbox import")
             setContentText("Dropbox import in progress")
@@ -142,7 +142,6 @@ class DropboxImportService : Service() {
     }
 
     companion object {
-        private val CHANNEL_ID = "com.mthaler.knittings.compressphotos.DropboxImportService"
         private val EXTRA_DIRECTORY = "directory"
 
         fun startService(context: Context, directory: String) {
