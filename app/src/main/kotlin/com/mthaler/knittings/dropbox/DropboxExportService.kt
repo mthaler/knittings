@@ -52,12 +52,13 @@ class DropboxExportService : Service() {
             withContext(Dispatchers.IO) {
                 val wakeLock: PowerManager.WakeLock =
                         (getSystemService(Context.POWER_SERVICE) as PowerManager).run {
-                            newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "Knittings::DropboxImport").apply {
+                            newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "Knittings::DropboxExport").apply {
                                 acquire()
                             }
                         }
                 try {
-                    val canceled = upload(builder)
+                    val dir = createDateTimeDirectoryName(Date())
+                    val canceled = upload(dir, builder)
                     if (canceled) {
                         DropboxExportServiceManager.getInstance().updateJobStatus(JobStatus.Canceled("Dropbox export canceled"))
                     } else {
@@ -80,7 +81,7 @@ class DropboxExportService : Service() {
         return null
     }
 
-    private fun upload(builder: NotificationCompat.Builder): Boolean {
+    private fun upload(dir: String, builder: NotificationCompat.Builder): Boolean {
         val dbxClient = DropboxClientFactory.getClient()
         val notificationManager = NotificationManagerCompat.from(this);
         val sm = DropboxExportServiceManager.getInstance()
@@ -107,7 +108,6 @@ class DropboxExportService : Service() {
             if (sm.canceled) {
                 return true
             }
-            //if (isCancelled) break
             val inputStream = FileInputStream(photo.filename)
             dbxClient.files().uploadBuilder("/" + dir + "/" + photo.id + "." + getExtension(photo.filename.name)) // Path in the user's Dropbox to save the file.
                     .withMode(WriteMode.OVERWRITE) // always overwrite existing file

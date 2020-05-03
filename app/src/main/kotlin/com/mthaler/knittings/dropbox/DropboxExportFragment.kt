@@ -56,6 +56,7 @@ class DropboxExportFragment : AbstractDropboxFragment() {
                         DropboxExportService.startService(requireContext())
                         DropboxExportServiceManager.getInstance().updateJobStatus(JobStatus.Progress(0))
                     }
+                    setNegativeButton(resources.getString(R.string.dialog_button_cancel)) { dialog, which -> }
                     show()
                 }
             } else {
@@ -72,7 +73,6 @@ class DropboxExportFragment : AbstractDropboxFragment() {
                 setPositiveButton(resources.getString(R.string.dropbox_export_cancel_dialog_ok_button)) { dialog, which ->
                     DropboxExportServiceManager.getInstance().canceled = true
                 }
-                setNegativeButton(resources.getString(R.string.dialog_button_cancel)) { dialog, which -> }
                 show()
             }
         }
