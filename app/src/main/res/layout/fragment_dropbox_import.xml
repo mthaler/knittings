@@ -48,6 +48,10 @@
         android:text="@string/dropbox_import_files"
         android:visibility="gone" />
 
+    <View style="@style/Divider"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"/>
+
     <ProgressBar
         android:id="@+id/progressBar"
         style="@style/Widget.AppCompat.ProgressBar.Horizontal"
