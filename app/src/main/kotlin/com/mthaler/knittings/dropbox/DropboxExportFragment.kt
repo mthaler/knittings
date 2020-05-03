@@ -65,7 +65,7 @@ class DropboxExportFragment : AbstractDropboxFragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        val sm = DropboxImportServiceManager.getInstance()
+        val sm = DropboxExportServiceManager.getInstance()
 
         sm.jobStatus.observe(viewLifecycleOwner, Observer { jobStatus ->
             when(jobStatus) {
