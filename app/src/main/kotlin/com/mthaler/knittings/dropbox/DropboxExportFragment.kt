@@ -71,7 +71,7 @@ class DropboxExportFragment : AbstractDropboxFragment() {
                 setTitle(resources.getString(R.string.dropbox_export_cancel_dialog_title))
                 setMessage(resources.getString(R.string.dropbox_export_cancel_dialog_message))
                 setPositiveButton(resources.getString(R.string.dropbox_export_cancel_dialog_ok_button)) { dialog, which ->
-                    DropboxExportServiceManager.getInstance().canceled = true
+                    DropboxExportServiceManager.getInstance().cancelled = true
                 }
                 show()
             }
@@ -100,7 +100,7 @@ class DropboxExportFragment : AbstractDropboxFragment() {
                     result.visibility = View.GONE
                     progressBar.progress = jobStatus.value
                 }
-                is JobStatus.Canceled -> {
+                is JobStatus.Cancelled -> {
                     export_button.isEnabled = true
                     export_title.visibility = View.VISIBLE
                     progressBar.visibility = View.GONE

@@ -60,7 +60,7 @@ class DropboxExportService : Service() {
                     val dir = createDateTimeDirectoryName(Date())
                     val canceled = upload(dir, builder)
                     if (canceled) {
-                        DropboxExportServiceManager.getInstance().updateJobStatus(JobStatus.Canceled("Dropbox export canceled"))
+                        DropboxExportServiceManager.getInstance().updateJobStatus(JobStatus.Cancelled("Dropbox export canceled"))
                     } else {
                         DropboxExportServiceManager.getInstance().updateJobStatus(JobStatus.Success())
                     }
@@ -105,7 +105,7 @@ class DropboxExportService : Service() {
         // upload photos to dropbox
         val count = photos.size
         for ((index, photo) in photos.withIndex()) {
-            if (sm.canceled) {
+            if (sm.cancelled) {
                 return true
             }
             val inputStream = FileInputStream(photo.filename)

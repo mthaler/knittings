@@ -40,28 +40,13 @@ class CompressPhotosService : Service() {
         GlobalScope.launch {
             try {
                 val sm = CompressPhotosServiceManager.getInstance()
-                withContext(Dispatchers.Default) {
-                    val photos = datasource.allPhotos
-                    val photosToCompress = photos.filter {
-                        it.filename.exists() && it.filename.length() > 350 * 1024
+                withContext(Dispatchers.IO) {
+                    val cancelled = compressPhotos(builder)
+                    if (cancelled) {
+                        CompressPhotosServiceManager.getInstance().updateJobStatus(JobStatus.Cancelled(getString(R.string.compress_photos_cancelled)))
+                    } else {
+                        CompressPhotosServiceManager.getInstance().updateJobStatus(JobStatus.Success(getString(R.string.compress_photos_completed)))
                     }
-                    val count = photosToCompress.count()
-                    for ((index, photo) in photosToCompress.withIndex()) {
-                        val progress = (index / count.toDouble() * 100).toInt()
-                        val file = photo.filename
-                        val compressed = PictureUtils.compress(this@CompressPhotosService, file)
-                        if (!file.delete()) {
-                            error("Could not delete $file")
-                        }
-                        FileUtils.copy(compressed, file)
-                        if (!compressed.delete()) {
-                            error("Could not delete $file")
-                        }
-                        builder.setProgress(100, progress, false)
-                        notificationManager.notify(1, builder.build())
-                        sm.updateJobStatus(JobStatus.Progress(progress))
-                    }
-                    CompressPhotosServiceManager.getInstance().updateJobStatus(JobStatus.Success(getString(R.string.compress_photos_completed)))
                 }
                 builder.setContentText("Compressing photos done")
                 builder.setProgress(0, 0, false)
@@ -81,6 +66,35 @@ class CompressPhotosService : Service() {
     override fun onDestroy() {
         super.onDestroy()
         CompressPhotosServiceManager.getInstance().updateServiceStatus(ServiceStatus.Stopped)
+    }
+
+    private suspend fun compressPhotos(builder: NotificationCompat.Builder): Boolean {
+        val sm = CompressPhotosServiceManager.getInstance()
+        val notificationManager = NotificationManagerCompat.from(this);
+        val photos = datasource.allPhotos
+        val photosToCompress = photos.filter {
+            it.filename.exists() && it.filename.length() > 350 * 1024
+        }
+        val count = photosToCompress.count()
+        for ((index, photo) in photosToCompress.withIndex()) {
+            if (sm.cancelled) {
+                return true
+            }
+            val progress = (index / count.toDouble() * 100).toInt()
+            val file = photo.filename
+            val compressed = PictureUtils.compress(this@CompressPhotosService, file)
+            if (!file.delete()) {
+                error("Could not delete $file")
+            }
+            FileUtils.copy(compressed, file)
+            if (!compressed.delete()) {
+                error("Could not delete $file")
+            }
+            builder.setProgress(100, progress, false)
+            notificationManager.notify(1, builder.build())
+            sm.updateJobStatus(JobStatus.Progress(progress))
+        }
+        return false
     }
 
     companion object {

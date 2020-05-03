@@ -6,6 +6,7 @@
     <string name="compress_photos_start">Start compression</string>
     <string name="compress_photos_compressing_title">Compressing photos:</string>
     <string name="compress_photos_completed">Compressing photos completed</string>
+    <string name="compress_photos_cancelled">Compressing photos cancelled</string>
 
     <string name="compress_photos_dialog_title">Compress Photos</string>
     <string name="compress_photos_dialog_message">Compress photos? This cannot be undone.</string>

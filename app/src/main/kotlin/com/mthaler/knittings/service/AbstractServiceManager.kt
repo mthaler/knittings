@@ -9,7 +9,7 @@ abstract class AbstractServiceManager {
 
     private val _jobStatus: MutableLiveData<JobStatus> = MutableLiveData(JobStatus.Initialized)
     private val _serviceStatus: MutableLiveData<ServiceStatus> = MutableLiveData(ServiceStatus.Stopped)
-    private val _canceled = AtomicBoolean(false)
+    private val _cancelled = AtomicBoolean(false)
 
     val jobStatus: LiveData<JobStatus>
         get() = _jobStatus
@@ -23,12 +23,12 @@ abstract class AbstractServiceManager {
 
     fun updateServiceStatus(serviceStatus: ServiceStatus) {
         if (serviceStatus == ServiceStatus.Started) {
-            _canceled.set(false)
+            _cancelled.set(false)
         }
         this._serviceStatus.setMutVal(serviceStatus)
     }
 
-    var canceled: Boolean
-        get() = _canceled.get()
-        set(value) = _canceled.set(value)
+    var cancelled: Boolean
+        get() = _cancelled.get()
+        set(value) = _cancelled.set(value)
 }

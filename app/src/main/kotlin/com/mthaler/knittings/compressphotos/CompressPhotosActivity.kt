@@ -44,7 +44,7 @@ class CompressPhotosActivity : BaseActivity() {
 
         val buttonCancel = findViewById<Button>(R.id.cancel_button)
         buttonCancel.setOnClickListener {
-            CompressPhotosServiceManager.getInstance().canceled = true
+            CompressPhotosServiceManager.getInstance().cancelled = true
         }
 
         val viewModel = ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory.getInstance(this.application)).get(CompressPhotosViewModel::class.java)
@@ -72,6 +72,14 @@ class CompressPhotosActivity : BaseActivity() {
                     result.visibility = View.GONE
                 }
                 is JobStatus.Success -> {
+                    buttonStart.isEnabled = true
+                    compressing_photos_title.visibility = View.VISIBLE
+                    progressBar.visibility = View.GONE
+                    cancel_button.visibility = View.GONE
+                    result.visibility = View.VISIBLE
+                    result.text = jobStatus.msg
+                }
+                is JobStatus.Cancelled -> {
                     buttonStart.isEnabled = true
                     compressing_photos_title.visibility = View.VISIBLE
                     progressBar.visibility = View.GONE
