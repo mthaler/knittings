@@ -3,7 +3,6 @@ package com.mthaler.knittings.compressphotos
 import android.app.*
 import android.content.Intent
 import android.content.Context
-import android.os.Build
 import android.os.IBinder
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
@@ -12,24 +11,26 @@ import com.mthaler.knittings.R
 import com.mthaler.knittings.service.JobStatus
 import com.mthaler.knittings.service.ServiceStatus
 import kotlinx.coroutines.*
+import com.mthaler.knittings.utils.createNotificationChannel
 
 class CompressPhotosService : Service() {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         CompressPhotosServiceManager.getInstance().updateServiceStatus(ServiceStatus.Started)
-        createNotificationChannel()
+        createNotificationChannel(this, getString(R.string.compress_photos_notification_channel_id), getString(R.string.compress_photos_notification_channel_name))
         val intent = Intent(this, CompressPhotosActivity::class.java).apply {
             this.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         }
         val pendingIntent = PendingIntent.getActivity(this, 0, intent, 0)
 
         val notificationManager = NotificationManagerCompat.from(this);
-        val builder = NotificationCompat.Builder(this, CHANNEL_ID).apply {
+        val builder = NotificationCompat.Builder(this, getString(R.string.compress_photos_notification_channel_id)).apply {
             setOngoing(true)
             setContentTitle("Compress Photos")
             setContentText("Compressing photos in progress")
             setSmallIcon(R.drawable.ic_photo_size_select_large_black_24dp)
             setContentIntent(pendingIntent)
+            setPriority(NotificationCompat.PRIORITY_LOW)
         }
         startForeground(1, builder.build())
         GlobalScope.launch {
@@ -65,20 +66,7 @@ class CompressPhotosService : Service() {
         CompressPhotosServiceManager.getInstance().updateServiceStatus(ServiceStatus.Stopped)
     }
 
-    private fun createNotificationChannel() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            getSystemService(NotificationManager::class.java).let {
-                val name = "compress photos"
-                val importance =  NotificationManager.IMPORTANCE_DEFAULT
-                val channel = NotificationChannel(CHANNEL_ID, name, importance)
-                it.createNotificationChannel(channel)
-            }
-        }
-    }
-
     companion object {
-
-        private val CHANNEL_ID = "com.mthaler.knittings.compressphotos.CompressPhotosService"
 
         fun startService(context: Context, message: String) {
             val startIntent = Intent(context, CompressPhotosService::class.java)
