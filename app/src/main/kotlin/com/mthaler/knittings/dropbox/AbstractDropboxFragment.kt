@@ -44,7 +44,7 @@ abstract class AbstractDropboxFragment : Fragment() {
 
     protected abstract fun loadData(onError: (Exception) -> Unit)
 
-    protected fun onLoadDataError(ex: Exception) {
+    private fun onLoadDataError(ex: Exception) {
         val prefs = PreferenceManager.getDefaultSharedPreferences(requireContext())
         val editor = prefs.edit()
         editor.remove("access-token")

@@ -76,7 +76,7 @@ class DropboxExportFragment : AbstractDropboxFragment() {
                     with(builder) {
                         setTitle(resources.getString(R.string.dropbox_export))
                         setMessage("Dropbox export completed")
-                        setPositiveButton("OK", { dialog, which -> })
+                        setPositiveButton("OK") { dialog, which -> }
                         show()
                     }
                 }

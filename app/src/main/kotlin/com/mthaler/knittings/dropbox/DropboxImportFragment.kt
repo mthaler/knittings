@@ -43,15 +43,15 @@ class DropboxImportFragment : AbstractDropboxFragment() {
                 with(builder) {
                     setTitle(resources.getString(R.string.dropbox_import))
                     setMessage(resources.getString(R.string.dropbox_export_no_wifi_question))
-                    setPositiveButton(resources.getString(R.string.dropbox_export_dialog_export_button), { dialog, which ->
+                    setPositiveButton(resources.getString(R.string.dropbox_export_dialog_export_button)) { dialog, which ->
                         lifecycleScope.launch {
                             val result = withContext(Dispatchers.IO) {
                                 DropboxClientFactory.getClient().files().listFolder("")
                             }
                             onListFolder(result)
                         }
-                    })
-                    setNegativeButton(resources.getString(R.string.dialog_button_cancel), { dialog, which -> })
+                    }
+                    setNegativeButton(resources.getString(R.string.dialog_button_cancel)) { dialog, which -> }
                     show()
                 }
             } else {
@@ -148,10 +148,10 @@ class DropboxImportFragment : AbstractDropboxFragment() {
                 with(builder) {
                     setTitle(resources.getString(R.string.dropbox_import))
                     setMessage("Do you really want to import from Dropbox? This will delete all existing data!")
-                    setPositiveButton("Import", { dialog, which ->
+                    setPositiveButton("Import") { dialog, which ->
                         DropboxImportService.startService(requireContext(), folderName)
-                    })
-                    setNegativeButton(resources.getString(R.string.dialog_button_cancel), { dialog, which -> })
+                    }
+                    setNegativeButton(resources.getString(R.string.dialog_button_cancel)) { dialog, which -> }
                     show()
                 }
             }
@@ -165,7 +165,7 @@ class DropboxImportFragment : AbstractDropboxFragment() {
             with(builder) {
                 setTitle("List folders")
                 setMessage("Error when listing folders: null")
-                setPositiveButton("OK", { dialog, which -> })
+                setPositiveButton("OK") { dialog, which -> }
                 show()
             }
         }

@@ -2,7 +2,6 @@
 <!-- string resources for category package -->
 <resources>
     <string name="activity_category_list_name">Kategorien</string>
-    <string name="activity_edit_category_name">Kategorie editieren</string>
 
     <string name="manage_categories">Kategorien verwalten</string>
     <string name="edit_category_select_color">Farbe auswählen</string>

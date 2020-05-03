@@ -33,10 +33,10 @@ class CompressPhotosActivity : BaseActivity() {
             with(builder) {
                 setTitle(resources.getString(R.string.compress_photos_dialog_title))
                 setMessage(resources.getString(R.string.compress_photos_dialog_message))
-                setPositiveButton(resources.getString(R.string.compress_photos_dialog_button_compress), { dialog, which ->
+                setPositiveButton(resources.getString(R.string.compress_photos_dialog_button_compress)) { dialog, which ->
                     CompressPhotosService.startService(this@CompressPhotosActivity, "Foreground Service is running...")
-                })
-                setNegativeButton(resources.getString(R.string.dialog_button_cancel), { dialog, which -> })
+                }
+                setNegativeButton(resources.getString(R.string.dialog_button_cancel)) { dialog, which -> }
                 show()
             }
         }
@@ -48,9 +48,9 @@ class CompressPhotosActivity : BaseActivity() {
 
         val viewModel = ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory.getInstance(this.application)).get(CompressPhotosViewModel::class.java)
         viewModel.statistics.observe(this, Observer { statistics ->
-            number_of_photos.setText(statistics.photos.toString())
-            total_size.setText(Format.humanReadableByteCountBin(statistics.totalSize))
-            will_be_compressed.setText(statistics.photosToCompress.toString())
+            number_of_photos.text = statistics.photos.toString()
+            total_size.text = Format.humanReadableByteCountBin(statistics.totalSize)
+            will_be_compressed.text = statistics.photosToCompress.toString()
         })
 
         CompressPhotosServiceManager.getInstance().jobStatus.observe(this, Observer { jobStatus->
