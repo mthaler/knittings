@@ -12,6 +12,7 @@ import com.dropbox.core.v2.users.FullAccount
 import com.dropbox.core.v2.users.SpaceUsage
 import com.mthaler.knittings.R
 import com.mthaler.knittings.service.JobStatus
+import com.mthaler.knittings.service.ServiceStatus
 import com.mthaler.knittings.utils.NetworkUtils
 import kotlinx.android.synthetic.main.fragment_dropbox_export.*
 import com.mthaler.knittings.utils.StringUtils.formatBytes
@@ -49,14 +50,12 @@ class DropboxExportFragment : AbstractDropboxFragment() {
                     setMessage(resources.getString(R.string.dropbox_export_no_wifi_question))
                     setPositiveButton(resources.getString(R.string.dropbox_export_dialog_export_button)) { dialog, which ->
                         DropboxExportService.startService(requireContext())
-                        setMode(true)
                     }
                     setNegativeButton(resources.getString(R.string.dialog_button_cancel)) { dialog, which -> }
                     show()
                 }
             } else {
                 DropboxExportService.startService(requireContext())
-                setMode(true)
             }
         }
 
@@ -65,21 +64,38 @@ class DropboxExportFragment : AbstractDropboxFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        DropboxExportServiceManager.getInstance().jobStatus.observe(viewLifecycleOwner, Observer { status ->
-            when(status) {
+
+        val sm = DropboxImportServiceManager.getInstance()
+
+        sm.jobStatus.observe(viewLifecycleOwner, Observer { jobStatus ->
+            when(jobStatus) {
+                is JobStatus.Initialized -> {
+                    export_button.isEnabled = true
+                    export_title.visibility = View.GONE
+                    progressBar.visibility = View.GONE
+                    result.visibility = View.GONE
+                }
                 is JobStatus.Progress -> {
-                    progressBar.progress = status.value
+                    export_button.isEnabled = false
+                    export_title.visibility = View.VISIBLE
+                    progressBar.visibility = View.VISIBLE
+                    result.visibility = View.GONE
+                    progressBar.progress = jobStatus.value
                 }
                 is JobStatus.Success -> {
-                    setMode(false)
-                    val builder = AlertDialog.Builder(requireContext())
-                    with(builder) {
-                        setTitle(resources.getString(R.string.dropbox_export))
-                        setMessage("Dropbox export completed")
-                        setPositiveButton("OK") { dialog, which -> }
-                        show()
-                    }
+                    export_button.isEnabled = true
+                    export_title.visibility = View.VISIBLE
+                    progressBar.visibility = View.GONE
+                    result.visibility = View.VISIBLE
+                    result.text = "Dropbox export completed" //jobStatus.result
                 }
+            }
+        })
+
+        sm.serviceStatus.observe(viewLifecycleOwner, Observer { serviceStatus ->
+            when(serviceStatus) {
+                ServiceStatus.Stopped -> export_button.isEnabled = true
+                ServiceStatus.Started -> export_button.isEnabled = false
             }
         })
     }
@@ -93,7 +109,6 @@ class DropboxExportFragment : AbstractDropboxFragment() {
             name_text.visibility = View.VISIBLE
             type_text.visibility = View.VISIBLE
             export_button.isEnabled = true
-            setMode(exporting)
         } else {
             login_button.visibility = View.VISIBLE
             email_text.visibility = View.GONE
@@ -136,7 +151,6 @@ class DropboxExportFragment : AbstractDropboxFragment() {
     }
 
     private fun onUploadComplete(cancelled: Boolean) {
-        setMode(false)
         if (cancelled) {
             context?.let {
                 val builder = AlertDialog.Builder(it)
@@ -170,22 +184,6 @@ class DropboxExportFragment : AbstractDropboxFragment() {
                 show()
             }
         }
-    }
-
-    private fun setMode(exporting: Boolean) {
-        if (exporting) {
-            export_button.visibility = View.GONE
-            export_text.visibility = View.VISIBLE
-            progressBar.visibility = View.VISIBLE
-            cancel_button.visibility = View.VISIBLE
-        } else {
-            export_button.visibility = View.VISIBLE
-            export_text.visibility = View.GONE
-            progressBar.visibility = View.GONE
-            progressBar.progress = 0
-            cancel_button.visibility = View.GONE
-        }
-        this.exporting = exporting
     }
 
     companion object {

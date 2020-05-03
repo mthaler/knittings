@@ -55,11 +55,18 @@
         android:layout_marginTop="30dp"
         android:text="@string/dropbox_export" />
 
+    <View style="@style/Divider"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"/>
+
     <TextView
-        android:id="@+id/export_text"
-        android:layout_width="match_parent"
+        android:id="@+id/export_title"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:textColor="@color/black"
+        android:textStyle="bold"
         android:text="@string/dropbox_export_files"
         android:visibility="gone" />
 
@@ -76,5 +83,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/dropbox_cancel_export"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/result"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginTop="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
         android:visibility="gone" />
 </LinearLayout>
