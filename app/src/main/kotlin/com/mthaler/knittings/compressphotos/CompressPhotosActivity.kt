@@ -5,9 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
-import android.view.ViewGroup
 import android.widget.Button
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.NavUtils
 import androidx.lifecycle.Observer
@@ -17,8 +15,6 @@ import com.mthaler.knittings.R
 import com.mthaler.knittings.service.JobStatus
 import com.mthaler.knittings.service.ServiceStatus
 import kotlinx.android.synthetic.main.activity_compress_photos.*
-import kotlinx.android.synthetic.main.fragment_project_count.*
-import kotlinx.coroutines.Job
 
 class CompressPhotosActivity : BaseActivity() {
 
@@ -64,6 +60,7 @@ class CompressPhotosActivity : BaseActivity() {
                     compressing_photos_title.visibility = View.GONE
                     progressBar.visibility = View.GONE
                     cancel_button.visibility = View.GONE
+                    result.visibility = View.GONE
                 }
                 is JobStatus.Progress -> {
                     buttonStart.isEnabled = false
@@ -71,12 +68,15 @@ class CompressPhotosActivity : BaseActivity() {
                     progressBar.visibility = View.VISIBLE
                     cancel_button.visibility = View.VISIBLE
                     progressBar.progress = jobStatus.value
+                    result.visibility = View.GONE
                 }
                 is JobStatus.Success -> {
                     buttonStart.isEnabled = true
+                    compressing_photos_title.visibility = View.VISIBLE
                     progressBar.visibility = View.GONE
                     cancel_button.visibility = View.GONE
-                    Toast.makeText(this, "Compress photo service finished", Toast.LENGTH_LONG).show()
+                    result.visibility = View.VISIBLE
+                    result.text = jobStatus.result
                 }
             }
         })

@@ -43,7 +43,7 @@ class CompressPhotosService : Service() {
                         notificationManager.notify(1, builder.build())
                         sm.updateJobStatus(JobStatus.Progress(i * 10))
                     }
-                    CompressPhotosServiceManager.getInstance().updateJobStatus(JobStatus.Success)
+                    CompressPhotosServiceManager.getInstance().updateJobStatus(JobStatus.Success(getString(R.string.compress_photos_finished)))
                 }
                 builder.setContentText("Compressing photos done")
                 builder.setProgress(0, 0, false)

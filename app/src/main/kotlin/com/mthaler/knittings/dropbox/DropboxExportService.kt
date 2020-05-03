@@ -58,7 +58,7 @@ class DropboxExportService : Service() {
                         }
                 try {
                     upload(builder)
-                    DropboxExportServiceManager.getInstance().updateJobStatus(JobStatus.Success)
+                    DropboxExportServiceManager.getInstance().updateJobStatus(JobStatus.Success())
                 } finally {
                     wakeLock.release()
                 }

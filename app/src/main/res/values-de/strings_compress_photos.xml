@@ -5,6 +5,7 @@
     <string name="compress_photos_compress_count">Fotos die komprimiert werden:</string>
     <string name="compress_photos_start">Komprimieren</string>
     <string name="compress_photos_compressing_title">Compressing photos:</string>
+    <string name="compress_photos_finished">Komprimieren der Fotos abgeschlossen</string>
 
     <string name="compress_photos_dialog_title">Fotos Komprimieren</string>
     <string name="compress_photos_dialog_message">Fotos verkleinern und komprimieren? Kann nicht rückgängig gemacht werden.</string>
