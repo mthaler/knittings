@@ -1,4 +1,4 @@
-package com.mthaler.knittings.compressphotos;
+package com.mthaler.knittings.utils;
 
 import java.text.CharacterIterator;
 import java.text.StringCharacterIterator;
