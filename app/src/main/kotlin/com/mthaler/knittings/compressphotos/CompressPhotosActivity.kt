@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.core.app.NavUtils
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -32,7 +33,16 @@ class CompressPhotosActivity : BaseActivity() {
 
         val buttonStart = findViewById<Button>(R.id.buttonStart)
         buttonStart.setOnClickListener {
-            CompressPhotosService.startService(this, "Foreground Service is running...")
+            val builder = AlertDialog.Builder(this)
+            with(builder) {
+                setTitle(resources.getString(R.string.compress_photos_dialog_title))
+                setMessage(resources.getString(R.string.compress_photos_dialog_message))
+                setPositiveButton(resources.getString(R.string.compress_photos_dialog_button_compress), { dialog, which ->
+                    CompressPhotosService.startService(this@CompressPhotosActivity, "Foreground Service is running...")
+                })
+                setNegativeButton(resources.getString(R.string.dialog_button_cancel), { dialog, which -> })
+                show()
+            }
         }
 
         val buttonCancel = findViewById<Button>(R.id.cancel_button)
