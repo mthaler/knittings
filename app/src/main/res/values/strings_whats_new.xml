@@ -2,6 +2,9 @@
 <resources>
     <string name="whats_new_title">Whats New</string>
     <string name="whats_new"><![CDATA[
+        <h3>Version 0.9.21</h3>
+        - Rewritten Dropbox export and import<br>
+        - Added possibilty to compress existing photos<br>
         <h3>Version 0.9.20</h3>
         - Knitting details display no longer cuts off text next to image<br>
         - Knitting details image is now smaller on devices with 18:9 aspect ratio<br>
