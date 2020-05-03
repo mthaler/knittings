@@ -17,14 +17,15 @@ class CompressPhotosService : Service() {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         CompressPhotosServiceManager.getInstance().updateServiceStatus(ServiceStatus.Started)
-        createNotificationChannel(this, getString(R.string.compress_photos_notification_channel_id), getString(R.string.compress_photos_notification_channel_name))
+        val channelID = getString(R.string.compress_photos_notification_channel_id)
+        createNotificationChannel(this, channelID, getString(R.string.compress_photos_notification_channel_name))
         val intent = Intent(this, CompressPhotosActivity::class.java).apply {
             this.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         }
         val pendingIntent = PendingIntent.getActivity(this, 0, intent, 0)
 
         val notificationManager = NotificationManagerCompat.from(this);
-        val builder = NotificationCompat.Builder(this, getString(R.string.compress_photos_notification_channel_id)).apply {
+        val builder = NotificationCompat.Builder(this, channelID).apply {
             setOngoing(true)
             setContentTitle("Compress Photos")
             setContentText("Compressing photos in progress")

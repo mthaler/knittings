@@ -1,12 +1,9 @@
 package com.mthaler.knittings.dropbox
 
-import android.app.NotificationChannel
-import android.app.NotificationManager
 import android.app.PendingIntent
 import android.app.Service
 import android.content.Context
 import android.content.Intent
-import android.os.Build
 import android.os.IBinder
 import android.os.PowerManager
 import androidx.core.app.NotificationCompat
@@ -20,6 +17,7 @@ import com.mthaler.knittings.model.toJSON
 import com.mthaler.knittings.service.JobStatus
 import com.mthaler.knittings.utils.FileUtils.createDateTimeDirectoryName
 import com.mthaler.knittings.utils.FileUtils.getExtension
+import com.mthaler.knittings.utils.createNotificationChannel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -31,19 +29,21 @@ import java.util.*
 class DropboxExportService : Service() {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        createNotificationChannel()
+        val channelID = getString(R.string.dropbox_export_notification_channel_id)
+        createNotificationChannel(this, channelID, getString(R.string.dropbox_export_notification_channel_name))
 
         val intent = Intent(this, DropboxExportActivity::class.java).apply {
             this.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         }
         val pendingIntent = PendingIntent.getActivity(this, 0, intent, 0)
 
-        val builder = NotificationCompat.Builder(this, CHANNEL_ID).apply {
+        val builder = NotificationCompat.Builder(this, channelID).apply {
             setOngoing(true)
             setContentTitle("Dropbox export")
             setContentText("Dropbox export in progress")
             setSmallIcon(R.drawable.ic_cloud_upload_black_24dp)
             setContentIntent(pendingIntent)
+            setPriority(NotificationCompat.PRIORITY_LOW)
         }
 
         startForeground(1, builder.build())
@@ -78,17 +78,6 @@ class DropboxExportService : Service() {
 
     override fun onBind(intent: Intent): IBinder? {
         return null
-    }
-
-    private fun createNotificationChannel() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            getSystemService(NotificationManager::class.java).let {
-                val name = "dropbox export"
-                val importance =  NotificationManager.IMPORTANCE_DEFAULT
-                val channel = NotificationChannel(CHANNEL_ID, name, importance)
-                it.createNotificationChannel(channel)
-            }
-        }
     }
 
     private fun upload(builder: NotificationCompat.Builder): Boolean {
@@ -132,7 +121,6 @@ class DropboxExportService : Service() {
     }
 
     companion object {
-        private val CHANNEL_ID = "com.mthaler.knittings.compressphotos.DropboxExportService"
 
         fun startService(context: Context) {
             val startIntent = Intent(context, DropboxExportService::class.java)

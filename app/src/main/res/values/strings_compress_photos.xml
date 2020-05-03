@@ -13,5 +13,5 @@
     <string name="compress_photos_dialog_button_cancel">Cancel</string>
 
     <string name="compress_photos_notification_channel_id" translatable="false">compress_photos_channel</string>
-    <string name="compress_photos_notification_channel_name" translatable="true">Compress Photos Service</string>
+    <string name="compress_photos_notification_channel_name">Compress Photos Service</string>
 </resources>

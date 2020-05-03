@@ -1,12 +1,9 @@
 package com.mthaler.knittings.dropbox
 
-import android.app.NotificationChannel
-import android.app.NotificationManager
 import android.app.PendingIntent
 import android.app.Service
 import android.content.Context
 import android.content.Intent
-import android.os.Build
 import android.os.Environment
 import android.os.IBinder
 import android.os.PowerManager
@@ -30,7 +27,8 @@ class DropboxImportService : Service() {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         DropboxImportServiceManager.getInstance().updateServiceStatus(ServiceStatus.Started)
-        createNotificationChannel()
+        val channelID = getString(R.string.dropbox_import_notification_channel_id)
+        com.mthaler.knittings.utils.createNotificationChannel(this, channelID, getString(R.string.dropbox_import_notification_channel_name))
 
         val directory = intent?.getStringExtra(EXTRA_DIRECTORY)!!
 
@@ -45,6 +43,7 @@ class DropboxImportService : Service() {
             setContentText("Dropbox import in progress")
             setSmallIcon(R.drawable.ic_cloud_download_black_24dp)
             setContentIntent(pendingIntent)
+            setPriority(NotificationCompat.PRIORITY_LOW)
         }
 
         startForeground(1, builder.build())
@@ -86,17 +85,6 @@ class DropboxImportService : Service() {
     override fun onDestroy() {
         super.onDestroy()
         DropboxImportServiceManager.getInstance().updateServiceStatus(ServiceStatus.Stopped)
-    }
-
-    private fun createNotificationChannel() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            getSystemService(NotificationManager::class.java).let {
-                val name = "dropbox import"
-                val importance =  NotificationManager.IMPORTANCE_DEFAULT
-                val channel = NotificationChannel(CHANNEL_ID, name, importance)
-                it.createNotificationChannel(channel)
-            }
-        }
     }
 
     private fun downloadDatabase(directory: String): Database {
