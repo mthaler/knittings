@@ -30,16 +30,14 @@ class CompressPhotosActivity : BaseActivity() {
         // enable up navigation
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        CompressPhotosServiceManager.getInstance().jobStatus.observe(this, Observer { status ->
-            when(status) {
-                is JobStatus.Success ->
-                    Toast.makeText(this, "Compress photo service finished", Toast.LENGTH_LONG).show()
-            }
-        })
-
         val buttonStart = findViewById<Button>(R.id.buttonStart)
         buttonStart.setOnClickListener {
             CompressPhotosService.startService(this, "Foreground Service is running...")
+        }
+
+        val buttonCancel = findViewById<Button>(R.id.cancel_button)
+        buttonCancel.setOnClickListener {
+            CompressPhotosServiceManager.getInstance().canceled = true
         }
 
         val viewModel = ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory.getInstance(this.application)).get(CompressPhotosViewModel::class.java)
@@ -52,20 +50,21 @@ class CompressPhotosActivity : BaseActivity() {
         CompressPhotosServiceManager.getInstance().jobStatus.observe(this, Observer { jobStatus->
             when(jobStatus) {
                 is JobStatus.Initialized -> {
-                    buttonStart.visibility = View.VISIBLE
+                    buttonStart.isEnabled = true
                     progressBar.visibility = View.GONE
                     cancel_button.visibility = View.GONE
                 }
                 is JobStatus.Progress -> {
-                    buttonStart.visibility = View.GONE
+                    buttonStart.isEnabled = false
                     progressBar.visibility = View.VISIBLE
                     cancel_button.visibility = View.VISIBLE
                     progressBar.progress = jobStatus.value
                 }
                 is JobStatus.Success -> {
-                    buttonStart.visibility = View.VISIBLE
+                    buttonStart.isEnabled = true
                     progressBar.visibility = View.GONE
                     cancel_button.visibility = View.GONE
+                    Toast.makeText(this, "Compress photo service finished", Toast.LENGTH_LONG).show()
                 }
             }
         })

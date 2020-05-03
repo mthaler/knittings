@@ -37,7 +37,8 @@ class CompressPhotosService : Service() {
                 val sm = CompressPhotosServiceManager.getInstance()
                 withContext(Dispatchers.Default) {
                     for(i in 1..10) {
-                        delay(1000)
+                        if (sm.canceled) break
+                        delay(2000)
                         builder.setProgress(100, i * 10, false)
                         notificationManager.notify(1, builder.build())
                         sm.updateJobStatus(JobStatus.Progress(i * 10))
