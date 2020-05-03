@@ -52,7 +52,6 @@ class DropboxExportFragment : AbstractDropboxFragment() {
                         DropboxExportService.startService(requireContext())
                         DropboxExportServiceManager.getInstance().updateJobStatus(JobStatus.Progress(0))
                     }
-                    setNegativeButton(resources.getString(R.string.dialog_button_cancel)) { dialog, which -> }
                     show()
                 }
             } else {
@@ -62,7 +61,16 @@ class DropboxExportFragment : AbstractDropboxFragment() {
         }
 
         cancel_button.setOnClickListener {
-            DropboxExportServiceManager.getInstance().canceled = true
+            val builder = AlertDialog.Builder(requireContext())
+            with(builder) {
+                setTitle(resources.getString(R.string.dropbox_export_cancel_dialog_title))
+                setMessage(resources.getString(R.string.dropbox_export_cancel_dialog_message))
+                setPositiveButton(resources.getString(R.string.dropbox_export_cancel_dialog_ok_button)) { dialog, which ->
+                    DropboxExportServiceManager.getInstance().canceled = true
+                }
+                setNegativeButton(resources.getString(R.string.dialog_button_cancel)) { dialog, which -> }
+                show()
+            }
         }
     }
 

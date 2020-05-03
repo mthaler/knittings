@@ -23,4 +23,7 @@
     <string name="dropbox_import_title">Importiere Dateien:</string>
     <string name="dropbox_import_completed">Dropbox Import abgeschlossen</string>
 
+    <string name="dropbox_export_cancel_dialog_title">Dropbox Export Abbrechen</string>
+    <string name="dropbox_export_cancel_dialog_message">Dropbox Export wirklich abbrechen?</string>
+    <string name="dropbox_export_cancel_dialog_ok_button">Export abbrechen</string>
 </resources>
