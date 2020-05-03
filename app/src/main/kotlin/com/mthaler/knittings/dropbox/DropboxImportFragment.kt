@@ -107,12 +107,14 @@ class DropboxImportFragment : AbstractDropboxFragment() {
 
         if (hasToken()) {
             login_button.visibility = View.GONE
+            account.visibility = View.VISIBLE
             email_text.visibility = View.VISIBLE
             name_text.visibility = View.VISIBLE
             type_text.visibility = View.VISIBLE
             import_button.isEnabled = true
         } else {
             login_button.visibility = View.VISIBLE
+            account.visibility = View.GONE
             email_text.visibility = View.GONE
             name_text.visibility = View.GONE
             type_text.visibility = View.GONE
