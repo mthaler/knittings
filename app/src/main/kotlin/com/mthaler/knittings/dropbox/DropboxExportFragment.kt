@@ -25,8 +25,6 @@ import kotlinx.coroutines.withContext
  */
 class DropboxExportFragment : AbstractDropboxFragment() {
 
-    private var exporting = false
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         // Retain this fragment across configuration changes.
@@ -171,42 +169,6 @@ class DropboxExportFragment : AbstractDropboxFragment() {
                     used_space_text.text = "Used: " + formatBytes(spaceUsage.used)
                     free_space_text.text = "Free: " + formatBytes(spaceUsage.allocation.individualValue.allocated - spaceUsage.used)
                 }
-            }
-        }
-    }
-
-    private fun onUploadComplete(cancelled: Boolean) {
-        if (cancelled) {
-            context?.let {
-                val builder = AlertDialog.Builder(it)
-                with(builder) {
-                    setTitle(resources.getString(R.string.dropbox_export))
-                    setMessage("Dropbox export was cancelled")
-                    setPositiveButton("OK") { dialog, which -> }
-                    show()
-                }
-            }
-        } else {
-            context?.let {
-                val builder = AlertDialog.Builder(it)
-                with(builder) {
-                    setTitle(resources.getString(R.string.dropbox_export))
-                    setMessage("Dropbox export completed")
-                    setPositiveButton("OK") { dialog, which -> }
-                    show()
-                }
-            }
-        }
-    }
-
-    private fun onUploadError(ex: Exception) {
-        context?.let {
-            val builder = AlertDialog.Builder(it)
-            with(builder) {
-                setTitle(resources.getString(R.string.dropbox_export))
-                setMessage("Dropbox export failed: " + ex.message)
-                setPositiveButton("OK") { dialog, which -> }
-                show()
             }
         }
     }
