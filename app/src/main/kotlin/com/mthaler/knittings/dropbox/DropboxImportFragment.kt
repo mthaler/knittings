@@ -20,7 +20,6 @@ import kotlinx.coroutines.withContext
 
 class DropboxImportFragment : AbstractDropboxFragment() {
 
-    private var importing = false
     private var backupDirectory = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -69,25 +68,34 @@ class DropboxImportFragment : AbstractDropboxFragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         val sm = DropboxImportServiceManager.getInstance()
-        sm.jobStatus.observe(viewLifecycleOwner, Observer { status ->
-            when(status) {
+
+        sm.jobStatus.observe(viewLifecycleOwner, Observer { jobStatus ->
+            when(jobStatus) {
+                is JobStatus.Initialized -> {
+                    import_button.isEnabled = true
+                    import_title.visibility = View.GONE
+                    progressBar.visibility = View.GONE
+                    result.visibility = View.GONE
+                }
                 is JobStatus.Progress -> {
-                    progressBar.progress = status.value
+                    import_button.isEnabled = false
+                    import_title.visibility = View.VISIBLE
+                    progressBar.visibility = View.VISIBLE
+                    result.visibility = View.GONE
+                    progressBar.progress = jobStatus.value
                 }
                 is JobStatus.Success -> {
-                    setMode(false)
-                    val builder = AlertDialog.Builder(requireContext())
-                    with(builder) {
-                        setTitle(resources.getString(R.string.dropbox_import))
-                        setMessage("Dropbox import completed")
-                        setPositiveButton("OK", { dialog, which -> })
-                        show()
-                    }
+                    import_button.isEnabled = true
+                    import_title.visibility = View.VISIBLE
+                    progressBar.visibility = View.GONE
+                    result.visibility = View.VISIBLE
+                    result.text = jobStatus.result
                 }
             }
         })
-        sm.serviceStatus.observe(viewLifecycleOwner, Observer { status ->
-            when(status) {
+
+        sm.serviceStatus.observe(viewLifecycleOwner, Observer { serviceStatus ->
+            when(serviceStatus) {
                 ServiceStatus.Stopped -> import_button.isEnabled = true
                 ServiceStatus.Started -> import_button.isEnabled = false
             }
@@ -103,7 +111,6 @@ class DropboxImportFragment : AbstractDropboxFragment() {
             name_text.visibility = View.VISIBLE
             type_text.visibility = View.VISIBLE
             import_button.isEnabled = true
-            setMode(importing)
         } else {
             login_button.visibility = View.VISIBLE
             email_text.visibility = View.GONE
@@ -127,20 +134,6 @@ class DropboxImportFragment : AbstractDropboxFragment() {
         }
     }
 
-    private fun setMode(importing: Boolean) {
-        if (importing) {
-            import_button.visibility = View.GONE
-            import_text.visibility = View.VISIBLE
-            progressBar.visibility = View.VISIBLE
-        } else {
-            import_button.visibility = View.VISIBLE
-            import_text.visibility = View.GONE
-            progressBar.visibility = View.GONE
-            progressBar.progress = 0
-        }
-        this.importing = importing
-    }
-
     private fun onListFolder(result: ListFolderResult?) {
         if (result != null) {
             val files = result.entries.map { it.name }.sortedDescending().toTypedArray()
@@ -155,7 +148,6 @@ class DropboxImportFragment : AbstractDropboxFragment() {
                     setMessage("Do you really want to import from Dropbox? This will delete all existing data!")
                     setPositiveButton("Import", { dialog, which ->
                         DropboxImportService.startService(requireContext(), folderName)
-                        setMode(true)
                     })
                     setNegativeButton(resources.getString(R.string.dialog_button_cancel), { dialog, which -> })
                     show()

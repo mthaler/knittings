@@ -81,14 +81,14 @@
     </GridLayout>
 
     <Button
+        android:id="@+id/buttonStart"
         style="@style/ButtonStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
-        android:text="@string/compress_photos_start"
-        android:id="@+id/buttonStart"/>
+        android:text="@string/compress_photos_start" />
 
     <View style="@style/Divider"
         android:layout_marginTop="16dp"

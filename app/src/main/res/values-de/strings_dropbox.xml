@@ -18,6 +18,7 @@
     <!-- DropboxImportActivity -->
     <string name="activity_dropbox_import_name">Dropbox Import</string>
     <string name="dropbox_import">Aus Dropbox importieren</string>
-    <string name="dropbox_import_files">Importiere Dateien:</string>
+    <string name="dropbox_import_title">Importiere Dateien:</string>
+    <string name="dropbox_import_completed">Dropbox Import abgeschlossen</string>
 
 </resources>
