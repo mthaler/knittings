@@ -59,7 +59,9 @@ class DropboxExportFragment : AbstractDropboxFragment() {
             }
         }
 
-        cancel_button.setOnClickListener { /*exportTask?.cancel(true)*/ }
+        cancel_button.setOnClickListener {
+            DropboxExportServiceManager.getInstance().canceled = true
+        }
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

@@ -151,6 +151,7 @@ class DropboxImportFragment : AbstractDropboxFragment() {
                     setMessage("Do you really want to import from Dropbox? This will delete all existing data!")
                     setPositiveButton("Import") { dialog, which ->
                         DropboxImportService.startService(requireContext(), folderName)
+                        DropboxImportServiceManager.getInstance().updateJobStatus(JobStatus.Progress(0))
                     }
                     setNegativeButton(resources.getString(R.string.dialog_button_cancel)) { dialog, which -> }
                     show()

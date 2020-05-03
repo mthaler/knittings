@@ -60,7 +60,7 @@ class DropboxImportService : Service() {
                                     }
                                 }
                         try {
-                            val database = downloadDatabase(directory, builder)
+                            val database = downloadDatabase(directory)
                             downloadPhotos(database, directory, builder)
                             DropboxImportServiceManager.getInstance().updateJobStatus(JobStatus.Success(getString(R.string.dropbox_import_completed)))
                         } finally {
@@ -99,9 +99,7 @@ class DropboxImportService : Service() {
         }
     }
 
-    private fun downloadDatabase(directory: String, builder: NotificationCompat.Builder): Database {
-        builder.setProgress(100, 0, false)
-        NotificationManagerCompat.from(this).notify(1, builder.build())
+    private fun downloadDatabase(directory: String): Database {
         val dbxClient = DropboxClientFactory.getClient()
         val os = ByteArrayOutputStream()
         dbxClient.files().download("/$directory/db.json").download(os)
