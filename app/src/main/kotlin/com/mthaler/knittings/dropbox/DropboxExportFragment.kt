@@ -73,12 +73,14 @@ class DropboxExportFragment : AbstractDropboxFragment() {
                     export_button.isEnabled = true
                     export_title.visibility = View.GONE
                     progressBar.visibility = View.GONE
+                    cancel_button.visibility = View.GONE
                     result.visibility = View.GONE
                 }
                 is JobStatus.Progress -> {
                     export_button.isEnabled = false
                     export_title.visibility = View.VISIBLE
                     progressBar.visibility = View.VISIBLE
+                    cancel_button.visibility = View.VISIBLE
                     result.visibility = View.GONE
                     progressBar.progress = jobStatus.value
                 }
@@ -86,6 +88,7 @@ class DropboxExportFragment : AbstractDropboxFragment() {
                     export_button.isEnabled = true
                     export_title.visibility = View.VISIBLE
                     progressBar.visibility = View.GONE
+                    cancel_button.visibility = View.GONE
                     result.visibility = View.VISIBLE
                     result.text = "Dropbox export completed" //jobStatus.result
                 }
@@ -105,12 +108,14 @@ class DropboxExportFragment : AbstractDropboxFragment() {
 
         if (hasToken()) {
             login_button.visibility = View.GONE
+            account.visibility = View.VISIBLE
             email_text.visibility = View.VISIBLE
             name_text.visibility = View.VISIBLE
             type_text.visibility = View.VISIBLE
             export_button.isEnabled = true
         } else {
             login_button.visibility = View.VISIBLE
+            account.visibility = View.GONE
             email_text.visibility = View.GONE
             name_text.visibility = View.GONE
             type_text.visibility = View.GONE
