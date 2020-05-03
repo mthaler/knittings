@@ -52,8 +52,7 @@ class PhotoGalleryActivity : BaseActivity(), PhotoGalleryFragment.OnFragmentInte
             if (upIntent == null) {
                 throw IllegalStateException("No Parent Activity Intent")
             } else {
-                val fm = supportFragmentManager
-                val f = fm.findFragmentById(R.id.photo_gallery_container)
+                val f = supportFragmentManager.findFragmentById(R.id.photo_gallery_container)
                 if (f is PhotoFragment) {
                     f.onBackPressed()
                 } else {
@@ -67,8 +66,7 @@ class PhotoGalleryActivity : BaseActivity(), PhotoGalleryFragment.OnFragmentInte
     }
 
     override fun onBackPressed() {
-        val fm = supportFragmentManager
-        val f = fm.findFragmentById(R.id.category_list_container)
+        val f = supportFragmentManager.findFragmentById(R.id.category_list_container)
         if (f is PhotoFragment) {
             f.onBackPressed()
         } else {
@@ -78,8 +76,7 @@ class PhotoGalleryActivity : BaseActivity(), PhotoGalleryFragment.OnFragmentInte
 
     override fun photoClicked(photoID: Long) {
         val f = PhotoFragment.newInstance(photoID)
-        val fm = supportFragmentManager
-        val ft = fm.beginTransaction()
+        val ft = supportFragmentManager.beginTransaction()
         ft.replace(R.id.photo_gallery_container, f)
         ft.addToBackStack(null)
         ft.commit()

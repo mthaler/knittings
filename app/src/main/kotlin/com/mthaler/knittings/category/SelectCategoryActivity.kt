@@ -42,8 +42,7 @@ class SelectCategoryActivity : BaseActivity(), CategoryListFragment.OnFragmentIn
     }
 
     override fun onBackPressed() {
-        val fm = supportFragmentManager
-        val f = fm.findFragmentById(R.id.select_category_container)
+        val f =  supportFragmentManager.findFragmentById(R.id.select_category_container)
         if (f is EditCategoryFragment) {
             f.onBackPressed { categoryID ->
                 val i = Intent()
@@ -58,8 +57,7 @@ class SelectCategoryActivity : BaseActivity(), CategoryListFragment.OnFragmentIn
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean = when (item.itemId) {
         android.R.id.home -> {
-            val fm = supportFragmentManager
-            val f = fm.findFragmentById(R.id.select_category_container)
+            val f =  supportFragmentManager.findFragmentById(R.id.select_category_container)
             if (f is EditCategoryFragment) {
                 f.onBackPressed { categoryID ->
                     if (f.getCategoryID() == Category.EMPTY.id) {
@@ -82,8 +80,7 @@ class SelectCategoryActivity : BaseActivity(), CategoryListFragment.OnFragmentIn
 
     override fun createCategory() {
         val f = EditCategoryFragment.newInstance(Category.EMPTY.id)
-        val fm = supportFragmentManager
-        val ft = fm.beginTransaction()
+        val ft =  supportFragmentManager.beginTransaction()
         ft.replace(R.id.select_category_container, f)
         ft.commit()
     }

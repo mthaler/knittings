@@ -36,14 +36,12 @@ class KnittingDetailsActivity : BaseActivity(), KnittingDetailsFragment.OnFragme
         if (savedInstanceState == null) {
             if (editOnly) {
                 val f = EditKnittingDetailsFragment.newInstance(knittingID, editOnly)
-                val fm = supportFragmentManager
-                val ft = fm.beginTransaction()
+                val ft = supportFragmentManager.beginTransaction()
                 ft.add(R.id.knitting_details_container, f)
                 ft.commit()
             } else {
                 val f = KnittingDetailsFragment.newInstance(knittingID)
-                val fm = supportFragmentManager
-                val ft = fm.beginTransaction()
+                val ft = supportFragmentManager.beginTransaction()
                 ft.add(R.id.knitting_details_container, f)
                 ft.commit()
             }
@@ -67,8 +65,7 @@ class KnittingDetailsActivity : BaseActivity(), KnittingDetailsFragment.OnFragme
             if (upIntent == null) {
                 throw IllegalStateException("No Parent Activity Intent")
             } else {
-                val fm = supportFragmentManager
-                val f = fm.findFragmentById(R.id.knitting_details_container)
+                val f = supportFragmentManager.findFragmentById(R.id.knitting_details_container)
                 if (f is EditKnittingDetailsFragment) {
                     f.onBackPressed()
                 } else {
@@ -81,8 +78,7 @@ class KnittingDetailsActivity : BaseActivity(), KnittingDetailsFragment.OnFragme
     }
 
     override fun onBackPressed() {
-        val fm = supportFragmentManager
-        val f = fm.findFragmentById(R.id.knitting_details_container)
+        val f = supportFragmentManager.findFragmentById(R.id.knitting_details_container)
         if (f is EditKnittingDetailsFragment) {
             f.onBackPressed()
         } else {
@@ -92,8 +88,7 @@ class KnittingDetailsActivity : BaseActivity(), KnittingDetailsFragment.OnFragme
 
     override fun editKnitting(id: Long) {
         val f = EditKnittingDetailsFragment.newInstance(knittingID, editOnly)
-        val fm = supportFragmentManager
-        val ft = fm.beginTransaction()
+        val ft = supportFragmentManager.beginTransaction()
         ft.replace(R.id.knitting_details_container, f)
         ft.addToBackStack(null)
         ft.commit()

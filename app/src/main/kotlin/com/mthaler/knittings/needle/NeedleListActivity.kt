@@ -37,8 +37,7 @@ class NeedleListActivity : BaseActivity(), NeedleListFragment.OnFragmentInteract
             if (upIntent == null) {
                 throw IllegalStateException("No Parent Activity Intent")
             } else {
-                val fm = supportFragmentManager
-                val f = fm.findFragmentById(R.id.needle_list_container)
+                val f = supportFragmentManager.findFragmentById(R.id.needle_list_container)
                 if (f is EditNeedleFragment) {
                     f.onBackPressed()
                 } else {
@@ -51,8 +50,7 @@ class NeedleListActivity : BaseActivity(), NeedleListFragment.OnFragmentInteract
     }
 
     override fun onBackPressed() {
-        val fm = supportFragmentManager
-        val f = fm.findFragmentById(R.id.needle_list_container)
+        val f = supportFragmentManager.findFragmentById(R.id.needle_list_container)
         if (f is EditNeedleFragment) {
             f.onBackPressed()
         } else {
@@ -62,8 +60,7 @@ class NeedleListActivity : BaseActivity(), NeedleListFragment.OnFragmentInteract
 
     override fun createNeedle() {
         val f = EditNeedleFragment.newInstance(Needle.EMPTY.id)
-        val fm = supportFragmentManager
-        val ft = fm.beginTransaction()
+        val ft = supportFragmentManager.beginTransaction()
         ft.replace(R.id.needle_list_container, f)
         ft.addToBackStack(null)
         ft.commit()
@@ -71,8 +68,7 @@ class NeedleListActivity : BaseActivity(), NeedleListFragment.OnFragmentInteract
 
     override fun needleClicked(needleID: Long) {
         val f = EditNeedleFragment.newInstance(needleID)
-        val fm = supportFragmentManager
-        val ft = fm.beginTransaction()
+        val ft = supportFragmentManager.beginTransaction()
         ft.replace(R.id.needle_list_container, f)
         ft.addToBackStack(null)
         ft.commit()

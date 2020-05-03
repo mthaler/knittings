@@ -183,7 +183,7 @@ class KnittingDetailsFragment : Fragment() {
                                 val file = knitting.defaultPhoto.filename
                                 if (file.exists()) {
                                     val orientation = PictureUtils.getOrientation(file.absolutePath)
-                                    val photo = PictureUtils.decodeSampledBitmapFromPath(file.absolutePath, imageView.width, imageView.height)
+                                    val photo = PictureUtils.decodeSampledBitmapFromPath(file.absolutePath, width, height)
                                     val rotatedPhoto = PictureUtils.rotateBitmap(photo, orientation)
                                     rotatedPhoto
                                 } else {

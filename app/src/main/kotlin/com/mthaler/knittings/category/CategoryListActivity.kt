@@ -23,8 +23,7 @@ class CategoryListActivity : BaseActivity(), CategoryListFragment.OnFragmentInte
 
         if (savedInstanceState == null) {
             val f = CategoryListFragment.newInstance(-1)
-            val fm = supportFragmentManager
-            val ft = fm.beginTransaction()
+            val ft = supportFragmentManager.beginTransaction()
             ft.add(R.id.category_list_container, f)
             ft.commit()
         }
@@ -62,8 +61,7 @@ class CategoryListActivity : BaseActivity(), CategoryListFragment.OnFragmentInte
 
     override fun createCategory() {
         val f = EditCategoryFragment.newInstance(Category.EMPTY.id)
-        val fm = supportFragmentManager
-        val ft = fm.beginTransaction()
+        val ft = supportFragmentManager.beginTransaction()
         ft.replace(R.id.category_list_container, f)
         ft.addToBackStack(null)
         ft.commit()
@@ -71,8 +69,7 @@ class CategoryListActivity : BaseActivity(), CategoryListFragment.OnFragmentInte
 
     override fun categoryClicked(categoryID: Long) {
         val f = EditCategoryFragment.newInstance(categoryID)
-        val fm = supportFragmentManager
-        val ft = fm.beginTransaction()
+        val ft = supportFragmentManager.beginTransaction()
         ft.replace(R.id.category_list_container, f)
         ft.addToBackStack(null)
         ft.commit()
