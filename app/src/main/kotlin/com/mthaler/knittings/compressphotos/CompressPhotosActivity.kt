@@ -76,7 +76,7 @@ class CompressPhotosActivity : BaseActivity() {
                     progressBar.visibility = View.GONE
                     cancel_button.visibility = View.GONE
                     result.visibility = View.VISIBLE
-                    result.text = jobStatus.result
+                    result.text = jobStatus.msg
                 }
             }
         })

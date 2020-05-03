@@ -90,7 +90,7 @@ class DropboxImportFragment : AbstractDropboxFragment() {
                     import_title.visibility = View.VISIBLE
                     progressBar.visibility = View.GONE
                     result.visibility = View.VISIBLE
-                    result.text = jobStatus.result
+                    result.text = jobStatus.msg
                 }
             }
         })
