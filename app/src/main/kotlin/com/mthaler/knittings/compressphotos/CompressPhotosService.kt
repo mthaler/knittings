@@ -8,8 +8,11 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import com.mthaler.knittings.R
+import com.mthaler.knittings.database.datasource
 import com.mthaler.knittings.service.JobStatus
 import com.mthaler.knittings.service.ServiceStatus
+import com.mthaler.knittings.utils.FileUtils
+import com.mthaler.knittings.utils.PictureUtils
 import kotlinx.coroutines.*
 import com.mthaler.knittings.utils.createNotificationChannel
 
@@ -38,12 +41,25 @@ class CompressPhotosService : Service() {
             try {
                 val sm = CompressPhotosServiceManager.getInstance()
                 withContext(Dispatchers.Default) {
-                    for(i in 1..10) {
-                        if (sm.canceled) break
-                        delay(2000)
-                        builder.setProgress(100, i * 10, false)
+                    val photos = datasource.allPhotos
+                    val photosToCompress = photos.filter {
+                        it.filename.exists() && it.filename.length() > 350 * 1024
+                    }
+                    val count = photosToCompress.count()
+                    for ((index, photo) in photosToCompress.withIndex()) {
+                        val progress = (index / count.toDouble() * 100).toInt()
+                        val file = photo.filename
+                        val compressed = PictureUtils.compress(this@CompressPhotosService, file)
+                        if (!file.delete()) {
+                            error("Could not delete $file")
+                        }
+                        FileUtils.copy(compressed, file)
+                        if (!compressed.delete()) {
+                            error("Could not delete $file")
+                        }
+                        builder.setProgress(100, progress, false)
                         notificationManager.notify(1, builder.build())
-                        sm.updateJobStatus(JobStatus.Progress(i * 10))
+                        sm.updateJobStatus(JobStatus.Progress(progress))
                     }
                     CompressPhotosServiceManager.getInstance().updateJobStatus(JobStatus.Success(getString(R.string.compress_photos_completed)))
                 }

@@ -97,7 +97,7 @@ object TakePhotoDialog {
         }
         FileUtils.copy(compressed, file)
         if (!compressed.delete()) {
-            error("Could not delete $file")
+            error("Could not delete $compressed")
         }
         val orientation = PictureUtils.getOrientation(file.absolutePath)
         val preview = PictureUtils.decodeSampledBitmapFromPath(file.absolutePath, 200, 200)
@@ -135,7 +135,7 @@ object TakePhotoDialog {
         }
         FileUtils.copy(compressed, file)
         if (!compressed.delete()) {
-            error("Could not delete $file")
+            error("Could not delete $compressed")
         }
         val orientation = PictureUtils.getOrientation(file.absolutePath)
         val preview = PictureUtils.decodeSampledBitmapFromPath(file.absolutePath, 200, 200)
