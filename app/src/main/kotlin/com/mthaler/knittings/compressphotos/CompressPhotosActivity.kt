@@ -4,6 +4,8 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
 import android.widget.Button
 import android.widget.Toast
 import androidx.core.app.NavUtils
@@ -14,6 +16,8 @@ import com.mthaler.knittings.R
 import com.mthaler.knittings.service.JobStatus
 import com.mthaler.knittings.service.ServiceStatus
 import kotlinx.android.synthetic.main.activity_compress_photos.*
+import kotlinx.android.synthetic.main.fragment_project_count.*
+import kotlinx.coroutines.Job
 
 class CompressPhotosActivity : BaseActivity() {
 
@@ -43,6 +47,27 @@ class CompressPhotosActivity : BaseActivity() {
             number_of_photos.setText(statistics.photos.toString())
             total_size.setText(Format.humanReadableByteCountBin(statistics.totalSize))
             will_be_compressed.setText(statistics.photosToCompress.toString())
+        })
+
+        CompressPhotosServiceManager.getInstance().jobStatus.observe(this, Observer { jobStatus->
+            when(jobStatus) {
+                is JobStatus.Initialized -> {
+                    buttonStart.visibility = View.VISIBLE
+                    progressBar.visibility = View.GONE
+                    cancel_button.visibility = View.GONE
+                }
+                is JobStatus.Progress -> {
+                    buttonStart.visibility = View.GONE
+                    progressBar.visibility = View.VISIBLE
+                    cancel_button.visibility = View.VISIBLE
+                    progressBar.progress = jobStatus.value
+                }
+                is JobStatus.Success -> {
+                    buttonStart.visibility = View.VISIBLE
+                    progressBar.visibility = View.GONE
+                    cancel_button.visibility = View.GONE
+                }
+            }
         })
 
         CompressPhotosServiceManager.getInstance().serviceStatus.observe(this, Observer { serviceStatus ->

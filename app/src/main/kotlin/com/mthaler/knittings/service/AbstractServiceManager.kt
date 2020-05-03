@@ -7,7 +7,7 @@ import java.util.concurrent.atomic.AtomicBoolean
 
 abstract class AbstractServiceManager {
 
-    private val _jobStatus: MutableLiveData<JobStatus> = MutableLiveData(JobStatus.Progress(0))
+    private val _jobStatus: MutableLiveData<JobStatus> = MutableLiveData(JobStatus.Initialized)
     private val _serviceStatus: MutableLiveData<ServiceStatus> = MutableLiveData(ServiceStatus.Stopped)
     private val _canceled = AtomicBoolean(false)
 
