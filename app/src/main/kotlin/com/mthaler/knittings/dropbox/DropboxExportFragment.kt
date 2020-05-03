@@ -50,12 +50,14 @@ class DropboxExportFragment : AbstractDropboxFragment() {
                     setMessage(resources.getString(R.string.dropbox_export_no_wifi_question))
                     setPositiveButton(resources.getString(R.string.dropbox_export_dialog_export_button)) { dialog, which ->
                         DropboxExportService.startService(requireContext())
+                        DropboxExportServiceManager.getInstance().updateJobStatus(JobStatus.Progress(0))
                     }
                     setNegativeButton(resources.getString(R.string.dialog_button_cancel)) { dialog, which -> }
                     show()
                 }
             } else {
                 DropboxExportService.startService(requireContext())
+                DropboxExportServiceManager.getInstance().updateJobStatus(JobStatus.Progress(0))
             }
         }
 
