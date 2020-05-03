@@ -6,16 +6,22 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.dropbox.core.android.Auth
 import com.dropbox.core.v2.users.FullAccount
 import com.dropbox.core.v2.users.SpaceUsage
 import com.mthaler.knittings.R
+import com.mthaler.knittings.compressphotos.CompressPhotosViewModel
 import com.mthaler.knittings.service.JobStatus
 import com.mthaler.knittings.service.ServiceStatus
+import com.mthaler.knittings.utils.Format
 import com.mthaler.knittings.utils.NetworkUtils
 import kotlinx.android.synthetic.main.fragment_dropbox_export.*
 import com.mthaler.knittings.utils.StringUtils.formatBytes
+import kotlinx.android.synthetic.main.fragment_dropbox_export.cancel_button
+import kotlinx.android.synthetic.main.fragment_dropbox_export.progressBar
+import kotlinx.android.synthetic.main.fragment_dropbox_export.result
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -119,6 +125,12 @@ class DropboxExportFragment : AbstractDropboxFragment() {
                 ServiceStatus.Started -> export_button.isEnabled = false
             }
         })
+
+        val viewModel = ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory.getInstance(requireActivity().application)).get(CompressPhotosViewModel::class.java)
+        viewModel.statistics.observe(viewLifecycleOwner, Observer { statistics ->
+            photo_count.text = statistics.photos.toString()
+            photo_total_size.text = Format.humanReadableByteCountBin(statistics.totalSize)
+        })
     }
 
     override fun onResume() {
@@ -130,6 +142,7 @@ class DropboxExportFragment : AbstractDropboxFragment() {
             email_text.visibility = View.VISIBLE
             name_text.visibility = View.VISIBLE
             type_text.visibility = View.VISIBLE
+            data_title.visibility = View.VISIBLE
             export_button.isEnabled = true
         } else {
             login_button.visibility = View.VISIBLE
@@ -137,6 +150,7 @@ class DropboxExportFragment : AbstractDropboxFragment() {
             email_text.visibility = View.GONE
             name_text.visibility = View.GONE
             type_text.visibility = View.GONE
+            data_title.visibility = View.GONE
             export_button.isEnabled = false
         }
     }

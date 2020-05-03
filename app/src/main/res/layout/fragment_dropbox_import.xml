@@ -24,7 +24,7 @@
         android:layout_marginBottom="8dp"
         android:textColor="@color/black"
         android:textStyle="bold"
-        android:text="@string/dropbox_import_account"
+        android:text="@string/dropbox_account"
         android:visibility="gone"/>
 
     <TextView

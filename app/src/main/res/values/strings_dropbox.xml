@@ -6,7 +6,7 @@
     <string name="title_activity_login">Sign in</string>
     <string name="logout">Logout</string>
 
-    <string name="dropbox_import_account">Account:</string>
+    <string name="dropbox_account">Account:</string>
 
     <!-- DropboxExportActivity -->
     <string name="activity_dropbox_export_name">Dropbox Export</string>
@@ -16,6 +16,9 @@
     <string name="dropbox_cancel_export">Cancel export</string>
     <string name="dropbox_export_no_wifi_question">No WIFI connection, do you really want to export to Dropbox?</string>
     <string name="dropbox_export_dialog_export_button">Export</string>
+    <string name="dropbox_export_data">Data to export:</string>
+    <string name="dropbox_export_photo_count">Photo count:</string>
+    <string name="dropbox_export_total_size">Total size:</string>
 
     <!-- DropboxImportActivity -->
     <string name="activity_dropbox_import_name">Dropbox Import</string>

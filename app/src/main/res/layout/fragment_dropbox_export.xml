@@ -24,7 +24,7 @@
         android:layout_marginBottom="8dp"
         android:textColor="@color/black"
         android:textStyle="bold"
-        android:text="@string/dropbox_import_account"
+        android:text="@string/dropbox_account"
         android:visibility="gone"/>
 
     <TextView
@@ -56,6 +56,46 @@
         android:id="@+id/free_space_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/data_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        android:text="@string/dropbox_export_data"
+        android:visibility="gone"/>
+
+    <GridLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:columnCount="2">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="4dp"
+            android:text="@string/dropbox_export_photo_count"/>
+
+        <TextView
+            android:id="@+id/photo_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="4dp"
+            android:text="@string/dropbox_export_total_size"/>
+
+        <TextView
+            android:id="@+id/photo_total_size"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </GridLayout>
 
     <Button
         style="@style/ButtonStyle"
