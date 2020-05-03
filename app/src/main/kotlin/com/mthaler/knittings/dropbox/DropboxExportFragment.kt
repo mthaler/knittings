@@ -88,6 +88,14 @@ class DropboxExportFragment : AbstractDropboxFragment() {
                     result.visibility = View.GONE
                     progressBar.progress = jobStatus.value
                 }
+                is JobStatus.Canceled -> {
+                    export_button.isEnabled = true
+                    export_title.visibility = View.VISIBLE
+                    progressBar.visibility = View.GONE
+                    cancel_button.visibility = View.GONE
+                    result.visibility = View.VISIBLE
+                    result.text = jobStatus.msg
+                }
                 is JobStatus.Success -> {
                     export_button.isEnabled = true
                     export_title.visibility = View.VISIBLE

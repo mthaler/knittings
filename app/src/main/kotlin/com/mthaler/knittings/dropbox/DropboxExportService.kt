@@ -57,8 +57,12 @@ class DropboxExportService : Service() {
                             }
                         }
                 try {
-                    upload(builder)
-                    DropboxExportServiceManager.getInstance().updateJobStatus(JobStatus.Success())
+                    val canceled = upload(builder)
+                    if (canceled) {
+                        DropboxExportServiceManager.getInstance().updateJobStatus(JobStatus.Canceled("Dropbox export canceled"))
+                    } else {
+                        DropboxExportServiceManager.getInstance().updateJobStatus(JobStatus.Success())
+                    }
                 } finally {
                     wakeLock.release()
                 }
@@ -87,7 +91,7 @@ class DropboxExportService : Service() {
         }
     }
 
-    private fun upload(builder: NotificationCompat.Builder) {
+    private fun upload(builder: NotificationCompat.Builder): Boolean {
         val dbxClient = DropboxClientFactory.getClient()
         val notificationManager = NotificationManagerCompat.from(this);
         val sm = DropboxExportServiceManager.getInstance()
@@ -111,6 +115,9 @@ class DropboxExportService : Service() {
         // upload photos to dropbox
         val count = photos.size
         for ((index, photo) in photos.withIndex()) {
+            if (sm.canceled) {
+                return true
+            }
             //if (isCancelled) break
             val inputStream = FileInputStream(photo.filename)
             dbxClient.files().uploadBuilder("/" + dir + "/" + photo.id + "." + getExtension(photo.filename.name)) // Path in the user's Dropbox to save the file.
@@ -121,6 +128,7 @@ class DropboxExportService : Service() {
             notificationManager.notify(1, builder.build())
             sm.updateJobStatus(JobStatus.Progress(progress))
         }
+        return false
     }
 
     companion object {
