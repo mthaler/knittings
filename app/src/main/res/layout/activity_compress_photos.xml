@@ -90,13 +90,27 @@
         android:text="@string/compress_photos_start"
         android:id="@+id/buttonStart"/>
 
+    <View style="@style/Divider"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"/>
+
+    <TextView
+        android:id="@+id/compressing_photos_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        android:text="@string/compress_photos_compressing_title"
+        android:visibility="gone"/>
+
     <ProgressBar
         android:id="@+id/progressBar"
         style="@style/Widget.AppCompat.ProgressBar.Horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
+        android:layout_margin="16dp"
         android:visibility="gone" />
 
     <Button
@@ -106,6 +120,6 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
-        android:text="@string/dropbox_cancel_export"
+        android:text="@string/compress_photos_dialog_button_cancel"
         android:visibility="gone" />
 </LinearLayout>

@@ -61,11 +61,13 @@ class CompressPhotosActivity : BaseActivity() {
             when(jobStatus) {
                 is JobStatus.Initialized -> {
                     buttonStart.isEnabled = true
+                    compressing_photos_title.visibility = View.GONE
                     progressBar.visibility = View.GONE
                     cancel_button.visibility = View.GONE
                 }
                 is JobStatus.Progress -> {
                     buttonStart.isEnabled = false
+                    compressing_photos_title.visibility = View.VISIBLE
                     progressBar.visibility = View.VISIBLE
                     cancel_button.visibility = View.VISIBLE
                     progressBar.progress = jobStatus.value
