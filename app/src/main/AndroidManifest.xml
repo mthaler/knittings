@@ -124,7 +124,7 @@
         <service
             android:name=".dropbox.DropboxExportService"
             android:enabled="true"
-            android:exported="false"></service>
+            android:exported="false" />
 
         <service
             android:name=".dropbox.DropboxImportService"
@@ -134,7 +134,7 @@
         <service
             android:name=".compressphotos.CompressPhotosService"
             android:enabled="true"
-            android:exported="false"></service>
+            android:exported="false" />
     </application>
 
     <uses-feature
