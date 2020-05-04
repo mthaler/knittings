@@ -24,7 +24,7 @@
         android:checkableBehavior="none">
         <item
             android:id="@+id/nav_compress_photos"
-            android:title="Compress photos"
+            android:title="@string/compress_photos"
             android:icon="@drawable/ic_photo_size_select_large_black_24dp" />
     </group>
     <group

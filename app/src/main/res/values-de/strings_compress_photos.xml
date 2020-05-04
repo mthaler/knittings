@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="compress_photos">Fotos komprimieren</string>
+
     <string name="compress_photos_count">Anzahl Fotos:</string>
     <string name="compress_photos_total_size">Gesamtgröße:</string>
     <string name="compress_photos_compress_count">Fotos die komprimiert werden:</string>
