@@ -36,4 +36,8 @@
 
     <string name="dropbox_export_notification_channel_name">Dropbox Export Service</string>
     <string name="dropbox_import_notification_channel_name">Dropbox Import Service</string>
+
+    <string name="dropbox_import_notification_title">Dropbox Import</string>
+    <string name="dropbox_import_notification_initial_msg">Aus Dropbox importieren</string>
+    <string name="dropbox_import_notification_done_msg">Dropbox Import abgeschlossen</string>
 </resources>

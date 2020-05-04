@@ -37,7 +37,7 @@ class CompressPhotosService : Service() {
                     compressPhotos(pendingIntent)
                 }
                 val sm = CompressPhotosServiceManager.getInstance()
-                val notificationManager = NotificationManagerCompat.from(this@CompressPhotosService);
+                val notificationManager = NotificationManagerCompat.from(this@CompressPhotosService)
                 if (cancelled) {
                     sm.updateJobStatus(JobStatus.Cancelled(getString(R.string.compress_photos_cancelled)))
                     val n = createNotificationBuilder(pendingIntent, getString(R.string.compress_photos_notification_cancelled_msg)).build()
@@ -48,7 +48,7 @@ class CompressPhotosService : Service() {
                     notificationManager.notify(1, n)
                 }
             } finally {
-                stopForeground(true)
+                stopForeground(false)
                 stopSelf()
             }
         }

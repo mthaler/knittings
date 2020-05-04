@@ -37,16 +37,9 @@ class DropboxImportService : Service() {
         }
         val pendingIntent = PendingIntent.getActivity(this, 0, intent, 0)
 
-        val builder = NotificationCompat.Builder(this, channelID).apply {
-            setOngoing(true)
-            setContentTitle("Dropbox import")
-            setContentText("Dropbox import in progress")
-            setSmallIcon(R.drawable.ic_cloud_download_black_24dp)
-            setContentIntent(pendingIntent)
-            priority = NotificationCompat.PRIORITY_LOW
-        }
+        val initialNotification = createNotificationBuilder(pendingIntent, getString(R.string.dropbox_import_notification_initial_msg)).build()
 
-        startForeground(1, builder.build())
+        startForeground(1, initialNotification)
 
         GlobalScope.launch {
             try {
@@ -60,17 +53,17 @@ class DropboxImportService : Service() {
                                 }
                         try {
                             val database = downloadDatabase(directory)
-                            downloadPhotos(database, directory, builder)
-                            DropboxImportServiceManager.getInstance().updateJobStatus(JobStatus.Success(getString(R.string.dropbox_import_completed)))
+                            downloadPhotos(database, directory, pendingIntent)
                         } finally {
                             wakeLock.release()
                         }
                     }
                 }
-                builder.setContentText("Dropbox import done")
-                builder.setProgress(0, 0, false)
+                DropboxImportServiceManager.getInstance().updateJobStatus(JobStatus.Success(getString(R.string.dropbox_import_completed)))
+                val n = createNotificationBuilder(pendingIntent, getString(R.string.dropbox_import_notification_done_msg), false).build()
+                NotificationManagerCompat.from(this@DropboxImportService).notify(1, n)
             } finally {
-                stopForeground(true)
+                stopForeground(false)
                 stopSelf()
             }
         }
@@ -117,7 +110,8 @@ class DropboxImportService : Service() {
         return database
     }
 
-    private fun downloadPhotos(database: Database, directory: String, builder: NotificationCompat.Builder) {
+    private fun downloadPhotos(database: Database, directory: String, pendingIntent: PendingIntent) {
+        val builder = createNotificationBuilder(pendingIntent, getString(R.string.dropbox_import_notification_initial_msg))
         val notificationManager = NotificationManagerCompat.from(this);
         val sm = DropboxImportServiceManager.getInstance()
         val count = database.photos.size
@@ -138,6 +132,18 @@ class DropboxImportService : Service() {
             builder.setProgress(100, progress, false)
             notificationManager.notify(1, builder.build())
             sm.updateJobStatus(JobStatus.Progress(progress))
+        }
+    }
+
+    private fun createNotificationBuilder(pendingIntent: PendingIntent, msg: String, autoCancel: Boolean = true): NotificationCompat.Builder {
+        return NotificationCompat.Builder(this, getString(R.string.dropbox_import_notification_channel_name)).apply {
+            setContentTitle(getString(R.string.dropbox_import_notification_title))
+            setContentText(msg)
+            setSmallIcon(R.drawable.ic_cloud_download_black_24dp)
+            setContentIntent(pendingIntent)
+            setDefaults(0)
+            setAutoCancel(autoCancel)
+            priority = NotificationCompat.PRIORITY_LOW
         }
     }
 
