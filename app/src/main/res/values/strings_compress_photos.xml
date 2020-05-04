@@ -17,4 +17,9 @@
 
     <string name="compress_photos_notification_channel_id" translatable="false">compress_photos_channel</string>
     <string name="compress_photos_notification_channel_name">Compress Photos Service</string>
+
+    <string name="compress_photos_notification_title">Compress</string>
+    <string name="compress_photos_notification_initial_msg">Compress photos</string>
+    <string name="compress_photos_notification_done_msg">Compress photos done</string>
+    <string name="compress_photos_notification_cancelled_msg">Compress photos cancelled</string>
 </resources>

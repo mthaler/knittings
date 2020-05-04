@@ -22,34 +22,31 @@ class CompressPhotosService : Service() {
         CompressPhotosServiceManager.getInstance().updateServiceStatus(ServiceStatus.Started)
         val channelID = getString(R.string.compress_photos_notification_channel_id)
         createNotificationChannel(this, channelID, getString(R.string.compress_photos_notification_channel_name))
+
         val intent = Intent(this, CompressPhotosActivity::class.java).apply {
             this.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         }
         val pendingIntent = PendingIntent.getActivity(this, 0, intent, 0)
 
-        val notificationManager = NotificationManagerCompat.from(this);
-        val builder = NotificationCompat.Builder(this, channelID).apply {
-            setOngoing(true)
-            setContentTitle("Compress Photos")
-            setContentText("Compressing photos in progress")
-            setSmallIcon(R.drawable.ic_photo_size_select_large_black_24dp)
-            setContentIntent(pendingIntent)
-            priority = NotificationCompat.PRIORITY_LOW
-        }
-        startForeground(1, builder.build())
+        val initialNotification = createNotificationBuilder(pendingIntent, getString(R.string.compress_photos_notification_initial_msg)).build()
+
+        startForeground(1, initialNotification)
         GlobalScope.launch {
             try {
-                val sm = CompressPhotosServiceManager.getInstance()
-                withContext(Dispatchers.IO) {
-                    val cancelled = compressPhotos(builder)
-                    if (cancelled) {
-                        CompressPhotosServiceManager.getInstance().updateJobStatus(JobStatus.Cancelled(getString(R.string.compress_photos_cancelled)))
-                    } else {
-                        CompressPhotosServiceManager.getInstance().updateJobStatus(JobStatus.Success(getString(R.string.compress_photos_completed)))
-                    }
+                val cancelled = withContext(Dispatchers.IO) {
+                    compressPhotos(pendingIntent)
                 }
-                builder.setContentText("Compressing photos done")
-                builder.setProgress(0, 0, false)
+                val sm = CompressPhotosServiceManager.getInstance()
+                val notificationManager = NotificationManagerCompat.from(this@CompressPhotosService);
+                if (cancelled) {
+                    sm.updateJobStatus(JobStatus.Cancelled(getString(R.string.compress_photos_cancelled)))
+                    val n = createNotificationBuilder(pendingIntent, getString(R.string.compress_photos_notification_cancelled_msg)).build()
+                    notificationManager.notify(1, n)
+                } else {
+                    sm.updateJobStatus(JobStatus.Success(getString(R.string.compress_photos_completed)))
+                    val n = createNotificationBuilder(pendingIntent, getString(R.string.compress_photos_notification_done_msg)).build()
+                    notificationManager.notify(1, n)
+                }
             } finally {
                 stopForeground(true)
                 stopSelf()
@@ -68,7 +65,8 @@ class CompressPhotosService : Service() {
         CompressPhotosServiceManager.getInstance().updateServiceStatus(ServiceStatus.Stopped)
     }
 
-    private suspend fun compressPhotos(builder: NotificationCompat.Builder): Boolean {
+    private suspend fun compressPhotos(pendingIntent: PendingIntent): Boolean {
+        val builder = createNotificationBuilder(pendingIntent, getString(R.string.compress_photos_notification_initial_msg))
         val sm = CompressPhotosServiceManager.getInstance()
         val notificationManager = NotificationManagerCompat.from(this);
         val photos = datasource.allPhotos
@@ -95,6 +93,18 @@ class CompressPhotosService : Service() {
             sm.updateJobStatus(JobStatus.Progress(progress))
         }
         return false
+    }
+
+    private fun createNotificationBuilder(pendingIntent: PendingIntent, msg: String): NotificationCompat.Builder {
+        return NotificationCompat.Builder(this, getString(R.string.compress_photos_notification_channel_id)).apply {
+            setContentTitle(getString(R.string.compress_photos_notification_title))
+            setContentText(msg)
+            setSmallIcon(R.drawable.ic_photo_size_select_large_black_24dp)
+            setContentIntent(pendingIntent)
+            setDefaults(0)
+            setAutoCancel(true)
+            priority = NotificationCompat.PRIORITY_LOW
+        }
     }
 
     companion object {

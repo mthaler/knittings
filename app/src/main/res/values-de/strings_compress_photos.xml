@@ -16,4 +16,9 @@
     <string name="compress_photos_dialog_button_cancel">Abbrechen</string>
 
     <string name="compress_photos_notification_channel_name">Fotos Komprimier-Service</string>
+
+    <string name="compress_photos_notification_title">Komprimieren</string>
+    <string name="compress_photos_notification_initial_msg">Fotos verkleinern und komprimieren</string>
+    <string name="compress_photos_notification_done_msg">Fotos wurden verkleinert und komprimiert</string>
+    <string name="compress_photos_notification_cancelled_msg">Fotos komprimieren abgebrochen</string>
 </resources>
