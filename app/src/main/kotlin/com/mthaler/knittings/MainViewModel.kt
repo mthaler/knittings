@@ -12,13 +12,11 @@ class MainViewModel(application: Application) : DatasourceViewModel(application)
 
     val knittings = MutableLiveData<List<Knitting>>(emptyList())
     var sorting: Sorting = Sorting.NewestFirst
-        get() = field
         set(value) {
             field = value
             updateKnittings()
         }
     var filter: CombinedFilter = CombinedFilter.Empty
-        get() = field
         set(value) {
             field = value
             updateKnittings()

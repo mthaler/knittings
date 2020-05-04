@@ -43,7 +43,7 @@ class DropboxImportService : Service() {
             setContentText("Dropbox import in progress")
             setSmallIcon(R.drawable.ic_cloud_download_black_24dp)
             setContentIntent(pendingIntent)
-            setPriority(NotificationCompat.PRIORITY_LOW)
+            priority = NotificationCompat.PRIORITY_LOW
         }
 
         startForeground(1, builder.build())

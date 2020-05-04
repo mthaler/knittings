@@ -43,7 +43,7 @@ class DropboxExportService : Service() {
             setContentText("Dropbox export in progress")
             setSmallIcon(R.drawable.ic_cloud_upload_black_24dp)
             setContentIntent(pendingIntent)
-            setPriority(NotificationCompat.PRIORITY_LOW)
+            priority = NotificationCompat.PRIORITY_LOW
         }
 
         startForeground(1, builder.build())

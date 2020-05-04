@@ -34,7 +34,7 @@ class CompressPhotosService : Service() {
             setContentText("Compressing photos in progress")
             setSmallIcon(R.drawable.ic_photo_size_select_large_black_24dp)
             setContentIntent(pendingIntent)
-            setPriority(NotificationCompat.PRIORITY_LOW)
+            priority = NotificationCompat.PRIORITY_LOW
         }
         startForeground(1, builder.build())
         GlobalScope.launch {

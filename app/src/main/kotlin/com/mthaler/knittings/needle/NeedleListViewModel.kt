@@ -13,7 +13,6 @@ class NeedleListViewModel(application: Application) : DatasourceViewModel(applic
 
     val needles = MutableLiveData<List<Needle>>(emptyList())
     var filter: Filter = NoFilter
-        get() = field
         set(value) {
             field = value
             updateNeedles()
