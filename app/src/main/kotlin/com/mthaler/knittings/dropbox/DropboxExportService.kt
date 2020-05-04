@@ -37,19 +37,12 @@ class DropboxExportService : Service() {
         }
         val pendingIntent = PendingIntent.getActivity(this, 0, intent, 0)
 
-        val builder = NotificationCompat.Builder(this, channelID).apply {
-            setOngoing(true)
-            setContentTitle("Dropbox export")
-            setContentText("Dropbox export in progress")
-            setSmallIcon(R.drawable.ic_cloud_upload_black_24dp)
-            setContentIntent(pendingIntent)
-            priority = NotificationCompat.PRIORITY_LOW
-        }
+        val initialNotification = createNotificationBuilder(pendingIntent, getString(R.string.dropbox_export_notification_initial_msg)).build()
 
-        startForeground(1, builder.build())
+        startForeground(1, initialNotification)
 
         GlobalScope.launch {
-            withContext(Dispatchers.IO) {
+            val cancelled = withContext(Dispatchers.IO) {
                 val wakeLock: PowerManager.WakeLock =
                         (getSystemService(Context.POWER_SERVICE) as PowerManager).run {
                             newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "Knittings::DropboxExport").apply {
@@ -58,19 +51,22 @@ class DropboxExportService : Service() {
                         }
                 try {
                     val dir = createDateTimeDirectoryName(Date())
-                    val canceled = upload(dir, builder)
-                    if (canceled) {
-                        DropboxExportServiceManager.getInstance().updateJobStatus(JobStatus.Cancelled("Dropbox export canceled"))
-                    } else {
-                        DropboxExportServiceManager.getInstance().updateJobStatus(JobStatus.Success())
-                    }
+                    upload(dir, pendingIntent)
                 } finally {
                     wakeLock.release()
                 }
             }
-            builder.setContentText("Dropbox import done")
-            builder.setProgress(0, 0, false)
-            stopForeground(true)
+            val nm = NotificationManagerCompat.from(this@DropboxExportService)
+            if (cancelled) {
+                val n = createNotificationBuilder(pendingIntent, getString(R.string.dropbox_export_notification_cancelled_msg), false).build()
+                nm.notify(1, n)
+                DropboxExportServiceManager.getInstance().updateJobStatus(JobStatus.Cancelled("Dropbox export canceled"))
+            } else {
+                val n = createNotificationBuilder(pendingIntent, getString(R.string.dropbox_export_notification_done_msg), false).build()
+                nm.notify(1, n)
+                DropboxExportServiceManager.getInstance().updateJobStatus(JobStatus.Success())
+            }
+            stopForeground(false)
             stopSelf()
         }
 
@@ -81,7 +77,8 @@ class DropboxExportService : Service() {
         return null
     }
 
-    private fun upload(dir: String, builder: NotificationCompat.Builder): Boolean {
+    private fun upload(dir: String, pendingIntent: PendingIntent): Boolean {
+        val builder = createNotificationBuilder(pendingIntent, getString(R.string.dropbox_import_notification_initial_msg))
         val dbxClient = DropboxClientFactory.getClient()
         val notificationManager = NotificationManagerCompat.from(this);
         val sm = DropboxExportServiceManager.getInstance()
@@ -118,6 +115,18 @@ class DropboxExportService : Service() {
             sm.updateJobStatus(JobStatus.Progress(progress))
         }
         return false
+    }
+
+    private fun createNotificationBuilder(pendingIntent: PendingIntent, msg: String, autoCancel: Boolean = true): NotificationCompat.Builder {
+        return NotificationCompat.Builder(this, getString(R.string.dropbox_export_notification_channel_name)).apply {
+            setContentTitle(getString(R.string.dropbox_export_notification_title))
+            setContentText(msg)
+            setSmallIcon(R.drawable.ic_cloud_upload_black_24dp)
+            setContentIntent(pendingIntent)
+            setDefaults(0)
+            setAutoCancel(autoCancel)
+            priority = NotificationCompat.PRIORITY_LOW
+        }
     }
 
     companion object {

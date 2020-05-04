@@ -18,6 +18,7 @@ import com.mthaler.knittings.service.JobStatus
 import com.mthaler.knittings.service.ServiceStatus
 import com.mthaler.knittings.utils.FileUtils
 import com.mthaler.knittings.utils.PictureUtils
+import com.mthaler.knittings.utils.createNotificationChannel
 import kotlinx.coroutines.*
 import org.json.JSONObject
 import java.io.ByteArrayOutputStream
@@ -28,7 +29,7 @@ class DropboxImportService : Service() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         DropboxImportServiceManager.getInstance().updateServiceStatus(ServiceStatus.Started)
         val channelID = getString(R.string.dropbox_import_notification_channel_id)
-        com.mthaler.knittings.utils.createNotificationChannel(this, channelID, getString(R.string.dropbox_import_notification_channel_name))
+        createNotificationChannel(this, channelID, getString(R.string.dropbox_import_notification_channel_name))
 
         val directory = intent?.getStringExtra(EXTRA_DIRECTORY)!!
 
