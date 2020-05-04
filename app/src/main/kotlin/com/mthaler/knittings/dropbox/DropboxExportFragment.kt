@@ -126,7 +126,7 @@ class DropboxExportFragment : AbstractDropboxFragment() {
             }
         })
 
-        val viewModel = ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory.getInstance(requireActivity().application)).get(CompressPhotosViewModel::class.java)
+        val viewModel = ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory.getInstance(requireActivity().application)).get(DropboxExportViewModel::class.java)
         viewModel.statistics.observe(viewLifecycleOwner, Observer { statistics ->
             photo_count.text = statistics.photos.toString()
             photo_total_size.text = Format.humanReadableByteCountBin(statistics.totalSize)
