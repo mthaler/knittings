@@ -30,6 +30,10 @@
     <string name="dropbox_export_cancel_dialog_message">Dropbox Export wirklich abbrechen?</string>
     <string name="dropbox_export_cancel_dialog_ok_button">Export abbrechen</string>
 
+    <string name="dropbox_import_dialog_title">Aus Dropbox importieren</string>
+    <string name="dropbox_import_dialog_msg">Daten wirklich aus Dropbox importieren? Alle existierenden Daten werden gelöscht!</string>
+    <string name="dropbox_import_dialog_button_import">Importieren</string>
+
     <string name="dropbox_export_notification_channel_name">Dropbox Export Service</string>
     <string name="dropbox_import_notification_channel_name">Dropbox Import Service</string>
 </resources>

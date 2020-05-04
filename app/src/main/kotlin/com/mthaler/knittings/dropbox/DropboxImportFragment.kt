@@ -147,9 +147,9 @@ class DropboxImportFragment : AbstractDropboxFragment() {
                 backupDirectory = folderName
                 val builder = AlertDialog.Builder(requireContext())
                 with(builder) {
-                    setTitle(resources.getString(R.string.dropbox_import))
-                    setMessage("Do you really want to import from Dropbox? This will delete all existing data!")
-                    setPositiveButton("Import") { dialog, which ->
+                    setTitle(getString(R.string.dropbox_import_dialog_title))
+                    setMessage(getString(R.string.dropbox_import_dialog_msg))
+                    setPositiveButton(getString(R.string.dropbox_import_dialog_button_import)) { dialog, which ->
                         DropboxImportService.startService(requireContext(), folderName)
                         DropboxImportServiceManager.getInstance().updateJobStatus(JobStatus.Progress(0))
                     }
