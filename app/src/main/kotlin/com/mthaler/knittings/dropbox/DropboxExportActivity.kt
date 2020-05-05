@@ -8,8 +8,10 @@ import com.mthaler.knittings.R
 import kotlinx.android.synthetic.main.activity_dropbox_export.*
 import android.view.Menu
 import android.view.MenuItem
+import androidx.core.app.NavUtils
 import androidx.lifecycle.lifecycleScope
 import com.mthaler.knittings.BaseActivity
+import com.mthaler.knittings.service.JobStatus
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -91,8 +93,30 @@ class DropboxExportActivity : BaseActivity() {
                 }
                 true
             }
+            android.R.id.home -> {
+                // Respond to the action bar's Up/Home button
+                val upIntent: Intent? = NavUtils.getParentActivityIntent(this)
+                if (upIntent == null) {
+                    throw IllegalStateException("No Parent Activity Intent")
+                } else {
+                    val sm = DropboxExportServiceManager.getInstance()
+                    if (sm.jobStatus.value is JobStatus.Success || sm.jobStatus.value is JobStatus.Cancelled) {
+                        sm.updateJobStatus(JobStatus.Initialized)
+                    }
+                    NavUtils.navigateUpTo(this, upIntent)
+                }
+                true
+            }
             else -> super.onOptionsItemSelected(item)
         }
+    }
+
+    override fun onBackPressed() {
+        val sm = DropboxExportServiceManager.getInstance()
+        if (sm.jobStatus.value is JobStatus.Success || sm.jobStatus.value is JobStatus.Cancelled) {
+            sm.updateJobStatus(JobStatus.Initialized)
+        }
+        super.onBackPressed()
     }
 
     companion object {

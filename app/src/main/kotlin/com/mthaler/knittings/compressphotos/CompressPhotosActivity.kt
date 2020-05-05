@@ -106,7 +106,7 @@ class CompressPhotosActivity : BaseActivity() {
                 throw IllegalStateException("No Parent Activity Intent")
             } else {
                 val sm = CompressPhotosServiceManager.getInstance()
-                if (sm.jobStatus.value is JobStatus.Success) {
+                if (sm.jobStatus.value is JobStatus.Success || sm.jobStatus.value is JobStatus.Cancelled) {
                     sm.updateJobStatus(JobStatus.Initialized)
                 }
                 NavUtils.navigateUpTo(this, upIntent)
@@ -118,7 +118,7 @@ class CompressPhotosActivity : BaseActivity() {
 
     override fun onBackPressed() {
         val sm = CompressPhotosServiceManager.getInstance()
-        if (sm.jobStatus.value is JobStatus.Success) {
+        if (sm.jobStatus.value is JobStatus.Success || sm.jobStatus.value is JobStatus.Cancelled) {
             sm.updateJobStatus(JobStatus.Initialized)
         }
         super.onBackPressed()
