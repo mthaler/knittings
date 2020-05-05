@@ -105,11 +105,23 @@ class CompressPhotosActivity : BaseActivity() {
             if (upIntent == null) {
                 throw IllegalStateException("No Parent Activity Intent")
             } else {
+                val sm = CompressPhotosServiceManager.getInstance()
+                if (sm.jobStatus.value is JobStatus.Success) {
+                    sm.updateJobStatus(JobStatus.Initialized)
+                }
                 NavUtils.navigateUpTo(this, upIntent)
             }
             true
         }
         else -> super.onOptionsItemSelected(item)
+    }
+
+    override fun onBackPressed() {
+        val sm = CompressPhotosServiceManager.getInstance()
+        if (sm.jobStatus.value is JobStatus.Success) {
+            sm.updateJobStatus(JobStatus.Initialized)
+        }
+        super.onBackPressed()
     }
 
     companion object {
