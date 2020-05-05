@@ -3,8 +3,11 @@ package com.mthaler.knittings.dropbox
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.MenuItem
+import androidx.core.app.NavUtils
 import com.mthaler.knittings.BaseActivity
 import com.mthaler.knittings.R
+import com.mthaler.knittings.service.JobStatus
 import kotlinx.android.synthetic.main.activity_dropbox_import.*
 
 /**
@@ -29,6 +32,32 @@ class DropboxImportActivity : BaseActivity() {
             val ff = DropboxImportFragment()
             supportFragmentManager.beginTransaction().add(R.id.frament_container, ff, DropboxImportFragmentTag).commit()
         }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean = when (item.itemId) {
+        android.R.id.home -> {
+            // Respond to the action bar's Up/Home button
+            val upIntent: Intent? = NavUtils.getParentActivityIntent(this)
+            if (upIntent == null) {
+                throw IllegalStateException("No Parent Activity Intent")
+            } else {
+                val sm = DropboxImportServiceManager.getInstance()
+                if (sm.jobStatus.value is JobStatus.Success) {
+                    sm.updateJobStatus(JobStatus.Initialized)
+                }
+                NavUtils.navigateUpTo(this, upIntent)
+            }
+            true
+        }
+        else -> super.onOptionsItemSelected(item)
+    }
+
+    override fun onBackPressed() {
+        val sm = DropboxImportServiceManager.getInstance()
+        if (sm.jobStatus.value is JobStatus.Success) {
+            sm.updateJobStatus(JobStatus.Initialized)
+        }
+        super.onBackPressed()
     }
 
     companion object {
