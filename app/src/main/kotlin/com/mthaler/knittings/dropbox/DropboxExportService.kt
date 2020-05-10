@@ -50,8 +50,7 @@ class DropboxExportService : Service() {
                             }
                         }
                 try {
-                    val dir = createDateTimeDirectoryName(Date())
-                    upload(dir, pendingIntent)
+                    upload(pendingIntent)
                 } finally {
                     wakeLock.release()
                 }
@@ -77,8 +76,8 @@ class DropboxExportService : Service() {
         return null
     }
 
-    private fun upload(dir: String, pendingIntent: PendingIntent): Boolean {
-        val builder = createNotificationBuilder(pendingIntent, getString(R.string.dropbox_import_notification_initial_msg))
+    private fun upload(pendingIntent: PendingIntent): Boolean {
+        val builder = createNotificationBuilder(pendingIntent, getString(R.string.dropbox_export_notification_initial_msg))
         val dbxClient = DropboxClientFactory.getClient()
         val notificationManager = NotificationManagerCompat.from(this);
         val sm = DropboxExportServiceManager.getInstance()
@@ -118,7 +117,7 @@ class DropboxExportService : Service() {
     }
 
     private fun createNotificationBuilder(pendingIntent: PendingIntent, msg: String, autoCancel: Boolean = true): NotificationCompat.Builder {
-        return NotificationCompat.Builder(this, getString(R.string.dropbox_export_notification_channel_name)).apply {
+        return NotificationCompat.Builder(this, getString(R.string.dropbox_export_notification_channel_id)).apply {
             setContentTitle(getString(R.string.dropbox_export_notification_title))
             setContentText(msg)
             setSmallIcon(R.drawable.ic_cloud_upload_black_24dp)
