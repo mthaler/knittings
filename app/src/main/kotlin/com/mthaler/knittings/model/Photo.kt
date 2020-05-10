@@ -18,7 +18,7 @@ data class Photo(val id: Long, val filename: File, val knittingID: Long, val des
             filename = File(parcel.readString()),
             knittingID = parcel.readLong(),
             description = parcel.readString(),
-            preview = parcel.readParcelable(null)
+            preview = parcel.readParcelable(classLoader)
     )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
@@ -33,6 +33,8 @@ data class Photo(val id: Long, val filename: File, val knittingID: Long, val des
     override fun describeContents(): Int = 0
 
     companion object {
+
+        val classLoader = javaClass.classLoader
 
         @JvmField
         val CREATOR = object : Parcelable.Creator<Photo> {

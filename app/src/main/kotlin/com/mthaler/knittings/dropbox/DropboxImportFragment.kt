@@ -1,6 +1,7 @@
 package com.mthaler.knittings.dropbox
 
 import android.os.Bundle
+import android.os.Environment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,11 +13,14 @@ import kotlinx.android.synthetic.main.fragment_dropbox_import.*
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
+import com.mthaler.knittings.model.toDatabase
 import com.mthaler.knittings.service.JobStatus
 import com.mthaler.knittings.service.ServiceStatus
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.json.JSONObject
+import java.io.ByteArrayOutputStream
 
 class DropboxImportFragment : AbstractDropboxFragment() {
 
@@ -150,8 +154,7 @@ class DropboxImportFragment : AbstractDropboxFragment() {
                     setTitle(getString(R.string.dropbox_import_dialog_title))
                     setMessage(getString(R.string.dropbox_import_dialog_msg))
                     setPositiveButton(getString(R.string.dropbox_import_dialog_button_import)) { dialog, which ->
-                        DropboxImportService.startService(requireContext(), folderName)
-                        DropboxImportServiceManager.getInstance().updateJobStatus(JobStatus.Progress(0))
+                        readDatabase(folderName)
                     }
                     setNegativeButton(resources.getString(R.string.dialog_button_cancel)) { dialog, which -> }
                     show()
@@ -170,6 +173,23 @@ class DropboxImportFragment : AbstractDropboxFragment() {
                 setPositiveButton("OK") { dialog, which -> }
                 show()
             }
+        }
+    }
+
+    private fun readDatabase(directory: String) {
+        viewLifecycleOwner.lifecycleScope.launch {
+            val database = withContext(Dispatchers.IO) {
+                val dbxClient = DropboxClientFactory.getClient()
+                val os = ByteArrayOutputStream()
+                dbxClient.files().download("/$directory/db.json").download(os)
+                val bytes = os.toByteArray()
+                val jsonStr = String(bytes)
+                val json = JSONObject(jsonStr)
+                val externalFilesDir = requireContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+                json.toDatabase(requireContext(), externalFilesDir)
+            }
+            DropboxImportService.startService(requireContext(), directory, database)
+            DropboxImportServiceManager.getInstance().updateJobStatus(JobStatus.Progress(0))
         }
     }
 

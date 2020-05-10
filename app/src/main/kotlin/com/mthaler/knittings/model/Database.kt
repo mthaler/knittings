@@ -7,10 +7,10 @@ import java.io.Serializable
 data class Database(val knittings: List<Knitting>, val photos: List<Photo>, val categories: List<Category>, val needles: List<Needle>) : Serializable, Parcelable {
 
     private constructor(parcel: Parcel) : this(
-            knittings = parcel.readParcelableArray(null).map { it as Knitting },
-            photos = parcel.readParcelableArray(null).map { it as Photo },
-            categories = parcel.readParcelableArray(null).map { it as Category },
-            needles = parcel.readParcelableArray(null).map { it as Needle }
+            knittings = parcel.readParcelableArray(classLoader).map { it as Knitting },
+            photos = parcel.readParcelableArray(classLoader).map { it as Photo },
+            categories = parcel.readParcelableArray(classLoader).map { it as Category },
+            needles = parcel.readParcelableArray(classLoader).map { it as Needle }
     )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
@@ -23,6 +23,8 @@ data class Database(val knittings: List<Knitting>, val photos: List<Photo>, val 
     override fun describeContents(): Int = 0
 
     companion object {
+
+        val classLoader = javaClass.classLoader
 
         @JvmField
         val CREATOR = object : Parcelable.Creator<Database> {

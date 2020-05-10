@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Environment
 import android.os.IBinder
+import android.os.Parcelable
 import android.os.PowerManager
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
@@ -32,6 +33,7 @@ class DropboxImportService : Service() {
         createNotificationChannel(this, channelID, getString(R.string.dropbox_import_notification_channel_name))
 
         val directory = intent?.getStringExtra(EXTRA_DIRECTORY)!!
+        val database = intent?.getParcelableExtra<Database>(EXTRA_DATABASE)
 
         val intent = Intent(this, DropboxImportActivity::class.java).apply {
             this.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
@@ -53,7 +55,6 @@ class DropboxImportService : Service() {
                                     }
                                 }
                         try {
-                            val database = downloadDatabase(directory)
                             downloadPhotos(database, directory, pendingIntent)
                         } finally {
                             wakeLock.release()
@@ -81,15 +82,12 @@ class DropboxImportService : Service() {
         DropboxImportServiceManager.getInstance().updateServiceStatus(ServiceStatus.Stopped)
     }
 
-    private fun downloadDatabase(directory: String): Database {
+    private fun downloadPhotos(database: Database, directory: String, pendingIntent: PendingIntent) {
+        val builder = createNotificationBuilder(pendingIntent, getString(R.string.dropbox_import_notification_initial_msg))
+        val notificationManager = NotificationManagerCompat.from(this);
+        val sm = DropboxImportServiceManager.getInstance()
+        val count = database.photos.size
         val dbxClient = DropboxClientFactory.getClient()
-        val os = ByteArrayOutputStream()
-        dbxClient.files().download("/$directory/db.json").download(os)
-        val bytes = os.toByteArray()
-        val jsonStr = String(bytes)
-        val json = JSONObject(jsonStr)
-        val externalFilesDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
-        val database = json.toDatabase(this, externalFilesDir)
         // remove all existing entries from the database
         datasource.deleteAllKnittings()
         datasource.deleteAllPhotos()
@@ -108,15 +106,6 @@ class DropboxImportService : Service() {
         for (knitting in database.knittings) {
             datasource.addKnitting(knitting, manualID = true)
         }
-        return database
-    }
-
-    private fun downloadPhotos(database: Database, directory: String, pendingIntent: PendingIntent) {
-        val builder = createNotificationBuilder(pendingIntent, getString(R.string.dropbox_import_notification_initial_msg))
-        val notificationManager = NotificationManagerCompat.from(this);
-        val sm = DropboxImportServiceManager.getInstance()
-        val count = database.photos.size
-        val dbxClient = DropboxClientFactory.getClient()
         for ((index, photo) in database.photos.withIndex()) {
             // Download the file.
             val filename = "/" + directory + "/" + photo.id + "." + FileUtils.getExtension(photo.filename.name)
@@ -150,10 +139,12 @@ class DropboxImportService : Service() {
 
     companion object {
         private val EXTRA_DIRECTORY = "directory"
+        private val EXTRA_DATABASE = "database"
 
-        fun startService(context: Context, directory: String) {
+        fun startService(context: Context, directory: String, database: Database) {
             val startIntent = Intent(context, DropboxImportService::class.java)
             startIntent.putExtra(EXTRA_DIRECTORY, directory)
+            startIntent.putExtra(EXTRA_DATABASE, database as Parcelable)
             ContextCompat.startForegroundService(context, startIntent)
         }
 

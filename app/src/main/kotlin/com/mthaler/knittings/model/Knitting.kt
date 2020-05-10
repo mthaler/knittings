@@ -34,10 +34,10 @@ data class Knitting(
             finished = makeDate(parcel.readOptionalLong()),
             needleDiameter = parcel.readString(),
             size = parcel.readString(),
-            defaultPhoto = parcel.readParcelable(null),
+            defaultPhoto = parcel.readParcelable(classLoader),
             rating = parcel.readDouble(),
             duration = parcel.readLong(),
-            category = parcel.readParcelable(null),
+            category = parcel.readParcelable(classLoader),
             status = Status.values()[parcel.readInt()]
     )
 
@@ -65,6 +65,8 @@ data class Knitting(
         }
 
     companion object {
+
+        val classLoader = javaClass.classLoader
 
         val EMPTY = Knitting()
 
