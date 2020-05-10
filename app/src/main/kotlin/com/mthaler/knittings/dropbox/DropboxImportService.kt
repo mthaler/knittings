@@ -137,7 +137,7 @@ class DropboxImportService : Service() {
     }
 
     private fun createNotificationBuilder(pendingIntent: PendingIntent, msg: String, autoCancel: Boolean = true): NotificationCompat.Builder {
-        return NotificationCompat.Builder(this, getString(R.string.dropbox_import_notification_channel_name)).apply {
+        return NotificationCompat.Builder(this, getString(R.string.dropbox_import_notification_channel_id)).apply {
             setContentTitle(getString(R.string.dropbox_import_notification_title))
             setContentText(msg)
             setSmallIcon(R.drawable.ic_cloud_download_black_24dp)
