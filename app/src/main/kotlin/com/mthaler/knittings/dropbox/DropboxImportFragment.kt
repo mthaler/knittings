@@ -16,6 +16,7 @@ import androidx.lifecycle.lifecycleScope
 import com.mthaler.knittings.model.toDatabase
 import com.mthaler.knittings.service.JobStatus
 import com.mthaler.knittings.service.ServiceStatus
+import com.mthaler.knittings.utils.FileUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -23,8 +24,6 @@ import org.json.JSONObject
 import java.io.ByteArrayOutputStream
 
 class DropboxImportFragment : AbstractDropboxFragment() {
-
-    private var backupDirectory = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -148,7 +147,6 @@ class DropboxImportFragment : AbstractDropboxFragment() {
             dialogBuilder.setTitle("Backups")
             dialogBuilder.setItems(files) { dialog, item ->
                 val folderName = files[item]
-                backupDirectory = folderName
                 val builder = AlertDialog.Builder(requireContext())
                 with(builder) {
                     setTitle(getString(R.string.dropbox_import_dialog_title))
@@ -178,7 +176,7 @@ class DropboxImportFragment : AbstractDropboxFragment() {
 
     private fun readDatabase(directory: String) {
         viewLifecycleOwner.lifecycleScope.launch {
-            val database = withContext(Dispatchers.IO) {
+            val (database, idsFromPhotoFiles) = withContext(Dispatchers.IO) {
                 val dbxClient = DropboxClientFactory.getClient()
                 val os = ByteArrayOutputStream()
                 dbxClient.files().download("/$directory/db.json").download(os)
@@ -186,10 +184,31 @@ class DropboxImportFragment : AbstractDropboxFragment() {
                 val jsonStr = String(bytes)
                 val json = JSONObject(jsonStr)
                 val externalFilesDir = requireContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES)
-                json.toDatabase(requireContext(), externalFilesDir)
+                val database = json.toDatabase(requireContext(), externalFilesDir)
+                val entries = dbxClient.files().listFolder("/$directory").entries
+                val ids = entries.filter { it.name != "db.json" }.map { FileUtils.getFilenameWithoutExtension(it.name).toLong() }.toHashSet()
+                Pair(database, ids)
             }
-            DropboxImportService.startService(requireContext(), directory, database)
-            DropboxImportServiceManager.getInstance().updateJobStatus(JobStatus.Progress(0))
+            val ids = database.photos.map { it.id}.toHashSet()
+            val missingPhotos = ids - idsFromPhotoFiles
+            if (missingPhotos.size > 0) {
+                val builder = AlertDialog.Builder(requireContext())
+                with(builder) {
+                    setTitle("Incomplete Dropbox Export")
+                    setMessage("Incomplete Dropbox Export, ${missingPhotos.size} photos missing. Do you want to import it anyway?")
+                    setPositiveButton("Import") { dialog, which ->
+                        val filteredPhotos = database.photos.filterNot{ missingPhotos.contains(it.id) }
+                        val filteredDatabase = database.copy(photos = filteredPhotos)
+                        DropboxImportService.startService(requireContext(), directory, filteredDatabase)
+                        DropboxImportServiceManager.getInstance().updateJobStatus(JobStatus.Progress(0))
+                    }
+                    setNegativeButton("Cancel") { dialog, which ->}
+                    show()
+                }
+            } else {
+                DropboxImportService.startService(requireContext(), directory, database)
+                DropboxImportServiceManager.getInstance().updateJobStatus(JobStatus.Progress(0))
+            }
         }
     }
 
