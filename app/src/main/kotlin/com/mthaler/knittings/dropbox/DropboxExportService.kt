@@ -42,6 +42,7 @@ class DropboxExportService : Service() {
         startForeground(1, initialNotification)
 
         GlobalScope.launch {
+            val dir = createDateTimeDirectoryName(Date())
             val cancelled = withContext(Dispatchers.IO) {
                 val wakeLock: PowerManager.WakeLock =
                         (getSystemService(Context.POWER_SERVICE) as PowerManager).run {
@@ -50,7 +51,7 @@ class DropboxExportService : Service() {
                             }
                         }
                 try {
-                    upload(pendingIntent)
+                    upload(dir, pendingIntent)
                 } finally {
                     wakeLock.release()
                 }
@@ -59,7 +60,7 @@ class DropboxExportService : Service() {
             if (cancelled) {
                 val n = createNotificationBuilder(pendingIntent, getString(R.string.dropbox_export_notification_cancelled_msg), false).build()
                 nm.notify(1, n)
-                DropboxExportServiceManager.getInstance().updateJobStatus(JobStatus.Cancelled("Dropbox export canceled"))
+                DropboxExportServiceManager.getInstance().updateJobStatus(JobStatus.Cancelled(getString(R.string.dropbox_export_notification_cancelled_msg), dir))
             } else {
                 val n = createNotificationBuilder(pendingIntent, getString(R.string.dropbox_export_notification_done_msg), false).build()
                 nm.notify(1, n)
@@ -76,7 +77,7 @@ class DropboxExportService : Service() {
         return null
     }
 
-    private fun upload(pendingIntent: PendingIntent): Boolean {
+    private fun upload(dir: String, pendingIntent: PendingIntent): Boolean {
         val builder = createNotificationBuilder(pendingIntent, getString(R.string.dropbox_export_notification_initial_msg))
         val dbxClient = DropboxClientFactory.getClient()
         val notificationManager = NotificationManagerCompat.from(this);
@@ -90,7 +91,6 @@ class DropboxExportService : Service() {
         val dbInputStream = ByteArrayInputStream(s.toByteArray())
 
         // create directory containing current date & time
-        val dir = createDateTimeDirectoryName(Date())
         dbxClient.files().createFolderV2("/$dir")
 
         // upload database to dropbox

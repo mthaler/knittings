@@ -30,6 +30,10 @@
     <string name="dropbox_export_cancel_dialog_message">Do you really want to cancel the dropbox export?</string>
     <string name="dropbox_export_cancel_dialog_ok_button">Cancel export</string>
 
+    <string name="dropbox_export_cancelled_dialog_title">Dropbox export cancelled</string>
+    <string name="dropbox_export_cancelled_dialog_msg">Do you want to delete incomplete export from Dropbox?</string>
+    <string name="dropbox_export_cancelled_dialog_ok_button">Delete</string>
+
     <string name="dropbox_import_dialog_title">Import from Dropbox</string>
     <string name="dropbox_import_dialog_msg">Do you really want to import from Dropbox? This will delete all existing data!</string>
     <string name="dropbox_import_dialog_button_import">Import</string>

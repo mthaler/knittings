@@ -2,6 +2,7 @@ package com.mthaler.knittings.dropbox
 
 import android.app.AlertDialog
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,7 +13,6 @@ import com.dropbox.core.android.Auth
 import com.dropbox.core.v2.users.FullAccount
 import com.dropbox.core.v2.users.SpaceUsage
 import com.mthaler.knittings.R
-import com.mthaler.knittings.compressphotos.CompressPhotosViewModel
 import com.mthaler.knittings.service.JobStatus
 import com.mthaler.knittings.service.ServiceStatus
 import com.mthaler.knittings.utils.Format
@@ -101,12 +101,30 @@ class DropboxExportFragment : AbstractDropboxFragment() {
                     progressBar.progress = jobStatus.value
                 }
                 is JobStatus.Cancelled -> {
+                    DropboxExportServiceManager.getInstance().cancelled = false
                     export_button.isEnabled = true
                     export_title.visibility = View.VISIBLE
                     progressBar.visibility = View.GONE
                     cancel_button.visibility = View.GONE
                     result.visibility = View.VISIBLE
                     result.text = jobStatus.msg
+                    when (jobStatus.data) {
+                        is String -> {
+                            val builder = AlertDialog.Builder(requireContext())
+                            with(builder) {
+                                setTitle(R.string.dropbox_export_cancelled_dialog_title)
+                                setMessage(R.string.dropbox_export_cancelled_dialog_msg)
+                                setPositiveButton(R.string.dropbox_export_cancelled_dialog_ok_button) { dialog, which ->
+                                    viewLifecycleOwner.lifecycleScope.launch {
+                                        withContext(Dispatchers.IO) {
+                                            DropboxClientFactory.getClient().files().deleteV2("/${jobStatus.data}")
+                                        }
+                                    }
+                                }
+                                show()
+                            }
+                        }
+                    }
                 }
                 is JobStatus.Success -> {
                     export_button.isEnabled = true
