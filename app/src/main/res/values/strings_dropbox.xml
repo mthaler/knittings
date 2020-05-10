@@ -36,6 +36,7 @@
 
     <string name="dropbox_import_dialog_title">Import from Dropbox</string>
     <string name="dropbox_import_dialog_msg">Do you really want to import from Dropbox? This will delete all existing data!</string>
+    <string name="dropbox_import_dialog_incomplete_msg">Incomplete Dropbox export, %1$s photos missing. Do you really want to import it? This will delete all existing data!</string>
     <string name="dropbox_import_dialog_button_import">Import</string>
 
     <string name="dropbox_export_notification_channel_id" translatable="false">dropbox_export_channel</string>

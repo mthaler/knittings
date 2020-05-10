@@ -146,17 +146,8 @@ class DropboxImportFragment : AbstractDropboxFragment() {
             val dialogBuilder = AlertDialog.Builder(requireContext())
             dialogBuilder.setTitle("Backups")
             dialogBuilder.setItems(files) { dialog, item ->
-                val folderName = files[item]
-                val builder = AlertDialog.Builder(requireContext())
-                with(builder) {
-                    setTitle(getString(R.string.dropbox_import_dialog_title))
-                    setMessage(getString(R.string.dropbox_import_dialog_msg))
-                    setPositiveButton(getString(R.string.dropbox_import_dialog_button_import)) { dialog, which ->
-                        readDatabase(folderName)
-                    }
-                    setNegativeButton(resources.getString(R.string.dialog_button_cancel)) { dialog, which -> }
-                    show()
-                }
+                val directory = files[item]
+                readDatabase(directory)
             }
             dialogBuilder.setNegativeButton("Cancel") { dialog, which -> }
             // Create alert dialog object via builder
@@ -194,20 +185,29 @@ class DropboxImportFragment : AbstractDropboxFragment() {
             if (missingPhotos.size > 0) {
                 val builder = AlertDialog.Builder(requireContext())
                 with(builder) {
-                    setTitle("Incomplete Dropbox Export")
-                    setMessage("Incomplete Dropbox Export, ${missingPhotos.size} photos missing. Do you want to import it anyway?")
-                    setPositiveButton("Import") { dialog, which ->
+                    setTitle(R.string.dropbox_import_dialog_title)
+                    setMessage(getString(R.string.dropbox_import_dialog_incomplete_msg, missingPhotos.size as Any))
+                    setPositiveButton(R.string.dropbox_import_dialog_button_import) { dialog, which ->
                         val filteredPhotos = database.photos.filterNot{ missingPhotos.contains(it.id) }
                         val filteredDatabase = database.copy(photos = filteredPhotos)
                         DropboxImportService.startService(requireContext(), directory, filteredDatabase)
                         DropboxImportServiceManager.getInstance().updateJobStatus(JobStatus.Progress(0))
                     }
-                    setNegativeButton("Cancel") { dialog, which ->}
+                    setNegativeButton(resources.getString(R.string.dialog_button_cancel)) { dialog, which ->}
                     show()
                 }
             } else {
-                DropboxImportService.startService(requireContext(), directory, database)
-                DropboxImportServiceManager.getInstance().updateJobStatus(JobStatus.Progress(0))
+                val builder = AlertDialog.Builder(requireContext())
+                with(builder) {
+                    setTitle(getString(R.string.dropbox_import_dialog_title))
+                    setMessage(getString(R.string.dropbox_import_dialog_msg))
+                    setPositiveButton(getString(R.string.dropbox_import_dialog_button_import)) { dialog, which ->
+                        DropboxImportService.startService(requireContext(), directory, database)
+                        DropboxImportServiceManager.getInstance().updateJobStatus(JobStatus.Progress(0))
+                    }
+                    setNegativeButton(resources.getString(R.string.dialog_button_cancel)) { dialog, which -> }
+                    show()
+                }
             }
         }
     }

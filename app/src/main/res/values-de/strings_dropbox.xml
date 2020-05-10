@@ -36,6 +36,7 @@
 
     <string name="dropbox_import_dialog_title">Aus Dropbox importieren</string>
     <string name="dropbox_import_dialog_msg">Daten wirklich aus Dropbox importieren? Alle existierenden Daten werden gelöscht!</string>
+    <string name="dropbox_import_dialog_incomplete_msg">Unvollständiger Dropbox export, %1$s Fotos nicht gefunden. Daten wirklich aus Dropbox importieren? Alle existierenden Daten werden gelöscht!</string>
     <string name="dropbox_import_dialog_button_import">Importieren</string>
 
     <string name="dropbox_export_notification_channel_name">Dropbox Export Service</string>
