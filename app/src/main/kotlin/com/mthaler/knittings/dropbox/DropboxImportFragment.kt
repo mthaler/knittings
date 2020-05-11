@@ -189,8 +189,9 @@ class DropboxImportFragment : AbstractDropboxFragment() {
                     setTitle(R.string.dropbox_import_dialog_title)
                     setMessage(getString(R.string.dropbox_import_dialog_incomplete_msg, missingPhotos.size as Any))
                     setPositiveButton(R.string.dropbox_import_dialog_button_import) { dialog, which ->
-                        val filteredPhotos = database.photos.filterNot{ missingPhotos.contains(it.id) }
-                        val filteredDatabase = database.copy(photos = filteredPhotos)
+                        val filteredPhotos = database.photos.filterNot { missingPhotos.contains(it.id) }
+                        val updatedKnittings = database.knittings.map { if (missingPhotos.contains(it.defaultPhoto?.id)) it.copy(defaultPhoto = null) else it }
+                        val filteredDatabase = database.copy(knittings = updatedKnittings, photos = filteredPhotos)
                         filteredDatabase.checkValidity()
                         DropboxImportService.startService(requireContext(), directory, filteredDatabase)
                         DropboxImportServiceManager.getInstance().updateJobStatus(JobStatus.Progress(0))
