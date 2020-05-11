@@ -2,6 +2,9 @@
 <resources>
     <string name="whats_new_title">Whats New</string>
     <string name="whats_new"><![CDATA[
+        <h3>Version 0.9.22</h3>
+        - Improved Dropbox export and import<br>
+        - Fixed cut-off status icon<br>
         <h3>Version 0.9.21</h3>
         - Rewritten Dropbox export and import<br>
         - Added possibility to compress existing photos<br>

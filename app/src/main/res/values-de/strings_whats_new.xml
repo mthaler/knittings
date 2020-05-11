@@ -2,6 +2,9 @@
 <resources>
     <string name="whats_new_title">Whats New</string>
     <string name="whats_new"><![CDATA[
+        <h3>Version 0.9.22</h3>
+        - Verbesserungen des Dropbox-Export und Import<br>
+        - Status-Icon wird nicht mehr abgeschnitten<br>
         <h3>Version 0.9.21</h3>
         - Dropbox Export und Import überarbeitet<br>
         - Es ist jetzt möglich existierende Bilder zu verkleinern und zu komprimieren<br>
