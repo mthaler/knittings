@@ -80,6 +80,7 @@ class CompressPhotosActivity : BaseActivity() {
                     result.text = jobStatus.msg
                 }
                 is JobStatus.Cancelled -> {
+                    CompressPhotosServiceManager.getInstance().cancelled = false
                     buttonStart.isEnabled = true
                     compressing_photos_title.visibility = View.VISIBLE
                     progressBar.visibility = View.GONE
