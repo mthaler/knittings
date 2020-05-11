@@ -3,6 +3,7 @@ package com.mthaler.knittings.model
 import android.os.Parcel
 import android.os.Parcelable
 import java.io.Serializable
+import java.lang.IllegalArgumentException
 
 data class Database(val knittings: List<Knitting>, val photos: List<Photo>, val categories: List<Category>, val needles: List<Needle>) : Serializable, Parcelable {
 
@@ -21,6 +22,29 @@ data class Database(val knittings: List<Knitting>, val photos: List<Photo>, val 
     }
 
     override fun describeContents(): Int = 0
+
+    fun checkValidity() {
+        checkPhotosValidity()
+        checkKnittingsValidity()
+    }
+
+    private fun checkPhotosValidity() {
+        val missing =  photos.map {it.knittingID}.toSet() - knittings.map { it.id }.toSet()
+        if (missing.size > 0) {
+            throw IllegalArgumentException("Photos reference non-existing knittings with ids $missing")
+        }
+    }
+
+    private fun checkKnittingsValidity() {
+        val missingCategories = knittings.mapNotNull { it.category }.map { it.id }.toSet() - categories.map { it.id }.toSet()
+        if (missingCategories.size > 0) {
+            throw IllegalArgumentException("Knittings reference non-existing categories with ids $missingCategories")
+        }
+        val missingPhotos = knittings.mapNotNull { it.defaultPhoto }.map { it.id }.toSet() - photos.map { it.id }.toSet()
+        if (missingPhotos.size > 0) {
+            throw IllegalArgumentException("Knittings reference non-existing photos with ids $missingPhotos")
+        }
+    }
 
     companion object {
 

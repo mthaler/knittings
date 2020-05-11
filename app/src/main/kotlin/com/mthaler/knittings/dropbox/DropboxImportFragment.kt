@@ -176,6 +176,7 @@ class DropboxImportFragment : AbstractDropboxFragment() {
                 val json = JSONObject(jsonStr)
                 val externalFilesDir = requireContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES)
                 val database = json.toDatabase(requireContext(), externalFilesDir)
+                database.checkValidity()
                 val entries = dbxClient.files().listFolder("/$directory").entries
                 val ids = entries.filter { it.name != "db.json" }.map { FileUtils.getFilenameWithoutExtension(it.name).toLong() }.toHashSet()
                 Pair(database, ids)
@@ -190,6 +191,7 @@ class DropboxImportFragment : AbstractDropboxFragment() {
                     setPositiveButton(R.string.dropbox_import_dialog_button_import) { dialog, which ->
                         val filteredPhotos = database.photos.filterNot{ missingPhotos.contains(it.id) }
                         val filteredDatabase = database.copy(photos = filteredPhotos)
+                        filteredDatabase.checkValidity()
                         DropboxImportService.startService(requireContext(), directory, filteredDatabase)
                         DropboxImportServiceManager.getInstance().updateJobStatus(JobStatus.Progress(0))
                     }
