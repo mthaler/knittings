@@ -66,7 +66,7 @@ data class Knitting(
 
     companion object {
 
-        val classLoader = javaClass.classLoader
+        val classLoader: ClassLoader = javaClass.classLoader
 
         val EMPTY = Knitting()
 

@@ -4,7 +4,6 @@ import android.app.PendingIntent
 import android.app.Service
 import android.content.Context
 import android.content.Intent
-import android.os.Environment
 import android.os.IBinder
 import android.os.Parcelable
 import android.os.PowerManager
@@ -14,15 +13,12 @@ import androidx.core.content.ContextCompat
 import com.mthaler.knittings.R
 import com.mthaler.knittings.database.datasource
 import com.mthaler.knittings.model.Database
-import com.mthaler.knittings.model.toDatabase
 import com.mthaler.knittings.service.JobStatus
 import com.mthaler.knittings.service.ServiceStatus
 import com.mthaler.knittings.utils.FileUtils
 import com.mthaler.knittings.utils.PictureUtils
 import com.mthaler.knittings.utils.createNotificationChannel
 import kotlinx.coroutines.*
-import org.json.JSONObject
-import java.io.ByteArrayOutputStream
 import java.io.FileOutputStream
 
 class DropboxImportService : Service() {
@@ -84,7 +80,7 @@ class DropboxImportService : Service() {
 
     private fun downloadPhotos(database: Database, directory: String, pendingIntent: PendingIntent) {
         val builder = createNotificationBuilder(pendingIntent, getString(R.string.dropbox_import_notification_initial_msg))
-        val notificationManager = NotificationManagerCompat.from(this);
+        val notificationManager = NotificationManagerCompat.from(this)
         val sm = DropboxImportServiceManager.getInstance()
         val count = database.photos.size
         val dbxClient = DropboxClientFactory.getClient()

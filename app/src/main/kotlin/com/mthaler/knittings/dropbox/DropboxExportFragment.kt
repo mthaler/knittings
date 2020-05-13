@@ -2,7 +2,6 @@ package com.mthaler.knittings.dropbox
 
 import android.app.AlertDialog
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -132,7 +131,7 @@ class DropboxExportFragment : AbstractDropboxFragment() {
                     progressBar.visibility = View.GONE
                     cancel_button.visibility = View.GONE
                     result.visibility = View.VISIBLE
-                    result.text = "Dropbox export completed" //jobStatus.result
+                    result.text = jobStatus.msg
                 }
             }
         })

@@ -48,7 +48,7 @@ data class Database(val knittings: List<Knitting>, val photos: List<Photo>, val 
 
     companion object {
 
-        val classLoader = javaClass.classLoader
+        val classLoader: ClassLoader = javaClass.classLoader
 
         @JvmField
         val CREATOR = object : Parcelable.Creator<Database> {

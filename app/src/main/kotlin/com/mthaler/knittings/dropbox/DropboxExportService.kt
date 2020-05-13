@@ -73,7 +73,7 @@ class DropboxExportService : Service() {
     private fun upload(dir: String, pendingIntent: PendingIntent): Boolean {
         val builder = createNotificationBuilder(pendingIntent, getString(R.string.dropbox_export_notification_initial_msg))
         val dbxClient = DropboxClientFactory.getClient()
-        val notificationManager = NotificationManagerCompat.from(this);
+        val notificationManager = NotificationManagerCompat.from(this)
         val sm = DropboxExportServiceManager.getInstance()
         val knittings = datasource.allKnittings
         val photos = datasource.allPhotos

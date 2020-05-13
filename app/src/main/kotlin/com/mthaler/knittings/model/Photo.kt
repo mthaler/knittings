@@ -34,7 +34,7 @@ data class Photo(val id: Long, val filename: File, val knittingID: Long, val des
 
     companion object {
 
-        val classLoader = javaClass.classLoader
+        val classLoader: ClassLoader = javaClass.classLoader
 
         @JvmField
         val CREATOR = object : Parcelable.Creator<Photo> {

@@ -68,7 +68,7 @@ class CompressPhotosService : Service() {
     private suspend fun compressPhotos(pendingIntent: PendingIntent): Boolean {
         val builder = createNotificationBuilder(pendingIntent, getString(R.string.compress_photos_notification_initial_msg))
         val sm = CompressPhotosServiceManager.getInstance()
-        val notificationManager = NotificationManagerCompat.from(this);
+        val notificationManager = NotificationManagerCompat.from(this)
         val photos = datasource.allPhotos
         val photosToCompress = photos.filter {
             it.filename.exists() && it.filename.length() > 350 * 1024
