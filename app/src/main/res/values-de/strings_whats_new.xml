@@ -2,6 +2,9 @@
 <resources>
     <string name="whats_new_title">Whats New</string>
     <string name="whats_new"><![CDATA[
+         <h3>Version 0.9.23</h3>
+        - Fotos werden nur durch komprimierte Fotos ersetzt wenn sie kleiner sind<br>
+        - Dropbox Export prüft beim Export ob Fotos existieren<br>
         <h3>Version 0.9.22</h3>
         - Verbesserungen des Dropbox-Export und Import<br>
         - Status-Icon wird nicht mehr abgeschnitten<br>
