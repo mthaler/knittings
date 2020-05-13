@@ -92,12 +92,18 @@ object TakePhotoDialog {
     suspend fun handleTakePhotoResult(context: Context, knittingID: Long, file: File) {
         // add photo to database
         val compressed = PictureUtils.compress(context, file)
-        if (!file.delete()) {
-            error("Could not delete $file")
-        }
-        FileUtils.copy(compressed, file)
-        if (!compressed.delete()) {
-            error("Could not delete $compressed")
+        if (compressed.length() < file.length()) {
+            if (!file.delete()) {
+                error("Could not delete $file")
+            }
+            FileUtils.copy(compressed, file)
+            if (!compressed.delete()) {
+                error("Could not delete $compressed")
+            }
+        } else {
+            if (!compressed.delete()) {
+                error("Could not delete $compressed")
+            }
         }
         val orientation = PictureUtils.getOrientation(file.absolutePath)
         val preview = PictureUtils.decodeSampledBitmapFromPath(file.absolutePath, 200, 200)
@@ -130,12 +136,18 @@ object TakePhotoDialog {
         val imageUri = data.data
         PictureUtils.copy(imageUri, file, context)
         val compressed = PictureUtils.compress(context, file)
-        if (!file.delete()) {
-            error("Could not delete $file")
-        }
-        FileUtils.copy(compressed, file)
-        if (!compressed.delete()) {
-            error("Could not delete $compressed")
+        if (compressed.length() < file.length()) {
+            if (!file.delete()) {
+                error("Could not delete $file")
+            }
+            FileUtils.copy(compressed, file)
+            if (!compressed.delete()) {
+                error("Could not delete $compressed")
+            }
+        } else {
+            if (!compressed.delete()) {
+                error("Could not delete $compressed")
+            }
         }
         val orientation = PictureUtils.getOrientation(file.absolutePath)
         val preview = PictureUtils.decodeSampledBitmapFromPath(file.absolutePath, 200, 200)
