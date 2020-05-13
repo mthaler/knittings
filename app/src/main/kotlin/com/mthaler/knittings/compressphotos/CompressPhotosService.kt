@@ -81,12 +81,18 @@ class CompressPhotosService : Service() {
             val progress = (index / count.toDouble() * 100).toInt()
             val file = photo.filename
             val compressed = PictureUtils.compress(this@CompressPhotosService, file)
-            if (!file.delete()) {
-                error("Could not delete $file")
-            }
-            FileUtils.copy(compressed, file)
-            if (!compressed.delete()) {
-                error("Could not delete $file")
+            if (compressed.length() < file.length()) {
+                if (!file.delete()) {
+                    error("Could not delete $file")
+                }
+                FileUtils.copy(compressed, file)
+                if (!compressed.delete()) {
+                    error("Could not delete $compressed")
+                }
+            } else {
+                if (!compressed.delete()) {
+                    error("Could not delete $compressed")
+                }
             }
             builder.setProgress(100, progress, false)
             notificationManager.notify(1, builder.build())
