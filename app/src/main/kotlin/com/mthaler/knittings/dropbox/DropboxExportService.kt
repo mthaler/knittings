@@ -75,17 +75,13 @@ class DropboxExportService : Service() {
         val dbxClient = DropboxClientFactory.getClient()
         val notificationManager = NotificationManagerCompat.from(this)
         val sm = DropboxExportServiceManager.getInstance()
-        val knittings = datasource.allKnittings
-        val photos = datasource.allPhotos
-        val categories = datasource.allCategories
-        val needles = datasource.allNeedles
-        val database = Database(knittings, photos, categories, needles)
         // create directory containing current date & time
         dbxClient.files().createFolderV2("/$dir")
+        val database = checkDatabase(createDatabase())
         uploadDatabase(dbxClient, dir, database)
         // upload photos to dropbox
-        val count = photos.size
-        for ((index, photo) in photos.withIndex()) {
+        val count = database.photos.size
+        for ((index, photo) in database.photos.withIndex()) {
             if (sm.cancelled) {
                 return true
             }
@@ -96,6 +92,23 @@ class DropboxExportService : Service() {
             sm.updateJobStatus(JobStatus.Progress(progress))
         }
         return false
+    }
+
+    private fun createDatabase(): Database {
+        val knittings = datasource.allKnittings
+        val photos = datasource.allPhotos
+        val categories = datasource.allCategories
+        val needles = datasource.allNeedles
+        return Database(knittings, photos, categories, needles)
+    }
+
+    private fun checkDatabase(database: Database): Database {
+        val filteredPhotos = database.photos.filter { it.filename.exists() }
+        val removedPhotos = database.photos.map { it.id }.toSet() - filteredPhotos.map { it.id}.toSet()
+        val updatedKnittings = database.knittings.map { if (removedPhotos.contains(it.defaultPhoto?.id)) it.copy(defaultPhoto = null) else it }
+        val filteredDatabase = database.copy(knittings = updatedKnittings, photos = filteredPhotos)
+        filteredDatabase.checkValidity()
+        return filteredDatabase
     }
 
     private fun uploadDatabase(dbxClient: DbxClientV2, dir: String, database: Database) {
