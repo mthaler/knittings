@@ -9,10 +9,12 @@ import android.os.PowerManager
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
+import com.dropbox.core.v2.DbxClientV2
 import com.dropbox.core.v2.files.WriteMode
 import com.mthaler.knittings.R
 import com.mthaler.knittings.database.datasource
 import com.mthaler.knittings.model.Database
+import com.mthaler.knittings.model.Photo
 import com.mthaler.knittings.model.toJSON
 import com.mthaler.knittings.service.JobStatus
 import com.mthaler.knittings.utils.FileUtils.createDateTimeDirectoryName
@@ -56,16 +58,7 @@ class DropboxExportService : Service() {
                     wakeLock.release()
                 }
             }
-            val nm = NotificationManagerCompat.from(this@DropboxExportService)
-            if (cancelled) {
-                val n = createNotificationBuilder(pendingIntent, getString(R.string.dropbox_export_notification_cancelled_msg), false).build()
-                nm.notify(1, n)
-                DropboxExportServiceManager.getInstance().updateJobStatus(JobStatus.Cancelled(getString(R.string.dropbox_export_notification_cancelled_msg), dir))
-            } else {
-                val n = createNotificationBuilder(pendingIntent, getString(R.string.dropbox_export_notification_done_msg), false).build()
-                nm.notify(1, n)
-                DropboxExportServiceManager.getInstance().updateJobStatus(JobStatus.Success())
-            }
+            onUploadCompleted(dir, cancelled, pendingIntent)
             stopForeground(false)
             stopSelf()
         }
@@ -86,34 +79,53 @@ class DropboxExportService : Service() {
         val photos = datasource.allPhotos
         val categories = datasource.allCategories
         val needles = datasource.allNeedles
-        val dbJSON = Database(knittings, photos, categories, needles).toJSON()
-        val s = dbJSON.toString(2)
-        val dbInputStream = ByteArrayInputStream(s.toByteArray())
-
+        val database = Database(knittings, photos, categories, needles)
         // create directory containing current date & time
         dbxClient.files().createFolderV2("/$dir")
-
-        // upload database to dropbox
-        dbxClient.files().uploadBuilder("/$dir/db.json") // Path in the user's Dropbox to save the file.
-                .withMode(WriteMode.OVERWRITE) // always overwrite existing file
-                .uploadAndFinish(dbInputStream)
-
+        uploadDatabase(dbxClient, dir, database)
         // upload photos to dropbox
         val count = photos.size
         for ((index, photo) in photos.withIndex()) {
             if (sm.cancelled) {
                 return true
             }
-            val inputStream = FileInputStream(photo.filename)
-            dbxClient.files().uploadBuilder("/" + dir + "/" + photo.id + "." + getExtension(photo.filename.name)) // Path in the user's Dropbox to save the file.
-                    .withMode(WriteMode.OVERWRITE) // always overwrite existing file
-                    .uploadAndFinish(inputStream)
+            uploadPhoto(dbxClient, dir, photo)
             val progress = (index / count.toFloat() * 100).toInt()
             builder.setProgress(100, progress, false)
             notificationManager.notify(1, builder.build())
             sm.updateJobStatus(JobStatus.Progress(progress))
         }
         return false
+    }
+
+    private fun uploadDatabase(dbxClient: DbxClientV2, dir: String, database: Database) {
+        val dbJSON = database.toJSON()
+        val s = dbJSON.toString(2)
+        val dbInputStream = ByteArrayInputStream(s.toByteArray())
+        // upload database to dropbox
+        dbxClient.files().uploadBuilder("/$dir/db.json") // Path in the user's Dropbox to save the file.
+                .withMode(WriteMode.OVERWRITE) // always overwrite existing file
+                .uploadAndFinish(dbInputStream)
+    }
+
+    private fun uploadPhoto(dbxClient: DbxClientV2, dir: String, photo: Photo) {
+        val inputStream = FileInputStream(photo.filename)
+        dbxClient.files().uploadBuilder("/" + dir + "/" + photo.id + "." + getExtension(photo.filename.name)) // Path in the user's Dropbox to save the file.
+                .withMode(WriteMode.OVERWRITE) // always overwrite existing file
+                .uploadAndFinish(inputStream)
+    }
+
+    private fun onUploadCompleted(dir: String, cancelled: Boolean, pendingIntent: PendingIntent) {
+        val nm = NotificationManagerCompat.from(this@DropboxExportService)
+        if (cancelled) {
+            val n = createNotificationBuilder(pendingIntent, getString(R.string.dropbox_export_notification_cancelled_msg), false).build()
+            nm.notify(1, n)
+            DropboxExportServiceManager.getInstance().updateJobStatus(JobStatus.Cancelled(getString(R.string.dropbox_export_notification_cancelled_msg), dir))
+        } else {
+            val n = createNotificationBuilder(pendingIntent, getString(R.string.dropbox_export_notification_done_msg), false).build()
+            nm.notify(1, n)
+            DropboxExportServiceManager.getInstance().updateJobStatus(JobStatus.Success())
+        }
     }
 
     private fun createNotificationBuilder(pendingIntent: PendingIntent, msg: String, autoCancel: Boolean = true): NotificationCompat.Builder {
