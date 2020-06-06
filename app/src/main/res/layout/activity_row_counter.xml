@@ -20,4 +20,17 @@
             app:popupTheme="@style/AppTheme.PopupOverlay"
             app:title="Row Counter" />
     </com.google.android.material.appbar.AppBarLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="16dp"
+        android:orientation="vertical"
+        android:layout_marginTop="?attr/actionBarSize">
+        <Button
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:text="+"
+            android:background="@drawable/circular_button"/>
+    </LinearLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
