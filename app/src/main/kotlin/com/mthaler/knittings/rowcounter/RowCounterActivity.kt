@@ -29,8 +29,8 @@ class RowCounterActivity : AppCompatActivity() {
 
         val viewModel = ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory.getInstance(application)).get(RowCounterViewModel::class.java)
         viewModel.init(id)
-        viewModel.knitting.observe(this, Observer { knitting ->
-            textViewRows.setText(knitting.totalRows.toString())
+        viewModel.rows.observe(this, Observer { rows ->
+            textViewRows.setText(rows.totalRows.toString())
         })
 
         val plusButton = findViewById<Button>(R.id.button_plus)

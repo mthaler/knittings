@@ -12,7 +12,7 @@ object KnittingTable {
 
     val Columns = arrayOf(Cols.ID, Cols.TITLE, Cols.DESCRIPTION, Cols.STARTED, Cols.FINISHED,
             Cols.NEEDLE_DIAMETER, Cols.SIZE, Cols.DEFAULT_PHOTO_ID, Cols.RATING, Cols.DURATION,
-            Cols.CATEGORY_ID, Cols.STATUS, Cols.TOTAL_ROWS)
+            Cols.CATEGORY_ID, Cols.STATUS)
 
     object Cols {
         val ID = "_id"
@@ -27,7 +27,6 @@ object KnittingTable {
         val DURATION = "duration"
         val CATEGORY_ID = "category_ID"
         val STATUS = "status"
-        val TOTAL_ROWS = "total_rows"
     }
 
     fun create(db: SQLiteDatabase) {
@@ -44,7 +43,6 @@ object KnittingTable {
                 "${Cols.DURATION} $INTEGER $NOT_NULL ${DEFAULT("0")}, " +
                 "${Cols.CATEGORY_ID} $INTEGER, " +
                 "${Cols.STATUS} $TEXT $NOT_NULL, " +
-                "${Cols.TOTAL_ROWS} $INTEGER $NOT_NULL ${DEFAULT("0")}, " +
                 "${FOREIGN_KEY(Cols.DEFAULT_PHOTO_ID, PhotoTable.PHOTOS, PhotoTable.Cols.ID)}, " +
                 "${FOREIGN_KEY(Cols.CATEGORY_ID, CategoryTable.CATEGORY, CategoryTable.Cols.ID)} )"
         db.execSQL(CREATE_KNITTING_TABLE)
@@ -53,7 +51,6 @@ object KnittingTable {
     val SQL_ADD_DURATION = "ALTER TABLE " + KNITTINGS + " ADD COLUMN " + Cols.DURATION + " INTEGER NOT NULL DEFAULT 0"
     val SQL_ADD_CATEGORY = "ALTER TABLE " + KNITTINGS + " ADD COLUMN " + Cols.CATEGORY_ID + " INTEGER"
     val SQL_ADD_STATUS = "ALTER TABLE " + KNITTINGS + " ADD COLUMN " + Cols.STATUS + " TEXT"
-    val SQL_ADD_TOTAL_ROWS = "ALTER TABLE " + KNITTINGS + " ADD COLUMN " + Cols.TOTAL_ROWS + " INTEGER NOT NULL DEFAULT 0"
 
     fun createContentValues(knitting: Knitting, manualID: Boolean = false): ContentValues {
         val values = ContentValues()
@@ -81,7 +78,6 @@ object KnittingTable {
             values.putNull(Cols.CATEGORY_ID)
         }
         values.put(Cols.STATUS, knitting.status.name)
-        values.put(Cols.TOTAL_ROWS, knitting.totalRows)
         return values
     }
 }

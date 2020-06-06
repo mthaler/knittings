@@ -23,8 +23,7 @@ data class Knitting(
     val rating: Double = 0.0,
     val duration: Long = 0L,
     val category: Category? = null,
-    val status: Status = Status.PLANNED,
-    val totalRows: Int = 0
+    val status: Status = Status.PLANNED
 ) : Serializable, Parcelable {
 
     private constructor(parcel: Parcel) : this(
@@ -39,8 +38,7 @@ data class Knitting(
             rating = parcel.readDouble(),
             duration = parcel.readLong(),
             category = parcel.readParcelable(classLoader),
-            status = Status.values()[parcel.readInt()],
-            totalRows = parcel.readInt()
+            status = Status.values()[parcel.readInt()]
     )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
@@ -56,7 +54,6 @@ data class Knitting(
         parcel.writeLong(duration)
         parcel.writeParcelable(category, 0)
         parcel.writeInt(status.ordinal)
-        parcel.writeInt(totalRows)
     }
 
     override fun describeContents(): Int = 0

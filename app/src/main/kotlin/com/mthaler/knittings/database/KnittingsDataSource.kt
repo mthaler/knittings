@@ -8,13 +8,11 @@ import java.io.File
 import java.util.ArrayList
 import java.util.Date
 import androidx.fragment.app.Fragment
-import com.mthaler.knittings.database.table.CategoryTable
-import com.mthaler.knittings.database.table.KnittingTable
-import com.mthaler.knittings.database.table.PhotoTable
+import com.mthaler.knittings.database.table.*
 import com.mthaler.knittings.database.table.CategoryTable.cursorToCategory
-import com.mthaler.knittings.database.table.NeedleTable
 import com.mthaler.knittings.database.table.PhotoTable.cursorToPhoto
 import com.mthaler.knittings.database.table.NeedleTable.cursorToNeedle
+import com.mthaler.knittings.database.table.RowsTable.cursorToRows
 import com.mthaler.knittings.model.*
 import java.lang.Exception
 
@@ -23,11 +21,6 @@ class KnittingsDataSource private constructor(context: Context) : AbstractObserv
     private val context: Context = context.applicationContext
     private val dbHelper: KnittingDatabaseHelper
 
-    /**
-     * Returns all knittings from the database
-     *
-     * @return all knittings from database
-     */
     override val allKnittings: ArrayList<Knitting>
         @Synchronized
         get() = dbHelper.readableDatabase.use { database ->
@@ -45,11 +38,6 @@ class KnittingsDataSource private constructor(context: Context) : AbstractObserv
             return knittings
         }
 
-    /**
-     * Returns all knittings from the database
-     *
-     * @return all knittings from database
-     */
     override val allPhotos: ArrayList<Photo>
         @Synchronized
         get() = dbHelper.readableDatabase.use { database ->
@@ -67,11 +55,6 @@ class KnittingsDataSource private constructor(context: Context) : AbstractObserv
             return photos
         }
 
-    /**
-     * Returns all knittings from the database
-     *
-     * @return all knittings from database
-     */
     val allCategories: ArrayList<Category>
         @Synchronized
         get() = dbHelper.readableDatabase.use { database ->
@@ -89,11 +72,6 @@ class KnittingsDataSource private constructor(context: Context) : AbstractObserv
             return categories
         }
 
-    /**
-     * Returns all needles from the database
-     *
-     * @return all needles from database
-     */
     val allNeedles: ArrayList<Needle>
         @Synchronized
         get() = dbHelper.readableDatabase.use { database ->
@@ -115,12 +93,6 @@ class KnittingsDataSource private constructor(context: Context) : AbstractObserv
         dbHelper = context.database
     }
 
-    /**
-     * Adds the given knitting to the database
-     *
-     * @param knitting knitting that should be added to the database
-     * @param manualID: use knitting ID instead of auto-imcremented id
-     */
     @Synchronized
     override fun addKnitting(knitting: Knitting, manualID: Boolean): Knitting {
         dbHelper.writableDatabase.use { database ->
@@ -136,12 +108,6 @@ class KnittingsDataSource private constructor(context: Context) : AbstractObserv
         }
     }
 
-    /**
-     * Updates a knitting in the database
-     *
-     * @param knitting knitting that should be updated
-     * @return updated knitting
-     */
     @Synchronized
     override fun updateKnitting(knitting: Knitting): Knitting {
         val result = updateKnittingImpl(knitting)
@@ -165,20 +131,12 @@ class KnittingsDataSource private constructor(context: Context) : AbstractObserv
         }
     }
 
-    /**
-     * Deletes the given knitting from the database. All photos for the deleted knitting are also deleted
-     *
-     * @param knitting knitting that should be deleted
-     */
     @Synchronized
     override fun deleteKnitting(knitting: Knitting) {
         deleteKnittingImpl(knitting)
         notifyObservers()
     }
 
-    /**
-     * Deletes all knittings from the database
-     */
     @Synchronized
     override fun deleteAllKnittings() {
         for (knitting in allKnittings) {
@@ -197,12 +155,6 @@ class KnittingsDataSource private constructor(context: Context) : AbstractObserv
         }
     }
 
-    /**
-     * Gets the knitting with the given id from the database
-     *
-     * @param id id of the knitting that should be read from database
-     * @return knitting for the given id
-     */
     @Synchronized
     override fun getKnitting(id: Long): Knitting {
         Log.d(TAG, "Getting knitting for id $id")
@@ -222,12 +174,6 @@ class KnittingsDataSource private constructor(context: Context) : AbstractObserv
         return if (externalFilesDir != null) File(externalFilesDir, knitting.photoFilename) else null
     }
 
-    /**
-     * Gets the photo with the given id from the database
-     *
-     * @param id id of the photo that should be read from database
-     * @return photo for the given id
-     */
     @Synchronized
     override fun getPhoto(id: Long): Photo {
         Log.d(TAG, "Getting photo for id $id")
@@ -241,12 +187,6 @@ class KnittingsDataSource private constructor(context: Context) : AbstractObserv
         }
     }
 
-    /**
-     * Get all photos for the given knitting
-     *
-     * @param knitting knitting to get photos for
-     * @return list of photos for the given knitting
-     */
     @Synchronized
     override fun getAllPhotos(knitting: Knitting): ArrayList<Photo> {
         dbHelper.readableDatabase.use { database ->
@@ -267,12 +207,6 @@ class KnittingsDataSource private constructor(context: Context) : AbstractObserv
         }
     }
 
-    /**
-     * Adds the given photo to the database
-     *
-     * @param photo photo that should be added to the database
-     * @param manualID: use photo ID instead of auto-imcremented id
-     */
     @Synchronized
     override fun addPhoto(photo: Photo, manualID: Boolean): Photo {
         dbHelper.writableDatabase.use { database ->
@@ -288,12 +222,6 @@ class KnittingsDataSource private constructor(context: Context) : AbstractObserv
         }
     }
 
-    /**
-     * Updates a photo in the database
-     *
-     * @param photo photo that should be updated
-     * @return updated photo
-     */
     @Synchronized
     override fun updatePhoto(photo: Photo): Photo {
         Log.d(TAG, "Updating photo $photo")
@@ -312,11 +240,6 @@ class KnittingsDataSource private constructor(context: Context) : AbstractObserv
         }
     }
 
-    /**
-     * Deletes the given photo from the database. The photo file is also deleted.
-     *
-     * @param photo photo that should be deleted
-     */
     @Synchronized
     override fun deletePhoto(photo: Photo) {
         val knitting = getKnitting(photo.knittingID)
@@ -332,11 +255,6 @@ class KnittingsDataSource private constructor(context: Context) : AbstractObserv
         notifyObservers()
     }
 
-    /**
-     * Delete all photos for the given knitting. Photo filres are also deleted.
-     *
-     * @param knitting knitting to delete photos for
-     */
     @Synchronized
     private fun deleteAllPhotos(knitting: Knitting) {
         for (photo in getAllPhotos(knitting)) {
@@ -351,9 +269,6 @@ class KnittingsDataSource private constructor(context: Context) : AbstractObserv
         }
     }
 
-    /**
-     * Deletes all photos from the database. Photo files are also deleted.
-     */
     @Synchronized
     override fun deleteAllPhotos() {
         for (photo in allPhotos) {
@@ -371,12 +286,6 @@ class KnittingsDataSource private constructor(context: Context) : AbstractObserv
         }
     }
 
-    /**
-     * Gets the category with the given id from the database
-     *
-     * @param id id of the category that should be read from database
-     * @return category for the given id
-     */
     @Synchronized
     fun getCategory(id: Long): Category {
         Log.d(TAG, "Getting category for id $id")
@@ -390,12 +299,6 @@ class KnittingsDataSource private constructor(context: Context) : AbstractObserv
         }
     }
 
-    /**
-     * Adds the given category to the database
-     *
-     * @param category category that should be added to the database
-     * @param manualID: use cagegpry ID instead of auto-imcremented id
-     */
     @Synchronized
     fun addCategory(category: Category, manualID: Boolean = false): Category {
         dbHelper.writableDatabase.use { database ->
@@ -411,12 +314,6 @@ class KnittingsDataSource private constructor(context: Context) : AbstractObserv
         }
     }
 
-    /**
-     * Updates a photo in the database
-     *
-     * @param category category that should be updated
-     * @return updated category
-     */
     @Synchronized
     fun updateCategory(category: Category): Category {
         Log.d(TAG, "Updating category $category")
@@ -435,11 +332,6 @@ class KnittingsDataSource private constructor(context: Context) : AbstractObserv
         }
     }
 
-    /**
-     * Deletes the given category from the database
-     *
-     * @param category category that should be deleted
-     */
     @Synchronized
     fun deleteCategory(category: Category) {
         deleteCategoryImpl(category)
@@ -469,12 +361,6 @@ class KnittingsDataSource private constructor(context: Context) : AbstractObserv
         }
     }
 
-    /**
-     * Gets the category with the given id from the database
-     *
-     * @param id id of the category that should be read from database
-     * @return category for the given id
-     */
     @Synchronized
     fun getNeedle(id: Long): Needle {
         Log.d(TAG, "Getting needle for id $id")
@@ -488,12 +374,6 @@ class KnittingsDataSource private constructor(context: Context) : AbstractObserv
         }
     }
 
-    /**
-     * Adds the given needle to the database
-     *
-     * @param needle needle that should be added to the database
-     * @param manualID: use cagegpry ID instead of auto-imcremented id
-     */
     @Synchronized
     fun addNeedle(needle: Needle, manualID: Boolean = false): Needle {
         dbHelper.writableDatabase.use { database ->
@@ -509,12 +389,6 @@ class KnittingsDataSource private constructor(context: Context) : AbstractObserv
         }
     }
 
-    /**
-     * Updates a photo in the database
-     *
-     * @param needle needle that should be updated
-     * @return updated needle
-     */
     @Synchronized
     fun updateNeedle(needle: Needle): Needle {
         Log.d(TAG, "Updating needle $needle")
@@ -533,11 +407,6 @@ class KnittingsDataSource private constructor(context: Context) : AbstractObserv
         }
     }
 
-    /**
-     * Deletes the given needle from the database
-     *
-     * @param needle needle that should be deleted
-     */
     @Synchronized
     fun deleteNeedle(needle: Needle) {
         deleteNeedleImpl(needle)
@@ -562,6 +431,19 @@ class KnittingsDataSource private constructor(context: Context) : AbstractObserv
     }
 
     @Synchronized
+    fun getRows(id: Long): Rows {
+        Log.d(TAG, "Getting rows for id $id")
+        dbHelper.readableDatabase.use { database ->
+            val cursor = database.query(RowsTable.ROWS,
+                    NeedleTable.Columns, RowsTable.Cols.ID + "=" + id, null, null, null, null)
+            cursor.moveToFirst()
+            val rows = cursorToRows(cursor)
+            cursor.close()
+            return rows
+        }
+    }
+
+    @Synchronized
     private fun cursorToKnitting(cursor: Cursor): Knitting {
         val idIndex = cursor.getColumnIndex(KnittingTable.Cols.ID)
         val idTitle = cursor.getColumnIndex(KnittingTable.Cols.TITLE)
@@ -575,7 +457,6 @@ class KnittingsDataSource private constructor(context: Context) : AbstractObserv
         val idDuration = cursor.getColumnIndex(KnittingTable.Cols.DURATION)
         val idCategory = cursor.getColumnIndex(KnittingTable.Cols.CATEGORY_ID)
         val idStatus = cursor.getColumnIndex(KnittingTable.Cols.STATUS)
-        val idTotalRows = cursor.getColumnIndex(KnittingTable.Cols.TOTAL_ROWS)
 
         val id = cursor.getLong(idIndex)
         val title = cursor.getString(idTitle)
@@ -607,9 +488,8 @@ class KnittingsDataSource private constructor(context: Context) : AbstractObserv
                 Status.parse(context, statusStr)
             }
         }
-        val totalRows = cursor.getInt(idTotalRows)
         return Knitting(id, title = title, description = description, started = started, finished = finished, needleDiameter = needleDiameter,
-                size = size, rating = rating, defaultPhoto = defaultPhoto, duration = duration, category = category, status = status, totalRows = totalRows)
+                size = size, rating = rating, defaultPhoto = defaultPhoto, duration = duration, category = category, status = status)
     }
 
     @Synchronized

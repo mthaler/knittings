@@ -3,10 +3,7 @@ package com.mthaler.knittings.database
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.util.Log
-import com.mthaler.knittings.database.table.CategoryTable
-import com.mthaler.knittings.database.table.KnittingTable
-import com.mthaler.knittings.database.table.NeedleTable
-import com.mthaler.knittings.database.table.PhotoTable
+import com.mthaler.knittings.database.table.*
 
 /**
  * Database helper class that defines our tables, columns and methods to create and drop tables
@@ -70,6 +67,12 @@ class KnittingDatabaseHelper(context: Context) : ManagedSQLiteOpenHelper(context
         } catch (ex: Exception) {
             Log.e(TAG, "Could not create needle table", ex)
         }
+        try {
+            RowsTable.create(db)
+            Log.d(TAG, "Rows table created")
+        } catch (ex: Exception) {
+            Log.e(TAG, "Could not create rows table", ex)
+        }
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
@@ -123,8 +126,12 @@ class KnittingDatabaseHelper(context: Context) : ManagedSQLiteOpenHelper(context
     }
 
     private fun upgrade45(db: SQLiteDatabase) {
-        db.execSQL(KnittingTable.SQL_ADD_TOTAL_ROWS)
-        Log.i(TAG, "Added total rows column to knitting table")
+        try {
+            RowsTable.create(db)
+            Log.d(TAG, "Rows table created")
+        } catch (ex: Exception) {
+            Log.e(TAG, "Could not create rows table", ex)
+        }
     }
 }
 
