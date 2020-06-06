@@ -31,6 +31,8 @@
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:text="+"
+            android:textSize="50dp"
+            android:textColor="@color/white"
             android:background="@drawable/circular_button"/>
     </LinearLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
