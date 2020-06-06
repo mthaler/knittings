@@ -27,7 +27,6 @@ import com.mthaler.knittings.dropbox.DropboxExportActivity
 import com.mthaler.knittings.dropbox.DropboxImportActivity
 import com.mthaler.knittings.model.Status
 import com.mthaler.knittings.needle.NeedleListActivity
-import com.mthaler.knittings.rowcounter.RowCounterActivity
 import com.mthaler.knittings.settings.SettingsActivity
 import com.mthaler.knittings.whatsnew.WhatsNewDialog
 import kotlinx.android.synthetic.main.activity_main.*
@@ -35,10 +34,6 @@ import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.content_main.*
 import java.util.*
 
-/**
- * The main activity that gets displayed when the app is started. It displays a list of knitting projects.
- * The user can add new projects or edit existing ones
- */
 class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedListener, SearchView.OnQueryTextListener, SearchView.OnCloseListener {
 
     private var initialQuery: CharSequence? = null
@@ -323,9 +318,6 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
             }
             R.id.nav_edit_needles -> {
                 startActivity(NeedleListActivity.newIntent(this))
-            }
-            R.id.nav_row_counter -> {
-                startActivity(RowCounterActivity.newIntent(this))
             }
             R.id.nav_compress_photos -> {
                 startActivity(CompressPhotosActivity.newIntent(this))

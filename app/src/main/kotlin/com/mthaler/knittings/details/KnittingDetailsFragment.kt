@@ -22,6 +22,7 @@ import com.mthaler.knittings.model.Status
 import com.mthaler.knittings.photo.PhotoGalleryActivity
 import com.mthaler.knittings.photo.SquareImageView
 import com.mthaler.knittings.photo.TakePhotoDialog
+import com.mthaler.knittings.rowcounter.RowCounterActivity
 import com.mthaler.knittings.stopwatch.StopwatchActivity
 import com.mthaler.knittings.utils.PictureUtils
 import com.mthaler.knittings.utils.TimeUtils
@@ -124,6 +125,10 @@ class KnittingDetailsFragment : Fragment() {
                     requireActivity().finish()
                 }.show()
                 return true
+            }
+            R.id.menu_item_row_counter -> {
+                startActivity(RowCounterActivity.newIntent(requireContext(), knittingID))
+                true
             }
             else -> super.onOptionsItemSelected(item)
         }

@@ -26,4 +26,10 @@
         android:title="@string/show_gallery"
         android:orderInCategory="4"
         app:showAsAction="ifRoom|withText"/>
+    <item
+        android:id="@+id/menu_item_row_counter"
+        android:icon="@drawable/ic_grid_on_white_36dp"
+        android:title="Row Counter"
+        android:orderInCategory="5"
+        app:showAsAction="ifRoom|withText"/>
 </menu>
