@@ -27,6 +27,7 @@ import com.mthaler.knittings.dropbox.DropboxExportActivity
 import com.mthaler.knittings.dropbox.DropboxImportActivity
 import com.mthaler.knittings.model.Status
 import com.mthaler.knittings.needle.NeedleListActivity
+import com.mthaler.knittings.rowcounter.RowCounterActivity
 import com.mthaler.knittings.settings.SettingsActivity
 import com.mthaler.knittings.whatsnew.WhatsNewDialog
 import kotlinx.android.synthetic.main.activity_main.*
@@ -322,6 +323,9 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
             }
             R.id.nav_edit_needles -> {
                 startActivity(NeedleListActivity.newIntent(this))
+            }
+            R.id.nav_row_counter -> {
+                startActivity(RowCounterActivity.newIntent(this))
             }
             R.id.nav_compress_photos -> {
                 startActivity(CompressPhotosActivity.newIntent(this))
