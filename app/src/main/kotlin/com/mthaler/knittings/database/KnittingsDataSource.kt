@@ -575,6 +575,7 @@ class KnittingsDataSource private constructor(context: Context) : AbstractObserv
         val idDuration = cursor.getColumnIndex(KnittingTable.Cols.DURATION)
         val idCategory = cursor.getColumnIndex(KnittingTable.Cols.CATEGORY_ID)
         val idStatus = cursor.getColumnIndex(KnittingTable.Cols.STATUS)
+        val idTotalRows = cursor.getColumnIndex(KnittingTable.Cols.TOTAL_ROWS)
 
         val id = cursor.getLong(idIndex)
         val title = cursor.getString(idTitle)
@@ -606,8 +607,9 @@ class KnittingsDataSource private constructor(context: Context) : AbstractObserv
                 Status.parse(context, statusStr)
             }
         }
+        val totalRows = cursor.getInt(idTotalRows)
         return Knitting(id, title = title, description = description, started = started, finished = finished, needleDiameter = needleDiameter,
-                size = size, rating = rating, defaultPhoto = defaultPhoto, duration = duration, category = category, status = status)
+                size = size, rating = rating, defaultPhoto = defaultPhoto, duration = duration, category = category, status = status, totalRows = totalRows)
     }
 
     @Synchronized

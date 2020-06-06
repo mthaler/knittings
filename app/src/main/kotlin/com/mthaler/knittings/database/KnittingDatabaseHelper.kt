@@ -25,7 +25,7 @@ class KnittingDatabaseHelper(context: Context) : ManagedSQLiteOpenHelper(context
         } catch (_: ClassNotFoundException) {
             "knittings.db"
         }
-        val DB_VERSION = 4
+        val DB_VERSION = 5
 
         private var instance: KnittingDatabaseHelper? = null
 
@@ -83,14 +83,10 @@ class KnittingDatabaseHelper(context: Context) : ManagedSQLiteOpenHelper(context
                 upgrade23(db)
             }
             3 -> upgrade34(db)
+            4 -> upgrade45(db)
         }
     }
 
-    /**
-     * Upgrades the database from version 1 to 2
-     *
-     * @param db database
-     */
     private fun upgrade12(db: SQLiteDatabase) {
         db.execSQL(KnittingTable.SQL_ADD_DURATION)
         Log.i(TAG, "Added duration colomn to knitting table")
@@ -105,11 +101,6 @@ class KnittingDatabaseHelper(context: Context) : ManagedSQLiteOpenHelper(context
         }
     }
 
-    /**
-     * Upgrades the database from version 2 to 3
-     *
-     * @param db database
-     */
     private fun upgrade23(db: SQLiteDatabase) {
         try {
             db.execSQL(KnittingTable.SQL_ADD_STATUS)
@@ -130,8 +121,12 @@ class KnittingDatabaseHelper(context: Context) : ManagedSQLiteOpenHelper(context
         db.execSQL(NeedleTable.SQL_ADD_TYPE)
         Log.i(TAG, "Added type column to needle table")
     }
+
+    private fun upgrade45(db: SQLiteDatabase) {
+        db.execSQL(KnittingTable.SQL_ADD_TOTAL_ROWS)
+        Log.i(TAG, "Added total rows column to knitting table")
+    }
 }
 
-// Access property for Context
 val Context.database: KnittingDatabaseHelper
     get() = KnittingDatabaseHelper.getInstance(applicationContext)
