@@ -12,6 +12,7 @@ import com.mthaler.knittings.database.table.*
 import com.mthaler.knittings.database.table.CategoryTable.cursorToCategory
 import com.mthaler.knittings.database.table.PhotoTable.cursorToPhoto
 import com.mthaler.knittings.database.table.NeedleTable.cursorToNeedle
+import com.mthaler.knittings.database.table.RowsTable.ROWS
 import com.mthaler.knittings.database.table.RowsTable.cursorToRows
 import com.mthaler.knittings.model.*
 import java.lang.Exception
@@ -444,6 +445,21 @@ class KnittingsDataSource private constructor(context: Context) : AbstractObserv
     }
 
     @Synchronized
+    fun getRows(knitting: Knitting): Rows? {
+        dbHelper.readableDatabase.use { database ->
+            val whereClause = RowsTable.Cols.KNITTING_ID + " = ?"
+            val whereArgs = arrayOf(java.lang.Double.toString(knitting.id.toDouble()))
+            val cursor = database.query(RowsTable.ROWS, RowsTable.Columns, whereClause, whereArgs, null, null, null)
+            cursor.moveToFirst()
+            if (!cursor.isAfterLast) {
+                return cursorToRows(cursor)
+            } else {
+                return null
+            }
+        }
+    }
+
+    @Synchronized
     fun addRows(rows: Rows, manualID: Boolean = false): Rows {
         dbHelper.writableDatabase.use { database ->
             val values = RowsTable.createContentValues(rows, manualID)
@@ -466,7 +482,7 @@ class KnittingsDataSource private constructor(context: Context) : AbstractObserv
             database.update(RowsTable.ROWS,
                     values,
                     RowsTable.Cols.ID + "=" + rows.id, null)
-            val cursor = database.query(NeedleTable.NEEDLES,
+            val cursor = database.query(RowsTable.ROWS,
                     RowsTable.Columns, RowsTable.Cols.ID + "=" + rows.id, null, null, null, null)
             cursor.moveToFirst()
             val result = cursorToRows(cursor)

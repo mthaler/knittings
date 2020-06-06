@@ -1,7 +1,6 @@
 package com.mthaler.knittings.rowcounter
 
 import android.app.Application
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.mthaler.knittings.DatasourceViewModel
@@ -20,34 +19,41 @@ class RowCounterViewModel(application: Application) : DatasourceViewModel(applic
         if (id != knittingID) {
             knittingID = id
             viewModelScope.launch {
-                val k =  withContext(Dispatchers.IO) {
-                    datasource.getKnitting(id)
+                val r =  withContext(Dispatchers.IO) {
+                    val knitting = datasource.getKnitting(id)
+                    datasource.getRows(knitting)
                 }
-                // knitting.value = k
+                if (r != null) {
+                    rows.value = r
+                } else {
+                    val rr = datasource.addRows(Rows(-1, 0, knittingID))
+                    rows.value = rr
+                }
             }
         }
     }
 
     fun incrementTotalRows() {
-//        val k = knitting.value
-//        if (k != null) {
-//            datasource.updateKnitting(k.copy(totalRows = k.totalRows + 1))
-//        }
+        val r = rows.value
+        if (r != null) {
+            datasource.updateRows(r.copy(totalRows = r.totalRows + 1))
+        }
     }
 
     fun decrementTotalRows() {
-//        val k = knitting.value
-//        if (k != null) {
-//            datasource.updateKnitting(k.copy(totalRows = k.totalRows - 1))
-//        }
+        val r = rows.value
+        if (r != null) {
+            datasource.updateRows(r.copy(totalRows = r.totalRows - 1))
+        }
     }
 
     override fun databaseChanged() {
-//        viewModelScope.launch {
-//            val k =  withContext(Dispatchers.IO) {
-//                datasource.getKnitting(knittingID)
-//            }
-//            knitting.value = k
-//        }
+        viewModelScope.launch {
+            val r =  withContext(Dispatchers.IO) {
+                val k = datasource.getKnitting(knittingID)
+                datasource.getRows(k)
+            }
+            rows.value = r
+        }
     }
 }
