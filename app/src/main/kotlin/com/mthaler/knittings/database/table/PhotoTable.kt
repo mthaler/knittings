@@ -8,7 +8,16 @@ import com.mthaler.knittings.model.Photo
 import java.io.File
 
 object PhotoTable {
+
     val PHOTOS = "photos"
+
+    object Cols {
+        val ID = "_id"
+        val FILENAME = "filename"
+        val PREVIEW = "preview"
+        val DESCRIPTION = "description"
+        val KNITTING_ID = "knitting_id"
+    }
 
     val Columns = arrayOf(Cols.ID, Cols.FILENAME, Cols.PREVIEW, Cols.DESCRIPTION, Cols.KNITTING_ID)
 
@@ -21,14 +30,6 @@ object PhotoTable {
                 "${Cols.KNITTING_ID} $INTEGER $NOT_NULL, " +
                 "${FOREIGN_KEY(Cols.KNITTING_ID, KnittingTable.KNITTINGS, KnittingTable.Cols.ID)} )"
         db.execSQL(CREATE_PHOTO_TABLE)
-    }
-
-    object Cols {
-        val ID = "_id"
-        val FILENAME = "filename"
-        val PREVIEW = "preview"
-        val DESCRIPTION = "description"
-        val KNITTING_ID = "knitting_id"
     }
 
     fun cursorToPhoto(cursor: Cursor): Photo {
