@@ -1,8 +1,9 @@
 package com.mthaler.knittings.database.table
 
+import android.content.ContentValues
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
-import com.mthaler.knittings.model.Photo
+import com.mthaler.knittings.model.Rows
 
 object RowsTable {
 
@@ -25,7 +26,7 @@ object RowsTable {
         db.execSQL(CREATE_ROWS_TABLE)
     }
 
-    fun cursorToRows(cursor: Cursor): Photo {
+    fun cursorToRows(cursor: Cursor): Rows {
         val idIndex = cursor.getColumnIndex(Cols.ID)
         val idTotalRows = cursor.getColumnIndex(Cols.TOTAL_ROWS)
         val idKnittingIndex = cursor.getColumnIndex(PhotoTable.Cols.KNITTING_ID)
@@ -33,6 +34,16 @@ object RowsTable {
         val id = cursor.getLong(idIndex)
         val totalRows = cursor.getInt(idTotalRows)
         val knittingID = cursor.getLong(idKnittingIndex)
-        return null!!
+        return Rows(id, totalRows, knittingID)
+    }
+
+    fun createContentValues(rows: Rows, manualID: Boolean = false): ContentValues {
+        val values = ContentValues()
+        if (manualID) {
+            values.put(Cols.ID, rows.id)
+        }
+        values.put(Cols.TOTAL_ROWS, rows.totalRows)
+        values.put(PhotoTable.Cols.KNITTING_ID, rows.knittingID)
+        return values
     }
 }
