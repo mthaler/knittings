@@ -444,6 +444,21 @@ class KnittingsDataSource private constructor(context: Context) : AbstractObserv
     }
 
     @Synchronized
+    fun addRows(rows: Rows, manualID: Boolean = false): Rows {
+        dbHelper.writableDatabase.use { database ->
+            val values = RowsTable.createContentValues(rows, manualID)
+            val id = database.insert(RowsTable.ROWS, null, values)
+            val cursor = database.query(RowsTable.ROWS,
+                    RowsTable.Columns, RowsTable.Cols.ID + "=" + id, null, null, null, null)
+            cursor.moveToFirst()
+            val result = cursorToRows(cursor)
+            cursor.close()
+            notifyObservers()
+            return result
+        }
+    }
+
+    @Synchronized
     private fun cursorToKnitting(cursor: Cursor): Knitting {
         val idIndex = cursor.getColumnIndex(KnittingTable.Cols.ID)
         val idTitle = cursor.getColumnIndex(KnittingTable.Cols.TITLE)
