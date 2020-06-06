@@ -23,7 +23,8 @@
            android:checkableBehavior="none">
         <item
             android:id="@+id/nav_row_counter"
-            android:title="Row Counter" />
+            android:title="Row Counter"
+            android:icon="@drawable/ic_baseline_reorder_24"/>
     </group>
     <group
         android:id="@+id/menu_compress_photos"
