@@ -27,19 +27,31 @@
         android:padding="16dp"
         android:orientation="vertical"
         android:layout_marginTop="?attr/actionBarSize">
-        <LinearLayout
+        <GridLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:columnCount="2"
             android:orientation="horizontal">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Rows:"/>
+                android:gravity="center"
+                android:layout_gravity="fill_horizontal"
+                android:text="Total rows:"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_gravity="fill_horizontal"
+                android:text="Row on repeat:"/>
             <TextView
                 android:id="@+id/rows"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
-        </LinearLayout>
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_gravity="fill_horizontal"
+                android:textSize="36dp"/>
+        </GridLayout>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
