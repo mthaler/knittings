@@ -26,7 +26,7 @@ class RowCounterViewModel(application: Application) : DatasourceViewModel(applic
                 if (r != null) {
                     rows.value = r
                 } else {
-                    val rr = datasource.addRows(Rows(-1, 0, knittingID))
+                    val rr = datasource.addRows(Rows(-1, 0, 0, knittingID))
                     rows.value = rr
                 }
             }
