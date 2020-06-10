@@ -26,7 +26,7 @@ class RowCounterViewModel(application: Application) : DatasourceViewModel(applic
                 if (r != null) {
                     rows.value = r
                 } else {
-                    val rr = datasource.addRows(Rows(-1, 0, 0, knittingID))
+                    val rr = datasource.addRows(Rows(-1, 0, 1, knittingID))
                     rows.value = rr
                 }
             }
@@ -44,6 +44,13 @@ class RowCounterViewModel(application: Application) : DatasourceViewModel(applic
         val r = rows.value
         if (r != null) {
             datasource.updateRows(r.copy(totalRows = r.totalRows - 1))
+        }
+    }
+
+    fun setRowsPerRepeat(rowsPerRepeat: Int) {
+        val r = rows.value
+        if (r != null && r.rowsPerRepeat != rowsPerRepeat) {
+            datasource.updateRows(r.copy(rowsPerRepeat = rowsPerRepeat))
         }
     }
 

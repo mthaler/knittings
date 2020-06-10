@@ -4,13 +4,17 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.widget.Button
+import android.widget.EditText
 import android.widget.TextView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.mthaler.knittings.Extras
 import com.mthaler.knittings.R
 import kotlinx.android.synthetic.main.activity_project_count.*
+import java.lang.Exception
 
 class RowCounterActivity : AppCompatActivity() {
 
@@ -26,12 +30,34 @@ class RowCounterActivity : AppCompatActivity() {
         val id = if (savedInstanceState != null) savedInstanceState.getLong(Extras.EXTRA_KNITTING_ID) else intent.getLongExtra(Extras.EXTRA_KNITTING_ID, -1L)
 
         val textViewRows = findViewById<TextView>(R.id.rows)
+        val editTextRowsPerRepeat = findViewById<EditText>(R.id.rows_per_repeat)
 
         val viewModel = ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory.getInstance(application)).get(RowCounterViewModel::class.java)
         viewModel.init(id)
         viewModel.rows.observe(this, Observer { rows ->
             textViewRows.setText(rows.totalRows.toString())
+            editTextRowsPerRepeat.setText(rows.rowsPerRepeat.toString())
         })
+
+        editTextRowsPerRepeat.addTextChangedListener(object : TextWatcher {
+
+            override fun afterTextChanged(s: Editable?) {
+                try {
+                    if (s != null) {
+                        val t = s.toString()
+                        val n = t.toInt()
+                        viewModel.setRowsPerRepeat(n)
+                    }
+                } catch (ex: Exception) {
+
+                }
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+        })
+
 
         val plusButton = findViewById<Button>(R.id.button_plus)
         plusButton.setOnClickListener {
