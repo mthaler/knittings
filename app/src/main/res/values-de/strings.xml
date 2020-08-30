@@ -41,9 +41,6 @@
     <string name="activity_photo_gallery">Galerie</string>
     <string name="activity_project_count">Projekte Zählen</string>
 
-    <!-- date picker -->
-    <string name="date_picker_title">Datum</string>
-
     <!-- delete knittings dialog -->
     <string name="delete_knitting_dialog_title">Löschen</string>
     <string name="delete_knitting_dialog_question">%1$s wirklich löschen?</string>

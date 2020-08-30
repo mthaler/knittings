@@ -11,7 +11,7 @@ import androidx.core.app.NavUtils
 import com.mthaler.knittings.R
 import com.mthaler.knittings.category.SelectCategoryActivity
 import com.mthaler.knittings.database.datasource
-import com.mthaler.knittings.datepicker.DatePickerFragment
+import com.mthaler.dbapp.datepicker.DatePickerFragment
 import com.mthaler.knittings.model.Knitting
 import com.mthaler.knittings.utils.TimeUtils
 import java.text.DateFormat
