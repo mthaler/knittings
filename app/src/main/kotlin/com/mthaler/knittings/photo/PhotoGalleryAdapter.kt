@@ -10,9 +10,9 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.recyclerview.widget.RecyclerView
+import com.mthaler.dbapp.utils.PictureUtils
 import com.mthaler.knittings.R
 import com.mthaler.knittings.model.Photo
-import com.mthaler.knittings.utils.PictureUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext

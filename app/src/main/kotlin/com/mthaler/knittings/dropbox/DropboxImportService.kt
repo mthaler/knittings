@@ -11,12 +11,12 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import com.mthaler.dbapp.utils.FileUtils
+import com.mthaler.dbapp.utils.PictureUtils
 import com.mthaler.knittings.R
 import com.mthaler.knittings.database.datasource
 import com.mthaler.knittings.model.Database
 import com.mthaler.knittings.service.JobStatus
 import com.mthaler.knittings.service.ServiceStatus
-import com.mthaler.knittings.utils.PictureUtils
 import com.mthaler.knittings.utils.createNotificationChannel
 import kotlinx.coroutines.*
 import java.io.FileOutputStream

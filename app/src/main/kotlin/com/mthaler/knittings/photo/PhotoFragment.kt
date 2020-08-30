@@ -13,13 +13,13 @@ import android.widget.ImageView
 import com.mthaler.knittings.R
 import com.mthaler.knittings.database.datasource
 import com.mthaler.knittings.model.Photo
-import com.mthaler.knittings.utils.PictureUtils
 import com.mthaler.knittings.Extras.EXTRA_PHOTO_ID
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
 import android.preference.PreferenceManager
 import androidx.lifecycle.lifecycleScope
+import com.mthaler.dbapp.utils.PictureUtils
 import com.mthaler.knittings.DeleteDialog
 import com.mthaler.knittings.SaveChangesDialog
 import kotlinx.coroutines.Dispatchers

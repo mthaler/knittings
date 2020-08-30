@@ -14,6 +14,7 @@ import android.widget.TextView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import com.mthaler.dbapp.utils.PictureUtils
 import com.mthaler.knittings.Extras
 import com.mthaler.knittings.R
 import com.mthaler.knittings.database.datasource
@@ -24,7 +25,6 @@ import com.mthaler.knittings.photo.SquareImageView
 import com.mthaler.knittings.photo.TakePhotoDialog
 import com.mthaler.knittings.rowcounter.RowCounterActivity
 import com.mthaler.knittings.stopwatch.StopwatchActivity
-import com.mthaler.knittings.utils.PictureUtils
 import com.mthaler.knittings.utils.TimeUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
