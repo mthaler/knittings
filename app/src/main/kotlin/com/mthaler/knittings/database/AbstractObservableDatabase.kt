@@ -1,5 +1,8 @@
 package com.mthaler.knittings.database
 
+import com.mthaler.dbapp.database.DatabaseObserver
+import com.mthaler.dbapp.database.ObservableDatabase
+
 abstract class AbstractObservableDatabase : ObservableDatabase {
 
     private val observers = HashSet<DatabaseObserver>()
