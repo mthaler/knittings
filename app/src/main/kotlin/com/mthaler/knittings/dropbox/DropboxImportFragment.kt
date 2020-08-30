@@ -13,10 +13,10 @@ import kotlinx.android.synthetic.main.fragment_dropbox_import.*
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
+import com.mthaler.dbapp.utils.FileUtils
 import com.mthaler.knittings.model.toDatabase
 import com.mthaler.knittings.service.JobStatus
 import com.mthaler.knittings.service.ServiceStatus
-import com.mthaler.knittings.utils.FileUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext

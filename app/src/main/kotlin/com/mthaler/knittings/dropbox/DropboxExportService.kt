@@ -17,8 +17,8 @@ import com.mthaler.knittings.model.Database
 import com.mthaler.knittings.model.Photo
 import com.mthaler.knittings.model.toJSON
 import com.mthaler.knittings.service.JobStatus
-import com.mthaler.knittings.utils.FileUtils.createDateTimeDirectoryName
-import com.mthaler.knittings.utils.FileUtils.getExtension
+import com.mthaler.dbapp.utils.FileUtils.createDateTimeDirectoryName
+import com.mthaler.dbapp.utils.FileUtils.getExtension
 import com.mthaler.knittings.utils.createNotificationChannel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope

@@ -12,10 +12,10 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.widget.Button
 import androidx.core.content.FileProvider
+import com.mthaler.dbapp.utils.FileUtils
 import com.mthaler.knittings.R
 import com.mthaler.knittings.database.datasource
 import com.mthaler.knittings.model.Photo
-import com.mthaler.knittings.utils.FileUtils
 import com.mthaler.knittings.utils.PictureUtils
 import java.io.File
 

@@ -1,1 +1,3 @@
 include ':app'
+include ':dbapp'
+project(':dbapp').projectDir = new File(settingsDir, '../DatabaseApplication/app')
