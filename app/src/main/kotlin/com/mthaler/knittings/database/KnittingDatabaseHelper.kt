@@ -3,6 +3,7 @@ package com.mthaler.knittings.database
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.util.Log
+import com.mthaler.dbapp.database.ManagedSQLiteOpenHelper
 import com.mthaler.knittings.database.table.*
 
 /**
