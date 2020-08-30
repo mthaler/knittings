@@ -14,6 +14,7 @@ import android.widget.TextView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import com.mthaler.dbapp.ui.SquareImageView
 import com.mthaler.dbapp.utils.PictureUtils
 import com.mthaler.knittings.Extras
 import com.mthaler.knittings.R
@@ -21,7 +22,6 @@ import com.mthaler.knittings.database.datasource
 import com.mthaler.knittings.model.Knitting
 import com.mthaler.knittings.model.Status
 import com.mthaler.knittings.photo.PhotoGalleryActivity
-import com.mthaler.knittings.photo.SquareImageView
 import com.mthaler.knittings.photo.TakePhotoDialog
 import com.mthaler.knittings.rowcounter.RowCounterActivity
 import com.mthaler.knittings.stopwatch.StopwatchActivity
