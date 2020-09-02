@@ -243,7 +243,7 @@ class KnittingsDataSource private constructor(context: Context) : AbstractObserv
 
     @Synchronized
     override fun deletePhoto(photo: Photo) {
-        val knitting = getKnitting(photo.knittingID)
+        val knitting = getKnitting(photo.ownerID)
         if (knitting.defaultPhoto != null && knitting.defaultPhoto.id == photo.id) {
             val photos = getAllPhotos(knitting).filter { it.id != photo.id }.sortedBy { it.id }
             if (photos.isNotEmpty()) {

@@ -61,7 +61,7 @@ object PhotoTable {
             values.put(Cols.ID, photo.id)
         }
         values.put(Cols.FILENAME, photo.filename.absolutePath)
-        values.put(Cols.KNITTING_ID, photo.knittingID)
+        values.put(Cols.KNITTING_ID, photo.ownerID)
         values.put(Cols.DESCRIPTION, photo.description)
         val previewBytes = Photo.getBytes(photo.preview)
         if (previewBytes != null) {

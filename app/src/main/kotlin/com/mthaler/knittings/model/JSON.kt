@@ -64,7 +64,7 @@ fun Photo.toJSON(): JSONObject {
     val result = JSONObject()
     result.put("id", id)
     result.put("filename", filename.absolutePath)
-    result.put("knittingID", knittingID)
+    result.put("knittingID", ownerID)
     result.put("description", description)
     return result
 }

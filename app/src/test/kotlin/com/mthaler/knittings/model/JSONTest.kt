@@ -81,7 +81,7 @@ class JSONTest {
         val p = json.toPhoto()
         assertEquals(42, p.id)
         assertEquals(File("/tmp/photo1.jpg"), p.filename)
-        assertEquals(43, p.knittingID)
+        assertEquals(43, p.ownerID)
         assertEquals("socks", p.description)
     }
 
@@ -165,12 +165,12 @@ class JSONTest {
         val p = photos[0]
         assertEquals(42, p.id)
         assertEquals(File("/tmp/photo1.jpg"), p.filename)
-        assertEquals(43, p.knittingID)
+        assertEquals(43, p.ownerID)
         assertEquals("socks", p.description)
         val p2 = photos[1]
         assertEquals(43, p2.id)
         assertEquals(File("/tmp/photo2.jpg"), p2.filename)
-        assertEquals(44, p2.knittingID)
+        assertEquals(44, p2.ownerID)
         assertEquals("shirt", p2.description)
     }
 
@@ -280,12 +280,12 @@ class JSONTest {
         val p = db.photos[0]
         assertEquals(42, p.id)
         assertEquals(File("/tmp/photo1.jpg"), p.filename)
-        assertEquals(43, p.knittingID)
+        assertEquals(43, p.ownerID)
         assertEquals("socks", p.description)
         val p2 = db.photos[1]
         assertEquals(43, p2.id)
         assertEquals(File("/tmp/photo2.jpg"), p2.filename)
-        assertEquals(44, p2.knittingID)
+        assertEquals(44, p2.ownerID)
         assertEquals("shirt", p2.description)
     }
 }

@@ -134,7 +134,7 @@ public class KnittingsDataSourceTest {
         ArrayList<Photo> photos = new ArrayList<>();
         photos.add(photo);
         assertEquals(photos, ds.getAllPhotos());
-        Photo updated = photo.copy(photo.getId(), photo.getFilename(), photo.getKnittingID(), "updated description", photo.getPreview());
+        Photo updated = photo.copy(photo.getId(), photo.getFilename(), photo.getOwnerID(), "updated description", photo.getPreview());
         ds.updatePhoto(updated);
         ArrayList<Photo> photos2 = new ArrayList<>();
         photos2.add(updated);

@@ -11,12 +11,12 @@ import java.io.Serializable
  * The photo class represents a photo. It has an id (used in the database), a filename and an
  * optional preview that can be displayed in the knittings list
  */
-data class Photo(val id: Long, val filename: File, val knittingID: Long, val description: String = "", val preview: Bitmap? = null) : Serializable, Parcelable {
+data class Photo(val id: Long, val filename: File, val ownerID: Long, val description: String = "", val preview: Bitmap? = null) : Serializable, Parcelable {
 
     private constructor(parcel: Parcel) : this(
             id = parcel.readLong(),
             filename = File(parcel.readString()),
-            knittingID = parcel.readLong(),
+            ownerID = parcel.readLong(),
             description = parcel.readString(),
             preview = parcel.readParcelable(classLoader)
     )
@@ -24,7 +24,7 @@ data class Photo(val id: Long, val filename: File, val knittingID: Long, val des
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeLong(id)
         parcel.writeString(filename.absolutePath)
-        parcel.writeLong(knittingID)
+        parcel.writeLong(ownerID)
         parcel.writeString(description)
         parcel.writeParcelable(preview, 0)
 

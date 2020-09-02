@@ -29,7 +29,7 @@ data class Database(val knittings: List<Knitting>, val photos: List<Photo>, val 
     }
 
     private fun checkPhotosValidity() {
-        val missing =  photos.map {it.knittingID}.toSet() - knittings.map { it.id }.toSet()
+        val missing =  photos.map {it.ownerID}.toSet() - knittings.map { it.id }.toSet()
         if (missing.size > 0) {
             throw IllegalArgumentException("Photos reference non-existing knittings with ids $missing")
         }
