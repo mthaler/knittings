@@ -10,7 +10,7 @@ data class Category(val id: Long = -1, val name: String = "", val color: Int? = 
 
     private constructor(parcel: Parcel) : this(
             id = parcel.readLong(),
-            name = parcel.readString(),
+            name = parcel.readString()!!,
             color = parcel.readOptionalInt()
     )
 

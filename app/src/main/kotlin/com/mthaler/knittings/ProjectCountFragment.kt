@@ -28,7 +28,7 @@ class ProjectCountFragment : Fragment() {
         val spinCategory = v.findViewById<Spinner>(R.id.category_spinner)
         val progressBarCircle = v.findViewById<ProgressBar>(R.id.progressBarCircle)
 
-        val yearAdapter = ArrayAdapter(this.context, R.layout.my_spinner, years)
+        val yearAdapter = ArrayAdapter(requireContext(), R.layout.my_spinner, years)
         spinYear.adapter = yearAdapter
         spinYear.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(parent: AdapterView<*>?) {}
@@ -44,7 +44,7 @@ class ProjectCountFragment : Fragment() {
             }
         }
 
-        val categoryAdapter = ArrayAdapter(this.context, R.layout.my_spinner, categoryNames)
+        val categoryAdapter = ArrayAdapter(requireContext(), R.layout.my_spinner, categoryNames)
         spinCategory.adapter = categoryAdapter
         spinCategory.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(parent: AdapterView<*>?) {}

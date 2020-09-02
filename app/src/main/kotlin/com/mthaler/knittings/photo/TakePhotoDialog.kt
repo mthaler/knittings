@@ -134,7 +134,7 @@ object TakePhotoDialog {
      */
     suspend fun handleImageImportResult(context: Context, knittingID: Long, file: File, data: Intent) {
         val imageUri = data.data
-        PictureUtils.copy(imageUri, file, context)
+        PictureUtils.copy(imageUri!!, file, context)
         val compressed = PictureUtils.compress(context, file)
         if (compressed.length() < file.length()) {
             if (!file.delete()) {

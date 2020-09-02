@@ -174,7 +174,7 @@ class DropboxImportFragment : AbstractDropboxFragment() {
                 val bytes = os.toByteArray()
                 val jsonStr = String(bytes)
                 val json = JSONObject(jsonStr)
-                val externalFilesDir = requireContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+                val externalFilesDir = requireContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES)!!
                 val database = json.toDatabase(requireContext(), externalFilesDir)
                 database.checkValidity()
                 val entries = dbxClient.files().listFolder("/$directory").entries

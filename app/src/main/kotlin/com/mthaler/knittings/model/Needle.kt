@@ -19,10 +19,10 @@ data class Needle(
 
     private constructor(parcel: Parcel) : this(
             id = parcel.readLong(),
-            name = parcel.readString(),
-            description = parcel.readString(),
-            size = parcel.readString(),
-            length = parcel.readString(),
+            name = parcel.readString()!!,
+            description = parcel.readString()!!,
+            size = parcel.readString()!!,
+            length = parcel.readString()!!,
             material = NeedleMaterial.values()[parcel.readInt()],
             inUse = parcel.readBoolean(),
             type = NeedleType.values()[parcel.readInt()]

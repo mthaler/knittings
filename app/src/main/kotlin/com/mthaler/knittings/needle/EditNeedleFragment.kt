@@ -44,7 +44,7 @@ class EditNeedleFragment : Fragment() {
         editTextLength = v.findViewById(R.id.needle_length)
         spinnerMaterial = v.findViewById(R.id.needle_material)
         // Create an ArrayAdapter using the string array and a default spinner layout
-        ArrayAdapter(context, android.R.layout.simple_spinner_item, NeedleMaterial.formattedValues(v.context)).also { adapter ->
+        ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, NeedleMaterial.formattedValues(v.context)).also { adapter ->
             // Specify the layout to use when the list of choices appears
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             // Apply the adapter to the spinner
@@ -53,7 +53,7 @@ class EditNeedleFragment : Fragment() {
         checkBoxInUse = v.findViewById(R.id.needle_in_use)
         spinnerType = v.findViewById(R.id.needle_type)
         // Create an ArrayAdapter using the string array and a default spinner layout
-        ArrayAdapter(context, android.R.layout.simple_spinner_item, NeedleType.formattedValues(v.context)).also { adapter ->
+        ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, NeedleType.formattedValues(v.context)).also { adapter ->
             // Specify the layout to use when the list of choices appears
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             // Apply the adapter to the spinner

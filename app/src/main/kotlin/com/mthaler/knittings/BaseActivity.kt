@@ -15,7 +15,7 @@ open class BaseActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         sharedPref = PreferenceManager.getDefaultSharedPreferences(this)
-        val name = sharedPref.getString("theme", "default")
+        val name = sharedPref.getString("theme", "default")!!
         currentTheme = Theme.getTheme(name)
         setAppTheme(currentTheme)
     }

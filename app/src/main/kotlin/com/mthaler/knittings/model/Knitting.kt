@@ -29,12 +29,12 @@ data class Knitting(
 
     private constructor(parcel: Parcel) : this(
             id = parcel.readLong(),
-            title = parcel.readString(),
-            description = parcel.readString(),
+            title = parcel.readString()!!,
+            description = parcel.readString()!!,
             started = Date(parcel.readLong()),
             finished = makeDate(parcel.readOptionalLong()),
-            needleDiameter = parcel.readString(),
-            size = parcel.readString(),
+            needleDiameter = parcel.readString()!!,
+            size = parcel.readString()!!,
             defaultPhoto = parcel.readParcelable(classLoader),
             rating = parcel.readDouble(),
             duration = parcel.readLong(),
@@ -67,7 +67,7 @@ data class Knitting(
 
     companion object {
 
-        val classLoader: ClassLoader = javaClass.classLoader
+        val classLoader: ClassLoader = javaClass.classLoader!!
 
         val EMPTY = Knitting()
 

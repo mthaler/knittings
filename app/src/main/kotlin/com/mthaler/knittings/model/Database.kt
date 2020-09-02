@@ -9,10 +9,10 @@ import java.lang.IllegalArgumentException
 data class Database(val knittings: List<Knitting>, val photos: List<Photo>, val categories: List<Category>, val needles: List<Needle>) : Serializable, Parcelable {
 
     private constructor(parcel: Parcel) : this(
-            knittings = parcel.readParcelableArray(classLoader).map { it as Knitting },
-            photos = parcel.readParcelableArray(classLoader).map { it as Photo },
-            categories = parcel.readParcelableArray(classLoader).map { it as Category },
-            needles = parcel.readParcelableArray(classLoader).map { it as Needle }
+            knittings = parcel.readParcelableArray(classLoader)!!.map { it as Knitting },
+            photos = parcel.readParcelableArray(classLoader)!!.map { it as Photo },
+            categories = parcel.readParcelableArray(classLoader)!!.map { it as Category },
+            needles = parcel.readParcelableArray(classLoader)!!.map { it as Needle }
     )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
@@ -49,7 +49,7 @@ data class Database(val knittings: List<Knitting>, val photos: List<Photo>, val 
 
     companion object {
 
-        val classLoader: ClassLoader = javaClass.classLoader
+        val classLoader: ClassLoader = javaClass.classLoader!!
 
         @JvmField
         val CREATOR = object : Parcelable.Creator<Database> {
