@@ -47,7 +47,6 @@
     <string name="delete_knitting_dialog_delete_button">Löschen</string>
 
     <string name="rating">Bewertung:</string>
-    <string name="photo">Foto</string>
 
     <!-- take photo dialog -->
     <string name="take_photo">Foto mit Kamera aufnehmen</string>

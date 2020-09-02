@@ -46,7 +46,6 @@
     <string name="delete_knitting_dialog_delete_button">Delete</string>
 
     <string name="rating">Rating:</string>
-    <string name="photo">Photo</string>
 
     <!-- take photo dialog -->
     <string name="take_photo">Take photo</string>
