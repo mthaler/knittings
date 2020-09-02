@@ -1,7 +1,7 @@
 package com.mthaler.knittings.database
 
+import com.mthaler.dbapp.model.Photo
 import com.mthaler.knittings.model.Knitting
-import com.mthaler.knittings.model.Photo
 import java.io.File
 import java.util.ArrayList
 

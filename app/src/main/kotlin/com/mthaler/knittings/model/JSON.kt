@@ -2,6 +2,7 @@ package com.mthaler.knittings.model
 
 import android.content.Context
 import android.graphics.Color
+import com.mthaler.dbapp.model.Photo
 import com.mthaler.knittings.database.KnittingDatabaseHelper
 import com.mthaler.knittings.utils.ColorUtils
 import org.json.JSONObject

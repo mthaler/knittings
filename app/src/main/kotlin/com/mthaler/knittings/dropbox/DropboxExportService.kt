@@ -11,10 +11,10 @@ import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import com.dropbox.core.v2.DbxClientV2
 import com.dropbox.core.v2.files.WriteMode
+import com.mthaler.dbapp.model.Photo
 import com.mthaler.knittings.R
 import com.mthaler.knittings.database.datasource
 import com.mthaler.knittings.model.Database
-import com.mthaler.knittings.model.Photo
 import com.mthaler.knittings.model.toJSON
 import com.mthaler.knittings.service.JobStatus
 import com.mthaler.dbapp.utils.FileUtils.createDateTimeDirectoryName

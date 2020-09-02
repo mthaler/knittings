@@ -2,6 +2,7 @@ package com.mthaler.knittings.model
 
 import android.os.Parcel
 import android.os.Parcelable
+import com.mthaler.dbapp.model.Photo
 import java.io.Serializable
 import java.lang.IllegalArgumentException
 

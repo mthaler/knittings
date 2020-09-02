@@ -3,8 +3,8 @@ package com.mthaler.knittings.photo
 import android.app.Application
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.mthaler.dbapp.model.Photo
 import com.mthaler.knittings.DatasourceViewModel
-import com.mthaler.knittings.model.Photo
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
