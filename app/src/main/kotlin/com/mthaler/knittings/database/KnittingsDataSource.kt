@@ -8,11 +8,11 @@ import java.io.File
 import java.util.ArrayList
 import java.util.Date
 import androidx.fragment.app.Fragment
+import com.mthaler.dbapp.database.AbstractObservableDatabase
 import com.mthaler.knittings.database.table.*
 import com.mthaler.knittings.database.table.CategoryTable.cursorToCategory
 import com.mthaler.knittings.database.table.PhotoTable.cursorToPhoto
 import com.mthaler.knittings.database.table.NeedleTable.cursorToNeedle
-import com.mthaler.knittings.database.table.RowsTable.ROWS
 import com.mthaler.knittings.database.table.RowsTable.cursorToRows
 import com.mthaler.knittings.model.*
 import java.lang.Exception
