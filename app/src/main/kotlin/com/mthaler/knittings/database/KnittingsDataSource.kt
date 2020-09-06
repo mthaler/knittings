@@ -2,7 +2,6 @@ package com.mthaler.knittings.database
 
 import android.content.Context
 import android.database.Cursor
-import android.os.Environment
 import android.util.Log
 import java.io.File
 import java.util.ArrayList
@@ -24,11 +23,10 @@ object KnittingsDataSource  : AbstractObservableDatabase(), KnittingRepository, 
     private const val TAG = "KnittingsDataSource"
 
     private lateinit var context: Context
-    private lateinit var dbHelper: KnittingDatabaseHelper
 
     override val allKnittings: ArrayList<Knitting>
         @Synchronized
-        get() = dbHelper.readableDatabase.use { database ->
+        get() = context.database.readableDatabase.use { database ->
             val knittings = ArrayList<Knitting>()
             val cursor = database.query(KnittingTable.KNITTINGS, KnittingTable.Columns, null, null, null, null, null)
             cursor.moveToFirst()
@@ -45,7 +43,7 @@ object KnittingsDataSource  : AbstractObservableDatabase(), KnittingRepository, 
 
     override val allPhotos: ArrayList<Photo>
         @Synchronized
-        get() = dbHelper.readableDatabase.use { database ->
+        get() = context.database.readableDatabase.use { database ->
             val photos = ArrayList<Photo>()
             val cursor = database.query(PhotoTable.PHOTOS, PhotoTable.Columns, null, null, null, null, null)
             cursor.moveToFirst()
@@ -62,7 +60,7 @@ object KnittingsDataSource  : AbstractObservableDatabase(), KnittingRepository, 
 
     val allCategories: ArrayList<Category>
         @Synchronized
-        get() = dbHelper.readableDatabase.use { database ->
+        get() = context.database.readableDatabase.use { database ->
             val categories = ArrayList<Category>()
             val cursor = database.query(CategoryTable.CATEGORY, CategoryTable.Columns, null, null, null, null, null)
             cursor.moveToFirst()
@@ -79,7 +77,7 @@ object KnittingsDataSource  : AbstractObservableDatabase(), KnittingRepository, 
 
     val allNeedles: ArrayList<Needle>
         @Synchronized
-        get() = dbHelper.readableDatabase.use { database ->
+        get() = context.database.readableDatabase.use { database ->
             val needles = ArrayList<Needle>()
             val cursor = database.query(NeedleTable.NEEDLES, NeedleTable.Columns, null, null, null, null, null)
             cursor.moveToFirst()
@@ -96,7 +94,7 @@ object KnittingsDataSource  : AbstractObservableDatabase(), KnittingRepository, 
 
     @Synchronized
     override fun addKnitting(knitting: Knitting, manualID: Boolean): Knitting {
-        dbHelper.writableDatabase.use { database ->
+        context.database.writableDatabase.use { database ->
             val values = KnittingTable.createContentValues(knitting, manualID)
             val id = database.insert(KnittingTable.KNITTINGS, null, values)
             val cursor = database.query(KnittingTable.KNITTINGS,
@@ -118,7 +116,7 @@ object KnittingsDataSource  : AbstractObservableDatabase(), KnittingRepository, 
 
     private fun updateKnittingImpl(knitting: Knitting): Knitting {
         Log.d(TAG, "Updating knitting " + knitting + ", default photo: " + knitting.defaultPhoto)
-        dbHelper.writableDatabase.use { database ->
+        context.database.writableDatabase.use { database ->
             val values = KnittingTable.createContentValues(knitting)
             database.update(KnittingTable.KNITTINGS,
                     values,
@@ -150,7 +148,7 @@ object KnittingsDataSource  : AbstractObservableDatabase(), KnittingRepository, 
         val id = knitting.id
         // delete all photos from the database
         deleteAllPhotos(knitting)
-        dbHelper.writableDatabase.use { database ->
+        context.database.writableDatabase.use { database ->
             database.delete(KnittingTable.KNITTINGS, KnittingTable.Cols.ID + "=" + id, null)
             Log.d(TAG, "Deleted knitting $id: $knitting")
         }
@@ -159,7 +157,7 @@ object KnittingsDataSource  : AbstractObservableDatabase(), KnittingRepository, 
     @Synchronized
     override fun getKnitting(id: Long): Knitting {
         Log.d(TAG, "Getting knitting for id $id")
-        dbHelper.readableDatabase.use { database ->
+        context.database.readableDatabase.use { database ->
             val cursor = database.query(KnittingTable.KNITTINGS,
                     KnittingTable.Columns, KnittingTable.Cols.ID + "=" + id, null, null, null, null)
             cursor.moveToFirst()
@@ -172,7 +170,7 @@ object KnittingsDataSource  : AbstractObservableDatabase(), KnittingRepository, 
     @Synchronized
     override fun getPhoto(id: Long): Photo {
         Log.d(TAG, "Getting photo for id $id")
-        dbHelper.readableDatabase.use { database ->
+        context.database.readableDatabase.use { database ->
             val cursor = database.query(PhotoTable.PHOTOS,
                     PhotoTable.Columns, PhotoTable.Cols.ID + "=" + id, null, null, null, null)
             cursor.moveToFirst()
@@ -184,7 +182,7 @@ object KnittingsDataSource  : AbstractObservableDatabase(), KnittingRepository, 
 
     @Synchronized
     override fun getAllPhotos(id: Long): ArrayList<Photo> {
-        dbHelper.readableDatabase.use { database ->
+        context.database.readableDatabase.use { database ->
             val photos = ArrayList<Photo>()
             val whereClause = PhotoTable.Cols.KNITTING_ID + " = ?"
             val whereArgs = arrayOf(java.lang.Double.toString(id.toDouble()))
@@ -204,7 +202,7 @@ object KnittingsDataSource  : AbstractObservableDatabase(), KnittingRepository, 
 
     @Synchronized
     override fun addPhoto(photo: Photo, manualID: Boolean): Photo {
-        dbHelper.writableDatabase.use { database ->
+        context.database.writableDatabase.use { database ->
             val values = PhotoTable.createContentValues(photo, manualID)
             val id = database.insert(PhotoTable.PHOTOS, null, values)
             val cursor = database.query(PhotoTable.PHOTOS,
@@ -220,7 +218,7 @@ object KnittingsDataSource  : AbstractObservableDatabase(), KnittingRepository, 
     @Synchronized
     override fun updatePhoto(photo: Photo): Photo {
         Log.d(TAG, "Updating photo $photo")
-        dbHelper.writableDatabase.use { database ->
+        context.database.writableDatabase.use { database ->
             val values = PhotoTable.createContentValues(photo)
             database.update(PhotoTable.PHOTOS,
                     values,
@@ -256,7 +254,7 @@ object KnittingsDataSource  : AbstractObservableDatabase(), KnittingRepository, 
             deletePhotoFile(photo.filename)
         }
         val id = knitting.id
-        dbHelper.writableDatabase.use { database ->
+        context.database.writableDatabase.use { database ->
             val whereClause = PhotoTable.Cols.KNITTING_ID + "= ?"
             val whereArgs = arrayOf(java.lang.Long.toString(id))
             database.delete(PhotoTable.PHOTOS, whereClause, whereArgs)
@@ -275,7 +273,7 @@ object KnittingsDataSource  : AbstractObservableDatabase(), KnittingRepository, 
     private fun deletePhotoImpl(photo: Photo) {
         deletePhotoFile(photo.filename)
         val id = photo.id
-        dbHelper.writableDatabase.use { database ->
+        context.database.writableDatabase.use { database ->
             database.delete(PhotoTable.PHOTOS, PhotoTable.Cols.ID + "=" + id, null)
             Log.d(TAG, "Deleted photo $id: $photo")
         }
@@ -284,7 +282,7 @@ object KnittingsDataSource  : AbstractObservableDatabase(), KnittingRepository, 
     @Synchronized
     fun getCategory(id: Long): Category {
         Log.d(TAG, "Getting category for id $id")
-        dbHelper.readableDatabase.use { database ->
+        context.database.readableDatabase.use { database ->
             val cursor = database.query(CategoryTable.CATEGORY,
                     CategoryTable.Columns, CategoryTable.Cols.ID + "=" + id, null, null, null, null)
             cursor.moveToFirst()
@@ -296,7 +294,7 @@ object KnittingsDataSource  : AbstractObservableDatabase(), KnittingRepository, 
 
     @Synchronized
     fun addCategory(category: Category, manualID: Boolean = false): Category {
-        dbHelper.writableDatabase.use { database ->
+        context.database.writableDatabase.use { database ->
             val values = CategoryTable.createContentValues(category, manualID)
             val id = database.insert(CategoryTable.CATEGORY, null, values)
             val cursor = database.query(CategoryTable.CATEGORY,
@@ -312,7 +310,7 @@ object KnittingsDataSource  : AbstractObservableDatabase(), KnittingRepository, 
     @Synchronized
     fun updateCategory(category: Category): Category {
         Log.d(TAG, "Updating category $category")
-        dbHelper.writableDatabase.use { database ->
+        context.database.writableDatabase.use { database ->
             val values = CategoryTable.createContentValues(category)
             database.update(CategoryTable.CATEGORY,
                     values,
@@ -349,7 +347,7 @@ object KnittingsDataSource  : AbstractObservableDatabase(), KnittingRepository, 
             updateKnitting(knitting.copy(category = null))
         }
         Log.d(TAG, "Removed category " + category.id + " from " + knittings.size + "knittings")
-        dbHelper.writableDatabase.use { database ->
+        context.database.writableDatabase.use { database ->
             // delete the category
             database.delete(CategoryTable.CATEGORY, CategoryTable.Cols.ID + "=" + category.id, null)
             Log.d(TAG, "Deleted category " + category.id + ": " + category)
@@ -359,7 +357,7 @@ object KnittingsDataSource  : AbstractObservableDatabase(), KnittingRepository, 
     @Synchronized
     fun getNeedle(id: Long): Needle {
         Log.d(TAG, "Getting needle for id $id")
-        dbHelper.readableDatabase.use { database ->
+        context.database.readableDatabase.use { database ->
             val cursor = database.query(NeedleTable.NEEDLES,
                     NeedleTable.Columns, NeedleTable.Cols.ID + "=" + id, null, null, null, null)
             cursor.moveToFirst()
@@ -371,7 +369,7 @@ object KnittingsDataSource  : AbstractObservableDatabase(), KnittingRepository, 
 
     @Synchronized
     fun addNeedle(needle: Needle, manualID: Boolean = false): Needle {
-        dbHelper.writableDatabase.use { database ->
+        context.database.writableDatabase.use { database ->
             val values = NeedleTable.createContentValues(needle, manualID)
             val id = database.insert(NeedleTable.NEEDLES, null, values)
             val cursor = database.query(NeedleTable.NEEDLES,
@@ -387,7 +385,7 @@ object KnittingsDataSource  : AbstractObservableDatabase(), KnittingRepository, 
     @Synchronized
     fun updateNeedle(needle: Needle): Needle {
         Log.d(TAG, "Updating needle $needle")
-        dbHelper.writableDatabase.use { database ->
+        context.database.writableDatabase.use { database ->
             val values = NeedleTable.createContentValues(needle)
             database.update(NeedleTable.NEEDLES,
                     values,
@@ -417,7 +415,7 @@ object KnittingsDataSource  : AbstractObservableDatabase(), KnittingRepository, 
     }
 
     private fun deleteNeedleImpl(needle: Needle) {
-        dbHelper.writableDatabase.use { database ->
+        context.database.writableDatabase.use { database ->
             // delete the category
             database.delete(NeedleTable.NEEDLES, NeedleTable.Cols.ID + "=" + needle.id, null)
             Log.d(TAG, "Deleted needle " + needle.id + ": " + needle)
@@ -428,7 +426,7 @@ object KnittingsDataSource  : AbstractObservableDatabase(), KnittingRepository, 
     @Synchronized
     fun getRows(id: Long): Rows {
         Log.d(TAG, "Getting rows for id $id")
-        dbHelper.readableDatabase.use { database ->
+        context.database.readableDatabase.use { database ->
             val cursor = database.query(RowsTable.ROWS,
                     NeedleTable.Columns, RowsTable.Cols.ID + "=" + id, null, null, null, null)
             cursor.moveToFirst()
@@ -440,7 +438,7 @@ object KnittingsDataSource  : AbstractObservableDatabase(), KnittingRepository, 
 
     @Synchronized
     fun getRows(knitting: Knitting): Rows? {
-        dbHelper.readableDatabase.use { database ->
+        context.database.readableDatabase.use { database ->
             val whereClause = RowsTable.Cols.KNITTING_ID + " = ?"
             val whereArgs = arrayOf(java.lang.Double.toString(knitting.id.toDouble()))
             val cursor = database.query(RowsTable.ROWS, RowsTable.Columns, whereClause, whereArgs, null, null, null)
@@ -455,7 +453,7 @@ object KnittingsDataSource  : AbstractObservableDatabase(), KnittingRepository, 
 
     @Synchronized
     fun addRows(rows: Rows, manualID: Boolean = false): Rows {
-        dbHelper.writableDatabase.use { database ->
+        context.database.writableDatabase.use { database ->
             val values = RowsTable.createContentValues(rows, manualID)
             val id = database.insert(RowsTable.ROWS, null, values)
             val cursor = database.query(RowsTable.ROWS,
@@ -471,7 +469,7 @@ object KnittingsDataSource  : AbstractObservableDatabase(), KnittingRepository, 
     @Synchronized
     fun updateRows(rows: Rows): Rows {
         Log.d(TAG, "Updating rows $rows")
-        dbHelper.writableDatabase.use { database ->
+        context.database.writableDatabase.use { database ->
             val values = RowsTable.createContentValues(rows)
             database.update(RowsTable.ROWS,
                     values,
@@ -550,6 +548,5 @@ object KnittingsDataSource  : AbstractObservableDatabase(), KnittingRepository, 
 
     fun init(context: Context) {
         this.context = context.applicationContext
-        this.dbHelper = KnittingsDataSource.context.database
     }
 }
