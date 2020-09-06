@@ -6,6 +6,7 @@ import android.content.ClipData
 import android.content.Context
 import android.content.Intent
 import android.os.Build
+import android.os.Environment
 import android.preference.PreferenceManager
 import android.provider.MediaStore
 import android.util.Log
@@ -17,6 +18,7 @@ import com.mthaler.dbapp.utils.FileUtils
 import com.mthaler.dbapp.utils.PictureUtils
 import com.mthaler.knittings.R
 import com.mthaler.knittings.database.KnittingsDataSource
+import com.mthaler.knittings.model.Knitting
 import java.io.File
 
 object TakePhotoDialog {
@@ -54,7 +56,7 @@ object TakePhotoDialog {
             val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
             val knitting = KnittingsDataSource.getKnitting(knittingID)
             // create a photo file for the photo
-            val f = KnittingsDataSource.getPhotoFile(knitting)?.let {
+            val f = getPhotoFile(context, knitting)?.let {
                 val packageManager = context.packageManager
                 val canTakePhoto = takePictureIntent.resolveActivity(packageManager) != null
                 if (canTakePhoto) {
@@ -73,7 +75,7 @@ object TakePhotoDialog {
         buttonImportPhoto.setOnClickListener {
             d.dismiss()
             val knitting = KnittingsDataSource.getKnitting(knittingID)
-            KnittingsDataSource.getPhotoFile(knitting)?.let {
+            getPhotoFile(context, knitting)?.let {
                 val photoPickerIntent = Intent(Intent.ACTION_PICK)
                 photoPickerIntent.type = "image/*"
                 importPhoto(it, photoPickerIntent)
@@ -166,5 +168,10 @@ object TakePhotoDialog {
                 KnittingsDataSource.updateKnitting(knitting.copy(defaultPhoto = photo))
             }
         }
+    }
+
+    fun getPhotoFile(context: Context, knitting: Knitting): File? {
+        val externalFilesDir = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+        return if (externalFilesDir != null) File(externalFilesDir, knitting.photoFilename) else null
     }
 }

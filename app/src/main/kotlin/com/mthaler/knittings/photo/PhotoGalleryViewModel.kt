@@ -21,7 +21,7 @@ class PhotoGalleryViewModel(application: Application) : DatasourceViewModel(appl
             viewModelScope.launch {
                 val ps = withContext(Dispatchers.IO) {
                     val k = KnittingsDataSource.getKnitting(id)
-                    KnittingsDataSource.getAllPhotos(k)
+                    KnittingsDataSource.getAllPhotos(k.id)
                 }
                 photos.value = ps
             }
@@ -32,7 +32,7 @@ class PhotoGalleryViewModel(application: Application) : DatasourceViewModel(appl
         viewModelScope.launch {
             val ps = withContext(Dispatchers.IO) {
                 val k = KnittingsDataSource.getKnitting(knittingID)
-                KnittingsDataSource.getAllPhotos(k)
+                KnittingsDataSource.getAllPhotos(k.id)
             }
             photos.value = ps
         }

@@ -8,6 +8,7 @@ import java.io.File
 import java.util.ArrayList
 import java.util.Date
 import com.mthaler.dbapp.database.AbstractObservableDatabase
+import com.mthaler.dbapp.database.PhotoRepositoryImpl
 import com.mthaler.dbapp.model.Category
 import com.mthaler.dbapp.model.Photo
 import com.mthaler.knittings.database.table.*
@@ -18,7 +19,7 @@ import com.mthaler.knittings.database.table.RowsTable.cursorToRows
 import com.mthaler.knittings.model.*
 import java.lang.Exception
 
-object KnittingsDataSource  : AbstractObservableDatabase(), KnittingRepository, PhotoRepository {
+object KnittingsDataSource  : AbstractObservableDatabase(), KnittingRepository, PhotoRepositoryImpl {
 
     private const val TAG = "KnittingsDataSource"
 
@@ -169,12 +170,6 @@ object KnittingsDataSource  : AbstractObservableDatabase(), KnittingRepository, 
     }
 
     @Synchronized
-    override fun getPhotoFile(knitting: Knitting): File? {
-        val externalFilesDir = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
-        return if (externalFilesDir != null) File(externalFilesDir, knitting.photoFilename) else null
-    }
-
-    @Synchronized
     override fun getPhoto(id: Long): Photo {
         Log.d(TAG, "Getting photo for id $id")
         dbHelper.readableDatabase.use { database ->
@@ -188,11 +183,11 @@ object KnittingsDataSource  : AbstractObservableDatabase(), KnittingRepository, 
     }
 
     @Synchronized
-    override fun getAllPhotos(knitting: Knitting): ArrayList<Photo> {
+    override fun getAllPhotos(id: Long): ArrayList<Photo> {
         dbHelper.readableDatabase.use { database ->
             val photos = ArrayList<Photo>()
             val whereClause = PhotoTable.Cols.KNITTING_ID + " = ?"
-            val whereArgs = arrayOf(java.lang.Double.toString(knitting.id.toDouble()))
+            val whereArgs = arrayOf(java.lang.Double.toString(id.toDouble()))
             val cursor = database.query(PhotoTable.PHOTOS, PhotoTable.Columns, whereClause, whereArgs, null, null, null)
             cursor.moveToFirst()
             var photo: Photo
@@ -244,7 +239,7 @@ object KnittingsDataSource  : AbstractObservableDatabase(), KnittingRepository, 
     override fun deletePhoto(photo: Photo) {
         val knitting = getKnitting(photo.ownerID)
         if (knitting.defaultPhoto != null && knitting.defaultPhoto.id == photo.id) {
-            val photos = getAllPhotos(knitting).filter { it.id != photo.id }.sortedBy { it.id }
+            val photos = getAllPhotos(knitting.id).filter { it.id != photo.id }.sortedBy { it.id }
             if (photos.isNotEmpty()) {
                 updateKnittingImpl(knitting.copy(defaultPhoto = photos.last()))
             } else {
@@ -257,7 +252,7 @@ object KnittingsDataSource  : AbstractObservableDatabase(), KnittingRepository, 
 
     @Synchronized
     private fun deleteAllPhotos(knitting: Knitting) {
-        for (photo in getAllPhotos(knitting)) {
+        for (photo in getAllPhotos(knitting.id)) {
             deletePhotoFile(photo.filename)
         }
         val id = knitting.id
