@@ -1,5 +1,6 @@
 package com.mthaler.knittings.settings
 
+import com.mthaler.dbapp.settings.Theme
 import com.mthaler.knittings.R
 
 object ThemeRepository {

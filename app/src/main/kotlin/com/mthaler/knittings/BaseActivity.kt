@@ -4,7 +4,7 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import android.preference.PreferenceManager
 import androidx.appcompat.app.AppCompatActivity
-import com.mthaler.knittings.settings.Theme
+import com.mthaler.dbapp.settings.Theme
 
 open class BaseActivity : AppCompatActivity() {
 
