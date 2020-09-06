@@ -7,7 +7,7 @@ import androidx.core.app.NavUtils
 import android.view.MenuItem
 import com.mthaler.dbapp.BaseActivity
 import com.mthaler.knittings.R
-import com.mthaler.knittings.model.Category
+import com.mthaler.dbapp.model.Category
 import kotlinx.android.synthetic.main.activity_category_list.*
 
 class CategoryListActivity : BaseActivity(), CategoryListFragment.OnFragmentInteractionListener, EditCategoryFragment.OnFragmentInteractionListener {

@@ -12,7 +12,7 @@ import com.mthaler.knittings.R
 import com.mthaler.knittings.Extras.EXTRA_CATEGORY_ID
 import com.mthaler.knittings.SaveChangesDialog
 import com.mthaler.knittings.database.datasource
-import com.mthaler.knittings.model.Category
+import com.mthaler.dbapp.model.Category
 import petrov.kristiyan.colorpicker.ColorPicker
 
 class EditCategoryFragment : Fragment() {
@@ -53,9 +53,10 @@ class EditCategoryFragment : Fragment() {
 
         if (savedInstanceState == null) {
             editTextTitle.setText(category.name)
-            if (category.color != null) {
-                buttonColor.setBackgroundColor(category.color)
-                color = category.color
+            val c = category.color
+            if (c != null) {
+                buttonColor.setBackgroundColor(c)
+                color = c
             }
         } else {
             color?.let { buttonColor.setBackgroundColor(it) }

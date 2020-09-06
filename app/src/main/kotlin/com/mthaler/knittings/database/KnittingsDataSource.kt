@@ -9,6 +9,7 @@ import java.util.ArrayList
 import java.util.Date
 import androidx.fragment.app.Fragment
 import com.mthaler.dbapp.database.AbstractObservableDatabase
+import com.mthaler.dbapp.model.Category
 import com.mthaler.dbapp.model.Photo
 import com.mthaler.knittings.database.table.*
 import com.mthaler.knittings.database.table.CategoryTable.cursorToCategory

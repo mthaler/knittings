@@ -9,7 +9,7 @@ import com.mthaler.knittings.Extras
 import com.mthaler.knittings.R
 import kotlinx.android.synthetic.main.activity_select_category.*
 import com.mthaler.knittings.Extras.EXTRA_KNITTING_ID
-import com.mthaler.knittings.model.Category
+import com.mthaler.dbapp.model.Category
 
 class SelectCategoryActivity : BaseActivity(), CategoryListFragment.OnFragmentInteractionListener, EditCategoryFragment.OnFragmentInteractionListener {
 

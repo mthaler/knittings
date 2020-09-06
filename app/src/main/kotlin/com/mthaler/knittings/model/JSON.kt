@@ -2,6 +2,7 @@ package com.mthaler.knittings.model
 
 import android.content.Context
 import android.graphics.Color
+import com.mthaler.dbapp.model.Category
 import com.mthaler.dbapp.model.Photo
 import com.mthaler.knittings.database.KnittingDatabaseHelper
 import com.mthaler.knittings.utils.ColorUtils
@@ -82,8 +83,9 @@ fun Category.toJSON(): JSONObject {
     val result = JSONObject()
     result.put("id", id)
     result.put("name", name)
-    if (color != null) {
-        result.put("color", ColorUtils.colorToHex(color))
+    val c = color
+    if (c != null) {
+        result.put("color", ColorUtils.colorToHex(c))
     }
     return result
 }

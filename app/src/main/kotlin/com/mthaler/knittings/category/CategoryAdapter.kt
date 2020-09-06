@@ -6,11 +6,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import com.mthaler.knittings.R
-import com.mthaler.knittings.model.Category
+import com.mthaler.dbapp.model.Category
 
 class CategoryAdapter(
-    private val onItemClick: (Category) -> Unit,
-    private val onItemLongClick: (Category) -> Unit
+        private val onItemClick: (Category) -> Unit,
+        private val onItemLongClick: (Category) -> Unit
 ) : RecyclerView.Adapter<CategoryAdapter.ViewHolder>() {
 
     private val categories = ArrayList<Category>()

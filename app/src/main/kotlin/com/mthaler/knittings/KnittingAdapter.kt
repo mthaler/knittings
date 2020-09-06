@@ -61,8 +61,9 @@ class KnittingAdapter(
                 photoView.setImageResource(R.drawable.categories)
             }
             if (knitting.category != null) {
-                if (knitting.category.color != null) {
-                    categoryIndicator.color = knitting.category.color
+                val c = knitting.category.color
+                if (c != null) {
+                    categoryIndicator.color = c
                 } else {
                     categoryIndicator.color = Color.WHITE
                 }

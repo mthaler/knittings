@@ -1,6 +1,6 @@
 package com.mthaler.knittings
 
-import com.mthaler.knittings.model.Category
+import com.mthaler.dbapp.model.Category
 import com.mthaler.knittings.model.Knitting
 import com.mthaler.knittings.model.Status
 import com.mthaler.knittings.utils.StringUtils.containsIgnoreCase

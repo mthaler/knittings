@@ -2,6 +2,7 @@ package com.mthaler.knittings.model
 
 import android.os.Parcel
 import android.os.Parcelable
+import com.mthaler.dbapp.model.Category
 import com.mthaler.dbapp.model.Photo
 import com.mthaler.dbapp.utils.readOptionalLong
 import com.mthaler.dbapp.utils.writeOptionalLong
