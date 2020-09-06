@@ -1,7 +1,7 @@
 package com.mthaler.knittings.settings
 
 import android.os.Bundle
-import com.mthaler.knittings.BaseActivity
+import com.mthaler.dbapp.BaseActivity
 import com.mthaler.knittings.R
 import kotlinx.android.synthetic.main.activity_settings.*
 

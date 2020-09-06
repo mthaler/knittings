@@ -8,7 +8,7 @@ import androidx.core.app.NavUtils
 import android.view.MenuItem
 import android.view.View
 import android.widget.TextView
-import com.mthaler.knittings.BaseActivity
+import com.mthaler.dbapp.BaseActivity
 import com.mthaler.knittings.R
 import com.mthaler.knittings.database.datasource
 import com.mthaler.knittings.Extras.EXTRA_KNITTING_ID

@@ -4,7 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
-import com.mthaler.knittings.BaseActivity
+import com.mthaler.dbapp.BaseActivity
 import com.mthaler.knittings.Extras
 import com.mthaler.knittings.R
 import kotlinx.android.synthetic.main.activity_select_category.*

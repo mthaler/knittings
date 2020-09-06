@@ -10,7 +10,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.app.NavUtils
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.mthaler.knittings.BaseActivity
+import com.mthaler.dbapp.BaseActivity
 import com.mthaler.knittings.R
 import com.mthaler.knittings.service.JobStatus
 import com.mthaler.knittings.service.ServiceStatus

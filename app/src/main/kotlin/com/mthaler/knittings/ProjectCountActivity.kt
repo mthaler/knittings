@@ -3,6 +3,7 @@ package com.mthaler.knittings
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import com.mthaler.dbapp.BaseActivity
 import kotlinx.android.synthetic.main.activity_project_count.*
 
 class ProjectCountActivity : BaseActivity() {

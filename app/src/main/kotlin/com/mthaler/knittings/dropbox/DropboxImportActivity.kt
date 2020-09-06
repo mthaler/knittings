@@ -5,7 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.core.app.NavUtils
-import com.mthaler.knittings.BaseActivity
+import com.mthaler.dbapp.BaseActivity
 import com.mthaler.knittings.R
 import com.mthaler.knittings.service.JobStatus
 import kotlinx.android.synthetic.main.activity_dropbox_import.*

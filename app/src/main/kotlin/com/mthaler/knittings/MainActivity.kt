@@ -17,6 +17,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.navigation.NavigationView
+import com.mthaler.dbapp.BaseActivity
 import com.mthaler.dbapp.Sorting
 import com.mthaler.knittings.about.AboutDialog
 import com.mthaler.knittings.category.CategoryListActivity
