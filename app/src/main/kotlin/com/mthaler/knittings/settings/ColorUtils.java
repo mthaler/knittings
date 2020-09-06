@@ -11,6 +11,8 @@ import android.util.TypedValue;
 import android.view.Gravity;
 import android.widget.ImageView;
 import androidx.annotation.ArrayRes;
+
+import com.mthaler.dbapp.settings.ColorShape;
 import com.mthaler.knittings.R;
 
 public class ColorUtils {
