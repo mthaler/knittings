@@ -3,7 +3,6 @@
     <string name="edit_settings">Einstellungen</string>
     <string name="title_activity_settings">Einstellungen</string>
     <string name="pref_header_theme">Aussehen</string>
-    <string name="pref_color_theme">Farbschema</string>
     <string name="pref_header_photos">Fotos</string>
     <string name="pref_use_newest_photo_as_preview">Neuestes Foto als Vorschau verwenden</string>
     <string name="pref_header_sharing">Teilen</string>
