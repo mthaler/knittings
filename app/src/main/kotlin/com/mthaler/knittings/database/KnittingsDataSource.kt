@@ -7,7 +7,8 @@ import java.io.File
 import java.util.ArrayList
 import java.util.Date
 import com.mthaler.dbapp.database.AbstractObservableDatabase
-import com.mthaler.dbapp.database.PhotoRepositoryImpl
+import com.mthaler.dbapp.database.CategoryDataSource
+import com.mthaler.dbapp.database.PhotoDataSource
 import com.mthaler.dbapp.model.Category
 import com.mthaler.dbapp.model.Photo
 import com.mthaler.knittings.database.table.*
@@ -18,7 +19,7 @@ import com.mthaler.knittings.database.table.RowsTable.cursorToRows
 import com.mthaler.knittings.model.*
 import java.lang.Exception
 
-object KnittingsDataSource  : AbstractObservableDatabase(), KnittingRepository, PhotoRepositoryImpl {
+object KnittingsDataSource  : AbstractObservableDatabase(), KnittingRepository, PhotoDataSource, CategoryDataSource {
 
     private const val TAG = "KnittingsDataSource"
 
@@ -58,7 +59,7 @@ object KnittingsDataSource  : AbstractObservableDatabase(), KnittingRepository, 
             return photos
         }
 
-    val allCategories: ArrayList<Category>
+    override val allCategories: ArrayList<Category>
         @Synchronized
         get() = context.database.readableDatabase.use { database ->
             val categories = ArrayList<Category>()
@@ -280,7 +281,7 @@ object KnittingsDataSource  : AbstractObservableDatabase(), KnittingRepository, 
     }
 
     @Synchronized
-    fun getCategory(id: Long): Category {
+    override fun getCategory(id: Long): Category {
         Log.d(TAG, "Getting category for id $id")
         context.database.readableDatabase.use { database ->
             val cursor = database.query(CategoryTable.CATEGORY,
@@ -293,7 +294,7 @@ object KnittingsDataSource  : AbstractObservableDatabase(), KnittingRepository, 
     }
 
     @Synchronized
-    fun addCategory(category: Category, manualID: Boolean = false): Category {
+    override fun addCategory(category: Category, manualID: Boolean): Category {
         context.database.writableDatabase.use { database ->
             val values = CategoryTable.createContentValues(category, manualID)
             val id = database.insert(CategoryTable.CATEGORY, null, values)
@@ -308,7 +309,7 @@ object KnittingsDataSource  : AbstractObservableDatabase(), KnittingRepository, 
     }
 
     @Synchronized
-    fun updateCategory(category: Category): Category {
+    override fun updateCategory(category: Category): Category {
         Log.d(TAG, "Updating category $category")
         context.database.writableDatabase.use { database ->
             val values = CategoryTable.createContentValues(category)
@@ -326,13 +327,13 @@ object KnittingsDataSource  : AbstractObservableDatabase(), KnittingRepository, 
     }
 
     @Synchronized
-    fun deleteCategory(category: Category) {
+    override fun deleteCategory(category: Category) {
         deleteCategoryImpl(category)
         notifyObservers()
     }
 
     @Synchronized
-    fun deleteAllCategories() {
+    override fun deleteAllCategories() {
         for (category in allCategories) {
             deleteCategoryImpl(category)
         }

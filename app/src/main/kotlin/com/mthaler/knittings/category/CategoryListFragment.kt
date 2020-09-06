@@ -11,10 +11,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.mthaler.dbapp.database.CategoryRepository
 import com.mthaler.knittings.DeleteDialog
 import com.mthaler.knittings.Extras
 import com.mthaler.knittings.R
-import com.mthaler.knittings.database.KnittingsDataSource
 import kotlinx.android.synthetic.main.fragment_category_list.*
 
 class CategoryListFragment : Fragment() {
@@ -53,7 +53,7 @@ class CategoryListFragment : Fragment() {
                         R.id.action_delete -> {
                             this@CategoryListFragment.activity?.let {
                                 DeleteDialog.create(it, category.name) {
-                                    KnittingsDataSource.deleteCategory(category)
+                                    CategoryRepository.deleteCategory(category)
                                 }.show()
                             }
                             mode?.finish()
@@ -62,7 +62,7 @@ class CategoryListFragment : Fragment() {
                         R.id.action_copy -> {
                             val newName = "${category.name} - ${getString(R.string.copy)}"
                             val categoryCopy = category.copy(name = newName)
-                            KnittingsDataSource.addCategory(categoryCopy)
+                            CategoryRepository.addCategory(categoryCopy)
                             mode?.finish()
                             return true
                         }

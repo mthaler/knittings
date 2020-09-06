@@ -6,13 +6,13 @@ import android.view.*
 import android.widget.Button
 import android.widget.EditText
 import androidx.fragment.app.Fragment
+import com.mthaler.dbapp.database.CategoryRepository
 import com.mthaler.knittings.DeleteDialog
 import com.mthaler.knittings.DiscardChangesDialog
 import com.mthaler.knittings.R
 import com.mthaler.knittings.Extras.EXTRA_CATEGORY_ID
 import com.mthaler.knittings.SaveChangesDialog
 import com.mthaler.dbapp.model.Category
-import com.mthaler.knittings.database.KnittingsDataSource
 import petrov.kristiyan.colorpicker.ColorPicker
 
 class EditCategoryFragment : Fragment() {
@@ -44,7 +44,7 @@ class EditCategoryFragment : Fragment() {
 
         setHasOptionsMenu(true)
 
-        val category = if (categoryID != Category.EMPTY.id) KnittingsDataSource.getCategory(categoryID) else Category()
+        val category = if (categoryID != Category.EMPTY.id) CategoryRepository.getCategory(categoryID) else Category()
 
         val v = inflater.inflate(R.layout.fragment_edit_category, container, false)
 
@@ -81,7 +81,7 @@ class EditCategoryFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.menu_item_save_category -> {
-                val oldCategory = if (categoryID != Category.EMPTY.id) KnittingsDataSource.getCategory(categoryID) else Category.EMPTY
+                val oldCategory = if (categoryID != Category.EMPTY.id) CategoryRepository.getCategory(categoryID) else Category.EMPTY
                 val newCategory = Category(categoryID, editTextTitle.text.toString(), color)
                 if (newCategory != oldCategory) {
                     saveCategory(newCategory)
@@ -107,7 +107,7 @@ class EditCategoryFragment : Fragment() {
     }
 
     fun onBackPressed(action: (Long) -> Unit) {
-        val oldCategory = if (categoryID != Category.EMPTY.id) KnittingsDataSource.getCategory(categoryID) else Category.EMPTY
+        val oldCategory = if (categoryID != Category.EMPTY.id) CategoryRepository.getCategory(categoryID) else Category.EMPTY
         val newCategory = Category(categoryID, editTextTitle.text.toString(), color)
         if (newCategory != oldCategory) {
             SaveChangesDialog.create(requireContext(), {
@@ -141,16 +141,16 @@ class EditCategoryFragment : Fragment() {
     }
 
     private fun deleteCategory() {
-        val category = KnittingsDataSource.getCategory(categoryID)
-        KnittingsDataSource.deleteCategory(category)
+        val category = CategoryRepository.getCategory(categoryID)
+        CategoryRepository.deleteCategory(category)
     }
 
     private fun saveCategory(category: Category) {
         if (category.id == Category.EMPTY.id) {
-            val result = KnittingsDataSource.addCategory(category)
+            val result = CategoryRepository.addCategory(category)
             categoryID = result.id
         } else {
-            KnittingsDataSource.updateCategory(category)
+            CategoryRepository.updateCategory(category)
         }
     }
 
