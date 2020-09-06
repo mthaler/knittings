@@ -17,6 +17,7 @@ import java.io.FileOutputStream
 import java.io.IOException
 import android.preference.PreferenceManager
 import androidx.lifecycle.lifecycleScope
+import com.mthaler.dbapp.database.PhotoRepository
 import com.mthaler.dbapp.model.Photo
 import com.mthaler.dbapp.utils.PictureUtils
 import com.mthaler.knittings.DeleteDialog
@@ -39,12 +40,12 @@ class PhotoFragment : Fragment() {
 
         arguments?.let {
             val photoID = it.getLong(EXTRA_PHOTO_ID)
-            photo = KnittingsDataSource.getPhoto(photoID)
+            photo = PhotoRepository.getPhoto(photoID)
         }
         savedInstanceState?.let {
             if (it.containsKey(EXTRA_PHOTO_ID)) {
                 val photoID = it.getLong(EXTRA_PHOTO_ID)
-                photo = KnittingsDataSource.getPhoto(photoID)
+                photo = PhotoRepository.getPhoto(photoID)
             }
         }
     }
@@ -183,14 +184,14 @@ class PhotoFragment : Fragment() {
     }
 
     private fun deletePhoto() {
-        KnittingsDataSource.deletePhoto(photo)
+        PhotoRepository.deletePhoto(photo)
     }
 
     private fun savePhoto(photo: Photo) {
         if (photo.id == -1L) {
-            KnittingsDataSource.addPhoto(photo)
+            PhotoRepository.addPhoto(photo)
         } else {
-            KnittingsDataSource.updatePhoto(photo)
+            PhotoRepository.updatePhoto(photo)
         }
     }
 
