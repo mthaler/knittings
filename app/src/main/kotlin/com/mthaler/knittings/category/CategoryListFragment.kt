@@ -14,7 +14,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.mthaler.knittings.DeleteDialog
 import com.mthaler.knittings.Extras
 import com.mthaler.knittings.R
-import com.mthaler.knittings.database.datasource
+import com.mthaler.knittings.database.KnittingsDataSource
 import kotlinx.android.synthetic.main.fragment_category_list.*
 
 class CategoryListFragment : Fragment() {
@@ -53,7 +53,7 @@ class CategoryListFragment : Fragment() {
                         R.id.action_delete -> {
                             this@CategoryListFragment.activity?.let {
                                 DeleteDialog.create(it, category.name) {
-                                    datasource.deleteCategory(category)
+                                    KnittingsDataSource.deleteCategory(category)
                                 }.show()
                             }
                             mode?.finish()
@@ -62,7 +62,7 @@ class CategoryListFragment : Fragment() {
                         R.id.action_copy -> {
                             val newName = "${category.name} - ${getString(R.string.copy)}"
                             val categoryCopy = category.copy(name = newName)
-                            datasource.addCategory(categoryCopy)
+                            KnittingsDataSource.addCategory(categoryCopy)
                             mode?.finish()
                             return true
                         }

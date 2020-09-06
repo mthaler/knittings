@@ -11,8 +11,8 @@ import com.mthaler.knittings.DiscardChangesDialog
 import com.mthaler.knittings.R
 import com.mthaler.knittings.Extras.EXTRA_CATEGORY_ID
 import com.mthaler.knittings.SaveChangesDialog
-import com.mthaler.knittings.database.datasource
 import com.mthaler.dbapp.model.Category
+import com.mthaler.knittings.database.KnittingsDataSource
 import petrov.kristiyan.colorpicker.ColorPicker
 
 class EditCategoryFragment : Fragment() {
@@ -44,7 +44,7 @@ class EditCategoryFragment : Fragment() {
 
         setHasOptionsMenu(true)
 
-        val category = if (categoryID != Category.EMPTY.id) datasource.getCategory(categoryID) else Category()
+        val category = if (categoryID != Category.EMPTY.id) KnittingsDataSource.getCategory(categoryID) else Category()
 
         val v = inflater.inflate(R.layout.fragment_edit_category, container, false)
 
@@ -81,7 +81,7 @@ class EditCategoryFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.menu_item_save_category -> {
-                val oldCategory = if (categoryID != Category.EMPTY.id) datasource.getCategory(categoryID) else Category.EMPTY
+                val oldCategory = if (categoryID != Category.EMPTY.id) KnittingsDataSource.getCategory(categoryID) else Category.EMPTY
                 val newCategory = Category(categoryID, editTextTitle.text.toString(), color)
                 if (newCategory != oldCategory) {
                     saveCategory(newCategory)
@@ -107,7 +107,7 @@ class EditCategoryFragment : Fragment() {
     }
 
     fun onBackPressed(action: (Long) -> Unit) {
-        val oldCategory = if (categoryID != Category.EMPTY.id) datasource.getCategory(categoryID) else Category.EMPTY
+        val oldCategory = if (categoryID != Category.EMPTY.id) KnittingsDataSource.getCategory(categoryID) else Category.EMPTY
         val newCategory = Category(categoryID, editTextTitle.text.toString(), color)
         if (newCategory != oldCategory) {
             SaveChangesDialog.create(requireContext(), {
@@ -141,16 +141,16 @@ class EditCategoryFragment : Fragment() {
     }
 
     private fun deleteCategory() {
-        val category = datasource.getCategory(categoryID)
-        datasource.deleteCategory(category)
+        val category = KnittingsDataSource.getCategory(categoryID)
+        KnittingsDataSource.deleteCategory(category)
     }
 
     private fun saveCategory(category: Category) {
         if (category.id == Category.EMPTY.id) {
-            val result = datasource.addCategory(category)
+            val result = KnittingsDataSource.addCategory(category)
             categoryID = result.id
         } else {
-            datasource.updateCategory(category)
+            KnittingsDataSource.updateCategory(category)
         }
     }
 

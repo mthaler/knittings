@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.mthaler.knittings.DatasourceViewModel
+import com.mthaler.knittings.database.KnittingsDataSource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -24,7 +25,7 @@ class DropboxExportViewModel(application: Application) : DatasourceViewModel(app
     private fun updatePhotoCount() {
         viewModelScope.launch {
             val s = withContext(Dispatchers.IO) {
-                val photos = datasource.allPhotos
+                val photos = KnittingsDataSource.allPhotos
                 var totalSize = 0L
                 for (p in photos) {
                     try {

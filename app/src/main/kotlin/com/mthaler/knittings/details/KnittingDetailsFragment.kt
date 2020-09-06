@@ -18,7 +18,7 @@ import com.mthaler.dbapp.ui.SquareImageView
 import com.mthaler.dbapp.utils.PictureUtils
 import com.mthaler.knittings.Extras
 import com.mthaler.knittings.R
-import com.mthaler.knittings.database.datasource
+import com.mthaler.knittings.database.KnittingsDataSource
 import com.mthaler.knittings.model.Knitting
 import com.mthaler.knittings.model.Status
 import com.mthaler.knittings.photo.PhotoGalleryActivity
@@ -119,7 +119,7 @@ class KnittingDetailsFragment : Fragment() {
                 true
             }
             R.id.menu_item_delete_knitting -> {
-                val knitting = datasource.getKnitting(knittingID)
+                val knitting = KnittingsDataSource.getKnitting(knittingID)
                 DeleteKnittingDialog.create(requireContext(), knitting) {
                     viewModel.delete()
                     requireActivity().finish()

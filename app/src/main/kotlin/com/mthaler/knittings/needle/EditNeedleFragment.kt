@@ -5,11 +5,11 @@ import androidx.fragment.app.Fragment
 import android.view.*
 import android.widget.*
 import com.mthaler.knittings.*
-import com.mthaler.knittings.database.datasource
 import com.mthaler.knittings.model.Needle
 import com.mthaler.knittings.model.NeedleMaterial
 import com.mthaler.knittings.model.NeedleType
 import com.mthaler.knittings.Extras.EXTRA_NEEDLE_ID
+import com.mthaler.knittings.database.KnittingsDataSource
 
 class EditNeedleFragment : Fragment() {
 
@@ -61,7 +61,7 @@ class EditNeedleFragment : Fragment() {
         }
 
         if (savedInstanceState == null) {
-            val needle = if (needleID != Needle.EMPTY.id) datasource.getNeedle(needleID) else Needle.EMPTY
+            val needle = if (needleID != Needle.EMPTY.id) KnittingsDataSource.getNeedle(needleID) else Needle.EMPTY
             editTextName.setText(needle.name)
             editTextSize.setText(needle.size)
             editTextLength.setText(needle.length)
@@ -98,7 +98,7 @@ class EditNeedleFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.menu_item_save_needle -> {
-                val oldNeedle = if (needleID != Needle.EMPTY.id) datasource.getNeedle(needleID) else Needle.EMPTY
+                val oldNeedle = if (needleID != Needle.EMPTY.id) KnittingsDataSource.getNeedle(needleID) else Needle.EMPTY
                 val newNeedle = createNeedle()
                 if (newNeedle != oldNeedle) {
                     saveNeedle(newNeedle)
@@ -125,7 +125,7 @@ class EditNeedleFragment : Fragment() {
     }
 
     fun onBackPressed() {
-        val oldNeedle = if (needleID != Needle.EMPTY.id) datasource.getNeedle(needleID) else Needle.EMPTY
+        val oldNeedle = if (needleID != Needle.EMPTY.id) KnittingsDataSource.getNeedle(needleID) else Needle.EMPTY
         val newNeedle = createNeedle()
         if (newNeedle != oldNeedle) {
             SaveChangesDialog.create(requireContext(), {
@@ -146,15 +146,15 @@ class EditNeedleFragment : Fragment() {
     }
 
     private fun deleteNeedle() {
-        val needle = datasource.getNeedle(needleID)
-        datasource.deleteNeedle(needle)
+        val needle = KnittingsDataSource.getNeedle(needleID)
+        KnittingsDataSource.deleteNeedle(needle)
     }
 
     private fun saveNeedle(needle: Needle) {
         if (needle.id == Needle.EMPTY.id) {
-            datasource.addNeedle(needle)
+            KnittingsDataSource.addNeedle(needle)
         } else {
-            datasource.updateNeedle(needle)
+            KnittingsDataSource.updateNeedle(needle)
         }
     }
 

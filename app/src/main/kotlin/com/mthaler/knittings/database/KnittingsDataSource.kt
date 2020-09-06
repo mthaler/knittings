@@ -7,7 +7,6 @@ import android.util.Log
 import java.io.File
 import java.util.ArrayList
 import java.util.Date
-import androidx.fragment.app.Fragment
 import com.mthaler.dbapp.database.AbstractObservableDatabase
 import com.mthaler.dbapp.model.Category
 import com.mthaler.dbapp.model.Photo
@@ -19,10 +18,12 @@ import com.mthaler.knittings.database.table.RowsTable.cursorToRows
 import com.mthaler.knittings.model.*
 import java.lang.Exception
 
-class KnittingsDataSource private constructor(context: Context) : AbstractObservableDatabase(), KnittingRepository, PhotoRepository {
+object KnittingsDataSource  : AbstractObservableDatabase(), KnittingRepository, PhotoRepository {
 
-    private val context: Context = context.applicationContext
-    private val dbHelper: KnittingDatabaseHelper
+    private const val TAG = "KnittingsDataSource"
+
+    private lateinit var context: Context
+    private lateinit var dbHelper: KnittingDatabaseHelper
 
     override val allKnittings: ArrayList<Knitting>
         @Synchronized
@@ -91,10 +92,6 @@ class KnittingsDataSource private constructor(context: Context) : AbstractObserv
             cursor.close()
             return needles
         }
-
-    init {
-        dbHelper = context.database
-    }
 
     @Synchronized
     override fun addKnitting(knitting: Knitting, manualID: Boolean): Knitting {
@@ -556,30 +553,8 @@ class KnittingsDataSource private constructor(context: Context) : AbstractObserv
         }
     }
 
-    companion object {
-
-        private const val TAG = "KnittingsDataSource"
-
-        private var sKnittingsDataSource: KnittingsDataSource? = null
-
-        fun getInstance(c: Context?): KnittingsDataSource {
-            if (sKnittingsDataSource == null) {
-                if (c == null) {
-                    throw IllegalArgumentException("context must not be null")
-                } else {
-                    sKnittingsDataSource = KnittingsDataSource(c)
-                }
-            }
-            return sKnittingsDataSource!!
-        }
+    fun init(context: Context) {
+        this.context = context.applicationContext
+        this.dbHelper = KnittingsDataSource.context.database
     }
 }
-
-// Access property for Context
-val Context.datasource: KnittingsDataSource
-    @Synchronized
-    get() = KnittingsDataSource.getInstance(applicationContext)
-
-val Fragment.datasource: KnittingsDataSource
-    @Synchronized
-    get() = KnittingsDataSource.getInstance(this.activity)

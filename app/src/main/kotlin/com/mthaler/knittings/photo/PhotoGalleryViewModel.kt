@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.mthaler.dbapp.model.Photo
 import com.mthaler.knittings.DatasourceViewModel
+import com.mthaler.knittings.database.KnittingsDataSource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -19,8 +20,8 @@ class PhotoGalleryViewModel(application: Application) : DatasourceViewModel(appl
             knittingID = id
             viewModelScope.launch {
                 val ps = withContext(Dispatchers.IO) {
-                    val k = datasource.getKnitting(id)
-                    datasource.getAllPhotos(k)
+                    val k = KnittingsDataSource.getKnitting(id)
+                    KnittingsDataSource.getAllPhotos(k)
                 }
                 photos.value = ps
             }
@@ -30,8 +31,8 @@ class PhotoGalleryViewModel(application: Application) : DatasourceViewModel(appl
     override fun databaseChanged() {
         viewModelScope.launch {
             val ps = withContext(Dispatchers.IO) {
-                val k = datasource.getKnitting(knittingID)
-                datasource.getAllPhotos(k)
+                val k = KnittingsDataSource.getKnitting(knittingID)
+                KnittingsDataSource.getAllPhotos(k)
             }
             photos.value = ps
         }

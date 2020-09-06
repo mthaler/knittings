@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.mthaler.knittings.DatasourceViewModel
+import com.mthaler.knittings.database.KnittingsDataSource
 import com.mthaler.knittings.model.Knitting
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -20,7 +21,7 @@ class KnittingDetailsViewModel(application: Application) : DatasourceViewModel(a
             knittingID = id
             viewModelScope.launch {
                 val k =  withContext(Dispatchers.IO) {
-                    datasource.getKnitting(id)
+                    KnittingsDataSource.getKnitting(id)
                 }
                 knitting.value = k
             }
@@ -31,8 +32,8 @@ class KnittingDetailsViewModel(application: Application) : DatasourceViewModel(a
         deleted = true
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
-                val k = datasource.getKnitting(knittingID)
-                datasource.deleteKnitting(k)
+                val k = KnittingsDataSource.getKnitting(knittingID)
+                KnittingsDataSource.deleteKnitting(k)
             }
         }
     }
@@ -41,7 +42,7 @@ class KnittingDetailsViewModel(application: Application) : DatasourceViewModel(a
         if (!deleted) {
             viewModelScope.launch {
                 val k =  withContext(Dispatchers.IO) {
-                    datasource.getKnitting(knittingID)
+                    KnittingsDataSource.getKnitting(knittingID)
                 }
                 knitting.value = k
             }

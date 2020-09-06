@@ -22,7 +22,7 @@ import com.mthaler.dbapp.Sorting
 import com.mthaler.knittings.about.AboutDialog
 import com.mthaler.knittings.category.CategoryListActivity
 import com.mthaler.knittings.compressphotos.CompressPhotosActivity
-import com.mthaler.knittings.database.datasource
+import com.mthaler.knittings.database.KnittingsDataSource
 import com.mthaler.knittings.details.DeleteKnittingDialog
 import com.mthaler.knittings.details.KnittingDetailsActivity
 import com.mthaler.knittings.dropbox.DropboxExportActivity
@@ -86,14 +86,14 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
                     R.id.action_delete -> {
                         mode?.finish()
                         DeleteKnittingDialog.create(this@MainActivity, knitting) {
-                            datasource.deleteKnitting(knitting)
+                            KnittingsDataSource.deleteKnitting(knitting)
                         }.show()
                         return true
                     }
                     R.id.action_copy -> {
                         val newTitle = "${knitting.title} - ${getString(R.string.copy)}"
                         val knittingCopy = knitting.copy(title = newTitle, started = Date(), finished = null, defaultPhoto = null, rating = 0.0, duration = 0, status = Status.PLANNED)
-                        datasource.addKnitting(knittingCopy)
+                        KnittingsDataSource.addKnitting(knittingCopy)
                         mode?.finish()
                         return true
                     }
@@ -246,7 +246,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
                 true
             }
             R.id.menu_item_category_filter -> {
-                val categories = datasource.allCategories
+                val categories = KnittingsDataSource.allCategories
                 categories.sortedBy { it.name }
                 val listItems = (listOf(getString(R.string.filter_show_all)) + categories.map { it.name }.toList()).toTypedArray()
                 val builder = AlertDialog.Builder(this)

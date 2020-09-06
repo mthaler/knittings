@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.mthaler.knittings.DatasourceViewModel
+import com.mthaler.knittings.database.KnittingsDataSource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -24,7 +25,7 @@ class CompressPhotosViewModel(application: Application) : DatasourceViewModel(ap
     private fun updatePhotoCount() {
         viewModelScope.launch {
             val s = withContext(Dispatchers.IO) {
-                val photos = datasource.allPhotos
+                val photos = KnittingsDataSource.allPhotos
                 var totalSize = 0L
                 var photosToCompress = 0
                 for (p in photos) {

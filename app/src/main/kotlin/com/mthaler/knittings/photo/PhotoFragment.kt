@@ -11,7 +11,6 @@ import android.view.*
 import android.widget.EditText
 import android.widget.ImageView
 import com.mthaler.knittings.R
-import com.mthaler.knittings.database.datasource
 import com.mthaler.knittings.Extras.EXTRA_PHOTO_ID
 import java.io.File
 import java.io.FileOutputStream
@@ -22,6 +21,7 @@ import com.mthaler.dbapp.model.Photo
 import com.mthaler.dbapp.utils.PictureUtils
 import com.mthaler.knittings.DeleteDialog
 import com.mthaler.knittings.SaveChangesDialog
+import com.mthaler.knittings.database.KnittingsDataSource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -39,12 +39,12 @@ class PhotoFragment : Fragment() {
 
         arguments?.let {
             val photoID = it.getLong(EXTRA_PHOTO_ID)
-            photo = datasource.getPhoto(photoID)
+            photo = KnittingsDataSource.getPhoto(photoID)
         }
         savedInstanceState?.let {
             if (it.containsKey(EXTRA_PHOTO_ID)) {
                 val photoID = it.getLong(EXTRA_PHOTO_ID)
-                photo = datasource.getPhoto(photoID)
+                photo = KnittingsDataSource.getPhoto(photoID)
             }
         }
     }
@@ -148,8 +148,8 @@ class PhotoFragment : Fragment() {
     }
 
     private fun setDefaultPhoto() {
-        val knitting = datasource.getKnitting(photo.ownerID)
-        datasource.updateKnitting(knitting.copy(defaultPhoto = photo))
+        val knitting = KnittingsDataSource.getKnitting(photo.ownerID)
+        KnittingsDataSource.updateKnitting(knitting.copy(defaultPhoto = photo))
         view?.let {
             Snackbar.make(it, "Used as main photo", Snackbar.LENGTH_SHORT).show()
         }
@@ -183,14 +183,14 @@ class PhotoFragment : Fragment() {
     }
 
     private fun deletePhoto() {
-        datasource.deletePhoto(photo)
+        KnittingsDataSource.deletePhoto(photo)
     }
 
     private fun savePhoto(photo: Photo) {
         if (photo.id == -1L) {
-            datasource.addPhoto(photo)
+            KnittingsDataSource.addPhoto(photo)
         } else {
-            datasource.updatePhoto(photo)
+            KnittingsDataSource.updatePhoto(photo)
         }
     }
 

@@ -10,8 +10,8 @@ import android.view.View
 import android.widget.TextView
 import com.mthaler.dbapp.BaseActivity
 import com.mthaler.knittings.R
-import com.mthaler.knittings.database.datasource
 import com.mthaler.knittings.Extras.EXTRA_KNITTING_ID
+import com.mthaler.knittings.database.KnittingsDataSource
 import java.util.Locale
 import kotlinx.android.synthetic.main.activity_stopwatch.*
 
@@ -38,7 +38,7 @@ class   StopwatchActivity : BaseActivity() {
         val id = if (savedInstanceState != null) savedInstanceState.getLong(EXTRA_KNITTING_ID) else intent.getLongExtra(EXTRA_KNITTING_ID, -1L)
         if (id != -1L) {
             knittingID = id
-            elapsedTime = datasource.getKnitting(knittingID).duration
+            elapsedTime = KnittingsDataSource.getKnitting(knittingID).duration
         } else {
             error("Could not get knitting id")
         }
@@ -67,8 +67,8 @@ class   StopwatchActivity : BaseActivity() {
     // Stop the stopwatch running when the Stop button is clicked.
     fun onClickStop(view: View) {
         running = false
-        val knitting = datasource.getKnitting(knittingID)
-        datasource.updateKnitting(knitting.copy(duration = elapsedTime))
+        val knitting = KnittingsDataSource.getKnitting(knittingID)
+        KnittingsDataSource.updateKnitting(knitting.copy(duration = elapsedTime))
     }
 
     fun onClickDiscard(view: View) {

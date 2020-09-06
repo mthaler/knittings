@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.mthaler.knittings.DatasourceViewModel
+import com.mthaler.knittings.database.KnittingsDataSource
 import com.mthaler.knittings.model.Knitting
 import com.mthaler.knittings.model.Rows
 import kotlinx.coroutines.Dispatchers
@@ -20,13 +21,13 @@ class RowCounterViewModel(application: Application) : DatasourceViewModel(applic
             knittingID = id
             viewModelScope.launch {
                 val r =  withContext(Dispatchers.IO) {
-                    val knitting = datasource.getKnitting(id)
-                    datasource.getRows(knitting)
+                    val knitting = KnittingsDataSource.getKnitting(id)
+                    KnittingsDataSource.getRows(knitting)
                 }
                 if (r != null) {
                     rows.value = r
                 } else {
-                    val rr = datasource.addRows(Rows(-1, 0, 1, knittingID))
+                    val rr = KnittingsDataSource.addRows(Rows(-1, 0, 1, knittingID))
                     rows.value = rr
                 }
             }
@@ -36,29 +37,29 @@ class RowCounterViewModel(application: Application) : DatasourceViewModel(applic
     fun incrementTotalRows() {
         val r = rows.value
         if (r != null) {
-            datasource.updateRows(r.copy(totalRows = r.totalRows + 1))
+            KnittingsDataSource.updateRows(r.copy(totalRows = r.totalRows + 1))
         }
     }
 
     fun decrementTotalRows() {
         val r = rows.value
         if (r != null) {
-            datasource.updateRows(r.copy(totalRows = r.totalRows - 1))
+            KnittingsDataSource.updateRows(r.copy(totalRows = r.totalRows - 1))
         }
     }
 
     fun setRowsPerRepeat(rowsPerRepeat: Int) {
         val r = rows.value
         if (r != null && r.rowsPerRepeat != rowsPerRepeat) {
-            datasource.updateRows(r.copy(rowsPerRepeat = rowsPerRepeat))
+            KnittingsDataSource.updateRows(r.copy(rowsPerRepeat = rowsPerRepeat))
         }
     }
 
     override fun databaseChanged() {
         viewModelScope.launch {
             val r =  withContext(Dispatchers.IO) {
-                val k = datasource.getKnitting(knittingID)
-                datasource.getRows(k)
+                val k = KnittingsDataSource.getKnitting(knittingID)
+                KnittingsDataSource.getRows(k)
             }
             rows.value = r
         }

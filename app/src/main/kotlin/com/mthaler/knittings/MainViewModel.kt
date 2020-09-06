@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.mthaler.dbapp.Sorting
+import com.mthaler.knittings.database.KnittingsDataSource
 import com.mthaler.knittings.model.Knitting
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -34,7 +35,7 @@ class MainViewModel(application: Application) : DatasourceViewModel(application)
     private fun updateKnittings() {
         viewModelScope.launch {
             val filtered = withContext(Dispatchers.IO) {
-                val allKnittings = datasource.allKnittings
+                val allKnittings = KnittingsDataSource.allKnittings
                 val filtered = filter.filter(allKnittings)
                 val sorted = when (sorting) {
                     Sorting.NewestFirst -> filtered.sortedByDescending { it.started }

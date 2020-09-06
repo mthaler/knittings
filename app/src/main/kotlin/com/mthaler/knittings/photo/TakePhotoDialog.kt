@@ -16,7 +16,7 @@ import com.mthaler.dbapp.model.Photo
 import com.mthaler.dbapp.utils.FileUtils
 import com.mthaler.dbapp.utils.PictureUtils
 import com.mthaler.knittings.R
-import com.mthaler.knittings.database.datasource
+import com.mthaler.knittings.database.KnittingsDataSource
 import java.io.File
 
 object TakePhotoDialog {
@@ -52,9 +52,9 @@ object TakePhotoDialog {
         buttonTakePhoto.setOnClickListener {
             d.dismiss()
             val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-            val knitting = context.datasource.getKnitting(knittingID)
+            val knitting = KnittingsDataSource.getKnitting(knittingID)
             // create a photo file for the photo
-            val f = context.datasource.getPhotoFile(knitting)?.let {
+            val f = KnittingsDataSource.getPhotoFile(knitting)?.let {
                 val packageManager = context.packageManager
                 val canTakePhoto = takePictureIntent.resolveActivity(packageManager) != null
                 if (canTakePhoto) {
@@ -72,8 +72,8 @@ object TakePhotoDialog {
         }
         buttonImportPhoto.setOnClickListener {
             d.dismiss()
-            val knitting = context.datasource.getKnitting(knittingID)
-            context.datasource.getPhotoFile(knitting)?.let {
+            val knitting = KnittingsDataSource.getKnitting(knittingID)
+            KnittingsDataSource.getPhotoFile(knitting)?.let {
                 val photoPickerIntent = Intent(Intent.ACTION_PICK)
                 photoPickerIntent.type = "image/*"
                 importPhoto(it, photoPickerIntent)
@@ -108,18 +108,18 @@ object TakePhotoDialog {
         val orientation = PictureUtils.getOrientation(file.absolutePath)
         val preview = PictureUtils.decodeSampledBitmapFromPath(file.absolutePath, 200, 200)
         val rotatedPreview = PictureUtils.rotateBitmap(preview, orientation)
-        val photo = context.datasource.addPhoto(Photo(-1, file, knittingID, "", rotatedPreview))
+        val photo = KnittingsDataSource.addPhoto(Photo(-1, file, knittingID, "", rotatedPreview))
         Log.d(TAG, "Created new photo from $file, knitting id $knittingID")
         // add first photo as default photo
-        val knitting = context.datasource.getKnitting(knittingID)
+        val knitting = KnittingsDataSource.getKnitting(knittingID)
         val prefs = PreferenceManager.getDefaultSharedPreferences(context)
         val useNewestAsPreview = prefs.getBoolean(context.resources.getString(R.string.key_photos_use_newest_as_preview), true)
         if (useNewestAsPreview) {
-            context.datasource.updateKnitting(knitting.copy(defaultPhoto = photo))
+            KnittingsDataSource.updateKnitting(knitting.copy(defaultPhoto = photo))
         } else {
             if (knitting.defaultPhoto == null) {
                 Log.d(TAG, "Set $photo as default photo")
-                context.datasource.updateKnitting(knitting.copy(defaultPhoto = photo))
+                KnittingsDataSource.updateKnitting(knitting.copy(defaultPhoto = photo))
             }
         }
     }
@@ -152,18 +152,18 @@ object TakePhotoDialog {
         val orientation = PictureUtils.getOrientation(file.absolutePath)
         val preview = PictureUtils.decodeSampledBitmapFromPath(file.absolutePath, 200, 200)
         val rotatedPreview = PictureUtils.rotateBitmap(preview, orientation)
-        val photo = context.datasource.addPhoto(Photo(-1, file, knittingID, "", rotatedPreview))
+        val photo = KnittingsDataSource.addPhoto(Photo(-1, file, knittingID, "", rotatedPreview))
         Log.d(TAG, "Created new photo from $file, knitting id $knittingID")
         // add first photo as default photo
-        val knitting = context.datasource.getKnitting(knittingID)
+        val knitting = KnittingsDataSource.getKnitting(knittingID)
         val prefs = PreferenceManager.getDefaultSharedPreferences(context)
         val useNewestAsPreview = prefs.getBoolean(context.resources.getString(R.string.key_photos_use_newest_as_preview), true)
         if (useNewestAsPreview) {
-            context.datasource.updateKnitting(knitting.copy(defaultPhoto = photo))
+            KnittingsDataSource.updateKnitting(knitting.copy(defaultPhoto = photo))
         } else {
             if (knitting.defaultPhoto == null) {
                 Log.d(TAG, "Set $photo as default photo")
-                context.datasource.updateKnitting(knitting.copy(defaultPhoto = photo))
+                KnittingsDataSource.updateKnitting(knitting.copy(defaultPhoto = photo))
             }
         }
     }

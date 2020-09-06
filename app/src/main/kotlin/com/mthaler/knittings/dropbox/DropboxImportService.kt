@@ -13,7 +13,7 @@ import androidx.core.content.ContextCompat
 import com.mthaler.dbapp.utils.FileUtils
 import com.mthaler.dbapp.utils.PictureUtils
 import com.mthaler.knittings.R
-import com.mthaler.knittings.database.datasource
+import com.mthaler.knittings.database.KnittingsDataSource
 import com.mthaler.knittings.model.Database
 import com.mthaler.knittings.service.JobStatus
 import com.mthaler.knittings.service.ServiceStatus
@@ -85,22 +85,22 @@ class DropboxImportService : Service() {
         val count = database.photos.size
         val dbxClient = DropboxClientFactory.getClient()
         // remove all existing entries from the database
-        datasource.deleteAllKnittings()
-        datasource.deleteAllPhotos()
-        datasource.deleteAllCategories()
-        datasource.deleteAllNeedles()
+        KnittingsDataSource.deleteAllKnittings()
+        KnittingsDataSource.deleteAllPhotos()
+        KnittingsDataSource.deleteAllCategories()
+        KnittingsDataSource.deleteAllNeedles()
         // add downloaded database
         for (photo in database.photos) {
-            datasource.addPhoto(photo, manualID = true)
+            KnittingsDataSource.addPhoto(photo, manualID = true)
         }
         for (category in database.categories) {
-            datasource.addCategory(category, manualID = true)
+            KnittingsDataSource.addCategory(category, manualID = true)
         }
         for (needle in database.needles) {
-            datasource.addNeedle(needle, manualID = true)
+            KnittingsDataSource.addNeedle(needle, manualID = true)
         }
         for (knitting in database.knittings) {
-            datasource.addKnitting(knitting, manualID = true)
+            KnittingsDataSource.addKnitting(knitting, manualID = true)
         }
         for ((index, photo) in database.photos.withIndex()) {
             // Download the file.
@@ -113,7 +113,7 @@ class DropboxImportService : Service() {
             val preview = PictureUtils.decodeSampledBitmapFromPath(photo.filename.absolutePath, 200, 200)
             val rotatedPreview = PictureUtils.rotateBitmap(preview, orientation)
             val photoWithPreview = photo.copy(preview = rotatedPreview)
-            this.datasource.updatePhoto(photoWithPreview)
+            KnittingsDataSource.updatePhoto(photoWithPreview)
             val progress = (index / count.toFloat() * 100).toInt()
             builder.setProgress(100, progress, false)
             notificationManager.notify(1, builder.build())

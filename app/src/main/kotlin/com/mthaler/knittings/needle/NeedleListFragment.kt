@@ -14,7 +14,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.mthaler.knittings.DeleteDialog
 import com.mthaler.knittings.R
-import com.mthaler.knittings.database.datasource
+import com.mthaler.knittings.database.KnittingsDataSource
 import com.mthaler.knittings.model.NeedleType
 import kotlinx.android.synthetic.main.fragment_needle_list.*
 
@@ -52,7 +52,7 @@ class NeedleListFragment : Fragment() {
                         R.id.action_delete -> {
                             this@NeedleListFragment.activity?.let {
                                 DeleteDialog.create(it, needle.name) {
-                                    datasource.deleteNeedle(needle)
+                                    KnittingsDataSource.deleteNeedle(needle)
                                 }.show()
                             }
                             mode?.finish()
@@ -61,7 +61,7 @@ class NeedleListFragment : Fragment() {
                         R.id.action_copy -> {
                             val newName = "${needle.name} - ${getString(R.string.copy)}"
                             val needleCopy = needle.copy(name = newName)
-                            datasource.addNeedle(needleCopy)
+                            KnittingsDataSource.addNeedle(needleCopy)
                             mode?.finish()
                             return true
                         }

@@ -10,7 +10,7 @@ import androidx.core.content.ContextCompat
 import com.mthaler.dbapp.utils.FileUtils
 import com.mthaler.dbapp.utils.PictureUtils
 import com.mthaler.knittings.R
-import com.mthaler.knittings.database.datasource
+import com.mthaler.knittings.database.KnittingsDataSource
 import com.mthaler.knittings.service.JobStatus
 import com.mthaler.knittings.service.ServiceStatus
 import kotlinx.coroutines.*
@@ -69,7 +69,7 @@ class CompressPhotosService : Service() {
         val builder = createNotificationBuilder(pendingIntent, getString(R.string.compress_photos_notification_initial_msg))
         val sm = CompressPhotosServiceManager.getInstance()
         val notificationManager = NotificationManagerCompat.from(this)
-        val photos = datasource.allPhotos
+        val photos = KnittingsDataSource.allPhotos
         val photosToCompress = photos.filter {
             it.filename.exists() && it.filename.length() > 350 * 1024
         }

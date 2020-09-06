@@ -6,7 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
-import com.mthaler.knittings.database.datasource
+import com.mthaler.knittings.database.KnittingsDataSource
 import com.mthaler.knittings.model.Knitting
 import java.util.Calendar
 
@@ -18,7 +18,7 @@ class ProjectCountFragment : Fragment() {
         val v = inflater.inflate(R.layout.fragment_project_count, container, false)
 
         // get all knittings from database
-        val knittings = datasource.allKnittings
+        val knittings = KnittingsDataSource.allKnittings
 
         val years = createYearsList(knittings)
         val categoryNames = createCategoryNamesList()
@@ -94,7 +94,7 @@ class ProjectCountFragment : Fragment() {
      * @return list of categories
      */
     private fun createCategoryNamesList(): List<String> {
-        val categories = datasource.allCategories
+        val categories = KnittingsDataSource.allCategories
         categories.sortBy { it.name }
         return listOf(getString(R.string.filter_show_all)) + categories.map { it.name }.toList()
     }

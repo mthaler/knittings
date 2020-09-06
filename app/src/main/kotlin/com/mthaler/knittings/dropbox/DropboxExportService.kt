@@ -13,12 +13,12 @@ import com.dropbox.core.v2.DbxClientV2
 import com.dropbox.core.v2.files.WriteMode
 import com.mthaler.dbapp.model.Photo
 import com.mthaler.knittings.R
-import com.mthaler.knittings.database.datasource
 import com.mthaler.knittings.model.Database
 import com.mthaler.knittings.model.toJSON
 import com.mthaler.knittings.service.JobStatus
 import com.mthaler.dbapp.utils.FileUtils.createDateTimeDirectoryName
 import com.mthaler.dbapp.utils.FileUtils.getExtension
+import com.mthaler.knittings.database.KnittingsDataSource
 import com.mthaler.knittings.utils.createNotificationChannel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -95,10 +95,10 @@ class DropboxExportService : Service() {
     }
 
     private fun createDatabase(): Database {
-        val knittings = datasource.allKnittings
-        val photos = datasource.allPhotos
-        val categories = datasource.allCategories
-        val needles = datasource.allNeedles
+        val knittings = KnittingsDataSource.allKnittings
+        val photos = KnittingsDataSource.allPhotos
+        val categories = KnittingsDataSource.allCategories
+        val needles = KnittingsDataSource.allNeedles
         return Database(knittings, photos, categories, needles)
     }
 
