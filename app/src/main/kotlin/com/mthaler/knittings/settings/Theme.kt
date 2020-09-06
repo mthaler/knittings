@@ -2,18 +2,19 @@ package com.mthaler.knittings.settings
 
 import android.content.Context
 import androidx.core.content.ContextCompat
-import com.mthaler.knittings.R
 
 data class Theme(val name: String, val colorId: Int, val themeId: Int) {
 
     companion object {
 
-        val default = Theme("default", R.color.colorPrimary, R.style.AppTheme_NoActionBar)
-        val mint = Theme("mint", R.color.mintColorPrimary, R.style.Theme_App_Mint)
-        val rose = Theme("rose", R.color.roseColorPrimary, R.style.Theme_App_Rose)
-        val sky = Theme("sky", R.color.skyColorPrimary, R.style.Theme_App_Sky)
+        private lateinit var themes: List<Theme>
 
-        val themes = listOf(default, mint, rose, sky)
+        fun setThemes(themes: List<Theme>) {
+            this.themes = themes
+        }
+
+        val default: Theme
+            get() = themes.first()
 
         fun getTheme(name: String): Theme {
             val result = themes.find { it.name == name }
