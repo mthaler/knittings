@@ -3,8 +3,8 @@ package com.mthaler.knittings.model
 import android.os.Parcel
 import android.os.Parcelable
 import com.mthaler.dbapp.model.Photo
-import com.mthaler.knittings.utils.readOptionalLong
-import com.mthaler.knittings.utils.writeOptionalLong
+import com.mthaler.dbapp.utils.readOptionalLong
+import com.mthaler.dbapp.utils.writeOptionalLong
 import java.io.Serializable
 import java.text.SimpleDateFormat
 import java.util.Date

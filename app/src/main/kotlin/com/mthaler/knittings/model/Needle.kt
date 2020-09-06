@@ -2,8 +2,6 @@ package com.mthaler.knittings.model
 
 import android.os.Parcel
 import android.os.Parcelable
-import com.mthaler.knittings.utils.readBoolean
-import com.mthaler.knittings.utils.writeBoolean
 import java.io.Serializable
 
 data class Needle(

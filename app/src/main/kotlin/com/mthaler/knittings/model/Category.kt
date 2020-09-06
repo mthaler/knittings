@@ -2,8 +2,8 @@ package com.mthaler.knittings.model
 
 import android.os.Parcel
 import android.os.Parcelable
-import com.mthaler.knittings.utils.readOptionalInt
-import com.mthaler.knittings.utils.writeOptionalInt
+import com.mthaler.dbapp.utils.readOptionalInt
+import com.mthaler.dbapp.utils.writeOptionalInt
 import java.io.Serializable
 
 data class Category(val id: Long = -1, val name: String = "", val color: Int? = null) : Serializable, Parcelable {
