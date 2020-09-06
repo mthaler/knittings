@@ -11,6 +11,7 @@ import androidx.preference.Preference;
 import androidx.preference.PreferenceViewHolder;
 
 import com.mthaler.dbapp.settings.ColorShape;
+import com.mthaler.dbapp.settings.ColorUtils;
 import com.mthaler.dbapp.settings.PreviewSize;
 import com.mthaler.knittings.R;
 import petrov.kristiyan.colorpicker.ColorPicker;
