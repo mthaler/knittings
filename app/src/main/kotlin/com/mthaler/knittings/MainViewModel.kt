@@ -3,7 +3,7 @@ package com.mthaler.knittings
 import android.app.Application
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.mthaler.dbapp.DatasourceViewModel
+import com.mthaler.dbapp.DataSourceViewModel
 import com.mthaler.dbapp.Sorting
 import com.mthaler.knittings.database.KnittingsDataSource
 import com.mthaler.knittings.model.Knitting
@@ -11,7 +11,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class MainViewModel(application: Application) : DatasourceViewModel(application) {
+class MainViewModel(application: Application) : DataSourceViewModel(application) {
 
     val knittings = MutableLiveData<List<Knitting>>(emptyList())
     var sorting: Sorting = Sorting.NewestFirst

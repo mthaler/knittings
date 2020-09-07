@@ -3,7 +3,7 @@ package com.mthaler.knittings.rowcounter
 import android.app.Application
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.mthaler.dbapp.DatasourceViewModel
+import com.mthaler.dbapp.DataSourceViewModel
 import com.mthaler.knittings.database.KnittingsDataSource
 import com.mthaler.knittings.model.Knitting
 import com.mthaler.knittings.model.Rows
@@ -11,7 +11,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class RowCounterViewModel(application: Application) : DatasourceViewModel(application) {
+class RowCounterViewModel(application: Application) : DataSourceViewModel(application) {
 
     private var knittingID = Knitting.EMPTY.id
     val rows = MutableLiveData<Rows>()
