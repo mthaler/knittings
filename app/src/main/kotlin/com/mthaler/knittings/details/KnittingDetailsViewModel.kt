@@ -3,7 +3,7 @@ package com.mthaler.knittings.details
 import android.app.Application
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.mthaler.knittings.DatasourceViewModel
+import com.mthaler.dbapp.DatasourceViewModel
 import com.mthaler.knittings.database.KnittingsDataSource
 import com.mthaler.knittings.model.Knitting
 import kotlinx.coroutines.Dispatchers

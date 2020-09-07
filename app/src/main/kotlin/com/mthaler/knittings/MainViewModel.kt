@@ -3,6 +3,7 @@ package com.mthaler.knittings
 import android.app.Application
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.mthaler.dbapp.DatasourceViewModel
 import com.mthaler.dbapp.Sorting
 import com.mthaler.knittings.database.KnittingsDataSource
 import com.mthaler.knittings.model.Knitting
