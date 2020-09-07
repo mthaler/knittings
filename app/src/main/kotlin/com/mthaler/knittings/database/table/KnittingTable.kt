@@ -2,6 +2,7 @@ package com.mthaler.knittings.database.table
 
 import android.content.ContentValues
 import android.database.sqlite.SQLiteDatabase
+import com.mthaler.dbapp.database.table.*
 import com.mthaler.knittings.model.Knitting
 
 /**

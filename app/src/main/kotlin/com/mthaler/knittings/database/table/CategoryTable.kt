@@ -3,6 +3,7 @@ package com.mthaler.knittings.database.table
 import android.content.ContentValues
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
+import com.mthaler.dbapp.database.table.*
 import com.mthaler.dbapp.model.Category
 
 object CategoryTable {

@@ -4,6 +4,7 @@ import android.content.ContentValues
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.graphics.BitmapFactory
+import com.mthaler.dbapp.database.table.*
 import com.mthaler.dbapp.model.Photo
 import java.io.File
 

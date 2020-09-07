@@ -4,6 +4,7 @@ import android.content.ContentValues
 import android.content.Context
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
+import com.mthaler.dbapp.database.table.*
 import com.mthaler.knittings.model.Needle
 import com.mthaler.knittings.model.NeedleMaterial
 import com.mthaler.knittings.model.NeedleType
