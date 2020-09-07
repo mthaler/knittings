@@ -9,10 +9,11 @@ import java.util.Date
 import com.mthaler.dbapp.database.AbstractObservableDatabase
 import com.mthaler.dbapp.database.CategoryDataSource
 import com.mthaler.dbapp.database.PhotoDataSource
+import com.mthaler.dbapp.database.table.CategoryTable
 import com.mthaler.dbapp.model.Category
 import com.mthaler.dbapp.model.Photo
 import com.mthaler.knittings.database.table.*
-import com.mthaler.knittings.database.table.CategoryTable.cursorToCategory
+import com.mthaler.dbapp.database.table.CategoryTable.cursorToCategory
 import com.mthaler.knittings.database.table.PhotoTable.cursorToPhoto
 import com.mthaler.knittings.database.table.NeedleTable.cursorToNeedle
 import com.mthaler.knittings.database.table.RowsTable.cursorToRows

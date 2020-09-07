@@ -4,6 +4,7 @@ import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.util.Log
 import com.mthaler.dbapp.database.ManagedSQLiteOpenHelper
+import com.mthaler.dbapp.database.table.CategoryTable
 import com.mthaler.knittings.database.table.*
 
 /**
