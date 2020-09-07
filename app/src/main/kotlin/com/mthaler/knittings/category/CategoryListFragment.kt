@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.mthaler.dbapp.category.CategoryAdapter
+import com.mthaler.dbapp.category.CategoryListViewModel
 import com.mthaler.dbapp.database.CategoryRepository
 import com.mthaler.knittings.DeleteDialog
 import com.mthaler.knittings.Extras
