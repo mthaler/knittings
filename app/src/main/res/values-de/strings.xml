@@ -20,10 +20,6 @@
     <string name="discard_changes_dialog_question">Änderungen verwerfen?</string>
     <string name="discard_changes_dialog_button_discard">Verwerfen</string>
 
-    <!-- delete category dialog -->
-    <string name="delete_dialog_question">%1$s wirklich löschen?</string>
-    <string name="delete_dialog_delete_button">Löschen</string>
-
     <!-- generic menu entries-->
     <string name="menu_entry_save">Speichern</string>
     <string name="menu_entry_delete">Löschen</string>

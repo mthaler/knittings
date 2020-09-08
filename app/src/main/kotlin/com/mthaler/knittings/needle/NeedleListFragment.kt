@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import android.view.*
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.mthaler.knittings.DeleteDialog
+import com.mthaler.dbapp.DeleteDialog
 import com.mthaler.knittings.R
 import com.mthaler.knittings.database.KnittingsDataSource
 import com.mthaler.knittings.model.NeedleType
