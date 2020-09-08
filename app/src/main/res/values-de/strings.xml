@@ -16,10 +16,6 @@
     <string name="save_changes_dialog_button_discard">Verwerfen</string>
     <string name="save_changes_dialog_question">Änderungen speichern?</string>
 
-    <!-- discard changes dialog -->
-    <string name="discard_changes_dialog_question">Änderungen verwerfen?</string>
-    <string name="discard_changes_dialog_button_discard">Verwerfen</string>
-
     <!-- generic menu entries-->
     <string name="menu_entry_save">Speichern</string>
     <string name="menu_entry_delete">Löschen</string>

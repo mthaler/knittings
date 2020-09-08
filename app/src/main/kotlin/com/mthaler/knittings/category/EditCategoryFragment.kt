@@ -7,8 +7,8 @@ import android.widget.Button
 import android.widget.EditText
 import androidx.fragment.app.Fragment
 import com.mthaler.dbapp.DeleteDialog
+import com.mthaler.dbapp.DiscardChangesDialog
 import com.mthaler.dbapp.database.CategoryRepository
-import com.mthaler.knittings.DiscardChangesDialog
 import com.mthaler.knittings.R
 import com.mthaler.knittings.Extras.EXTRA_CATEGORY_ID
 import com.mthaler.knittings.SaveChangesDialog

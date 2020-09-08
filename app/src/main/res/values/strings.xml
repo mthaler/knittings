@@ -15,10 +15,6 @@
     <string name="save_changes_dialog_button_save">Save</string>
     <string name="save_changes_dialog_button_discard">Discard</string>
 
-    <!-- discard changes dialog -->
-    <string name="discard_changes_dialog_question">Discard changes?</string>
-    <string name="discard_changes_dialog_button_discard">Discard</string>
-
     <!-- generic menu entries-->
     <string name="menu_entry_save">Save</string>
     <string name="menu_entry_delete">Delete</string>
