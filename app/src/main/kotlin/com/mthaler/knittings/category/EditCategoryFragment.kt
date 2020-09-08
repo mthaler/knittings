@@ -8,10 +8,10 @@ import android.widget.EditText
 import androidx.fragment.app.Fragment
 import com.mthaler.dbapp.DeleteDialog
 import com.mthaler.dbapp.DiscardChangesDialog
+import com.mthaler.dbapp.SaveChangesDialog
 import com.mthaler.dbapp.database.CategoryRepository
 import com.mthaler.knittings.R
 import com.mthaler.knittings.Extras.EXTRA_CATEGORY_ID
-import com.mthaler.knittings.SaveChangesDialog
 import com.mthaler.dbapp.model.Category
 import petrov.kristiyan.colorpicker.ColorPicker
 

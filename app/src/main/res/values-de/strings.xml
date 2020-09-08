@@ -11,11 +11,6 @@
     <!-- generic dialog strings -->
     <string name="dialog_button_cancel">Abbrechen</string>
 
-    <!-- save changes dialog strings -->
-    <string name="save_changes_dialog_button_save">Speichern</string>
-    <string name="save_changes_dialog_button_discard">Verwerfen</string>
-    <string name="save_changes_dialog_question">Änderungen speichern?</string>
-
     <!-- generic menu entries-->
     <string name="menu_entry_save">Speichern</string>
     <string name="menu_entry_delete">Löschen</string>

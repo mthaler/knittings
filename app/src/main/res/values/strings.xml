@@ -10,11 +10,6 @@
     <!-- generic dialog strings -->
     <string name="dialog_button_cancel">Cancel</string>
 
-    <!-- save changes dialog strings -->
-    <string name="save_changes_dialog_question">Save changes?</string>
-    <string name="save_changes_dialog_button_save">Save</string>
-    <string name="save_changes_dialog_button_discard">Discard</string>
-
     <!-- generic menu entries-->
     <string name="menu_entry_save">Save</string>
     <string name="menu_entry_delete">Delete</string>
