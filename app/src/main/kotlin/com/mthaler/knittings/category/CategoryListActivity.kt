@@ -81,6 +81,12 @@ class CategoryListActivity : BaseActivity(), CategoryListFragment.OnFragmentInte
 
     companion object {
 
-        fun newIntent(context: Context): Intent = Intent(context, CategoryListActivity::class.java)
+        val EXTRA_EMPTY_LIST_BACKGROUND = "com.mthaler.dbapp.empty_list_background"
+
+        fun newIntent(context: Context, emptyListBackground: Int): Intent {
+            val intent = Intent(context, CategoryListActivity::class.java)
+            intent.putExtra(EXTRA_EMPTY_LIST_BACKGROUND, emptyListBackground)
+            return intent
+        }
     }
 }
