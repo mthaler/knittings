@@ -84,14 +84,14 @@
                 android:value=".details.KnittingDetailsActivity" />
         </activity>
         <activity
-            android:name=".category.CategoryListActivity"
+            android:name="com.mthaler.dbapp.category.CategoryListActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
         </activity>
         <activity
-            android:name=".category.SelectCategoryActivity"
+            android:name="com.mthaler.dbapp.category.SelectCategoryActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

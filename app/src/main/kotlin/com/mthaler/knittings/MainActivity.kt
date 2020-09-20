@@ -19,8 +19,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.navigation.NavigationView
 import com.mthaler.dbapp.BaseActivity
 import com.mthaler.dbapp.Sorting
+import com.mthaler.dbapp.category.CategoryListActivity
 import com.mthaler.knittings.about.AboutDialog
-import com.mthaler.knittings.category.CategoryListActivity
 import com.mthaler.knittings.compressphotos.CompressPhotosActivity
 import com.mthaler.knittings.database.KnittingsDataSource
 import com.mthaler.knittings.details.DeleteKnittingDialog

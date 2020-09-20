@@ -9,8 +9,8 @@ import androidx.appcompat.content.res.AppCompatResources
 import android.widget.*
 import androidx.core.app.NavUtils
 import com.mthaler.dbapp.SaveChangesDialog
+import com.mthaler.dbapp.category.SelectCategoryActivity
 import com.mthaler.knittings.R
-import com.mthaler.knittings.category.SelectCategoryActivity
 import com.mthaler.dbapp.datepicker.DatePickerFragment
 import com.mthaler.knittings.model.Knitting
 import com.mthaler.knittings.utils.TimeUtils
