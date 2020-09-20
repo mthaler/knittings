@@ -13,6 +13,7 @@ import kotlinx.android.synthetic.main.activity_category_list.*
 class CategoryListActivity : BaseActivity(), CategoryListFragment.OnFragmentInteractionListener, EditCategoryFragment.OnFragmentInteractionListener {
 
     private var emptyListBackground: Int = -1
+    private var listBackground: Int = -1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,6 +25,7 @@ class CategoryListActivity : BaseActivity(), CategoryListFragment.OnFragmentInte
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         emptyListBackground = if (savedInstanceState != null) savedInstanceState.getInt(EXTRA_EMPTY_LIST_BACKGROUND) else intent.getIntExtra(EXTRA_EMPTY_LIST_BACKGROUND, -1)
+        listBackground = if (savedInstanceState != null) savedInstanceState.getInt(EXTRA_LIST_BACKGROUND) else intent.getIntExtra(EXTRA_LIST_BACKGROUND, -1)
 
         if (savedInstanceState == null) {
             val f = CategoryListFragment.newInstance(-1, emptyListBackground)
@@ -35,6 +37,7 @@ class CategoryListActivity : BaseActivity(), CategoryListFragment.OnFragmentInte
 
     override fun onSaveInstanceState(savedInstanceState: Bundle) {
         savedInstanceState.putInt(EXTRA_EMPTY_LIST_BACKGROUND, emptyListBackground)
+        savedInstanceState.putInt(EXTRA_LIST_BACKGROUND, listBackground)
         super.onSaveInstanceState(savedInstanceState)
     }
 
@@ -91,10 +94,12 @@ class CategoryListActivity : BaseActivity(), CategoryListFragment.OnFragmentInte
     companion object {
 
         val EXTRA_EMPTY_LIST_BACKGROUND = "com.mthaler.dbapp.empty_list_background"
+        val EXTRA_LIST_BACKGROUND = "com.mthaler.dbapp.list_background"
 
-        fun newIntent(context: Context, emptyListBackground: Int): Intent {
+        fun newIntent(context: Context, emptyListBackground: Int, listBackground: Int): Intent {
             val intent = Intent(context, CategoryListActivity::class.java)
             intent.putExtra(EXTRA_EMPTY_LIST_BACKGROUND, emptyListBackground)
+            intent.putExtra(EXTRA_EMPTY_LIST_BACKGROUND, listBackground)
             return intent
         }
     }
