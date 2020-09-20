@@ -11,19 +11,6 @@
     <!-- generic dialog strings -->
     <string name="dialog_button_cancel">Abbrechen</string>
 
-    <!-- save changes dialog strings -->
-    <string name="save_changes_dialog_button_save">Speichern</string>
-    <string name="save_changes_dialog_button_discard">Verwerfen</string>
-    <string name="save_changes_dialog_question">Änderungen speichern?</string>
-
-    <!-- discard changes dialog -->
-    <string name="discard_changes_dialog_question">Änderungen verwerfen?</string>
-    <string name="discard_changes_dialog_button_discard">Verwerfen</string>
-
-    <!-- delete category dialog -->
-    <string name="delete_dialog_question">%1$s wirklich löschen?</string>
-    <string name="delete_dialog_delete_button">Löschen</string>
-
     <!-- generic menu entries-->
     <string name="menu_entry_save">Speichern</string>
     <string name="menu_entry_delete">Löschen</string>

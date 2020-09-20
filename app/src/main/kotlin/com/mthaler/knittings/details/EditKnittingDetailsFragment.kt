@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.appcompat.content.res.AppCompatResources
 import android.widget.*
 import androidx.core.app.NavUtils
+import com.mthaler.dbapp.SaveChangesDialog
 import com.mthaler.knittings.R
 import com.mthaler.knittings.category.SelectCategoryActivity
 import com.mthaler.dbapp.datepicker.DatePickerFragment
@@ -17,7 +18,6 @@ import java.text.DateFormat
 import com.mthaler.knittings.durationpicker.DurationPickerDialog
 import com.mthaler.knittings.Extras.EXTRA_CATEGORY_ID
 import com.mthaler.knittings.Extras.EXTRA_KNITTING_ID
-import com.mthaler.knittings.SaveChangesDialog
 import com.mthaler.dbapp.model.Category
 import com.mthaler.knittings.database.KnittingsDataSource
 import com.mthaler.knittings.model.Status

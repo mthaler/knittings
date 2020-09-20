@@ -4,6 +4,9 @@ import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.*
 import android.widget.*
+import com.mthaler.dbapp.DeleteDialog
+import com.mthaler.dbapp.DiscardChangesDialog
+import com.mthaler.dbapp.SaveChangesDialog
 import com.mthaler.knittings.*
 import com.mthaler.knittings.model.Needle
 import com.mthaler.knittings.model.NeedleMaterial

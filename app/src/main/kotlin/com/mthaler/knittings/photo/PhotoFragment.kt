@@ -17,11 +17,11 @@ import java.io.FileOutputStream
 import java.io.IOException
 import android.preference.PreferenceManager
 import androidx.lifecycle.lifecycleScope
+import com.mthaler.dbapp.DeleteDialog
+import com.mthaler.dbapp.SaveChangesDialog
 import com.mthaler.dbapp.database.PhotoRepository
 import com.mthaler.dbapp.model.Photo
 import com.mthaler.dbapp.utils.PictureUtils
-import com.mthaler.knittings.DeleteDialog
-import com.mthaler.knittings.SaveChangesDialog
 import com.mthaler.knittings.database.KnittingsDataSource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
