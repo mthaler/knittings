@@ -137,9 +137,7 @@ class EditKnittingDetailsFragment : Fragment() {
             d.show()
         }
         buttonCategory.setOnClickListener {
-            val i = Intent(context, SelectCategoryActivity::class.java)
-            // add the knitting ID which is required to make up navigation work correctly
-            i.putExtra(EXTRA_KNITTING_ID, knittingID)
+            val i = SelectCategoryActivity.newIntent(requireContext(), knittingID, R.drawable.categories, R.drawable.categories2)
             startActivityForResult(i, REQUEST_SELECT_CATEGORY)
         }
 

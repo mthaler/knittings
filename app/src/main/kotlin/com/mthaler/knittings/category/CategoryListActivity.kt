@@ -99,7 +99,7 @@ class CategoryListActivity : BaseActivity(), CategoryListFragment.OnFragmentInte
         fun newIntent(context: Context, emptyListBackground: Int, listBackground: Int): Intent {
             val intent = Intent(context, CategoryListActivity::class.java)
             intent.putExtra(EXTRA_EMPTY_LIST_BACKGROUND, emptyListBackground)
-            intent.putExtra(EXTRA_EMPTY_LIST_BACKGROUND, listBackground)
+            intent.putExtra(EXTRA_LIST_BACKGROUND, listBackground)
             return intent
         }
     }

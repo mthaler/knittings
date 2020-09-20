@@ -1,6 +1,7 @@
 package com.mthaler.knittings.category
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
@@ -10,10 +11,14 @@ import com.mthaler.knittings.R
 import kotlinx.android.synthetic.main.activity_select_category.*
 import com.mthaler.knittings.Extras.EXTRA_KNITTING_ID
 import com.mthaler.dbapp.model.Category
+import com.mthaler.knittings.category.CategoryListActivity.Companion.EXTRA_EMPTY_LIST_BACKGROUND
+import com.mthaler.knittings.category.CategoryListActivity.Companion.EXTRA_LIST_BACKGROUND
 
 class SelectCategoryActivity : BaseActivity(), CategoryListFragment.OnFragmentInteractionListener, EditCategoryFragment.OnFragmentInteractionListener {
 
-    var knittingID = -1L
+    private var knittingID = -1L
+    private var emptyListBackground: Int = -1
+    private var listBackground: Int = -1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,9 +31,11 @@ class SelectCategoryActivity : BaseActivity(), CategoryListFragment.OnFragmentIn
 
         // get the id of the category that should be displayed.
         knittingID = if (savedInstanceState != null) savedInstanceState.getLong(EXTRA_KNITTING_ID) else intent.getLongExtra(EXTRA_KNITTING_ID, -1L)
+        emptyListBackground = if (savedInstanceState != null) savedInstanceState.getInt(EXTRA_EMPTY_LIST_BACKGROUND) else intent.getIntExtra(EXTRA_EMPTY_LIST_BACKGROUND, -1)
+        listBackground = if (savedInstanceState != null) savedInstanceState.getInt(EXTRA_LIST_BACKGROUND) else intent.getIntExtra(EXTRA_LIST_BACKGROUND, -1)
 
         if (savedInstanceState == null) {
-            val f = CategoryListFragment.newInstance(-1, -1)
+            val f = CategoryListFragment.newInstance(emptyListBackground, listBackground)
             val fm = supportFragmentManager
             val ft = fm.beginTransaction()
             ft.add(R.id.select_category_container, f)
@@ -38,6 +45,8 @@ class SelectCategoryActivity : BaseActivity(), CategoryListFragment.OnFragmentIn
 
     override fun onSaveInstanceState(outState: Bundle) {
         outState.putLong(EXTRA_KNITTING_ID, knittingID)
+        outState.putInt(EXTRA_EMPTY_LIST_BACKGROUND, emptyListBackground)
+        outState.putInt(EXTRA_LIST_BACKGROUND, listBackground)
         super.onSaveInstanceState(outState)
     }
 
@@ -101,6 +110,17 @@ class SelectCategoryActivity : BaseActivity(), CategoryListFragment.OnFragmentIn
             i.putExtra(Extras.EXTRA_CATEGORY_ID, categoryID)
             setResult(Activity.RESULT_OK, i)
             finish()
+        }
+    }
+
+    companion object {
+
+        fun newIntent(context: Context, knittingID: Long, emptyListBackground: Int, listBackground: Int): Intent {
+            val intent = Intent(context, SelectCategoryActivity::class.java)
+            intent.putExtra(EXTRA_KNITTING_ID, knittingID)
+            intent.putExtra(EXTRA_EMPTY_LIST_BACKGROUND, emptyListBackground)
+            intent.putExtra(EXTRA_LIST_BACKGROUND, listBackground)
+            return intent
         }
     }
 }
