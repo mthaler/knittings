@@ -3,6 +3,7 @@ package com.mthaler.knittings.category
 import android.content.Context
 import android.os.Bundle
 import android.view.*
+import android.widget.ImageView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import androidx.fragment.app.Fragment
 import androidx.appcompat.app.AppCompatActivity
@@ -22,12 +23,14 @@ import kotlinx.android.synthetic.main.fragment_category_list.*
 class CategoryListFragment : Fragment() {
 
     private var knittingID: Long = -1
+    private var categoryListBackground: Int = -1
     private var listener: OnFragmentInteractionListener? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
             knittingID = it.getLong(Extras.EXTRA_KNITTING_ID)
+            categoryListBackground = it.getInt(CategoryListActivity.EXTRA_EMPTY_LIST_BACKGROUND)
         }
 
         retainInstance = true
@@ -38,6 +41,11 @@ class CategoryListFragment : Fragment() {
 
         val fab = v.findViewById<FloatingActionButton>(R.id.fab_create_category)
         fab.setOnClickListener { listener?.createCategory() }
+
+        if (categoryListBackground != -1) {
+            val rv = v.findViewById<ImageView>(R.id.category_empty_recycler_view)
+            rv.setImageResource(categoryListBackground)
+        }
 
         return v
     }
@@ -128,10 +136,11 @@ class CategoryListFragment : Fragment() {
     companion object {
 
         @JvmStatic
-        fun newInstance(knittingID: Long) =
+        fun newInstance(knittingID: Long, emptyListBackground: Int) =
             CategoryListFragment().apply {
                 arguments = Bundle().apply {
                     putLong(Extras.EXTRA_KNITTING_ID, knittingID)
+                    putInt(CategoryListActivity.EXTRA_EMPTY_LIST_BACKGROUND, emptyListBackground)
                 }
             }
     }
