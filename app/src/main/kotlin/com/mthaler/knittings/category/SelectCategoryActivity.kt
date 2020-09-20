@@ -28,7 +28,7 @@ class SelectCategoryActivity : BaseActivity(), CategoryListFragment.OnFragmentIn
         knittingID = if (savedInstanceState != null) savedInstanceState.getLong(EXTRA_KNITTING_ID) else intent.getLongExtra(EXTRA_KNITTING_ID, -1L)
 
         if (savedInstanceState == null) {
-            val f = CategoryListFragment.newInstance(knittingID, -1)
+            val f = CategoryListFragment.newInstance(-1, -1)
             val fm = supportFragmentManager
             val ft = fm.beginTransaction()
             ft.add(R.id.select_category_container, f)

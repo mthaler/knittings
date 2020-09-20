@@ -16,21 +16,20 @@ import com.mthaler.dbapp.DeleteDialog
 import com.mthaler.dbapp.category.CategoryAdapter
 import com.mthaler.dbapp.category.CategoryListViewModel
 import com.mthaler.dbapp.database.CategoryRepository
-import com.mthaler.knittings.Extras
 import com.mthaler.knittings.R
 import kotlinx.android.synthetic.main.fragment_category_list.*
 
 class CategoryListFragment : Fragment() {
 
-    private var knittingID: Long = -1
-    private var categoryListBackground: Int = -1
+    private var emptyListBackground: Int = -1
+    private var listBackground: Int = -1
     private var listener: OnFragmentInteractionListener? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            knittingID = it.getLong(Extras.EXTRA_KNITTING_ID)
-            categoryListBackground = it.getInt(CategoryListActivity.EXTRA_EMPTY_LIST_BACKGROUND)
+            emptyListBackground = it.getInt(CategoryListActivity.EXTRA_EMPTY_LIST_BACKGROUND)
+            listBackground = it.getInt(CategoryListActivity.EXTRA_LIST_BACKGROUND)
         }
 
         retainInstance = true
@@ -42,9 +41,14 @@ class CategoryListFragment : Fragment() {
         val fab = v.findViewById<FloatingActionButton>(R.id.fab_create_category)
         fab.setOnClickListener { listener?.createCategory() }
 
-        if (categoryListBackground != -1) {
+        if (emptyListBackground != -1) {
             val rv = v.findViewById<ImageView>(R.id.category_empty_recycler_view)
-            rv.setImageResource(categoryListBackground)
+            rv.setImageResource(emptyListBackground)
+        }
+
+        if (listBackground != -1) {
+            val rv = v.findViewById<ImageView>(R.id.category_nonempty_recycler_view)
+            rv.setImageResource(listBackground)
         }
 
         return v
@@ -136,11 +140,11 @@ class CategoryListFragment : Fragment() {
     companion object {
 
         @JvmStatic
-        fun newInstance(knittingID: Long, emptyListBackground: Int) =
+        fun newInstance(emptyListBackground: Int, listBackground: Int) =
             CategoryListFragment().apply {
                 arguments = Bundle().apply {
-                    putLong(Extras.EXTRA_KNITTING_ID, knittingID)
                     putInt(CategoryListActivity.EXTRA_EMPTY_LIST_BACKGROUND, emptyListBackground)
+                    putInt(CategoryListActivity.EXTRA_LIST_BACKGROUND, listBackground)
                 }
             }
     }
