@@ -8,13 +8,11 @@ import android.view.MenuItem
 import com.mthaler.dbapp.BaseActivity
 import com.mthaler.knittings.R
 import com.mthaler.dbapp.model.Category
-import com.mthaler.knittings.Extras
-import com.mthaler.knittings.model.Knitting
 import kotlinx.android.synthetic.main.activity_category_list.*
 
 class CategoryListActivity : BaseActivity(), CategoryListFragment.OnFragmentInteractionListener, EditCategoryFragment.OnFragmentInteractionListener {
 
-    private var categoryListBackground: Int = -1
+    private var emptyListBackground: Int = -1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,14 +23,19 @@ class CategoryListActivity : BaseActivity(), CategoryListFragment.OnFragmentInte
         // enable up navigation
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        categoryListBackground = if (savedInstanceState != null) savedInstanceState.getInt(EXTRA_EMPTY_LIST_BACKGROUND) else intent.getIntExtra(EXTRA_EMPTY_LIST_BACKGROUND, -1)
+        emptyListBackground = if (savedInstanceState != null) savedInstanceState.getInt(EXTRA_EMPTY_LIST_BACKGROUND) else intent.getIntExtra(EXTRA_EMPTY_LIST_BACKGROUND, -1)
 
         if (savedInstanceState == null) {
-            val f = CategoryListFragment.newInstance(-1, categoryListBackground)
+            val f = CategoryListFragment.newInstance(-1, emptyListBackground)
             val ft = supportFragmentManager.beginTransaction()
             ft.add(R.id.category_list_container, f)
             ft.commit()
         }
+    }
+
+    override fun onSaveInstanceState(savedInstanceState: Bundle) {
+        savedInstanceState.putInt(EXTRA_EMPTY_LIST_BACKGROUND, emptyListBackground)
+        super.onSaveInstanceState(savedInstanceState)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean = when (item.itemId) {
