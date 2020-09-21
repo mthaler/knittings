@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.mthaler.dbapp.DataSourceViewModel
 import com.mthaler.dbapp.Sorting
+import com.mthaler.dbapp.filter.CombinedFilter
 import com.mthaler.knittings.database.KnittingsDataSource
 import com.mthaler.knittings.model.Knitting
 import kotlinx.coroutines.Dispatchers
@@ -19,7 +20,7 @@ class MainViewModel(application: Application) : DataSourceViewModel(application)
             field = value
             updateKnittings()
         }
-    var filter: CombinedFilter = CombinedFilter.Empty
+    var filter: CombinedFilter<Knitting> = CombinedFilter.empty()
         set(value) {
             field = value
             updateKnittings()

@@ -20,6 +20,7 @@ import com.google.android.material.navigation.NavigationView
 import com.mthaler.dbapp.BaseActivity
 import com.mthaler.dbapp.Sorting
 import com.mthaler.dbapp.category.CategoryListActivity
+import com.mthaler.dbapp.filter.CombinedFilter
 import com.mthaler.knittings.about.AboutDialog
 import com.mthaler.knittings.compressphotos.CompressPhotosActivity
 import com.mthaler.knittings.database.KnittingsDataSource
@@ -27,6 +28,7 @@ import com.mthaler.knittings.details.DeleteKnittingDialog
 import com.mthaler.knittings.details.KnittingDetailsActivity
 import com.mthaler.knittings.dropbox.DropboxExportActivity
 import com.mthaler.knittings.dropbox.DropboxImportActivity
+import com.mthaler.knittings.model.Knitting
 import com.mthaler.knittings.model.Status
 import com.mthaler.knittings.needle.NeedleListActivity
 import com.mthaler.knittings.settings.SettingsActivity
@@ -242,7 +244,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
                 true
             }
             R.id.menu_item_clear_filters -> {
-                viewModel.filter = CombinedFilter.Empty
+                viewModel.filter =CombinedFilter.empty()
                 true
             }
             R.id.menu_item_category_filter -> {
@@ -363,7 +365,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
      */
     override fun onQueryTextChange(newText: String?): Boolean {
         if (newText == null || TextUtils.isEmpty(newText)) {
-            viewModel.filter = CombinedFilter.Empty
+            viewModel.filter = CombinedFilter.empty()
         } else {
             viewModel.filter = CombinedFilter(listOf(ContainsFilter(newText)))
         }
@@ -386,7 +388,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
      * @return true if the listener wants to override the default behavior of clearing the text field and dismissing it, false otherwise.
      */
     override fun onClose(): Boolean {
-        viewModel.filter = CombinedFilter.Empty
+        viewModel.filter = CombinedFilter.empty()
         return true
     }
 
