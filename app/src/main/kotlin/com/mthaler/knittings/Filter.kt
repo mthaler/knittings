@@ -4,8 +4,7 @@ import com.mthaler.dbapp.filter.Filter
 import com.mthaler.dbapp.model.Category
 import com.mthaler.knittings.model.Knitting
 import com.mthaler.knittings.model.Status
-import com.mthaler.knittings.utils.StringUtils.containsIgnoreCase
-import java.io.Serializable
+import com.mthaler.dbapp.utils.StringUtils.containsIgnoreCase
 
 /**
  * A filter that filters the project list by category
