@@ -2,6 +2,7 @@ package com.mthaler.knittings.database
 
 import android.content.Context
 import android.database.Cursor
+import android.preference.PreferenceManager
 import android.util.Log
 import java.io.File
 import java.util.ArrayList
@@ -14,10 +15,12 @@ import com.mthaler.dbapp.model.Category
 import com.mthaler.dbapp.model.Photo
 import com.mthaler.knittings.database.table.*
 import com.mthaler.dbapp.database.table.CategoryTable.cursorToCategory
+import com.mthaler.knittings.R
 import com.mthaler.knittings.database.table.PhotoTable.cursorToPhoto
 import com.mthaler.knittings.database.table.NeedleTable.cursorToNeedle
 import com.mthaler.knittings.database.table.RowsTable.cursorToRows
 import com.mthaler.knittings.model.*
+import com.mthaler.knittings.photo.TakePhotoDialog
 import java.lang.Exception
 
 object KnittingsDataSource  : AbstractObservableDatabase(), KnittingRepository, PhotoDataSource, CategoryDataSource {
@@ -278,6 +281,20 @@ object KnittingsDataSource  : AbstractObservableDatabase(), KnittingRepository, 
         context.database.writableDatabase.use { database ->
             database.delete(PhotoTable.PHOTOS, PhotoTable.Cols.ID + "=" + id, null)
             Log.d(TAG, "Deleted photo $id: $photo")
+        }
+    }
+
+    @Synchronized
+    override fun setDefaultPhoto(ownerID: Long, photo: Photo) {
+        val knitting = getKnitting(ownerID)
+        val prefs = PreferenceManager.getDefaultSharedPreferences(context)
+        val useNewestAsPreview = prefs.getBoolean(context.resources.getString(R.string.key_photos_use_newest_as_preview), true)
+        if (useNewestAsPreview) {
+            updateKnitting(knitting.copy(defaultPhoto = photo))
+        } else {
+            if (knitting.defaultPhoto == null) {
+                updateKnitting(knitting.copy(defaultPhoto = photo))
+            }
         }
     }
 

@@ -7,7 +7,6 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Environment
-import android.preference.PreferenceManager
 import android.provider.MediaStore
 import android.util.Log
 import android.view.LayoutInflater
@@ -18,8 +17,6 @@ import com.mthaler.dbapp.model.Photo
 import com.mthaler.dbapp.utils.FileUtils
 import com.mthaler.dbapp.utils.PictureUtils
 import com.mthaler.knittings.R
-import com.mthaler.knittings.database.KnittingsDataSource
-import com.mthaler.knittings.model.Knitting
 import java.io.File
 
 object TakePhotoDialog {
@@ -31,7 +28,6 @@ object TakePhotoDialog {
      *
      * @param context Context
      * @param layoutInflater layout inflater
-     * @param knittingID ID of the knitting for which a photo should be added
      * @param takePhoto function that is called if the user wants to take a photo
      * @param importPhoto function that is called if the user wants to import a photo
      */
@@ -111,17 +107,7 @@ object TakePhotoDialog {
         val photo = PhotoRepository.addPhoto(Photo(-1, file, knittingID, "", rotatedPreview))
         Log.d(TAG, "Created new photo from $file, knitting id $knittingID")
         // add first photo as default photo
-        val knitting = KnittingsDataSource.getKnitting(knittingID)
-        val prefs = PreferenceManager.getDefaultSharedPreferences(context)
-        val useNewestAsPreview = prefs.getBoolean(context.resources.getString(R.string.key_photos_use_newest_as_preview), true)
-        if (useNewestAsPreview) {
-            KnittingsDataSource.updateKnitting(knitting.copy(defaultPhoto = photo))
-        } else {
-            if (knitting.defaultPhoto == null) {
-                Log.d(TAG, "Set $photo as default photo")
-                KnittingsDataSource.updateKnitting(knitting.copy(defaultPhoto = photo))
-            }
-        }
+        PhotoRepository.setDefaultPhoto(knittingID, photo)
     }
 
     /**
@@ -155,17 +141,7 @@ object TakePhotoDialog {
         val photo = PhotoRepository.addPhoto(Photo(-1, file, knittingID, "", rotatedPreview))
         Log.d(TAG, "Created new photo from $file, knitting id $knittingID")
         // add first photo as default photo
-        val knitting = KnittingsDataSource.getKnitting(knittingID)
-        val prefs = PreferenceManager.getDefaultSharedPreferences(context)
-        val useNewestAsPreview = prefs.getBoolean(context.resources.getString(R.string.key_photos_use_newest_as_preview), true)
-        if (useNewestAsPreview) {
-            KnittingsDataSource.updateKnitting(knitting.copy(defaultPhoto = photo))
-        } else {
-            if (knitting.defaultPhoto == null) {
-                Log.d(TAG, "Set $photo as default photo")
-                KnittingsDataSource.updateKnitting(knitting.copy(defaultPhoto = photo))
-            }
-        }
+        PhotoRepository.setDefaultPhoto(knittingID, photo)
     }
 
     private fun getPhotoFile(context: Context): File? {
