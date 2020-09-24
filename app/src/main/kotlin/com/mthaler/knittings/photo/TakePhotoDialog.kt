@@ -38,7 +38,6 @@ object TakePhotoDialog {
     fun create(
         context: Context,
         layoutInflater: LayoutInflater,
-        knittingID: Long,
         takePhoto: (File, Intent) -> Unit,
         importPhoto: (File, Intent) -> Unit
     ): AlertDialog {

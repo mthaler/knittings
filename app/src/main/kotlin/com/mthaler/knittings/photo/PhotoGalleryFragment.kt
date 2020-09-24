@@ -88,7 +88,7 @@ class PhotoGalleryFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.menu_item_add_photo -> {
-                val d = TakePhotoDialog.create(requireContext(), layoutInflater, knittingID, this::takePhoto, this::importPhoto)
+                val d = TakePhotoDialog.create(requireContext(), layoutInflater, this::takePhoto, this::importPhoto)
                 d.show()
                 true
             }
