@@ -55,7 +55,6 @@ object TakePhotoDialog {
         buttonTakePhoto.setOnClickListener {
             d.dismiss()
             val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-            val knitting = KnittingsDataSource.getKnitting(knittingID)
             // create a photo file for the photo
             val f = getPhotoFile(context)?.let {
                 val packageManager = context.packageManager
@@ -75,7 +74,6 @@ object TakePhotoDialog {
         }
         buttonImportPhoto.setOnClickListener {
             d.dismiss()
-            val knitting = KnittingsDataSource.getKnitting(knittingID)
             getPhotoFile(context)?.let {
                 val photoPickerIntent = Intent(Intent.ACTION_PICK)
                 photoPickerIntent.type = "image/*"
@@ -171,7 +169,7 @@ object TakePhotoDialog {
         }
     }
 
-    fun getPhotoFile(context: Context): File? {
+    private fun getPhotoFile(context: Context): File? {
         val externalFilesDir = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
         return if (externalFilesDir != null) File(externalFilesDir, Photo.photoFilename) else null
     }
