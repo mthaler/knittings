@@ -290,12 +290,13 @@ object KnittingsDataSource  : AbstractObservableDatabase(), KnittingRepository, 
         val prefs = PreferenceManager.getDefaultSharedPreferences(context)
         val useNewestAsPreview = prefs.getBoolean(context.resources.getString(R.string.key_photos_use_newest_as_preview), true)
         if (useNewestAsPreview) {
-            updateKnitting(knitting.copy(defaultPhoto = photo))
+            updateKnittingImpl(knitting.copy(defaultPhoto = photo))
         } else {
             if (knitting.defaultPhoto == null) {
-                updateKnitting(knitting.copy(defaultPhoto = photo))
+                updateKnittingImpl(knitting.copy(defaultPhoto = photo))
             }
         }
+        notifyObservers()
     }
 
     @Synchronized
