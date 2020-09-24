@@ -20,7 +20,6 @@ import com.mthaler.knittings.database.table.PhotoTable.cursorToPhoto
 import com.mthaler.knittings.database.table.NeedleTable.cursorToNeedle
 import com.mthaler.knittings.database.table.RowsTable.cursorToRows
 import com.mthaler.knittings.model.*
-import com.mthaler.knittings.photo.TakePhotoDialog
 import java.lang.Exception
 
 object KnittingsDataSource  : AbstractObservableDatabase(), KnittingRepository, PhotoDataSource, CategoryDataSource {
