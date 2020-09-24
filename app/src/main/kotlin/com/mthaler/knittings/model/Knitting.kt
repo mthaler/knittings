@@ -7,7 +7,6 @@ import com.mthaler.dbapp.model.Photo
 import com.mthaler.dbapp.utils.readOptionalLong
 import com.mthaler.dbapp.utils.writeOptionalLong
 import java.io.Serializable
-import java.text.SimpleDateFormat
 import java.util.Date
 
 /**
@@ -59,12 +58,6 @@ data class Knitting(
     }
 
     override fun describeContents(): Int = 0
-
-    val photoFilename: String
-        get() {
-            val timeStamp = SimpleDateFormat("yyyy_MM_dd_HH_mm_ss").format(Date())
-            return "IMG_$timeStamp.jpg"
-        }
 
     companion object {
 
