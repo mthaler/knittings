@@ -41,7 +41,7 @@
                 android:value=".MainActivity" />
         </activity> <!-- we define our own toolbar in MainActivity, use theme without toolbar -->
         <activity
-            android:name=".photo.PhotoGalleryActivity"
+            android:name="com.mthaler.dbapp.photo.PhotoGalleryActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
