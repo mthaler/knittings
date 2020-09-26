@@ -149,8 +149,7 @@ class PhotoFragment : Fragment() {
     }
 
     private fun setDefaultPhoto() {
-        val knitting = KnittingsDataSource.getKnitting(photo.ownerID)
-        KnittingsDataSource.updateKnitting(knitting.copy(defaultPhoto = photo))
+        PhotoRepository.setDefaultPhoto(photo.ownerID, photo)
         view?.let {
             Snackbar.make(it, "Used as main photo", Snackbar.LENGTH_SHORT).show()
         }
