@@ -13,6 +13,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.mthaler.dbapp.photo.PhotoGalleryAdapter
+import com.mthaler.dbapp.photo.PhotoGalleryViewModel
 import com.mthaler.dbapp.photo.TakePhotoDialog
 import com.mthaler.knittings.Extras.EXTRA_KNITTING_ID
 import com.mthaler.knittings.R
