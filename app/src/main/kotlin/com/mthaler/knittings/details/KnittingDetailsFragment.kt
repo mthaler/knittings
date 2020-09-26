@@ -14,6 +14,7 @@ import android.widget.TextView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import com.mthaler.dbapp.DeleteDialog
 import com.mthaler.dbapp.photo.TakePhotoDialog
 import com.mthaler.dbapp.ui.SquareImageView
 import com.mthaler.dbapp.utils.PictureUtils
@@ -120,7 +121,7 @@ class KnittingDetailsFragment : Fragment() {
             }
             R.id.menu_item_delete_knitting -> {
                 val knitting = KnittingsDataSource.getKnitting(knittingID)
-                DeleteKnittingDialog.create(requireContext(), knitting) {
+                DeleteDialog.create(requireContext(), knitting.title) {
                     viewModel.delete()
                     requireActivity().finish()
                 }.show()

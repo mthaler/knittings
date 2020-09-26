@@ -27,11 +27,6 @@
     <string name="activity_photo_gallery">Photos</string>
     <string name="activity_project_count">Count Projects</string>
 
-    <!-- delete knittings dialog -->
-    <string name="delete_knitting_dialog_title">Delete</string>
-    <string name="delete_knitting_dialog_question">Do you really want to delete %1$s?</string>
-    <string name="delete_knitting_dialog_delete_button">Delete</string>
-
     <string name="rating">Rating:</string>
 
     <!-- take photo dialog -->

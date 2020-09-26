@@ -18,13 +18,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.navigation.NavigationView
 import com.mthaler.dbapp.BaseActivity
+import com.mthaler.dbapp.DeleteDialog
 import com.mthaler.dbapp.Sorting
 import com.mthaler.dbapp.category.CategoryListActivity
 import com.mthaler.dbapp.filter.CombinedFilter
 import com.mthaler.knittings.about.AboutDialog
 import com.mthaler.knittings.compressphotos.CompressPhotosActivity
 import com.mthaler.knittings.database.KnittingsDataSource
-import com.mthaler.knittings.details.DeleteKnittingDialog
 import com.mthaler.knittings.details.KnittingDetailsActivity
 import com.mthaler.knittings.dropbox.DropboxExportActivity
 import com.mthaler.knittings.dropbox.DropboxImportActivity
@@ -89,7 +89,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
                 when (menu?.itemId) {
                     R.id.action_delete -> {
                         mode?.finish()
-                        DeleteKnittingDialog.create(this@MainActivity, knitting) {
+                        DeleteDialog.create(this@MainActivity, knitting.title) {
                             KnittingsDataSource.deleteKnitting(knitting)
                         }.show()
                         return true
