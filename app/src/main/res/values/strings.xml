@@ -29,10 +29,6 @@
 
     <string name="rating">Rating:</string>
 
-    <!-- take photo dialog -->
-    <string name="take_photo">Take photo</string>
-    <string name="import_from_gallery">Import from gallery</string>
-
     <!-- knitting details menu -->
     <string name="show_gallery">Show gallery</string>
     <string name="add_photo">Add photo</string>

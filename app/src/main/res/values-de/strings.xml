@@ -30,10 +30,6 @@
 
     <string name="rating">Bewertung:</string>
 
-    <!-- take photo dialog -->
-    <string name="take_photo">Foto mit Kamera aufnehmen</string>
-    <string name="import_from_gallery">Bild aus Galerie importieren</string>
-
     <!-- knitting details menu -->
     <string name="show_gallery">Galerie anzeigen</string>
     <string name="add_photo">Foto hinzufügen</string>
