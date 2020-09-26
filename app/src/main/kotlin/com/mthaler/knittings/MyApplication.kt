@@ -15,7 +15,7 @@ class MyApplication : MultiDexApplication() {
         KnittingsDataSource.init(this)
         ObservableDatabase.init(KnittingsDataSource)
         CategoryRepository.init(KnittingsDataSource)
-        PhotoRepository.init(KnittingsDataSource)
+        PhotoRepository.init(KnittingsDataSource, "com.mthaler.knittings.fileprovider")
         Theme.setThemes(ThemeRepository.themes)
     }
 }

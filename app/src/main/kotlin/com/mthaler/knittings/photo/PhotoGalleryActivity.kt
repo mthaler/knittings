@@ -6,6 +6,7 @@ import android.os.Bundle
 import androidx.core.app.NavUtils
 import android.view.MenuItem
 import com.mthaler.dbapp.BaseActivity
+import com.mthaler.dbapp.photo.PhotoFragment
 import com.mthaler.knittings.R
 import com.mthaler.knittings.Extras.EXTRA_KNITTING_ID
 import kotlinx.android.synthetic.main.activity_photo_gallery.*
