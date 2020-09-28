@@ -16,7 +16,7 @@ import com.mthaler.knittings.model.Knitting
 import com.mthaler.knittings.utils.TimeUtils
 import java.text.DateFormat
 import com.mthaler.knittings.durationpicker.DurationPickerDialog
-import com.mthaler.knittings.Extras.EXTRA_CATEGORY_ID
+import com.mthaler.dbapp.Extras.EXTRA_CATEGORY_ID
 import com.mthaler.knittings.Extras.EXTRA_KNITTING_ID
 import com.mthaler.dbapp.model.Category
 import com.mthaler.knittings.database.KnittingsDataSource
