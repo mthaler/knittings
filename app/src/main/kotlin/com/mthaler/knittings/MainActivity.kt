@@ -320,7 +320,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         // Handle navigation view item clicks here.
         when (item.itemId) {
             R.id.nav_edit_categories -> {
-                startActivity(CategoryListActivity.newIntent(this, R.drawable.categories, R.drawable.categories2))
+                startActivity(CategoryListActivity.newIntent(this))
             }
             R.id.nav_edit_needles -> {
                 startActivity(NeedleListActivity.newIntent(this))

@@ -1,6 +1,7 @@
 package com.mthaler.knittings
 
 import androidx.multidex.MultiDexApplication
+import com.mthaler.dbapp.ApplicationSettings
 import com.mthaler.dbapp.DatabaseApplication
 import com.mthaler.dbapp.database.CategoryDataSource
 import com.mthaler.dbapp.database.ObservableDatabase
@@ -18,9 +19,16 @@ class MyApplication : MultiDexApplication(), DatabaseApplication {
         Theme.setThemes(ThemeRepository.themes)
     }
 
-    override fun getFileProviderAuthority(): String = "com.mthaler.knittings.fileprovider"
-
     override fun getCategoryDataSource(): CategoryDataSource = KnittingsDataSource
 
     override fun getPhotoDataSource(): PhotoDataSource = KnittingsDataSource
+
+    override fun getApplicationSettings(): ApplicationSettings = object : ApplicationSettings {
+
+        override fun getFileProviderAuthority(): String = "com.mthaler.knittings.fileprovider"
+
+        override fun emptyCategoryListBackground(): Int = R.drawable.categories
+
+        override fun categoryListBackground(): Int = R.drawable.categories2
+    }
 }

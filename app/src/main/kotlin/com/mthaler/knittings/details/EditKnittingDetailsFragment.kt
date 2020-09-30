@@ -137,7 +137,7 @@ class EditKnittingDetailsFragment : Fragment() {
             d.show()
         }
         buttonCategory.setOnClickListener {
-            val i = SelectCategoryActivity.newIntent(requireContext(), knittingID, R.drawable.categories, R.drawable.categories2)
+            val i = SelectCategoryActivity.newIntent(requireContext(), knittingID)
             startActivityForResult(i, REQUEST_SELECT_CATEGORY)
         }
 
