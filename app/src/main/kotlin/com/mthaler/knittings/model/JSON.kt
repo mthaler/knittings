@@ -1,16 +1,16 @@
 package com.mthaler.knittings.model
 
 import android.content.Context
-import android.graphics.Color
 import com.mthaler.dbapp.model.Category
 import com.mthaler.dbapp.model.Photo
-import com.mthaler.dbapp.utils.ColorUtils
 import com.mthaler.knittings.database.KnittingDatabaseHelper
 import org.json.JSONObject
 import java.text.SimpleDateFormat
 import org.json.JSONArray
 import java.io.File
 import java.lang.Exception
+import com.mthaler.dbapp.model.toCategory
+import com.mthaler.dbapp.model.toJSON
 
 private val dateFormat = SimpleDateFormat("yyyy-MM-dd")
 
@@ -77,24 +77,6 @@ fun JSONObject.toPhoto(): Photo {
     val knittingID = getLong("knittingID")
     val description = getString("description")
     return Photo(id, filename, knittingID, description)
-}
-
-fun Category.toJSON(): JSONObject {
-    val result = JSONObject()
-    result.put("id", id)
-    result.put("name", name)
-    val c = color
-    if (c != null) {
-        result.put("color", ColorUtils.colorToHex(c))
-    }
-    return result
-}
-
-fun JSONObject.toCategory(): Category {
-    val id = getLong("id")
-    val name = getString("name")
-    val color = if (has("color")) Color.parseColor(getString("color")) else null
-    return Category(id, name, color)
 }
 
 fun Needle.toJSON(): JSONObject {

@@ -91,27 +91,6 @@ class JSONTest {
     }
 
     @Test
-    fun testCategoryToJSON() {
-        val c0 = Category(42, "test", null)
-        val j0 = c0.toJSON()
-        assertEquals(42, j0.getLong("id"))
-        assertEquals("test", j0.getString("name"))
-        val c1 = Category(43, "socks", Color.RED)
-        val j1 = c1.toJSON()
-        assertEquals(43, j1.getLong("id"))
-        assertEquals("socks", j1.getString("name"))
-        assertEquals(Color.RED, Color.parseColor(j1.getString("color")))
-    }
-
-    @Test
-    fun testJSONToCategory() {
-        val s1 = """{"name":"test","id":42}"""
-        assertEquals(Category(42, "test", null), JSONObject(s1).toCategory())
-        val s2 = """{"color":"#FFFF0000","name":"socks","id":43}"""
-        assertEquals(Category(43, "socks", Color.RED), JSONObject(s2).toCategory())
-    }
-
-    @Test
     fun testNeedleToJSON() {
         val n0 = Needle(42, "needle", "my first needle", "5 mm", "20 cm", NeedleMaterial.METAL, true, NeedleType.SET)
         val j0 = n0.toJSON()
