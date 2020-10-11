@@ -4,6 +4,7 @@ import android.graphics.Color
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.mthaler.dbapp.model.Category
+import com.mthaler.dbapp.model.Photo
 import org.json.JSONArray
 import org.json.JSONObject
 import org.junit.Assert.*

@@ -3,10 +3,10 @@ package com.mthaler.knittings.utils
 import org.junit.Test
 import java.util.*
 import org.junit.Assert.*
-import com.mthaler.knittings.utils.FileUtils.createDateTimeDirectoryName
-import com.mthaler.knittings.utils.FileUtils.getExtension
-import com.mthaler.knittings.utils.FileUtils.getFilenameWithoutExtension
-import com.mthaler.knittings.utils.FileUtils.replaceIllegalCharacters
+import com.mthaler.dbapp.utils.FileUtils.createDateTimeDirectoryName
+import com.mthaler.dbapp.utils.FileUtils.getExtension
+import com.mthaler.dbapp.utils.FileUtils.getFilenameWithoutExtension
+import com.mthaler.dbapp.utils.FileUtils.replaceIllegalCharacters
 
 class FileUtilsTest {
 

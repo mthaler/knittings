@@ -2,6 +2,7 @@ package com.mthaler.knittings.model
 
 import android.os.Parcel
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.mthaler.dbapp.model.Photo
 import com.mthaler.knittings.utils.SerializeUtils
 import org.junit.Assert.*
 import org.junit.Test
