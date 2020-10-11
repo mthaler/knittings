@@ -1,6 +1,7 @@
 package com.mthaler.knittings.model
 
 import android.graphics.Color
+import android.os.Build
 import android.os.Parcel
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.mthaler.dbapp.model.Category
@@ -8,8 +9,10 @@ import com.mthaler.knittings.utils.SerializeUtils
 import org.junit.Assert.*
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.robolectric.annotation.Config
 
 @RunWith(AndroidJUnit4::class)
+@Config(sdk = [Build.VERSION_CODES.P])
 class CategoryTest {
 
     @Test
