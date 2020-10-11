@@ -1,6 +1,7 @@
 package com.mthaler.knittings.model
 
 import android.graphics.Color
+import android.os.Build
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.mthaler.dbapp.model.Category
@@ -10,11 +11,13 @@ import org.json.JSONObject
 import org.junit.Assert.*
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.robolectric.annotation.Config
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
 
 @RunWith(AndroidJUnit4::class)
+@Config(sdk = [Build.VERSION_CODES.P])
 class JSONTest {
 
     private val dateFormat = SimpleDateFormat("yyyy-MM-dd")
@@ -214,7 +217,7 @@ class JSONTest {
         val photos = listOf(p0, p1)
         val db = Database(knittings, photos, ArrayList(), ArrayList())
         val json = db.toJSON()
-        assertEquals(4, json.getInt("version"))
+        assertEquals(5, json.getInt("version"))
         // get the JSON array containing the knittings
         val ks = json.getJSONArray("knittings")
         assertEquals(2, ks.length())
