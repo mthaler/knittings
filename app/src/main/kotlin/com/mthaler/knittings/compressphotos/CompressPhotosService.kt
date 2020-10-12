@@ -55,10 +55,7 @@ class CompressPhotosService : Service() {
         return START_NOT_STICKY
     }
 
-    override fun onBind(intent: Intent): IBinder? {
-        // don't allow binding
-        return null
-    }
+    override fun onBind(intent: Intent): IBinder? = null // don't allow binding
 
     override fun onDestroy() {
         super.onDestroy()

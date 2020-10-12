@@ -32,18 +32,18 @@ data class Database(val knittings: List<Knitting>, val photos: List<Photo>, val 
 
     private fun checkPhotosValidity() {
         val missing =  photos.map {it.ownerID}.toSet() - knittings.map { it.id }.toSet()
-        if (missing.size > 0) {
+        if (missing.isNotEmpty()) {
             throw IllegalArgumentException("Photos reference non-existing knittings with ids $missing")
         }
     }
 
     private fun checkKnittingsValidity() {
         val missingCategories = knittings.mapNotNull { it.category }.map { it.id }.toSet() - categories.map { it.id }.toSet()
-        if (missingCategories.size > 0) {
+        if (missingCategories.isNotEmpty()) {
             throw IllegalArgumentException("Knittings reference non-existing categories with ids $missingCategories")
         }
         val missingPhotos = knittings.mapNotNull { it.defaultPhoto }.map { it.id }.toSet() - photos.map { it.id }.toSet()
-        if (missingPhotos.size > 0) {
+        if (missingPhotos.isNotEmpty()) {
             throw IllegalArgumentException("Knittings reference non-existing photos with ids $missingPhotos")
         }
     }

@@ -183,7 +183,7 @@ class DropboxImportFragment : AbstractDropboxFragment() {
             }
             val ids = database.photos.map { it.id}.toHashSet()
             val missingPhotos = ids - idsFromPhotoFiles
-            if (missingPhotos.size > 0) {
+            if (missingPhotos.isNotEmpty()) {
                 val builder = AlertDialog.Builder(requireContext())
                 with(builder) {
                     setTitle(R.string.dropbox_import_dialog_title)

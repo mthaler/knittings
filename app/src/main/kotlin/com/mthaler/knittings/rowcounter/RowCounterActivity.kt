@@ -35,7 +35,7 @@ class RowCounterActivity : AppCompatActivity() {
         val viewModel = ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory.getInstance(application)).get(RowCounterViewModel::class.java)
         viewModel.init(id)
         viewModel.rows.observe(this, Observer { rows ->
-            textViewRows.setText(rows.totalRows.toString())
+            textViewRows.text = rows.totalRows.toString()
             editTextRowsPerRepeat.setText(rows.rowsPerRepeat.toString())
         })
 

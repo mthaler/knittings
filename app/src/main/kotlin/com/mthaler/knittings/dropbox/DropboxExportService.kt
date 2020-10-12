@@ -66,9 +66,7 @@ class DropboxExportService : Service() {
         return START_NOT_STICKY
     }
 
-    override fun onBind(intent: Intent): IBinder? {
-        return null
-    }
+    override fun onBind(intent: Intent): IBinder? = null
 
     private fun upload(dir: String, pendingIntent: PendingIntent): Boolean {
         val builder = createNotificationBuilder(pendingIntent, getString(R.string.dropbox_export_notification_initial_msg))
