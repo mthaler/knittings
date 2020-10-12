@@ -9,8 +9,8 @@ import java.text.SimpleDateFormat
 import org.json.JSONArray
 import java.io.File
 import java.lang.Exception
-import com.mthaler.dbapp.model.toCategory
 import com.mthaler.dbapp.model.toJSON
+import com.mthaler.dbapp.model.toCategories
 
 private val dateFormat = SimpleDateFormat("yyyy-MM-dd")
 
@@ -140,19 +140,6 @@ fun JSONArray.toPhotos(): List<Photo> {
         val item = getJSONObject(i)
         val photo = item.toPhoto()
         result.add(photo)
-    }
-    return result
-}
-
-/**
- * Converts a JSON array to a list of categories
- */
-fun JSONArray.toCategories(): List<Category> {
-    val result = ArrayList<Category>()
-    for (i in 0 until length()) {
-        val item = getJSONObject(i)
-        val category = item.toCategory()
-        result.add(category)
     }
     return result
 }
