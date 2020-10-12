@@ -1,10 +1,8 @@
 package com.mthaler.knittings.model
 
-import android.graphics.Color
 import android.os.Build
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.mthaler.dbapp.model.Category
 import com.mthaler.dbapp.model.Photo
 import org.json.JSONArray
 import org.json.JSONObject
@@ -156,16 +154,6 @@ class JSONTest {
         assertEquals(File("/tmp/photo2.jpg"), p2.filename)
         assertEquals(44, p2.ownerID)
         assertEquals("shirt", p2.description)
-    }
-
-    @Test
-    fun testJSONArrayToCategories() {
-        val s = """[{"name":"test","id":42},{"color":"#FFFF0000","name":"socks","id":43}]"""
-        val json = JSONArray(s)
-        val categories = json.toCategories()
-        assertEquals(2, categories.size)
-        assertEquals(Category(42, "test", null), categories[0])
-        assertEquals(Category(43, "socks", Color.RED), categories[1])
     }
 
     @Test
