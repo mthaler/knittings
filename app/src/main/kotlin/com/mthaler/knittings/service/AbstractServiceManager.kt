@@ -2,6 +2,8 @@ package com.mthaler.knittings.service
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.mthaler.dbapp.service.JobStatus
+import com.mthaler.dbapp.service.ServiceStatus
 import com.mthaler.knittings.utils.setMutVal
 import java.util.concurrent.atomic.AtomicBoolean
 

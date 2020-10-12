@@ -12,8 +12,8 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.mthaler.dbapp.BaseActivity
 import com.mthaler.knittings.R
-import com.mthaler.knittings.service.JobStatus
-import com.mthaler.knittings.service.ServiceStatus
+import com.mthaler.dbapp.service.JobStatus
+import com.mthaler.dbapp.service.ServiceStatus
 import com.mthaler.knittings.utils.Format
 import kotlinx.android.synthetic.main.activity_compress_photos.*
 

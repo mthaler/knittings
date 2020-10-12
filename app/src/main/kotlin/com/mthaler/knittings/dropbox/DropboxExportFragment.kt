@@ -12,8 +12,8 @@ import com.dropbox.core.android.Auth
 import com.dropbox.core.v2.users.FullAccount
 import com.dropbox.core.v2.users.SpaceUsage
 import com.mthaler.knittings.R
-import com.mthaler.knittings.service.JobStatus
-import com.mthaler.knittings.service.ServiceStatus
+import com.mthaler.dbapp.service.JobStatus
+import com.mthaler.dbapp.service.ServiceStatus
 import com.mthaler.knittings.utils.Format
 import com.mthaler.knittings.utils.NetworkUtils
 import kotlinx.android.synthetic.main.fragment_dropbox_export.*

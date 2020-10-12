@@ -15,7 +15,7 @@ import com.mthaler.dbapp.model.Photo
 import com.mthaler.knittings.R
 import com.mthaler.knittings.model.Database
 import com.mthaler.knittings.model.toJSON
-import com.mthaler.knittings.service.JobStatus
+import com.mthaler.dbapp.service.JobStatus
 import com.mthaler.dbapp.utils.FileUtils.createDateTimeDirectoryName
 import com.mthaler.dbapp.utils.FileUtils.getExtension
 import com.mthaler.knittings.database.KnittingsDataSource

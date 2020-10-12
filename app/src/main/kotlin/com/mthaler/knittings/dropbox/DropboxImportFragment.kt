@@ -15,8 +15,8 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import com.mthaler.dbapp.utils.FileUtils
 import com.mthaler.knittings.model.toDatabase
-import com.mthaler.knittings.service.JobStatus
-import com.mthaler.knittings.service.ServiceStatus
+import com.mthaler.dbapp.service.JobStatus
+import com.mthaler.dbapp.service.ServiceStatus
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext

@@ -11,8 +11,8 @@ import com.mthaler.dbapp.utils.FileUtils
 import com.mthaler.dbapp.utils.PictureUtils
 import com.mthaler.knittings.R
 import com.mthaler.knittings.database.KnittingsDataSource
-import com.mthaler.knittings.service.JobStatus
-import com.mthaler.knittings.service.ServiceStatus
+import com.mthaler.dbapp.service.JobStatus
+import com.mthaler.dbapp.service.ServiceStatus
 import kotlinx.coroutines.*
 import com.mthaler.knittings.utils.createNotificationChannel
 
