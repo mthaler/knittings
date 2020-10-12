@@ -1,6 +1,6 @@
 package com.mthaler.knittings.dropbox
 
-import com.mthaler.knittings.service.AbstractServiceManager
+import com.mthaler.dbapp.service.AbstractServiceManager
 
 class DropboxExportServiceManager : AbstractServiceManager() {
 

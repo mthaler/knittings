@@ -1,6 +1,6 @@
 package com.mthaler.knittings.compressphotos
 
-import com.mthaler.knittings.service.AbstractServiceManager
+import com.mthaler.dbapp.service.AbstractServiceManager
 
 class CompressPhotosServiceManager : AbstractServiceManager() {
 
