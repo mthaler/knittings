@@ -1,5 +1,6 @@
 package com.mthaler.knittings.model
 
+import android.os.Build
 import android.os.Parcel
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.mthaler.dbapp.model.Photo
@@ -7,10 +8,12 @@ import com.mthaler.knittings.utils.SerializeUtils
 import org.junit.Assert.*
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.robolectric.annotation.Config
 import java.io.File
 import java.util.*
 
 @RunWith(AndroidJUnit4::class)
+@Config(sdk = [Build.VERSION_CODES.P])
 class KnittingTest {
 
     @Test
