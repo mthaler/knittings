@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.mthaler.dbapp.DataSourceViewModel
+import com.mthaler.dbapp.dropbox.Statistics
 import com.mthaler.knittings.database.KnittingsDataSource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
