@@ -6,7 +6,7 @@ import android.os.Parcel
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.mthaler.dbapp.model.Category
 import com.mthaler.dbapp.model.Photo
-import com.mthaler.knittings.utils.SerializeUtils
+import com.mthaler.dbapp.utils.SerializeUtils
 import org.junit.Assert.*
 import org.junit.Test
 import org.junit.runner.RunWith
