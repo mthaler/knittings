@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import com.mthaler.dbapp.model.Project
 import com.mthaler.knittings.R
 import com.mthaler.knittings.database.KnittingsDataSource
 import com.mthaler.knittings.model.Knitting
@@ -71,8 +72,8 @@ class ProjectCountFragment : Fragment() {
      * @param knittings list of all knittings
      * @return list of years
      */
-    private fun createYearsList(knittings: List<Knitting>): List<String> {
-        val oldest = knittings.minBy { it.started.time }
+    private fun createYearsList(projects: List<Project>): List<String> {
+        val oldest = projects.minBy { it.started.time }
         val years = ArrayList<String>()
         val thisYear = Calendar.getInstance().get(Calendar.YEAR)
         if (oldest != null) {
