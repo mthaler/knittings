@@ -8,9 +8,10 @@ import com.mthaler.dbapp.database.ObservableDatabase
 import com.mthaler.dbapp.database.PhotoDataSource
 import com.mthaler.dbapp.settings.Theme
 import com.mthaler.knittings.database.KnittingsDataSource
+import com.mthaler.knittings.model.Knitting
 import com.mthaler.knittings.settings.ThemeRepository
 
-class MyApplication : MultiDexApplication(), DatabaseApplication {
+class MyApplication : MultiDexApplication(), DatabaseApplication<Knitting> {
 
     override fun onCreate() {
         super.onCreate()
