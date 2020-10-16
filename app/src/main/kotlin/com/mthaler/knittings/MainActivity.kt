@@ -29,7 +29,7 @@ import com.mthaler.knittings.details.KnittingDetailsActivity
 import com.mthaler.knittings.dropbox.DropboxExportActivity
 import com.mthaler.knittings.dropbox.DropboxImportActivity
 import com.mthaler.knittings.filter.ContainsFilter
-import com.mthaler.knittings.filter.SingleCategoryFilter
+import com.mthaler.dbapp.filter.SingleCategoryFilter
 import com.mthaler.knittings.filter.SingleStatusFilter
 import com.mthaler.knittings.model.Knitting
 import com.mthaler.knittings.model.Status
