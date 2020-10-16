@@ -15,9 +15,9 @@ import java.util.Date
  */
 data class Knitting(
         override val id: Long = -1,
-        val title: String = "",
-        val description: String = "",
-        val started: Date = Date(),
+        override val title: String = "",
+        override val description: String = "",
+        override val started: Date = Date(),
         val finished: Date? = null,
         val needleDiameter: String = "",
         val size: String = "",
