@@ -112,11 +112,11 @@ class ProjectCountFragment : Fragment() {
          * @param year year to get the project count for or null for all years
          * @param categoryName name of the category to get the project count for or null for all categories
          */
-        private fun getProjectCount(knittings: List<Knitting>, year: Int?, categoryName: String?): Int {
+        private fun getProjectCount(projects: List<Project>, year: Int?, categoryName: String?): Int {
             if (year == null && categoryName == null) {
-                return knittings.size
+                return projects.size
             } else if (year != null && categoryName == null) {
-                return knittings.count {
+                return projects.count {
                     val finished = it.finished
                     if (finished != null) {
                         val c = Calendar.getInstance()
@@ -127,14 +127,17 @@ class ProjectCountFragment : Fragment() {
                     }
                 }
             } else if (year == null && categoryName != null) {
-                return knittings.count { it.category != null && it.category.name == categoryName }
+                return projects.count {
+                    val category = it.category
+                    category != null && category.name == categoryName }
             } else {
-                return knittings.count {
+                return projects.count {
                     val finished = it.finished
                     if (finished != null) {
                         val c = Calendar.getInstance()
                         c.time = finished
-                        year == c.get(Calendar.YEAR) && it.category != null && it.category.name == categoryName
+                        val category = it.category
+                        year == c.get(Calendar.YEAR) && category != null && category.name == categoryName
                     } else {
                         false
                     }

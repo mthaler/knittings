@@ -18,7 +18,7 @@ data class Knitting(
         override val title: String = "",
         override val description: String = "",
         override val started: Date = Date(),
-        val finished: Date? = null,
+        override val finished: Date? = null,
         val needleDiameter: String = "",
         val size: String = "",
         override val defaultPhoto: Photo? = null,
