@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import com.mthaler.dbapp.DatabaseApplication
 import com.mthaler.dbapp.model.Project
 import com.mthaler.knittings.R
 import com.mthaler.knittings.database.KnittingsDataSource
@@ -96,7 +97,8 @@ class ProjectCountFragment : Fragment() {
      * @return list of categories
      */
     private fun createCategoryNamesList(): List<String> {
-        val categories = KnittingsDataSource.allCategories
+        val ds = (requireContext().applicationContext as DatabaseApplication<*>).getCategoryDataSource()
+        val categories = ds.allCategories
         categories.sortBy { it.name }
         return listOf(getString(R.string.filter_show_all)) + categories.map { it.name }.toList()
     }
