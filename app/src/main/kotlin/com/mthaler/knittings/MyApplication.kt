@@ -6,6 +6,7 @@ import com.mthaler.dbapp.DatabaseApplication
 import com.mthaler.dbapp.database.CategoryDataSource
 import com.mthaler.dbapp.database.ObservableDatabase
 import com.mthaler.dbapp.database.PhotoDataSource
+import com.mthaler.dbapp.database.ProjectsDataSource
 import com.mthaler.dbapp.settings.Theme
 import com.mthaler.knittings.database.KnittingsDataSource
 import com.mthaler.knittings.model.Knitting
@@ -23,6 +24,8 @@ class MyApplication : MultiDexApplication(), DatabaseApplication<Knitting> {
     override fun getCategoryDataSource(): CategoryDataSource = KnittingsDataSource
 
     override fun getPhotoDataSource(): PhotoDataSource = KnittingsDataSource
+
+    override fun getProjectsDataSource(): ProjectsDataSource<Knitting> = KnittingsDataSource
 
     override fun getApplicationSettings(): ApplicationSettings = object : ApplicationSettings {
 
