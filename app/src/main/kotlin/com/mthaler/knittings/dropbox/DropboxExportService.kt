@@ -93,7 +93,7 @@ class DropboxExportService : Service() {
     }
 
     private fun createDatabase(): Database {
-        val knittings = KnittingsDataSource.allKnittings
+        val knittings = KnittingsDataSource.allProjects
         val photos = KnittingsDataSource.allPhotos
         val categories = KnittingsDataSource.allCategories
         val needles = KnittingsDataSource.allNeedles

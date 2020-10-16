@@ -120,7 +120,7 @@ class KnittingDetailsFragment : Fragment() {
                 true
             }
             R.id.menu_item_delete_knitting -> {
-                val knitting = KnittingsDataSource.getKnitting(knittingID)
+                val knitting = KnittingsDataSource.getProject(knittingID)
                 DeleteDialog.create(requireContext(), knitting.title) {
                     viewModel.delete()
                     requireActivity().finish()

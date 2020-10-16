@@ -18,7 +18,7 @@ class ProjectCountFragment : Fragment() {
         val v = inflater.inflate(R.layout.fragment_project_count, container, false)
 
         // get all knittings from database
-        val knittings = KnittingsDataSource.allKnittings
+        val knittings = KnittingsDataSource.allProjects
 
         val years = createYearsList(knittings)
         val categoryNames = createCategoryNamesList()

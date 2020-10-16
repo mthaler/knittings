@@ -90,14 +90,14 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
                     R.id.action_delete -> {
                         mode?.finish()
                         DeleteDialog.create(this@MainActivity, knitting.title) {
-                            KnittingsDataSource.deleteKnitting(knitting)
+                            KnittingsDataSource.deleteProject(knitting)
                         }.show()
                         return true
                     }
                     R.id.action_copy -> {
                         val newTitle = "${knitting.title} - ${getString(R.string.copy)}"
                         val knittingCopy = knitting.copy(title = newTitle, started = Date(), finished = null, defaultPhoto = null, rating = 0.0, duration = 0, status = Status.PLANNED)
-                        KnittingsDataSource.addKnitting(knittingCopy)
+                        KnittingsDataSource.addProject(knittingCopy)
                         mode?.finish()
                         return true
                     }

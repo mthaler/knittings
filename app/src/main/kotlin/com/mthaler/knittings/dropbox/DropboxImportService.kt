@@ -83,7 +83,7 @@ class DropboxImportService : Service() {
         val count = database.photos.size
         val dbxClient = DropboxClientFactory.getClient()
         // remove all existing entries from the database
-        KnittingsDataSource.deleteAllKnittings()
+        KnittingsDataSource.deleteAllProjects()
         KnittingsDataSource.deleteAllPhotos()
         KnittingsDataSource.deleteAllCategories()
         KnittingsDataSource.deleteAllNeedles()
@@ -98,7 +98,7 @@ class DropboxImportService : Service() {
             KnittingsDataSource.addNeedle(needle, manualID = true)
         }
         for (knitting in database.knittings) {
-            KnittingsDataSource.addKnitting(knitting, manualID = true)
+            KnittingsDataSource.addProject(knitting, manualID = true)
         }
         for ((index, photo) in database.photos.withIndex()) {
             // Download the file.

@@ -33,79 +33,79 @@ public class KnittingsDataSourceTest {
     public void testAddKnitting() {
         Context ctx = InstrumentationRegistry.getTargetContext();
         KnittingsDataSource ds = KnittingsDataSource.Companion.getInstance(ctx);
-        assertTrue(ds.getAllKnittings().isEmpty());
+        assertTrue(ds.getAllProjects().isEmpty());
         Knitting knitting1 = ds.createKnitting("test knitting 1", "first test knitting", new Date(), null, "3.0", "42.0", 4.0);
         Knitting knitting2 = ds.createKnitting("test knitting 2", "second test knitting", new Date(), null, "4.0", "43.0", 5.0);
         Knitting knitting3 = ds.createKnitting("test knitting 3", "third test knitting", new Date(), null, "2.0", "39.0", 3.0);
-        assertEquals(3, ds.getAllKnittings().size());
+        assertEquals(3, ds.getAllProjects().size());
         ArrayList<Knitting> knittings = new ArrayList<>();
         knittings.add(knitting1);
         knittings.add(knitting2);
         knittings.add(knitting3);
-        assertEquals(knittings, ds.getAllKnittings());
+        assertEquals(knittings, ds.getAllProjects());
     }
 
     @Test
     public void testDeleteKnitting() {
         Context ctx = InstrumentationRegistry.getTargetContext();
         KnittingsDataSource ds = KnittingsDataSource.Companion.getInstance(ctx);
-        assertTrue(ds.getAllKnittings().isEmpty());
+        assertTrue(ds.getAllProjects().isEmpty());
         Knitting knitting1 = ds.createKnitting("test knitting 1", "first test knitting", new Date(), null, "3.0", "42.0", 4.0);
         Knitting knitting2 = ds.createKnitting("test knitting 2", "second test knitting", new Date(), null, "4.0", "43.0", 5.0);
         Knitting knitting3 = ds.createKnitting("test knitting 3", "third test knitting", new Date(), null, "2.0", "39.0", 3.0);
-        assertEquals(3, ds.getAllKnittings().size());
-        ds.deleteKnitting(knitting2);
-        assertEquals(2, ds.getAllKnittings().size());
+        assertEquals(3, ds.getAllProjects().size());
+        ds.deleteProject(knitting2);
+        assertEquals(2, ds.getAllProjects().size());
         ArrayList<Knitting> knittings = new ArrayList<>();
         knittings.add(knitting1);
         knittings.add(knitting3);
-        assertEquals(knittings, ds.getAllKnittings());
+        assertEquals(knittings, ds.getAllProjects());
     }
 
     @Test
     public void testUpdateKnitting() {
         Context ctx = InstrumentationRegistry.getTargetContext();
         KnittingsDataSource ds = KnittingsDataSource.Companion.getInstance(ctx);
-        assertTrue(ds.getAllKnittings().isEmpty());
+        assertTrue(ds.getAllProjects().isEmpty());
         Knitting knitting1 = ds.createKnitting("test knitting 1", "first test knitting", new Date(), null, "3.0", "42.0", 4.0);
         Knitting knitting2 = ds.createKnitting("test knitting 2", "second test knitting", new Date(), null, "4.0", "43.0", 5.0);
         Knitting knitting3 = ds.createKnitting("test knitting 3", "third test knitting", new Date(), null, "2.0", "39.0", 3.0);
-        assertEquals(3, ds.getAllKnittings().size());
+        assertEquals(3, ds.getAllProjects().size());
         Knitting updated = knitting2.copy(knitting2.getId(), knitting2.getTitle(), "Updated knitting", knitting2.getStarted(), knitting2.getFinished(),
                 knitting2.getNeedleDiameter(), knitting2.getSize(), knitting2.getDefaultPhoto(), knitting2.getRating(), knitting2.getDuration(), knitting2.getCategory());
-        Knitting result = ds.updateKnitting(updated);
+        Knitting result = ds.updateProject(updated);
         assertEquals(updated, result);
-        assertEquals(3, ds.getAllKnittings().size());
+        assertEquals(3, ds.getAllProjects().size());
         ArrayList<Knitting> knittings = new ArrayList<>();
         knittings.add(knitting1);
         knittings.add(updated);
         knittings.add(knitting3);
-        assertEquals(knittings, ds.getAllKnittings());
+        assertEquals(knittings, ds.getAllProjects());
     }
 
     @Test
     public void testGetKnitting() {
         Context ctx = InstrumentationRegistry.getTargetContext();
         KnittingsDataSource ds = KnittingsDataSource.Companion.getInstance(ctx);
-        assertTrue(ds.getAllKnittings().isEmpty());
+        assertTrue(ds.getAllProjects().isEmpty());
         Knitting knitting1 = ds.createKnitting("test knitting 1", "first test knitting", new Date(), null, "3.0", "42.0", 4.0);
         Knitting knitting2 = ds.createKnitting("test knitting 2", "second test knitting", new Date(), null, "4.0", "43.0", 5.0);
         Knitting knitting3 = ds.createKnitting("test knitting 3", "third test knitting", new Date(), null, "2.0", "39.0", 3.0);
-        assertEquals(3, ds.getAllKnittings().size());
-        assertEquals(knitting1, ds.getKnitting(knitting1.getId()));
-        assertEquals(knitting2, ds.getKnitting(knitting2.getId()));
-        assertEquals(knitting3, ds.getKnitting(knitting3.getId()));
+        assertEquals(3, ds.getAllProjects().size());
+        assertEquals(knitting1, ds.getProject(knitting1.getId()));
+        assertEquals(knitting2, ds.getProject(knitting2.getId()));
+        assertEquals(knitting3, ds.getProject(knitting3.getId()));
     }
 
     @Test
     public void testCreatePhoto() {
         Context ctx = InstrumentationRegistry.getTargetContext();
         KnittingsDataSource ds = KnittingsDataSource.Companion.getInstance(ctx);
-        assertTrue(ds.getAllKnittings().isEmpty());
+        assertTrue(ds.getAllProjects().isEmpty());
         Knitting knitting1 = ds.createKnitting("test knitting 1", "first test knitting", new Date(), null, "3.0", "42.0", 4.0);
         Knitting knitting2 = ds.createKnitting("test knitting 2", "second test knitting", new Date(), null, "4.0", "43.0", 5.0);
         Knitting knitting3 = ds.createKnitting("test knitting 3", "third test knitting", new Date(), null, "2.0", "39.0", 3.0);
-        assertEquals(3, ds.getAllKnittings().size());
+        assertEquals(3, ds.getAllProjects().size());
         assertTrue(ds.getAllPhotos().isEmpty());
         Photo photo = ds.createPhoto(new File("/path/to/photo"), knitting2.getId(), null, "test");
         assertEquals(1, ds.getAllPhotos().size());
@@ -116,7 +116,7 @@ public class KnittingsDataSourceTest {
         assertEquals(1, ds.getAllPhotos(knitting2).size());
         assertEquals(photos, ds.getAllPhotos(knitting2));
         assertTrue(ds.getAllPhotos(knitting3).isEmpty());
-        ds.deleteKnitting(knitting2);
+        ds.deleteProject(knitting2);
         assertTrue(ds.getAllPhotos().isEmpty());
     }
 
@@ -124,10 +124,10 @@ public class KnittingsDataSourceTest {
     public void testUpdatePhoto() {
         Context ctx = InstrumentationRegistry.getTargetContext();
         KnittingsDataSource ds = KnittingsDataSource.Companion.getInstance(ctx);
-        assertTrue(ds.getAllKnittings().isEmpty());
+        assertTrue(ds.getAllProjects().isEmpty());
         assertTrue(ds.getAllPhotos().isEmpty());
         Knitting knitting = ds.createKnitting("test knitting 1", "first test knitting", new Date(), null, "3.0", "42.0", 4.0);
-        assertEquals(1, ds.getAllKnittings().size());
+        assertEquals(1, ds.getAllProjects().size());
         assertTrue(ds.getAllPhotos().isEmpty());
         Photo photo = ds.createPhoto(new File("/path/to/photo"), knitting.getId(), null, "test");
         assertEquals(1, ds.getAllPhotos().size());
@@ -145,10 +145,10 @@ public class KnittingsDataSourceTest {
     public void testGetPhoto() {
         Context ctx = InstrumentationRegistry.getTargetContext();
         KnittingsDataSource ds = KnittingsDataSource.Companion.getInstance(ctx);
-        assertTrue(ds.getAllKnittings().isEmpty());
+        assertTrue(ds.getAllProjects().isEmpty());
         assertTrue(ds.getAllPhotos().isEmpty());
         Knitting knitting = ds.createKnitting("test knitting 1", "first test knitting", new Date(), null, "3.0", "42.0", 4.0);
-        assertEquals(1, ds.getAllKnittings().size());
+        assertEquals(1, ds.getAllProjects().size());
         assertTrue(ds.getAllPhotos().isEmpty());
         Photo photo = ds.createPhoto(new File("/path/to/photo"), knitting.getId(), null, "test");
         assertEquals(1, ds.getAllPhotos().size());
@@ -159,6 +159,6 @@ public class KnittingsDataSourceTest {
     private void deleteAllKnittings() {
         Context ctx = InstrumentationRegistry.getTargetContext();
         KnittingsDataSource ds = KnittingsDataSource.Companion.getInstance(ctx);
-        ds.deleteAllKnittings();
+        ds.deleteAllProjects();
     }
 }

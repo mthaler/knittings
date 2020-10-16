@@ -21,7 +21,7 @@ class RowCounterViewModel(application: Application) : DataSourceViewModel(applic
             knittingID = id
             viewModelScope.launch {
                 val r =  withContext(Dispatchers.IO) {
-                    val knitting = KnittingsDataSource.getKnitting(id)
+                    val knitting = KnittingsDataSource.getProject(id)
                     KnittingsDataSource.getRows(knitting)
                 }
                 if (r != null) {
@@ -58,7 +58,7 @@ class RowCounterViewModel(application: Application) : DataSourceViewModel(applic
     override fun databaseChanged() {
         viewModelScope.launch {
             val r =  withContext(Dispatchers.IO) {
-                val k = KnittingsDataSource.getKnitting(knittingID)
+                val k = KnittingsDataSource.getProject(knittingID)
                 KnittingsDataSource.getRows(k)
             }
             rows.value = r

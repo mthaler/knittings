@@ -10,6 +10,7 @@ import java.util.Date
 import com.mthaler.dbapp.database.AbstractObservableDatabase
 import com.mthaler.dbapp.database.CategoryDataSource
 import com.mthaler.dbapp.database.PhotoDataSource
+import com.mthaler.dbapp.database.ProjectsDataSource
 import com.mthaler.dbapp.database.table.CategoryTable
 import com.mthaler.dbapp.model.Category
 import com.mthaler.dbapp.model.Photo
@@ -22,13 +23,13 @@ import com.mthaler.knittings.database.table.RowsTable.cursorToRows
 import com.mthaler.knittings.model.*
 import java.lang.Exception
 
-object KnittingsDataSource  : AbstractObservableDatabase(), PhotoDataSource, CategoryDataSource {
+object KnittingsDataSource  : AbstractObservableDatabase(), PhotoDataSource, CategoryDataSource, ProjectsDataSource<Knitting> {
 
     private const val TAG = "KnittingsDataSource"
 
     private lateinit var context: Context
 
-    val allKnittings: ArrayList<Knitting>
+    override val allProjects: ArrayList<Knitting>
         @Synchronized
         get() = context.database.readableDatabase.use { database ->
             val knittings = ArrayList<Knitting>()
@@ -97,9 +98,9 @@ object KnittingsDataSource  : AbstractObservableDatabase(), PhotoDataSource, Cat
         }
 
     @Synchronized
-    fun addKnitting(knitting: Knitting, manualID: Boolean = false): Knitting {
+    override fun addProject(project: Knitting, manualID: Boolean): Knitting {
         context.database.writableDatabase.use { database ->
-            val values = KnittingTable.createContentValues(knitting, manualID)
+            val values = KnittingTable.createContentValues(project, manualID)
             val id = database.insert(KnittingTable.KNITTINGS, null, values)
             val cursor = database.query(KnittingTable.KNITTINGS,
                     KnittingTable.Columns, KnittingTable.Cols.ID + "=" + id, null, null, null, null)
@@ -112,8 +113,8 @@ object KnittingsDataSource  : AbstractObservableDatabase(), PhotoDataSource, Cat
     }
 
     @Synchronized
-    fun updateKnitting(knitting: Knitting): Knitting {
-        val result = updateKnittingImpl(knitting)
+    override fun updateProject(project: Knitting): Knitting {
+        val result = updateKnittingImpl(project)
         notifyObservers()
         return result
     }
@@ -135,14 +136,14 @@ object KnittingsDataSource  : AbstractObservableDatabase(), PhotoDataSource, Cat
     }
 
     @Synchronized
-    fun deleteKnitting(knitting: Knitting) {
-        deleteKnittingImpl(knitting)
+    override fun deleteProject(project: Knitting) {
+        deleteKnittingImpl(project)
         notifyObservers()
     }
 
     @Synchronized
-    fun deleteAllKnittings() {
-        for (knitting in allKnittings) {
+    override fun deleteAllProjects() {
+        for (knitting in allProjects) {
             deleteKnittingImpl(knitting)
         }
         notifyObservers()
@@ -159,7 +160,7 @@ object KnittingsDataSource  : AbstractObservableDatabase(), PhotoDataSource, Cat
     }
 
     @Synchronized
-    fun getKnitting(id: Long): Knitting {
+    override fun getProject(id: Long): Knitting {
         Log.d(TAG, "Getting knitting for id $id")
         context.database.readableDatabase.use { database ->
             val cursor = database.query(KnittingTable.KNITTINGS,
@@ -239,7 +240,7 @@ object KnittingsDataSource  : AbstractObservableDatabase(), PhotoDataSource, Cat
 
     @Synchronized
     override fun deletePhoto(photo: Photo) {
-        val knitting = getKnitting(photo.ownerID)
+        val knitting = getProject(photo.ownerID)
         if (knitting.defaultPhoto != null && knitting.defaultPhoto.id == photo.id) {
             val photos = getAllPhotos(knitting.id).filter { it.id != photo.id }.sortedBy { it.id }
             if (photos.isNotEmpty()) {
@@ -285,7 +286,7 @@ object KnittingsDataSource  : AbstractObservableDatabase(), PhotoDataSource, Cat
 
     @Synchronized
     override fun setDefaultPhoto(ownerID: Long, photo: Photo) {
-        val knitting = getKnitting(ownerID)
+        val knitting = getProject(ownerID)
         val prefs = PreferenceManager.getDefaultSharedPreferences(context)
         val useNewestAsPreview = prefs.getBoolean(context.resources.getString(R.string.key_photos_use_newest_as_preview), true)
         if (useNewestAsPreview) {
@@ -361,9 +362,9 @@ object KnittingsDataSource  : AbstractObservableDatabase(), PhotoDataSource, Cat
     private fun deleteCategoryImpl(category: Category) {
         // get all knittings from the database and remove the category we are going to delete
         // we need to do this before deleting the category
-        val knittings = allKnittings.filter { it.category == category }
+        val knittings = allProjects.filter { it.category == category }
         for (knitting in knittings) {
-            updateKnitting(knitting.copy(category = null))
+            updateProject(knitting.copy(category = null))
         }
         Log.d(TAG, "Removed category " + category.id + " from " + knittings.size + "knittings")
         context.database.writableDatabase.use { database ->

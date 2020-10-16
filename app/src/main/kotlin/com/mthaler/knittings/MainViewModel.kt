@@ -37,7 +37,7 @@ class MainViewModel(application: Application) : DataSourceViewModel(application)
     private fun updateKnittings() {
         viewModelScope.launch {
             val filtered = withContext(Dispatchers.IO) {
-                val allKnittings = KnittingsDataSource.allKnittings
+                val allKnittings = KnittingsDataSource.allProjects
                 val filtered = filter.filter(allKnittings)
                 val sorted = when (sorting) {
                     Sorting.NewestFirst -> filtered.sortedByDescending { it.started }

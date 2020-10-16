@@ -21,7 +21,7 @@ class KnittingDetailsViewModel(application: Application) : DataSourceViewModel(a
             knittingID = id
             viewModelScope.launch {
                 val k =  withContext(Dispatchers.IO) {
-                    KnittingsDataSource.getKnitting(id)
+                    KnittingsDataSource.getProject(id)
                 }
                 knitting.value = k
             }
@@ -32,8 +32,8 @@ class KnittingDetailsViewModel(application: Application) : DataSourceViewModel(a
         deleted = true
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
-                val k = KnittingsDataSource.getKnitting(knittingID)
-                KnittingsDataSource.deleteKnitting(k)
+                val k = KnittingsDataSource.getProject(knittingID)
+                KnittingsDataSource.deleteProject(k)
             }
         }
     }
@@ -42,7 +42,7 @@ class KnittingDetailsViewModel(application: Application) : DataSourceViewModel(a
         if (!deleted) {
             viewModelScope.launch {
                 val k =  withContext(Dispatchers.IO) {
-                    KnittingsDataSource.getKnitting(knittingID)
+                    KnittingsDataSource.getProject(knittingID)
                 }
                 knitting.value = k
             }

@@ -38,7 +38,7 @@ class   StopwatchActivity : BaseActivity() {
         val id = if (savedInstanceState != null) savedInstanceState.getLong(EXTRA_KNITTING_ID) else intent.getLongExtra(EXTRA_KNITTING_ID, -1L)
         if (id != -1L) {
             knittingID = id
-            elapsedTime = KnittingsDataSource.getKnitting(knittingID).duration
+            elapsedTime = KnittingsDataSource.getProject(knittingID).duration
         } else {
             error("Could not get knitting id")
         }
@@ -67,8 +67,8 @@ class   StopwatchActivity : BaseActivity() {
     // Stop the stopwatch running when the Stop button is clicked.
     fun onClickStop(view: View) {
         running = false
-        val knitting = KnittingsDataSource.getKnitting(knittingID)
-        KnittingsDataSource.updateKnitting(knitting.copy(duration = elapsedTime))
+        val knitting = KnittingsDataSource.getProject(knittingID)
+        KnittingsDataSource.updateProject(knitting.copy(duration = elapsedTime))
     }
 
     fun onClickDiscard(view: View) {

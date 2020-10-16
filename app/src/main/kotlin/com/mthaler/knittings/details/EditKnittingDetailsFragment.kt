@@ -94,7 +94,7 @@ class EditKnittingDetailsFragment : Fragment() {
         ratingBar = v.findViewById(R.id.ratingBar)
 
         if (savedInstanceState == null) {
-            val knitting = if (knittingID != Knitting.EMPTY.id) KnittingsDataSource.getKnitting(knittingID) else Knitting.EMPTY
+            val knitting = if (knittingID != Knitting.EMPTY.id) KnittingsDataSource.getProject(knittingID) else Knitting.EMPTY
             editTextTitle.setText(knitting.title)
             editTextDescription.setText(knitting.description)
             started = knitting.started
@@ -169,7 +169,7 @@ class EditKnittingDetailsFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.menu_item_save_knitting -> {
-                val oldKnitting = if (knittingID != Knitting.EMPTY.id) KnittingsDataSource.getKnitting(knittingID) else Knitting.EMPTY
+                val oldKnitting = if (knittingID != Knitting.EMPTY.id) KnittingsDataSource.getProject(knittingID) else Knitting.EMPTY
                 val newKnitting = createKnitting().copy(defaultPhoto = oldKnitting.defaultPhoto)
                 if (newKnitting != oldKnitting) {
                     saveKnitting(newKnitting)
@@ -225,7 +225,7 @@ class EditKnittingDetailsFragment : Fragment() {
             if (upIntent == null) {
                 throw IllegalStateException("No Parent Activity Intent")
             } else {
-                val oldKnitting = if (knittingID != Knitting.EMPTY.id) KnittingsDataSource.getKnitting(knittingID) else Knitting.EMPTY
+                val oldKnitting = if (knittingID != Knitting.EMPTY.id) KnittingsDataSource.getProject(knittingID) else Knitting.EMPTY
                 val newKnitting = createKnitting().copy(defaultPhoto = oldKnitting.defaultPhoto)
                 if (newKnitting != oldKnitting) {
                     SaveChangesDialog.create(it, {
@@ -261,9 +261,9 @@ class EditKnittingDetailsFragment : Fragment() {
 
     private fun saveKnitting(knitting: Knitting) {
         if (knitting.id == Knitting.EMPTY.id) {
-            KnittingsDataSource.addKnitting(knitting)
+            KnittingsDataSource.addProject(knitting)
         } else {
-            KnittingsDataSource.updateKnitting(knitting)
+            KnittingsDataSource.updateProject(knitting)
         }
     }
 
