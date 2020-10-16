@@ -23,10 +23,6 @@
 
     <style name="ButtonStyle" parent="Widget.AppCompat.Button.Colored" />
 
-    <style name="MySpinnerLook"
-        parent="@android:style/Widget.TextView.SpinnerItem">
-        <item name="android:textSize">30sp</item>
-    </style>
     <!-- mint theme -->
     <style name="Theme.App.Mint" parent="AppTheme.NoActionBar">
         <item name="colorPrimary">@color/mintColorPrimary</item>
