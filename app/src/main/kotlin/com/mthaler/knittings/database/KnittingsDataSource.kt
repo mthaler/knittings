@@ -22,13 +22,13 @@ import com.mthaler.knittings.database.table.RowsTable.cursorToRows
 import com.mthaler.knittings.model.*
 import java.lang.Exception
 
-object KnittingsDataSource  : AbstractObservableDatabase(), KnittingRepository, PhotoDataSource, CategoryDataSource {
+object KnittingsDataSource  : AbstractObservableDatabase(), PhotoDataSource, CategoryDataSource {
 
     private const val TAG = "KnittingsDataSource"
 
     private lateinit var context: Context
 
-    override val allKnittings: ArrayList<Knitting>
+    val allKnittings: ArrayList<Knitting>
         @Synchronized
         get() = context.database.readableDatabase.use { database ->
             val knittings = ArrayList<Knitting>()
@@ -97,7 +97,7 @@ object KnittingsDataSource  : AbstractObservableDatabase(), KnittingRepository, 
         }
 
     @Synchronized
-    override fun addKnitting(knitting: Knitting, manualID: Boolean): Knitting {
+    fun addKnitting(knitting: Knitting, manualID: Boolean = false): Knitting {
         context.database.writableDatabase.use { database ->
             val values = KnittingTable.createContentValues(knitting, manualID)
             val id = database.insert(KnittingTable.KNITTINGS, null, values)
@@ -112,7 +112,7 @@ object KnittingsDataSource  : AbstractObservableDatabase(), KnittingRepository, 
     }
 
     @Synchronized
-    override fun updateKnitting(knitting: Knitting): Knitting {
+    fun updateKnitting(knitting: Knitting): Knitting {
         val result = updateKnittingImpl(knitting)
         notifyObservers()
         return result
@@ -135,13 +135,13 @@ object KnittingsDataSource  : AbstractObservableDatabase(), KnittingRepository, 
     }
 
     @Synchronized
-    override fun deleteKnitting(knitting: Knitting) {
+    fun deleteKnitting(knitting: Knitting) {
         deleteKnittingImpl(knitting)
         notifyObservers()
     }
 
     @Synchronized
-    override fun deleteAllKnittings() {
+    fun deleteAllKnittings() {
         for (knitting in allKnittings) {
             deleteKnittingImpl(knitting)
         }
@@ -159,7 +159,7 @@ object KnittingsDataSource  : AbstractObservableDatabase(), KnittingRepository, 
     }
 
     @Synchronized
-    override fun getKnitting(id: Long): Knitting {
+    fun getKnitting(id: Long): Knitting {
         Log.d(TAG, "Getting knitting for id $id")
         context.database.readableDatabase.use { database ->
             val cursor = database.query(KnittingTable.KNITTINGS,
