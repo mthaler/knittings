@@ -30,11 +30,11 @@ import com.mthaler.knittings.dropbox.DropboxExportActivity
 import com.mthaler.knittings.dropbox.DropboxImportActivity
 import com.mthaler.knittings.filter.ContainsFilter
 import com.mthaler.dbapp.filter.SingleCategoryFilter
+import com.mthaler.dbapp.projectcount.ProjectCountActivity
 import com.mthaler.knittings.filter.SingleStatusFilter
 import com.mthaler.knittings.model.Knitting
 import com.mthaler.knittings.model.Status
 import com.mthaler.knittings.needle.NeedleListActivity
-import com.mthaler.knittings.projectcount.ProjectCountActivity
 import com.mthaler.knittings.settings.SettingsActivity
 import com.mthaler.knittings.whatsnew.WhatsNewDialog
 import kotlinx.android.synthetic.main.activity_main.*
