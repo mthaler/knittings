@@ -33,6 +33,7 @@ import com.mthaler.knittings.filter.SingleCategoryFilter
 import com.mthaler.knittings.filter.SingleStatusFilter
 import com.mthaler.knittings.model.Status
 import com.mthaler.knittings.needle.NeedleListActivity
+import com.mthaler.knittings.projectcount.ProjectCountActivity
 import com.mthaler.knittings.settings.SettingsActivity
 import com.mthaler.knittings.whatsnew.WhatsNewDialog
 import kotlinx.android.synthetic.main.activity_main.*

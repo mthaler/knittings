@@ -1,4 +1,4 @@
-package com.mthaler.knittings
+package com.mthaler.knittings.projectcount
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import com.mthaler.knittings.R
 import com.mthaler.knittings.database.KnittingsDataSource
 import com.mthaler.knittings.model.Knitting
 import java.util.Calendar
