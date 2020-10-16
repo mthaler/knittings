@@ -31,6 +31,7 @@ import com.mthaler.knittings.dropbox.DropboxImportActivity
 import com.mthaler.knittings.filter.ContainsFilter
 import com.mthaler.knittings.filter.SingleCategoryFilter
 import com.mthaler.knittings.filter.SingleStatusFilter
+import com.mthaler.knittings.model.Knitting
 import com.mthaler.knittings.model.Status
 import com.mthaler.knittings.needle.NeedleListActivity
 import com.mthaler.knittings.projectcount.ProjectCountActivity
@@ -269,7 +270,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
                         0 -> viewModel.filter = CombinedFilter(f.filters.filterNot { it is SingleCategoryFilter })
                         else -> {
                             val category = categories[which - 1]
-                            val newFilter = SingleCategoryFilter(category)
+                            val newFilter = SingleCategoryFilter<Knitting>(category)
                             viewModel.filter = CombinedFilter(f.filters.filterNot { it is SingleCategoryFilter } + newFilter)
                         }
                     }
