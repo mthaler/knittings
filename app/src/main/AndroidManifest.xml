@@ -98,7 +98,7 @@
                 android:value=".details.KnittingDetailsActivity" />
         </activity>
         <activity
-            android:name=".projectcount.ProjectCountActivity"
+            android:name="com.mthaler.dbapp.projectcount.ProjectCountActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
