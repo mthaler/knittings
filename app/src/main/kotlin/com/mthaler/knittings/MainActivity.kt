@@ -46,7 +46,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
     private var initialQuery: CharSequence? = null
     private var sv: SearchView? = null
-    private lateinit var viewModel: MainViewModel
+    private lateinit var viewModel: MainViewModel<Knitting>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -143,8 +143,8 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
         val activeFilters = findViewById<TextView>(R.id.knitting_active_filters)
 
-        viewModel = ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory.getInstance(application)).get(MainViewModel::class.java)
-        viewModel.knittings.observe(this, Observer { knittings ->
+        viewModel = ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory.getInstance(application)).get(MainViewModel.javaClass<Knitting>())
+        viewModel.projects.observe(this, Observer { knittings ->
 
             if (knittings.isEmpty()) {
                 knitting_list_empty_recycler_view.visibility = View.VISIBLE

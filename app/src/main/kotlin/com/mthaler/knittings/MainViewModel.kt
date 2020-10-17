@@ -4,41 +4,43 @@ import android.app.Application
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.mthaler.dbapp.DataSourceViewModel
+import com.mthaler.dbapp.DatabaseApplication
 import com.mthaler.dbapp.Sorting
 import com.mthaler.dbapp.filter.CombinedFilter
-import com.mthaler.knittings.database.KnittingsDataSource
-import com.mthaler.knittings.model.Knitting
+import com.mthaler.dbapp.model.Project
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class MainViewModel(application: Application) : DataSourceViewModel(application) {
+class MainViewModel<T : Project>(application: Application) : DataSourceViewModel(application) {
 
-    val knittings = MutableLiveData<List<Knitting>>(emptyList())
+    private val ds = (application as DatabaseApplication<T>).getProjectsDataSource()
+
+    val projects = MutableLiveData<List<T>>(emptyList())
     var sorting: Sorting = Sorting.NewestFirst
         set(value) {
             field = value
-            updateKnittings()
+            updateProjects()
         }
-    var filter: CombinedFilter<Knitting> = CombinedFilter.empty()
+    var filter: CombinedFilter<T> = CombinedFilter.empty()
         set(value) {
             field = value
-            updateKnittings()
+            updateProjects()
         }
 
     init {
-        updateKnittings()
+        updateProjects()
     }
 
     override fun databaseChanged() {
-        updateKnittings()
+        updateProjects()
     }
 
-    private fun updateKnittings() {
+    private fun updateProjects() {
         viewModelScope.launch {
             val filtered = withContext(Dispatchers.IO) {
-                val allKnittings = KnittingsDataSource.allProjects
-                val filtered = filter.filter(allKnittings)
+                val allProjects = ds.allProjects
+                val filtered = filter.filter(allProjects)
                 val sorted = when (sorting) {
                     Sorting.NewestFirst -> filtered.sortedByDescending { it.started }
                     Sorting.OldestFirst -> filtered.sortedBy { it.started }
@@ -46,7 +48,11 @@ class MainViewModel(application: Application) : DataSourceViewModel(application)
                 }
                 sorted
             }
-            knittings.value = filtered
+            projects.value = filtered
         }
+    }
+
+    companion object {
+        fun <T : Project>javaClass(): Class<MainViewModel<T>> = MainViewModel::class.java as Class<MainViewModel<T>>
     }
 }
