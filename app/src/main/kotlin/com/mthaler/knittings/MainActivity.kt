@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.navigation.NavigationView
 import com.mthaler.dbapp.BaseActivity
 import com.mthaler.dbapp.DeleteDialog
+import com.mthaler.dbapp.MainViewModel
 import com.mthaler.dbapp.Sorting
 import com.mthaler.dbapp.category.CategoryListActivity
 import com.mthaler.dbapp.filter.CombinedFilter
