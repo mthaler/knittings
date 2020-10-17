@@ -28,7 +28,7 @@ import com.mthaler.knittings.database.KnittingsDataSource
 import com.mthaler.knittings.details.KnittingDetailsActivity
 import com.mthaler.knittings.dropbox.DropboxExportActivity
 import com.mthaler.knittings.dropbox.DropboxImportActivity
-import com.mthaler.knittings.filter.ContainsFilter
+import com.mthaler.dbapp.filter.ContainsFilter
 import com.mthaler.dbapp.filter.SingleCategoryFilter
 import com.mthaler.dbapp.projectcount.ProjectCountActivity
 import com.mthaler.knittings.filter.SingleStatusFilter
