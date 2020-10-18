@@ -74,7 +74,8 @@
                 android:text="+"
                 android:textSize="50dp"
                 android:textColor="@color/white"
-                android:background="@drawable/circular_button"/>
+                android:background="@drawable/circular_button"
+                style="?android:attr/borderlessButtonStyle" />
             <Button
                 android:id="@+id/button_minus"
                 android:layout_width="100dp"
@@ -82,7 +83,8 @@
                 android:text="-"
                 android:textSize="50dp"
                 android:textColor="@color/white"
-                android:background="@drawable/circular_button"/>
+                android:background="@drawable/circular_button"
+                style="?android:attr/borderlessButtonStyle" />
         </LinearLayout>
     </LinearLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
