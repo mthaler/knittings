@@ -11,12 +11,13 @@ import android.widget.EditText
 import android.widget.TextView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.mthaler.dbapp.BaseActivity
 import com.mthaler.knittings.Extras
 import com.mthaler.knittings.R
 import kotlinx.android.synthetic.main.activity_row_counter.*
 import java.lang.Exception
 
-class RowCounterActivity : AppCompatActivity() {
+class RowCounterActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
