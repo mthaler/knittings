@@ -3,6 +3,7 @@ package com.mthaler.knittings.dropbox
 import androidx.fragment.app.Fragment
 import androidx.preference.PreferenceManager
 import com.dropbox.core.android.Auth
+import com.mthaler.dbapp.dropbox.DropboxClientFactory
 
 /**
  * Base class for Dropbox fragments
