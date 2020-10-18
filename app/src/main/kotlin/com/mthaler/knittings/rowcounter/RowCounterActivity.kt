@@ -31,38 +31,21 @@ class RowCounterActivity : BaseActivity() {
         val id = if (savedInstanceState != null) savedInstanceState.getLong(Extras.EXTRA_KNITTING_ID) else intent.getLongExtra(Extras.EXTRA_KNITTING_ID, -1L)
 
         val textViewRows = findViewById<TextView>(R.id.rows)
-        val editTextRowsPerRepeat = findViewById<EditText>(R.id.rows_per_repeat)
 
         val viewModel = ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory.getInstance(application)).get(RowCounterViewModel::class.java)
         viewModel.init(id)
         viewModel.rows.observe(this, Observer { rows ->
             textViewRows.text = rows.totalRows.toString()
-            editTextRowsPerRepeat.setText(rows.rowsPerRepeat.toString())
         })
-
-        editTextRowsPerRepeat.addTextChangedListener(object : TextWatcher {
-
-            override fun afterTextChanged(s: Editable?) {
-                try {
-                    if (s != null) {
-                        val t = s.toString()
-                        val n = t.toInt()
-                        viewModel.setRowsPerRepeat(n)
-                    }
-                } catch (ex: Exception) {
-
-                }
-            }
-
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-        })
-
 
         val plusButton = findViewById<Button>(R.id.button_plus)
         plusButton.setOnClickListener {
             viewModel.incrementTotalRows()
+        }
+
+        val resetButton = findViewById<Button>(R.id.button_reset)
+        resetButton.setOnClickListener {
+
         }
 
         val minusButton = findViewById<Button>(R.id.button_minus)
