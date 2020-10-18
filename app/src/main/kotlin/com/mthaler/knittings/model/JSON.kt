@@ -11,6 +11,7 @@ import java.io.File
 import java.lang.Exception
 import com.mthaler.dbapp.model.toJSON
 import com.mthaler.dbapp.model.toCategories
+import com.mthaler.dbapp.model.categoriesToJSON
 
 private val dateFormat = SimpleDateFormat("yyyy-MM-dd")
 
@@ -169,14 +170,6 @@ fun photosToJSON(photos: List<Photo>): JSONArray {
     val result = JSONArray()
     for (photo in photos) {
         result.put(photo.toJSON())
-    }
-    return result
-}
-
-fun categoriesToJSON(categories: List<Category>): JSONArray {
-    val result = JSONArray()
-    for (category in categories) {
-        result.put(category.toJSON())
     }
     return result
 }
