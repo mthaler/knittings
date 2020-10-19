@@ -49,7 +49,7 @@ class RowCounterActivity : BaseActivity() {
 
         }
 
-        val minusButton = findViewById<Button>(R.id.button_minus)
+        val minusButton = findViewById<ImageButton>(R.id.button_minus)
         minusButton.setOnClickListener {
             viewModel.decrementTotalRows()
         }

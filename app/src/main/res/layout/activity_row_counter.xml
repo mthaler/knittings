@@ -63,14 +63,12 @@
                 android:background="@drawable/circular_button"
                 style="?android:attr/borderlessButtonStyle" />
 
-            <Button
+            <ImageButton
                 android:id="@+id/button_minus"
                 android:layout_width="90dp"
                 android:layout_height="90dp"
                 android:layout_marginLeft="10dp"
-                android:text="-"
-                android:textSize="70dp"
-                android:textColor="@color/white"
+                app:srcCompat="@drawable/ic_baseline_remove"
                 android:background="@drawable/circular_button"
                 style="?android:attr/borderlessButtonStyle" />
         </LinearLayout>
