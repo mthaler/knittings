@@ -10,9 +10,12 @@ import androidx.lifecycle.ViewModelProvider
 import com.mthaler.dbapp.BaseActivity
 import com.mthaler.knittings.Extras
 import com.mthaler.knittings.R
+import com.mthaler.knittings.model.Knitting
 import kotlinx.android.synthetic.main.activity_row_counter.*
 
 class RowCounterActivity : BaseActivity() {
+
+    private var knittingID: Long = Knitting.EMPTY.id
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,12 +26,12 @@ class RowCounterActivity : BaseActivity() {
         // enable up navigation
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        val id = if (savedInstanceState != null) savedInstanceState.getLong(Extras.EXTRA_KNITTING_ID) else intent.getLongExtra(Extras.EXTRA_KNITTING_ID, -1L)
+        knittingID = if (savedInstanceState != null) savedInstanceState.getLong(Extras.EXTRA_KNITTING_ID) else intent.getLongExtra(Extras.EXTRA_KNITTING_ID, -1L)
 
         val textViewRows = findViewById<TextView>(R.id.rows)
 
         val viewModel = ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory.getInstance(application)).get(RowCounterViewModel::class.java)
-        viewModel.init(id)
+        viewModel.init(knittingID)
         viewModel.rows.observe(this, Observer { rows ->
             textViewRows.text = rows.totalRows.toString()
         })
@@ -47,6 +50,11 @@ class RowCounterActivity : BaseActivity() {
         minusButton.setOnClickListener {
             viewModel.decrementTotalRows()
         }
+    }
+
+    override fun onSaveInstanceState(savedInstanceState: Bundle) {
+        savedInstanceState.putLong(Extras.EXTRA_KNITTING_ID, knittingID)
+        super.onSaveInstanceState(savedInstanceState)
     }
 
     companion object {
