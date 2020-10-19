@@ -8,6 +8,7 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageButton
 import android.widget.TextView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -38,7 +39,7 @@ class RowCounterActivity : BaseActivity() {
             textViewRows.text = rows.totalRows.toString()
         })
 
-        val plusButton = findViewById<Button>(R.id.button_plus)
+        val plusButton = findViewById<ImageButton>(R.id.button_plus)
         plusButton.setOnClickListener {
             viewModel.incrementTotalRows()
         }
