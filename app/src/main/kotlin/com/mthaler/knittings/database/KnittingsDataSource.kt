@@ -505,6 +505,16 @@ object KnittingsDataSource  : AbstractObservableDatabase(), PhotoDataSource, Cat
     }
 
     @Synchronized
+    private fun deleteAllRows(knitting: Knitting) {
+        context.database.writableDatabase.use { database ->
+            val whereClause = RowsTable.Cols.KNITTING_ID + "= ?"
+            val whereArgs = arrayOf(knitting.id.toString())
+            database.delete(RowsTable.ROWS, whereClause, whereArgs)
+            Log.d(TAG, "Removed knitting ${knitting.id}: $knitting")
+        }
+    }
+
+    @Synchronized
     private fun cursorToKnitting(cursor: Cursor): Knitting {
         val idIndex = cursor.getColumnIndex(KnittingTable.Cols.ID)
         val idTitle = cursor.getColumnIndex(KnittingTable.Cols.TITLE)
