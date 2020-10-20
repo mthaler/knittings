@@ -37,8 +37,8 @@
             android:orientation="horizontal">
             <ImageButton
                 android:id="@+id/button_plus"
-                android:layout_width="160dp"
-                android:layout_height="160dp"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
                 app:srcCompat="@drawable/ic_baseline_add"
                 android:background="@drawable/circular_button"
                 style="?android:attr/borderlessButtonStyle"/>
@@ -59,8 +59,8 @@
             android:orientation="horizontal">
             <ImageButton
                 android:id="@+id/button_minus"
-                android:layout_width="160dp"
-                android:layout_height="160dp"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
                 app:srcCompat="@drawable/ic_baseline_remove"
                 android:background="@drawable/circular_button"
                 style="?android:attr/borderlessButtonStyle" />
