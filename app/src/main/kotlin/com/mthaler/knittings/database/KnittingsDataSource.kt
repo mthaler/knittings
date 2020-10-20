@@ -190,7 +190,7 @@ object KnittingsDataSource  : AbstractObservableDatabase(), PhotoDataSource, Cat
         context.database.readableDatabase.use { database ->
             val photos = ArrayList<Photo>()
             val whereClause = PhotoTable.Cols.KNITTING_ID + " = ?"
-            val whereArgs = arrayOf(java.lang.Double.toString(id.toDouble()))
+            val whereArgs = arrayOf(id.toString())
             val cursor = database.query(PhotoTable.PHOTOS, PhotoTable.Columns, whereClause, whereArgs, null, null, null)
             cursor.moveToFirst()
             var photo: Photo
@@ -261,7 +261,7 @@ object KnittingsDataSource  : AbstractObservableDatabase(), PhotoDataSource, Cat
         val id = knitting.id
         context.database.writableDatabase.use { database ->
             val whereClause = PhotoTable.Cols.KNITTING_ID + "= ?"
-            val whereArgs = arrayOf(java.lang.Long.toString(id))
+            val whereArgs = arrayOf(id.toString())
             database.delete(PhotoTable.PHOTOS, whereClause, whereArgs)
             Log.d(TAG, "Removed knitting $id: $knitting")
         }
@@ -460,7 +460,7 @@ object KnittingsDataSource  : AbstractObservableDatabase(), PhotoDataSource, Cat
     fun getRows(knitting: Knitting): Rows? {
         context.database.readableDatabase.use { database ->
             val whereClause = RowsTable.Cols.KNITTING_ID + " = ?"
-            val whereArgs = arrayOf(java.lang.Double.toString(knitting.id.toDouble()))
+            val whereArgs = arrayOf(knitting.id.toString())
             val cursor = database.query(RowsTable.ROWS, RowsTable.Columns, whereClause, whereArgs, null, null, null)
             cursor.moveToFirst()
             if (!cursor.isAfterLast) {
