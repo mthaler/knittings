@@ -41,10 +41,10 @@ class RowCounterActivity : BaseActivity() {
             viewModel.incrementTotalRows()
         }
 
-        val resetButton = findViewById<ImageButton>(R.id.button_reset)
-        resetButton.setOnClickListener {
-
-        }
+//        val resetButton = findViewById<ImageButton>(R.id.button_reset)
+//        resetButton.setOnClickListener {
+//
+//        }
 
         val minusButton = findViewById<ImageButton>(R.id.button_minus)
         minusButton.setOnClickListener {
