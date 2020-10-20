@@ -153,6 +153,7 @@ object KnittingsDataSource  : AbstractObservableDatabase(), PhotoDataSource, Cat
         val id = knitting.id
         // delete all photos from the database
         deleteAllPhotos(knitting)
+        deleteAllRows(knitting)
         context.database.writableDatabase.use { database ->
             database.delete(KnittingTable.KNITTINGS, KnittingTable.Cols.ID + "=" + id, null)
             Log.d(TAG, "Deleted knitting $id: $knitting")
