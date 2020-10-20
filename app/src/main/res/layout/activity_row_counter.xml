@@ -49,22 +49,21 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:layout_weight="1"
-            android:textColor="?attr/colorPrimary"
-            android:textSize="128dp"/>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:layout_weight="1"
-        android:orientation="horizontal">
-        <ImageButton
-            android:id="@+id/button_minus"
-            android:layout_width="200dp"
-            android:layout_height="200dp"
-            app:srcCompat="@drawable/ic_baseline_remove"
-            android:background="@drawable/circular_button"
-            style="?android:attr/borderlessButtonStyle" />
-    </LinearLayout>
+            android:textColor="?attr/colorAccent"
+            android:textSize="200dp"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+            <ImageButton
+                android:id="@+id/button_minus"
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                app:srcCompat="@drawable/ic_baseline_remove"
+                android:background="@drawable/circular_button"
+                style="?android:attr/borderlessButtonStyle" />
+        </LinearLayout>
     </LinearLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
