@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.mthaler.dbapp.BaseActivity
 import com.mthaler.knittings.Extras
 import com.mthaler.knittings.R
+import com.mthaler.knittings.details.KnittingDetailsFragment
 import com.mthaler.knittings.model.Knitting
 import kotlinx.android.synthetic.main.activity_row_counter.*
 
@@ -28,28 +29,10 @@ class RowCounterActivity : BaseActivity() {
 
         knittingID = if (savedInstanceState != null) savedInstanceState.getLong(Extras.EXTRA_KNITTING_ID) else intent.getLongExtra(Extras.EXTRA_KNITTING_ID, -1L)
 
-        val textViewRows = findViewById<TextView>(R.id.rows)
-
-        val viewModel = ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory.getInstance(application)).get(RowCounterViewModel::class.java)
-        viewModel.init(knittingID)
-        viewModel.rows.observe(this, Observer { rows ->
-            textViewRows.text = rows.totalRows.toString()
-        })
-
-        val plusButton = findViewById<ImageButton>(R.id.button_plus)
-        plusButton.setOnClickListener {
-            viewModel.incrementTotalRows()
-        }
-
-//        val resetButton = findViewById<ImageButton>(R.id.button_reset)
-//        resetButton.setOnClickListener {
-//
-//        }
-
-        val minusButton = findViewById<ImageButton>(R.id.button_minus)
-        minusButton.setOnClickListener {
-            viewModel.decrementTotalRows()
-        }
+        val f = RowCounterFragment.newInstance(knittingID)
+        val ft = supportFragmentManager.beginTransaction()
+        ft.add(R.id.row_counter_container, f)
+        ft.commit()
     }
 
     override fun onSaveInstanceState(savedInstanceState: Bundle) {
