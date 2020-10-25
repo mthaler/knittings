@@ -38,6 +38,7 @@
             android:layout_marginTop="20dp"
             android:layout_marginLeft="20dp"
             android:layout_gravity="top|left"
+            app:srcCompat="@drawable/ic_baseline_clear"
             android:background="@drawable/circular_button"
             style="?android:attr/borderlessButtonStyle"/>
         <ImageButton
@@ -47,6 +48,7 @@
             android:layout_marginTop="20dp"
             android:layout_marginRight="20dp"
             android:layout_gravity="top|right"
+            app:srcCompat="@drawable/ic_baseline_remove"
             android:background="@drawable/circular_button"
             style="?android:attr/borderlessButtonStyle"/>
     </FrameLayout>

@@ -48,6 +48,13 @@ class RowCounterViewModel(application: Application) : DataSourceViewModel(applic
         }
     }
 
+    fun clearTotalRows() {
+        val r = rows.value
+        if (r != null) {
+            KnittingsDataSource.updateRows(r.copy(totalRows = 0))
+        }
+    }
+
     fun setRowsPerRepeat(rowsPerRepeat: Int) {
         val r = rows.value
         if (r != null && r.rowsPerRepeat != rowsPerRepeat) {
