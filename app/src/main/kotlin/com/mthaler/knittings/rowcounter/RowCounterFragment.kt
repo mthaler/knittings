@@ -53,10 +53,10 @@ class RowCounterFragment : Fragment() {
 //
 //        }
 
-        val minusButton = v.findViewById<ImageButton>(R.id.button_minus)
-        minusButton.setOnClickListener {
-            viewModel.decrementTotalRows()
-        }
+//        val minusButton = v.findViewById<ImageButton>(R.id.button_minus)
+//        minusButton.setOnClickListener {
+//            viewModel.decrementTotalRows()
+//        }
 
         // Inflate the layout for this fragment
         return v

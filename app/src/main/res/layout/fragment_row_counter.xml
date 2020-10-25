@@ -3,9 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:gravity="center"
-    android:layout_gravity="center">
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -21,36 +19,20 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:textColor="?attr/colorAccent"
-            android:textSize="160dp"/>
+            android:textSize="150dp"/>
     </LinearLayout>
-
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:layout_weight="1"
-        android:orientation="horizontal">
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:gravity="center">
         <ImageButton
             android:id="@+id/button_plus"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
+            android:layout_width="250dp"
+            android:layout_height="250dp"
             app:srcCompat="@drawable/ic_baseline_add"
             android:background="@drawable/circular_button"
+            android:gravity="center"
             style="?android:attr/borderlessButtonStyle"/>
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:layout_weight="1"
-        android:orientation="horizontal">
-        <ImageButton
-            android:id="@+id/button_minus"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
-            app:srcCompat="@drawable/ic_baseline_remove"
-            android:background="@drawable/circular_button"
-            style="?android:attr/borderlessButtonStyle" />
     </LinearLayout>
 </LinearLayout>
