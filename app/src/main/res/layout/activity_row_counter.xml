@@ -4,13 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".rowcounter.RowCounterActivity">
+    tools:context="com.mthaler.knittings.rowcounter.RowCounterActivity">
 
     <!-- add toolbar -->
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:keepScreenOn="true"
         android:theme="@style/AppTheme.AppBarOverlay">
 
         <androidx.appcompat.widget.Toolbar
@@ -19,51 +18,13 @@
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
             app:popupTheme="@style/AppTheme.PopupOverlay"
-            app:title="Row Counter" />
+            app:title="@string/activity_row_counter" />
+
     </com.google.android.material.appbar.AppBarLayout>
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:gravity="center"
-        android:layout_gravity="center"
-        android:layout_marginTop="?attr/actionBarSize">
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:layout_weight="1"
-            android:orientation="horizontal">
-            <ImageButton
-                android:id="@+id/button_plus"
-                android:layout_width="150dp"
-                android:layout_height="150dp"
-                app:srcCompat="@drawable/ic_baseline_add"
-                android:background="@drawable/circular_button"
-                style="?android:attr/borderlessButtonStyle"/>
-        </LinearLayout>
-        <TextView
-            android:id="@+id/rows"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:layout_weight="1"
-            android:textColor="?attr/colorAccent"
-            android:textSize="160dp"/>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:layout_weight="1"
-            android:orientation="horizontal">
-            <ImageButton
-                android:id="@+id/button_minus"
-                android:layout_width="150dp"
-                android:layout_height="150dp"
-                app:srcCompat="@drawable/ic_baseline_remove"
-                android:background="@drawable/circular_button"
-                style="?android:attr/borderlessButtonStyle" />
-        </LinearLayout>
-    </LinearLayout>
+    <FrameLayout
+        android:id="@+id/row_counter_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="?attr/actionBarSize" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
