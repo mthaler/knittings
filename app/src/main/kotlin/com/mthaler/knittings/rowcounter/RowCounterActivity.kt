@@ -29,10 +29,12 @@ class RowCounterActivity : BaseActivity() {
 
         knittingID = if (savedInstanceState != null) savedInstanceState.getLong(Extras.EXTRA_KNITTING_ID) else intent.getLongExtra(Extras.EXTRA_KNITTING_ID, -1L)
 
-        val f = RowCounterFragment.newInstance(knittingID)
-        val ft = supportFragmentManager.beginTransaction()
-        ft.add(R.id.row_counter_container, f)
-        ft.commit()
+        if (savedInstanceState == null) {
+            val f = RowCounterFragment.newInstance(knittingID)
+            val ft = supportFragmentManager.beginTransaction()
+            ft.add(R.id.row_counter_container, f)
+            ft.commit()
+        }
     }
 
     override fun onSaveInstanceState(savedInstanceState: Bundle) {
