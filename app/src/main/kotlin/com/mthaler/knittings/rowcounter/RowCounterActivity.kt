@@ -3,14 +3,11 @@ package com.mthaler.knittings.rowcounter
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.widget.ImageButton
-import android.widget.TextView
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
+import android.view.MenuItem
+import androidx.core.app.NavUtils
 import com.mthaler.dbapp.BaseActivity
 import com.mthaler.knittings.Extras
 import com.mthaler.knittings.R
-import com.mthaler.knittings.details.KnittingDetailsFragment
 import com.mthaler.knittings.model.Knitting
 import kotlinx.android.synthetic.main.activity_row_counter.*
 
@@ -40,6 +37,22 @@ class RowCounterActivity : BaseActivity() {
     override fun onSaveInstanceState(savedInstanceState: Bundle) {
         savedInstanceState.putLong(Extras.EXTRA_KNITTING_ID, knittingID)
         super.onSaveInstanceState(savedInstanceState)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean = when (item.itemId) {
+        android.R.id.home -> {
+            // Respond to the action bar's Up/Home button
+            val upIntent: Intent? = NavUtils.getParentActivityIntent(this)
+            if (upIntent == null) {
+                throw IllegalStateException("No Parent Activity Intent")
+            } else {
+                val f = supportFragmentManager.findFragmentById(R.id.knitting_details_container)
+                upIntent.putExtra(Extras.EXTRA_KNITTING_ID, knittingID)
+                NavUtils.navigateUpTo(this, upIntent)
+            }
+            true
+        }
+        else -> super.onOptionsItemSelected(item)
     }
 
     companion object {
