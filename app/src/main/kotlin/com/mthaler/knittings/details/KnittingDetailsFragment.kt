@@ -4,16 +4,17 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import com.google.android.material.floatingactionbutton.FloatingActionButton
-import androidx.fragment.app.Fragment
+import android.os.Handler
 import android.view.*
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.RatingBar
 import android.widget.TextView
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.mthaler.dbapp.DeleteDialog
 import com.mthaler.dbapp.photo.PhotoGalleryActivity
 import com.mthaler.dbapp.photo.TakePhotoDialog
@@ -176,36 +177,7 @@ class KnittingDetailsFragment : Fragment() {
         view?.let {
             val imageView = it.findViewById<SquareImageView>(R.id.image)
             imageView.setImageBitmap(null)
-            val viewTreeObserver = imageView.viewTreeObserver
-            viewTreeObserver.addOnPreDrawListener(object : ViewTreeObserver.OnPreDrawListener {
-                override fun onPreDraw(): Boolean {
-                    imageView.viewTreeObserver.removeOnPreDrawListener(this)
-                    val width = imageView.measuredWidth
-                    val height = imageView.measuredHeight
-                    if (knitting.defaultPhoto != null) {
-                        viewLifecycleOwner.lifecycleScope.launch {
-                            val result = withContext(Dispatchers.Default) {
-                                val file = knitting.defaultPhoto.filename
-                                if (file.exists()) {
-                                    val orientation = PictureUtils.getOrientation(file.absolutePath)
-                                    val photo = PictureUtils.decodeSampledBitmapFromPath(file.absolutePath, width, height)
-                                    val rotatedPhoto = PictureUtils.rotateBitmap(photo, orientation)
-                                    rotatedPhoto
-                                } else {
-                                    null
-                                }
-                            }
-                            if (result != null) {
-                                imageView.setImageBitmap(result)
-                            }
-                        }
-                    } else {
-                        imageView.setImageResource(R.drawable.categories)
-                    }
-                    return true
-                }
-            })
-
+            updateImageView(imageView, knitting)
 
             val knittingTitle = it.findViewById<TextView>(R.id.knitting_title)
             knittingTitle.text = knitting.title
@@ -241,6 +213,45 @@ class KnittingDetailsFragment : Fragment() {
             val ratingBar = it.findViewById<RatingBar>(R.id.ratingBar)
             ratingBar.rating = knitting.rating.toFloat()
         }
+    }
+
+    private fun updateImageView(imageView: ImageView, knitting: Knitting) {
+        val viewTreeObserver = imageView.viewTreeObserver
+        viewTreeObserver.addOnPreDrawListener(object : ViewTreeObserver.OnPreDrawListener {
+            override fun onPreDraw(): Boolean {
+                imageView.viewTreeObserver.removeOnPreDrawListener(this)
+                val width = imageView.measuredWidth
+                val height = imageView.measuredHeight
+                if (width > 0 && height > 0) {
+                    if (knitting.defaultPhoto != null) {
+                        viewLifecycleOwner.lifecycleScope.launch {
+                            val result = withContext(Dispatchers.Default) {
+                                val file = knitting.defaultPhoto.filename
+                                if (file.exists()) {
+                                    val orientation = PictureUtils.getOrientation(file.absolutePath)
+                                    val photo = PictureUtils.decodeSampledBitmapFromPath(file.absolutePath, width, height)
+                                    val rotatedPhoto = PictureUtils.rotateBitmap(photo, orientation)
+                                    rotatedPhoto
+                                } else {
+                                    null
+                                }
+                            }
+                            if (result != null) {
+                                imageView.setImageBitmap(result)
+                            }
+                        }
+                    } else {
+                        imageView.setImageResource(R.drawable.categories)
+                    }
+                } else {
+                    val handler = Handler()
+                    handler.postDelayed({
+                        updateImageView(imageView, knitting)
+                    }, 200)
+                }
+                return true
+            }
+        })
     }
 
     override fun onAttach(context: Context) {
