@@ -43,7 +43,7 @@ class RowCounterViewModel(application: Application) : DataSourceViewModel(applic
 
     fun decrementTotalRows() {
         val r = rows.value
-        if (r != null) {
+        if (r != null && r.totalRows > 0) {
             KnittingsDataSource.updateRows(r.copy(totalRows = r.totalRows - 1))
         }
     }
