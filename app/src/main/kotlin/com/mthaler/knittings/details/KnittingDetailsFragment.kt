@@ -177,7 +177,7 @@ class KnittingDetailsFragment : Fragment() {
         view?.let {
             val imageView = it.findViewById<SquareImageView>(R.id.image)
             imageView.setImageBitmap(null)
-            updateImageView(imageView, knitting)
+            updateImageView(imageView, knitting, 50)
 
             val knittingTitle = it.findViewById<TextView>(R.id.knitting_title)
             knittingTitle.text = knitting.title
@@ -215,43 +215,45 @@ class KnittingDetailsFragment : Fragment() {
         }
     }
 
-    private fun updateImageView(imageView: ImageView, knitting: Knitting) {
-        val viewTreeObserver = imageView.viewTreeObserver
-        viewTreeObserver.addOnPreDrawListener(object : ViewTreeObserver.OnPreDrawListener {
-            override fun onPreDraw(): Boolean {
-                imageView.viewTreeObserver.removeOnPreDrawListener(this)
-                val width = imageView.measuredWidth
-                val height = imageView.measuredHeight
-                if (width > 0 && height > 0) {
-                    if (knitting.defaultPhoto != null) {
-                        viewLifecycleOwner.lifecycleScope.launch {
-                            val result = withContext(Dispatchers.Default) {
-                                val file = knitting.defaultPhoto.filename
-                                if (file.exists()) {
-                                    val orientation = PictureUtils.getOrientation(file.absolutePath)
-                                    val photo = PictureUtils.decodeSampledBitmapFromPath(file.absolutePath, width, height)
-                                    val rotatedPhoto = PictureUtils.rotateBitmap(photo, orientation)
-                                    rotatedPhoto
-                                } else {
-                                    null
+    private fun updateImageView(imageView: ImageView, knitting: Knitting, delayMillis: Long) {
+        if (delayMillis < 5000) {
+            val viewTreeObserver = imageView.viewTreeObserver
+            viewTreeObserver.addOnPreDrawListener(object : ViewTreeObserver.OnPreDrawListener {
+                override fun onPreDraw(): Boolean {
+                    imageView.viewTreeObserver.removeOnPreDrawListener(this)
+                    val width = imageView.measuredWidth
+                    val height = imageView.measuredHeight
+                    if (width > 0 && height > 0) {
+                        if (knitting.defaultPhoto != null) {
+                            viewLifecycleOwner.lifecycleScope.launch {
+                                val result = withContext(Dispatchers.Default) {
+                                    val file = knitting.defaultPhoto.filename
+                                    if (file.exists()) {
+                                        val orientation = PictureUtils.getOrientation(file.absolutePath)
+                                        val photo = PictureUtils.decodeSampledBitmapFromPath(file.absolutePath, width, height)
+                                        val rotatedPhoto = PictureUtils.rotateBitmap(photo, orientation)
+                                        rotatedPhoto
+                                    } else {
+                                        null
+                                    }
+                                }
+                                if (result != null) {
+                                    imageView.setImageBitmap(result)
                                 }
                             }
-                            if (result != null) {
-                                imageView.setImageBitmap(result)
-                            }
+                        } else {
+                            imageView.setImageResource(R.drawable.categories)
                         }
                     } else {
-                        imageView.setImageResource(R.drawable.categories)
+                        val handler = Handler()
+                        handler.postDelayed({
+                            updateImageView(imageView, knitting, delayMillis * 2)
+                        }, delayMillis)
                     }
-                } else {
-                    val handler = Handler()
-                    handler.postDelayed({
-                        updateImageView(imageView, knitting)
-                    }, 200)
+                    return true
                 }
-                return true
-            }
-        })
+            })
+        }
     }
 
     override fun onAttach(context: Context) {
