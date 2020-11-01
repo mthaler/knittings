@@ -97,6 +97,23 @@ object KnittingsDataSource  : AbstractObservableDatabase(), PhotoDataSource, Cat
             return needles
         }
 
+    val allRows: ArrayList<Rows>
+        @Synchronized
+        get() = context.database.readableDatabase.use { database ->
+            val rows = ArrayList<Rows>()
+            val cursor = database.query(RowsTable.ROWS, RowsTable.Columns, null, null, null, null, null)
+            cursor.moveToFirst()
+            var r: Rows
+            while (!cursor.isAfterLast) {
+                r = cursorToRows(cursor)
+                rows.add(r)
+                Log.d(TAG, "Read rows $r")
+                cursor.moveToNext()
+            }
+            cursor.close()
+            return rows
+        }
+
     @Synchronized
     override fun addProject(project: Knitting, manualID: Boolean): Knitting {
         context.database.writableDatabase.use { database ->
