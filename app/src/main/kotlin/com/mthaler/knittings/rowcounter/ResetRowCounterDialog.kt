@@ -8,8 +8,8 @@ object ResetRowCounterDialog {
 
     fun create(context: Context, onReset: () -> Unit): AlertDialog {
         val b = AlertDialog.Builder(context)
-        b.setMessage("Do you really want to reset row counter?")
-        b.setPositiveButton("Reset") { diaglog, which -> onReset() }
+        b.setMessage(R.string.delete_row_counter_dialog_message)
+        b.setPositiveButton(R.string.delete_row_counter_dialog_reset) { diaglog, which -> onReset() }
         b.setNegativeButton(R.string.dialog_button_cancel) { dialog, which -> }
         return b.create()
     }

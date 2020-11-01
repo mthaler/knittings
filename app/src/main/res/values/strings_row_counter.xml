@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="row_counter">Row Counter</string>
+    <string name="delete_row_counter_dialog_message">Do you really want to reset row counter?</string>
+    <string name="delete_row_counter_dialog_reset">Reset</string>
 </resources>

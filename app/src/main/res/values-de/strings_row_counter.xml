@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="row_counter">Reihenzähler</string>
+    <string name="delete_row_counter_dialog_message">Reihenzähler wirklich zurücksetzen?</string>
+    <string name="delete_row_counter_dialog_reset">Zurücksetzen</string>
 </resources>
