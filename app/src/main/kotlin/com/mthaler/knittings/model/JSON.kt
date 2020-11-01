@@ -174,6 +174,16 @@ fun JSONArray.toNeedles(context: Context): List<Needle> {
     return result
 }
 
+fun JSONArray.toRows(): List<Rows> {
+    val result = ArrayList<Rows>()
+    for (i in 0 until length()) {
+        val item = getJSONObject(i)
+        val rows = item.toRows()
+        result.add(rows)
+    }
+    return result
+}
+
 fun knittingsToJSON(knittings: List<Knitting>): JSONArray {
     val result = JSONArray()
     for (knitting in knittings) {
