@@ -208,6 +208,14 @@ fun needlesToJSON(needles: List<Needle>): JSONArray {
     return result
 }
 
+fun rowsToJSON(rows: List<Rows>): JSONArray {
+    val result = JSONArray()
+    for (r in rows) {
+        result.put(r.toJson())
+    }
+    return result
+}
+
 /**
  * Converts a database to JSON
  */

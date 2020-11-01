@@ -4,7 +4,7 @@ import android.os.Parcel
 import android.os.Parcelable
 import java.io.Serializable
 
-data class Rows(val id: Long, val totalRows: Int, val rowsPerRepeat: Int, val knittingID: Long) : Serializable, Parcelable {
+data class Rows(val id: Long = -1, val totalRows: Int = 0, val rowsPerRepeat: Int = 0, val knittingID: Long = -1) : Serializable, Parcelable {
 
     private constructor(parcel: Parcel) : this(
             id = parcel.readLong(),
