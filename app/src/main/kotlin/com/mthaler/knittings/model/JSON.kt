@@ -127,6 +127,14 @@ fun Rows.toJson(): JSONObject {
     return result
 }
 
+fun JSONObject.toRows(): Rows {
+    val id = getLong("id")
+    val totalRows = getInt("totalRows")
+    val rowsPerRepeat = getInt("rowsPerRepeat")
+    val knittingID = getLong("knittingID")
+    return Rows(id, totalRows, rowsPerRepeat, knittingID)
+}
+
 /**
  * Converts a JSON array to a list of knittings
  */
