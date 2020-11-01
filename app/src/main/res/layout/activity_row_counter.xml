@@ -18,7 +18,7 @@
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
             app:popupTheme="@style/AppTheme.PopupOverlay"
-            app:title="@string/activity_row_counter" />
+            app:title="@string/row_counter" />
 
     </com.google.android.material.appbar.AppBarLayout>
 

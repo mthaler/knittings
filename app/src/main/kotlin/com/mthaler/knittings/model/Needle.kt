@@ -2,6 +2,8 @@ package com.mthaler.knittings.model
 
 import android.os.Parcel
 import android.os.Parcelable
+import com.mthaler.dbapp.utils.readBooleanCompat
+import com.mthaler.dbapp.utils.writeBooleanCompat
 import java.io.Serializable
 
 data class Needle(
@@ -22,7 +24,7 @@ data class Needle(
             size = parcel.readString()!!,
             length = parcel.readString()!!,
             material = NeedleMaterial.values()[parcel.readInt()],
-            inUse = parcel.readBoolean(),
+            inUse = parcel.readBooleanCompat(),
             type = NeedleType.values()[parcel.readInt()]
     )
 
@@ -33,7 +35,7 @@ data class Needle(
         parcel.writeString(size)
         parcel.writeString(length)
         parcel.writeInt(material.ordinal)
-        parcel.writeBoolean(inUse)
+        parcel.writeBooleanCompat(inUse)
         parcel.writeInt(type.ordinal)
     }
 

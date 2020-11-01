@@ -29,7 +29,7 @@
     <item
         android:id="@+id/menu_item_row_counter"
         android:icon="@drawable/ic_grid_on_white_36dp"
-        android:title="Row Counter"
+        android:title="@string/row_counter"
         android:orderInCategory="5"
         app:showAsAction="ifRoom|withText"/>
 </menu>

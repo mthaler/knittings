@@ -55,7 +55,7 @@ class RowCounterFragment : Fragment() {
 
         val resetButton = v.findViewById<ImageButton>(R.id.button_reset)
         resetButton.setOnClickListener {
-            ResetRowCounterDialog.create(requireContext(), { viewModel.clearTotalRows() }).show()
+            ResetRowCounterDialog.create(requireContext()) { viewModel.clearTotalRows() }.show()
         }
 
         // Inflate the layout for this fragment

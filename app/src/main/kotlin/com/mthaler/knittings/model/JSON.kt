@@ -9,7 +9,6 @@ import java.text.SimpleDateFormat
 import org.json.JSONArray
 import java.io.File
 import java.lang.Exception
-import com.mthaler.dbapp.model.toJSON
 import com.mthaler.dbapp.model.toCategories
 import com.mthaler.dbapp.model.categoriesToJSON
 
