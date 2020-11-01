@@ -118,6 +118,15 @@ fun JSONObject.toNeedle(context: Context): Needle {
     return Needle(id, name, description, size, length, material, inUse, type)
 }
 
+fun Rows.toJson(): JSONObject {
+    val result = JSONObject()
+    result.put("id", id)
+    result.put("totalRows", totalRows)
+    result.put("rowsPerRepeat", rowsPerRepeat)
+    result.put("knittingID", knittingID)
+    return result
+}
+
 /**
  * Converts a JSON array to a list of knittings
  */
