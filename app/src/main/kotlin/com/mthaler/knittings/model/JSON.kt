@@ -127,7 +127,7 @@ fun RowCounter.toJson(): JSONObject {
     return result
 }
 
-fun JSONObject.toRows(): RowCounter {
+fun JSONObject.toRowCounter(): RowCounter {
     val id = getLong("id")
     val totalRows = getInt("totalRows")
     val rowsPerRepeat = getInt("rowsPerRepeat")
@@ -174,11 +174,11 @@ fun JSONArray.toNeedles(context: Context): List<Needle> {
     return result
 }
 
-fun JSONArray.toRows(): List<RowCounter> {
+fun JSONArray.toRowCounters(): List<RowCounter> {
     val result = ArrayList<RowCounter>()
     for (i in 0 until length()) {
         val item = getJSONObject(i)
-        val rows = item.toRows()
+        val rows = item.toRowCounter()
         result.add(rows)
     }
     return result
@@ -208,7 +208,7 @@ fun needlesToJSON(needles: List<Needle>): JSONArray {
     return result
 }
 
-fun rowsToJSON(rows: List<RowCounter>): JSONArray {
+fun rowCountersToJSON(rows: List<RowCounter>): JSONArray {
     val result = JSONArray()
     for (r in rows) {
         result.put(r.toJson())
@@ -226,7 +226,7 @@ fun Database.toJSON(): JSONObject {
     result.put("photos", photosToJSON(photos))
     result.put("categories", categoriesToJSON(categories))
     result.put("needles", needlesToJSON(needles))
-    result.put("rows", rowsToJSON(rowCounters))
+    result.put("rowcounters", rowCountersToJSON(rowCounters))
     return result
 }
 
@@ -270,7 +270,7 @@ fun JSONObject.toDatabase(context: Context, externalFilesDir: File): Database {
     val photos = getJSONArray("photos").toPhotos()
     val categories = if (has("categories")) getJSONArray("categories").toCategories() else ArrayList()
     val needles = if (has("needles")) getJSONArray("needles").toNeedles(context) else ArrayList()
-    val rows = if(has("rows")) getJSONArray("rows").toRows() else ArrayList()
+    val rows = if(has("rows")) getJSONArray("rows").toRowCounters() else ArrayList()
     // we need to update the filename of the photo because the external storage location might be different
     val photosWithUpdatedFilename = photos.map { updatePhotoFilename(it) }
 
