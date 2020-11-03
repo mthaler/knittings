@@ -270,6 +270,7 @@ fun JSONObject.toDatabase(context: Context, externalFilesDir: File): Database {
     val photos = getJSONArray("photos").toPhotos()
     val categories = if (has("categories")) getJSONArray("categories").toCategories() else ArrayList()
     val needles = if (has("needles")) getJSONArray("needles").toNeedles(context) else ArrayList()
+    val rows = if(has("rows")) getJSONArray("rows").toRows() else ArrayList()
     // we need to update the filename of the photo because the external storage location might be different
     val photosWithUpdatedFilename = photos.map { updatePhotoFilename(it) }
 
@@ -279,5 +280,5 @@ fun JSONObject.toDatabase(context: Context, externalFilesDir: File): Database {
     val idToCategory = categories.map { it.id to it }.toMap()
     // update the list of knittings with default photos
     val knittings = knittingsAndDefaultPhotos.map { Pair(updateKnitting(it.first, it.second, idToPhoto), it.third) }.map { addCategory(it.first, it.second, idToCategory) }
-    return Database(knittings, photosWithUpdatedFilename, categories, needles, emptyList())
+    return Database(knittings, photosWithUpdatedFilename, categories, needles, rows)
 }

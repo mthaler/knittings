@@ -88,6 +88,7 @@ class DropboxImportService : Service() {
         KnittingsDataSource.deleteAllPhotos()
         KnittingsDataSource.deleteAllCategories()
         KnittingsDataSource.deleteAllNeedles()
+        KnittingsDataSource.deleteAllRows()
         // add downloaded database
         for (photo in database.photos) {
             KnittingsDataSource.addPhoto(photo, manualID = true)
@@ -97,6 +98,9 @@ class DropboxImportService : Service() {
         }
         for (needle in database.needles) {
             KnittingsDataSource.addNeedle(needle, manualID = true)
+        }
+        for (r in database.rows) {
+            KnittingsDataSource.addRows(r, manualID = true)
         }
         for (knitting in database.knittings) {
             KnittingsDataSource.addProject(knitting, manualID = true)
