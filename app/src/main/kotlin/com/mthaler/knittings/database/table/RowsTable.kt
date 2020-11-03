@@ -4,7 +4,7 @@ import android.content.ContentValues
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import com.mthaler.dbapp.database.table.*
-import com.mthaler.knittings.model.Rows
+import com.mthaler.knittings.model.RowCounter
 
 object RowsTable {
 
@@ -29,7 +29,7 @@ object RowsTable {
         db.execSQL(CREATE_ROWS_TABLE)
     }
 
-    fun cursorToRows(cursor: Cursor): Rows {
+    fun cursorToRows(cursor: Cursor): RowCounter {
         val idIndex = cursor.getColumnIndex(Cols.ID)
         val idTotalRows = cursor.getColumnIndex(Cols.TOTAL_ROWS)
         val idRowsPerRepeat = cursor.getColumnIndex(Cols.ROWS_PER_REPEAT)
@@ -39,17 +39,17 @@ object RowsTable {
         val totalRows = cursor.getInt(idTotalRows)
         val rowsPerRepeat = cursor.getInt(idRowsPerRepeat)
         val knittingID = cursor.getLong(idKnittingIndex)
-        return Rows(id, totalRows, rowsPerRepeat, knittingID)
+        return RowCounter(id, totalRows, rowsPerRepeat, knittingID)
     }
 
-    fun createContentValues(rows: Rows, manualID: Boolean = false): ContentValues {
+    fun createContentValues(rowCounter: RowCounter, manualID: Boolean = false): ContentValues {
         val values = ContentValues()
         if (manualID) {
-            values.put(Cols.ID, rows.id)
+            values.put(Cols.ID, rowCounter.id)
         }
-        values.put(Cols.TOTAL_ROWS, rows.totalRows)
-        values.put(Cols.ROWS_PER_REPEAT, rows.rowsPerRepeat)
-        values.put(PhotoTable.Cols.KNITTING_ID, rows.knittingID)
+        values.put(Cols.TOTAL_ROWS, rowCounter.totalRows)
+        values.put(Cols.ROWS_PER_REPEAT, rowCounter.rowsPerRepeat)
+        values.put(PhotoTable.Cols.KNITTING_ID, rowCounter.knittingID)
         return values
     }
 }

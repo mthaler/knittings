@@ -6,7 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.mthaler.dbapp.DataSourceViewModel
 import com.mthaler.knittings.database.KnittingsDataSource
 import com.mthaler.knittings.model.Knitting
-import com.mthaler.knittings.model.Rows
+import com.mthaler.knittings.model.RowCounter
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -14,7 +14,7 @@ import kotlinx.coroutines.withContext
 class RowCounterViewModel(application: Application) : DataSourceViewModel(application) {
 
     private var knittingID = Knitting.EMPTY.id
-    val rows = MutableLiveData<Rows>()
+    val rows = MutableLiveData<RowCounter>()
 
     fun init(id: Long) {
         if (id != knittingID) {
@@ -27,7 +27,7 @@ class RowCounterViewModel(application: Application) : DataSourceViewModel(applic
                 if (r != null) {
                     rows.value = r
                 } else {
-                    val rr = KnittingsDataSource.addRows(Rows(-1, 0, 1, knittingID))
+                    val rr = KnittingsDataSource.addRows(RowCounter(-1, 0, 1, knittingID))
                     rows.value = rr
                 }
             }

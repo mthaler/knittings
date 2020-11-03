@@ -118,7 +118,7 @@ fun JSONObject.toNeedle(context: Context): Needle {
     return Needle(id, name, description, size, length, material, inUse, type)
 }
 
-fun Rows.toJson(): JSONObject {
+fun RowCounter.toJson(): JSONObject {
     val result = JSONObject()
     result.put("id", id)
     result.put("totalRows", totalRows)
@@ -127,12 +127,12 @@ fun Rows.toJson(): JSONObject {
     return result
 }
 
-fun JSONObject.toRows(): Rows {
+fun JSONObject.toRows(): RowCounter {
     val id = getLong("id")
     val totalRows = getInt("totalRows")
     val rowsPerRepeat = getInt("rowsPerRepeat")
     val knittingID = getLong("knittingID")
-    return Rows(id, totalRows, rowsPerRepeat, knittingID)
+    return RowCounter(id, totalRows, rowsPerRepeat, knittingID)
 }
 
 /**
@@ -174,8 +174,8 @@ fun JSONArray.toNeedles(context: Context): List<Needle> {
     return result
 }
 
-fun JSONArray.toRows(): List<Rows> {
-    val result = ArrayList<Rows>()
+fun JSONArray.toRows(): List<RowCounter> {
+    val result = ArrayList<RowCounter>()
     for (i in 0 until length()) {
         val item = getJSONObject(i)
         val rows = item.toRows()
@@ -208,7 +208,7 @@ fun needlesToJSON(needles: List<Needle>): JSONArray {
     return result
 }
 
-fun rowsToJSON(rows: List<Rows>): JSONArray {
+fun rowsToJSON(rows: List<RowCounter>): JSONArray {
     val result = JSONArray()
     for (r in rows) {
         result.put(r.toJson())

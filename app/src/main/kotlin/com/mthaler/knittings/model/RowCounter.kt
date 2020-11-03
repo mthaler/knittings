@@ -4,7 +4,7 @@ import android.os.Parcel
 import android.os.Parcelable
 import java.io.Serializable
 
-data class Rows(val id: Long = -1, val totalRows: Int = 0, val rowsPerRepeat: Int = 0, val knittingID: Long = -1) : Serializable, Parcelable {
+data class RowCounter(val id: Long = -1, val totalRows: Int = 0, val rowsPerRepeat: Int = 0, val knittingID: Long = -1) : Serializable, Parcelable {
 
     private constructor(parcel: Parcel) : this(
             id = parcel.readLong(),
@@ -25,9 +25,9 @@ data class Rows(val id: Long = -1, val totalRows: Int = 0, val rowsPerRepeat: In
     companion object {
 
         @JvmField
-        val CREATOR = object : Parcelable.Creator<Rows> {
-            override fun createFromParcel(parcel: Parcel) = Rows(parcel)
-            override fun newArray(size: Int) = arrayOfNulls<Rows>(size)
+        val CREATOR = object : Parcelable.Creator<RowCounter> {
+            override fun createFromParcel(parcel: Parcel) = RowCounter(parcel)
+            override fun newArray(size: Int) = arrayOfNulls<RowCounter>(size)
         }
     }
 }

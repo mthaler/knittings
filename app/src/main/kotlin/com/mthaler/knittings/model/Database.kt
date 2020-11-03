@@ -7,14 +7,14 @@ import com.mthaler.dbapp.model.Photo
 import java.io.Serializable
 import java.lang.IllegalArgumentException
 
-data class Database(val knittings: List<Knitting>, val photos: List<Photo>, val categories: List<Category>, val needles: List<Needle>, val rows: List<Rows>) : Serializable, Parcelable {
+data class Database(val knittings: List<Knitting>, val photos: List<Photo>, val categories: List<Category>, val needles: List<Needle>, val rows: List<RowCounter>) : Serializable, Parcelable {
 
     private constructor(parcel: Parcel) : this(
             knittings = parcel.readParcelableArray(classLoader)!!.map { it as Knitting },
             photos = parcel.readParcelableArray(classLoader)!!.map { it as Photo },
             categories = parcel.readParcelableArray(classLoader)!!.map { it as Category },
             needles = parcel.readParcelableArray(classLoader)!!.map { it as Needle },
-            rows = parcel.readParcelableArray(classLoader)!!.map { it as Rows}
+            rows = parcel.readParcelableArray(classLoader)!!.map { it as RowCounter}
     )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
