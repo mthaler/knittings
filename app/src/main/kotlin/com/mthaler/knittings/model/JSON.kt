@@ -226,7 +226,7 @@ fun Database.toJSON(): JSONObject {
     result.put("photos", photosToJSON(photos))
     result.put("categories", categoriesToJSON(categories))
     result.put("needles", needlesToJSON(needles))
-    result.put("rowcounters", rowCountersToJSON(rowCounters))
+    result.put("rowCounters", rowCountersToJSON(rowCounters))
     return result
 }
 
@@ -270,7 +270,7 @@ fun JSONObject.toDatabase(context: Context, externalFilesDir: File): Database {
     val photos = getJSONArray("photos").toPhotos()
     val categories = if (has("categories")) getJSONArray("categories").toCategories() else ArrayList()
     val needles = if (has("needles")) getJSONArray("needles").toNeedles(context) else ArrayList()
-    val rows = if(has("rowcounters")) getJSONArray("rows").toRowCounters() else ArrayList()
+    val rows = if(has("rowCounters")) getJSONArray("rows").toRowCounters() else ArrayList()
     // we need to update the filename of the photo because the external storage location might be different
     val photosWithUpdatedFilename = photos.map { updatePhotoFilename(it) }
 
