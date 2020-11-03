@@ -226,7 +226,7 @@ fun Database.toJSON(): JSONObject {
     result.put("photos", photosToJSON(photos))
     result.put("categories", categoriesToJSON(categories))
     result.put("needles", needlesToJSON(needles))
-    result.put("rows", rowsToJSON(rows))
+    result.put("rows", rowsToJSON(rowCounters))
     return result
 }
 

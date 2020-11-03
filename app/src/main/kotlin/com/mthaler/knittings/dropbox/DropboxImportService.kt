@@ -99,7 +99,7 @@ class DropboxImportService : Service() {
         for (needle in database.needles) {
             KnittingsDataSource.addNeedle(needle, manualID = true)
         }
-        for (r in database.rows) {
+        for (r in database.rowCounters) {
             KnittingsDataSource.addRows(r, manualID = true)
         }
         for (knitting in database.knittings) {
