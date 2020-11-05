@@ -178,8 +178,8 @@ fun JSONArray.toRowCounters(): List<RowCounter> {
     val result = ArrayList<RowCounter>()
     for (i in 0 until length()) {
         val item = getJSONObject(i)
-        val rows = item.toRowCounter()
-        result.add(rows)
+        val rowCounter = item.toRowCounter()
+        result.add(rowCounter)
     }
     return result
 }
