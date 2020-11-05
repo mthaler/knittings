@@ -8,7 +8,7 @@ import com.mthaler.knittings.model.RowCounter
 
 object RowCounterTable {
 
-    val ROWS = "rows"
+    val ROW_COUNTERS = "row_counters"
 
     object Cols {
         val ID = "_id"
@@ -20,16 +20,16 @@ object RowCounterTable {
     val Columns = arrayOf(Cols.ID, Cols.TOTAL_ROWS, Cols.ROWS_PER_REPEAT, Cols.KNITTING_ID)
 
     fun create(db: SQLiteDatabase) {
-        val CREATE_ROWS_TABLE = "CREATE TABLE $IF_NOT_EXISTS $ROWS( " +
+        val CREATE_ROW_COUNTER_TABLE = "CREATE TABLE $IF_NOT_EXISTS $ROW_COUNTERS( " +
                 "${Cols.ID} $INTEGER $PRIMARY_KEY $AUTOINCREMENT, " +
                 "${Cols.TOTAL_ROWS} $INTEGER $NOT_NULL ${DEFAULT("0")}, " +
                 "${Cols.ROWS_PER_REPEAT} $INTEGER $NOT_NULL ${DEFAULT("0")}, " +
                 "${Cols.KNITTING_ID} $INTEGER $NOT_NULL, " +
                 "${FOREIGN_KEY(Cols.KNITTING_ID, KnittingTable.KNITTINGS, KnittingTable.Cols.ID)} )"
-        db.execSQL(CREATE_ROWS_TABLE)
+        db.execSQL(CREATE_ROW_COUNTER_TABLE)
     }
 
-    fun cursorToRows(cursor: Cursor): RowCounter {
+    fun cursorToRowCounter(cursor: Cursor): RowCounter {
         val idIndex = cursor.getColumnIndex(Cols.ID)
         val idTotalRows = cursor.getColumnIndex(Cols.TOTAL_ROWS)
         val idRowsPerRepeat = cursor.getColumnIndex(Cols.ROWS_PER_REPEAT)

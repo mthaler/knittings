@@ -208,9 +208,9 @@ fun needlesToJSON(needles: List<Needle>): JSONArray {
     return result
 }
 
-fun rowCountersToJSON(rows: List<RowCounter>): JSONArray {
+fun rowCountersToJSON(rowCounters: List<RowCounter>): JSONArray {
     val result = JSONArray()
-    for (r in rows) {
+    for (r in rowCounters) {
         result.put(r.toJson())
     }
     return result
