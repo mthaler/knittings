@@ -98,7 +98,7 @@ class DropboxExportService : Service() {
         val photos = KnittingsDataSource.allPhotos
         val categories = KnittingsDataSource.allCategories
         val needles = KnittingsDataSource.allNeedles
-        val rows = KnittingsDataSource.allRows
+        val rows = KnittingsDataSource.allRowCounters
         return Database(knittings, photos, categories, needles, rows)
     }
 

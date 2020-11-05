@@ -97,7 +97,7 @@ object KnittingsDataSource  : AbstractObservableDatabase(), PhotoDataSource, Cat
             return needles
         }
 
-    val allRows: ArrayList<RowCounter>
+    val allRowCounters: ArrayList<RowCounter>
         @Synchronized
         get() = context.database.readableDatabase.use { database ->
             val rows = ArrayList<RowCounter>()
@@ -170,7 +170,7 @@ object KnittingsDataSource  : AbstractObservableDatabase(), PhotoDataSource, Cat
         val id = knitting.id
         // delete all photos from the database
         deleteAllPhotos(knitting)
-        deleteAllRows(knitting)
+        deleteAllRowCounters(knitting)
         context.database.writableDatabase.use { database ->
             database.delete(KnittingTable.KNITTINGS, KnittingTable.Cols.ID + "=" + id, null)
             Log.d(TAG, "Deleted knitting $id: $knitting")
@@ -462,7 +462,7 @@ object KnittingsDataSource  : AbstractObservableDatabase(), PhotoDataSource, Cat
     }
 
     @Synchronized
-    fun getRows(id: Long): RowCounter {
+    fun getRowCounter(id: Long): RowCounter {
         Log.d(TAG, "Getting rows for id $id")
         context.database.readableDatabase.use { database ->
             val cursor = database.query(RowCounterTable.ROWS,
@@ -475,7 +475,7 @@ object KnittingsDataSource  : AbstractObservableDatabase(), PhotoDataSource, Cat
     }
 
     @Synchronized
-    fun getRows(knitting: Knitting): RowCounter? {
+    fun getRowCounter(knitting: Knitting): RowCounter? {
         context.database.readableDatabase.use { database ->
             val whereClause = RowCounterTable.Cols.KNITTING_ID + " = ?"
             val whereArgs = arrayOf(knitting.id.toString())
@@ -490,7 +490,7 @@ object KnittingsDataSource  : AbstractObservableDatabase(), PhotoDataSource, Cat
     }
 
     @Synchronized
-    fun addRows(rowCounter: RowCounter, manualID: Boolean = false): RowCounter {
+    fun addRowCounter(rowCounter: RowCounter, manualID: Boolean = false): RowCounter {
         context.database.writableDatabase.use { database ->
             val values = RowCounterTable.createContentValues(rowCounter, manualID)
             val id = database.insert(RowCounterTable.ROWS, null, values)
@@ -505,7 +505,7 @@ object KnittingsDataSource  : AbstractObservableDatabase(), PhotoDataSource, Cat
     }
 
     @Synchronized
-    fun updateRows(rowCounter: RowCounter): RowCounter {
+    fun updateRowCounter(rowCounter: RowCounter): RowCounter {
         Log.d(TAG, "Updating rows $rowCounter")
         context.database.writableDatabase.use { database ->
             val values = RowCounterTable.createContentValues(rowCounter)
@@ -523,7 +523,7 @@ object KnittingsDataSource  : AbstractObservableDatabase(), PhotoDataSource, Cat
     }
 
     @Synchronized
-    private fun deleteAllRows(knitting: Knitting) {
+    private fun deleteAllRowCounters(knitting: Knitting) {
         context.database.writableDatabase.use { database ->
             val whereClause = RowCounterTable.Cols.KNITTING_ID + "= ?"
             val whereArgs = arrayOf(knitting.id.toString())
@@ -533,14 +533,14 @@ object KnittingsDataSource  : AbstractObservableDatabase(), PhotoDataSource, Cat
     }
 
     @Synchronized
-    fun deleteAllRows() {
-        for (r in allRows) {
-            deleteRowsImpl(r)
+    fun deleteAllRowCounters() {
+        for (r in allRowCounters) {
+            deleteRowCounterImpl(r)
         }
         notifyObservers()
     }
 
-    private fun deleteRowsImpl(r: RowCounter) {
+    private fun deleteRowCounterImpl(r: RowCounter) {
         context.database.writableDatabase.use { database ->
             database.delete(RowCounterTable.ROWS, RowCounterTable.Cols.ID + "=" + r.id, null)
             Log.d(TAG, "Deleted rows " + r.id + ": " + r)

@@ -22,12 +22,12 @@ class RowCounterViewModel(application: Application) : DataSourceViewModel(applic
             viewModelScope.launch {
                 val r =  withContext(Dispatchers.IO) {
                     val knitting = KnittingsDataSource.getProject(id)
-                    KnittingsDataSource.getRows(knitting)
+                    KnittingsDataSource.getRowCounter(knitting)
                 }
                 if (r != null) {
                     rows.value = r
                 } else {
-                    val rr = KnittingsDataSource.addRows(RowCounter(-1, 0, 1, knittingID))
+                    val rr = KnittingsDataSource.addRowCounter(RowCounter(-1, 0, 1, knittingID))
                     rows.value = rr
                 }
             }
@@ -37,28 +37,28 @@ class RowCounterViewModel(application: Application) : DataSourceViewModel(applic
     fun incrementTotalRows() {
         val r = rows.value
         if (r != null) {
-            KnittingsDataSource.updateRows(r.copy(totalRows = r.totalRows + 1))
+            KnittingsDataSource.updateRowCounter(r.copy(totalRows = r.totalRows + 1))
         }
     }
 
     fun decrementTotalRows() {
         val r = rows.value
         if (r != null && r.totalRows > 0) {
-            KnittingsDataSource.updateRows(r.copy(totalRows = r.totalRows - 1))
+            KnittingsDataSource.updateRowCounter(r.copy(totalRows = r.totalRows - 1))
         }
     }
 
     fun clearTotalRows() {
         val r = rows.value
         if (r != null) {
-            KnittingsDataSource.updateRows(r.copy(totalRows = 0))
+            KnittingsDataSource.updateRowCounter(r.copy(totalRows = 0))
         }
     }
 
     fun setRowsPerRepeat(rowsPerRepeat: Int) {
         val r = rows.value
         if (r != null && r.rowsPerRepeat != rowsPerRepeat) {
-            KnittingsDataSource.updateRows(r.copy(rowsPerRepeat = rowsPerRepeat))
+            KnittingsDataSource.updateRowCounter(r.copy(rowsPerRepeat = rowsPerRepeat))
         }
     }
 
@@ -66,7 +66,7 @@ class RowCounterViewModel(application: Application) : DataSourceViewModel(applic
         viewModelScope.launch {
             val r =  withContext(Dispatchers.IO) {
                 val k = KnittingsDataSource.getProject(knittingID)
-                KnittingsDataSource.getRows(k)
+                KnittingsDataSource.getRowCounter(k)
             }
             rows.value = r
         }
