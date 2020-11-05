@@ -6,7 +6,7 @@ import android.database.sqlite.SQLiteDatabase
 import com.mthaler.dbapp.database.table.*
 import com.mthaler.knittings.model.RowCounter
 
-object RowsTable {
+object RowCounterTable {
 
     val ROWS = "rows"
 

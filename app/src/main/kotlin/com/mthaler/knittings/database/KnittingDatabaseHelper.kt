@@ -70,7 +70,7 @@ class KnittingDatabaseHelper(context: Context) : ManagedSQLiteOpenHelper(context
             Log.e(TAG, "Could not create needle table", ex)
         }
         try {
-            RowsTable.create(db)
+            RowCounterTable.create(db)
             Log.d(TAG, "Rows table created")
         } catch (ex: Exception) {
             Log.e(TAG, "Could not create rows table", ex)
@@ -129,7 +129,7 @@ class KnittingDatabaseHelper(context: Context) : ManagedSQLiteOpenHelper(context
 
     private fun upgrade45(db: SQLiteDatabase) {
         try {
-            RowsTable.create(db)
+            RowCounterTable.create(db)
             Log.d(TAG, "Rows table created")
         } catch (ex: Exception) {
             Log.e(TAG, "Could not create rows table", ex)
