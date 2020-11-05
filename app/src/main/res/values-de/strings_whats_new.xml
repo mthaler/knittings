@@ -2,7 +2,11 @@
 <resources>
     <string name="whats_new_title">Whats New</string>
     <string name="whats_new"><![CDATA[
-         <h3>Version 0.9.23</h3>
+        <h3>Version 0.9.24</h3>
+        - Reihenzähler hinzugefügt<br>
+        - Abstürze behoben die beim Drehen des Telefons auftreten konnten<br>
+        - Design von Projekte zählen verbessert<br>
+        <h3>Version 0.9.23</h3>
         - Fotos werden nur durch komprimierte Fotos ersetzt wenn sie kleiner sind<br>
         - Dropbox Export prüft beim Export ob Fotos existieren<br>
         <h3>Version 0.9.22</h3>

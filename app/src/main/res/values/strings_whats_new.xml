@@ -2,6 +2,10 @@
 <resources>
     <string name="whats_new_title">Whats New</string>
     <string name="whats_new"><![CDATA[
+        <h3>Version 0.9.24</h3>
+        - Added row counter<br>
+        - Fixed crashes that sometimes happend when rotating phone<br>
+        - Improved design of project counter<br>
         <h3>Version 0.9.23</h3>
         - Only replace photo with compressed photo if size is actually smaller<br>
         - Check if photo exists when exporting to Dropbox<br>
