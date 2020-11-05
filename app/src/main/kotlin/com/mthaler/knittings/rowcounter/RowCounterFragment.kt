@@ -39,8 +39,8 @@ class RowCounterFragment : Fragment() {
 
         val viewModel = ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory.getInstance(requireActivity().application)).get(RowCounterViewModel::class.java)
         viewModel.init(knittingID)
-        viewModel.rowCounter.observe(viewLifecycleOwner, Observer { rows ->
-            textViewRows.text = rows.totalRows.toString()
+        viewModel.rowCounter.observe(viewLifecycleOwner, Observer { rowCounter ->
+            textViewRows.text = rowCounter.totalRows.toString()
         })
 
         val plusButton = v.findViewById<ImageButton>(R.id.button_plus)

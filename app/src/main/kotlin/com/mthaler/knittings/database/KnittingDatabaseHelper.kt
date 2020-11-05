@@ -71,9 +71,9 @@ class KnittingDatabaseHelper(context: Context) : ManagedSQLiteOpenHelper(context
         }
         try {
             RowCounterTable.create(db)
-            Log.d(TAG, "Rows table created")
+            Log.d(TAG, "RowCounter table created")
         } catch (ex: Exception) {
-            Log.e(TAG, "Could not create rows table", ex)
+            Log.e(TAG, "Could not create row counter table", ex)
         }
     }
 

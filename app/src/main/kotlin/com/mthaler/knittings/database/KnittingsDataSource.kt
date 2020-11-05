@@ -100,18 +100,18 @@ object KnittingsDataSource  : AbstractObservableDatabase(), PhotoDataSource, Cat
     val allRowCounters: ArrayList<RowCounter>
         @Synchronized
         get() = context.database.readableDatabase.use { database ->
-            val rows = ArrayList<RowCounter>()
+            val rowCounters = ArrayList<RowCounter>()
             val cursor = database.query(RowCounterTable.ROWS, RowCounterTable.Columns, null, null, null, null, null)
             cursor.moveToFirst()
             var r: RowCounter
             while (!cursor.isAfterLast) {
                 r = cursorToRows(cursor)
-                rows.add(r)
-                Log.d(TAG, "Read rows $r")
+                rowCounters.add(r)
+                Log.d(TAG, "Read row counter $r")
                 cursor.moveToNext()
             }
             cursor.close()
-            return rows
+            return rowCounters
         }
 
     @Synchronized
