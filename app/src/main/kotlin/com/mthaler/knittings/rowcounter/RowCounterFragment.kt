@@ -39,7 +39,7 @@ class RowCounterFragment : Fragment() {
 
         val viewModel = ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory.getInstance(requireActivity().application)).get(RowCounterViewModel::class.java)
         viewModel.init(knittingID)
-        viewModel.rows.observe(viewLifecycleOwner, Observer { rows ->
+        viewModel.rowCounter.observe(viewLifecycleOwner, Observer { rows ->
             textViewRows.text = rows.totalRows.toString()
         })
 

@@ -14,7 +14,7 @@ import kotlinx.coroutines.withContext
 class RowCounterViewModel(application: Application) : DataSourceViewModel(application) {
 
     private var knittingID = Knitting.EMPTY.id
-    val rows = MutableLiveData<RowCounter>()
+    val rowCounter = MutableLiveData<RowCounter>()
 
     fun init(id: Long) {
         if (id != knittingID) {
@@ -25,38 +25,38 @@ class RowCounterViewModel(application: Application) : DataSourceViewModel(applic
                     KnittingsDataSource.getRowCounter(knitting)
                 }
                 if (r != null) {
-                    rows.value = r
+                    rowCounter.value = r
                 } else {
                     val rr = KnittingsDataSource.addRowCounter(RowCounter(-1, 0, 1, knittingID))
-                    rows.value = rr
+                    rowCounter.value = rr
                 }
             }
         }
     }
 
     fun incrementTotalRows() {
-        val r = rows.value
+        val r = rowCounter.value
         if (r != null) {
             KnittingsDataSource.updateRowCounter(r.copy(totalRows = r.totalRows + 1))
         }
     }
 
     fun decrementTotalRows() {
-        val r = rows.value
+        val r = rowCounter.value
         if (r != null && r.totalRows > 0) {
             KnittingsDataSource.updateRowCounter(r.copy(totalRows = r.totalRows - 1))
         }
     }
 
     fun clearTotalRows() {
-        val r = rows.value
+        val r = rowCounter.value
         if (r != null) {
             KnittingsDataSource.updateRowCounter(r.copy(totalRows = 0))
         }
     }
 
     fun setRowsPerRepeat(rowsPerRepeat: Int) {
-        val r = rows.value
+        val r = rowCounter.value
         if (r != null && r.rowsPerRepeat != rowsPerRepeat) {
             KnittingsDataSource.updateRowCounter(r.copy(rowsPerRepeat = rowsPerRepeat))
         }
@@ -68,7 +68,7 @@ class RowCounterViewModel(application: Application) : DataSourceViewModel(applic
                 val k = KnittingsDataSource.getProject(knittingID)
                 KnittingsDataSource.getRowCounter(k)
             }
-            rows.value = r
+            rowCounter.value = r
         }
     }
 }
