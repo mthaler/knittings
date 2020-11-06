@@ -18,7 +18,7 @@
             android:gravity="center"
             android:layout_gravity="center"
             android:textColor="?attr/colorAccent"
-            android:textSize="100dp"/>
+            android:textSize="130dp"/>
     </FrameLayout>
     <FrameLayout
         android:layout_width="0dp"
@@ -26,8 +26,8 @@
         android:layout_weight="5">
         <ImageButton
             android:id="@+id/button_plus"
-            android:layout_width="200dp"
-            android:layout_height="200dp"
+            android:layout_width="230dp"
+            android:layout_height="230dp"
             android:layout_gravity="center"
             app:srcCompat="@drawable/ic_baseline_add"
             android:background="@drawable/circular_button"
