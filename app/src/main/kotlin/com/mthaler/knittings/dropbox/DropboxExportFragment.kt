@@ -16,7 +16,7 @@ import com.mthaler.dbapp.dropbox.DropboxExportViewModel
 import com.mthaler.knittings.R
 import com.mthaler.dbapp.service.JobStatus
 import com.mthaler.dbapp.service.ServiceStatus
-import com.mthaler.knittings.utils.Format
+import com.mthaler.dbapp.utils.Format
 import com.mthaler.knittings.utils.NetworkUtils
 import kotlinx.android.synthetic.main.fragment_dropbox_export.*
 import com.mthaler.dbapp.utils.StringUtils.formatBytes

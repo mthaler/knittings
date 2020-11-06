@@ -14,7 +14,7 @@ import com.mthaler.dbapp.BaseActivity
 import com.mthaler.knittings.R
 import com.mthaler.dbapp.service.JobStatus
 import com.mthaler.dbapp.service.ServiceStatus
-import com.mthaler.knittings.utils.Format
+import com.mthaler.dbapp.utils.Format
 import kotlinx.android.synthetic.main.activity_compress_photos.*
 
 class CompressPhotosActivity : BaseActivity() {
