@@ -24,6 +24,8 @@ data class RowCounter(val id: Long = -1, val totalRows: Int = 0, val rowsPerRepe
 
     companion object {
 
+        val EMPTY = RowCounter()
+
         @JvmField
         val CREATOR = object : Parcelable.Creator<RowCounter> {
             override fun createFromParcel(parcel: Parcel) = RowCounter(parcel)

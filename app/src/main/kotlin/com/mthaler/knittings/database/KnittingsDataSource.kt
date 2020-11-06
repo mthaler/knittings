@@ -475,17 +475,15 @@ object KnittingsDataSource  : AbstractObservableDatabase(), PhotoDataSource, Cat
     }
 
     @Synchronized
-    fun getRowCounter(knitting: Knitting): RowCounter? {
+    fun getRowCounter(knitting: Knitting): RowCounter {
         context.database.readableDatabase.use { database ->
             val whereClause = RowCounterTable.Cols.KNITTING_ID + " = ?"
             val whereArgs = arrayOf(knitting.id.toString())
             val cursor = database.query(RowCounterTable.ROW_COUNTERS, RowCounterTable.Columns, whereClause, whereArgs, null, null, null)
             cursor.moveToFirst()
-            if (!cursor.isAfterLast) {
-                return cursorToRowCounter(cursor)
-            } else {
-                return null
-            }
+            val rowCounter = cursorToRowCounter(cursor)
+            cursor.close()
+            return rowCounter
         }
     }
 
