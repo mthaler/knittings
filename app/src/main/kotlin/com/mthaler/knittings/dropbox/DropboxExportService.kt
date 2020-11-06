@@ -20,7 +20,7 @@ import com.mthaler.dbapp.service.JobStatus
 import com.mthaler.dbapp.utils.FileUtils.createDateTimeDirectoryName
 import com.mthaler.dbapp.utils.FileUtils.getExtension
 import com.mthaler.knittings.database.KnittingsDataSource
-import com.mthaler.knittings.utils.createNotificationChannel
+import com.mthaler.dbapp.utils.createNotificationChannel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch

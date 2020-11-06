@@ -14,7 +14,7 @@ import com.mthaler.knittings.database.KnittingsDataSource
 import com.mthaler.dbapp.service.JobStatus
 import com.mthaler.dbapp.service.ServiceStatus
 import kotlinx.coroutines.*
-import com.mthaler.knittings.utils.createNotificationChannel
+import com.mthaler.dbapp.utils.createNotificationChannel
 
 class CompressPhotosService : Service() {
 
