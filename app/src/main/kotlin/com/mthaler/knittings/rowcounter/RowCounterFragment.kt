@@ -32,8 +32,9 @@ class RowCounterFragment : Fragment() {
                               savedInstanceState: Bundle?): View? {
 
         val knitting = KnittingsDataSource.getProject(knittingID)
-        rowCounter = KnittingsDataSource.getRowCounter(knitting)
-
+        val rc = KnittingsDataSource.getRowCounter(knitting)
+        rowCounter = if (rc != null) rc else KnittingsDataSource.addRowCounter(RowCounter(-1, 0, 1, knittingID))
+        
         val v = inflater.inflate(R.layout.fragment_row_counter, container, false)
 
         textViewRows = v.findViewById<TextView>(R.id.rows)
