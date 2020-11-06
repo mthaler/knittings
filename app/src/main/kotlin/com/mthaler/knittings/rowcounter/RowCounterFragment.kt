@@ -7,8 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.TextView
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import com.mthaler.knittings.Extras
 import com.mthaler.knittings.R
 import com.mthaler.knittings.database.KnittingsDataSource
@@ -34,7 +32,7 @@ class RowCounterFragment : Fragment() {
         val knitting = KnittingsDataSource.getProject(knittingID)
         val rc = KnittingsDataSource.getRowCounter(knitting)
         rowCounter = if (rc != null) rc else KnittingsDataSource.addRowCounter(RowCounter(-1, 0, 1, knittingID))
-        
+
         val v = inflater.inflate(R.layout.fragment_row_counter, container, false)
 
         textViewRows = v.findViewById<TextView>(R.id.rows)
