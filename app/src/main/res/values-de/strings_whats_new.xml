@@ -2,6 +2,8 @@
 <resources>
     <string name="whats_new_title">Whats New</string>
     <string name="whats_new"><![CDATA[
+        <h3>Version 0.9.25</h3>
+        - Performance des Reihenzählers verbessert<br>
         <h3>Version 0.9.24</h3>
         - Reihenzähler hinzugefügt<br>
         - Abstürze behoben die beim Drehen des Telefons auftreten konnten<br>
