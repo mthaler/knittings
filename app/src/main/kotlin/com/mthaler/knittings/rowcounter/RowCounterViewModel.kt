@@ -35,23 +35,29 @@ class RowCounterViewModel(application: Application) : DataSourceViewModel(applic
     }
 
     fun incrementTotalRows() {
-        val r = rowCounter.value
-        if (r != null) {
-            KnittingsDataSource.updateRowCounter(r.copy(totalRows = r.totalRows + 1))
+        val r0 = rowCounter.value
+        if (r0 != null) {
+            val r1 = r0.copy(totalRows = r0.totalRows + 1)
+            rowCounter.value = r1
+            KnittingsDataSource.updateRowCounter(r1)
         }
     }
 
     fun decrementTotalRows() {
-        val r = rowCounter.value
-        if (r != null && r.totalRows > 0) {
-            KnittingsDataSource.updateRowCounter(r.copy(totalRows = r.totalRows - 1))
+        val r0 = rowCounter.value
+        if (r0 != null && r0.totalRows > 0) {
+            val r1 = r0.copy(totalRows = r0.totalRows -1)
+            rowCounter.value = r1
+            KnittingsDataSource.updateRowCounter(r1)
         }
     }
 
     fun clearTotalRows() {
-        val r = rowCounter.value
-        if (r != null) {
-            KnittingsDataSource.updateRowCounter(r.copy(totalRows = 0))
+        val r0 = rowCounter.value
+        if (r0 != null) {
+            val r1 = r0.copy(totalRows = 0)
+            rowCounter.value = r1
+            KnittingsDataSource.updateRowCounter(r1)
         }
     }
 
