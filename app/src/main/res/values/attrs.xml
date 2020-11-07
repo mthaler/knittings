@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <declare-styleable name="ColorSwatch">
-        <attr name="color" format="color" />
-    </declare-styleable>
     <attr name="colorChoices" format="reference" />
     <attr name="numColumns" format="integer" />
     <attr name="showDialog" format="boolean" />
