@@ -18,19 +18,16 @@ import com.mthaler.dbapp.service.JobStatus
 import com.mthaler.dbapp.service.ServiceStatus
 import com.mthaler.dbapp.utils.Format
 import com.mthaler.knittings.utils.NetworkUtils
-import kotlinx.android.synthetic.main.fragment_dropbox_export.*
 import com.mthaler.dbapp.utils.StringUtils.formatBytes
-import kotlinx.android.synthetic.main.fragment_dropbox_export.cancel_button
-import kotlinx.android.synthetic.main.fragment_dropbox_export.progressBar
-import kotlinx.android.synthetic.main.fragment_dropbox_export.result
+import com.mthaler.knittings.databinding.FragmentDropboxExportBinding
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-/**
- * Fragment used for Dropbox export
- */
 class DropboxExportFragment : AbstractDropboxFragment() {
+
+    private var _binding: FragmentDropboxExportBinding? = null
+    private val binding get() = _binding!!
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,15 +35,17 @@ class DropboxExportFragment : AbstractDropboxFragment() {
         retainInstance = true
     }
 
-    override fun onCreateView(inflater: LayoutInflater, parent: ViewGroup?, savedInstanceState: Bundle?): View? =
-            inflater.inflate(R.layout.fragment_dropbox_export, parent, false)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        _binding = FragmentDropboxExportBinding.inflate(inflater, container, false)
+        return binding.root
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        login_button.setOnClickListener { Auth.startOAuth2Authentication(context, AppKey) }
+        binding.loginButton.setOnClickListener { Auth.startOAuth2Authentication(context, AppKey) }
 
-        export_button.setOnClickListener {
+        binding.exportButton.setOnClickListener {
             val isWiFi = NetworkUtils.isWifiConnected(requireContext())
             if (!isWiFi) {
                 val builder = AlertDialog.Builder(requireContext())
@@ -66,7 +65,7 @@ class DropboxExportFragment : AbstractDropboxFragment() {
             }
         }
 
-        cancel_button.setOnClickListener {
+        binding.cancelButton.setOnClickListener {
             val builder = AlertDialog.Builder(requireContext())
             with(builder) {
                 setTitle(resources.getString(R.string.dropbox_export_cancel_dialog_title))
@@ -79,6 +78,11 @@ class DropboxExportFragment : AbstractDropboxFragment() {
         }
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
@@ -87,28 +91,28 @@ class DropboxExportFragment : AbstractDropboxFragment() {
         sm.jobStatus.observe(viewLifecycleOwner, Observer { jobStatus ->
             when(jobStatus) {
                 is JobStatus.Initialized -> {
-                    export_button.isEnabled = true
-                    export_title.visibility = View.GONE
-                    progressBar.visibility = View.GONE
-                    cancel_button.visibility = View.GONE
-                    result.visibility = View.GONE
+                    binding.exportButton.isEnabled = true
+                    binding.exportTitle.visibility = View.GONE
+                    binding.progressBar.visibility = View.GONE
+                    binding.cancelButton.visibility = View.GONE
+                    binding.result.visibility = View.GONE
                 }
                 is JobStatus.Progress -> {
-                    export_button.isEnabled = false
-                    export_title.visibility = View.VISIBLE
-                    progressBar.visibility = View.VISIBLE
-                    cancel_button.visibility = View.VISIBLE
-                    result.visibility = View.GONE
-                    progressBar.progress = jobStatus.value
+                    binding.exportButton.isEnabled = false
+                    binding.exportTitle.visibility = View.VISIBLE
+                    binding.progressBar.visibility = View.VISIBLE
+                    binding.cancelButton.visibility = View.VISIBLE
+                    binding.result.visibility = View.GONE
+                    binding.progressBar.progress = jobStatus.value
                 }
                 is JobStatus.Cancelled -> {
                     DropboxExportServiceManager.getInstance().cancelled = false
-                    export_button.isEnabled = true
-                    export_title.visibility = View.VISIBLE
-                    progressBar.visibility = View.GONE
-                    cancel_button.visibility = View.GONE
-                    result.visibility = View.VISIBLE
-                    result.text = jobStatus.msg
+                    binding.exportButton.isEnabled = true
+                    binding.exportTitle.visibility = View.VISIBLE
+                    binding.progressBar.visibility = View.GONE
+                    binding.cancelButton.visibility = View.GONE
+                    binding.result.visibility = View.VISIBLE
+                    binding.result.text = jobStatus.msg
                     when (jobStatus.data) {
                         is String -> {
                             val builder = AlertDialog.Builder(requireContext())
@@ -128,27 +132,27 @@ class DropboxExportFragment : AbstractDropboxFragment() {
                     }
                 }
                 is JobStatus.Success -> {
-                    export_button.isEnabled = true
-                    export_title.visibility = View.VISIBLE
-                    progressBar.visibility = View.GONE
-                    cancel_button.visibility = View.GONE
-                    result.visibility = View.VISIBLE
-                    result.text = jobStatus.msg
+                    binding.exportButton.isEnabled = true
+                    binding.exportTitle.visibility = View.VISIBLE
+                    binding.progressBar.visibility = View.GONE
+                    binding.cancelButton.visibility = View.GONE
+                    binding.result.visibility = View.VISIBLE
+                    binding.result.text = jobStatus.msg
                 }
             }
         })
 
         sm.serviceStatus.observe(viewLifecycleOwner, Observer { serviceStatus ->
             when(serviceStatus) {
-                ServiceStatus.Stopped -> export_button.isEnabled = true
-                ServiceStatus.Started -> export_button.isEnabled = false
+                ServiceStatus.Stopped -> binding.exportButton.isEnabled = true
+                ServiceStatus.Started -> binding.exportButton.isEnabled = false
             }
         })
 
         val viewModel = ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory.getInstance(requireActivity().application)).get(DropboxExportViewModel::class.java)
         viewModel.statistics.observe(viewLifecycleOwner, Observer { statistics ->
-            photo_count.text = statistics.photos.toString()
-            photo_total_size.text = Format.humanReadableByteCountBin(statistics.totalSize)
+            binding.photoCount.text = statistics.photos.toString()
+            binding.photoTotalSize.text = Format.humanReadableByteCountBin(statistics.totalSize)
         })
     }
 
@@ -156,21 +160,21 @@ class DropboxExportFragment : AbstractDropboxFragment() {
         super.onResume()
 
         if (hasToken()) {
-            login_button.visibility = View.GONE
-            account.visibility = View.VISIBLE
-            email_text.visibility = View.VISIBLE
-            name_text.visibility = View.VISIBLE
-            type_text.visibility = View.VISIBLE
-            data_title.visibility = View.VISIBLE
-            export_button.isEnabled = true
+            binding.loginButton.visibility = View.GONE
+            binding.account.visibility = View.VISIBLE
+            binding.emailText.visibility = View.VISIBLE
+            binding.nameText.visibility = View.VISIBLE
+            binding.typeText.visibility = View.VISIBLE
+            binding.dataTitle.visibility = View.VISIBLE
+            binding.exportButton.isEnabled = true
         } else {
-            login_button.visibility = View.VISIBLE
-            account.visibility = View.GONE
-            email_text.visibility = View.GONE
-            name_text.visibility = View.GONE
-            type_text.visibility = View.GONE
-            data_title.visibility = View.GONE
-            export_button.isEnabled = false
+            binding.loginButton.visibility = View.VISIBLE
+            binding.account.visibility = View.GONE
+            binding.emailText.visibility = View.GONE
+            binding.nameText.visibility = View.GONE
+            binding.typeText.visibility = View.GONE
+            binding.dataTitle.visibility = View.GONE
+            binding.exportButton.isEnabled = false
         }
     }
 
@@ -193,14 +197,14 @@ class DropboxExportFragment : AbstractDropboxFragment() {
                 onError(exception)
             } else {
                 if (account != null) {
-                    email_text.text = account.email
-                    name_text.text = account.name.displayName
-                    type_text.text = account.accountType.name
+                    binding.emailText.text = account.email
+                    binding.nameText.text = account.name.displayName
+                    binding.typeText.text = account.accountType.name
                 }
                 if (spaceUsage != null) {
-                    max_space_text.text = "Max: " + formatBytes(spaceUsage.allocation.individualValue.allocated)
-                    used_space_text.text = "Used: " + formatBytes(spaceUsage.used)
-                    free_space_text.text = "Free: " + formatBytes(spaceUsage.allocation.individualValue.allocated - spaceUsage.used)
+                    binding.maxSpaceText.text = "Max: " + formatBytes(spaceUsage.allocation.individualValue.allocated)
+                    binding.usedSpaceText.text = "Used: " + formatBytes(spaceUsage.used)
+                    binding.freeSpaceText.text = "Free: " + formatBytes(spaceUsage.allocation.individualValue.allocated - spaceUsage.used)
                 }
             }
         }
