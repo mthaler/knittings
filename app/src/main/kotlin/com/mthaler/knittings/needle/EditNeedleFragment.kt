@@ -13,16 +13,13 @@ import com.mthaler.knittings.model.NeedleMaterial
 import com.mthaler.knittings.model.NeedleType
 import com.mthaler.knittings.Extras.EXTRA_NEEDLE_ID
 import com.mthaler.knittings.database.KnittingsDataSource
+import com.mthaler.knittings.databinding.FragmentEditNeedleBinding
 
 class EditNeedleFragment : Fragment() {
 
     private var needleID: Long = Needle.EMPTY.id
-    private lateinit var editTextName: EditText
-    private lateinit var editTextSize: EditText
-    private lateinit var editTextLength: EditText
-    private lateinit var spinnerMaterial: Spinner
-    private lateinit var checkBoxInUse: CheckBox
-    private lateinit var spinnerType: Spinner
+    private var _binding: FragmentEditNeedleBinding? = null
+    private val binding get() = _binding!!
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,55 +34,49 @@ class EditNeedleFragment : Fragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        _binding = FragmentEditNeedleBinding.inflate(inflater, container, false)
+        val view = binding.root
 
         setHasOptionsMenu(true)
 
-        val v = inflater.inflate(R.layout.fragment_edit_needle, container, false)
-
-        editTextName = v.findViewById(R.id.needle_name)
-        editTextSize = v.findViewById(R.id.needle_size)
-        editTextLength = v.findViewById(R.id.needle_length)
-        spinnerMaterial = v.findViewById(R.id.needle_material)
         // Create an ArrayAdapter using the string array and a default spinner layout
-        ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, NeedleMaterial.formattedValues(v.context)).also { adapter ->
+        ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, NeedleMaterial.formattedValues(view.context)).also { adapter ->
             // Specify the layout to use when the list of choices appears
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             // Apply the adapter to the spinner
-            spinnerMaterial.adapter = adapter
+            binding.needleMaterial.adapter = adapter
         }
-        checkBoxInUse = v.findViewById(R.id.needle_in_use)
-        spinnerType = v.findViewById(R.id.needle_type)
         // Create an ArrayAdapter using the string array and a default spinner layout
-        ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, NeedleType.formattedValues(v.context)).also { adapter ->
+        ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, NeedleType.formattedValues(view.context)).also { adapter ->
             // Specify the layout to use when the list of choices appears
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             // Apply the adapter to the spinner
-            spinnerType.adapter = adapter
+            binding.needleType.adapter = adapter
         }
 
         if (savedInstanceState == null) {
             val needle = if (needleID != Needle.EMPTY.id) KnittingsDataSource.getNeedle(needleID) else Needle.EMPTY
-            editTextName.setText(needle.name)
-            editTextSize.setText(needle.size)
-            editTextLength.setText(needle.length)
+            binding.needleName.setText(needle.name)
+            binding.needleSize.setText(needle.size)
+            binding.needleLength.setText(needle.length)
             NeedleMaterial.values().indexOf(needle.material).also { index ->
                 if (index >= 0) {
-                    spinnerMaterial.setSelection(index)
+                    binding.needleMaterial.setSelection(index)
                 } else {
-                    spinnerMaterial.setSelection(0)
+                    binding.needleMaterial.setSelection(0)
                 }
             }
-            checkBoxInUse.isChecked = needle.inUse
+            binding.needleInUse.isChecked = needle.inUse
             NeedleType.values().indexOf(needle.type).also { index ->
                 if (index >= 0) {
-                    spinnerType.setSelection(index)
+                    binding.needleType.setSelection(index)
                 } else {
-                    spinnerType.setSelection(0)
+                    binding.needleType.setSelection(0)
                 }
             }
         }
 
-        return v
+        return view
     }
 
     override fun onSaveInstanceState(savedInstanceState: Bundle) {
@@ -115,7 +106,7 @@ class EditNeedleFragment : Fragment() {
                         parentFragmentManager.popBackStack()
                     }.show()
                 } else {
-                    DeleteDialog.create(requireContext(), editTextName.text.toString()
+                    DeleteDialog.create(requireContext(), binding.needleName.text.toString()
                     ) {
                         deleteNeedle()
                         parentFragmentManager.popBackStack()
@@ -143,9 +134,9 @@ class EditNeedleFragment : Fragment() {
     }
 
     private fun createNeedle(): Needle {
-        val material = NeedleMaterial.values()[spinnerMaterial.selectedItemPosition]
-        val type = NeedleType.values()[spinnerType.selectedItemPosition]
-        return Needle(needleID, editTextName.text.toString(), "", editTextSize.text.toString(), editTextLength.text.toString(), material, checkBoxInUse.isChecked, type)
+        val material = NeedleMaterial.values()[binding.needleMaterial.selectedItemPosition]
+        val type = NeedleType.values()[binding.needleType.selectedItemPosition]
+        return Needle(needleID, binding.needleName.text.toString(), "", binding.needleSize.text.toString(), binding.needleLength.text.toString(), material, binding.needleInUse.isChecked, type)
     }
 
     private fun deleteNeedle() {
