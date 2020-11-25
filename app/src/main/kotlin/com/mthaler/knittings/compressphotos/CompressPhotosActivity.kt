@@ -18,11 +18,9 @@ import com.mthaler.knittings.databinding.ActivityCompressPhotosBinding
 
 class CompressPhotosActivity : BaseActivity() {
 
-    private lateinit var binding: ActivityCompressPhotosBinding
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityCompressPhotosBinding.inflate(layoutInflater)
+        val binding = ActivityCompressPhotosBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
 

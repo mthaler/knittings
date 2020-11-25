@@ -12,14 +12,15 @@ import com.mthaler.dbapp.BaseActivity
 import com.mthaler.knittings.R
 import com.mthaler.knittings.Extras.EXTRA_KNITTING_ID
 import com.mthaler.knittings.database.KnittingsDataSource
+import com.mthaler.knittings.databinding.ActivityStopwatchBinding
 import java.util.Locale
-import kotlinx.android.synthetic.main.activity_stopwatch.*
 
 /**
  * StopWatchActivity shows a stopwatch that can be used to measure the time the user is working on a knitting
  */
 class   StopwatchActivity : BaseActivity() {
 
+    private lateinit var binding: ActivityStopwatchBinding
     private var knittingID: Long = -1
     private var elapsedTime = 0L
     private var previousTime = 0L
@@ -27,9 +28,11 @@ class   StopwatchActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_stopwatch)
+        binding = ActivityStopwatchBinding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)
 
-        setSupportActionBar(toolbar)
+        setSupportActionBar(binding.toolbar)
 
         // enable up navigation
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -79,7 +82,6 @@ class   StopwatchActivity : BaseActivity() {
 
     private fun runTimer() {
         previousTime = System.currentTimeMillis()
-        val timeView = findViewById<TextView>(R.id.time_view)
         val handler = Handler()
         handler.post(object : Runnable {
             override fun run() {
@@ -88,7 +90,7 @@ class   StopwatchActivity : BaseActivity() {
                 val minutes = totalSeconds % 3600 / 60
                 val secs = totalSeconds % 60
                 val time = String.format(Locale.getDefault(), "%d:%02d:%02d", hours, minutes, secs)
-                timeView.text = time
+                binding.timeView.text = time
                 if (running) {
                     val t = System.currentTimeMillis()
                     elapsedTime += (t - previousTime)
