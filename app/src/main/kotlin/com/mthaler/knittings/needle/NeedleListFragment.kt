@@ -2,24 +2,24 @@ package com.mthaler.knittings.needle
 
 import android.content.Context
 import android.os.Bundle
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import androidx.fragment.app.Fragment
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ActionMode
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import android.view.*
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.mthaler.dbapp.DeleteDialog
 import com.mthaler.knittings.R
 import com.mthaler.knittings.database.KnittingsDataSource
+import com.mthaler.knittings.databinding.FragmentNeedleListBinding
 import com.mthaler.knittings.model.NeedleType
-import kotlinx.android.synthetic.main.fragment_needle_list.*
 
 class NeedleListFragment : Fragment() {
 
+    private var _binding: FragmentNeedleListBinding? = null
+    private val binding get() = _binding!!
     private var listener: OnFragmentInteractionListener? = null
     private lateinit var viewModel: NeedleListViewModel
 
@@ -28,21 +28,17 @@ class NeedleListFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val v = inflater.inflate(R.layout.fragment_needle_list, container, false)
-
+        _binding = FragmentNeedleListBinding.inflate(inflater, container, false)
+        val view = binding.root
         setHasOptionsMenu(true)
-
-        val fab = v.findViewById<FloatingActionButton>(R.id.fab_create_needle)
-        fab.setOnClickListener { v -> listener?.createNeedle() }
-
-        return v
+        binding.fabCreateNeedle.setOnClickListener { v -> listener?.createNeedle() }
+        return view
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        val rv = requireView().findViewById<RecyclerView>(R.id.needles_recycler_view)
-        rv.layoutManager = LinearLayoutManager(context)
+        binding.needlesRecyclerView.layoutManager = LinearLayoutManager(context)
 
         val adapter = NeedleAdapter({ needle -> listener?.needleClicked(needle.id) }, { needle ->
             (activity as AppCompatActivity).startSupportActionMode(object : ActionMode.Callback {
@@ -82,17 +78,17 @@ class NeedleListFragment : Fragment() {
                 override fun onDestroyActionMode(mode: ActionMode?) {}
             })
         })
-        rv.adapter = adapter
+        binding.needlesRecyclerView.adapter = adapter
 
         viewModel = ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory.getInstance(requireActivity().application)).get(NeedleListViewModel::class.java)
         viewModel.needles.observe(viewLifecycleOwner, Observer { needles ->
             // show image if category list is empty
             if (needles.isEmpty()) {
-                needles_empty_recycler_view.visibility = View.VISIBLE
-                needles_recycler_view.visibility = View.GONE
+                binding.needlesEmptyRecyclerView.visibility = View.VISIBLE
+                binding.needlesRecyclerView.visibility = View.GONE
             } else {
-                needles_empty_recycler_view.visibility = View.GONE
-                needles_recycler_view.visibility = View.VISIBLE
+                binding.needlesEmptyRecyclerView.visibility = View.GONE
+                binding.needlesRecyclerView.visibility = View.VISIBLE
             }
             val items = NeedleAdapter.groupItems(requireContext(), needles)
             adapter.setItems(items)
