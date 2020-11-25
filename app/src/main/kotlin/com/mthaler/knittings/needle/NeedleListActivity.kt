@@ -7,16 +7,18 @@ import androidx.core.app.NavUtils
 import android.view.MenuItem
 import com.mthaler.dbapp.BaseActivity
 import com.mthaler.knittings.R
+import com.mthaler.knittings.databinding.ActivityNeedleListBinding
 import com.mthaler.knittings.model.Needle
-import kotlinx.android.synthetic.main.activity_needle_list.*
 
 class NeedleListActivity : BaseActivity(), NeedleListFragment.OnFragmentInteractionListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_needle_list)
+        val binding = ActivityNeedleListBinding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)
 
-        setSupportActionBar(toolbar)
+        setSupportActionBar(binding.toolbar)
 
         // enable up navigation
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
