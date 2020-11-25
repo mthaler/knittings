@@ -7,9 +7,7 @@ import android.os.Handler
 import androidx.core.app.NavUtils
 import android.view.MenuItem
 import android.view.View
-import android.widget.TextView
 import com.mthaler.dbapp.BaseActivity
-import com.mthaler.knittings.R
 import com.mthaler.knittings.Extras.EXTRA_KNITTING_ID
 import com.mthaler.knittings.database.KnittingsDataSource
 import com.mthaler.knittings.databinding.ActivityStopwatchBinding
