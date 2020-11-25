@@ -79,6 +79,11 @@ class EditNeedleFragment : Fragment() {
         return view
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
     override fun onSaveInstanceState(savedInstanceState: Bundle) {
         savedInstanceState.putLong(EXTRA_NEEDLE_ID, needleID)
         super.onSaveInstanceState(savedInstanceState)
