@@ -5,7 +5,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
-import android.widget.Button
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.NavUtils
 import androidx.lifecycle.Observer
@@ -15,21 +14,24 @@ import com.mthaler.knittings.R
 import com.mthaler.dbapp.service.JobStatus
 import com.mthaler.dbapp.service.ServiceStatus
 import com.mthaler.dbapp.utils.Format
-import kotlinx.android.synthetic.main.activity_compress_photos.*
+import com.mthaler.knittings.databinding.ActivityCompressPhotosBinding
 
 class CompressPhotosActivity : BaseActivity() {
 
+    private lateinit var binding: ActivityCompressPhotosBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_compress_photos)
+        binding = ActivityCompressPhotosBinding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)
 
-        setSupportActionBar(toolbar)
+        setSupportActionBar(binding.toolbar)
 
         // enable up navigation
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        val buttonStart = findViewById<Button>(R.id.buttonStart)
-        buttonStart.setOnClickListener {
+        binding.buttonStart.setOnClickListener {
             val builder = AlertDialog.Builder(this)
             with(builder) {
                 setTitle(resources.getString(R.string.compress_photos_dialog_title))
@@ -42,59 +44,58 @@ class CompressPhotosActivity : BaseActivity() {
             }
         }
 
-        val buttonCancel = findViewById<Button>(R.id.cancel_button)
-        buttonCancel.setOnClickListener {
+        binding.cancelButton.setOnClickListener {
             CompressPhotosServiceManager.getInstance().cancelled = true
         }
 
         val viewModel = ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory.getInstance(this.application)).get(CompressPhotosViewModel::class.java)
         viewModel.statistics.observe(this, Observer { statistics ->
-            number_of_photos.text = statistics.photos.toString()
-            total_size.text = Format.humanReadableByteCountBin(statistics.totalSize)
-            will_be_compressed.text = statistics.photosToCompress.toString()
+            binding.numberOfPhotos.text = statistics.photos.toString()
+            binding.totalSize.text = Format.humanReadableByteCountBin(statistics.totalSize)
+            binding.willBeCompressed.text = statistics.photosToCompress.toString()
         })
 
         CompressPhotosServiceManager.getInstance().jobStatus.observe(this, Observer { jobStatus->
             when(jobStatus) {
                 is JobStatus.Initialized -> {
-                    buttonStart.isEnabled = true
-                    compressing_photos_title.visibility = View.GONE
-                    progressBar.visibility = View.GONE
-                    cancel_button.visibility = View.GONE
-                    result.visibility = View.GONE
+                    binding.buttonStart.isEnabled = true
+                    binding.compressingPhotosTitle.visibility = View.GONE
+                    binding.progressBar.visibility = View.GONE
+                    binding.cancelButton.visibility = View.GONE
+                    binding.result.visibility = View.GONE
                 }
                 is JobStatus.Progress -> {
-                    buttonStart.isEnabled = false
-                    compressing_photos_title.visibility = View.VISIBLE
-                    progressBar.visibility = View.VISIBLE
-                    cancel_button.visibility = View.VISIBLE
-                    progressBar.progress = jobStatus.value
-                    result.visibility = View.GONE
+                    binding.buttonStart.isEnabled = false
+                    binding.compressingPhotosTitle.visibility = View.VISIBLE
+                    binding.progressBar.visibility = View.VISIBLE
+                    binding.cancelButton.visibility = View.VISIBLE
+                    binding.progressBar.progress = jobStatus.value
+                    binding.result.visibility = View.GONE
                 }
                 is JobStatus.Success -> {
-                    buttonStart.isEnabled = true
-                    compressing_photos_title.visibility = View.VISIBLE
-                    progressBar.visibility = View.GONE
-                    cancel_button.visibility = View.GONE
-                    result.visibility = View.VISIBLE
-                    result.text = jobStatus.msg
+                    binding.buttonStart.isEnabled = true
+                    binding.compressingPhotosTitle.visibility = View.VISIBLE
+                    binding.progressBar.visibility = View.GONE
+                    binding.cancelButton.visibility = View.GONE
+                    binding.result.visibility = View.VISIBLE
+                    binding.result.text = jobStatus.msg
                 }
                 is JobStatus.Cancelled -> {
                     CompressPhotosServiceManager.getInstance().cancelled = false
-                    buttonStart.isEnabled = true
-                    compressing_photos_title.visibility = View.VISIBLE
-                    progressBar.visibility = View.GONE
-                    cancel_button.visibility = View.GONE
-                    result.visibility = View.VISIBLE
-                    result.text = jobStatus.msg
+                    binding.buttonStart.isEnabled = true
+                    binding.compressingPhotosTitle.visibility = View.VISIBLE
+                    binding.progressBar.visibility = View.GONE
+                    binding.cancelButton.visibility = View.GONE
+                    binding.result.visibility = View.VISIBLE
+                    binding.result.text = jobStatus.msg
                 }
             }
         })
 
         CompressPhotosServiceManager.getInstance().serviceStatus.observe(this, Observer { serviceStatus ->
             when (serviceStatus) {
-                ServiceStatus.Stopped -> buttonStart.isEnabled = true
-                ServiceStatus.Started -> buttonStart.isEnabled = false
+                ServiceStatus.Stopped -> binding.buttonStart.isEnabled = true
+                ServiceStatus.Started -> binding.buttonStart.isEnabled = false
             }
         })
     }
