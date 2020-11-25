@@ -8,18 +8,18 @@ import androidx.core.app.NavUtils
 import com.mthaler.dbapp.BaseActivity
 import com.mthaler.knittings.R
 import com.mthaler.dbapp.service.JobStatus
-import kotlinx.android.synthetic.main.activity_dropbox_import.*
+import com.mthaler.knittings.databinding.ActivityDropboxImportBinding
 
-/**
- * Activity that handles Dropbox import
- */
 class DropboxImportActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_dropbox_import)
 
-        setSupportActionBar(toolbar)
+        val binding = ActivityDropboxImportBinding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)
+
+        setSupportActionBar(binding.toolbar)
 
         // enable up navigation
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
