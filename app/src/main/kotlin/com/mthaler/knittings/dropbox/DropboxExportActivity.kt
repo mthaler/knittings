@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import com.mthaler.knittings.R
-import kotlinx.android.synthetic.main.activity_dropbox_export.*
 import android.view.Menu
 import android.view.MenuItem
 import androidx.core.app.NavUtils
@@ -13,20 +12,21 @@ import androidx.lifecycle.lifecycleScope
 import com.mthaler.dbapp.BaseActivity
 import com.mthaler.dbapp.dropbox.DropboxClientFactory
 import com.mthaler.dbapp.service.JobStatus
+import com.mthaler.knittings.databinding.ActivityDropboxExportBinding
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-/**
- * Activity that handles Dropbox export
- */
 class DropboxExportActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_dropbox_export)
 
-        setSupportActionBar(toolbar)
+        val binding = ActivityDropboxExportBinding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)
+
+        setSupportActionBar(binding.toolbar)
 
         // enable up navigation
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
