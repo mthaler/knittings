@@ -8,8 +8,8 @@ import androidx.core.app.NavUtils
 import com.mthaler.dbapp.BaseActivity
 import com.mthaler.knittings.Extras
 import com.mthaler.knittings.R
+import com.mthaler.knittings.databinding.ActivityRowCounterBinding
 import com.mthaler.knittings.model.Knitting
-import kotlinx.android.synthetic.main.activity_row_counter.*
 
 class RowCounterActivity : BaseActivity() {
 
@@ -17,9 +17,11 @@ class RowCounterActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_row_counter)
+        val binding = ActivityRowCounterBinding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)
 
-        setSupportActionBar(toolbar)
+        setSupportActionBar(binding.toolbar)
 
         // enable up navigation
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
