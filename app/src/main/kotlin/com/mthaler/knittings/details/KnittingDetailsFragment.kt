@@ -8,21 +8,18 @@ import android.os.Handler
 import android.view.*
 import android.widget.ImageView
 import android.widget.LinearLayout
-import android.widget.RatingBar
-import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.mthaler.dbapp.DeleteDialog
 import com.mthaler.dbapp.photo.PhotoGalleryActivity
 import com.mthaler.dbapp.photo.TakePhotoDialog
-import com.mthaler.dbapp.ui.SquareImageView
 import com.mthaler.dbapp.utils.PictureUtils
 import com.mthaler.knittings.Extras
 import com.mthaler.knittings.R
 import com.mthaler.knittings.database.KnittingsDataSource
+import com.mthaler.knittings.databinding.FragmentKnittingDetailsBinding
 import com.mthaler.knittings.model.Knitting
 import com.mthaler.knittings.model.Status
 import com.mthaler.knittings.rowcounter.RowCounterActivity
@@ -43,6 +40,9 @@ class KnittingDetailsFragment : Fragment() {
     private lateinit var viewModel: KnittingDetailsViewModel
     private var currentPhotoPath: File? = null
     private var listener: OnFragmentInteractionListener? = null
+
+    private var _binding: FragmentKnittingDetailsBinding? = null
+    private val binding get() = _binding!!
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -65,9 +65,10 @@ class KnittingDetailsFragment : Fragment() {
         val ratio = metrics.heightPixels / metrics.widthPixels.toDouble()
 
 
-        val v = inflater.inflate(R.layout.fragment_knitting_details, container, false)
+        _binding = FragmentKnittingDetailsBinding.inflate(inflater, container, false)
+        val view = binding.root
 
-        val imageView = v.findViewById<SquareImageView>(R.id.image)
+        val imageView = binding.image
         imageView.setOnClickListener {
             startActivity(PhotoGalleryActivity.newIntent(requireContext(), knittingID))
         }
@@ -78,12 +79,16 @@ class KnittingDetailsFragment : Fragment() {
             imageView.layoutParams = layoutParams
         }
 
-        val fabEdit = v.findViewById<FloatingActionButton>(R.id.edit_knitting_details)
-        fabEdit.setOnClickListener {
+        binding.editKnittingDetails.setOnClickListener {
             listener?.editKnitting(knittingID)
         }
 
-        return v
+        return view
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -175,43 +180,20 @@ class KnittingDetailsFragment : Fragment() {
 
     private fun updateDetails(knitting: Knitting) {
         view?.let {
-            val imageView = it.findViewById<SquareImageView>(R.id.image)
-            imageView.setImageBitmap(null)
-            updateImageView(imageView, knitting, 50)
-
-            val knittingTitle = it.findViewById<TextView>(R.id.knitting_title)
-            knittingTitle.text = knitting.title
-
-            val knittingDescription = it.findViewById<TextView>(R.id.knitting_description)
-            knittingDescription.text = knitting.description
-
-            val knittingStarted = it.findViewById<TextView>(R.id.knitting_started)
-            knittingStarted.text = DateFormat.getDateInstance().format(knitting.started)
-
-            val knittingFinished = it.findViewById<TextView>(R.id.knitting_finished)
-            knittingFinished.text = if (knitting.finished != null) DateFormat.getDateInstance().format(knitting.finished) else ""
-
-            val knittingNeedleDiameter = it.findViewById<TextView>(R.id.knitting_needle_diameter)
-            knittingNeedleDiameter.text = knitting.needleDiameter
-
-            val knittingSize = it.findViewById<TextView>(R.id.knitting_size)
-            knittingSize.text = knitting.size
-
-            val knittingDuration = it.findViewById<TextView>(R.id.knitting_duration)
-            knittingDuration.text = TimeUtils.formatDuration(knitting.duration)
-
-            val knittingCategory = it.findViewById<TextView>(R.id.knitting_category)
+            binding.image.setImageBitmap(null)
+            updateImageView(binding.image, knitting, 50)
+            binding.knittingTitle.text = knitting.title
+            binding.knittingDescription.text = knitting.description
+            binding.knittingStarted.text = DateFormat.getDateInstance().format(knitting.started)
+            binding.knittingFinished.text = if (knitting.finished != null) DateFormat.getDateInstance().format(knitting.finished) else ""
+            binding.knittingNeedleDiameter.text = knitting.needleDiameter
+            binding.knittingSize.text = knitting.size
+            binding.knittingDuration.text = TimeUtils.formatDuration(knitting.duration)
             val c = knitting.category
-            knittingCategory.text = c?.name ?: ""
-
-            val knittingStatusImage = it.findViewById<ImageView>(R.id.knitting_status_image)
-            knittingStatusImage.setImageResource(Status.getDrawableResource(it.context, knitting.status))
-
-            val knittingStatus = it.findViewById<TextView>(R.id.knitting_status)
-            knittingStatus.text = Status.format(it.context, knitting.status)
-
-            val ratingBar = it.findViewById<RatingBar>(R.id.ratingBar)
-            ratingBar.rating = knitting.rating.toFloat()
+            binding.knittingCategory.text = c?.name ?: ""
+            binding.knittingStatusImage.setImageResource(Status.getDrawableResource(it.context, knitting.status))
+            binding.knittingStatus.text = Status.format(it.context, knitting.status)
+            binding.ratingBar.rating = knitting.rating.toFloat()
         }
     }
 
