@@ -8,8 +8,8 @@ import android.view.MenuItem
 import com.mthaler.dbapp.BaseActivity
 import com.mthaler.knittings.R
 import com.mthaler.knittings.Extras.EXTRA_KNITTING_ID
+import com.mthaler.knittings.databinding.ActivityKnittingDetailsBinding
 import com.mthaler.knittings.model.Knitting
-import kotlinx.android.synthetic.main.activity_knitting_details.*
 
 /**
  * Activity that displays knitting details (name, description, start time etc.)
@@ -22,9 +22,11 @@ class KnittingDetailsActivity : BaseActivity(), KnittingDetailsFragment.OnFragme
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_knitting_details)
+        val binding = ActivityKnittingDetailsBinding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)
 
-        setSupportActionBar(toolbar)
+        setSupportActionBar(binding.toolbar)
 
         // enable up navigation
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
