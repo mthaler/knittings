@@ -9,7 +9,6 @@ import com.dropbox.core.android.Auth
 import com.dropbox.core.v2.files.ListFolderResult
 import com.mthaler.knittings.R
 import com.mthaler.knittings.utils.NetworkUtils
-import kotlinx.android.synthetic.main.fragment_dropbox_import.*
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
@@ -18,6 +17,7 @@ import com.mthaler.dbapp.utils.FileUtils
 import com.mthaler.knittings.model.toDatabase
 import com.mthaler.dbapp.service.JobStatus
 import com.mthaler.dbapp.service.ServiceStatus
+import com.mthaler.knittings.databinding.FragmentDropboxImportBinding
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -26,21 +26,26 @@ import java.io.ByteArrayOutputStream
 
 class DropboxImportFragment : AbstractDropboxFragment() {
 
+    private var _binding: FragmentDropboxImportBinding? = null
+    private val binding get() = _binding!!
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         // Retain this fragment across configuration changes.
         retainInstance = true
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
-        inflater.inflate(R.layout.fragment_dropbox_import, container, false)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        _binding = FragmentDropboxImportBinding.inflate(inflater, container, false)
+        return binding.root
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        login_button.setOnClickListener { Auth.startOAuth2Authentication(context, AppKey) }
+        binding.loginButton.setOnClickListener { Auth.startOAuth2Authentication(context, AppKey) }
 
-        import_button.setOnClickListener {
+        binding.importButton.setOnClickListener {
             val isWiFi = NetworkUtils.isWifiConnected(requireContext())
             if (!isWiFi) {
                 val builder = AlertDialog.Builder(requireContext())
@@ -69,6 +74,11 @@ class DropboxImportFragment : AbstractDropboxFragment() {
         }
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
@@ -77,32 +87,32 @@ class DropboxImportFragment : AbstractDropboxFragment() {
         sm.jobStatus.observe(viewLifecycleOwner, Observer { jobStatus ->
             when(jobStatus) {
                 is JobStatus.Initialized -> {
-                    import_button.isEnabled = true
-                    import_title.visibility = View.GONE
-                    progressBar.visibility = View.GONE
-                    result.visibility = View.GONE
+                    binding.importButton.isEnabled = true
+                    binding.importTitle.visibility = View.GONE
+                    binding.progressBar.visibility = View.GONE
+                    binding.result.visibility = View.GONE
                 }
                 is JobStatus.Progress -> {
-                    import_button.isEnabled = false
-                    import_title.visibility = View.VISIBLE
-                    progressBar.visibility = View.VISIBLE
-                    result.visibility = View.GONE
-                    progressBar.progress = jobStatus.value
+                    binding.importButton.isEnabled = false
+                    binding.importTitle.visibility = View.VISIBLE
+                    binding.progressBar.visibility = View.VISIBLE
+                    binding.result.visibility = View.GONE
+                    binding.progressBar.progress = jobStatus.value
                 }
                 is JobStatus.Success -> {
-                    import_button.isEnabled = true
-                    import_title.visibility = View.VISIBLE
-                    progressBar.visibility = View.GONE
-                    result.visibility = View.VISIBLE
-                    result.text = jobStatus.msg
+                    binding.importButton.isEnabled = true
+                    binding.importTitle.visibility = View.VISIBLE
+                    binding.progressBar.visibility = View.GONE
+                    binding.result.visibility = View.VISIBLE
+                    binding.result.text = jobStatus.msg
                 }
             }
         })
 
         sm.serviceStatus.observe(viewLifecycleOwner, Observer { serviceStatus ->
             when(serviceStatus) {
-                ServiceStatus.Stopped -> import_button.isEnabled = true
-                ServiceStatus.Started -> import_button.isEnabled = false
+                ServiceStatus.Stopped -> binding.importButton.isEnabled = true
+                ServiceStatus.Started -> binding.importButton.isEnabled = false
             }
         })
     }
@@ -111,19 +121,19 @@ class DropboxImportFragment : AbstractDropboxFragment() {
         super.onResume()
 
         if (hasToken()) {
-            login_button.visibility = View.GONE
-            account.visibility = View.VISIBLE
-            email_text.visibility = View.VISIBLE
-            name_text.visibility = View.VISIBLE
-            type_text.visibility = View.VISIBLE
-            import_button.isEnabled = true
+            binding.loginButton.visibility = View.GONE
+            binding.account.visibility = View.VISIBLE
+            binding.emailText.visibility = View.VISIBLE
+            binding.nameText.visibility = View.VISIBLE
+            binding.typeText.visibility = View.VISIBLE
+            binding.importButton.isEnabled = true
         } else {
-            login_button.visibility = View.VISIBLE
-            account.visibility = View.GONE
-            email_text.visibility = View.GONE
-            name_text.visibility = View.GONE
-            type_text.visibility = View.GONE
-            import_button.isEnabled = false
+            binding.loginButton.visibility = View.VISIBLE
+            binding.account.visibility = View.GONE
+            binding.emailText.visibility = View.GONE
+            binding.nameText.visibility = View.GONE
+            binding.typeText.visibility = View.GONE
+            binding.importButton.isEnabled = false
         }
     }
 
@@ -135,9 +145,9 @@ class DropboxImportFragment : AbstractDropboxFragment() {
                 //val spaceUsage = client.users().spaceUsage
                 account
             }
-            email_text.text = account.email
-            name_text.text = account.name.displayName
-            type_text.text = account.accountType.name
+            binding.emailText.text = account.email
+            binding.nameText.text = account.name.displayName
+            binding.typeText.text = account.accountType.name
         }
     }
 
