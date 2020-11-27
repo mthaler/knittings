@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.appcompat.content.res.AppCompatResources
-import android.widget.*
 import androidx.core.app.NavUtils
 import com.mthaler.dbapp.SaveChangesDialog
 import com.mthaler.dbapp.category.SelectCategoryActivity
@@ -20,6 +19,7 @@ import com.mthaler.dbapp.Extras.EXTRA_CATEGORY_ID
 import com.mthaler.knittings.Extras.EXTRA_KNITTING_ID
 import com.mthaler.dbapp.model.Category
 import com.mthaler.knittings.database.KnittingsDataSource
+import com.mthaler.knittings.databinding.FragmentEditKnittingDetailsBinding
 import com.mthaler.knittings.model.Status
 import java.util.Date
 
@@ -27,20 +27,14 @@ class EditKnittingDetailsFragment : Fragment() {
 
     private var knittingID: Long = Knitting.EMPTY.id
     private var editOnly: Boolean = false
-    private lateinit var editTextTitle: EditText
-    private lateinit var editTextDescription: EditText
-    private lateinit var textViewStarted: TextView
+
+    private var _binding: FragmentEditKnittingDetailsBinding? = null
+    private val binding get() = _binding!!
+
     private lateinit var started: Date
-    private lateinit var textViewFinished: TextView
     private var finished: Date? = null
-    private lateinit var textViewDuration: TextView
     private var duration = 0L
-    private lateinit var editTextNeedleDiameter: EditText
-    private lateinit var editTextSize: EditText
-    private lateinit var buttonCategory: Button
     private var category: Category? = null
-    private lateinit var spinnerStatus: Spinner
-    private lateinit var ratingBar: RatingBar
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -75,76 +69,69 @@ class EditKnittingDetailsFragment : Fragment() {
 
         setHasOptionsMenu(true)
 
-        val v = inflater.inflate(R.layout.fragment_edit_knitting_details, container, false)
+        _binding = FragmentEditKnittingDetailsBinding.inflate(inflater, container, false)
+        val view = binding.root
 
-        editTextTitle = v.findViewById(R.id.knitting_title)
-        editTextDescription = v.findViewById(R.id.knitting_description)
-        textViewStarted = v.findViewById(R.id.knitting_started)
         // we need to set this in code because older android versions (API <21) do not support vector drawables with drawableLeft
-        textViewStarted.setCompoundDrawablesWithIntrinsicBounds(AppCompatResources.getDrawable(inflater.context, R.drawable.ic_date_range_black_24dp), null, null, null)
-        textViewFinished = v.findViewById(R.id.knitting_finished)
+        binding.knittingStarted.setCompoundDrawablesWithIntrinsicBounds(AppCompatResources.getDrawable(inflater.context, R.drawable.ic_date_range_black_24dp), null, null, null)
         // we need to set this in code because older android versions (API <21) do not support vector drawables with drawableLeft
-        textViewFinished.setCompoundDrawablesWithIntrinsicBounds(AppCompatResources.getDrawable(inflater.context, R.drawable.ic_date_range_black_24dp), null, null, null)
-        editTextNeedleDiameter = v.findViewById(R.id.knitting_needle_diameter)
-        editTextSize = v.findViewById(R.id.knitting_size)
-        textViewDuration = v.findViewById(R.id.knitting_duration)
-        buttonCategory = v.findViewById(R.id.knitting_category)
-        spinnerStatus = v.findViewById(R.id.knitting_status)
-        spinnerStatus.adapter = StatusAdapter(requireContext())
-        ratingBar = v.findViewById(R.id.ratingBar)
+        binding.knittingFinished.setCompoundDrawablesWithIntrinsicBounds(AppCompatResources.getDrawable(inflater.context, R.drawable.ic_date_range_black_24dp), null, null, null)
+        binding.knittingStatus.adapter = StatusAdapter(requireContext())
 
         if (savedInstanceState == null) {
             val knitting = if (knittingID != Knitting.EMPTY.id) KnittingsDataSource.getProject(knittingID) else Knitting.EMPTY
-            editTextTitle.setText(knitting.title)
-            editTextDescription.setText(knitting.description)
+            binding.knittingTitle.setText(knitting.title)
+            binding.knittingDescription.setText(knitting.description)
             started = knitting.started
             finished = knitting.finished
-            editTextNeedleDiameter.setText(knitting.needleDiameter)
-            editTextSize.setText(knitting.size)
+            binding.knittingNeedleDiameter.setText(knitting.needleDiameter)
+            binding.knittingSize.setText(knitting.size)
             duration = knitting.duration
             category = knitting.category
             val statusList = Status.formattedValues(requireContext())
             val index = statusList.indexOf(Status.format(requireContext(), knitting.status))
             if (index >= 0) {
-                spinnerStatus.setSelection(index)
+                binding.knittingStatus.setSelection(index)
             } else {
-                spinnerStatus.setSelection(0)
+                binding.knittingStatus.setSelection(0)
             }
-            ratingBar.rating = knitting.rating.toFloat()
+            binding.ratingBar.rating = knitting.rating.toFloat()
         }
-        textViewStarted.text = DateFormat.getDateInstance().format(started)
-        textViewFinished.text = if (finished != null) DateFormat.getDateInstance().format(finished) else ""
-        textViewDuration.text = TimeUtils.formatDuration(duration)
+        binding.knittingStarted.text = DateFormat.getDateInstance().format(started)
+        binding.knittingFinished.text = if (finished != null) DateFormat.getDateInstance().format(finished) else ""
+        binding.knittingDuration.text = TimeUtils.formatDuration(duration)
         category?.let {
-            buttonCategory.text = it.name
+            binding.knittingCategory.text = it.name
         }
 
-        textViewStarted.setOnClickListener {
+        binding.knittingStarted.setOnClickListener {
             val dialog = DatePickerFragment.newInstance(started)
             dialog.setTargetFragment(this, REQUEST_STARTED)
             dialog.show(parentFragmentManager, DIALOG_DATE)
         }
-        textViewFinished.setOnClickListener {
+        binding.knittingFinished.setOnClickListener {
             val dialog = DatePickerFragment.newInstance(if (finished != null) finished else Date())
             dialog.setTargetFragment(this, REQUEST_FINISHED)
             dialog.show(parentFragmentManager, DIALOG_DATE)
         }
-        textViewDuration.setOnClickListener {
+        binding.knittingDuration.setOnClickListener {
             val d = DurationPickerDialog(requireContext(), { durationPicker, d ->
-                textViewDuration.text = TimeUtils.formatDuration(d)
+                binding.knittingDuration.text = TimeUtils.formatDuration(d)
                 duration = d
             }, duration)
             d.show()
         }
-        buttonCategory.setOnClickListener {
+        binding.knittingCategory.setOnClickListener {
             val i = SelectCategoryActivity.newIntent(requireContext(), knittingID)
             startActivityForResult(i, REQUEST_SELECT_CATEGORY)
         }
 
-        // update knitting if user changes the rating
-        ratingBar = v.findViewById(R.id.ratingBar)
+        return view
+    }
 
-        return v
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     override fun onSaveInstanceState(savedInstanceState: Bundle) {
@@ -197,13 +184,13 @@ class EditKnittingDetailsFragment : Fragment() {
         if (requestCode == REQUEST_STARTED) {
             val date = data!!.getSerializableExtra(DatePickerFragment.EXTRA_DATE) as Date
             if (date != started) {
-                textViewStarted.text = DateFormat.getDateInstance().format(date)
+                binding.knittingStarted.text = DateFormat.getDateInstance().format(date)
                 started = date
             }
         } else if (requestCode == REQUEST_FINISHED) {
             val date = data!!.getSerializableExtra(DatePickerFragment.EXTRA_DATE) as Date
             if (date != finished) {
-                textViewFinished.text = DateFormat.getDateInstance().format(date)
+                binding.knittingFinished.text = DateFormat.getDateInstance().format(date)
                 finished = date
             }
         } else if (requestCode == REQUEST_SELECT_CATEGORY) {
@@ -211,7 +198,7 @@ class EditKnittingDetailsFragment : Fragment() {
                 val categoryID = it.getLongExtra(EXTRA_CATEGORY_ID, Category.EMPTY.id)
                 if (categoryID != Category.EMPTY.id) {
                     val c = KnittingsDataSource.getCategory(categoryID)
-                    buttonCategory.text = c.name
+                    binding.knittingCategory.text = c.name
                     category = c
                 }
             }
@@ -254,9 +241,9 @@ class EditKnittingDetailsFragment : Fragment() {
     }
 
     private fun createKnitting(): Knitting {
-        val status = Status.values()[spinnerStatus.selectedItemPosition]
-        return Knitting(knittingID, editTextTitle.text.toString(), editTextDescription.text.toString(), started, finished, editTextNeedleDiameter.text.toString(),
-        editTextSize.text.toString(), null, ratingBar.rating.toDouble(), duration, category, status)
+        val status = Status.values()[binding.knittingStatus.selectedItemPosition]
+        return Knitting(knittingID, binding.knittingTitle.text.toString(), binding.knittingDescription.text.toString(), started, finished, binding.knittingNeedleDiameter.text.toString(),
+        binding.knittingSize.text.toString(), null, binding.ratingBar.rating.toDouble(), duration, category, status)
     }
 
     private fun saveKnitting(knitting: Knitting) {
