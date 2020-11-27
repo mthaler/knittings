@@ -5,15 +5,17 @@ import android.content.Intent
 import android.os.Bundle
 import com.mthaler.dbapp.BaseActivity
 import com.mthaler.knittings.R
-import kotlinx.android.synthetic.main.activity_settings.*
+import com.mthaler.knittings.databinding.ActivitySettingsBinding
 
 class SettingsActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_settings)
+        val binding = ActivitySettingsBinding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)
 
-        setSupportActionBar(toolbar)
+        setSupportActionBar(binding.toolbar)
 
         // enable up navigation
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
