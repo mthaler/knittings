@@ -34,8 +34,6 @@ import com.mthaler.knittings.needle.NeedleListActivity
 import com.mthaler.knittings.settings.SettingsActivity
 import com.mthaler.knittings.whatsnew.WhatsNewDialog
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.app_bar_main.*
-import kotlinx.android.synthetic.main.content_main.*
 import java.util.*
 
 class MainActivity : AbstractMainActivity<Knitting>(), NavigationView.OnNavigationItemSelectedListener {
