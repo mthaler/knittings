@@ -23,8 +23,7 @@ class DropboxExportActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
 
         val binding = ActivityDropboxExportBinding.inflate(layoutInflater)
-        val view = binding.root
-        setContentView(view)
+        setContentView(binding.root)
 
         setSupportActionBar(binding.toolbar)
 

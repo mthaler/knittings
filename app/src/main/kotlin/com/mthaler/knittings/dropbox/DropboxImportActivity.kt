@@ -16,8 +16,7 @@ class DropboxImportActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
 
         val binding = ActivityDropboxImportBinding.inflate(layoutInflater)
-        val view = binding.root
-        setContentView(view)
+        setContentView(binding.root)
 
         setSupportActionBar(binding.toolbar)
 
