@@ -27,19 +27,21 @@ import com.mthaler.knittings.dropbox.DropboxExportActivity
 import com.mthaler.knittings.dropbox.DropboxImportActivity
 import com.mthaler.dbapp.filter.SingleCategoryFilter
 import com.mthaler.dbapp.projectcount.ProjectCountActivity
+import com.mthaler.knittings.databinding.ActivityMainBinding
 import com.mthaler.knittings.filter.SingleStatusFilter
 import com.mthaler.knittings.model.Knitting
 import com.mthaler.knittings.model.Status
 import com.mthaler.knittings.needle.NeedleListActivity
 import com.mthaler.knittings.settings.SettingsActivity
 import com.mthaler.knittings.whatsnew.WhatsNewDialog
-import kotlinx.android.synthetic.main.activity_main.*
 import java.util.*
 
 class MainActivity : AbstractMainActivity<Knitting>(), NavigationView.OnNavigationItemSelectedListener {
 
     private var initialQuery: CharSequence? = null
     private var sv: SearchView? = null
+
+    lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,24 +50,28 @@ class MainActivity : AbstractMainActivity<Knitting>(), NavigationView.OnNavigati
             initialQuery = savedInstanceState.getCharSequence(STATE_QUERY)
         }
 
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)
+
         setContentView(R.layout.activity_main)
 
         // add toolbar to activity
-        setSupportActionBar(toolbar)
+        setSupportActionBar(binding.toolbar)
 
         // set on click handler of floating action button that creates a new knitting
-        fab_create_add_knitting.setOnClickListener {
+        binding.fabCreateAddKnitting.setOnClickListener {
             // start knitting activity with newly created knitting
             startActivity(KnittingDetailsActivity.newIntent(this, -1L, true))
         }
 
         val toggle = ActionBarDrawerToggle(
-                this, drawer_layout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
-        drawer_layout.addDrawerListener(toggle)
+                this, binding.drawerLayout, binding.toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
+        binding.drawerLayout.addDrawerListener(toggle)
 
         toggle.syncState()
 
-        nav_view.setNavigationItemSelectedListener(this)
+        binding.navView.setNavigationItemSelectedListener(this)
 
         val rv = findViewById<RecyclerView>(R.id.knitting_recycler_view)
         rv.layoutManager = LinearLayoutManager(this)
@@ -140,11 +146,11 @@ class MainActivity : AbstractMainActivity<Knitting>(), NavigationView.OnNavigati
         viewModel.projects.observe(this, Observer { knittings ->
 
             if (knittings.isEmpty()) {
-                knitting_list_empty_recycler_view.visibility = View.VISIBLE
-                knitting_recycler_view.visibility = View.GONE
+                binding.knittingListEmptyRecyclerView.visibility = View.VISIBLE
+                binding.knittingRecyclerView.visibility = View.GONE
             } else {
-                knitting_list_empty_recycler_view.visibility = View.GONE
-                knitting_recycler_view.visibility = View.VISIBLE
+                binding.knittingListEmptyRecyclerView.visibility = View.GONE
+                binding.knittingRecyclerView.visibility = View.VISIBLE
             }
             if (viewModel.filter.filters.filter { it is SingleCategoryFilter || it is SingleStatusFilter }.isEmpty()) {
                 activeFilters.text = ""
@@ -200,8 +206,8 @@ class MainActivity : AbstractMainActivity<Knitting>(), NavigationView.OnNavigati
     }
 
     override fun onBackPressed() {
-        if (drawer_layout.isDrawerOpen(GravityCompat.START)) {
-            drawer_layout.closeDrawer(GravityCompat.START)
+        if (binding.drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            binding.drawerLayout.closeDrawer(GravityCompat.START)
         } else {
             super.onBackPressed()
         }
@@ -334,7 +340,7 @@ class MainActivity : AbstractMainActivity<Knitting>(), NavigationView.OnNavigati
             }
         }
 
-        drawer_layout.closeDrawer(GravityCompat.START)
+        binding.drawerLayout.closeDrawer(GravityCompat.START)
         return true
     }
 
