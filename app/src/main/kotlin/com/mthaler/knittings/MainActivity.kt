@@ -51,8 +51,7 @@ class MainActivity : AbstractMainActivity<Knitting>(), NavigationView.OnNavigati
         }
 
         binding = ActivityMainBinding.inflate(layoutInflater)
-        val view = binding.root
-        setContentView(view)
+        setContentView(binding.root)
 
         // add toolbar to activity
         setSupportActionBar(binding.toolbar)
