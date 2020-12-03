@@ -1,7 +1,6 @@
 package com.mthaler.knittings.details
 
 import android.app.Activity
-import android.app.DatePickerDialog
 import android.content.Intent
 import android.os.Bundle
 import android.view.*
@@ -11,7 +10,6 @@ import androidx.core.app.NavUtils
 import com.mthaler.dbapp.SaveChangesDialog
 import com.mthaler.dbapp.category.SelectCategoryActivity
 import com.mthaler.knittings.R
-import com.mthaler.dbapp.datepicker.DatePickerFragment
 import com.mthaler.knittings.model.Knitting
 import com.mthaler.knittings.utils.TimeUtils
 import java.text.DateFormat
@@ -115,11 +113,18 @@ class EditKnittingDetailsFragment : Fragment() {
             }
             dialog.show()
         }
+
         binding.knittingFinished.setOnClickListener {
-            val dialog = DatePickerFragment.newInstance(if (finished != null) finished else Date())
-            dialog.setTargetFragment(this, REQUEST_FINISHED)
-            dialog.show(parentFragmentManager, DIALOG_DATE)
+            val f = finished ?: Date()
+            val dialog = DatePickerUtils.create(requireContext(), f) { view, date ->
+                if (date != finished) {
+                    binding.knittingFinished.text = DateFormat.getDateInstance().format(date)
+                    finished = date
+                }
+            }
+            dialog.show()
         }
+
         binding.knittingDuration.setOnClickListener {
             val d = DurationPickerDialog(requireContext(), { durationPicker, d ->
                 binding.knittingDuration.text = TimeUtils.formatDuration(d)
@@ -187,13 +192,7 @@ class EditKnittingDetailsFragment : Fragment() {
         if (resultCode != Activity.RESULT_OK) {
             return
         }
-        if (requestCode == REQUEST_FINISHED) {
-            val date = data!!.getSerializableExtra(DatePickerFragment.EXTRA_DATE) as Date
-            if (date != finished) {
-                binding.knittingFinished.text = DateFormat.getDateInstance().format(date)
-                finished = date
-            }
-        } else if (requestCode == REQUEST_SELECT_CATEGORY) {
+        if (requestCode == REQUEST_SELECT_CATEGORY) {
             data?.let {
                 val categoryID = it.getLongExtra(EXTRA_CATEGORY_ID, Category.EMPTY.id)
                 if (categoryID != Category.EMPTY.id) {
