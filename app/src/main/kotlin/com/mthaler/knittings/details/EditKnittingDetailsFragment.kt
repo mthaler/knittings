@@ -1,6 +1,7 @@
 package com.mthaler.knittings.details
 
 import android.app.Activity
+import android.app.DatePickerDialog
 import android.content.Intent
 import android.os.Bundle
 import android.view.*
@@ -18,10 +19,11 @@ import com.mthaler.knittings.durationpicker.DurationPickerDialog
 import com.mthaler.dbapp.Extras.EXTRA_CATEGORY_ID
 import com.mthaler.knittings.Extras.EXTRA_KNITTING_ID
 import com.mthaler.dbapp.model.Category
+import com.mthaler.dbapp.utils.DatePickerUtils
 import com.mthaler.knittings.database.KnittingsDataSource
 import com.mthaler.knittings.databinding.FragmentEditKnittingDetailsBinding
 import com.mthaler.knittings.model.Status
-import java.util.Date
+import java.util.*
 
 class EditKnittingDetailsFragment : Fragment() {
 
@@ -105,9 +107,13 @@ class EditKnittingDetailsFragment : Fragment() {
         }
 
         binding.knittingStarted.setOnClickListener {
-            val dialog = DatePickerFragment.newInstance(started)
-            dialog.setTargetFragment(this, REQUEST_STARTED)
-            dialog.show(parentFragmentManager, DIALOG_DATE)
+            val dialog = DatePickerUtils.create(requireContext(), started) { view, date ->
+                if (date != started) {
+                    binding.knittingStarted.text = DateFormat.getDateInstance().format(date)
+                    started = date
+                }
+            }
+            dialog.show()
         }
         binding.knittingFinished.setOnClickListener {
             val dialog = DatePickerFragment.newInstance(if (finished != null) finished else Date())
@@ -181,13 +187,7 @@ class EditKnittingDetailsFragment : Fragment() {
         if (resultCode != Activity.RESULT_OK) {
             return
         }
-        if (requestCode == REQUEST_STARTED) {
-            val date = data!!.getSerializableExtra(DatePickerFragment.EXTRA_DATE) as Date
-            if (date != started) {
-                binding.knittingStarted.text = DateFormat.getDateInstance().format(date)
-                started = date
-            }
-        } else if (requestCode == REQUEST_FINISHED) {
+        if (requestCode == REQUEST_FINISHED) {
             val date = data!!.getSerializableExtra(DatePickerFragment.EXTRA_DATE) as Date
             if (date != finished) {
                 binding.knittingFinished.text = DateFormat.getDateInstance().format(date)
