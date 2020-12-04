@@ -17,7 +17,6 @@ import com.mthaler.dbapp.model.Photo
 import com.mthaler.knittings.database.table.*
 import com.mthaler.knittings.R
 import com.mthaler.knittings.database.table.PhotoTable.cursorToPhoto
-import com.mthaler.knittings.database.table.RowCounterTable.cursorToRowCounter
 import com.mthaler.knittings.model.*
 import java.lang.Exception
 import com.mthaler.dbapp.database.*
@@ -88,15 +87,8 @@ object KnittingsDataSource  : AbstractObservableDatabase(), PhotoDataSource, Cat
         get() = context.database.readableDatabase.use { database ->
             val rowCounters = ArrayList<RowCounter>()
             val cursor = database.query(RowCounterTable.ROW_COUNTERS, RowCounterTable.Columns, null, null, null, null, null)
-            cursor.moveToFirst()
-            var r: RowCounter
-            while (!cursor.isAfterLast) {
-                r = cursorToRowCounter(cursor)
-                rowCounters.add(r)
-                Log.d(TAG, "Read row counter $r")
-                cursor.moveToNext()
-            }
-            cursor.close()
+            val result = cursor.toList(RowCounterConverter::convert)
+            rowCounters.addAll(result)
             return rowCounters
         }
 
@@ -442,10 +434,7 @@ object KnittingsDataSource  : AbstractObservableDatabase(), PhotoDataSource, Cat
         context.database.readableDatabase.use { database ->
             val cursor = database.query(RowCounterTable.ROW_COUNTERS,
                     NeedleTable.Columns, RowCounterTable.Cols.ID + "=" + id, null, null, null, null)
-            cursor.moveToFirst()
-            val rowCounter = cursorToRowCounter(cursor)
-            cursor.close()
-            return rowCounter
+            return  cursor.first(RowCounterConverter::convert)
         }
     }
 
@@ -455,9 +444,8 @@ object KnittingsDataSource  : AbstractObservableDatabase(), PhotoDataSource, Cat
             val whereClause = RowCounterTable.Cols.KNITTING_ID + " = ?"
             val whereArgs = arrayOf(knitting.id.toString())
             val cursor = database.query(RowCounterTable.ROW_COUNTERS, RowCounterTable.Columns, whereClause, whereArgs, null, null, null)
-            cursor.moveToFirst()
             if (!cursor.isAfterLast) {
-                return cursorToRowCounter(cursor)
+                return cursor.first(RowCounterConverter::convert)
             } else {
                 return null
             }
@@ -471,9 +459,7 @@ object KnittingsDataSource  : AbstractObservableDatabase(), PhotoDataSource, Cat
             val id = database.insert(RowCounterTable.ROW_COUNTERS, null, values)
             val cursor = database.query(RowCounterTable.ROW_COUNTERS,
                     RowCounterTable.Columns, RowCounterTable.Cols.ID + "=" + id, null, null, null, null)
-            cursor.moveToFirst()
-            val result = cursorToRowCounter(cursor)
-            cursor.close()
+            val result = cursor.first(RowCounterConverter::convert)
             notifyObservers()
             return result
         }
@@ -489,9 +475,7 @@ object KnittingsDataSource  : AbstractObservableDatabase(), PhotoDataSource, Cat
                     RowCounterTable.Cols.ID + "=" + rowCounter.id, null)
             val cursor = database.query(RowCounterTable.ROW_COUNTERS,
                     RowCounterTable.Columns, RowCounterTable.Cols.ID + "=" + rowCounter.id, null, null, null, null)
-            cursor.moveToFirst()
-            val result = cursorToRowCounter(cursor)
-            cursor.close()
+            val result = cursor.first(RowCounterConverter::convert)
             notifyObservers()
             return result
         }

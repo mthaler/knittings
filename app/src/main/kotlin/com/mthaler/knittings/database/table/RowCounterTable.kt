@@ -1,7 +1,6 @@
 package com.mthaler.knittings.database.table
 
 import android.content.ContentValues
-import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import com.mthaler.dbapp.database.table.*
 import com.mthaler.knittings.model.RowCounter
@@ -27,19 +26,6 @@ object RowCounterTable {
                 "${Cols.KNITTING_ID} $INTEGER $NOT_NULL, " +
                 "${FOREIGN_KEY(Cols.KNITTING_ID, KnittingTable.KNITTINGS, KnittingTable.Cols.ID)} )"
         db.execSQL(CREATE_ROW_COUNTER_TABLE)
-    }
-
-    fun cursorToRowCounter(cursor: Cursor): RowCounter {
-        val idIndex = cursor.getColumnIndex(Cols.ID)
-        val idTotalRows = cursor.getColumnIndex(Cols.TOTAL_ROWS)
-        val idRowsPerRepeat = cursor.getColumnIndex(Cols.ROWS_PER_REPEAT)
-        val idKnittingIndex = cursor.getColumnIndex(PhotoTable.Cols.KNITTING_ID)
-
-        val id = cursor.getLong(idIndex)
-        val totalRows = cursor.getInt(idTotalRows)
-        val rowsPerRepeat = cursor.getInt(idRowsPerRepeat)
-        val knittingID = cursor.getLong(idKnittingIndex)
-        return RowCounter(id, totalRows, rowsPerRepeat, knittingID)
     }
 
     fun createContentValues(rowCounter: RowCounter, manualID: Boolean = false): ContentValues {
