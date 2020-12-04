@@ -33,29 +33,6 @@ object PhotoTable {
         db.execSQL(CREATE_PHOTO_TABLE)
     }
 
-    fun cursorToPhoto(cursor: Cursor): Photo {
-        val idIndex = cursor.getColumnIndex(Cols.ID)
-        val idPreview = cursor.getColumnIndex(Cols.PREVIEW)
-        val idFilename = cursor.getColumnIndex(Cols.FILENAME)
-        val idKnittingIndex = cursor.getColumnIndex(Cols.KNITTING_ID)
-        val idDescription = cursor.getColumnIndex(Cols.DESCRIPTION)
-
-        val id = cursor.getLong(idIndex)
-        val filename = cursor.getString(idFilename)
-        val previewBytes = if (cursor.isNull(idPreview)) null else cursor.getBlob(idPreview)
-        val knittingID = cursor.getLong(idKnittingIndex)
-        val description = cursor.getString(idDescription)
-
-        val photo = Photo(id, File(filename), knittingID, description)
-        if (previewBytes != null) {
-            val options = BitmapFactory.Options()
-            val preview = BitmapFactory.decodeByteArray(previewBytes, 0, previewBytes.size, options)
-            return photo.copy(preview = preview)
-        } else {
-            return photo
-        }
-    }
-
     fun createContentValues(photo: Photo, manualID: Boolean = false): ContentValues {
         val values = ContentValues()
         if (manualID) {

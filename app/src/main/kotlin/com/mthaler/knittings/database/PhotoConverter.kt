@@ -6,7 +6,7 @@ import com.mthaler.dbapp.model.Photo
 import com.mthaler.knittings.database.table.PhotoTable
 import java.io.File
 
-class PhotoConverter {
+object PhotoConverter {
 
     fun convert(dbRow: Map<String, Any?>): Photo {
         val id = dbRow.getLong(PhotoTable.Cols.ID)

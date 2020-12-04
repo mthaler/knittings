@@ -16,7 +16,6 @@ import com.mthaler.dbapp.model.Category
 import com.mthaler.dbapp.model.Photo
 import com.mthaler.knittings.database.table.*
 import com.mthaler.knittings.R
-import com.mthaler.knittings.database.table.PhotoTable.cursorToPhoto
 import com.mthaler.knittings.model.*
 import java.lang.Exception
 import com.mthaler.dbapp.database.*
@@ -49,15 +48,8 @@ object KnittingsDataSource  : AbstractObservableDatabase(), PhotoDataSource, Cat
         get() = context.database.readableDatabase.use { database ->
             val photos = ArrayList<Photo>()
             val cursor = database.query(PhotoTable.PHOTOS, PhotoTable.Columns, null, null, null, null, null)
-            cursor.moveToFirst()
-            var photo: Photo
-            while (!cursor.isAfterLast) {
-                photo = cursorToPhoto(cursor)
-                photos.add(photo)
-                Log.d(TAG, "Read photo " + photo.id + " filename: " + photo.filename)
-                cursor.moveToNext()
-            }
-            cursor.close()
+            val result = cursor.toList(PhotoConverter::convert)
+            photos.addAll(result)
             return photos
         }
 
@@ -174,10 +166,7 @@ object KnittingsDataSource  : AbstractObservableDatabase(), PhotoDataSource, Cat
         context.database.readableDatabase.use { database ->
             val cursor = database.query(PhotoTable.PHOTOS,
                     PhotoTable.Columns, PhotoTable.Cols.ID + "=" + id, null, null, null, null)
-            cursor.moveToFirst()
-            val photo = cursorToPhoto(cursor)
-            cursor.close()
-            return photo
+            return cursor.first(PhotoConverter::convert)
         }
     }
 
@@ -188,15 +177,8 @@ object KnittingsDataSource  : AbstractObservableDatabase(), PhotoDataSource, Cat
             val whereClause = PhotoTable.Cols.KNITTING_ID + " = ?"
             val whereArgs = arrayOf(id.toString())
             val cursor = database.query(PhotoTable.PHOTOS, PhotoTable.Columns, whereClause, whereArgs, null, null, null)
-            cursor.moveToFirst()
-            var photo: Photo
-            while (!cursor.isAfterLast) {
-                photo = cursorToPhoto(cursor)
-                photos.add(photo)
-                Log.d(TAG, "Read photo $photo")
-                cursor.moveToNext()
-            }
-            cursor.close()
+            val result = cursor.toList(PhotoConverter::convert)
+            photos.addAll(result)
             return photos
         }
     }
@@ -208,9 +190,7 @@ object KnittingsDataSource  : AbstractObservableDatabase(), PhotoDataSource, Cat
             val id = database.insert(PhotoTable.PHOTOS, null, values)
             val cursor = database.query(PhotoTable.PHOTOS,
                     PhotoTable.Columns, PhotoTable.Cols.ID + "=" + id, null, null, null, null)
-            cursor.moveToFirst()
-            val result = cursorToPhoto(cursor)
-            cursor.close()
+            val result = cursor.first(PhotoConverter::convert)
             notifyObservers()
             return result
         }
@@ -226,9 +206,7 @@ object KnittingsDataSource  : AbstractObservableDatabase(), PhotoDataSource, Cat
                     PhotoTable.Cols.ID + "=" + photo.id, null)
             val cursor = database.query(PhotoTable.PHOTOS,
                     PhotoTable.Columns, PhotoTable.Cols.ID + "=" + photo.id, null, null, null, null)
-            cursor.moveToFirst()
-            val result = cursorToPhoto(cursor)
-            cursor.close()
+            val result = cursor.first(PhotoConverter::convert)
             notifyObservers()
             return result
         }
