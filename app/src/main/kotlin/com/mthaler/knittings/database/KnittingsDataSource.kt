@@ -18,10 +18,10 @@ import com.mthaler.knittings.database.table.*
 import com.mthaler.dbapp.database.table.CategoryTable.cursorToCategory
 import com.mthaler.knittings.R
 import com.mthaler.knittings.database.table.PhotoTable.cursorToPhoto
-import com.mthaler.knittings.database.table.NeedleTable.cursorToNeedle
 import com.mthaler.knittings.database.table.RowCounterTable.cursorToRowCounter
 import com.mthaler.knittings.model.*
 import java.lang.Exception
+import com.mthaler.dbapp.database.*
 
 object KnittingsDataSource  : AbstractObservableDatabase(), PhotoDataSource, CategoryDataSource, ProjectsDataSource<Knitting> {
 
@@ -85,15 +85,9 @@ object KnittingsDataSource  : AbstractObservableDatabase(), PhotoDataSource, Cat
         get() = context.database.readableDatabase.use { database ->
             val needles = ArrayList<Needle>()
             val cursor = database.query(NeedleTable.NEEDLES, NeedleTable.Columns, null, null, null, null, null)
-            cursor.moveToFirst()
-            var needle: Needle
-            while (!cursor.isAfterLast) {
-                needle = cursorToNeedle(context, cursor)
-                needles.add(needle)
-                Log.d(TAG, "Read category $needle")
-                cursor.moveToNext()
-            }
-            cursor.close()
+            val converter = NeedleConverter(context)
+            val result = cursor.toList(converter::convert)
+            needles.addAll(result)
             return needles
         }
 
@@ -398,9 +392,8 @@ object KnittingsDataSource  : AbstractObservableDatabase(), PhotoDataSource, Cat
         context.database.readableDatabase.use { database ->
             val cursor = database.query(NeedleTable.NEEDLES,
                     NeedleTable.Columns, NeedleTable.Cols.ID + "=" + id, null, null, null, null)
-            cursor.moveToFirst()
-            val needle = cursorToNeedle(context, cursor)
-            cursor.close()
+            val converter = NeedleConverter(context)
+            val needle = cursor.first(converter::convert)
             return needle
         }
     }
@@ -412,9 +405,8 @@ object KnittingsDataSource  : AbstractObservableDatabase(), PhotoDataSource, Cat
             val id = database.insert(NeedleTable.NEEDLES, null, values)
             val cursor = database.query(NeedleTable.NEEDLES,
                     NeedleTable.Columns, NeedleTable.Cols.ID + "=" + id, null, null, null, null)
-            cursor.moveToFirst()
-            val result = cursorToNeedle(context, cursor)
-            cursor.close()
+            val converter = NeedleConverter(context)
+            val result = cursor.first(converter::convert)
             notifyObservers()
             return result
         }
@@ -430,9 +422,8 @@ object KnittingsDataSource  : AbstractObservableDatabase(), PhotoDataSource, Cat
                     NeedleTable.Cols.ID + "=" + needle.id, null)
             val cursor = database.query(NeedleTable.NEEDLES,
                     NeedleTable.Columns, NeedleTable.Cols.ID + "=" + needle.id, null, null, null, null)
-            cursor.moveToFirst()
-            val result = cursorToNeedle(context, cursor)
-            cursor.close()
+            val converter = NeedleConverter(context)
+            val result = cursor.first(converter::convert)
             notifyObservers()
             return result
         }

@@ -1,14 +1,9 @@
 package com.mthaler.knittings.database.table
 
 import android.content.ContentValues
-import android.content.Context
-import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import com.mthaler.dbapp.database.table.*
 import com.mthaler.knittings.model.Needle
-import com.mthaler.knittings.model.NeedleMaterial
-import com.mthaler.knittings.model.NeedleType
-import java.lang.Exception
 
 object NeedleTable {
     val NEEDLES = "needles"
@@ -37,37 +32,6 @@ object NeedleTable {
                 "${Cols.IN_USE} $INTEGER, " +
                 "${Cols.TYPE} $TEXT $NOT_NULL )"
         db.execSQL(CREATE_NEEDLE_TABLE)
-    }
-
-    fun cursorToNeedle(context: Context, cursor: Cursor): Needle {
-        val idIndex = cursor.getColumnIndex(Cols.ID)
-        val idName = cursor.getColumnIndex(Cols.NAME)
-        val idDescription = cursor.getColumnIndex(Cols.DESCRIPTION)
-        val idSize = cursor.getColumnIndex(Cols.SIZE)
-        val idLength = cursor.getColumnIndex(Cols.LENGTH)
-        val idMaterial = cursor.getColumnIndex(Cols.MATERIAL)
-        val idInUse = cursor.getColumnIndex(Cols.IN_USE)
-        val idType = cursor.getColumnIndex(Cols.TYPE)
-
-        val id = cursor.getLong(idIndex)
-        val name = cursor.getString(idName)
-        val description = cursor.getString(idDescription)
-        val size = cursor.getString(idSize)
-        val length = cursor.getString(idLength)
-        val materialStr = cursor.getString(idMaterial)
-        val material = try {
-            NeedleMaterial.valueOf(materialStr)
-        } catch (ex: Exception) {
-            NeedleMaterial.parse(context, materialStr)
-        }
-        val inUse = cursor.getInt(idInUse)
-        val typeStr = cursor.getString(idType)
-        val type = try {
-            NeedleType.valueOf(typeStr)
-        } catch (ex: Exception) {
-            NeedleType.parse(context, typeStr)
-        }
-        return Needle(id, name, description, size, length, material, inUse > 0, type)
     }
 
     /**
