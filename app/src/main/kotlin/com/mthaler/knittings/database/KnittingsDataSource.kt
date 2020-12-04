@@ -15,7 +15,6 @@ import com.mthaler.dbapp.database.table.CategoryTable
 import com.mthaler.dbapp.model.Category
 import com.mthaler.dbapp.model.Photo
 import com.mthaler.knittings.database.table.*
-import com.mthaler.dbapp.database.table.CategoryTable.cursorToCategory
 import com.mthaler.knittings.R
 import com.mthaler.knittings.database.table.PhotoTable.cursorToPhoto
 import com.mthaler.knittings.database.table.RowCounterTable.cursorToRowCounter
@@ -68,15 +67,8 @@ object KnittingsDataSource  : AbstractObservableDatabase(), PhotoDataSource, Cat
         get() = context.database.readableDatabase.use { database ->
             val categories = ArrayList<Category>()
             val cursor = database.query(CategoryTable.CATEGORY, CategoryTable.Columns, null, null, null, null, null)
-            cursor.moveToFirst()
-            var category: Category
-            while (!cursor.isAfterLast) {
-                category = cursorToCategory(cursor)
-                categories.add(category)
-                Log.d(TAG, "Read category $category")
-                cursor.moveToNext()
-            }
-            cursor.close()
+            val result = cursor.toList(CategoryConverter::convert)
+            categories.addAll(result)
             return categories
         }
 
@@ -317,10 +309,7 @@ object KnittingsDataSource  : AbstractObservableDatabase(), PhotoDataSource, Cat
         context.database.readableDatabase.use { database ->
             val cursor = database.query(CategoryTable.CATEGORY,
                     CategoryTable.Columns, CategoryTable.Cols.ID + "=" + id, null, null, null, null)
-            cursor.moveToFirst()
-            val category = cursorToCategory(cursor)
-            cursor.close()
-            return category
+            return cursor.first(CategoryConverter::convert)
         }
     }
 
@@ -331,9 +320,7 @@ object KnittingsDataSource  : AbstractObservableDatabase(), PhotoDataSource, Cat
             val id = database.insert(CategoryTable.CATEGORY, null, values)
             val cursor = database.query(CategoryTable.CATEGORY,
                     CategoryTable.Columns, CategoryTable.Cols.ID + "=" + id, null, null, null, null)
-            cursor.moveToFirst()
-            val result = cursorToCategory(cursor)
-            cursor.close()
+            val result = cursor.first(CategoryConverter::convert)
             notifyObservers()
             return result
         }
@@ -349,9 +336,7 @@ object KnittingsDataSource  : AbstractObservableDatabase(), PhotoDataSource, Cat
                     CategoryTable.Cols.ID + "=" + category.id, null)
             val cursor = database.query(CategoryTable.CATEGORY,
                     CategoryTable.Columns, CategoryTable.Cols.ID + "=" + category.id, null, null, null, null)
-            cursor.moveToFirst()
-            val result = cursorToCategory(cursor)
-            cursor.close()
+            val result = cursor.first(CategoryConverter::convert)
             notifyObservers()
             return result
         }
@@ -393,8 +378,7 @@ object KnittingsDataSource  : AbstractObservableDatabase(), PhotoDataSource, Cat
             val cursor = database.query(NeedleTable.NEEDLES,
                     NeedleTable.Columns, NeedleTable.Cols.ID + "=" + id, null, null, null, null)
             val converter = NeedleConverter(context)
-            val needle = cursor.first(converter::convert)
-            return needle
+            return cursor.first(converter::convert)
         }
     }
 
