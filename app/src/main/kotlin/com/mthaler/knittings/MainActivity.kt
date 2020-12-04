@@ -142,7 +142,10 @@ class MainActivity : AbstractMainActivity<Knitting>(), NavigationView.OnNavigati
         viewModel = ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory.getInstance(application)).get(MainViewModel.javaClass<Knitting>())
         viewModel.projects.observe(this, Observer { knittings ->
 
-            if (knittings.isEmpty()) {
+            if (knittings == null) {
+                binding.knittingListEmptyRecyclerView.visibility = View.GONE
+                binding.knittingRecyclerView.visibility = View.VISIBLE
+            } else if (knittings.isEmpty()) {
                 binding.knittingListEmptyRecyclerView.visibility = View.VISIBLE
                 binding.knittingRecyclerView.visibility = View.GONE
             } else {
@@ -170,7 +173,7 @@ class MainActivity : AbstractMainActivity<Knitting>(), NavigationView.OnNavigati
                 activeFilters.text = sb.toString()
                 activeFilters.visibility = View.VISIBLE
             }
-            adapter.setKnittings(knittings)
+            adapter.setKnittings(knittings ?: emptyList())
         })
 
         init()
