@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.dropbox.core.android.Auth
@@ -35,7 +34,7 @@ class DropboxExportFragment : AbstractDropboxFragment() {
         retainInstance = true
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentDropboxExportBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -88,7 +87,7 @@ class DropboxExportFragment : AbstractDropboxFragment() {
 
         val sm = DropboxExportServiceManager.getInstance()
 
-        sm.jobStatus.observe(viewLifecycleOwner, Observer { jobStatus ->
+        sm.jobStatus.observe(viewLifecycleOwner, { jobStatus ->
             when(jobStatus) {
                 is JobStatus.Initialized -> {
                     binding.exportButton.isEnabled = true
@@ -142,7 +141,7 @@ class DropboxExportFragment : AbstractDropboxFragment() {
             }
         })
 
-        sm.serviceStatus.observe(viewLifecycleOwner, Observer { serviceStatus ->
+        sm.serviceStatus.observe(viewLifecycleOwner, { serviceStatus ->
             when(serviceStatus) {
                 ServiceStatus.Stopped -> binding.exportButton.isEnabled = true
                 ServiceStatus.Started -> binding.exportButton.isEnabled = false
@@ -150,7 +149,7 @@ class DropboxExportFragment : AbstractDropboxFragment() {
         })
 
         val viewModel = ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory.getInstance(requireActivity().application)).get(DropboxExportViewModel::class.java)
-        viewModel.statistics.observe(viewLifecycleOwner, Observer { statistics ->
+        viewModel.statistics.observe(viewLifecycleOwner, { statistics ->
             binding.photoCount.text = statistics.photos.toString()
             binding.photoTotalSize.text = Format.humanReadableByteCountBin(statistics.totalSize)
         })

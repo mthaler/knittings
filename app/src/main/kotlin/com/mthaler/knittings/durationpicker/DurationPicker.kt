@@ -121,7 +121,7 @@ class DurationPicker @JvmOverloads constructor(context: Context, attrs: Attribut
         }
     }
 
-    override fun onSaveInstanceState(): Parcelable? {
+    override fun onSaveInstanceState(): Parcelable {
         val superState = super.onSaveInstanceState()
         return SavedState(superState!!, duration)
     }

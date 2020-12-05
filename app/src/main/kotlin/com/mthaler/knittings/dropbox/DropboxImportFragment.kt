@@ -10,7 +10,6 @@ import com.dropbox.core.v2.files.ListFolderResult
 import com.mthaler.knittings.R
 import com.mthaler.knittings.utils.NetworkUtils
 import androidx.appcompat.app.AlertDialog
-import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import com.mthaler.dbapp.dropbox.DropboxClientFactory
 import com.mthaler.dbapp.utils.FileUtils
@@ -35,7 +34,7 @@ class DropboxImportFragment : AbstractDropboxFragment() {
         retainInstance = true
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentDropboxImportBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -84,7 +83,7 @@ class DropboxImportFragment : AbstractDropboxFragment() {
 
         val sm = DropboxImportServiceManager.getInstance()
 
-        sm.jobStatus.observe(viewLifecycleOwner, Observer { jobStatus ->
+        sm.jobStatus.observe(viewLifecycleOwner, { jobStatus ->
             when(jobStatus) {
                 is JobStatus.Initialized -> {
                     binding.importButton.isEnabled = true
@@ -109,7 +108,7 @@ class DropboxImportFragment : AbstractDropboxFragment() {
             }
         })
 
-        sm.serviceStatus.observe(viewLifecycleOwner, Observer { serviceStatus ->
+        sm.serviceStatus.observe(viewLifecycleOwner, { serviceStatus ->
             when(serviceStatus) {
                 ServiceStatus.Stopped -> binding.importButton.isEnabled = true
                 ServiceStatus.Started -> binding.importButton.isEnabled = false

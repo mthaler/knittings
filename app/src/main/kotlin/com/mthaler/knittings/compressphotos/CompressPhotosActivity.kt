@@ -7,7 +7,6 @@ import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.NavUtils
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.mthaler.dbapp.BaseActivity
 import com.mthaler.knittings.R
@@ -46,13 +45,13 @@ class CompressPhotosActivity : BaseActivity() {
         }
 
         val viewModel = ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory.getInstance(this.application)).get(CompressPhotosViewModel::class.java)
-        viewModel.statistics.observe(this, Observer { statistics ->
+        viewModel.statistics.observe(this, { statistics ->
             binding.numberOfPhotos.text = statistics.photos.toString()
             binding.totalSize.text = Format.humanReadableByteCountBin(statistics.totalSize)
             binding.willBeCompressed.text = statistics.photosToCompress.toString()
         })
 
-        CompressPhotosServiceManager.getInstance().jobStatus.observe(this, Observer { jobStatus->
+        CompressPhotosServiceManager.getInstance().jobStatus.observe(this, { jobStatus->
             when(jobStatus) {
                 is JobStatus.Initialized -> {
                     binding.buttonStart.isEnabled = true
@@ -89,7 +88,7 @@ class CompressPhotosActivity : BaseActivity() {
             }
         })
 
-        CompressPhotosServiceManager.getInstance().serviceStatus.observe(this, Observer { serviceStatus ->
+        CompressPhotosServiceManager.getInstance().serviceStatus.observe(this, { serviceStatus ->
             when (serviceStatus) {
                 ServiceStatus.Stopped -> binding.buttonStart.isEnabled = true
                 ServiceStatus.Started -> binding.buttonStart.isEnabled = false

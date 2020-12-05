@@ -11,7 +11,6 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.view.ActionMode
 import androidx.appcompat.widget.SearchView
 import androidx.core.view.GravityCompat
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -139,18 +138,22 @@ class MainActivity : AbstractMainActivity<Knitting>(), NavigationView.OnNavigati
 
         val activeFilters = findViewById<TextView>(R.id.knitting_active_filters)
 
-        viewModel = ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory.getInstance(application)).get(MainViewModel.javaClass<Knitting>())
-        viewModel.projects.observe(this, Observer { knittings ->
+        viewModel = ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory.getInstance(application)).get(MainViewModel.javaClass())
+        viewModel.projects.observe(this, { knittings ->
 
-            if (knittings == null) {
-                binding.knittingListEmptyRecyclerView.visibility = View.GONE
-                binding.knittingRecyclerView.visibility = View.VISIBLE
-            } else if (knittings.isEmpty()) {
-                binding.knittingListEmptyRecyclerView.visibility = View.VISIBLE
-                binding.knittingRecyclerView.visibility = View.GONE
-            } else {
-                binding.knittingListEmptyRecyclerView.visibility = View.GONE
-                binding.knittingRecyclerView.visibility = View.VISIBLE
+            when {
+                knittings == null -> {
+                    binding.knittingListEmptyRecyclerView.visibility = View.GONE
+                    binding.knittingRecyclerView.visibility = View.VISIBLE
+                }
+                knittings.isEmpty() -> {
+                    binding.knittingListEmptyRecyclerView.visibility = View.VISIBLE
+                    binding.knittingRecyclerView.visibility = View.GONE
+                }
+                else -> {
+                    binding.knittingListEmptyRecyclerView.visibility = View.GONE
+                    binding.knittingRecyclerView.visibility = View.VISIBLE
+                }
             }
             if (viewModel.filter.filters.filter { it is SingleCategoryFilter || it is SingleStatusFilter }.isEmpty()) {
                 activeFilters.text = ""

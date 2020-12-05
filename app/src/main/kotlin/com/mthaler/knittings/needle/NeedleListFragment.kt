@@ -8,7 +8,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ActionMode
 import androidx.recyclerview.widget.LinearLayoutManager
 import android.view.*
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.mthaler.dbapp.DeleteDialog
 import com.mthaler.knittings.R
@@ -27,7 +26,7 @@ class NeedleListFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentNeedleListBinding.inflate(inflater, container, false)
         val view = binding.root
         setHasOptionsMenu(true)
@@ -86,7 +85,7 @@ class NeedleListFragment : Fragment() {
         binding.needlesRecyclerView.adapter = adapter
 
         viewModel = ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory.getInstance(requireActivity().application)).get(NeedleListViewModel::class.java)
-        viewModel.needles.observe(viewLifecycleOwner, Observer { needles ->
+        viewModel.needles.observe(viewLifecycleOwner, { needles ->
             // show image if category list is empty
             if (needles.isEmpty()) {
                 binding.needlesEmptyRecyclerView.visibility = View.VISIBLE
@@ -111,8 +110,7 @@ class NeedleListFragment : Fragment() {
                 val types = NeedleType.formattedValues(requireContext())
                 val listItems = (listOf(getString(R.string.filter_show_all)) + types).toTypedArray()
                 val builder = AlertDialog.Builder(requireContext())
-                val f = viewModel.filter
-                val checkedItem = when (f) {
+                val checkedItem = when (val f = viewModel.filter) {
                     is NoFilter -> 0
                     is SingleTypeFilter -> {
                         val index = NeedleType.values().indexOf(f.type)

@@ -9,7 +9,6 @@ import android.view.*
 import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.mthaler.dbapp.DeleteDialog
@@ -51,7 +50,7 @@ class KnittingDetailsFragment : Fragment() {
         }
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
 
         setHasOptionsMenu(true)
 
@@ -95,7 +94,7 @@ class KnittingDetailsFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory.getInstance(requireActivity().application)).get(KnittingDetailsViewModel::class.java)
         viewModel.init(knittingID)
-        viewModel.knitting.observe(viewLifecycleOwner, Observer { knitting ->
+        viewModel.knitting.observe(viewLifecycleOwner, { knitting ->
             updateDetails(knitting)
         })
     }
