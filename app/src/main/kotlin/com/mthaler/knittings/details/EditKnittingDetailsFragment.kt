@@ -145,6 +145,18 @@ class EditKnittingDetailsFragment : Fragment() {
         _binding = null
     }
 
+    override fun onResume() {
+        super.onResume()
+        // make sure the category still exists
+        category?.let {
+            if (KnittingsDataSource.getCategory(it.id) == null) {
+                binding.knittingCategory.text = resources.getString(R.string.edit_knitting_details_category_hint)
+                category = null
+
+            }
+        }
+    }
+
     override fun onSaveInstanceState(savedInstanceState: Bundle) {
         savedInstanceState.putLong(EXTRA_KNITTING_ID, knittingID)
         savedInstanceState.putBoolean(EXTRA_EDIT_ONLY, editOnly)
@@ -197,7 +209,7 @@ class EditKnittingDetailsFragment : Fragment() {
                 val categoryID = it.getLongExtra(EXTRA_CATEGORY_ID, Category.EMPTY.id)
                 if (categoryID != Category.EMPTY.id) {
                     val c = KnittingsDataSource.getCategory(categoryID)
-                    binding.knittingCategory.text = c?.name ?: ""
+                    binding.knittingCategory.text = c?.name ?: resources.getString(R.string.edit_knitting_details_category_hint)
                     category = c
                 }
             }
