@@ -3,9 +3,9 @@
     <string name="whats_new_title">Whats New</string>
     <string name="whats_new"><![CDATA[
         <h3>Version 0.9.27</h3>
-         - Neuer Datums-Dialog<br>
-         - Project Liste zeigt kein Bild bevor die Liste angezeigt wird<br>
-         - Die ausgewählte Kategorie im Kategorie Auswählen Bildschirm löschen führt nicht mehr zu einer inkonsistenten Datenbank<br>
+        - Neuer Datums-Dialog<br>
+        - Project Liste zeigt kein Bild bevor die Liste angezeigt wird<br>
+        - Die ausgewählte Kategorie im Kategorie Auswählen Bildschirm löschen führt nicht mehr zu einer inkonsistenten Datenbank<br>
         <h3>Version 0.9.26</h3>
         - Reihenzähler Bug behoben<br>
         <h3>Version 0.9.25</h3>

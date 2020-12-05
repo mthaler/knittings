@@ -2,11 +2,11 @@
 <resources>
     <string name="whats_new_title">Whats New</string>
     <string name="whats_new"><![CDATA[
-         <h3>Version 0.9.27</h3>
-         - Updated date dialog<br>
-         - Project list now longer shows image before actual list is displayed<br>
-         - Deleting selected category in selet category activity no longer breaks database<br>
-         <h3>Version 0.9.26</h3>
+        <h3>Version 0.9.27</h3>
+        - Updated date dialog<br>
+        - Project list now longer shows image before actual list is displayed<br>
+        - Deleting selected category in selet category activity no longer breaks database<br>
+        <h3>Version 0.9.26</h3>
         - Fixed row counter bug<br>
         <h3>Version 0.9.25</h3>
         - Improved performance of row counter<br>
