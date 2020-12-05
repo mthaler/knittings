@@ -274,12 +274,12 @@ object KnittingsDataSource  : AbstractObservableDatabase(), PhotoDataSource, Cat
     }
 
     @Synchronized
-    override fun getCategory(id: Long): Category {
+    override fun getCategory(id: Long): Category? {
         Log.d(TAG, "Getting category for id $id")
         context.database.readableDatabase.use { database ->
             val cursor = database.query(CategoryTable.CATEGORY,
                     CategoryTable.Columns, CategoryTable.Cols.ID + "=" + id, null, null, null, null)
-            return cursor.first(CategoryConverter::convert)
+            return cursor.firstOrNull(CategoryConverter::convert)
         }
     }
 

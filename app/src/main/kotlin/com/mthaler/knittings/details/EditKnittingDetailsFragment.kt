@@ -197,7 +197,7 @@ class EditKnittingDetailsFragment : Fragment() {
                 val categoryID = it.getLongExtra(EXTRA_CATEGORY_ID, Category.EMPTY.id)
                 if (categoryID != Category.EMPTY.id) {
                     val c = KnittingsDataSource.getCategory(categoryID)
-                    binding.knittingCategory.text = c.name
+                    binding.knittingCategory.text = c?.name ?: ""
                     category = c
                 }
             }
