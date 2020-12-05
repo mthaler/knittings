@@ -11,7 +11,7 @@ object PhotoConverter {
     fun convert(dbRow: Map<String, Any?>): Photo {
         val id = dbRow.getLong(PhotoTable.Cols.ID)
         val filename = dbRow.getString(PhotoTable.Cols.FILENAME)
-        val previewBytes = if (dbRow.containsKey(PhotoTable.Cols.PREVIEW) && dbRow.get(dbRow.containsKey(PhotoTable.Cols.PREVIEW)) != null) dbRow.getBlob(PhotoTable.Cols.PREVIEW)  else null
+        val previewBytes = if (dbRow.containsKey(PhotoTable.Cols.PREVIEW) && dbRow.get(PhotoTable.Cols.PREVIEW) != null) dbRow.getBlob(PhotoTable.Cols.PREVIEW)  else null
         val knittingID = dbRow.getLong(PhotoTable.Cols.KNITTING_ID)
         val description = dbRow.getString(PhotoTable.Cols.DESCRIPTION)
 
