@@ -35,7 +35,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:textAppearance="@android:style/TextAppearance.Large"
-            android:textSize="56sp" />
+            android:textSize="64sp" />
         <Button
             style="@style/ButtonStopwatch"
             android:id="@+id/start_button"
