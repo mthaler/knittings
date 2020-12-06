@@ -45,4 +45,15 @@
         <item name="android:layout_height">1dp</item>
         <item name="android:background">?android:attr/listDivider</item>
     </style>
+    <!-- about dialog -->
+    <style name="TextAbout" parent="TextAppearance.AppCompat">
+        <item name="android:textColor">@color/about_text_color</item>
+        <item name="android:padding">8dp</item>
+    </style>
+    <style name="TextAboutLarge" parent="TextAbout">
+        <item name="android:textSize">32sp</item>
+    </style>
+    <style name="TextAboutSmall" parent="TextAbout">
+        <item name="android:textSize">18sp</item>
+    </style>
 </resources>
