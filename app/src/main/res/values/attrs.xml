@@ -18,4 +18,7 @@
         <attr name="viewSize" />
         <attr name="showDialog" />
     </declare-styleable>
+    <declare-styleable name="CircularButton">
+        <attr name="backgroundColor" format="color" />
+    </declare-styleable>
 </resources>
