@@ -1,6 +1,7 @@
 package com.mthaler.knittings.rowcounter
 
 import android.content.Context
+import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
 import android.util.AttributeSet
@@ -45,5 +46,10 @@ class CircularButton @JvmOverloads constructor(
         super.onSizeChanged(width, height, oldWidth, oldHeight)
         // Calculate the radius from the smaller of the width and height.
         radius = (min(width, height) / 2.0 * 0.8).toFloat()
+    }
+
+    override fun onDraw(canvas: Canvas) {
+        canvas.drawCircle((width / 2).toFloat(), (height / 2).toFloat(), radius, paint)
+        super.draw(canvas)
     }
 }
