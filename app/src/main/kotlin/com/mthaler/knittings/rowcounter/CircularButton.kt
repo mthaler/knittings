@@ -40,6 +40,7 @@ class CircularButton @JvmOverloads constructor(
         } else {
             paint.color = Color.BLUE
         }
+        invalidate()
     }
 
     override fun onSizeChanged(width: Int, height: Int, oldWidth: Int, oldHeight: Int) {
@@ -50,6 +51,6 @@ class CircularButton @JvmOverloads constructor(
 
     override fun onDraw(canvas: Canvas) {
         canvas.drawCircle((width / 2).toFloat(), (height / 2).toFloat(), radius, paint)
-        super.draw(canvas)
+        super.onDraw(canvas)
     }
 }
