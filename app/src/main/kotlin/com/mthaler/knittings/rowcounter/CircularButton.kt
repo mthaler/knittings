@@ -49,7 +49,7 @@ class CircularButton @JvmOverloads constructor(
     override fun onSizeChanged(width: Int, height: Int, oldWidth: Int, oldHeight: Int) {
         super.onSizeChanged(width, height, oldWidth, oldHeight)
         // Calculate the radius from the smaller of the width and height.
-        radius = (min(width, height) / 2.0 * 0.8).toFloat()
+        radius = (min(width, height) / 2.0).toFloat()
     }
 
     override fun onDraw(canvas: Canvas) {

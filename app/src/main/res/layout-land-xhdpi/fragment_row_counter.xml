@@ -42,7 +42,7 @@
             app:srcCompat="@drawable/ic_baseline_clear"
             android:background="@drawable/circular_button"
             style="?android:attr/borderlessButtonStyle"/>
-        <ImageButton
+        <com.mthaler.knittings.rowcounter.CircularButton
             android:id="@+id/button_minus"
             android:layout_width="60dp"
             android:layout_height="60dp"
@@ -50,7 +50,6 @@
             android:layout_marginRight="20dp"
             android:layout_gravity="bottom|left"
             app:srcCompat="@drawable/ic_baseline_remove"
-            android:background="@drawable/circular_button"
-            style="?android:attr/borderlessButtonStyle"/>
+            app:backgroundColor="?attr/colorPrimary" />
     </FrameLayout>
 </LinearLayout>
