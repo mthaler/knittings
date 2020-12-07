@@ -6,6 +6,7 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.util.AttributeSet
 import androidx.appcompat.widget.AppCompatImageView
+import androidx.core.graphics.ColorUtils
 import com.mthaler.knittings.R
 import kotlin.math.min
 
@@ -15,7 +16,6 @@ class CircularButton @JvmOverloads constructor(
         defStyleAttr: Int = 0
 ) : AppCompatImageView(context, attrs, defStyleAttr) {
 
-
     private val paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         // Paint styles used for rendering are initialized here. This
         // is a performance optimization, since onDraw() is called
@@ -24,6 +24,7 @@ class CircularButton @JvmOverloads constructor(
     }
 
     private var radius = 0.0f // Radius of the circle.
+    private var color = Color.BLACK
 
     init {
         isFocusable = true
@@ -31,14 +32,16 @@ class CircularButton @JvmOverloads constructor(
         isClickable = true
 
         val typedArray = context.obtainStyledAttributes(attrs, R.styleable.CircularButton)
+        color = typedArray.getColor(R.styleable.CircularButton_backgroundColor,0)
+        paint.color = color
     }
 
     override fun setPressed(pressed: Boolean) {
         super.setPressed(pressed)
         if (pressed) {
-            paint.color = Color.RED
+            paint.color = ColorUtils.blendARGB(color, Color.BLACK, 0.1f)
         } else {
-            paint.color = Color.BLUE
+            paint.color = color
         }
         invalidate()
     }
