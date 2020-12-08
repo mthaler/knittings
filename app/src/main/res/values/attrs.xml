@@ -21,4 +21,7 @@
     <declare-styleable name="CircularButton">
         <attr name="backgroundColor" format="color" />
     </declare-styleable>
+    <declare-styleable name="CountFrame">
+        <attr name="frameWidth" format="dimension" />
+    </declare-styleable>
 </resources>

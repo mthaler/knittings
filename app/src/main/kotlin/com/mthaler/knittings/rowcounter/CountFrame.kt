@@ -1,10 +1,13 @@
 package com.mthaler.knittings.rowcounter
 
 import android.content.Context
+import android.graphics.Canvas
+import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.RectF
 import android.util.AttributeSet
 import android.widget.FrameLayout
+import com.mthaler.knittings.R
 
 class CountFrame @JvmOverloads constructor(
         context: Context,
@@ -17,11 +20,15 @@ class CountFrame @JvmOverloads constructor(
         // is a performance optimization, since onDraw() is called
         // for every screen refresh.
         style = Paint.Style.STROKE
-        strokeWidth = 25f
-        strokeCap = Paint.Cap.BUTT
     }
 
     private var rect = RectF(0f, 0f, 1f, 1f)
+
+    init {
+        val typedArray = context.obtainStyledAttributes(attrs, R.styleable.CountFrame)
+        val frameWidth= typedArray.getDimension(R.styleable.CountFrame_frameWidth,40f)
+        paint.strokeWidth = frameWidth
+    }
 
     /**
      * This is called during layout when the size of this view has changed. If
@@ -34,9 +41,22 @@ class CountFrame @JvmOverloads constructor(
      * @param oldHeight Old height of this view.
      */
     override fun onSizeChanged(width: Int, height: Int, oldWidth: Int, oldHeight: Int) {
-        // Calculate the radius from the smaller of the width and height.
-        val cx = (width / 2.0).toFloat()
         val cy = (height / 2.0).toFloat()
-        rect = RectF((cx - width / 2.0 * 0.95).toFloat(), (cy - height / 2.0 * 0.95).toFloat(), (cx + width / 2.0 * 0.95).toFloat(), (cy + height / 2.0 * 0.95).toFloat())
+        rect = RectF(0.025f * width, (cy - height / 2.0 * 0.95).toFloat(), 0.975f * width, (cy + height / 2.0 * 0.95).toFloat())
+    }
+
+    /**
+     * Renders view content: an outer circle to serve as the "dial",
+     * and a smaller black circle to server as the indicator.
+     * The position of the indicator is based on fanSpeed.
+     *
+     * @param canvas The canvas on which the background will be drawn.
+     */
+    override fun onDraw(canvas: Canvas) {
+        super.onDraw(canvas)
+
+        // Draw the ring.
+        paint.color = Color.RED
+        canvas.drawRoundRect(rect, 150f, 150f, paint)
     }
 }
