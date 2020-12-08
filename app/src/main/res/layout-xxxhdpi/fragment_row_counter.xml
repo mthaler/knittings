@@ -11,10 +11,10 @@
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:layout_marginTop="20dp"
-        android:background="@drawable/row_count_frame"
-        app:frameWidth="16dp"
-        app:frameRadiusX="30dp"
-        app:frameRadiusY="30dp" >
+        app:frameWidth="13dp"
+        app:frameRadiusX="36dp"
+        app:frameRadiusY="36dp"
+        app:frameColor="#DDDDDD" >
         <TextView
             android:id="@+id/rows"
             android:layout_width="match_parent"

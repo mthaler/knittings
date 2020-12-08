@@ -28,11 +28,14 @@ class CountFrame @JvmOverloads constructor(
     private var ry = 150f
 
     init {
+        setWillNotDraw(false)
         val typedArray = context.obtainStyledAttributes(attrs, R.styleable.CountFrame)
         val frameWidth= typedArray.getDimension(R.styleable.CountFrame_frameWidth,40f)
         paint.strokeWidth = frameWidth
         rx = typedArray.getDimension(R.styleable.CountFrame_frameRadiusX, 150f)
         ry = typedArray.getDimension(R.styleable.CountFrame_frameRadiusY, 150f)
+        val frameColor = typedArray.getColor(R.styleable.CountFrame_frameColor, Color.BLACK)
+        paint.color = frameColor
     }
 
     /**
@@ -46,7 +49,6 @@ class CountFrame @JvmOverloads constructor(
      * @param oldHeight Old height of this view.
      */
     override fun onSizeChanged(width: Int, height: Int, oldWidth: Int, oldHeight: Int) {
-        val cy = (height / 2.0).toFloat()
         rect = RectF(0.025f * width, 0.05f * height, 0.975f * width, 0.95f * height)
     }
 
@@ -60,8 +62,7 @@ class CountFrame @JvmOverloads constructor(
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
 
-        // Draw the ring.
-        paint.color = Color.RED
+        // draw frame
         canvas.drawRoundRect(rect, rx, ry, paint)
     }
 }
