@@ -23,14 +23,13 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <ImageButton
+        <com.mthaler.knittings.rowcounter.CircularButton
             android:id="@+id/button_plus"
             android:layout_width="250dp"
             android:layout_height="250dp"
             android:layout_gravity="center"
             app:srcCompat="@drawable/ic_baseline_add"
-            android:background="@drawable/circular_button"
-            style="?android:attr/borderlessButtonStyle"/>
+            app:backgroundColor="?attr/colorPrimary" />
         <com.mthaler.knittings.rowcounter.CircularButton
             android:id="@+id/button_reset"
             android:layout_width="60dp"
