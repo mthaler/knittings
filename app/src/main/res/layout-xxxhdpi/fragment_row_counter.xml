@@ -14,7 +14,7 @@
         app:frameWidth="13dp"
         app:frameRadiusX="36dp"
         app:frameRadiusY="36dp"
-        app:frameColor="#DDDDDD" >
+        app:frameColor="#DDDDDD">
         <TextView
             android:id="@+id/rows"
             android:layout_width="match_parent"
