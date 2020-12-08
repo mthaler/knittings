@@ -23,5 +23,7 @@
     </declare-styleable>
     <declare-styleable name="CountFrame">
         <attr name="frameWidth" format="dimension" />
+        <attr name="frameRadiusX" format="dimension" />
+        <attr name="frameRadiusY" format="dimension" />
     </declare-styleable>
 </resources>
