@@ -42,7 +42,7 @@ class RowCounterFragment : Fragment() {
         }
 
         binding.buttonMinus.setOnClickListener {
-            updateTotoalRows { it -1 }
+            updateTotoalRows { r -> if (r > 0) r - 1 else r }
         }
 
         binding.buttonReset.setOnClickListener {
