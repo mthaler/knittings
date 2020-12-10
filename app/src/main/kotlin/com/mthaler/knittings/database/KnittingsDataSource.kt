@@ -53,14 +53,11 @@ object KnittingsDataSource  : AbstractObservableDatabase(), PhotoDataSource, Cat
             return photos
         }
 
-    override val allCategories: ArrayList<Category>
+    override val allCategories: List<Category>
         @Synchronized
         get() = context.database.readableDatabase.use { database ->
-            val categories = ArrayList<Category>()
             val cursor = database.query(CategoryTable.CATEGORY, CategoryTable.Columns, null, null, null, null, null)
-            val result = cursor.toList(CategoryConverter::convert)
-            categories.addAll(result)
-            return categories
+            cursor.toList(CategoryConverter::convert)
         }
 
     val allNeedles: ArrayList<Needle>

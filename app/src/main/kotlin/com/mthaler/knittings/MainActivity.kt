@@ -250,12 +250,11 @@ class MainActivity : AbstractMainActivity<Knitting>(), NavigationView.OnNavigati
                 true
             }
             R.id.menu_item_clear_filters -> {
-                viewModel.filter =CombinedFilter.empty()
+                viewModel.filter = CombinedFilter.empty()
                 true
             }
             R.id.menu_item_category_filter -> {
-                val categories = KnittingsDataSource.allCategories
-                categories.sortedBy { it.name }
+                val categories = KnittingsDataSource.allCategories.sortedBy { it.name.toLowerCase() }
                 val listItems = (listOf(getString(R.string.filter_show_all)) + categories.map { it.name }.toList()).toTypedArray()
                 val builder = AlertDialog.Builder(this)
                 val f = viewModel.filter
