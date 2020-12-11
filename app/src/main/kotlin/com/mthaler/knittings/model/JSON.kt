@@ -217,20 +217,6 @@ fun rowCountersToJSON(rowCounters: List<RowCounter>): JSONArray {
 }
 
 /**
- * Converts a database to JSON
- */
-fun Database.toJSON(): JSONObject {
-    val result = JSONObject()
-    result.put("version", KnittingDatabaseHelper.DB_VERSION)
-    result.put("knittings", knittingsToJSON(knittings))
-    result.put("photos", photosToJSON(photos))
-    result.put("categories", categoriesToJSON(categories))
-    result.put("needles", needlesToJSON(needles))
-    result.put("rowCounters", rowCountersToJSON(rowCounters))
-    return result
-}
-
-/**
  * Converts a JSON object to a database object
  */
 fun JSONObject.toDatabase(context: Context, externalFilesDir: File): Database {

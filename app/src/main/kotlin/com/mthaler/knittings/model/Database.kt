@@ -4,6 +4,9 @@ import android.os.Parcel
 import android.os.Parcelable
 import com.mthaler.dbapp.model.Category
 import com.mthaler.dbapp.model.Photo
+import com.mthaler.dbapp.model.categoriesToJSON
+import com.mthaler.knittings.database.KnittingDatabaseHelper
+import org.json.JSONObject
 import java.io.Serializable
 import java.lang.IllegalArgumentException
 
@@ -48,6 +51,17 @@ data class Database(val knittings: List<Knitting>, val photos: List<Photo>, val 
         if (missingPhotos.isNotEmpty()) {
             throw IllegalArgumentException("Knittings reference non-existing photos with ids $missingPhotos")
         }
+    }
+
+    fun toJSON(): JSONObject {
+        val result = JSONObject()
+        result.put("version", KnittingDatabaseHelper.DB_VERSION)
+        result.put("knittings", knittingsToJSON(knittings))
+        result.put("photos", photosToJSON(photos))
+        result.put("categories", categoriesToJSON(categories))
+        result.put("needles", needlesToJSON(needles))
+        result.put("rowCounters", rowCountersToJSON(rowCounters))
+        return result
     }
 
     companion object {
