@@ -7,8 +7,10 @@ import com.mthaler.dbapp.database.CategoryDataSource
 import com.mthaler.dbapp.database.ObservableDatabase
 import com.mthaler.dbapp.database.PhotoDataSource
 import com.mthaler.dbapp.database.ProjectsDataSource
+import com.mthaler.dbapp.model.ExportDatabase
 import com.mthaler.dbapp.settings.Theme
 import com.mthaler.knittings.database.KnittingsDataSource
+import com.mthaler.knittings.model.Database
 import com.mthaler.knittings.model.Knitting
 import com.mthaler.knittings.settings.ThemeRepository
 
@@ -35,4 +37,6 @@ class MyApplication : MultiDexApplication(), DatabaseApplication<Knitting> {
 
         override fun categoryListBackground(): Int = R.drawable.categories2
     }
+
+    override fun createExportDatabase(): ExportDatabase = Database.createDatabase()
 }

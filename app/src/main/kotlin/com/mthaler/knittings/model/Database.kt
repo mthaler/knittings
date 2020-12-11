@@ -12,7 +12,7 @@ import org.json.JSONObject
 import java.io.Serializable
 import java.lang.IllegalArgumentException
 
-data class Database(val knittings: List<Knitting>, val photos: List<Photo>, val categories: List<Category>, val needles: List<Needle>, val rowCounters: List<RowCounter>) : ExportDatabase, Serializable, Parcelable {
+data class Database(val knittings: List<Knitting>, override val photos: List<Photo>, val categories: List<Category>, val needles: List<Needle>, val rowCounters: List<RowCounter>) : ExportDatabase, Serializable, Parcelable {
 
     private constructor(parcel: Parcel) : this(
             knittings = parcel.readParcelableArray(classLoader)!!.map { it as Knitting },

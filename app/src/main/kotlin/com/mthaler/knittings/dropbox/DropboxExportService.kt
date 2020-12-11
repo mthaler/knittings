@@ -12,13 +12,14 @@ import androidx.core.content.ContextCompat
 import com.dropbox.core.v2.DbxClientV2
 import com.dropbox.core.v2.files.WriteMode
 import com.mthaler.dbapp.dropbox.DropboxClientFactory
+import com.mthaler.dbapp.model.ExportDatabase
 import com.mthaler.dbapp.model.Photo
 import com.mthaler.knittings.R
-import com.mthaler.knittings.model.Database
 import com.mthaler.dbapp.service.JobStatus
 import com.mthaler.dbapp.utils.FileUtils.createDateTimeDirectoryName
 import com.mthaler.dbapp.utils.FileUtils.getExtension
 import com.mthaler.dbapp.utils.createNotificationChannel
+import com.mthaler.knittings.MyApplication
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -74,7 +75,7 @@ class DropboxExportService : Service() {
         val sm = DropboxExportServiceManager.getInstance()
         // create directory containing current date & time
         dbxClient.files().createFolderV2("/$dir")
-        val database = Database.createDatabase().checkDatabase()
+        val database = (applicationContext as MyApplication).createExportDatabase().checkDatabase()
         uploadDatabase(dbxClient, dir, database)
         // upload photos to dropbox
         val count = database.photos.size
@@ -91,7 +92,7 @@ class DropboxExportService : Service() {
         return false
     }
 
-    private fun uploadDatabase(dbxClient: DbxClientV2, dir: String, database: Database) {
+    private fun uploadDatabase(dbxClient: DbxClientV2, dir: String, database: ExportDatabase) {
         val dbJSON = database.toJSON()
         val s = dbJSON.toString(2)
         val dbInputStream = ByteArrayInputStream(s.toByteArray())
