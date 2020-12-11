@@ -17,12 +17,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.navigation.NavigationView
 import com.mthaler.dbapp.*
 import com.mthaler.dbapp.category.CategoryListActivity
+import com.mthaler.dbapp.dropbox.DropboxExportActivity
 import com.mthaler.dbapp.filter.CombinedFilter
 import com.mthaler.knittings.about.AboutDialog
 import com.mthaler.knittings.compressphotos.CompressPhotosActivity
 import com.mthaler.knittings.database.KnittingsDataSource
 import com.mthaler.knittings.details.KnittingDetailsActivity
-import com.mthaler.knittings.dropbox.DropboxExportActivity
 import com.mthaler.knittings.dropbox.DropboxImportActivity
 import com.mthaler.dbapp.filter.SingleCategoryFilter
 import com.mthaler.dbapp.projectcount.ProjectCountActivity
