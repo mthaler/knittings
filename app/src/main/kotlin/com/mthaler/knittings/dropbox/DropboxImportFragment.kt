@@ -12,6 +12,7 @@ import com.mthaler.knittings.utils.NetworkUtils
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.lifecycleScope
 import com.mthaler.dbapp.dropbox.DropboxClientFactory
+import com.mthaler.dbapp.dropbox.DropboxImportServiceManager
 import com.mthaler.dbapp.utils.FileUtils
 import com.mthaler.knittings.model.toDatabase
 import com.mthaler.dbapp.service.JobStatus
