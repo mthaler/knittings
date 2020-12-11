@@ -74,7 +74,7 @@ class DropboxExportService : Service() {
         val sm = DropboxExportServiceManager.getInstance()
         // create directory containing current date & time
         dbxClient.files().createFolderV2("/$dir")
-        val database = checkDatabase(Database.createDatabase())
+        val database = Database.createDatabase().checkDatabase()
         uploadDatabase(dbxClient, dir, database)
         // upload photos to dropbox
         val count = database.photos.size
@@ -89,15 +89,6 @@ class DropboxExportService : Service() {
             sm.updateJobStatus(JobStatus.Progress(progress))
         }
         return false
-    }
-
-    private fun checkDatabase(database: Database): Database {
-        val filteredPhotos = database.photos.filter { it.filename.exists() }
-        val removedPhotos = database.photos.map { it.id }.toSet() - filteredPhotos.map { it.id}.toSet()
-        val updatedKnittings = database.knittings.map { if (removedPhotos.contains(it.defaultPhoto?.id)) it.copy(defaultPhoto = null) else it }
-        val filteredDatabase = database.copy(knittings = updatedKnittings, photos = filteredPhotos)
-        filteredDatabase.checkValidity()
-        return filteredDatabase
     }
 
     private fun uploadDatabase(dbxClient: DbxClientV2, dir: String, database: Database) {

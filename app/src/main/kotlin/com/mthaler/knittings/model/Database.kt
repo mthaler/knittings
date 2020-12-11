@@ -55,6 +55,17 @@ data class Database(val knittings: List<Knitting>, val photos: List<Photo>, val 
         }
     }
 
+
+    override fun checkDatabase(): Database {
+        val filteredPhotos = photos.filter { it.filename.exists() }
+        val removedPhotos = photos.map { it.id }.toSet() - filteredPhotos.map { it.id}.toSet()
+        val updatedKnittings = knittings.map { if (removedPhotos.contains(it.defaultPhoto?.id)) it.copy(defaultPhoto = null) else it }
+        val filteredDatabase = copy(knittings = updatedKnittings, photos = filteredPhotos)
+        filteredDatabase.checkValidity()
+        return filteredDatabase
+    }
+
+
     override fun toJSON(): JSONObject {
         val result = JSONObject()
         result.put("version", KnittingDatabaseHelper.DB_VERSION)
