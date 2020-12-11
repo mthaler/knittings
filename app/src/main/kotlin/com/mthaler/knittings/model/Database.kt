@@ -3,6 +3,7 @@ package com.mthaler.knittings.model
 import android.os.Parcel
 import android.os.Parcelable
 import com.mthaler.dbapp.model.Category
+import com.mthaler.dbapp.model.ExportDatabase
 import com.mthaler.dbapp.model.Photo
 import com.mthaler.dbapp.model.categoriesToJSON
 import com.mthaler.knittings.database.KnittingDatabaseHelper
@@ -11,7 +12,7 @@ import org.json.JSONObject
 import java.io.Serializable
 import java.lang.IllegalArgumentException
 
-data class Database(val knittings: List<Knitting>, val photos: List<Photo>, val categories: List<Category>, val needles: List<Needle>, val rowCounters: List<RowCounter>) : Serializable, Parcelable {
+data class Database(val knittings: List<Knitting>, val photos: List<Photo>, val categories: List<Category>, val needles: List<Needle>, val rowCounters: List<RowCounter>) : ExportDatabase, Serializable, Parcelable {
 
     private constructor(parcel: Parcel) : this(
             knittings = parcel.readParcelableArray(classLoader)!!.map { it as Knitting },
@@ -54,7 +55,7 @@ data class Database(val knittings: List<Knitting>, val photos: List<Photo>, val 
         }
     }
 
-    fun toJSON(): JSONObject {
+    override fun toJSON(): JSONObject {
         val result = JSONObject()
         result.put("version", KnittingDatabaseHelper.DB_VERSION)
         result.put("knittings", knittingsToJSON(knittings))
