@@ -11,9 +11,11 @@ import com.mthaler.knittings.R
 import com.mthaler.dbapp.utils.NetworkUtils
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.lifecycleScope
+import com.mthaler.dbapp.DatabaseApplication
 import com.mthaler.dbapp.dropbox.AbstractDropboxFragment
 import com.mthaler.dbapp.dropbox.DropboxClientFactory
 import com.mthaler.dbapp.dropbox.DropboxImportServiceManager
+import com.mthaler.dbapp.model.Project
 import com.mthaler.dbapp.utils.FileUtils
 import com.mthaler.knittings.model.toDatabase
 import com.mthaler.dbapp.service.JobStatus
@@ -44,7 +46,7 @@ class DropboxImportFragment : AbstractDropboxFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.loginButton.setOnClickListener { Auth.startOAuth2Authentication(context, AppKey) }
+        binding.loginButton.setOnClickListener { Auth.startOAuth2Authentication(context, (requireContext().applicationContext as DatabaseApplication<Project>).dropboxAppKey) }
 
         binding.importButton.setOnClickListener {
             val isWiFi = NetworkUtils.isWifiConnected(requireContext())
@@ -225,9 +227,5 @@ class DropboxImportFragment : AbstractDropboxFragment() {
                 }
             }
         }
-    }
-
-    companion object {
-        private const val AppKey = "6ybf7tgqdbhf641"
     }
 }

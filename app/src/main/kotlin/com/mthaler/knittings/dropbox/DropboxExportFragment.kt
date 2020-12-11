@@ -10,10 +10,12 @@ import androidx.lifecycle.lifecycleScope
 import com.dropbox.core.android.Auth
 import com.dropbox.core.v2.users.FullAccount
 import com.dropbox.core.v2.users.SpaceUsage
+import com.mthaler.dbapp.DatabaseApplication
 import com.mthaler.dbapp.dropbox.AbstractDropboxFragment
 import com.mthaler.dbapp.dropbox.DropboxClientFactory
 import com.mthaler.dbapp.dropbox.DropboxExportServiceManager
 import com.mthaler.dbapp.dropbox.DropboxExportViewModel
+import com.mthaler.dbapp.model.Project
 import com.mthaler.knittings.R
 import com.mthaler.dbapp.service.JobStatus
 import com.mthaler.dbapp.service.ServiceStatus
@@ -44,7 +46,7 @@ class DropboxExportFragment : AbstractDropboxFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.loginButton.setOnClickListener { Auth.startOAuth2Authentication(context, AppKey) }
+        binding.loginButton.setOnClickListener { Auth.startOAuth2Authentication(context, (requireContext().applicationContext as DatabaseApplication<Project>).dropboxAppKey) }
 
         binding.exportButton.setOnClickListener {
             val isWiFi = NetworkUtils.isWifiConnected(requireContext())
@@ -209,9 +211,5 @@ class DropboxExportFragment : AbstractDropboxFragment() {
                 }
             }
         }
-    }
-
-    companion object {
-        private const val AppKey = "6ybf7tgqdbhf641"
     }
 }
