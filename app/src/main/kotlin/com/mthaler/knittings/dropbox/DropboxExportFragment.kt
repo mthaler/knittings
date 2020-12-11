@@ -18,7 +18,7 @@ import com.mthaler.knittings.R
 import com.mthaler.dbapp.service.JobStatus
 import com.mthaler.dbapp.service.ServiceStatus
 import com.mthaler.dbapp.utils.Format
-import com.mthaler.knittings.utils.NetworkUtils
+import com.mthaler.dbapp.utils.NetworkUtils
 import com.mthaler.dbapp.utils.StringUtils.formatBytes
 import com.mthaler.knittings.databinding.FragmentDropboxExportBinding
 import kotlinx.coroutines.Dispatchers

@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import com.dropbox.core.android.Auth
 import com.dropbox.core.v2.files.ListFolderResult
 import com.mthaler.knittings.R
-import com.mthaler.knittings.utils.NetworkUtils
+import com.mthaler.dbapp.utils.NetworkUtils
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.lifecycleScope
 import com.mthaler.dbapp.dropbox.AbstractDropboxFragment
