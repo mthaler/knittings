@@ -10,8 +10,10 @@ import android.view.MenuItem
 import androidx.core.app.NavUtils
 import androidx.lifecycle.lifecycleScope
 import com.mthaler.dbapp.BaseActivity
+import com.mthaler.dbapp.DatabaseApplication
 import com.mthaler.dbapp.dropbox.DropboxClientFactory
 import com.mthaler.dbapp.dropbox.DropboxExportServiceManager
+import com.mthaler.dbapp.model.Project
 import com.mthaler.dbapp.service.JobStatus
 import com.mthaler.knittings.databinding.ActivityDropboxExportBinding
 import kotlinx.coroutines.Dispatchers
@@ -72,7 +74,7 @@ class DropboxExportActivity : BaseActivity() {
                         }
                     }
                     // delete auth token from shared pref_sharing
-                    val prefs = getSharedPreferences(AbstractDropboxFragment.SharedPreferencesName, MODE_PRIVATE)
+                    val prefs = getSharedPreferences((applicationContext as DatabaseApplication<Project>).sharedPreferencesName, MODE_PRIVATE)
                     val editor = prefs.edit()
                     editor.remove("access-token")
                     editor.commit()

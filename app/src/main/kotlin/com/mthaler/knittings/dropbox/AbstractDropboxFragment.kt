@@ -65,8 +65,4 @@ abstract class AbstractDropboxFragment : Fragment() {
         val accessToken = prefs.getString("access-token", null)
         return accessToken != null
     }
-
-    companion object {
-        const val SharedPreferencesName = "com.mthaler.knittings"
-    }
 }

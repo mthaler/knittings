@@ -23,6 +23,8 @@ class MyApplication : MultiDexApplication(), DatabaseApplication<Knitting> {
         Theme.setThemes(ThemeRepository.themes)
     }
 
+    override val sharedPreferencesName: String = "com.mthaler.knittings"
+
     override fun getCategoryDataSource(): CategoryDataSource = KnittingsDataSource
 
     override fun getPhotoDataSource(): PhotoDataSource = KnittingsDataSource
