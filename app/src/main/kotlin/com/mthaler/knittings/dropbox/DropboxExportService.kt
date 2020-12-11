@@ -18,7 +18,6 @@ import com.mthaler.knittings.model.Database
 import com.mthaler.dbapp.service.JobStatus
 import com.mthaler.dbapp.utils.FileUtils.createDateTimeDirectoryName
 import com.mthaler.dbapp.utils.FileUtils.getExtension
-import com.mthaler.knittings.database.KnittingsDataSource
 import com.mthaler.dbapp.utils.createNotificationChannel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -75,7 +74,7 @@ class DropboxExportService : Service() {
         val sm = DropboxExportServiceManager.getInstance()
         // create directory containing current date & time
         dbxClient.files().createFolderV2("/$dir")
-        val database = checkDatabase(createDatabase())
+        val database = checkDatabase(Database.createDatabase())
         uploadDatabase(dbxClient, dir, database)
         // upload photos to dropbox
         val count = database.photos.size
@@ -90,15 +89,6 @@ class DropboxExportService : Service() {
             sm.updateJobStatus(JobStatus.Progress(progress))
         }
         return false
-    }
-
-    private fun createDatabase(): Database {
-        val knittings = KnittingsDataSource.allProjects
-        val photos = KnittingsDataSource.allPhotos
-        val categories = KnittingsDataSource.allCategories
-        val needles = KnittingsDataSource.allNeedles
-        val rowCounters = KnittingsDataSource.allRowCounters
-        return Database(knittings, photos, categories, needles, rowCounters)
     }
 
     private fun checkDatabase(database: Database): Database {

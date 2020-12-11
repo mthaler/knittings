@@ -6,6 +6,7 @@ import com.mthaler.dbapp.model.Category
 import com.mthaler.dbapp.model.Photo
 import com.mthaler.dbapp.model.categoriesToJSON
 import com.mthaler.knittings.database.KnittingDatabaseHelper
+import com.mthaler.knittings.database.KnittingsDataSource
 import org.json.JSONObject
 import java.io.Serializable
 import java.lang.IllegalArgumentException
@@ -72,6 +73,15 @@ data class Database(val knittings: List<Knitting>, val photos: List<Photo>, val 
         val CREATOR = object : Parcelable.Creator<Database> {
             override fun createFromParcel(parcel: Parcel) = Database(parcel)
             override fun newArray(size: Int) = arrayOfNulls<Database>(size)
+        }
+
+        fun createDatabase(): Database {
+            val knittings = KnittingsDataSource.allProjects
+            val photos = KnittingsDataSource.allPhotos
+            val categories = KnittingsDataSource.allCategories
+            val needles = KnittingsDataSource.allNeedles
+            val rowCounters = KnittingsDataSource.allRowCounters
+            return Database(knittings, photos, categories, needles, rowCounters)
         }
     }
 }
