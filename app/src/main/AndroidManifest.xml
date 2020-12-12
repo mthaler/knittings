@@ -70,7 +70,7 @@
                 android:value=".MainActivity" />
         </activity>
         <activity
-            android:name=".dropbox.DropboxImportActivity"
+            android:name="com.mthaler.dbapp.dropbox.DropboxImportActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -147,7 +147,7 @@
             android:enabled="true"
             android:exported="false" />
         <service
-            android:name=".dropbox.DropboxImportService"
+            android:name="com.mthaler.dbapp.dropbox.DropboxImportService"
             android:enabled="true"
             android:exported="false" />
         <service
