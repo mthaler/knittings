@@ -10,7 +10,6 @@ import com.mthaler.knittings.database.KnittingDatabaseHelper
 import com.mthaler.knittings.database.KnittingsDataSource
 import org.json.JSONObject
 import java.io.FileOutputStream
-import java.lang.IllegalArgumentException
 
 data class Database(override val projects: List<Knitting>, override val photos: List<Photo>, override val categories: List<Category>, val needles: List<Needle>, val rowCounters: List<RowCounter>) : AbstractExportDatabase<Knitting>() {
 
@@ -111,12 +110,12 @@ data class Database(override val projects: List<Knitting>, override val photos: 
         }
 
         fun createDatabase(): Database {
-            val knittings = KnittingsDataSource.allProjects
+            val projects = KnittingsDataSource.allProjects
             val photos = KnittingsDataSource.allPhotos
             val categories = KnittingsDataSource.allCategories
             val needles = KnittingsDataSource.allNeedles
             val rowCounters = KnittingsDataSource.allRowCounters
-            return Database(knittings, photos, categories, needles, rowCounters)
+            return Database(projects, photos, categories, needles, rowCounters)
         }
     }
 }
