@@ -2,13 +2,17 @@ package com.mthaler.knittings.model
 
 import android.os.Parcel
 import android.os.Parcelable
+import com.dropbox.core.v2.DbxClientV2
 import com.mthaler.dbapp.model.Category
 import com.mthaler.dbapp.model.ExportDatabase
 import com.mthaler.dbapp.model.Photo
 import com.mthaler.dbapp.model.categoriesToJSON
+import com.mthaler.dbapp.utils.FileUtils
+import com.mthaler.dbapp.utils.PictureUtils
 import com.mthaler.knittings.database.KnittingDatabaseHelper
 import com.mthaler.knittings.database.KnittingsDataSource
 import org.json.JSONObject
+import java.io.FileOutputStream
 import java.io.Serializable
 import java.lang.IllegalArgumentException
 
@@ -71,6 +75,46 @@ data class Database(val knittings: List<Knitting>, override val photos: List<Pho
         val filteredDatabase = copy(knittings = updatedKnittings, photos = filteredPhotos)
         filteredDatabase.checkValidity()
         return filteredDatabase
+    }
+
+    override fun write(dbxClient: DbxClientV2, directory: String, photoDownloaded: (Int) -> Unit) {
+        val count = photos.size
+        // remove all existing entries from the database
+        KnittingsDataSource.deleteAllProjects()
+        KnittingsDataSource.deleteAllPhotos()
+        KnittingsDataSource.deleteAllCategories()
+        KnittingsDataSource.deleteAllNeedles()
+        KnittingsDataSource.deleteAllRowCounters()
+        // add downloaded database
+        for (photo in photos) {
+            KnittingsDataSource.addPhoto(photo, manualID = true)
+        }
+        for (category in categories) {
+            KnittingsDataSource.addCategory(category, manualID = true)
+        }
+        for (needle in needles) {
+            KnittingsDataSource.addNeedle(needle, manualID = true)
+        }
+        for (r in rowCounters) {
+            KnittingsDataSource.addRowCounter(r, manualID = true)
+        }
+        for (knitting in knittings) {
+            KnittingsDataSource.addProject(knitting, manualID = true)
+        }
+        for ((index, photo) in photos.withIndex()) {
+            val filename = "/" + directory + "/" + photo.id + "." + FileUtils.getExtension(photo.filename.name)
+            FileOutputStream(photo.filename).use {
+                dbxClient.files().download(filename).download(it)
+            }
+            // generate preview
+            val orientation = PictureUtils.getOrientation(photo.filename.absolutePath)
+            val preview = PictureUtils.decodeSampledBitmapFromPath(photo.filename.absolutePath, 200, 200)
+            val rotatedPreview = PictureUtils.rotateBitmap(preview, orientation)
+            val photoWithPreview = photo.copy(preview = rotatedPreview)
+            KnittingsDataSource.updatePhoto(photoWithPreview)
+            val progress = (index / count.toFloat() * 100).toInt()
+            photoDownloaded(progress)
+        }
     }
 
     override fun toJSON(): JSONObject {
