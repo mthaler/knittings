@@ -48,5 +48,5 @@ class MyApplication : MultiDexApplication(), DatabaseApplication<Knitting> {
 
     override fun createExportDatabase(): ExportDatabase = Database.createDatabase()
 
-    override fun createExportDatabaseFromJSON(json: JSONObject, context: Context, externalFilesDir: File): ExportDatabase = json.toDatabase(context, externalFilesDir)
+    override fun createExportDatabaseFromJSON(json: JSONObject, externalFilesDir: File): ExportDatabase = json.toDatabase(this, externalFilesDir)
 }
