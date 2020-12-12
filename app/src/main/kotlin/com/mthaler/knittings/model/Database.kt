@@ -15,10 +15,10 @@ import org.json.JSONObject
 import java.io.FileOutputStream
 import java.lang.IllegalArgumentException
 
-data class Database(val knittings: List<Knitting>, override val photos: List<Photo>, val categories: List<Category>, val needles: List<Needle>, val rowCounters: List<RowCounter>) : ExportDatabase<Knitting> {
+data class Database(override val projects: List<Knitting>, override val photos: List<Photo>, val categories: List<Category>, val needles: List<Needle>, val rowCounters: List<RowCounter>) : ExportDatabase<Knitting> {
 
     private constructor(parcel: Parcel) : this(
-            knittings = parcel.readParcelableArray(classLoader)!!.map { it as Knitting },
+            projects = parcel.readParcelableArray(classLoader)!!.map { it as Knitting },
             photos = parcel.readParcelableArray(classLoader)!!.map { it as Photo },
             categories = parcel.readParcelableArray(classLoader)!!.map { it as Category },
             needles = parcel.readParcelableArray(classLoader)!!.map { it as Needle },
@@ -26,7 +26,7 @@ data class Database(val knittings: List<Knitting>, override val photos: List<Pho
     )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
-        parcel.writeParcelableArray(knittings.toTypedArray(), 0)
+        parcel.writeParcelableArray(projects.toTypedArray(), 0)
         parcel.writeParcelableArray(photos.toTypedArray(), 0)
         parcel.writeParcelableArray(categories.toTypedArray(), 0)
         parcel.writeParcelableArray(needles.toTypedArray(), 0)
@@ -41,18 +41,18 @@ data class Database(val knittings: List<Knitting>, override val photos: List<Pho
     }
 
     private fun checkPhotosValidity() {
-        val missing =  photos.map {it.ownerID}.toSet() - knittings.map { it.id }.toSet()
+        val missing =  photos.map {it.ownerID}.toSet() - projects.map { it.id }.toSet()
         if (missing.isNotEmpty()) {
             throw IllegalArgumentException("Photos reference non-existing knittings with ids $missing")
         }
     }
 
     private fun checkKnittingsValidity() {
-        val missingCategories = knittings.mapNotNull { it.category }.map { it.id }.toSet() - categories.map { it.id }.toSet()
+        val missingCategories = projects.mapNotNull { it.category }.map { it.id }.toSet() - categories.map { it.id }.toSet()
         if (missingCategories.isNotEmpty()) {
             throw IllegalArgumentException("Knittings reference non-existing categories with ids $missingCategories")
         }
-        val missingPhotos = knittings.mapNotNull { it.defaultPhoto }.map { it.id }.toSet() - photos.map { it.id }.toSet()
+        val missingPhotos = projects.mapNotNull { it.defaultPhoto }.map { it.id }.toSet() - photos.map { it.id }.toSet()
         if (missingPhotos.isNotEmpty()) {
             throw IllegalArgumentException("Knittings reference non-existing photos with ids $missingPhotos")
         }
@@ -62,16 +62,16 @@ data class Database(val knittings: List<Knitting>, override val photos: List<Pho
     override fun checkDatabase(): Database {
         val filteredPhotos = photos.filter { it.filename.exists() }
         val removedPhotos = photos.map { it.id }.toSet() - filteredPhotos.map { it.id}.toSet()
-        val updatedKnittings = knittings.map { if (removedPhotos.contains(it.defaultPhoto?.id)) it.copy(defaultPhoto = null) else it }
-        val filteredDatabase = copy(knittings = updatedKnittings, photos = filteredPhotos)
+        val updatedKnittings = projects.map { if (removedPhotos.contains(it.defaultPhoto?.id)) it.copy(defaultPhoto = null) else it }
+        val filteredDatabase = copy(projects = updatedKnittings, photos = filteredPhotos)
         filteredDatabase.checkValidity()
         return filteredDatabase
     }
 
     override fun removeMissingPhotos(missingPhotos: Set<Long>): ExportDatabase<Knitting> {
         val filteredPhotos = photos.filterNot { missingPhotos.contains(it.id) }
-        val updatedKnittings = knittings.map { if (missingPhotos.contains(it.defaultPhoto?.id)) it.copy(defaultPhoto = null) else it }
-        val filteredDatabase = copy(knittings = updatedKnittings, photos = filteredPhotos)
+        val updatedKnittings = projects.map { if (missingPhotos.contains(it.defaultPhoto?.id)) it.copy(defaultPhoto = null) else it }
+        val filteredDatabase = copy(projects = updatedKnittings, photos = filteredPhotos)
         filteredDatabase.checkValidity()
         return filteredDatabase
     }
@@ -97,7 +97,7 @@ data class Database(val knittings: List<Knitting>, override val photos: List<Pho
         for (r in rowCounters) {
             KnittingsDataSource.addRowCounter(r, manualID = true)
         }
-        for (knitting in knittings) {
+        for (knitting in projects) {
             KnittingsDataSource.addProject(knitting, manualID = true)
         }
         for ((index, photo) in photos.withIndex()) {
@@ -119,7 +119,7 @@ data class Database(val knittings: List<Knitting>, override val photos: List<Pho
     override fun toJSON(): JSONObject {
         val result = JSONObject()
         result.put("version", KnittingDatabaseHelper.DB_VERSION)
-        result.put("knittings", knittingsToJSON(knittings))
+        result.put("knittings", knittingsToJSON(projects))
         result.put("photos", photosToJSON(photos))
         result.put("categories", categoriesToJSON(categories))
         result.put("needles", needlesToJSON(needles))
