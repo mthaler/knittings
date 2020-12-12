@@ -12,6 +12,7 @@ import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import com.mthaler.dbapp.dropbox.DropboxClientFactory
 import com.mthaler.dbapp.dropbox.DropboxImportServiceManager
+import com.mthaler.dbapp.model.ExportDatabase
 import com.mthaler.dbapp.utils.FileUtils
 import com.mthaler.dbapp.utils.PictureUtils
 import com.mthaler.knittings.R
@@ -141,7 +142,7 @@ class DropboxImportService : Service() {
         private val EXTRA_DIRECTORY = "directory"
         private val EXTRA_DATABASE = "database"
 
-        fun startService(context: Context, directory: String, database: Database) {
+        fun startService(context: Context, directory: String, database: ExportDatabase) {
             val startIntent = Intent(context, DropboxImportService::class.java)
             startIntent.putExtra(EXTRA_DIRECTORY, directory)
             startIntent.putExtra(EXTRA_DATABASE, database as Parcelable)

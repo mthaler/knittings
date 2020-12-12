@@ -1,5 +1,6 @@
 package com.mthaler.knittings
 
+import android.content.Context
 import androidx.multidex.MultiDexApplication
 import com.mthaler.dbapp.ApplicationSettings
 import com.mthaler.dbapp.DatabaseApplication
@@ -12,7 +13,10 @@ import com.mthaler.dbapp.settings.Theme
 import com.mthaler.knittings.database.KnittingsDataSource
 import com.mthaler.knittings.model.Database
 import com.mthaler.knittings.model.Knitting
+import com.mthaler.knittings.model.toDatabase
 import com.mthaler.knittings.settings.ThemeRepository
+import org.json.JSONObject
+import java.io.File
 
 class MyApplication : MultiDexApplication(), DatabaseApplication<Knitting> {
 
@@ -43,4 +47,6 @@ class MyApplication : MultiDexApplication(), DatabaseApplication<Knitting> {
     }
 
     override fun createExportDatabase(): ExportDatabase = Database.createDatabase()
+
+    override fun createExportDatabaseFromJSON(json: JSONObject, context: Context, externalFilesDir: File): ExportDatabase = json.toDatabase(context, externalFilesDir)
 }

@@ -32,7 +32,7 @@ data class Database(val knittings: List<Knitting>, override val photos: List<Pho
 
     override fun describeContents(): Int = 0
 
-    fun checkValidity() {
+    override fun checkValidity() {
         checkPhotosValidity()
         checkKnittingsValidity()
     }
@@ -65,6 +65,13 @@ data class Database(val knittings: List<Knitting>, override val photos: List<Pho
         return filteredDatabase
     }
 
+    override fun removeMissingPhotos(missingPhotos: Set<Long>): ExportDatabase {
+        val filteredPhotos = photos.filterNot { missingPhotos.contains(it.id) }
+        val updatedKnittings = knittings.map { if (missingPhotos.contains(it.defaultPhoto?.id)) it.copy(defaultPhoto = null) else it }
+        val filteredDatabase = copy(knittings = updatedKnittings, photos = filteredPhotos)
+        filteredDatabase.checkValidity()
+        return filteredDatabase
+    }
 
     override fun toJSON(): JSONObject {
         val result = JSONObject()

@@ -17,7 +17,6 @@ import com.mthaler.dbapp.dropbox.DropboxClientFactory
 import com.mthaler.dbapp.dropbox.DropboxImportServiceManager
 import com.mthaler.dbapp.model.Project
 import com.mthaler.dbapp.utils.FileUtils
-import com.mthaler.knittings.model.toDatabase
 import com.mthaler.dbapp.service.JobStatus
 import com.mthaler.dbapp.service.ServiceStatus
 import com.mthaler.knittings.databinding.FragmentDropboxImportBinding
@@ -189,7 +188,7 @@ class DropboxImportFragment : AbstractDropboxFragment() {
                 val jsonStr = String(bytes)
                 val json = JSONObject(jsonStr)
                 val externalFilesDir = requireContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES)!!
-                val database = json.toDatabase(requireContext(), externalFilesDir)
+                val database = (requireContext().applicationContext as DatabaseApplication<Project>).createExportDatabaseFromJSON(json, requireContext(), externalFilesDir)
                 database.checkValidity()
                 val entries = dbxClient.files().listFolder("/$directory").entries
                 val ids = entries.filter { it.name != "db.json" }.map { FileUtils.getFilenameWithoutExtension(it.name).toLong() }.toHashSet()
@@ -203,10 +202,7 @@ class DropboxImportFragment : AbstractDropboxFragment() {
                     setTitle(R.string.dropbox_import_dialog_title)
                     setMessage(getString(R.string.dropbox_import_dialog_incomplete_msg, missingPhotos.size as Any))
                     setPositiveButton(R.string.dropbox_import_dialog_button_import) { dialog, which ->
-                        val filteredPhotos = database.photos.filterNot { missingPhotos.contains(it.id) }
-                        val updatedKnittings = database.knittings.map { if (missingPhotos.contains(it.defaultPhoto?.id)) it.copy(defaultPhoto = null) else it }
-                        val filteredDatabase = database.copy(knittings = updatedKnittings, photos = filteredPhotos)
-                        filteredDatabase.checkValidity()
+                        val filteredDatabase = database.removeMissingPhotos(missingPhotos)
                         DropboxImportService.startService(requireContext(), directory, filteredDatabase)
                         DropboxImportServiceManager.getInstance().updateJobStatus(JobStatus.Progress(0))
                     }
