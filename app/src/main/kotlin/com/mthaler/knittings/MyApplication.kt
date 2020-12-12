@@ -1,6 +1,5 @@
 package com.mthaler.knittings
 
-import android.content.Context
 import androidx.multidex.MultiDexApplication
 import com.mthaler.dbapp.ApplicationSettings
 import com.mthaler.dbapp.DatabaseApplication
@@ -46,7 +45,7 @@ class MyApplication : MultiDexApplication(), DatabaseApplication<Knitting> {
         override fun categoryListBackground(): Int = R.drawable.categories2
     }
 
-    override fun createExportDatabase(): ExportDatabase = Database.createDatabase()
+    override fun createExportDatabase(): ExportDatabase<Knitting> = Database.createDatabase()
 
-    override fun createExportDatabaseFromJSON(json: JSONObject, externalFilesDir: File): ExportDatabase = json.toDatabase(this, externalFilesDir)
+    override fun createExportDatabaseFromJSON(json: JSONObject, externalFilesDir: File): ExportDatabase<Knitting> = json.toDatabase(this, externalFilesDir)
 }

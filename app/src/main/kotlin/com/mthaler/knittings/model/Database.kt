@@ -15,7 +15,7 @@ import org.json.JSONObject
 import java.io.FileOutputStream
 import java.lang.IllegalArgumentException
 
-data class Database(val knittings: List<Knitting>, override val photos: List<Photo>, val categories: List<Category>, val needles: List<Needle>, val rowCounters: List<RowCounter>) : ExportDatabase {
+data class Database(val knittings: List<Knitting>, override val photos: List<Photo>, val categories: List<Category>, val needles: List<Needle>, val rowCounters: List<RowCounter>) : ExportDatabase<Knitting> {
 
     private constructor(parcel: Parcel) : this(
             knittings = parcel.readParcelableArray(classLoader)!!.map { it as Knitting },
@@ -68,7 +68,7 @@ data class Database(val knittings: List<Knitting>, override val photos: List<Pho
         return filteredDatabase
     }
 
-    override fun removeMissingPhotos(missingPhotos: Set<Long>): ExportDatabase {
+    override fun removeMissingPhotos(missingPhotos: Set<Long>): ExportDatabase<Knitting> {
         val filteredPhotos = photos.filterNot { missingPhotos.contains(it.id) }
         val updatedKnittings = knittings.map { if (missingPhotos.contains(it.defaultPhoto?.id)) it.copy(defaultPhoto = null) else it }
         val filteredDatabase = copy(knittings = updatedKnittings, photos = filteredPhotos)
