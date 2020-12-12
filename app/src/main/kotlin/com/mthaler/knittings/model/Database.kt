@@ -3,10 +3,7 @@ package com.mthaler.knittings.model
 import android.os.Parcel
 import android.os.Parcelable
 import com.dropbox.core.v2.DbxClientV2
-import com.mthaler.dbapp.model.Category
-import com.mthaler.dbapp.model.ExportDatabase
-import com.mthaler.dbapp.model.Photo
-import com.mthaler.dbapp.model.categoriesToJSON
+import com.mthaler.dbapp.model.*
 import com.mthaler.dbapp.utils.FileUtils
 import com.mthaler.dbapp.utils.PictureUtils
 import com.mthaler.knittings.database.KnittingDatabaseHelper
@@ -15,7 +12,7 @@ import org.json.JSONObject
 import java.io.FileOutputStream
 import java.lang.IllegalArgumentException
 
-data class Database(override val projects: List<Knitting>, override val photos: List<Photo>, override val categories: List<Category>, val needles: List<Needle>, val rowCounters: List<RowCounter>) : ExportDatabase<Knitting> {
+data class Database(override val projects: List<Knitting>, override val photos: List<Photo>, override val categories: List<Category>, val needles: List<Needle>, val rowCounters: List<RowCounter>) : AbstractExportDatabase<Knitting>() {
 
     private constructor(parcel: Parcel) : this(
             projects = parcel.readParcelableArray(classLoader)!!.map { it as Knitting },
@@ -34,30 +31,6 @@ data class Database(override val projects: List<Knitting>, override val photos: 
     }
 
     override fun describeContents(): Int = 0
-
-    override fun checkValidity() {
-        checkPhotosValidity()
-        checkKnittingsValidity()
-    }
-
-    private fun checkPhotosValidity() {
-        val missing =  photos.map {it.ownerID}.toSet() - projects.map { it.id }.toSet()
-        if (missing.isNotEmpty()) {
-            throw IllegalArgumentException("Photos reference non-existing knittings with ids $missing")
-        }
-    }
-
-    private fun checkKnittingsValidity() {
-        val missingCategories = projects.mapNotNull { it.category }.map { it.id }.toSet() - categories.map { it.id }.toSet()
-        if (missingCategories.isNotEmpty()) {
-            throw IllegalArgumentException("Knittings reference non-existing categories with ids $missingCategories")
-        }
-        val missingPhotos = projects.mapNotNull { it.defaultPhoto }.map { it.id }.toSet() - photos.map { it.id }.toSet()
-        if (missingPhotos.isNotEmpty()) {
-            throw IllegalArgumentException("Knittings reference non-existing photos with ids $missingPhotos")
-        }
-    }
-
 
     override fun checkDatabase(): Database {
         val filteredPhotos = photos.filter { it.filename.exists() }
