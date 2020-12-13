@@ -185,10 +185,7 @@ class EditKnittingDetailsFragment : Fragment() {
                     saveKnitting(newKnitting)
                 }
                 if (editOnly) {
-                    val upIntent: Intent? = NavUtils.getParentActivityIntent(requireActivity())
-                    if (upIntent == null) {
-                        throw IllegalStateException("No Parent Activity Intent")
-                    }
+                    val upIntent: Intent = NavUtils.getParentActivityIntent(requireActivity()) ?: throw IllegalStateException("No Parent Activity Intent")
                     NavUtils.navigateUpTo(requireActivity(), upIntent)
                 } else {
                     parentFragmentManager.popBackStack()
