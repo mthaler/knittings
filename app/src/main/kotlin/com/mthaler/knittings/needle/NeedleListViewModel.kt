@@ -4,6 +4,8 @@ import android.app.Application
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.mthaler.dbapp.DataSourceViewModel
+import com.mthaler.dbapp.filter.CombinedFilter
+import com.mthaler.dbapp.filter.Filter
 import com.mthaler.knittings.database.KnittingsDataSource
 import com.mthaler.knittings.model.Needle
 import kotlinx.coroutines.Dispatchers
@@ -13,7 +15,7 @@ import kotlinx.coroutines.withContext
 class NeedleListViewModel(application: Application) : DataSourceViewModel(application) {
 
     val needles = MutableLiveData<List<Needle>>(emptyList())
-    var filter: Filter = NoFilter
+    var filter: Filter<Needle> = CombinedFilter.empty()
         set(value) {
             field = value
             updateNeedles()

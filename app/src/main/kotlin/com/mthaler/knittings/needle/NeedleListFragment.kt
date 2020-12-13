@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import android.view.*
 import androidx.lifecycle.ViewModelProvider
 import com.mthaler.dbapp.DeleteDialog
+import com.mthaler.dbapp.filter.CombinedFilter
 import com.mthaler.knittings.R
 import com.mthaler.knittings.database.KnittingsDataSource
 import com.mthaler.knittings.databinding.FragmentNeedleListBinding
@@ -111,15 +112,14 @@ class NeedleListFragment : Fragment() {
                 val listItems = (listOf(getString(R.string.filter_show_all)) + types).toTypedArray()
                 val builder = AlertDialog.Builder(requireContext())
                 val checkedItem = when (val f = viewModel.filter) {
-                    is NoFilter -> 0
                     is SingleTypeFilter -> {
                         val index = NeedleType.values().indexOf(f.type)
                         index + 1
                     }
-                    else -> throw Exception("Unknown filter: $f")
+                    else -> 0
                 }
                 builder.setSingleChoiceItems(listItems, checkedItem) { dialog, which -> when (which) {
-                    0 -> viewModel.filter = NoFilter
+                    0 -> viewModel.filter = CombinedFilter.empty()
                     else -> {
                         val type = NeedleType.values()[which - 1]
                         viewModel.filter = SingleTypeFilter(type)
