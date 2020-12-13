@@ -2,8 +2,8 @@ package com.mthaler.knittings.database
 
 import android.content.Context
 import android.database.Cursor
-import android.preference.PreferenceManager
 import android.util.Log
+import androidx.preference.PreferenceManager
 import java.io.File
 import java.util.ArrayList
 import java.util.Date

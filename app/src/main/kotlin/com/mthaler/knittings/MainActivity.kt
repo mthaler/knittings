@@ -1,7 +1,6 @@
 package com.mthaler.knittings
 
 import android.os.Bundle
-import android.preference.PreferenceManager
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -11,6 +10,7 @@ import androidx.appcompat.view.ActionMode
 import androidx.appcompat.widget.SearchView
 import androidx.core.view.GravityCompat
 import androidx.lifecycle.ViewModelProvider
+import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.navigation.NavigationView
