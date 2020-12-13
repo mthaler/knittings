@@ -166,7 +166,31 @@ class NeedleListFragment : Fragment() {
                 true
             }
             R.id.menu_item_in_use_filter -> {
-
+                val listItems = (listOf(getString(R.string.filter_show_all)) + getString(R.string.needle_filter_in_use) + getString(R.string.needle_filter_not_in_use)).toTypedArray()
+                val builder = AlertDialog.Builder(requireContext())
+                val f = viewModel.filter
+                val checkedItem: Int = let {
+                    val result = f.filters.find { it is InUseFilter }
+                    if (result != null && result is InUseFilter) {
+                        if (result.inUse) {
+                            1
+                        } else {
+                            2
+                        }
+                    } else {
+                        0
+                    }
+                }
+                builder.setSingleChoiceItems(listItems, checkedItem) { dialog, which -> when (which) {
+                    0 -> viewModel.filter = CombinedFilter(f.filters.filterNot { it is SingleTypeFilter })
+                    1 -> viewModel.filter = CombinedFilter(f.filters.filterNot { it is InUseFilter} + InUseFilter(true))
+                    else -> viewModel.filter = CombinedFilter(f.filters.filterNot { it is InUseFilter} + InUseFilter(false))
+                }
+                    dialog.dismiss()
+                }
+                builder.setNegativeButton(R.string.dialog_button_cancel) { dialog, which -> dialog.dismiss() }
+                val dialog = builder.create()
+                dialog.show()
                 true
             }
             else -> super.onOptionsItemSelected(item)

@@ -27,4 +27,5 @@
 
     <string name="needle_filter_type">Nadelart</string>
     <string name="needle_filter_in_use">In Gebrauch</string>
+    <string name="needle_filter_not_in_use">Nicht in Gebrauch</string>
 </resources>

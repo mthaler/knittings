@@ -27,4 +27,5 @@
 
     <string name="needle_filter_type">Needle type</string>
     <string name="needle_filter_in_use">In use</string>
+    <string name="needle_filter_not_in_use">Not in use</string>
 </resources>
