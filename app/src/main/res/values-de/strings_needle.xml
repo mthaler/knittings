@@ -24,4 +24,7 @@
     <string name="needle_type_set">Nadelspiel</string>
     <string name="needle_type_round">Rundstricknadeln</string>
     <string name="needle_type_coat">Jackennadeln</string>
+
+    <string name="needle_filter_type">Nadelart</string>
+    <string name="needle_filter_in_use">In Gebrauch</string>
 </resources>

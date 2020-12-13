@@ -1,4 +1,4 @@
-package com.mthaler.knittings.needle
+package com.mthaler.knittings.needle.filter
 
 import com.mthaler.dbapp.filter.Filter
 import com.mthaler.knittings.model.Needle

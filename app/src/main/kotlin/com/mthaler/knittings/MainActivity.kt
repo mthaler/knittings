@@ -136,7 +136,7 @@ class MainActivity : AbstractMainActivity<Knitting>(), NavigationView.OnNavigati
         })
         rv.adapter = adapter
 
-        val activeFilters = findViewById<TextView>(R.id.knitting_active_filters)
+        val activeFilters = binding.knittingActiveFilters
 
         viewModel = ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory.getInstance(application)).get(MainViewModel.javaClass())
         viewModel.projects.observe(this, { knittings ->

@@ -2,7 +2,21 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/menu_item_filter"
         android:title="@string/filter"
-        app:showAsAction="never"/>
+        app:showAsAction="never">
+        <menu>
+            <item
+                android:id="@+id/menu_item_clear_filters"
+                android:title="@string/clear_filters"
+                app:showAsAction="never"/>
+            <item
+                android:id="@+id/menu_item_type_filter"
+                android:title="@string/needle_filter_type"
+                app:showAsAction="never"/>
+            <item
+                android:id="@+id/menu_item_in_use_filter"
+                android:title="@string/needle_filter_in_use"
+                app:showAsAction="never"/>
+        </menu>
+    </item>
 </menu>

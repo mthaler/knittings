@@ -15,7 +15,7 @@ import kotlinx.coroutines.withContext
 class NeedleListViewModel(application: Application) : DataSourceViewModel(application) {
 
     val needles = MutableLiveData<List<Needle>>(emptyList())
-    var filter: Filter<Needle> = CombinedFilter.empty()
+    var filter: CombinedFilter<Needle> = CombinedFilter.empty()
         set(value) {
             field = value
             updateNeedles()

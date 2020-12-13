@@ -24,4 +24,7 @@
     <string name="needle_type_set">Set</string>
     <string name="needle_type_round">Round</string>
     <string name="needle_type_coat">Coat</string>
+
+    <string name="needle_filter_type">Needle type</string>
+    <string name="needle_filter_in_use">In use</string>
 </resources>
