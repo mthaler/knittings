@@ -34,6 +34,7 @@ class CircularButton @JvmOverloads constructor(
         val typedArray = context.obtainStyledAttributes(attrs, R.styleable.CircularButton)
         color = typedArray.getColor(R.styleable.CircularButton_backgroundColor,0)
         paint.color = color
+        typedArray.recycle()
     }
 
     override fun setPressed(pressed: Boolean) {

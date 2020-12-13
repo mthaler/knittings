@@ -36,6 +36,7 @@ class CountFrame @JvmOverloads constructor(
         ry = typedArray.getDimension(R.styleable.CountFrame_frameRadiusY, 150f)
         val frameColor = typedArray.getColor(R.styleable.CountFrame_frameColor, Color.BLACK)
         paint.color = frameColor
+        typedArray.recycle()
     }
 
     /**

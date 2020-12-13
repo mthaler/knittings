@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools"
     tools:ignore="MissingTranslation">
-    <string name="key_mint_theme">mint_theme</string>
     <string name="key_photos_use_newest_as_preview">photos_use_newest_as_preview</string>
     <string name="key_share_photo_size">share_photo_size</string>
     <string name="key_display_photo_size">display_photo_size</string>

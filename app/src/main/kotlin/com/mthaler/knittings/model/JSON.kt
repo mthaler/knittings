@@ -3,14 +3,12 @@ package com.mthaler.knittings.model
 import android.content.Context
 import com.mthaler.dbapp.model.Category
 import com.mthaler.dbapp.model.Photo
-import com.mthaler.knittings.database.KnittingDatabaseHelper
 import org.json.JSONObject
 import java.text.SimpleDateFormat
 import org.json.JSONArray
 import java.io.File
 import java.lang.Exception
 import com.mthaler.dbapp.model.toCategories
-import com.mthaler.dbapp.model.categoriesToJSON
 
 private val dateFormat = SimpleDateFormat("yyyy-MM-dd")
 
