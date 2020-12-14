@@ -182,7 +182,7 @@ class NeedleListFragment : Fragment() {
                     }
                 }
                 builder.setSingleChoiceItems(listItems, checkedItem) { dialog, which -> when (which) {
-                    0 -> viewModel.filter = CombinedFilter(f.filters.filterNot { it is SingleTypeFilter })
+                    0 -> viewModel.filter = CombinedFilter(f.filters.filterNot { it is InUseFilter })
                     1 -> viewModel.filter = CombinedFilter(f.filters.filterNot { it is InUseFilter} + InUseFilter(true))
                     else -> viewModel.filter = CombinedFilter(f.filters.filterNot { it is InUseFilter} + InUseFilter(false))
                 }
