@@ -26,8 +26,6 @@ class MyApplication : MultiDexApplication(), DatabaseApplication<Knitting> {
         Theme.setThemes(ThemeRepository.themes)
     }
 
-    override val sharedPreferencesName: String = "com.mthaler.knittings"
-
     override val dropboxAppKey: String = "6ybf7tgqdbhf641"
 
     override fun getCategoryDataSource(): CategoryDataSource = KnittingsDataSource
