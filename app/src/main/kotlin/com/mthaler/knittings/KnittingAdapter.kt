@@ -4,11 +4,8 @@ import android.content.Context
 import android.graphics.Color
 import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
-import com.mthaler.dbapp.CategoryIndicator
+import com.mthaler.knittings.databinding.ListItemKnittingBinding
 import com.mthaler.knittings.model.Knitting
 import com.mthaler.knittings.model.Status
 import java.text.DateFormat
@@ -28,8 +25,8 @@ class KnittingAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val v = LayoutInflater.from(parent.context).inflate(R.layout.list_item_knitting, parent, false)
-        return ViewHolder(context, v)
+        val binding = ListItemKnittingBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return ViewHolder(context, binding)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -38,13 +35,7 @@ class KnittingAdapter(
 
     override fun getItemCount(): Int = knittings.size
 
-    inner class ViewHolder(val context: Context, itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private val titleTextView = itemView.findViewById<TextView>(R.id.knitting_list_item_titleTextView)
-        private val descriptionTextView = itemView.findViewById<TextView>(R.id.knitting_list_item_descriptionTextView)
-        private val startedTextView = itemView.findViewById<TextView>(R.id.knitting_list_item_startedTextView)
-        private val photoView = itemView.findViewById<ImageView>(R.id.knitting_list_item_photoImageView)
-        private val categoryIndicator = itemView.findViewById<CategoryIndicator>(R.id.knitting_list_item_categoryIndicator)
-        private val statusImageView = itemView.findViewById<ImageView>(R.id.knitting_list_item_statusImageView)
+    inner class ViewHolder(val context: Context, val binding: ListItemKnittingBinding) : RecyclerView.ViewHolder(binding.root) {
 
         init {
             itemView.setOnClickListener { v -> onItemClick(knittings[adapterPosition]) }
@@ -52,26 +43,26 @@ class KnittingAdapter(
         }
 
         fun bind(knitting: Knitting) {
-            titleTextView.text = knitting.title
-            descriptionTextView.text = knitting.description
-            startedTextView.text = DateFormat.getDateInstance().format(knitting.started)
+            binding.knittingListItemTitleTextView.text = knitting.title
+            binding.knittingListItemDescriptionTextView.text = knitting.description
+            binding.knittingListItemStartedTextView.text = DateFormat.getDateInstance().format(knitting.started)
             // the list item views are reused, we always need to set bitmap, otherwise the previous bitmap is used
             if (knitting.defaultPhoto?.preview != null) {
-                photoView.setImageBitmap(knitting.defaultPhoto.preview)
+                binding.knittingListItemPhotoImageView.setImageBitmap(knitting.defaultPhoto.preview)
             } else {
-                photoView.setImageResource(R.drawable.categories)
+                binding.knittingListItemPhotoImageView.setImageResource(R.drawable.categories)
             }
             if (knitting.category != null) {
                 val c = knitting.category.color
                 if (c != null) {
-                    categoryIndicator.color = c
+                    binding.knittingListItemCategoryIndicator.color = c
                 } else {
-                    categoryIndicator.color = Color.WHITE
+                    binding.knittingListItemCategoryIndicator.color = Color.WHITE
                 }
             } else {
-                categoryIndicator.color = Color.WHITE
+                binding.knittingListItemCategoryIndicator.color = Color.WHITE
             }
-            statusImageView.setImageResource(Status.getDrawableResource(context, knitting.status))
+            binding.knittingListItemStatusImageView.setImageResource(Status.getDrawableResource(context, knitting.status))
         }
     }
 }
