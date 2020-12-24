@@ -3,10 +3,9 @@ package com.mthaler.knittings.needle
 import android.content.Context
 import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
-import com.mthaler.knittings.R
+import com.mthaler.knittings.databinding.ListItemNeedleBinding
+import com.mthaler.knittings.databinding.ListItemNeedleHeaderBinding
 import com.mthaler.knittings.model.Needle
 import com.mthaler.knittings.model.NeedleMaterial
 import com.mthaler.knittings.model.NeedleType
@@ -27,12 +26,12 @@ class NeedleAdapter(private val onItemClick: (Needle) -> Unit, private val onIte
 
         when (viewType) {
             TypeHeader -> {
-                val v = LayoutInflater.from(parent.context).inflate(R.layout.list_item_needle_header, parent, false)
-                return HeaderViewHolder(v)
+                val binding = ListItemNeedleHeaderBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+                return HeaderViewHolder(binding)
             }
             TypeItem -> {
-                val v = LayoutInflater.from(parent.context).inflate(R.layout.list_item_needle, parent, false)
-                return ItemViewHolder(v)
+                val binding = ListItemNeedleBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+                return ItemViewHolder(binding)
             }
             else -> throw IllegalArgumentException("Unknown view type $viewType")
         }
@@ -50,19 +49,14 @@ class NeedleAdapter(private val onItemClick: (Needle) -> Unit, private val onIte
 
     override fun getItemCount(): Int = items.size
 
-    class HeaderViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-
-        private val textViewHeader = itemView.findViewById<TextView>(R.id.needle_list_item_header)
+    class HeaderViewHolder(val binding: ListItemNeedleHeaderBinding) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(header: String) {
-            textViewHeader.text = header
+            binding.needleListItemHeader.text = header
         }
     }
 
-    class ItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private val textViewName = itemView.findViewById<TextView>(R.id.needle_list_item_name)
-        private val textViewDescription = itemView.findViewById<TextView>(R.id.needle_list_item_description)
-
+    class ItemViewHolder(val binding: ListItemNeedleBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(needle: Needle, onItemClick: (Needle) -> Unit, onItemLongLick: (Needle) -> Unit) {
             val sb = StringBuilder()
             sb.append(NeedleMaterial.format(itemView.context, needle.material))
@@ -80,8 +74,8 @@ class NeedleAdapter(private val onItemClick: (Needle) -> Unit, private val onIte
             if (needle.inUse) {
                 sb.append("  \u2713")
             }
-            textViewName.text = if (needle.name.trim().isNotEmpty()) needle.name.trim() else NeedleType.format(itemView.context, needle.type)
-            textViewDescription.text = sb.toString()
+            binding.needleListItemName.text = if (needle.name.trim().isNotEmpty()) needle.name.trim() else NeedleType.format(itemView.context, needle.type)
+            binding.needleListItemDescription.text = sb.toString()
             itemView.setOnClickListener { v -> onItemClick(needle) }
             itemView.setOnLongClickListener { v -> onItemLongLick(needle); true }
         }
