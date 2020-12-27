@@ -74,8 +74,8 @@ class NeedleAdapter(private val onItemClick: (Needle) -> Unit, private val onIte
             if (needle.inUse) {
                 sb.append("  \u2713")
             }
-            binding.needleListItemName.text = if (needle.name.trim().isNotEmpty()) needle.name.trim() else NeedleType.format(itemView.context, needle.type)
-            binding.needleListItemDescription.text = sb.toString()
+            binding.name.text = if (needle.name.trim().isNotEmpty()) needle.name.trim() else NeedleType.format(itemView.context, needle.type)
+            binding.description.text = sb.toString()
             itemView.setOnClickListener { v -> onItemClick(needle) }
             itemView.setOnLongClickListener { v -> onItemLongLick(needle); true }
         }

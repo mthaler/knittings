@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:background="?android:attr/selectableItemBackground">
         <TextView
-            android:id="@+id/needle_list_item_name"
+            android:id="@+id/name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textStyle="bold"
@@ -21,10 +21,10 @@
             android:paddingRight="4dp"
             android:paddingTop="4dp"
             android:layout_alignParentLeft="true" />
-        <TextView android:id="@+id/needle_list_item_description"
+        <TextView android:id="@+id/description"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/needle_list_item_name"
+            android:layout_below="@id/name"
             android:layout_alignParentLeft="true"
             android:paddingLeft="8dp"
             android:paddingRight="4dp"
