@@ -3,6 +3,7 @@ package com.mthaler.knittings.compressphotos
 import android.app.*
 import android.content.Intent
 import android.content.Context
+import android.os.Build
 import android.os.IBinder
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
@@ -102,7 +103,10 @@ class CompressPhotosService : Service() {
         return NotificationCompat.Builder(this, getString(R.string.compress_photos_notification_channel_id)).apply {
             setContentTitle(getString(R.string.compress_photos_notification_title))
             setContentText(msg)
-            setSmallIcon(R.drawable.ic_photo_size_select_large_black_24dp)
+            // vector icons crash the service on Android < 21
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                setSmallIcon(R.drawable.ic_photo_size_select_large_black_24dp)
+            }
             setContentIntent(pendingIntent)
             setDefaults(0)
             setAutoCancel(true)
