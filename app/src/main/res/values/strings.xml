@@ -7,9 +7,6 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
-    <!-- generic dialog strings -->
-    <string name="dialog_button_cancel">Cancel</string>
-
     <!-- generic menu entries-->
     <string name="menu_entry_save">Save</string>
     <string name="menu_entry_delete">Delete</string>
@@ -31,10 +28,6 @@
     <!-- about dialog -->
     <string name="idea_and_concept">Idea and concept: Ulrike Jordan</string>
     <string name="programming">Programming: Michael Thaler</string>
-
-    <!-- network error -->
-    <string name="network_error_title">Network Error</string>
-    <string name="network_error_dropbox">Could not connect to Dropbox</string>
 
     <string name="sort">Sort</string>
     <string name="filter">Filter</string>
