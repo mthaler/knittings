@@ -2,6 +2,14 @@
 <resources>
     <string name="whats_new_title">Whats New</string>
     <string name="whats_new"><![CDATA[
+        <h3>Version 0.9.29</h3>
+        - Design der Stopuhr nochmal verbessert<br>
+        - Reihenzähler und Projekte zählen funktioniert jetzt unter Android 4.x<br>
+        - Aus Dropbox ausloggen funktioniert jetzt<br>
+        - Verbesserte Dropbox Fehlerbehandlung<br>
+        - Nadelliste kann jetzt gefiltert werden<br>
+        - Dropbox Import / Export funktioniert wieder unter Android 4.x<br>
+        - Kategorie-Liste ist jetzt sortiert<br>
         <h3>Version 0.9.28</h3>
         - Design der Stopuhr verbessert<br>
         <h3>Version 0.9.27</h3>

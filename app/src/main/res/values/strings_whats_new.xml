@@ -2,6 +2,14 @@
 <resources>
     <string name="whats_new_title">Whats New</string>
     <string name="whats_new"><![CDATA[
+        <h3>Version 0.9.29</h3>
+        - Improved layout of stopwatch activity<br>
+        - Row counter and project count now work on Android 4.x<br>
+        - Log out from Dropbox works now<br>
+        - Improved Dropbox error handling<br>
+        - Needle list can now be filtered<br>
+        - Dropbox import / export works again on Android 4.x<br>
+        - Category list is now sorted<br>
         <h3>Version 0.9.28</h3>
         - Updated stopwatch activity<br>
         <h3>Version 0.9.27</h3>
