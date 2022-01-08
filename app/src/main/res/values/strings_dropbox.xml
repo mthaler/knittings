@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- string resources for dropbox package -->
+<resources>
+    <string name="dropbox_error">Dropbox Error</string>
+
+    <!-- Strings related to login / logout -->
+    <string name="sign_in">Sign in</string>
+    <string name="title_activity_login">Sign in</string>
+    <string name="logout">Logout</string>
+
+    <string name="dropbox_account">Account:</string>
+
+    <!-- DropboxExportActivity -->
+    <string name="activity_dropbox_export_name">Dropbox Export</string>
+    <string name="dropbox_login">Login with Dropbox</string>
+    <string name="dropbox_export">Export to Dropbox</string>
+    <string name="dropbox_export_files">Exporting files:</string>
+    <string name="dropbox_cancel_export">Cancel export</string>
+    <string name="dropbox_export_no_wifi_question">No WIFI connection, do you really want to export to Dropbox?</string>
+    <string name="dropbox_export_dialog_export_button">Export</string>
+    <string name="dropbox_export_data">Data to export:</string>
+    <string name="dropbox_export_photo_count">Photo count:</string>
+    <string name="dropbox_export_total_size">Total size:</string>
+
+    <!-- DropboxImportActivity -->
+    <string name="activity_dropbox_import_name">Dropbox Import</string>
+    <string name="dropbox_import">Import from Dropbox</string>
+    <string name="dropbox_import_title">Importing files:</string>
+    <string name="dropbox_import_completed">Dropbox import completed</string>
+
+    <string name="dropbox_export_cancel_dialog_title">Cancel Dropbox Export</string>
+    <string name="dropbox_export_cancel_dialog_message">Do you really want to cancel the dropbox export?</string>
+    <string name="dropbox_export_cancel_dialog_ok_button">Cancel export</string>
+
+    <string name="dropbox_export_cancelled_dialog_title">Dropbox export cancelled</string>
+    <string name="dropbox_export_cancelled_dialog_msg">Do you want to delete incomplete export from Dropbox?</string>
+    <string name="dropbox_export_cancelled_dialog_ok_button">Delete</string>
+
+    <string name="dropbox_import_dialog_title">Import from Dropbox</string>
+    <string name="dropbox_import_dialog_msg">Do you really want to import from Dropbox? This will delete all existing data!</string>
+    <string name="dropbox_import_dialog_incomplete_msg">Incomplete Dropbox export, %1$s photos missing. Do you really want to import it? This will delete all existing data!</string>
+    <string name="dropbox_import_dialog_button_import">Import</string>
+
+    <string name="dropbox_export_notification_channel_id" translatable="false">dropbox_export_channel</string>
+    <string name="dropbox_export_notification_channel_name">Dropbox Export Service</string>
+    <string name="dropbox_import_notification_channel_id" translatable="false">dropbox_import_channel</string>
+    <string name="dropbox_import_notification_channel_name">Dropbox Import Service</string>
+
+    <string name="dropbox_export_notification_title">Dropbox Export</string>
+    <string name="dropbox_export_notification_initial_msg">Exporting to Dropbox</string>
+    <string name="dropbox_export_notification_done_msg">Dropbox export finished</string>
+    <string name="dropbox_export_notification_cancelled_msg">Dropbox export cancelled</string>
+
+    <string name="dropbox_import_notification_title">Dropbox Import</string>
+    <string name="dropbox_import_notification_initial_msg">Importing from Dropbox</string>
+    <string name="dropbox_import_notification_done_msg">Dropbox import finished</string>
+</resources>

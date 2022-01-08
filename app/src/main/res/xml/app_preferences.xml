@@ -7,7 +7,7 @@
         android:key="category_theme"
         android:title="@string/pref_header_theme"
         app:iconSpaceReserved="false">
-        <com.mthaler.dbapp.settings.ThemePreference
+        <com.mthaler.knittings.settings.ThemePreference
             android:title="@string/pref_color_theme"
             android:defaultValue="default"
             android:key="theme"

@@ -42,4 +42,32 @@
 
     <string name="action_copy">Kopieren</string>
     <string name="action_delete">Löschen</string>
+
+    <!-- date picker -->
+    <string name="date_picker_title">Datum</string>
+    <string name="photo">Foto</string>
+
+    <!-- generic dialog strings -->
+    <string name="dialog_button_cancel">Abbrechen</string>
+    <string name="dialog_button_ok">OK</string>
+
+    <!-- delete category dialog -->
+    <string name="delete_dialog_question">%1$s wirklich löschen?</string>
+    <string name="delete_dialog_delete_button">Löschen</string>
+
+    <!-- discard changes dialog -->
+    <string name="discard_changes_dialog_question">Änderungen verwerfen?</string>
+    <string name="discard_changes_dialog_button_discard">Verwerfen</string>
+
+    <!-- save changes dialog strings -->
+    <string name="save_changes_dialog_button_save">Speichern</string>
+    <string name="save_changes_dialog_button_discard">Verwerfen</string>
+    <string name="save_changes_dialog_question">Änderungen speichern?</string>
+
+    <!-- take photo dialog -->
+    <string name="take_photo">Foto mit Kamera aufnehmen</string>
+    <string name="import_from_gallery">Bild aus Galerie importieren</string>
+
+    <!-- filter -->
+    <string name="filter_show_all">Alle</string>
 </resources>

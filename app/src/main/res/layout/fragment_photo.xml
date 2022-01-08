@@ -1,0 +1,32 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center">
+
+    <ImageView
+        android:id="@+id/image"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1000"
+        android:layout_gravity="center"
+        android:scaleType="centerInside"
+        android:contentDescription="@string/photo"/>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/photo_description_input_layout_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_marginTop="10dp">
+        <com.google.android.material.textfield.TextInputEditText android:id="@+id/photo_description"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:gravity="top"
+            android:hint="@string/photo_description_hint" />
+    </com.google.android.material.textfield.TextInputLayout>
+</LinearLayout>
+

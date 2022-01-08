@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- string resources for category package -->
+<resources>
+    <string name="activity_category_list_name">Kategorien</string>
+
+    <string name="manage_categories">Kategorien verwalten</string>
+    <string name="edit_category_select_color">Farbe auswählen</string>
+    <string name="edit_category_name_hint">Name</string>
+
+    <!-- color dialog -->
+    <string name="category_color_dialog_title">Farbe auswählen</string>
+</resources>

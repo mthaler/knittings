@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- string resources for dropbox package -->
+<resources>
+    <string name="dropbox_error">Dropbox Fehler</string>
+
+    <!-- Strings related to login / logout -->
+    <string name="sign_in">Anmelden</string>
+    <string name="title_activity_login">Anmelden</string>
+    <string name="logout">Abmelden</string>
+
+    <string name="dropbox_account">Benutzerkonto:</string>
+
+    <!-- DropboxExportActivity -->
+    <string name="activity_dropbox_export_name">Dropbox Export</string>
+    <string name="dropbox_login">An Dropbox anmelden</string>
+    <string name="dropbox_export">Nach Dropbox exportieren</string>
+    <string name="dropbox_export_files">Exportiere Dateien:</string>
+    <string name="dropbox_cancel_export">Export abbrechen</string>
+    <string name="dropbox_export_no_wifi_question">Keine WIFI Verbindung, Daten wirklich zur Dropbox exportieren?</string>
+    <string name="dropbox_export_dialog_export_button">Exportieren</string>
+    <string name="dropbox_export_data">Zu exportierende Daten:</string>
+    <string name="dropbox_export_photo_count">Anzahl Photos:</string>
+    <string name="dropbox_export_total_size">Gesamtgröße:</string>
+
+    <!-- DropboxImportActivity -->
+    <string name="activity_dropbox_import_name">Dropbox Import</string>
+    <string name="dropbox_import">Aus Dropbox importieren</string>
+    <string name="dropbox_import_title">Importiere Dateien:</string>
+    <string name="dropbox_import_completed">Dropbox Import abgeschlossen</string>
+
+    <string name="dropbox_export_cancel_dialog_title">Dropbox Export Abbrechen</string>
+    <string name="dropbox_export_cancel_dialog_message">Dropbox Export wirklich abbrechen?</string>
+    <string name="dropbox_export_cancel_dialog_ok_button">Export abbrechen</string>
+
+    <string name="dropbox_export_cancelled_dialog_title">Dropbox Export abgebrochen</string>
+    <string name="dropbox_export_cancelled_dialog_msg">Unvollständigen Dropbox-Export löschen?</string>
+    <string name="dropbox_export_cancelled_dialog_ok_button">Löschen</string>
+
+    <string name="dropbox_import_dialog_title">Aus Dropbox importieren</string>
+    <string name="dropbox_import_dialog_msg">Daten wirklich aus Dropbox importieren? Alle existierenden Daten werden gelöscht!</string>
+    <string name="dropbox_import_dialog_incomplete_msg">Unvollständiger Dropbox export, %1$s Fotos nicht gefunden. Daten wirklich aus Dropbox importieren? Alle existierenden Daten werden gelöscht!</string>
+    <string name="dropbox_import_dialog_button_import">Importieren</string>
+
+    <string name="dropbox_export_notification_channel_name">Dropbox Export Service</string>
+    <string name="dropbox_import_notification_channel_name">Dropbox Import Service</string>
+
+    <string name="dropbox_export_notification_title">Dropbox Export</string>
+    <string name="dropbox_export_notification_initial_msg">Nach Dropbox exportieren</string>
+    <string name="dropbox_export_notification_done_msg">Dropbox Export abgeschlossen</string>
+    <string name="dropbox_export_notification_cancelled_msg">Dropbox Export abgebrochen</string>
+
+    <string name="dropbox_import_notification_title">Dropbox Import</string>
+    <string name="dropbox_import_notification_initial_msg">Aus Dropbox importieren</string>
+    <string name="dropbox_import_notification_done_msg">Dropbox Import abgeschlossen</string>
+</resources>

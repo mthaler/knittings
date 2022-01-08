@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="activity_project_count">Projekte Zählen</string>
+    <string name="project_count_year">Jahr:</string>
+    <string name="project_count_category">Kategorie:</string>
+</resources>

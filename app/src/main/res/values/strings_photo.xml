@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- string resources for photo package -->
+<resources>
+    <string name="activity_photo_gallery">Photos</string>
+    <!-- photo details -->
+    <string name="photo_description_hint">Description</string>
+    <string name="delete_photo">Delete photo</string>
+    <string name="set_main_photo">Use as preview</string>
+    <string name="rotate_photo">Rotate</string>
+    <string name="share_photo">Share</string>
+    <string name="set_preview">Set as preview</string>
+</resources>

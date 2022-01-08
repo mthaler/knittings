@@ -25,7 +25,8 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".MainActivity"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -40,7 +41,7 @@
                 android:value=".MainActivity" />
         </activity> <!-- we define our own toolbar in MainActivity, use theme without toolbar -->
         <activity
-            android:name="com.mthaler.dbapp.photo.PhotoGalleryActivity"
+            android:name=".photo.PhotoGalleryActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -49,7 +50,8 @@
         <activity
             android:name="com.dropbox.core.android.AuthActivity"
             android:configChanges="orientation|keyboard"
-            android:launchMode="singleTask">
+            android:exported="true"
+            >
             <intent-filter>
 
                 <!-- Insert your app key after “db-  ...” -->
@@ -62,14 +64,14 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.mthaler.dbapp.dropbox.DropboxExportActivity"
+            android:name=".dropbox.DropboxExportActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
         </activity>
         <activity
-            android:name="com.mthaler.dbapp.dropbox.DropboxImportActivity"
+            android:name=".dropbox.DropboxImportActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -83,21 +85,21 @@
                 android:value=".details.KnittingDetailsActivity" />
         </activity>
         <activity
-            android:name="com.mthaler.dbapp.category.CategoryListActivity"
+            android:name=".category.CategoryListActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
         </activity>
         <activity
-            android:name="com.mthaler.dbapp.category.SelectCategoryActivity"
+            android:name=".category.SelectCategoryActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".details.KnittingDetailsActivity" />
         </activity>
         <activity
-            android:name="com.mthaler.dbapp.projectcount.ProjectCountActivity"
+            android:name=".projectcount.ProjectCountActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -142,11 +144,11 @@
         </provider>
 
         <service
-            android:name="com.mthaler.dbapp.dropbox.DropboxExportService"
+            android:name=".dropbox.DropboxExportService"
             android:enabled="true"
             android:exported="false" />
         <service
-            android:name="com.mthaler.dbapp.dropbox.DropboxImportService"
+            android:name=".dropbox.DropboxImportService"
             android:enabled="true"
             android:exported="false" />
         <service

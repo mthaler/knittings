@@ -41,4 +41,30 @@
 
     <string name="action_copy">Copy</string>
     <string name="action_delete">Delete</string>
+    <!-- date picker -->
+    <string name="date_picker_title">Date</string>
+    <string name="photo">Photo</string>
+
+    <!-- generic dialog strings -->
+    <string name="dialog_button_cancel">Cancel</string>
+    <string name="dialog_button_ok">OK</string>
+e dialog strings -->
+    <string name="delete_dialog_question">Do you really want to delete %1$s?</string>
+    <string name="delete_dialog_delete_button">Delete</string>
+
+    <!-- discard changes dialog -->
+    <string name="discard_changes_dialog_question">Discard changes?</string>
+    <string name="discard_changes_dialog_button_discard">Discard</string>
+
+    <!-- save changes dialog strings -->
+    <string name="save_changes_dialog_question">Save changes?</string>
+    <string name="save_changes_dialog_button_save">Save</string>
+    <string name="save_changes_dialog_button_discard">Discard</string>
+
+    <!-- take photo dialog -->
+    <string name="take_photo">Take photo</string>
+    <string name="import_from_gallery">Import from gallery</string>
+
+    <!-- filter -->
+    <string name="filter_show_all">All</string>
 </resources>
