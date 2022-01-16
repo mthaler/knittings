@@ -48,7 +48,7 @@
     <!-- generic dialog strings -->
     <string name="dialog_button_cancel">Cancel</string>
     <string name="dialog_button_ok">OK</string>
-e dialog strings -->
+    e dialog strings -->
     <string name="delete_dialog_question">Do you really want to delete %1$s?</string>
     <string name="delete_dialog_delete_button">Delete</string>
 
@@ -67,4 +67,8 @@ e dialog strings -->
 
     <!-- filter -->
     <string name="filter_show_all">All</string>
+
+    <string name="colorpicker_dialog_title">Choose the color</string>
+    <string name="colorpicker_dialog_cancel">CANCEL</string>
+    <string name="colorpicker_dialog_ok">OK</string>
 </resources>

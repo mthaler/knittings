@@ -37,7 +37,7 @@ class PhotoGalleryFragment : Fragment() {
         }
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
 
         setHasOptionsMenu(true)
 
@@ -74,11 +74,10 @@ class PhotoGalleryFragment : Fragment() {
         val columns = if (orientation == Configuration.ORIENTATION_PORTRAIT) 2 else 3
         view?.let {
             val gridLayoutManager = GridLayoutManager(requireContext(), columns)
-            /*binding.gridView.layoutManager = gridLayoutManager
-            binding.gridView.adapter = photoGalleryAdapter*/
+            binding.gridView.layoutManager = gridLayoutManager
+            binding.gridView.adapter = photoGalleryAdapter
         }
-        val viewModel = ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory.getInstance(requireActivity().application)).get(
-            PhotoGalleryViewModel::class.java)
+        val viewModel = ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory.getInstance(requireActivity().application)).get(PhotoGalleryViewModel::class.java)
         viewModel.init(ownerID)
         viewModel.photos.observe(viewLifecycleOwner, { photos ->
             // show the newest photos first. The id is incremented for each photo that is added, thus we can sort by id
@@ -96,14 +95,7 @@ class PhotoGalleryFragment : Fragment() {
         return when (item.itemId) {
             R.id.menu_item_add_photo -> {
                 val ctx = requireContext()
-                val d = TakePhotoDialog.create(
-                    ctx,
-                    (ctx.applicationContext as DatabaseApplication<*>).getApplicationSettings()
-                        .getFileProviderAuthority(),
-                    layoutInflater,
-                    this::takePhoto,
-                    this::importPhoto
-                )
+                val d = TakePhotoDialog.create(ctx, (ctx.applicationContext as DatabaseApplication<*>).getApplicationSettings().getFileProviderAuthority(), layoutInflater, this::takePhoto, this::importPhoto)
                 d.show()
                 true
             }
@@ -119,9 +111,8 @@ class PhotoGalleryFragment : Fragment() {
             REQUEST_IMAGE_CAPTURE -> {
                 currentPhotoPath?.let {
                     viewLifecycleOwner.lifecycleScope.launch {
-                        /*withContext(Dispatchers.IO) {
-                            TakePhotoDialog.handleTakePhotoResult(requireContext(), ownerID, it)
-                        }*/
+                        withContext(Dispatchers.IO) {
+                            TakePhotoDialog.handleTakePhotoResult(requireContext(), ownerID, it) }
                     }
                 }
             }
@@ -129,14 +120,9 @@ class PhotoGalleryFragment : Fragment() {
                 val f = currentPhotoPath
                 if (f != null && data != null) {
                     viewLifecycleOwner.lifecycleScope.launch {
-                        /*withContext(Dispatchers.IO) {
-                            TakePhotoDialog.handleImageImportResult(
-                                requireContext(),
-                                ownerID,
-                                f,
-                                data
-                            )
-                        }*/
+                        withContext(Dispatchers.IO) {
+                            TakePhotoDialog.handleImageImportResult(requireContext(), ownerID, f, data)
+                        }
                     }
                 }
             }
@@ -177,11 +163,11 @@ class PhotoGalleryFragment : Fragment() {
 
         @JvmStatic
         fun newInstance(ownerID: Long) =
-                PhotoGalleryFragment().apply {
-                    arguments = Bundle().apply {
-                        putLong(EXTRA_OWNER_ID, ownerID)
-                    }
+            PhotoGalleryFragment().apply {
+                arguments = Bundle().apply {
+                    putLong(EXTRA_OWNER_ID, ownerID)
                 }
+            }
 
         const val CURRENT_PHOTO_PATH = "com.mthaler.dbapp.CURRENT_PHOTO_PATH"
         const val REQUEST_IMAGE_CAPTURE = 0

@@ -34,4 +34,31 @@
     <color name="skyButtonNormal">#03a9f4</color>
     <color name="skyButtonHighlight">#9FD9F3</color>
     <color name="skyButtonText">#FFFFFF</color>
+
+    <!-- Default Colors !-->
+
+    <color name="color1">#2062af</color>
+    <color name="color2">#58AEB7</color>
+    <color name="color3">#F4B528</color>
+    <color name="color4">#DD3E48</color>
+    <color name="color5">#BF89AE</color>
+
+    <color name="color6">#5C88BE</color>
+    <color name="color7">#59BC10</color>
+    <color name="color8">#E87034</color>
+    <color name="color9">#f84c44</color>
+    <color name="color10">#8c47fb</color>
+
+    <color name="color11">#51C1EE</color>
+    <color name="color12">#8cc453</color>
+    <color name="color13">#C2987D</color>
+    <color name="color14">#CE7777</color>
+    <color name="color15">#9086BA</color>
+
+    <color name="lite_blue">#42a5f5</color>
+    <color name="window_background">#00000000</color>
+    <color name="black_de">#000000</color>
+
+    <color name="dropbox_blue">#0061FF</color>
+    <color name="dropbox_blue_dark">#003FA5</color>
 </resources>

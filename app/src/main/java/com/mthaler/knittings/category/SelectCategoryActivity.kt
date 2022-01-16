@@ -5,13 +5,15 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
+import com.mthaler.knittings.BaseActivity
 import com.mthaler.knittings.R
 import com.mthaler.knittings.database.Extras
 import com.mthaler.knittings.database.Extras.EXTRA_OWNER_ID
 import com.mthaler.knittings.databinding.ActivitySelectCategoryBinding
 import com.mthaler.knittings.model.Category
 
-class SelectCategoryActivity : com.mthaler.knittings.BaseActivity(), OnFragmentInteractionListener {
+
+class SelectCategoryActivity : BaseActivity(), CategoryListFragment.OnFragmentInteractionListener, EditCategoryFragment.OnFragmentInteractionListener {
 
     private var ownerID = -1L
 
@@ -79,6 +81,20 @@ class SelectCategoryActivity : com.mthaler.knittings.BaseActivity(), OnFragmentI
         else -> super.onOptionsItemSelected(item)
     }
 
+    override fun createCategory() {
+        val f = EditCategoryFragment.newInstance(Category.EMPTY.id)
+        val ft =  supportFragmentManager.beginTransaction()
+        ft.replace(R.id.select_category_container, f)
+        ft.commit()
+    }
+
+    override fun categoryClicked(categoryID: Long) {
+        val i = Intent()
+        i.putExtra(Extras.EXTRA_CATEGORY_ID, categoryID)
+        setResult(Activity.RESULT_OK, i)
+        finish()
+    }
+
     override fun categorySaved(categoryID: Long) {
         if (categoryID == Category.EMPTY.id) {
             finish()
@@ -93,7 +109,6 @@ class SelectCategoryActivity : com.mthaler.knittings.BaseActivity(), OnFragmentI
 
     companion object {
 
-        @JvmStatic
         fun newIntent(context: Context, ownerID: Long): Intent {
             val intent = Intent(context, SelectCategoryActivity::class.java)
             intent.putExtra(EXTRA_OWNER_ID, ownerID)

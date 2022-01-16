@@ -15,6 +15,7 @@ import android.widget.Button
 import androidx.core.content.FileProvider
 import com.mthaler.knittings.R
 import com.mthaler.knittings.model.Photo
+import com.mthaler.knittings.utils.PictureUtils
 import java.io.File
 
 object TakePhotoDialog {
@@ -100,9 +101,9 @@ object TakePhotoDialog {
                 error("Could not delete $compressed")
             }
         }
-        val orientation = com.mthaler.knittings.utils.PictureUtils.getOrientation(Uri.fromFile(file), context)
-        val preview = com.mthaler.knittings.utils.PictureUtils.decodeSampledBitmapFromPath(file.absolutePath, 200, 200)
-        val rotatedPreview = com.mthaler.knittings.utils.PictureUtils.rotateBitmap(preview, orientation)
+        val orientation = PictureUtils.getOrientation(Uri.fromFile(file), context)
+        val preview = PictureUtils.decodeSampledBitmapFromPath(file.absolutePath, 200, 200)
+        val rotatedPreview = PictureUtils.rotateBitmap(preview, orientation)
         val ds = (context.applicationContext as com.mthaler.knittings.DatabaseApplication<*>).getPhotoDataSource()
         val photo = ds.addPhoto(Photo(-1, file, ownerID, "", rotatedPreview))
         Log.d(TAG, "Created new photo from $file, owner id $ownerID")
@@ -121,8 +122,8 @@ object TakePhotoDialog {
      */
     suspend fun handleImageImportResult(context: Context, ownerID: Long, file: File, data: Intent) {
         val imageUri = data.data
-        com.mthaler.knittings.utils.PictureUtils.copy(imageUri!!, file, context)
-        val compressed = com.mthaler.knittings.utils.PictureUtils.compress(context, file)
+        PictureUtils.copy(imageUri!!, file, context)
+        val compressed = PictureUtils.compress(context, file)
         if (compressed.length() < file.length()) {
             if (!file.delete()) {
                 error("Could not delete $file")
@@ -136,9 +137,9 @@ object TakePhotoDialog {
                 error("Could not delete $compressed")
             }
         }
-        val orientation = com.mthaler.knittings.utils.PictureUtils.getOrientation(Uri.fromFile(file), context)
-        val preview = com.mthaler.knittings.utils.PictureUtils.decodeSampledBitmapFromPath(file.absolutePath, 200, 200)
-        val rotatedPreview = com.mthaler.knittings.utils.PictureUtils.rotateBitmap(preview, orientation)
+        val orientation = PictureUtils.getOrientation(Uri.fromFile(file), context)
+        val preview = PictureUtils.decodeSampledBitmapFromPath(file.absolutePath, 200, 200)
+        val rotatedPreview = PictureUtils.rotateBitmap(preview, orientation)
         val ds = (context.applicationContext as com.mthaler.knittings.DatabaseApplication<*>).getPhotoDataSource()
         val photo = ds.addPhoto(Photo(-1, file, ownerID, "", rotatedPreview))
         Log.d(TAG, "Created new photo from $file, owner id $ownerID")

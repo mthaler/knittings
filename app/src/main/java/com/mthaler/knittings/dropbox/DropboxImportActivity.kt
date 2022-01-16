@@ -10,11 +10,11 @@ import com.mthaler.knittings.R
 import com.mthaler.knittings.databinding.ActivityDropboxImportBinding
 import com.mthaler.knittings.service.JobStatus
 
+
 class DropboxImportActivity : AbstractDropboxActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
 
         val binding = ActivityDropboxImportBinding.inflate(layoutInflater)
         setContentView(binding.root)

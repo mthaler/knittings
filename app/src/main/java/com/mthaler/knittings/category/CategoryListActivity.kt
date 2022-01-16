@@ -10,7 +10,7 @@ import com.mthaler.knittings.R
 import com.mthaler.knittings.databinding.ActivityCategoryListBinding
 import com.mthaler.knittings.model.Category
 
-class CategoryListActivity : BaseActivity(), OnFragmentInteractionListener {
+class CategoryListActivity : BaseActivity(), CategoryListFragment.OnFragmentInteractionListener, EditCategoryFragment.OnFragmentInteractionListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,7 +50,17 @@ class CategoryListActivity : BaseActivity(), OnFragmentInteractionListener {
         else -> super.onOptionsItemSelected(item)
     }
 
-    fun createCategory(): Unit {
+    override fun onBackPressed() {
+        val fm = supportFragmentManager
+        val f = fm.findFragmentById(R.id.category_list_container)
+        if (f is EditCategoryFragment) {
+            f.onBackPressed { fm.popBackStack() }
+        } else {
+            super.onBackPressed()
+        }
+    }
+
+    override fun createCategory() {
         val f = EditCategoryFragment.newInstance(Category.EMPTY.id)
         val ft = supportFragmentManager.beginTransaction()
         ft.replace(R.id.category_list_container, f)
@@ -58,7 +68,7 @@ class CategoryListActivity : BaseActivity(), OnFragmentInteractionListener {
         ft.commit()
     }
 
-    fun categoryClicked(categoryID: Long): Unit {
+    override fun categoryClicked(categoryID: Long) {
         val f = EditCategoryFragment.newInstance(categoryID)
         val ft = supportFragmentManager.beginTransaction()
         ft.replace(R.id.category_list_container, f)
@@ -66,7 +76,7 @@ class CategoryListActivity : BaseActivity(), OnFragmentInteractionListener {
         ft.commit()
     }
 
-    override  fun categorySaved(categoryID: Long) {
+    override fun categorySaved(categoryID: Long) {
         supportFragmentManager.popBackStack()
     }
 

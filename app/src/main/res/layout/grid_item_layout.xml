@@ -7,4 +7,25 @@
     android:focusable="true"
     android:foreground="?android:attr/selectableItemBackground">
 
+    <com.mthaler.knittings.ui.SquareImageView
+        android:id="@+id/image"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scaleType="centerCrop"
+        android:contentDescription="@string/photo"
+        android:clickable="false" />
+
+    <TextView
+        android:id="@+id/text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_gravity="bottom"
+        android:gravity="center"
+        android:textColor="@android:color/white"
+        android:textSize="12sp"
+        android:background="#55000000"
+        android:visibility="invisible"
+        android:clickable="false" />
+
 </FrameLayout>

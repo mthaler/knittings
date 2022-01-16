@@ -65,7 +65,7 @@ class EditKnittingDetailsFragment : Fragment() {
         }
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
 
         setHasOptionsMenu(true)
 
@@ -228,7 +228,7 @@ class EditKnittingDetailsFragment : Fragment() {
                         if (editOnly) {
                             NavUtils.navigateUpTo(it, upIntent)
                         } else {
-                           parentFragmentManager.popBackStack()
+                            parentFragmentManager.popBackStack()
                         }
                     }, {
                         if (editOnly) {
@@ -251,7 +251,7 @@ class EditKnittingDetailsFragment : Fragment() {
     private fun createKnitting(): Knitting {
         val status = Status.values()[binding.knittingStatus.selectedItemPosition]
         return Knitting(knittingID, binding.knittingTitle.text.toString(), binding.knittingDescription.text.toString(), started, finished, binding.knittingNeedleDiameter.text.toString(),
-        binding.knittingSize.text.toString(), null, binding.ratingBar.rating.toDouble(), duration, category, status)
+            binding.knittingSize.text.toString(), null, binding.ratingBar.rating.toDouble(), duration, category, status)
     }
 
     private fun saveKnitting(knitting: Knitting) {

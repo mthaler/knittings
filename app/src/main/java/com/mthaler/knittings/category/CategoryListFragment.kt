@@ -1,5 +1,6 @@
 package com.mthaler.knittings.category
 
+import android.content.Context
 import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
@@ -17,6 +18,7 @@ class CategoryListFragment : Fragment() {
 
     private var _binding: FragmentCategoryListBinding? = null
     private val binding get() = _binding!!
+    private var listener: OnFragmentInteractionListener? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,11 +26,11 @@ class CategoryListFragment : Fragment() {
         retainInstance = true
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentCategoryListBinding.inflate(inflater, container, false)
         val view = binding.root
 
-        binding.fabCreateCategory.setOnClickListener { createCategory() }
+        binding.fabCreateCategory.setOnClickListener { listener?.createCategory() }
 
         val appSettings = (requireContext().applicationContext as DatabaseApplication<*>).getApplicationSettings()
         val emptyListBackground = appSettings.emptyCategoryListBackground()
@@ -54,29 +56,24 @@ class CategoryListFragment : Fragment() {
 
         val ds = (requireContext().applicationContext as DatabaseApplication<*>).getCategoryDataSource()
 
-        val layoutManager = LinearLayoutManager(context)
-        val id = layoutManager.findFirstVisibleItemPosition().toLong()
-        val category = ds.getCategory(id)
+        binding.categoryRecyclerView.layoutManager = LinearLayoutManager(context)
+        val adapter = CategoryAdapter({ category -> listener?.categoryClicked(category.id) }, { category ->
+            (activity as AppCompatActivity).startSupportActionMode(object : ActionMode.Callback {
 
-        binding.categoryRecyclerView.layoutManager = layoutManager
-
-        val adapter = CategoryAdapter({ view -> categoryClicked(category!!.id) }, { view ->
-            val a = (requireActivity() as AppCompatActivity)
-            a.startSupportActionMode(object : ActionMode.Callback {
                 override fun onActionItemClicked(mode: ActionMode?, menu: MenuItem?): Boolean {
                     when (menu?.itemId) {
                         R.id.action_delete -> {
                             this@CategoryListFragment.activity?.let {
-                                DeleteDialog.create(it, category!!.name) {
-                                    ds.deleteCategory(category!!)
+                                DeleteDialog.create(it, category.name) {
+                                    ds.deleteCategory(category)
                                 }.show()
                             }
                             mode?.finish()
                             return true
                         }
                         R.id.action_copy -> {
-                            val newName = "${category!!.name} - ${getString(R.string.copy)}"
-                            val categoryCopy = category!!.copy(name = newName)
+                            val newName = "${category.name} - ${getString(R.string.copy)}"
+                            val categoryCopy = category.copy(name = newName)
                             ds.addCategory(categoryCopy)
                             mode?.finish()
                             return true
@@ -98,12 +95,10 @@ class CategoryListFragment : Fragment() {
                 override fun onDestroyActionMode(mode: ActionMode?) {
                 }
             })
-            false
         })
         binding.categoryRecyclerView.adapter = adapter
 
-        val viewModel = ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory.getInstance(requireActivity().application)).get(
-            CategoryListViewModel::class.java)
+        val viewModel = ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory.getInstance(requireActivity().application)).get(CategoryListViewModel::class.java)
         viewModel.categories.observe(viewLifecycleOwner, { categories ->
             // show image if category list is empty
             if (categories.isEmpty()) {
@@ -119,22 +114,26 @@ class CategoryListFragment : Fragment() {
         })
     }
 
-    fun createCategory() {
-        val f = EditCategoryFragment.newInstance(Category.EMPTY.id)
-        val ft = this.requireActivity().supportFragmentManager.beginTransaction()
-        ft.replace(R.id.category_list_container, f)
-        ft.addToBackStack(null)
-        ft.commit()
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        if (context is OnFragmentInteractionListener) {
+            listener = context
+        } else {
+            throw RuntimeException("$context must implement OnFragmentInteractionListener")
+        }
     }
 
-    fun categoryClicked(categoryID: Long) {
-        val f = EditCategoryFragment.newInstance(categoryID)
-        val ft = this.requireActivity().supportFragmentManager.beginTransaction()
-        ft.replace(R.id.category_list_container, f)
-        ft.addToBackStack(null)
-        ft.commit()
+    override fun onDetach() {
+        super.onDetach()
+        listener = null
     }
 
+    interface OnFragmentInteractionListener {
+
+        fun createCategory()
+
+        fun categoryClicked(categoryID: Long)
+    }
 
     companion object {
 

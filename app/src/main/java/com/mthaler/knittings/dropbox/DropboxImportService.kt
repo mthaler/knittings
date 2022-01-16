@@ -1,5 +1,7 @@
 package com.mthaler.knittings.dropbox
 
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.app.PendingIntent
 import android.app.Service
 import android.content.Context
@@ -22,12 +24,20 @@ class DropboxImportService : Service() {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         DropboxImportServiceManager.getInstance().updateServiceStatus(ServiceStatus.Started)
-        val channelID = getString(R.string.dropbox_import_notification_channel_id)
-        com.mthaler.knittings.utils.createNotificationChannel(
-            this,
-            channelID,
-            getString(R.string.dropbox_import_notification_channel_name)
-        )
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val channelID = getString(R.string.dropbox_import_notification_channel_id)
+            val name = getString(R.string.dropbox_import_notification_channel_name)
+            val importance = NotificationManager.IMPORTANCE_DEFAULT
+
+            val channel = NotificationChannel(channelID, name, importance).apply {
+                description = ""
+            }
+
+            // Creating the Channel
+            val notificationManager: NotificationManager =
+                getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            notificationManager.createNotificationChannel(channel)
+        }
 
         val directory = intent?.getStringExtra(EXTRA_DIRECTORY)!!
         val database = intent?.getParcelableExtra<ExportDatabase<Project>>(EXTRA_DATABASE)
@@ -46,11 +56,11 @@ class DropboxImportService : Service() {
                 withContext(Dispatchers.IO) {
                     if (directory != null) {
                         val wakeLock: PowerManager.WakeLock =
-                                (getSystemService(Context.POWER_SERVICE) as PowerManager).run {
-                                    newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "Knittings::DropboxImport").apply {
-                                        acquire()
-                                    }
+                            (getSystemService(Context.POWER_SERVICE) as PowerManager).run {
+                                newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "Knittings::DropboxImport").apply {
+                                    acquire()
                                 }
+                            }
                         try {
                             downloadPhotos(database!!, directory!!, pendingIntent)
                         } finally {
@@ -81,8 +91,7 @@ class DropboxImportService : Service() {
         val builder = createNotificationBuilder(pendingIntent, getString(R.string.dropbox_import_notification_initial_msg))
         val notificationManager = NotificationManagerCompat.from(this)
         val sm = DropboxImportServiceManager.getInstance()
-        val dbxClient =
-            DropboxClientFactory.getClient()
+        val dbxClient = DropboxClientFactory.getClient()
         database.write(dbxClient, directory) { progress ->
             builder.setProgress(100, progress, false)
             notificationManager.notify(1, builder.build())

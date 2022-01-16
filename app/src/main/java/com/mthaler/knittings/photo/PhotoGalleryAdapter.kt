@@ -1,7 +1,8 @@
 package com.mthaler.knittings.photo
 
 import android.content.Context
-import android.media.Image
+import android.net.Uri
+import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,11 +13,12 @@ import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.RecyclerView
 import com.mthaler.knittings.R
-import com.mthaler.knittings.databinding.GridItemLayoutBinding
 import com.mthaler.knittings.model.Photo
+import com.mthaler.knittings.utils.PictureUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.util.logging.Handler
+import kotlinx.coroutines.withContext
+import java.io.File
 
 class PhotoGalleryAdapter(context: Context, private val lifecycleScope: LifecycleCoroutineScope, private val onItemClick: (Photo) -> Unit) : RecyclerView.Adapter<PhotoGalleryAdapter.ViewHolder>() {
 
@@ -33,26 +35,29 @@ class PhotoGalleryAdapter(context: Context, private val lifecycleScope: Lifecycl
     override fun getItemCount(): Int = photos.size
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val binding = GridItemLayoutBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return ViewHolder(binding)
+        val v = LayoutInflater.from(parent.context).inflate(R.layout.grid_item_layout, parent, false)
+        return ViewHolder(v)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(photos[position])
     }
 
-    inner class ViewHolder(val binding: GridItemLayoutBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+
+        var title: TextView = view.findViewById(R.id.text)
+        var image: ImageView = view.findViewById(R.id.image)
 
         init {
-            binding.root.setOnClickListener { v -> onItemClick(photos[adapterPosition]) }
+            view.setOnClickListener { v -> onItemClick(photos[adapterPosition]) }
         }
 
         fun bind(photo: Photo) {
-            //binding.text.visibility = View.INVISIBLE
-            //updateImageView(binding.image, binding.text, photo, 50)
+            title.visibility = View.INVISIBLE
+            updateImageView(image, title, photo, 50)
         }
 
-        private fun updateImageView(imageView: ImageView, titleView: TextView, photo: Photo, delayMillis: Long, context: Context) {
+        private fun updateImageView(imageView: ImageView, titleView: TextView, photo: Photo, delayMillis: Long) {
             if (delayMillis < 5000) {
                 val viewTreeObserver = imageView.viewTreeObserver
                 viewTreeObserver.addOnPreDrawListener(object : ViewTreeObserver.OnPreDrawListener {
@@ -62,16 +67,15 @@ class PhotoGalleryAdapter(context: Context, private val lifecycleScope: Lifecycl
                         val height = imageView.measuredHeight
                         if (width > 0 && height > 0) {
                             val filename = photo.filename.absolutePath
-                            /*lifecycleScope.launch {
+                            lifecycleScope.launch {
                                 val result = withContext(Dispatchers.Default) {
                                     val file = File(filename)
                                     if (file.exists()) {
                                         val imageSize = if (displayPhotoSize) File(filename).length() else 0L
-                                        val orientation = PictureUtils.getOrientation(Uri.fromFile(File(filename)), context)
+                                        val orientation = PictureUtils.getOrientation(Uri.parse(filename), imageView.context)
                                         val photo = PictureUtils.decodeSampledBitmapFromPath(filename, width, height)
                                         val rotatedPhoto = PictureUtils.rotateBitmap(photo, orientation)
                                         Pair(imageSize, rotatedPhoto)
-
                                     } else {
                                         null
                                     }
@@ -96,12 +100,12 @@ class PhotoGalleryAdapter(context: Context, private val lifecycleScope: Lifecycl
                                 } else {
                                     imageView.setImageResource(R.drawable.ic_insert_photo_black_48dp)
                                 }
-                            }*/
+                            }
                         } else {
-                            /*val handler = Handler()
+                            val handler = Handler()
                             handler.postDelayed({
-                                updateImageView(imageView, titleView, photo, delayMillis * 2, context)
-                            }, delayMillis)*/
+                                updateImageView(imageView, titleView, photo, delayMillis * 2)
+                            }, delayMillis)
                         }
                         return true
                     }

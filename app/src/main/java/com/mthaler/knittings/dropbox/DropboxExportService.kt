@@ -1,5 +1,7 @@
 package com.mthaler.knittings.dropbox
 
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.app.PendingIntent
 import android.app.Service
 import android.content.Context
@@ -7,11 +9,13 @@ import android.content.Intent
 import android.os.Build
 import android.os.IBinder
 import android.os.PowerManager
+import androidx.core.app.NotificationChannelCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import com.dropbox.core.v2.DbxClientV2
 import com.dropbox.core.v2.files.WriteMode
+import com.mthaler.knittings.DatabaseApplication
 import com.mthaler.knittings.R
 import com.mthaler.knittings.model.ExportDatabase
 import com.mthaler.knittings.model.Photo
@@ -30,12 +34,20 @@ import java.util.*
 class DropboxExportService : Service() {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        val channelID = getString(R.string.dropbox_export_notification_channel_id)
-        com.mthaler.knittings.utils.createNotificationChannel(
-            this,
-            channelID,
-            getString(R.string.dropbox_export_notification_channel_name)
-        )
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val channelID = getString(R.string.dropbox_export_notification_channel_id)
+            val name = getString(R.string.dropbox_export_notification_channel_name)
+            val importance = NotificationManager.IMPORTANCE_DEFAULT
+
+            val channel = NotificationChannel(channelID, name, importance).apply {
+                description = ""
+            }
+
+            // Creating the Channel
+            val notificationManager: NotificationManager =
+                getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            notificationManager.createNotificationChannel(channel)
+        }
 
         val intent = Intent(this, DropboxExportActivity::class.java).apply {
             this.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
@@ -73,13 +85,12 @@ class DropboxExportService : Service() {
 
     private fun upload(dir: String, pendingIntent: PendingIntent): Boolean {
         val builder = createNotificationBuilder(pendingIntent, getString(R.string.dropbox_export_notification_initial_msg))
-        val dbxClient =
-            DropboxClientFactory.getClient()
+        val dbxClient = DropboxClientFactory.getClient()
         val notificationManager = NotificationManagerCompat.from(this)
         val sm = DropboxExportServiceManager.getInstance()
         // create directory containing current date & time
         dbxClient.files().createFolderV2("/$dir")
-        val database = (applicationContext as com.mthaler.knittings.DatabaseApplication<Project>).createExportDatabase().checkDatabase()
+        val database = (applicationContext as DatabaseApplication<Project>).createExportDatabase().checkDatabase()
         uploadDatabase(dbxClient, dir, database)
         // upload photos to dropbox
         val count = database.photos.size

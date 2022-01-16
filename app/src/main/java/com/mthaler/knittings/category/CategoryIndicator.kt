@@ -6,6 +6,7 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.util.AttributeSet
 import android.view.View
+import com.mthaler.knittings.R
 
 /**
  * CategoryIndicator is used to display the category of a knitting in the knitting list
@@ -38,9 +39,9 @@ class CategoryIndicator(context: Context?, attrs: AttributeSet?) : View(context,
      * Handles the attributes passed if the color swatch is instantiated from XML
      */
     private fun setupAttributes(attrs: AttributeSet?) {
-        /*val typedArray = context.theme.obtainStyledAttributes(attrs, R.styleable.ColorSwatch, 0, 0)
+        val typedArray = context.theme.obtainStyledAttributes(attrs, R.styleable.ColorSwatch, 0, 0)
         color = typedArray.getColor(R.styleable.ColorSwatch_color, DEFAULT_COLOR)
-        typedArray.recycle()*/
+        typedArray.recycle()
     }
 
     override fun onDraw(canvas: Canvas) {

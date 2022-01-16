@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.mthaler.knittings" android:requestLegacyExternalStorage="true">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.mthaler.knittings"
+    android:requestLegacyExternalStorage="true">
 
     <uses-feature
         android:name="android.hardware.camera"
@@ -17,16 +19,19 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
-        android:name="com.mthaler.knittings.MyApplication"
+        android:name=".MyApplication"
         android:allowBackup="false"
         android:icon="@mipmap/ic_knittings"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
+            android:name=".dropbox.MainActivity2"
+            android:exported="false" />
+        <activity
             android:name=".MainActivity"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:exported="true">
+            android:exported="true"
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -50,8 +55,7 @@
         <activity
             android:name="com.dropbox.core.android.AuthActivity"
             android:configChanges="orientation|keyboard"
-            android:exported="true"
-            >
+            android:exported="true">
             <intent-filter>
 
                 <!-- Insert your app key after “db-  ...” -->
@@ -126,7 +130,8 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
         </activity>
-        <activity android:name=".rowcounter.RowCounterActivity"
+        <activity
+            android:name=".rowcounter.RowCounterActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

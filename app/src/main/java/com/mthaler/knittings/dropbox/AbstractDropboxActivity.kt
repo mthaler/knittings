@@ -1,16 +1,18 @@
 package com.mthaler.knittings.dropbox
 
 import android.app.AlertDialog
+import androidx.lifecycle.lifecycleScope
 import androidx.preference.PreferenceManager
 import com.dropbox.core.android.AuthActivity
 import com.google.android.material.snackbar.Snackbar
 import com.mthaler.knittings.BaseActivity
 import com.mthaler.knittings.R
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-abstract class AbstractDropboxActivity : BaseActivity(),
-    AbstractDropboxFragment.OnFragmentInteractionListener {
+
+abstract class AbstractDropboxActivity : BaseActivity(), AbstractDropboxFragment.OnFragmentInteractionListener {
 
     protected fun logout() {
         val builder = AlertDialog.Builder(this)
@@ -18,12 +20,11 @@ abstract class AbstractDropboxActivity : BaseActivity(),
             setTitle("Dropbox")
             setMessage("Do you want to log out of Dropbox?")
             setPositiveButton("OK") { dialog, which ->
-                /*lifecycleScope.launch {
+                lifecycleScope.launch {
                     withContext(Dispatchers.IO) {
                         try {
                             // remove auth token from Dropbox server
-                            DropboxClientFactory.getClient()
-                                .auth().tokenRevoke()
+                            DropboxClientFactory.getClient().auth().tokenRevoke()
                         } catch (ex: Exception) {
                         }
                     }
@@ -33,7 +34,7 @@ abstract class AbstractDropboxActivity : BaseActivity(),
                     // replace the Dropbox export fragment with a new one
                     updateFragment()
                     Snackbar.make(window.decorView.rootView, "Logged out of Dropbox", Snackbar.LENGTH_LONG).show()
-                }*/
+                }
             }
             show()
         }

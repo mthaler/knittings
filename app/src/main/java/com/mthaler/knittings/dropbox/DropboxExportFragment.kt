@@ -8,15 +8,20 @@ import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.dropbox.core.android.Auth
+import com.dropbox.core.v2.users.Account
 import com.dropbox.core.v2.users.FullAccount
 import com.dropbox.core.v2.users.SpaceUsage
+import com.mthaler.knittings.DatabaseApplication
 import com.mthaler.knittings.R
 import com.mthaler.knittings.databinding.FragmentDropboxExportBinding
 import com.mthaler.knittings.model.Project
 import com.mthaler.knittings.service.JobStatus
 import com.mthaler.knittings.service.ServiceStatus
+import com.mthaler.knittings.utils.Format
+import com.mthaler.knittings.utils.NetworkUtils
 import com.mthaler.knittings.utils.StringUtils.formatBytes
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class DropboxExportFragment : AbstractDropboxFragment() {
@@ -27,23 +32,22 @@ class DropboxExportFragment : AbstractDropboxFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         // Retain this fragment across configuration changes.
-        // retainInstance = true
+        retainInstance = true
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        //_binding = FragmentDropboxExportBinding.inflate(inflater, container, false)
-        //  return binding.root
-        return null
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        _binding = FragmentDropboxExportBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         // this opens a web browser where the user can log in
-        binding.loginButton.setOnClickListener { Auth.startOAuth2Authentication(context, (requireContext().applicationContext as com.mthaler.knittings.DatabaseApplication<Project>).dropboxAppKey) }
+        binding.loginButton.setOnClickListener { Auth.startOAuth2Authentication(context, (requireContext().applicationContext as DatabaseApplication<Project>).dropboxAppKey) }
 
         binding.exportButton.setOnClickListener {
-            /*val isWiFi = NetworkUtils.isWifiConnected(requireContext())
+            val isWiFi = NetworkUtils.isWifiConnected(requireContext())
             if (!isWiFi) {
                 val builder = AlertDialog.Builder(requireContext())
                 with(builder) {
@@ -59,7 +63,7 @@ class DropboxExportFragment : AbstractDropboxFragment() {
             } else {
                 DropboxExportService.startService(requireContext())
                 DropboxExportServiceManager.getInstance().updateJobStatus(JobStatus.Progress(0))
-            }*/
+            }
         }
 
         binding.cancelButton.setOnClickListener {
@@ -77,7 +81,7 @@ class DropboxExportFragment : AbstractDropboxFragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        //_binding = null
+        _binding = null
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -117,12 +121,9 @@ class DropboxExportFragment : AbstractDropboxFragment() {
                                 setTitle(R.string.dropbox_export_cancelled_dialog_title)
                                 setMessage(R.string.dropbox_export_cancelled_dialog_msg)
                                 setPositiveButton(R.string.dropbox_export_cancelled_dialog_ok_button) { dialog, which ->
-                                    /*viewLifecycleOwner.lifecycleScope.launch {
-                                        withContext(Dispatchers.IO) {
-                                            DropboxClientFactory.getClient()
-                                                .files().deleteV2("/${jobStatus.data}")
-                                        }
-                                    }*/
+                                    viewLifecycleOwner.lifecycleScope.launch(Dispatchers.IO) {
+                                        DropboxClientFactory.getClient().files().deleteV2("/${jobStatus.data}")
+                                    }
                                 }
                                 show()
                             }
@@ -150,7 +151,7 @@ class DropboxExportFragment : AbstractDropboxFragment() {
         val viewModel = ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory.getInstance(requireActivity().application)).get(DropboxExportViewModel::class.java)
         viewModel.statistics.observe(viewLifecycleOwner, { statistics ->
             binding.photoCount.text = statistics.photos.toString()
-            binding.photoTotalSize.text = com.mthaler.knittings.utils.Format.humanReadableByteCountBin(statistics.totalSize)
+            binding.photoTotalSize.text = Format.humanReadableByteCountBin(statistics.totalSize)
         })
     }
 
@@ -180,10 +181,9 @@ class DropboxExportFragment : AbstractDropboxFragment() {
 
     // called from onResume after the DropboxClientFactory is initialized
     override fun loadData(onError: (Exception) -> Unit) {
-        /*lifecycleScope.launch {
+        lifecycleScope.launch {
             val(exception, account, spaceUsage) = withContext(Dispatchers.IO) {
-                val client =
-                    DropboxClientFactory.getClient()
+                val client = DropboxClientFactory.getClient()
                 var account: FullAccount? = null
                 var spaceUsage: SpaceUsage? = null
                 var exception: Exception? = null
@@ -209,6 +209,6 @@ class DropboxExportFragment : AbstractDropboxFragment() {
                     binding.freeSpaceText.text = "Free: " + formatBytes(spaceUsage.allocation.individualValue.allocated - spaceUsage.used)
                 }
             }
-        }*/
+        }
     }
 }

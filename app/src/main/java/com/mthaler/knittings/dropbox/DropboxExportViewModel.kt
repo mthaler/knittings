@@ -3,6 +3,7 @@ package com.mthaler.knittings.dropbox
 import android.app.Application
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.mthaler.knittings.DatabaseApplication
 import com.mthaler.knittings.database.DataSourceViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -11,7 +12,7 @@ import java.lang.Exception
 
 class DropboxExportViewModel(application: Application) : DataSourceViewModel(application)  {
 
-    private val ds = (application as com.mthaler.knittings.DatabaseApplication<*>).getPhotoDataSource()
+    private val ds = (application as DatabaseApplication<*>).getPhotoDataSource()
 
     val statistics = MutableLiveData(Statistics.EMPTY)
 

@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
 import com.mthaler.knittings.*
+import com.mthaler.knittings.color.ColorPicker
 import com.mthaler.knittings.database.Extras.EXTRA_CATEGORY_ID
 import com.mthaler.knittings.database.CategoryDataSource
 import com.mthaler.knittings.databinding.FragmentEditCategoryBinding
@@ -37,7 +38,7 @@ class EditCategoryFragment : Fragment() {
         }
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
 
         setHasOptionsMenu(true)
 
@@ -122,7 +123,7 @@ class EditCategoryFragment : Fragment() {
     }
 
     private fun showColorPicker() {
-        /*val colorPicker = ColorPicker(activity)
+        val colorPicker = ColorPicker(activity)
         colorPicker.setOnFastChooseColorListener(object : ColorPicker.OnFastChooseColorListener {
             override fun setOnFastChooseColorListener(position: Int, c: Int) {
                 color = c
@@ -137,7 +138,7 @@ class EditCategoryFragment : Fragment() {
         colorPicker.setRoundColorButton(true)
         colorPicker.setColorButtonMargin(6, 6, 6, 6)
         colorPicker.setColumns(4)
-        colorPicker.show()*/
+        colorPicker.show()
     }
 
     private fun deleteCategory() {
@@ -170,16 +171,21 @@ class EditCategoryFragment : Fragment() {
         listener = null
     }
 
+    interface OnFragmentInteractionListener {
+
+        fun categorySaved(categoryID: Long)
+    }
+
     companion object {
 
-        private const val EXTRA_COLOR = "com.mthaler.dbapp.category.COLOR"
+        private const val EXTRA_COLOR = "com.mthaler.knittings.category.COLOR"
 
-        //@JvmStatic
+        @JvmStatic
         fun newInstance(categoryID: Long) =
-                EditCategoryFragment().apply {
-                    arguments = Bundle().apply {
-                        putLong(EXTRA_CATEGORY_ID, categoryID)
-                    }
+            EditCategoryFragment().apply {
+                arguments = Bundle().apply {
+                    putLong(EXTRA_CATEGORY_ID, categoryID)
                 }
+            }
     }
 }

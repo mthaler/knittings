@@ -9,10 +9,17 @@ import com.dropbox.core.android.Auth
 import com.dropbox.core.v2.files.ListFolderResult
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.lifecycleScope
+import com.mthaler.knittings.DatabaseApplication
+import com.mthaler.knittings.R
 import com.mthaler.knittings.databinding.FragmentDropboxImportBinding
+import com.mthaler.knittings.model.Project
 import com.mthaler.knittings.service.JobStatus
 import com.mthaler.knittings.service.ServiceStatus
+import com.mthaler.knittings.utils.FileUtils
+import com.mthaler.knittings.utils.NetworkUtils
+import com.mthaler.knittings.utils.Try
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.json.JSONObject
 import java.io.ByteArrayOutputStream
@@ -28,20 +35,19 @@ class DropboxImportFragment : AbstractDropboxFragment() {
         retainInstance = true
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        /*_binding = FragmentDropboxImportBinding.inflate(inflater, container, false)
-        return binding.root*/
-        return null
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        _binding = FragmentDropboxImportBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         // this opens a web browser where the user can log in
-        //binding.loginButton.setOnClickListener { Auth.startOAuth2Authentication(context, (requireContext().applicationContext as com.mthaler.knittings.DatabaseApplication<Project>).dropboxAppKey) }
+        binding.loginButton.setOnClickListener { Auth.startOAuth2Authentication(context, (requireContext().applicationContext as DatabaseApplication<Project>).dropboxAppKey) }
 
-                //binding.importButton.setOnClickListener {
-            /*val isWiFi = NetworkUtils.isWifiConnected(requireContext())
+        binding.importButton.setOnClickListener {
+            val isWiFi = NetworkUtils.isWifiConnected(requireContext())
             if (!isWiFi) {
                 val builder = AlertDialog.Builder(requireContext())
                 with(builder) {
@@ -72,12 +78,12 @@ class DropboxImportFragment : AbstractDropboxFragment() {
                     }
                 }
             }
-        }*/
+        }
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-        //_binding = null
+        _binding = null
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -142,10 +148,9 @@ class DropboxImportFragment : AbstractDropboxFragment() {
 
     // called from onResume after the DropboxClientFactory is initialized
     override fun loadData(onError: (Exception) -> Unit) {
-        /*viewLifecycleOwner.lifecycleScope.launch {
+        viewLifecycleOwner.lifecycleScope.launch {
             val account = withContext(Dispatchers.IO) {
-                val client =
-                    DropboxClientFactory.getClient()
+                val client = DropboxClientFactory.getClient()
                 val account = client.users().currentAccount
                 //val spaceUsage = client.users().spaceUsage
                 account
@@ -153,7 +158,7 @@ class DropboxImportFragment : AbstractDropboxFragment() {
             binding.emailText.text = account.email
             binding.nameText.text = account.name.displayName
             binding.typeText.text = account.accountType.name
-        }*/
+        }
     }
 
     private fun onListFolder(result: ListFolderResult?) {
@@ -182,20 +187,19 @@ class DropboxImportFragment : AbstractDropboxFragment() {
     }
 
     private fun readDatabase(directory: String) {
-        /*viewLifecycleOwner.lifecycleScope.launch {
+        viewLifecycleOwner.lifecycleScope.launch {
             val (database, idsFromPhotoFiles) = withContext(Dispatchers.IO) {
-                val dbxClient =
-                    DropboxClientFactory.getClient()
+                val dbxClient = DropboxClientFactory.getClient()
                 val os = ByteArrayOutputStream()
                 dbxClient.files().download("/$directory/db.json").download(os)
                 val bytes = os.toByteArray()
                 val jsonStr = String(bytes)
                 val json = JSONObject(jsonStr)
                 val externalFilesDir = requireContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES)!!
-                val database = (requireContext().applicationContext as com.mthaler.knittings.DatabaseApplication<Project>).createExportDatabaseFromJSON(json, externalFilesDir)
+                val database = (requireContext().applicationContext as DatabaseApplication<Project>).createExportDatabaseFromJSON(json, externalFilesDir)
                 database.checkValidity()
                 val entries = dbxClient.files().listFolder("/$directory").entries
-                val ids = entries.filter { it.name != "db.json" }.map { com.mthaler.knittings.utils.FileUtils.getFilenameWithoutExtension(it.name).toLong() }.toHashSet()
+                val ids = entries.filter { it.name != "db.json" }.map { FileUtils.getFilenameWithoutExtension(it.name).toLong() }.toHashSet()
                 Pair(database, ids)
             }
             val ids = database.photos.map { it.id}.toHashSet()
@@ -207,11 +211,7 @@ class DropboxImportFragment : AbstractDropboxFragment() {
                     setMessage(getString(R.string.dropbox_import_dialog_incomplete_msg, missingPhotos.size as Any))
                     setPositiveButton(R.string.dropbox_import_dialog_button_import) { dialog, which ->
                         val filteredDatabase = database.removeMissingPhotos(missingPhotos)
-                        DropboxImportService.startService(
-                            requireContext(),
-                            directory,
-                            filteredDatabase
-                        )
+                        DropboxImportService.startService(requireContext(), directory, filteredDatabase)
                         DropboxImportServiceManager.getInstance().updateJobStatus(JobStatus.Progress(0))
                     }
                     setNegativeButton(resources.getString(R.string.dialog_button_cancel)) { dialog, which ->}
@@ -230,6 +230,6 @@ class DropboxImportFragment : AbstractDropboxFragment() {
                     show()
                 }
             }
-        }*/
+        }
     }
 }

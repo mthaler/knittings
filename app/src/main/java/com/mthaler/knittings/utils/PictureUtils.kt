@@ -55,7 +55,7 @@ object PictureUtils {
         return BitmapFactory.decodeFile(path, options)
     }
 
-       /**
+    /**
      * Returns the orientation of a photo
      *
      * @param uri uri of the photo

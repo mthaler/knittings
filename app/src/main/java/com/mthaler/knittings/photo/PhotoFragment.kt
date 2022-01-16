@@ -16,15 +16,18 @@ import java.io.FileOutputStream
 import java.io.IOException
 import androidx.lifecycle.lifecycleScope
 import androidx.preference.PreferenceManager
+import com.mthaler.knittings.DatabaseApplication
 import com.mthaler.knittings.DeleteDialog
 import com.mthaler.knittings.R
 import com.mthaler.knittings.SaveChangesDialog
 import com.mthaler.knittings.database.PhotoDataSource
 import com.mthaler.knittings.databinding.FragmentPhotoBinding
 import com.mthaler.knittings.model.Photo
+import com.mthaler.knittings.utils.PictureUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+
 
 /**
  * PhotoFragment displays a photo and the description
@@ -39,7 +42,7 @@ class PhotoFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        ds = (requireContext().applicationContext as com.mthaler.knittings.DatabaseApplication<*>).getPhotoDataSource()
+        ds = (requireContext().applicationContext as DatabaseApplication<*>).getPhotoDataSource()
         arguments?.let {
             val photoID = it.getLong(EXTRA_PHOTO_ID)
             photo = ds.getPhoto(photoID)
@@ -52,7 +55,7 @@ class PhotoFragment : Fragment() {
         }
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
 
         // we need to call setHasOptionsMenu(true) to indicate that we are interested in participating in the action bar
         setHasOptionsMenu(true)
@@ -87,12 +90,12 @@ class PhotoFragment : Fragment() {
                         // loading and scaling the bitmap is expensive, use async task to do the work
                         val path = photo.filename.absolutePath
                         viewLifecycleOwner.lifecycleScope.launch {
-                            /*val rotated = withContext(Dispatchers.Default) {
-                                val orientation = com.mthaler.knittings.utils.PictureUtils.getOrientation(Uri.parse(path), requireContext())
-                                val scaled = com.mthaler.knittings.utils.PictureUtils.decodeSampledBitmapFromPath(path, width, height)
-                                com.mthaler.knittings.utils.PictureUtils.rotateBitmap(scaled, orientation)
+                            val rotated = withContext(Dispatchers.Default) {
+                                val orientation = PictureUtils.getOrientation(Uri.parse(path), requireContext())
+                                val scaled = PictureUtils.decodeSampledBitmapFromPath(path, width, height)
+                                PictureUtils.rotateBitmap(scaled, orientation)
                             }
-                            imageView.setImageBitmap(rotated)*/
+                            imageView.setImageBitmap(rotated)
                         }
                     } else {
                         val handler = Handler()
@@ -137,7 +140,7 @@ class PhotoFragment : Fragment() {
                 val path = photo.filename.absolutePath
                 val prefs = PreferenceManager.getDefaultSharedPreferences(activity)
                 val size = Integer.parseInt(prefs.getString(resources.getString(R.string.key_share_photo_size), "1200")!!)
-                val scaled = com.mthaler.knittings.utils.PictureUtils.decodeSampledBitmapFromPath(path, size, size)
+                val scaled = PictureUtils.decodeSampledBitmapFromPath(path, size, size)
                 val uri = saveImage(scaled)
                 uri?.let { shareImageUri(it) }
                 true
@@ -151,7 +154,6 @@ class PhotoFragment : Fragment() {
             }
             else -> super.onOptionsItemSelected(item)
         }
-        return true
     }
 
     fun onBackPressed() {
@@ -170,7 +172,7 @@ class PhotoFragment : Fragment() {
     private fun setDefaultPhoto() {
         ds.setDefaultPhoto(photo.ownerID, photo)
         view?.let {
-            Snackbar.make(it, resources.getString(R.string.set_preview), Snackbar.LENGTH_LONG).show()
+            Snackbar.make(it, "Used as main photo", Snackbar.LENGTH_SHORT).show()
         }
     }
 
@@ -187,7 +189,7 @@ class PhotoFragment : Fragment() {
             stream.flush()
             stream.close()
             val ctx = requireContext()
-            uri = FileProvider.getUriForFile(ctx, (ctx.applicationContext as com.mthaler.knittings.DatabaseApplication<*>).getApplicationSettings().getFileProviderAuthority(), file)
+            uri = FileProvider.getUriForFile(ctx, (ctx.applicationContext as DatabaseApplication<*>).getApplicationSettings().getFileProviderAuthority(), file)
         } catch (e: IOException) {
             error("IOException while trying to write file for sharing: " + e.message)
         }

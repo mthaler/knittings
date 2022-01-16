@@ -160,10 +160,10 @@ class EditNeedleFragment : Fragment() {
 
         @JvmStatic
         fun newInstance(needleID: Long) =
-                EditNeedleFragment().apply {
-                    arguments = Bundle().apply {
-                        putLong(EXTRA_NEEDLE_ID, needleID)
-                    }
+            EditNeedleFragment().apply {
+                arguments = Bundle().apply {
+                    putLong(EXTRA_NEEDLE_ID, needleID)
                 }
+            }
     }
 }

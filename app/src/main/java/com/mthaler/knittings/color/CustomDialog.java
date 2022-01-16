@@ -1,11 +1,11 @@
-package com.mthaler.knittings.utils;
+package com.mthaler.knittings.color;
 
 import android.content.Context;
 import android.os.Bundle;
-import androidx.appcompat.app.AppCompatDialog;
 import android.view.View;
 import android.view.Window;
 
+import androidx.appcompat.app.AppCompatDialog;
 
 public class CustomDialog extends AppCompatDialog {
     private View view;
