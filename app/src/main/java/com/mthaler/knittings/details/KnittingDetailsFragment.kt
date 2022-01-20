@@ -27,7 +27,6 @@ import com.mthaler.knittings.stopwatch.StopwatchActivity
 import com.mthaler.knittings.utils.PictureUtils
 import com.mthaler.knittings.utils.TimeUtils
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.asExecutor
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.File

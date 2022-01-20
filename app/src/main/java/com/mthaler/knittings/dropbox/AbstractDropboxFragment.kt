@@ -123,9 +123,9 @@ abstract class AbstractDropboxFragment : Fragment() {
         val credential = getLocalCredential()
         val dropboxClient = DbxClientV2(requestConfig, credential)
         val dropboxApi = DropboxApi(dropboxClient)
-        //viewLifecycleOwner.lifecycle.launch {
-        //    dropboxApi.revokeDropboxAuthorization()
-        //}
+        viewLifecycleOwner.lifecycle.launch {
+            dropboxApi.revokeDropboxAuthorization()
+        }
         val sharedPreferences = requireActivity().getSharedPreferences("dropbox-sample", Activity.MODE_PRIVATE)
         sharedPreferences.edit().remove("credential").apply()
         clearData()
