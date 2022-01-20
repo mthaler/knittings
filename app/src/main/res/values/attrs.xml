@@ -27,9 +27,6 @@
         <attr name="frameRadiusY" format="dimension" />
         <attr name="frameColor" format="color" />
     </declare-styleable>
-    <declare-styleable name="ColorSwatch">
-        <attr name="color" format="color" />
-    </declare-styleable>
     <declare-styleable name="CircularProgressBar">
         <attr name="ringWidth" format="dimension" />
         <attr name="ringColor" format="color" />

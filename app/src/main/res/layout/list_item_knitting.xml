@@ -52,7 +52,7 @@
         android:paddingLeft="4dp"
         android:paddingRight="4dp"
         android:textColor="@color/knitting_list_item_description"/>
-    <com.mthaler.knittings.category.CategoryIndicator
+    <ch.temparus.colorpicker.ColorCircle
         android:id="@+id/knitting_list_item_categoryIndicator"
         android:layout_width="4dp"
         android:layout_height="80dp"

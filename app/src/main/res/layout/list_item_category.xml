@@ -8,7 +8,7 @@
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-        <com.mthaler.knittings.category.CategoryIndicator
+        <ch.temparus.colorpicker.ColorCircle
             android:id="@+id/color"
             android:layout_width="26dp"
             android:layout_height="26dp"
