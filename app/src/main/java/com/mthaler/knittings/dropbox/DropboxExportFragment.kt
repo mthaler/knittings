@@ -5,9 +5,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import com.bumptech.glide.Glide
+import com.dropbox.core.DbxRequestConfig
 import com.dropbox.core.android.Auth
+import com.dropbox.core.oauth.DbxCredential
+import com.dropbox.core.v2.DbxClientV2
 import com.dropbox.core.v2.users.Account
 import com.dropbox.core.v2.users.FullAccount
 import com.dropbox.core.v2.users.SpaceUsage
@@ -23,22 +28,13 @@ import com.mthaler.knittings.utils.StringUtils.formatBytes
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.io.InputStream
 
 class DropboxExportFragment : AbstractDropboxFragment() {
 
     private var _binding: FragmentDropboxExportBinding? = null
     private val binding get() = _binding!!
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        // Retain this fragment across configuration changes.
-        retainInstance = true
-    }
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        _binding = FragmentDropboxExportBinding.inflate(inflater, container, false)
-        return binding.root
-    }
+    private val adapter = FilesAdapter()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -46,7 +42,7 @@ class DropboxExportFragment : AbstractDropboxFragment() {
         // this opens a web browser where the user can log in
         binding.loginButton.setOnClickListener { Auth.startOAuth2Authentication(context, (requireContext().applicationContext as DatabaseApplication<Project>).dropboxAppKey) }
 
-        binding.exportButton.setOnClickListener {
+        /*binding.exportButton.setOnClickListener {
             val isWiFi = NetworkUtils.isWifiConnected(requireContext())
             if (!isWiFi) {
                 val builder = AlertDialog.Builder(requireContext())
@@ -76,7 +72,7 @@ class DropboxExportFragment : AbstractDropboxFragment() {
                 }
                 show()
             }
-        }
+        }*/
     }
 
     override fun onDestroyView() {
@@ -89,7 +85,7 @@ class DropboxExportFragment : AbstractDropboxFragment() {
 
         val sm = DropboxExportServiceManager.getInstance()
 
-        sm.jobStatus.observe(viewLifecycleOwner, { jobStatus ->
+        /*sm.jobStatus.observe(viewLifecycleOwner, { jobStatus ->
             when(jobStatus) {
                 is JobStatus.Initialized -> {
                     binding.exportButton.isEnabled = true
@@ -142,6 +138,7 @@ class DropboxExportFragment : AbstractDropboxFragment() {
         })
 
         sm.serviceStatus.observe(viewLifecycleOwner, { serviceStatus ->
+        sm.serviceStatus.observe(viewLifecycleOwner, { serviceStatus ->
             when(serviceStatus) {
                 ServiceStatus.Stopped -> binding.exportButton.isEnabled = true
                 ServiceStatus.Started -> binding.exportButton.isEnabled = false
@@ -152,13 +149,40 @@ class DropboxExportFragment : AbstractDropboxFragment() {
         viewModel.statistics.observe(viewLifecycleOwner, { statistics ->
             binding.photoCount.text = statistics.photos.toString()
             binding.photoTotalSize.text = Format.humanReadableByteCountBin(statistics.totalSize)
-        })
+        })*/
+
+          //Check if we have an existing token stored, this will be used by DbxClient to make requests
+        val localCredential: DbxCredential? = getLocalCredential()
+        val credential: DbxCredential? = if (localCredential == null) {
+            val credential = Auth.getDbxCredential() //fetch the result from the AuthActivity
+            credential?.let {
+                //the user successfully connected their Dropbox account!
+                storeCredentialLocally(it)
+                fetchAccountInfo()
+                fetchDropboxFolder()
+            }
+            credential
+        } else localCredential
+
+        if (credential == null) {
+            with(binding) {
+                loginButton.visibility = View.VISIBLE
+                logoutButton.visibility = View.GONE
+                uploadButton.isEnabled = false
+            }
+        } else {
+            with(binding) {
+                uploadButton.isEnabled = true
+                logoutButton.visibility = View.VISIBLE
+                loginButton.visibility = View.GONE
+            }
+        }
     }
 
     override fun onResume() {
         super.onResume()
 
-        if (hasToken()) {
+        /*if (hasToken()) {
             // user is logged in, hide login button, show other buttons
             binding.loginButton.visibility = View.GONE
             binding.account.visibility = View.VISIBLE
@@ -176,7 +200,7 @@ class DropboxExportFragment : AbstractDropboxFragment() {
             binding.typeText.visibility = View.GONE
             binding.dataTitle.visibility = View.GONE
             binding.exportButton.isEnabled = false
-        }
+        }*/
     }
 
     // called from onResume after the DropboxClientFactory is initialized
@@ -195,7 +219,7 @@ class DropboxExportFragment : AbstractDropboxFragment() {
                 }
                 Triple(exception, account, spaceUsage)
             }
-            if (exception != null) {
+            /*if (exception != null) {
                 onError(exception)
             } else {
                 if (account != null) {
@@ -207,6 +231,63 @@ class DropboxExportFragment : AbstractDropboxFragment() {
                     binding.maxSpaceText.text = "Max: " + formatBytes(spaceUsage.allocation.individualValue.allocated)
                     binding.usedSpaceText.text = "Used: " + formatBytes(spaceUsage.used)
                     binding.freeSpaceText.text = "Free: " + formatBytes(spaceUsage.allocation.individualValue.allocated - spaceUsage.used)
+                }
+            }*/
+        }
+    }
+
+    private fun fetchAccountInfo() {
+        val clientIdentifier = "DropboxSampleAndroid/1.0.0"
+        val requestConfig = DbxRequestConfig(clientIdentifier)
+        val credential = getLocalCredential()
+        credential?.let {
+            val dropboxClient = DbxClientV2(requestConfig, credential)
+            val dropboxApi = DropboxApi(dropboxClient)
+            lifecycleScope.launch {
+                when (val response = dropboxApi.getAccountInfo()) {
+                    is DropboxAccountInfoResponse.Failure -> {
+                        Toast.makeText(
+                            this@DropboxExportFragment.requireContext(),
+                            "Error getting account info!",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        binding.exceptionText.text =
+                            "type: ${response.exception.javaClass} + ${response.exception.localizedMessage}"
+                    }
+                    is DropboxAccountInfoResponse.Success -> {
+                        val profileImageUrl = response.accountInfo.profilePhotoUrl
+                        Glide.with(this@DropboxExportFragment.requireActivity()).load(profileImageUrl)
+                            .into(binding.accountPhoto)
+                    }
+                }
+            }
+        }
+    }
+
+    private fun fetchDropboxFolder() {
+        val clientIdentifier = "DropboxSampleAndroid/1.0.0"
+        val requestConfig = DbxRequestConfig(clientIdentifier)
+        val credential = getLocalCredential()
+        credential?.let {
+            val dropboxClient = DbxClientV2(requestConfig, credential)
+            val dropboxApi = DropboxApi(dropboxClient)
+
+            lifecycleScope.launch {
+                dropboxApi.getFilesForFolderFlow("").collect {
+                    when (it) {
+                        is GetFilesResponse.Failure -> {
+                            Toast.makeText(
+                                this@DropboxExportFragment.requireContext(),
+                                "Error getting Dropbox files!",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            binding.exceptionText.text =
+                                "type: ${it.exception.javaClass} + ${it.exception.localizedMessage}"
+                        }
+                        is GetFilesResponse.Success -> {
+                            adapter.submitList(it.result)
+                        }
+                    }
                 }
             }
         }

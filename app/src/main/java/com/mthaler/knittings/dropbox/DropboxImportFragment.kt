@@ -9,6 +9,7 @@ import com.dropbox.core.android.Auth
 import com.dropbox.core.v2.files.ListFolderResult
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.lifecycleScope
+import com.dropbox.core.oauth.DbxCredential
 import com.mthaler.knittings.DatabaseApplication
 import com.mthaler.knittings.R
 import com.mthaler.knittings.databinding.FragmentDropboxImportBinding
@@ -45,6 +46,14 @@ class DropboxImportFragment : AbstractDropboxFragment() {
 
         // this opens a web browser where the user can log in
         binding.loginButton.setOnClickListener { Auth.startOAuth2Authentication(context, (requireContext().applicationContext as DatabaseApplication<Project>).dropboxAppKey) }
+
+        binding.loginButton.setOnClickListener {
+            startDropboxAuthorization()
+        }
+        binding.logoutButton.setOnClickListener {
+            revokeDropboxAuthorization()
+        }
+
 
         binding.importButton.setOnClickListener {
             val isWiFi = NetworkUtils.isWifiConnected(requireContext())
@@ -91,6 +100,8 @@ class DropboxImportFragment : AbstractDropboxFragment() {
 
         val sm = DropboxImportServiceManager.getInstance()
 
+
+
         sm.jobStatus.observe(viewLifecycleOwner, { jobStatus ->
             when(jobStatus) {
                 is JobStatus.Initialized -> {
@@ -129,18 +140,10 @@ class DropboxImportFragment : AbstractDropboxFragment() {
 
         if (hasToken()) {
             // user is logged in, hide login button, show other buttons
-            binding.loginButton.visibility = View.GONE
-            binding.account.visibility = View.VISIBLE
-            binding.emailText.visibility = View.VISIBLE
-            binding.nameText.visibility = View.VISIBLE
             binding.typeText.visibility = View.VISIBLE
             binding.importButton.isEnabled = true
         } else {
             // user is logged out, show login button, hide other buttons
-            binding.loginButton.visibility = View.VISIBLE
-            binding.account.visibility = View.GONE
-            binding.emailText.visibility = View.GONE
-            binding.nameText.visibility = View.GONE
             binding.typeText.visibility = View.GONE
             binding.importButton.isEnabled = false
         }
@@ -155,8 +158,6 @@ class DropboxImportFragment : AbstractDropboxFragment() {
                 //val spaceUsage = client.users().spaceUsage
                 account
             }
-            binding.emailText.text = account.email
-            binding.nameText.text = account.name.displayName
             binding.typeText.text = account.accountType.name
         }
     }

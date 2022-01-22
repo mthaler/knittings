@@ -2,7 +2,6 @@ package com.mthaler.knittings.dropbox
 
 import android.app.Activity
 import android.content.Context
-import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
@@ -123,7 +122,7 @@ abstract class AbstractDropboxFragment : Fragment() {
         val credential = getLocalCredential()
         val dropboxClient = DbxClientV2(requestConfig, credential)
         val dropboxApi = DropboxApi(dropboxClient)
-        viewLifecycleOwner.lifecycle.launch {
+        lifecycleScope.launch {
             dropboxApi.revokeDropboxAuthorization()
         }
         val sharedPreferences = requireActivity().getSharedPreferences("dropbox-sample", Activity.MODE_PRIVATE)
@@ -135,11 +134,18 @@ abstract class AbstractDropboxFragment : Fragment() {
     }
 
     //deserialize the credential from SharedPreferences if it exists
-    private fun getLocalCredential(): DbxCredential? {
+    protected fun getLocalCredential(): DbxCredential? {
         val sharedPreferences = requireActivity().getSharedPreferences("dropbox-sample",
             AppCompatActivity.MODE_PRIVATE
         )
         val serializedCredential = sharedPreferences.getString("credential", null) ?: return null
         return DbxCredential.Reader.readFully(serializedCredential)
+    }
+
+    //serialize the credential and store in SharedPreferences
+    protected fun storeCredentialLocally(dbxCredential: DbxCredential) {
+        val sharedPreferences = requireActivity().getSharedPreferences("dropbox-sample", AppCompatActivity.MODE_PRIVATE
+        )
+        sharedPreferences.edit().putString("credential", dbxCredential.toString()).apply()
     }
 }

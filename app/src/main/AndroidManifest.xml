@@ -53,21 +53,6 @@
                 android:value=".details.KnittingDetailsActivity" />
         </activity> <!-- we define our own toolbar in MainActivity, use theme without toolbar -->
         <activity
-            android:name="com.dropbox.core.android.AuthActivity"
-            android:configChanges="orientation|keyboard"
-            android:exported="true">
-            <intent-filter>
-
-                <!-- Insert your app key after “db-  ...” -->
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.BROWSABLE" />
-                <category android:name="android.intent.category.DEFAULT" />
-
-                <data android:scheme="db-6ybf7tgqdbhf641" />
-            </intent-filter>
-        </activity>
-        <activity
             android:name=".dropbox.DropboxExportActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
@@ -136,6 +121,19 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".details.KnittingDetailsActivity" />
+        </activity>
+        <activity
+            android:name="com.dropbox.core.android.AuthActivity"
+            android:configChanges="orientation|keyboard"
+            android:launchMode="singleTask"
+            android:exported="true">
+            <intent-filter>
+                <!-- Using a Manifest Placeholder to hide our app key -->
+                <data android:scheme="db-${dropboxKey}" />
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
         </activity>
 
         <provider
