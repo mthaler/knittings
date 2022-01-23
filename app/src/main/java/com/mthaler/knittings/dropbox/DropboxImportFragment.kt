@@ -1,15 +1,20 @@
 package com.mthaler.knittings.dropbox
 
+import android.app.Activity
 import android.os.Bundle
 import android.os.Environment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import com.dropbox.core.android.Auth
 import com.dropbox.core.v2.files.ListFolderResult
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.lifecycleScope
+import com.bumptech.glide.Glide
+import com.dropbox.core.DbxRequestConfig
 import com.dropbox.core.oauth.DbxCredential
+import com.dropbox.core.v2.DbxClientV2
 import com.mthaler.knittings.DatabaseApplication
 import com.mthaler.knittings.R
 import com.mthaler.knittings.databinding.FragmentDropboxImportBinding
@@ -29,12 +34,7 @@ class DropboxImportFragment : AbstractDropboxFragment() {
 
     private var _binding: FragmentDropboxImportBinding? = null
     private val binding get() = _binding!!
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        // Retain this fragment across configuration changes.
-        retainInstance = true
-    }
+    private val adapter = FilesAdapter()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentDropboxImportBinding.inflate(inflater, container, false)
@@ -44,8 +44,6 @@ class DropboxImportFragment : AbstractDropboxFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // this opens a web browser where the user can log in
-        binding.loginButton.setOnClickListener { Auth.startOAuth2Authentication(context, (requireContext().applicationContext as DatabaseApplication<Project>).dropboxAppKey) }
 
         binding.loginButton.setOnClickListener {
             startDropboxAuthorization()
@@ -53,7 +51,6 @@ class DropboxImportFragment : AbstractDropboxFragment() {
         binding.logoutButton.setOnClickListener {
             revokeDropboxAuthorization()
         }
-
 
         binding.importButton.setOnClickListener {
             val isWiFi = NetworkUtils.isWifiConnected(requireContext())
@@ -147,6 +144,14 @@ class DropboxImportFragment : AbstractDropboxFragment() {
             binding.typeText.visibility = View.GONE
             binding.importButton.isEnabled = false
         }
+    }
+
+    private fun clearData() {
+        adapter.submitList(emptyList())
+        binding.accountPhoto.setImageBitmap(null)
+        binding.logoutButton.visibility = View.GONE
+        binding.loginButton.visibility = View.VISIBLE
+        binding.uploadButton.isEnabled = false
     }
 
     // called from onResume after the DropboxClientFactory is initialized

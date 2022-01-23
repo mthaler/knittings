@@ -39,10 +39,7 @@ class DropboxExportFragment : AbstractDropboxFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // this opens a web browser where the user can log in
-        binding.loginButton.setOnClickListener { Auth.startOAuth2Authentication(context, (requireContext().applicationContext as DatabaseApplication<Project>).dropboxAppKey) }
-
-        /*binding.exportButton.setOnClickListener {
+        binding.exportButton.setOnClickListener {
             val isWiFi = NetworkUtils.isWifiConnected(requireContext())
             if (!isWiFi) {
                 val builder = AlertDialog.Builder(requireContext())
@@ -72,7 +69,7 @@ class DropboxExportFragment : AbstractDropboxFragment() {
                 }
                 show()
             }
-        }*/
+        }
     }
 
     override fun onDestroyView() {
@@ -85,7 +82,7 @@ class DropboxExportFragment : AbstractDropboxFragment() {
 
         val sm = DropboxExportServiceManager.getInstance()
 
-        /*sm.jobStatus.observe(viewLifecycleOwner, { jobStatus ->
+        sm.jobStatus.observe(viewLifecycleOwner, { jobStatus ->
             when(jobStatus) {
                 is JobStatus.Initialized -> {
                     binding.exportButton.isEnabled = true
@@ -138,69 +135,63 @@ class DropboxExportFragment : AbstractDropboxFragment() {
         })
 
         sm.serviceStatus.observe(viewLifecycleOwner, { serviceStatus ->
-        sm.serviceStatus.observe(viewLifecycleOwner, { serviceStatus ->
-            when(serviceStatus) {
-                ServiceStatus.Stopped -> binding.exportButton.isEnabled = true
-                ServiceStatus.Started -> binding.exportButton.isEnabled = false
+            sm.serviceStatus.observe(viewLifecycleOwner, { serviceStatus ->
+                when (serviceStatus) {
+                    ServiceStatus.Stopped -> binding.exportButton.isEnabled = true
+                    ServiceStatus.Started -> binding.exportButton.isEnabled = false
+                }
+            })
+
+            val viewModel = ViewModelProvider(
+                this,
+                ViewModelProvider.AndroidViewModelFactory.getInstance(requireActivity().application)
+            ).get(DropboxExportViewModel::class.java)
+            viewModel.statistics.observe(viewLifecycleOwner, { statistics ->
+                binding.photoCount.text = statistics.photos.toString()
+                binding.photoTotalSize.text = Format.humanReadableByteCountBin(statistics.totalSize)
+            })
+
+            //Check if we have an existing token stored, this will be used by DbxClient to make requests
+            val localCredential: DbxCredential? = getLocalCredential()
+            val credential: DbxCredential? = if (localCredential == null) {
+                val credential = Auth.getDbxCredential() //fetch the result from the AuthActivity
+                credential?.let {
+                    //the user successfully connected their Dropbox account!
+                    storeCredentialLocally(it)
+                    fetchAccountInfo()
+                    fetchDropboxFolder()
+                }
+                credential
+            } else localCredential
+
+            if (credential == null) {
+                with(binding) {
+                    loginButton.visibility = View.VISIBLE
+                    logoutButton.visibility = View.GONE
+                    uploadButton.isEnabled = false
+                }
+            } else {
+                with(binding) {
+                    uploadButton.isEnabled = true
+                    logoutButton.visibility = View.VISIBLE
+                    loginButton.visibility = View.GONE
+                }
             }
         })
-
-        val viewModel = ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory.getInstance(requireActivity().application)).get(DropboxExportViewModel::class.java)
-        viewModel.statistics.observe(viewLifecycleOwner, { statistics ->
-            binding.photoCount.text = statistics.photos.toString()
-            binding.photoTotalSize.text = Format.humanReadableByteCountBin(statistics.totalSize)
-        })*/
-
-          //Check if we have an existing token stored, this will be used by DbxClient to make requests
-        val localCredential: DbxCredential? = getLocalCredential()
-        val credential: DbxCredential? = if (localCredential == null) {
-            val credential = Auth.getDbxCredential() //fetch the result from the AuthActivity
-            credential?.let {
-                //the user successfully connected their Dropbox account!
-                storeCredentialLocally(it)
-                fetchAccountInfo()
-                fetchDropboxFolder()
-            }
-            credential
-        } else localCredential
-
-        if (credential == null) {
-            with(binding) {
-                loginButton.visibility = View.VISIBLE
-                logoutButton.visibility = View.GONE
-                uploadButton.isEnabled = false
-            }
-        } else {
-            with(binding) {
-                uploadButton.isEnabled = true
-                logoutButton.visibility = View.VISIBLE
-                loginButton.visibility = View.GONE
-            }
-        }
     }
 
     override fun onResume() {
         super.onResume()
 
-        /*if (hasToken()) {
+        if (hasToken()) {
             // user is logged in, hide login button, show other buttons
-            binding.loginButton.visibility = View.GONE
-            binding.account.visibility = View.VISIBLE
-            binding.emailText.visibility = View.VISIBLE
-            binding.nameText.visibility = View.VISIBLE
-            binding.typeText.visibility = View.VISIBLE
             binding.dataTitle.visibility = View.VISIBLE
             binding.exportButton.isEnabled = true
         } else {
             // user is logged out, show login button, hide other buttons
-            binding.loginButton.visibility = View.VISIBLE
-            binding.account.visibility = View.GONE
-            binding.emailText.visibility = View.GONE
-            binding.nameText.visibility = View.GONE
-            binding.typeText.visibility = View.GONE
             binding.dataTitle.visibility = View.GONE
             binding.exportButton.isEnabled = false
-        }*/
+        }
     }
 
     // called from onResume after the DropboxClientFactory is initialized
