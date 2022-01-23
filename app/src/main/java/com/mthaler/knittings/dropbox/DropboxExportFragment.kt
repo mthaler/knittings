@@ -2,9 +2,7 @@ package com.mthaler.knittings.dropbox
 
 import android.app.AlertDialog
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -13,22 +11,17 @@ import com.dropbox.core.DbxRequestConfig
 import com.dropbox.core.android.Auth
 import com.dropbox.core.oauth.DbxCredential
 import com.dropbox.core.v2.DbxClientV2
-import com.dropbox.core.v2.users.Account
 import com.dropbox.core.v2.users.FullAccount
 import com.dropbox.core.v2.users.SpaceUsage
-import com.mthaler.knittings.DatabaseApplication
 import com.mthaler.knittings.R
 import com.mthaler.knittings.databinding.FragmentDropboxExportBinding
-import com.mthaler.knittings.model.Project
 import com.mthaler.knittings.service.JobStatus
 import com.mthaler.knittings.service.ServiceStatus
 import com.mthaler.knittings.utils.Format
 import com.mthaler.knittings.utils.NetworkUtils
-import com.mthaler.knittings.utils.StringUtils.formatBytes
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.io.InputStream
 
 class DropboxExportFragment : AbstractDropboxFragment() {
 
@@ -168,11 +161,9 @@ class DropboxExportFragment : AbstractDropboxFragment() {
                 with(binding) {
                     loginButton.visibility = View.VISIBLE
                     logoutButton.visibility = View.GONE
-                    uploadButton.isEnabled = false
                 }
             } else {
                 with(binding) {
-                    uploadButton.isEnabled = true
                     logoutButton.visibility = View.VISIBLE
                     loginButton.visibility = View.GONE
                 }

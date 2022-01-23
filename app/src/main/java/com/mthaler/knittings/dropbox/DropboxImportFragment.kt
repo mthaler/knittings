@@ -154,19 +154,6 @@ class DropboxImportFragment : AbstractDropboxFragment() {
         binding.uploadButton.isEnabled = false
     }
 
-    // called from onResume after the DropboxClientFactory is initialized
-    fun loadData(onError: (Exception) -> Unit) {
-        viewLifecycleOwner.lifecycleScope.launch {
-            val account = withContext(Dispatchers.IO) {
-                val client = DropboxClientFactory.getClient()
-                val account = client.users().currentAccount
-                //val spaceUsage = client.users().spaceUsage
-                account
-            }
-            binding.typeText.text = account.accountType.name
-        }
-    }
-
     private fun onListFolder(result: ListFolderResult?) {
         if (result != null) {
             val files = result.entries.map { it.name }.sortedDescending().toTypedArray()
