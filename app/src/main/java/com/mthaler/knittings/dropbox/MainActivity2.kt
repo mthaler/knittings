@@ -67,19 +67,7 @@ class MainActivity2 : AppCompatActivity() {
             credential
         } else localCredential
 
-        if (credential == null) {
-            with(binding) {
-                loginButton.visibility = View.VISIBLE
-                logoutButton.visibility = View.GONE
-                uploadButton.isEnabled = false
-            }
-        } else {
-            with(binding) {
-                uploadButton.isEnabled = true
-                logoutButton.visibility = View.VISIBLE
-                loginButton.visibility = View.GONE
-            }
-        }
+
     }
 
     /**

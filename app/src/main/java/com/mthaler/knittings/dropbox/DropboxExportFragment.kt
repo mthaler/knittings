@@ -195,7 +195,7 @@ class DropboxExportFragment : AbstractDropboxFragment() {
     }
 
     // called from onResume after the DropboxClientFactory is initialized
-    override fun loadData(onError: (Exception) -> Unit) {
+    fun loadData(onError: (Exception) -> Unit) {
         lifecycleScope.launch {
             val(exception, account, spaceUsage) = withContext(Dispatchers.IO) {
                 val client = DropboxClientFactory.getClient()

@@ -24,52 +24,6 @@ abstract class AbstractDropboxFragment : Fragment() {
 
     private val APP_KEY = BuildConfig.DROPBOX_KEY
 
-    override fun onResume() {
-        super.onResume()
-
-        // get the access token from shared pref_sharing
-        val prefs = PreferenceManager.getDefaultSharedPreferences(requireContext())
-        var accessToken = prefs.accessToken
-        if (accessToken == null) {
-            // if the user just logged in using the web browser, we get a non null access
-            accessToken = Auth.getOAuth2Token()
-            if (accessToken != null) {
-                // save the access token
-                prefs.accessToken = accessToken
-                initAndLoadData(accessToken)
-            }
-        } else {
-            // we have an access token
-            initAndLoadData(accessToken)
-        }
-
-        val uid = Auth.getUid()
-        val storedUid = prefs.userID
-        if (uid != null && uid != storedUid) {
-            prefs.userID = uid
-        }
-    }
-
-    // called from onResume if we have an access token
-    private fun initAndLoadData(accessToken: String) {
-        DropboxClientFactory.init(accessToken)
-        loadData(::onLoadDataError)
-    }
-
-    // called after the DropboxClientFactory is initialized
-    protected abstract fun loadData(onError: (Exception) -> Unit)
-
-    private fun onLoadDataError(ex: Exception) {
-        val prefs = PreferenceManager.getDefaultSharedPreferences(requireContext())
-        prefs.removeAccessToken()
-        // clear client so that it is not reused next time we connect to Dropbox
-        DropboxClientFactory.clearClient()
-        val accessToken = Auth.getOAuth2Token()
-        if (accessToken != null) {
-            prefs.accessToken = accessToken
-            initAndLoadData(accessToken)
-        }
-    }
 
     protected fun hasToken(): Boolean {
         val prefs = PreferenceManager.getDefaultSharedPreferences(requireContext())
