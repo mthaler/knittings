@@ -2,6 +2,8 @@
 <resources>
     <string name="whats_new_title">Whats New</string>
     <string name="whats_new"><![CDATA[
+        <h3>Version 0.9.30</h3>
+        - Updated library versions<br>
         <h3>Version 0.9.29</h3>
         - Improved layout of stopwatch activity<br>
         - Row counter and project count now work on Android 4.x<br>

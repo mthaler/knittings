@@ -1,23 +1,20 @@
 package com.mthaler.knittings.dropbox
 
-import android.app.Activity
 import android.os.Bundle
 import android.os.Environment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import com.dropbox.core.android.Auth
 import com.dropbox.core.v2.files.ListFolderResult
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.lifecycleScope
-import com.bumptech.glide.Glide
-import com.dropbox.core.DbxRequestConfig
-import com.dropbox.core.oauth.DbxCredential
-import com.dropbox.core.v2.DbxClientV2
 import com.mthaler.knittings.DatabaseApplication
 import com.mthaler.knittings.R
 import com.mthaler.knittings.databinding.FragmentDropboxImportBinding
+import com.mthaler.knittings.dropbox.DropboxClientFactory
+import com.mthaler.knittings.dropbox.DropboxImportService
+import com.mthaler.knittings.dropbox.DropboxImportServiceManager
 import com.mthaler.knittings.model.Project
 import com.mthaler.knittings.service.JobStatus
 import com.mthaler.knittings.service.ServiceStatus
@@ -34,7 +31,6 @@ class DropboxImportFragment : AbstractDropboxFragment() {
 
     private var _binding: FragmentDropboxImportBinding? = null
     private val binding get() = _binding!!
-    private val adapter = FilesAdapter()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentDropboxImportBinding.inflate(inflater, container, false)
@@ -44,13 +40,8 @@ class DropboxImportFragment : AbstractDropboxFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
-        binding.loginButton.setOnClickListener {
-            startDropboxAuthorization()
-        }
-        binding.logoutButton.setOnClickListener {
-            revokeDropboxAuthorization()
-        }
+        // this opens a web browser where the user can log in
+        binding.loginButton.setOnClickListener { Auth.startOAuth2Authentication(context, (requireContext().applicationContext as DatabaseApplication<Project>).dropboxAppKey) }
 
         binding.importButton.setOnClickListener {
             val isWiFi = NetworkUtils.isWifiConnected(requireContext())
@@ -97,8 +88,6 @@ class DropboxImportFragment : AbstractDropboxFragment() {
 
         val sm = DropboxImportServiceManager.getInstance()
 
-
-
         sm.jobStatus.observe(viewLifecycleOwner, { jobStatus ->
             when(jobStatus) {
                 is JobStatus.Initialized -> {
@@ -137,21 +126,36 @@ class DropboxImportFragment : AbstractDropboxFragment() {
 
         if (hasToken()) {
             // user is logged in, hide login button, show other buttons
+            binding.loginButton.visibility = View.GONE
+            binding.account.visibility = View.VISIBLE
+            binding.emailText.visibility = View.VISIBLE
+            binding.nameText.visibility = View.VISIBLE
             binding.typeText.visibility = View.VISIBLE
             binding.importButton.isEnabled = true
         } else {
             // user is logged out, show login button, hide other buttons
+            binding.loginButton.visibility = View.VISIBLE
+            binding.account.visibility = View.GONE
+            binding.emailText.visibility = View.GONE
+            binding.nameText.visibility = View.GONE
             binding.typeText.visibility = View.GONE
             binding.importButton.isEnabled = false
         }
     }
 
-    private fun clearData() {
-        adapter.submitList(emptyList())
-        binding.accountPhoto.setImageBitmap(null)
-        binding.logoutButton.visibility = View.GONE
-        binding.loginButton.visibility = View.VISIBLE
-        binding.uploadButton.isEnabled = false
+    // called from onResume after the DropboxClientFactory is initialized
+    override fun loadData(onError: (Exception) -> Unit) {
+        viewLifecycleOwner.lifecycleScope.launch {
+            val account = withContext(Dispatchers.IO) {
+                val client = DropboxClientFactory.getClient()
+                val account = client.users().currentAccount
+                //val spaceUsage = client.users().spaceUsage
+                account
+            }
+            binding.emailText.text = account.email
+            binding.nameText.text = account.name.displayName
+            binding.typeText.text = account.accountType.name
+        }
     }
 
     private fun onListFolder(result: ListFolderResult?) {

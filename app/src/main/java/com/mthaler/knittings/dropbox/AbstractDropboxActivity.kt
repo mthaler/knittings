@@ -3,17 +3,13 @@ package com.mthaler.knittings.dropbox
 import android.app.AlertDialog
 import androidx.lifecycle.lifecycleScope
 import androidx.preference.PreferenceManager
-import com.dropbox.core.DbxRequestConfig
-import com.dropbox.core.android.Auth
 import com.dropbox.core.android.AuthActivity
-import com.dropbox.core.v2.DbxClientV2
 import com.google.android.material.snackbar.Snackbar
 import com.mthaler.knittings.BaseActivity
 import com.mthaler.knittings.R
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-
 
 abstract class AbstractDropboxActivity : BaseActivity(), AbstractDropboxFragment.OnFragmentInteractionListener {
 
