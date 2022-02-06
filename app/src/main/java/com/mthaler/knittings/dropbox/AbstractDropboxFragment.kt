@@ -1,13 +1,11 @@
 package com.mthaler.knittings.dropbox
 
+import android.app.Activity
 import android.content.Context
 import androidx.fragment.app.Fragment
-import androidx.preference.PreferenceManager
+import com.dropbox.core.DbxRequestConfig
 import com.dropbox.core.android.Auth
-import com.mthaler.knittings.dropbox.DropboxClientFactory
-import com.mthaler.knittings.dropbox.accessToken
-import com.mthaler.knittings.dropbox.removeAccessToken
-import com.mthaler.knittings.dropbox.userID
+import com.dropbox.core.oauth.DbxCredential
 
 /**
  * Base class for Dropbox fragments
@@ -18,57 +16,8 @@ abstract class AbstractDropboxFragment : Fragment() {
 
     protected var listener: OnFragmentInteractionListener? = null
 
-    override fun onResume() {
-        super.onResume()
-
-        // get the access token from shared pref_sharing
-        val prefs = PreferenceManager.getDefaultSharedPreferences(requireContext())
-        var accessToken = prefs.accessToken
-        if (accessToken == null) {
-            // if the user just logged in using the web browser, we get a non null access
-            accessToken = Auth.getOAuth2Token()
-            if (accessToken != null) {
-                // save the access token
-                prefs.accessToken = accessToken
-                initAndLoadData(accessToken)
-            }
-        } else {
-            // we have an access token
-            initAndLoadData(accessToken)
-        }
-
-        val uid = Auth.getUid()
-        val storedUid = prefs.userID
-        if (uid != null && uid != storedUid) {
-            prefs.userID = uid
-        }
-    }
-
-    // called from onResume if we have an access token
-    private fun initAndLoadData(accessToken: String) {
-        DropboxClientFactory.init(accessToken)
-        loadData(::onLoadDataError)
-    }
-
-    // called after the DropboxClientFactory is initialized
-    protected abstract fun loadData(onError: (Exception) -> Unit)
-
-    private fun onLoadDataError(ex: Exception) {
-        val prefs = PreferenceManager.getDefaultSharedPreferences(requireContext())
-        prefs.removeAccessToken()
-        // clear client so that it is not reused next time we connect to Dropbox
-        DropboxClientFactory.clearClient()
-        val accessToken = Auth.getOAuth2Token()
-        if (accessToken != null) {
-            prefs.accessToken = accessToken
-            initAndLoadData(accessToken)
-        }
-    }
-
-    protected fun hasToken(): Boolean {
-        val prefs = PreferenceManager.getDefaultSharedPreferences(requireContext())
-        return prefs.accessToken != null
-    }
+    abstract protected val APP_KEY: String
+    abstract protected fun exception(ex: String)
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -87,5 +36,44 @@ abstract class AbstractDropboxFragment : Fragment() {
     interface OnFragmentInteractionListener {
 
         fun error(ex: Exception)
+    }
+
+    /**
+     * Starts the Dropbox OAuth process by launching the Dropbox official app or web
+     * browser if dropbox official app is not available. In browser flow, normally user needs to
+     * sign in.
+     *
+     * Because mobile apps need to keep Dropbox secrets in their binaries we need to use PKCE.
+     * Read more about this here: https://dropbox.tech/developers/pkce--what-and-why-
+     **/
+    protected fun startDropboxAuthorization() {
+        // The client identifier is usually of the form "SoftwareName/SoftwareVersion".
+        val clientIdentifier = "KNITTINGS"
+        val requestConfig = DbxRequestConfig(clientIdentifier)
+
+        // The scope's your app will need from Dropbox
+        // Read more about Scopes here: https://developers.dropbox.com/oauth-guide#dropbox-api-permissions
+        val scopes = listOf("account_info.read", "files.content.read", "files.content.write")
+        Auth.startOAuth2PKCE(requireContext(), APP_KEY, requestConfig, scopes)
+        //Auth.startOAuth2Authentication(requireContext(), getString(R.string.app_name))
+    }
+
+    //deserialize the credential from SharedPreferences if it exists
+    protected fun getLocalCredential(): DbxCredential? {
+        val sharedPreferences = requireActivity().getSharedPreferences(KNITTINGS, Activity.MODE_PRIVATE)
+        val serializedCredential = sharedPreferences.getString("credential", null) ?: return null
+        return DbxCredential.Reader.readFully(serializedCredential)
+    }
+
+    //serialize the credential and store in SharedPreferences
+    protected fun storeCredentialLocally(dbxCredential: DbxCredential) {
+        val sharedPreferences = requireActivity().getSharedPreferences(KNITTINGS, Activity.MODE_PRIVATE)
+        sharedPreferences.edit().putString("credential", dbxCredential.toString()).apply()
+    }
+
+    companion object {
+        val CLIENT_IDENTIFIER = "KNITTINGS"
+        val KNITTINGS = "com.mthaler.knittings"
+        val TAG = "AbstractDropboxFragment"
     }
 }

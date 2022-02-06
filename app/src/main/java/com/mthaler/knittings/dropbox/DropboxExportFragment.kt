@@ -8,21 +8,16 @@ import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.dropbox.core.android.Auth
-import com.dropbox.core.v2.users.FullAccount
-import com.dropbox.core.v2.users.SpaceUsage
+import com.dropbox.core.oauth.DbxCredential
+import com.mthaler.knittings.BuildConfig
 import com.mthaler.knittings.DatabaseApplication
 import com.mthaler.knittings.R
 import com.mthaler.knittings.databinding.FragmentDropboxExportBinding
-import com.mthaler.knittings.dropbox.DropboxClientFactory
-import com.mthaler.knittings.dropbox.DropboxExportService
-import com.mthaler.knittings.dropbox.DropboxExportServiceManager
-import com.mthaler.knittings.dropbox.DropboxExportViewModel
 import com.mthaler.knittings.model.Project
 import com.mthaler.knittings.service.JobStatus
 import com.mthaler.knittings.service.ServiceStatus
 import com.mthaler.knittings.utils.Format
 import com.mthaler.knittings.utils.NetworkUtils
-import com.mthaler.knittings.utils.StringUtils.formatBytes
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -31,6 +26,12 @@ class DropboxExportFragment : AbstractDropboxFragment() {
 
     private var _binding: FragmentDropboxExportBinding? = null
     private val binding get() = _binding!!
+
+
+    override protected val APP_KEY = BuildConfig.DROPBOX_KEY
+    override fun exception(ex: String) {
+        binding.exceptionText.text = ex
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentDropboxExportBinding.inflate(inflater, container, false)
@@ -120,7 +121,7 @@ class DropboxExportFragment : AbstractDropboxFragment() {
                                 setPositiveButton(R.string.dropbox_export_cancelled_dialog_ok_button) { dialog, which ->
                                     viewLifecycleOwner.lifecycleScope.launch {
                                         withContext(Dispatchers.IO) {
-                                            DropboxClientFactory.getClient().files().deleteV2("/${jobStatus.data}")
+                                            //DropboxClientFactory.getClient().files().deleteV2("/${jobStatus.data}")
                                         }
                                     }
                                 }
@@ -157,7 +158,30 @@ class DropboxExportFragment : AbstractDropboxFragment() {
     override fun onResume() {
         super.onResume()
 
-        if (hasToken()) {
+         //Check if we have an existing token stored, this will be used by DbxClient to make requests
+        val localCredential: DbxCredential? = getLocalCredential()
+        val credential: DbxCredential? = if (localCredential == null) {
+            val credential = Auth.getDbxCredential() //fetch the result from the AuthActivity
+            credential?.let {
+                //the user successfully connected their Dropbox account!
+                storeCredentialLocally(it)
+            }
+            credential
+        } else localCredential
+
+        if (credential == null) {
+            with(binding) {
+                loginButton.visibility = View.VISIBLE
+                 //logoutButton.visibility = View.GONE
+            }
+        } else {
+            with(binding) {
+                //logoutButton.visibility = View.VISIBLE
+                loginButton.visibility = View.GONE
+            }
+        }
+
+        if (credential != null) {
             // user is logged in, hide login button, show other buttons
             binding.loginButton.visibility = View.GONE
             binding.account.visibility = View.VISIBLE
@@ -175,39 +199,6 @@ class DropboxExportFragment : AbstractDropboxFragment() {
             binding.typeText.visibility = View.GONE
             binding.dataTitle.visibility = View.GONE
             binding.exportButton.isEnabled = false
-        }
-    }
-
-    // called from onResume after the DropboxClientFactory is initialized
-    override fun loadData(onError: (Exception) -> Unit) {
-        lifecycleScope.launch {
-            val(exception, account, spaceUsage) = withContext(Dispatchers.IO) {
-                val client = DropboxClientFactory.getClient()
-                var account: FullAccount? = null
-                var spaceUsage: SpaceUsage? = null
-                var exception: Exception? = null
-                try {
-                    account = client.users().currentAccount
-                    spaceUsage = client.users().spaceUsage
-                } catch (ex: Exception) {
-                    exception = ex
-                }
-                Triple(exception, account, spaceUsage)
-            }
-            if (exception != null) {
-                onError(exception)
-            } else {
-                if (account != null) {
-                    binding.emailText.text = account.email
-                    binding.nameText.text = account.name.displayName
-                    binding.typeText.text = account.accountType.name
-                }
-                if (spaceUsage != null) {
-                    binding.maxSpaceText.text = "Max: " + formatBytes(spaceUsage.allocation.individualValue.allocated)
-                    binding.usedSpaceText.text = "Used: " + formatBytes(spaceUsage.used)
-                    binding.freeSpaceText.text = "Free: " + formatBytes(spaceUsage.allocation.individualValue.allocated - spaceUsage.used)
-                }
-            }
         }
     }
 }

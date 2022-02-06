@@ -1,12 +1,16 @@
 package com.mthaler.knittings.model
 
+import android.content.Context
+import android.net.Uri
 import android.os.Parcel
 import android.os.Parcelable
 import com.dropbox.core.v2.DbxClientV2
 import com.mthaler.knittings.utils.FileUtils
 import com.mthaler.knittings.database.KnittingDatabaseHelper
 import com.mthaler.knittings.database.KnittingsDataSource
+import com.mthaler.knittings.utils.PictureUtils
 import org.json.JSONObject
+import java.io.File
 import java.io.FileOutputStream
 
 data class Database(override val projects: List<Knitting>, override val photos: List<Photo>, override val categories: List<Category>, val needles: List<Needle>, val rowCounters: List<RowCounter>) : AbstractExportDatabase<Knitting>() {
@@ -46,7 +50,7 @@ data class Database(override val projects: List<Knitting>, override val photos: 
         return filteredDatabase
     }
 
-    override fun write(dbxClient: DbxClientV2, directory: String, photoDownloaded: (Int) -> Unit) {
+    override fun write(context: Context, dbxClient: DbxClientV2, directory: String, photoDownloaded: (Int) -> Unit) {
         val count = photos.size
         // remove all existing entries from the database
         KnittingsDataSource.deleteAllProjects()
@@ -76,11 +80,11 @@ data class Database(override val projects: List<Knitting>, override val photos: 
                 dbxClient.files().download(filename).download(it)
             }
             // generate preview
-            /*val orientation = PictureUtils.getOrientation(Uri.fromFile(File(photo.filename.absolutePath))
+            val orientation = PictureUtils.getOrientation(Uri.fromFile(File(photo.filename.absolutePath)), context)
             val preview = PictureUtils.decodeSampledBitmapFromPath(photo.filename.absolutePath, 200, 200)
             val rotatedPreview = PictureUtils.rotateBitmap(preview, orientation)
             val photoWithPreview = photo.copy(preview = rotatedPreview)
-            KnittingsDataSource.updatePhoto(photoWithPreview)*/
+            KnittingsDataSource.updatePhoto(photoWithPreview)
             val progress = (index / count.toFloat() * 100).toInt()
             photoDownloaded(progress)
         }

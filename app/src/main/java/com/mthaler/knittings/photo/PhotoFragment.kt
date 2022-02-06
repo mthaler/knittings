@@ -137,7 +137,7 @@ class PhotoFragment : Fragment() {
             }
             R.id.menu_item_share -> {
                 val path = photo.filename.absolutePath
-                val prefs = PreferenceManager.getDefaultSharedPreferences(activity)
+                val prefs = PreferenceManager.getDefaultSharedPreferences(requireActivity())
                 val size = Integer.parseInt(prefs.getString(resources.getString(R.string.key_share_photo_size), "1200")!!)
                 val scaled = PictureUtils.decodeSampledBitmapFromPath(path, size, size)
                 val uri = saveImage(scaled)

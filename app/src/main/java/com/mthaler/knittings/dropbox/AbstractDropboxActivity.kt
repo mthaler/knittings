@@ -23,7 +23,7 @@ abstract class AbstractDropboxActivity : BaseActivity(), AbstractDropboxFragment
                     withContext(Dispatchers.IO) {
                         try {
                             // remove auth token from Dropbox server
-                            DropboxClientFactory.getClient().auth().tokenRevoke()
+                            //DropboxClientFactory.getClient().auth().tokenRevoke()
                         } catch (ex: Exception) {
                         }
                     }
@@ -59,7 +59,7 @@ abstract class AbstractDropboxActivity : BaseActivity(), AbstractDropboxFragment
     }
 
     private fun clearDropboxClient() {
-        DropboxClientFactory.clearClient()
+        //DropboxClientFactory.clearClient()y
     }
 
     private fun clearAuthActivity() {

@@ -1,18 +1,16 @@
 package com.mthaler.knittings.dropbox
 
-import android.app.NotificationChannel
-import android.app.NotificationManager
-import android.app.PendingIntent
-import android.app.Service
+import android.app.*
 import android.content.Context
 import android.content.Intent
-import android.os.Build
-import android.os.IBinder
-import android.os.Parcelable
-import android.os.PowerManager
+import android.os.*
+import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
+import com.dropbox.core.DbxRequestConfig
+import com.dropbox.core.oauth.DbxCredential
+import com.dropbox.core.v2.DbxClientV2
 import com.mthaler.knittings.R
 import com.mthaler.knittings.model.ExportDatabase
 import com.mthaler.knittings.model.Project
@@ -24,37 +22,40 @@ class DropboxImportService : Service() {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         DropboxImportServiceManager.getInstance().updateServiceStatus(ServiceStatus.Started)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val channelID = getString(R.string.dropbox_import_notification_channel_id)
-            val name = getString(R.string.dropbox_import_notification_channel_name)
-            val importance = NotificationManager.IMPORTANCE_DEFAULT
 
-            val channel = NotificationChannel(channelID, name, importance).apply {
-                description = ""
-            }
-
-            // Creating the Channel
-            val notificationManager: NotificationManager =
-                getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-            notificationManager.createNotificationChannel(channel)
-        }
-
-        val directory = intent?.getStringExtra(EXTRA_DIRECTORY)!!
-        val database = intent?.getParcelableExtra<ExportDatabase<Project>>(EXTRA_DATABASE)
-
-        val intent = Intent(this, DropboxImportActivity::class.java).apply {
-            this.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-        }
         val pendingIntent = PendingIntent.getActivity(this, 0, intent, 0)
 
-        val initialNotification = createNotificationBuilder(pendingIntent, getString(R.string.dropbox_import_notification_initial_msg)).build()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        val channelId =
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                createNotificationChannel()
+            } else {
+                // If earlier version channel ID is not used
+                // https://developer.android.com/reference/android/support/v4/app/NotificationCompat.Builder.html#NotificationCompat.Builder(android.content.Context)
+                ""
+            }
 
-        startForeground(1, initialNotification)
+            createNotificationBuilder(pendingIntent, getString(R.string.dropbox_import_notification_channel_name))
+        }
+
+        val directory = intent?.getStringExtra(EXTRA_DIRECTORY)
+        val database = intent?.getParcelableExtra<ExportDatabase<Project>>(EXTRA_DATABASE)
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val initialNotification = createNotificationBuilder(
+                pendingIntent,
+                getString(R.string.dropbox_import_notification_initial_msg)
+            ).build()
+
+            startForeground(1, initialNotification)
+        } else {
+            startForeground(1, Notification())
+        }
 
         GlobalScope.launch {
             try {
                 withContext(Dispatchers.IO) {
-                    if (directory != null) {
+                    if (directory != null && database != null) {
                         val wakeLock: PowerManager.WakeLock =
                             (getSystemService(Context.POWER_SERVICE) as PowerManager).run {
                                 newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "Knittings::DropboxImport").apply {
@@ -62,15 +63,17 @@ class DropboxImportService : Service() {
                                 }
                             }
                         try {
-                            downloadPhotos(database!!, directory!!, pendingIntent)
+                            downloadPhotos(database, directory, pendingIntent)
                         } finally {
                             wakeLock.release()
                         }
                     }
                 }
                 DropboxImportServiceManager.getInstance().updateJobStatus(JobStatus.Success(getString(R.string.dropbox_import_completed)))
-                val n = createNotificationBuilder(pendingIntent, getString(R.string.dropbox_import_notification_done_msg), false).build()
-                NotificationManagerCompat.from(this@DropboxImportService).notify(1, n)
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    val n = createNotificationBuilder(pendingIntent, getString(R.string.dropbox_import_notification_done_msg), false).build()
+                    NotificationManagerCompat.from(this@DropboxImportService).notify(1, n)
+                }
             } finally {
                 stopForeground(false)
                 stopSelf()
@@ -87,18 +90,50 @@ class DropboxImportService : Service() {
         DropboxImportServiceManager.getInstance().updateServiceStatus(ServiceStatus.Stopped)
     }
 
-    private fun downloadPhotos(database: ExportDatabase<Project>, directory: String, pendingIntent: PendingIntent) {
-        val builder = createNotificationBuilder(pendingIntent, getString(R.string.dropbox_import_notification_initial_msg))
-        val notificationManager = NotificationManagerCompat.from(this)
-        val sm = DropboxImportServiceManager.getInstance()
-        val dbxClient = DropboxClientFactory.getClient()
-        database.write(dbxClient, directory) { progress ->
-            builder.setProgress(100, progress, false)
-            notificationManager.notify(1, builder.build())
-            sm.updateJobStatus(JobStatus.Progress(progress))
+    private suspend fun downloadPhotos(database: ExportDatabase<Project>, directory: String, pendingIntent: PendingIntent) {
+        val clientIdentifier = "Knittings"
+        val requestConfig = DbxRequestConfig(clientIdentifier)
+        val credential = getLocalCredential()
+        credential?.let {
+            val dropboxClient = DbxClientV2(requestConfig, credential)
+            val sm = DropboxImportServiceManager.getInstance()
+            database.write(this, dropboxClient, directory) { progress ->
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    val builder = createNotificationBuilder(pendingIntent,  getString(R.string.dropbox_import_notification_initial_msg))
+                    val notificationManager = NotificationManagerCompat.from(this)
+                    builder.setProgress(100, progress, false)
+                    notificationManager.notify(1, builder.build())
+                }
+                sm.updateJobStatus(JobStatus.Progress(progress))
+            }
         }
     }
 
+    //deserialize the credential from SharedPreferences if it exists
+    protected fun getLocalCredential(): DbxCredential? {
+        val sharedPreferences = getSharedPreferences(KNITTINGS, Activity.MODE_PRIVATE)
+        val serializedCredential = sharedPreferences.getString("credential", null) ?: return null
+        return DbxCredential.Reader.readFully(serializedCredential)
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun createNotificationChannel() {
+        // Create the NotificationChannel, but only on API 26+ because
+        // the NotificationChannel class is new and not in the support library
+        val name = getString(R.string.dropbox_import_notification_channel_name)
+        val descriptionText = getString(R.string.dropbox_import_notification_channel_name)
+        val importance = NotificationManager.IMPORTANCE_LOW
+        val channel = NotificationChannel(getString(R.string.dropbox_import_notification_channel_id), name, importance).apply {
+            description = descriptionText
+        }
+        // Register the channel with the system
+        val notificationManager: NotificationManager =
+            getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        notificationManager.createNotificationChannel(channel)
+    }
+
+
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun createNotificationBuilder(pendingIntent: PendingIntent, msg: String, autoCancel: Boolean = true): NotificationCompat.Builder {
         return NotificationCompat.Builder(this, getString(R.string.dropbox_import_notification_channel_id)).apply {
             setContentTitle(getString(R.string.dropbox_import_notification_title))
@@ -110,6 +145,7 @@ class DropboxImportService : Service() {
             setContentIntent(pendingIntent)
             setDefaults(0)
             setAutoCancel(autoCancel)
+
             priority = NotificationCompat.PRIORITY_LOW
         }
     }
@@ -117,6 +153,8 @@ class DropboxImportService : Service() {
     companion object {
         private val EXTRA_DIRECTORY = "directory"
         private val EXTRA_DATABASE = "database"
+
+        val KNITTINGS = "com.mthaler.knittings"
 
         fun startService(context: Context, directory: String, database: ExportDatabase<Project>) {
             val startIntent = Intent(context, DropboxImportService::class.java)
