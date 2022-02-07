@@ -5,10 +5,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import com.dropbox.core.DbxRequestConfig
 import com.dropbox.core.android.Auth
 import com.dropbox.core.oauth.DbxCredential
+import com.dropbox.core.v2.DbxClientV2
 import com.mthaler.knittings.BuildConfig
 import com.mthaler.knittings.DatabaseApplication
 import com.mthaler.knittings.R
@@ -190,6 +193,7 @@ class DropboxExportFragment : AbstractDropboxFragment() {
             binding.typeText.visibility = View.VISIBLE
             binding.dataTitle.visibility = View.VISIBLE
             binding.exportButton.isEnabled = true
+            fetchAccountInfo()
         } else {
             // user is logged out, show login button, hide other buttons
             binding.loginButton.visibility = View.VISIBLE
@@ -199,6 +203,34 @@ class DropboxExportFragment : AbstractDropboxFragment() {
             binding.typeText.visibility = View.GONE
             binding.dataTitle.visibility = View.GONE
             binding.exportButton.isEnabled = false
+        }
+    }
+
+    private fun fetchAccountInfo() {
+        val requestConfig = DbxRequestConfig(CLIENT_IDENTIFIER)
+        val credential = getLocalCredential()
+        credential?.let {
+            val dropboxClient = DbxClientV2(requestConfig, credential)
+            val dropboxApi = DropboxApi(dropboxClient)
+            lifecycleScope.launch {
+                when (val response = dropboxApi.getAccountInfo()) {
+                    is DropboxAccountInfoResponse.Failure -> {
+                        Toast.makeText(
+                            this@DropboxExportFragment.requireContext(),
+                            "Error getting account info!",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        binding.exceptionText.text =
+                            "type: ${response.exception.javaClass} + ${response.exception.localizedMessage}"
+                    }
+                    is DropboxAccountInfoResponse.Success -> {
+                        val account= response.accountInfo
+                        binding.emailText.text = account.email
+                        binding.nameText.text = account.name.displayName
+                        binding.typeText.text = account.accountType.name
+                    }
+                }
+            }
         }
     }
 }

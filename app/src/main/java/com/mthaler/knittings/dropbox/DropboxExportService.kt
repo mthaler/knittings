@@ -1,9 +1,6 @@
 package com.mthaler.knittings.dropbox
 
-import android.app.NotificationChannel
-import android.app.NotificationManager
-import android.app.PendingIntent
-import android.app.Service
+import android.app.*
 import android.content.Context
 import android.content.Intent
 import android.os.Build
@@ -13,6 +10,8 @@ import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
+import com.dropbox.core.DbxRequestConfig
+import com.dropbox.core.oauth.DbxCredential
 import com.dropbox.core.v2.DbxClientV2
 import com.dropbox.core.v2.files.WriteMode
 import com.mthaler.knittings.DatabaseApplication
@@ -76,31 +75,35 @@ class DropboxExportService : Service() {
 
     override fun onBind(intent: Intent): IBinder? = null
 
-    private fun upload(dir: String, pendingIntent: PendingIntent): Boolean {
+    private suspend fun upload(dir: String, pendingIntent: PendingIntent): Boolean {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val builder = createNotificationBuilder(
-                pendingIntent,
-                getString(R.string.dropbox_export_notification_initial_msg)
-            )
-            //val dbxClient = DropboxClientFactory.getClient()
-            val notificationManager = NotificationManagerCompat.from(this)
-            val sm = DropboxExportServiceManager.getInstance()
-            // create directory containing current date & time
-            //dbxClient.files().createFolderV2("/$dir")
-            val database = (applicationContext as DatabaseApplication<Project>).createExportDatabase()
-                .checkDatabase()
-            //uploadDatabase(dbxClient, dir, database)
-            // upload photos to dropbox
-            val count = database.photos.size
-            for ((index, photo) in database.photos.withIndex()) {
-                if (sm.cancelled) {
-                    return true
+            val clientIdentifier = "Knittings"
+            val requestConfig = DbxRequestConfig(clientIdentifier)
+            val credential = getLocalCredential()
+            credential?.let {
+                val dropboxClient = DbxClientV2(requestConfig, credential)
+                val builder = createNotificationBuilder(
+                    pendingIntent,
+                    getString(R.string.dropbox_export_notification_initial_msg)
+                )
+                val notificationManager = NotificationManagerCompat.from(this)
+                val sm = DropboxExportServiceManager.getInstance()
+                // create directory containing current date & time
+                dropboxClient.files().createFolderV2("/$dir")
+                val database = (applicationContext as DatabaseApplication<Project>).createExportDatabase().checkDatabase()
+                //uploadDatabase(dbxClient, dir, database)
+                // upload photos to dropbox
+                val count = database.photos.size
+                for ((index, photo) in database.photos.withIndex()) {
+                    if (sm.cancelled) {
+                        return true
+                    }
+                    uploadPhoto(dropboxClient, dir, photo)
+                    val progress = (index / count.toFloat() * 100).toInt()
+                    builder.setProgress(100, progress, false)
+                    notificationManager.notify(1, builder.build())
+                    sm.updateJobStatus(JobStatus.Progress(progress))
                 }
-                //uploadPhoto(dbxClient, dir, photo)
-                val progress = (index / count.toFloat() * 100).toInt()
-                builder.setProgress(100, progress, false)
-                notificationManager.notify(1, builder.build())
-                sm.updateJobStatus(JobStatus.Progress(progress))
             }
         }
         return false
@@ -130,21 +133,11 @@ class DropboxExportService : Service() {
                 val n = createNotificationBuilder(
                     pendingIntent,
                     getString(R.string.dropbox_export_notification_cancelled_msg),
-                    false
-                ).build()
+                    false).build()
                 nm.notify(1, n)
-                DropboxExportServiceManager.getInstance().updateJobStatus(
-                    JobStatus.Cancelled(
-                        getString(R.string.dropbox_export_notification_cancelled_msg),
-                        dir
-                    )
-                )
+                DropboxExportServiceManager.getInstance().updateJobStatus(JobStatus.Cancelled(getString(R.string.dropbox_export_notification_cancelled_msg), dir))
             } else {
-                val n = createNotificationBuilder(
-                    pendingIntent,
-                    getString(R.string.dropbox_export_notification_done_msg),
-                    false
-                ).build()
+                val n = createNotificationBuilder(pendingIntent, getString(R.string.dropbox_export_notification_done_msg), false).build()
                 nm.notify(1, n)
                 DropboxExportServiceManager.getInstance().updateJobStatus(JobStatus.Success())
             }
@@ -187,6 +180,13 @@ class DropboxExportService : Service() {
         }
     }
 
+    //deserialize the credential from SharedPreferences if it exists
+    protected fun getLocalCredential(): DbxCredential? {
+        val sharedPreferences = getSharedPreferences(DropboxImportService.KNITTINGS, Activity.MODE_PRIVATE)
+        val serializedCredential = sharedPreferences.getString("credential", null) ?: return null
+        return DbxCredential.Reader.readFully(serializedCredential)
+    }
+
     companion object {
 
         fun startService(context: Context) {
@@ -199,4 +199,7 @@ class DropboxExportService : Service() {
             context.stopService(stopIntent)
         }
     }
+
+
 }
+
