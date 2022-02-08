@@ -77,12 +77,12 @@ class DropboxExportService : Service() {
     override fun onBind(intent: Intent): IBinder? = null
 
     private suspend fun upload(dir: String, pendingIntent: PendingIntent): Boolean {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val clientIdentifier = "Knittings"
-            val requestConfig = DbxRequestConfig(clientIdentifier)
-            val credential = getLocalCredential()
-            credential?.let {
-                val dropboxClient = DbxClientV2(requestConfig, credential)
+        val clientIdentifier = "Knittings"
+        val requestConfig = DbxRequestConfig(clientIdentifier)
+        val credential = getLocalCredential()
+        credential?.let {
+            val dropboxClient = DbxClientV2(requestConfig, credential)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 val builder = createNotificationBuilder(
                     pendingIntent,
                     getString(R.string.dropbox_export_notification_initial_msg)
@@ -92,7 +92,7 @@ class DropboxExportService : Service() {
                 // create directory containing current date & time
                 dropboxClient.files().createFolderV2("/$dir")
                 val database = (applicationContext as DatabaseApplication<Project>).createExportDatabase().checkDatabase()
-                //uploadDatabase(dbxClient, dir, database)
+                uploadDatabase(dropboxClient, dir, database)
                 // upload photos to dropbox
                 val count = database.photos.size
                 for ((index, photo) in database.photos.withIndex()) {
@@ -105,6 +105,21 @@ class DropboxExportService : Service() {
                     notificationManager.notify(1, builder.build())
                     sm.updateJobStatus(JobStatus.Progress(progress))
                 }
+            } else {
+                val sm = DropboxExportServiceManager.getInstance()
+                 dropboxClient.files().createFolderV2("/$dir")
+                 val database = (applicationContext as DatabaseApplication<Project>).createExportDatabase().checkDatabase()
+                 uploadDatabase(dropboxClient, dir, database)
+                 // upload photos to dropbox
+                 val count = database.photos.size
+                 for ((index, photo) in database.photos.withIndex()) {
+                     if (sm.cancelled) {
+                        return true
+                    }
+                    uploadPhoto(dropboxClient, dir, photo)
+                    val progress = (index / count.toFloat() * 100).toInt()
+                    sm.updateJobStatus(JobStatus.Progress(progress))
+                 }
             }
         }
         return false
@@ -143,28 +158,10 @@ class DropboxExportService : Service() {
                 DropboxExportServiceManager.getInstance().updateJobStatus(JobStatus.Success())
             }
         } else {
-
+            DropboxExportServiceManager.getInstance().updateJobStatus(JobStatus.Cancelled(getString(R.string.dropbox_export_notification_cancelled_msg), dir))
         }
     }
-
-
-
-    @RequiresApi(Build.VERSION_CODES.O)
-    private fun createNotificationChannel() {
-        // Create the NotificationChannel, but only on API 26+ because
-        // the NotificationChannel class is new and not in the support library
-        val name = getString(R.string.dropbox_export_notification_channel_name)
-        val descriptionText = getString(R.string.dropbox_export_notification_channel_name)
-        val importance = NotificationManager.IMPORTANCE_LOW
-        val channel = NotificationChannel(getString(R.string.dropbox_export_notification_channel_id), name, importance).apply {
-            description = descriptionText
-        }
-        // Register the channel with the system
-        val notificationManager: NotificationManager =
-            getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        notificationManager.createNotificationChannel(channel)
-    }
-
+    
     @RequiresApi(Build.VERSION_CODES.O)
     private fun createNotificationBuilder(pendingIntent: PendingIntent, msg: String, autoCancel: Boolean = true): NotificationCompat.Builder {
         return NotificationCompat.Builder(this, getString(R.string.dropbox_export_notification_channel_id)).apply {
