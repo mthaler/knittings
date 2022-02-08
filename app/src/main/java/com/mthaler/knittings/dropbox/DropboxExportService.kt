@@ -34,10 +34,9 @@ class DropboxExportService : Service() {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val pendingIntent = PendingIntent.getActivity(this, 0, intent, 0)
+        val pendingIntent = PendingIntent.getActivity(this, 0, intent, 0)
 
-            val channelID = createNotificationChannel()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 
             val initialNotification = createNotificationBuilder(
                 pendingIntent,
@@ -45,29 +44,31 @@ class DropboxExportService : Service() {
             ).build()
 
             startForeground(1, initialNotification)
+        } else {
+            startForeground(1, Notification())
+        }
 
-            GlobalScope.launch {
-                val dir = createDateTimeDirectoryName(Date())
-                val cancelled = withContext(Dispatchers.IO) {
-                    val wakeLock: PowerManager.WakeLock =
-                        (getSystemService(Context.POWER_SERVICE) as PowerManager).run {
-                            newWakeLock(
-                                PowerManager.PARTIAL_WAKE_LOCK,
-                                "Knittings::DropboxExport"
-                            ).apply {
-                                acquire()
-                            }
+        GlobalScope.launch {
+            val dir = createDateTimeDirectoryName(Date())
+            val cancelled = withContext(Dispatchers.IO) {
+                val wakeLock: PowerManager.WakeLock =
+                    (getSystemService(Context.POWER_SERVICE) as PowerManager).run {
+                        newWakeLock(
+                            PowerManager.PARTIAL_WAKE_LOCK,
+                            "Knittings::DropboxExport"
+                        ).apply {
+                            acquire()
                         }
-                    try {
-                        upload(dir, pendingIntent)
-                    } finally {
-                        wakeLock.release()
                     }
+                try {
+                    upload(dir, pendingIntent)
+                } finally {
+                    wakeLock.release()
                 }
-                onUploadCompleted(dir, cancelled, pendingIntent)
-                stopForeground(false)
-                stopSelf()
             }
+            onUploadCompleted(dir, cancelled, pendingIntent)
+            stopForeground(false)
+            stopSelf()
         }
 
         return START_NOT_STICKY

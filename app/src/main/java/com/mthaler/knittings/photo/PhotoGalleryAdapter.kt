@@ -3,6 +3,7 @@ package com.mthaler.knittings.photo
 import android.content.Context
 import android.net.Uri
 import android.os.Handler
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -27,6 +28,7 @@ class PhotoGalleryAdapter(context: Context, private val lifecycleScope: Lifecycl
     private val displayPhotoSize = sharedPref.getBoolean("display_photo_size", false)
 
     fun setPhotos(photos: List<Photo>) {
+        Log.w(TAG, Thread.currentThread().name)
         this.photos.clear()
         this.photos.addAll(photos)
         notifyDataSetChanged()
@@ -112,5 +114,8 @@ class PhotoGalleryAdapter(context: Context, private val lifecycleScope: Lifecycl
                 })
             }
         }
+    }
+    companion object {
+        val TAG = "PhotoGalleryAdapter"
     }
 }
