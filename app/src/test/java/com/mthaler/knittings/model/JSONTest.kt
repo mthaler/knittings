@@ -183,7 +183,7 @@ class JSONTest {
         val p0 = Photo(42, File("/tmp/photo1.jpg"), 43, "socks", null)
         val p1 = Photo(43, File("/tmp/photo2.jpg"), 44, "shirt", null)
         val photos = listOf(p0, p1)
-        val db = Database(knittings, photos, ArrayList(), ArrayList())
+        val db = Database(knittings, photos, ArrayList(), ArrayList(), emptyList())
         val json = db.toJSON()
         assertEquals(5, json.getInt("version"))
         // get the JSON array containing the knittings
@@ -262,7 +262,7 @@ class JSONTest {
         assertEquals("shirt", p2.description)
     }
 
-    Test
+    @Test
     fun testCategoryToJSON() {
         val c0 = Category(42, "test", null)
         val j0 = c0.toJSON()

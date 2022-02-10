@@ -161,7 +161,7 @@ class DropboxExportService : Service() {
             DropboxExportServiceManager.getInstance().updateJobStatus(JobStatus.Cancelled(getString(R.string.dropbox_export_notification_cancelled_msg), dir))
         }
     }
-    
+
     @RequiresApi(Build.VERSION_CODES.O)
     private fun createNotificationBuilder(pendingIntent: PendingIntent, msg: String, autoCancel: Boolean = true): NotificationCompat.Builder {
         return NotificationCompat.Builder(this, getString(R.string.dropbox_export_notification_channel_id)).apply {
@@ -179,7 +179,7 @@ class DropboxExportService : Service() {
     }
 
     //deserialize the credential from SharedPreferences if it exists
-    protected fun getLocalCredential(): DbxCredential? {
+    private fun getLocalCredential(): DbxCredential? {
         val sharedPreferences = getSharedPreferences(DropboxImportService.KNITTINGS, Activity.MODE_PRIVATE)
         val serializedCredential = sharedPreferences.getString("credential", null) ?: return null
         return DbxCredential.Reader.readFully(serializedCredential)
