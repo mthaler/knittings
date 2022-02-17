@@ -1,4 +1,4 @@
-package com.mthaler.knittings.rowcounter
+package com.mthaler.knittings.projectcount
 
 import android.content.Context
 import android.graphics.Canvas
