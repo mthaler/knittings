@@ -137,4 +137,4 @@ class KnittingDatabaseHelper(context: Context) : ManagedSQLiteOpenHelper(context
 }
 
 val Context.database: KnittingDatabaseHelper
-    get() = KnittingDatabaseHelper.getInstance(this.applicationContext)
+    get() = KnittingDatabaseHelper.getInstance(this)
