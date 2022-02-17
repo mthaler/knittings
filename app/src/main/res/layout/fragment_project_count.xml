@@ -2,6 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     tools:context="com.mthaler.knittings.projectcount.ProjectCountActivity">
 
@@ -20,7 +21,8 @@
             android:indeterminate="false"
             android:max="100"
             android:progress="100"
-            android:rotation="-90" />
+            android:rotation="-90"
+            app:ringColor="?attr/colorAccent"/>
 
         <TextView
             android:id="@+id/projectCount"

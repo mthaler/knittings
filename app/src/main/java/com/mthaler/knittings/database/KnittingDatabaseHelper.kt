@@ -18,8 +18,8 @@ class KnittingDatabaseHelper(context: Context) : ManagedSQLiteOpenHelper(context
         // Use in-memory database for testing. This is an ugly hack, but I didn't find another way to do this
         // if the database name is null, Android uses an in-memory database
         private val DB_NAME = try {
-            Class.forName("android.support.test.espresso.Espresso")
-            null
+            Class.forName("androidx.test.espresso.Espresso")
+            "knittings_test.db"
         } catch (_: ClassNotFoundException) {
             "knittings.db"
         }
@@ -30,7 +30,7 @@ class KnittingDatabaseHelper(context: Context) : ManagedSQLiteOpenHelper(context
         @Synchronized
         fun getInstance(ctx: Context): KnittingDatabaseHelper {
             if (instance == null) {
-                instance = KnittingDatabaseHelper(ctx.applicationContext)
+                instance = KnittingDatabaseHelper(ctx)
             }
             return instance!!
         }
@@ -137,4 +137,4 @@ class KnittingDatabaseHelper(context: Context) : ManagedSQLiteOpenHelper(context
 }
 
 val Context.database: KnittingDatabaseHelper
-    get() = KnittingDatabaseHelper.getInstance(applicationContext)
+    get() = KnittingDatabaseHelper.getInstance(this.applicationContext)

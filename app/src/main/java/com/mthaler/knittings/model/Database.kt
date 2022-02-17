@@ -2,8 +2,6 @@ package com.mthaler.knittings.model
 
 import android.content.Context
 import android.net.Uri
-import android.os.Parcel
-import android.os.Parcelable
 import com.dropbox.core.v2.DbxClientV2
 import com.mthaler.knittings.utils.FileUtils
 import com.mthaler.knittings.database.KnittingDatabaseHelper
@@ -14,24 +12,6 @@ import java.io.File
 import java.io.FileOutputStream
 
 data class Database(override val projects: List<Knitting>, override val photos: List<Photo>, override val categories: List<Category>, val needles: List<Needle>, val rowCounters: List<RowCounter>) : AbstractExportDatabase<Knitting>() {
-
-    private constructor(parcel: Parcel) : this(
-            projects = parcel.readParcelableArray(classLoader)!!.map { it as Knitting },
-            photos = parcel.readParcelableArray(classLoader)!!.map { it as Photo },
-            categories = parcel.readParcelableArray(classLoader)!!.map { it as Category },
-            needles = parcel.readParcelableArray(classLoader)!!.map { it as Needle },
-            rowCounters = parcel.readParcelableArray(classLoader)!!.map { it as RowCounter}
-    )
-
-    override fun writeToParcel(parcel: Parcel, flags: Int) {
-        parcel.writeParcelableArray(projects.toTypedArray(), 0)
-        parcel.writeParcelableArray(photos.toTypedArray(), 0)
-        parcel.writeParcelableArray(categories.toTypedArray(), 0)
-        parcel.writeParcelableArray(needles.toTypedArray(), 0)
-        parcel.writeParcelableArray(rowCounters.toTypedArray(), 0)
-    }
-
-    override fun describeContents(): Int = 0
 
     override fun checkDatabase(): Database {
         val filteredPhotos = photos.filter { it.filename.exists() }
@@ -102,14 +82,6 @@ data class Database(override val projects: List<Knitting>, override val photos: 
     }
 
     companion object {
-
-        val classLoader: ClassLoader = javaClass.classLoader!!
-
-        @JvmField
-        val CREATOR = object : Parcelable.Creator<Database> {
-            override fun createFromParcel(parcel: Parcel) = Database(parcel)
-            override fun newArray(size: Int) = arrayOfNulls<Database>(size)
-        }
 
         fun createDatabase(): Database {
             val projects = KnittingsDataSource.allProjects

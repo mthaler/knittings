@@ -33,14 +33,23 @@ class CircularProgressBar @JvmOverloads constructor(
     set(value) {
         field = value
         invalidate()
+        requestLayout()
     }
 
     init {
-        val typedArray = context.obtainStyledAttributes(attrs, R.styleable.CircularProgressBar)
-        val ringWidth = typedArray.getDimension(R.styleable.CircularProgressBar_ringWidth, 25f)
-        paint.strokeWidth = ringWidth
-        ringColor = typedArray.getColor(R.styleable.CircularProgressBar_ringColor,0)
-        progress = typedArray.getFloat(R.styleable.CircularProgressBar_progress, 0f)
+        context.theme.obtainStyledAttributes(
+            attrs,
+            R.styleable.CircularProgressBar,
+            0, 0).apply {
+                try {
+                    val ringWidth = getDimension(R.styleable.CircularProgressBar_ringWidth, 25f)
+                    paint.strokeWidth = ringWidth
+                    ringColor = getColor(R.styleable.CircularProgressBar_ringColor,0)
+                    progress = getFloat(R.styleable.CircularProgressBar_progress, 0f)
+                } finally {
+                   recycle()
+                }
+        }
     }
 
     /**

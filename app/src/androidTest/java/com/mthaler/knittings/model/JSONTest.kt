@@ -1,22 +1,18 @@
 package com.mthaler.knittings.model
 
 import android.graphics.Color
-import android.os.Build
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.json.JSONArray
 import org.json.JSONObject
-import org.junit.Assert
 import org.junit.Assert.*
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.robolectric.annotation.Config
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
 
 @RunWith(AndroidJUnit4::class)
-@Config(sdk = [Build.VERSION_CODES.P])
 class JSONTest {
 
     private val dateFormat = SimpleDateFormat("yyyy-MM-dd")
@@ -266,21 +262,21 @@ class JSONTest {
     fun testCategoryToJSON() {
         val c0 = Category(42, "test", null)
         val j0 = c0.toJSON()
-        Assert.assertEquals(42, j0.getLong("id"))
-        Assert.assertEquals("test", j0.getString("name"))
+        assertEquals(42, j0.getLong("id"))
+        assertEquals("test", j0.getString("name"))
         val c1 = Category(43, "socks", Color.RED)
         val j1 = c1.toJSON()
-        Assert.assertEquals(43, j1.getLong("id"))
-        Assert.assertEquals("socks", j1.getString("name"))
-        Assert.assertEquals(Color.RED, Color.parseColor(j1.getString("color")))
+        assertEquals(43, j1.getLong("id"))
+        assertEquals("socks", j1.getString("name"))
+        assertEquals(Color.RED, Color.parseColor(j1.getString("color")))
     }
 
     @Test
     fun testJSONToCategory() {
         val s1 = """{"name":"test","id":42}"""
-        Assert.assertEquals(Category(42, "test", null), JSONObject(s1).toCategory())
+        assertEquals(Category(42, "test", null), JSONObject(s1).toCategory())
         val s2 = """{"color":"#FFFF0000","name":"socks","id":43}"""
-        Assert.assertEquals(Category(43, "socks", Color.RED), JSONObject(s2).toCategory())
+        assertEquals(Category(43, "socks", Color.RED), JSONObject(s2).toCategory())
     }
 
     @Test
@@ -288,9 +284,9 @@ class JSONTest {
         val s = """[{"name":"test","id":42},{"color":"#FFFF0000","name":"socks","id":43}]"""
         val json = JSONArray(s)
         val categories = json.toCategories()
-        Assert.assertEquals(2, categories.size)
-        Assert.assertEquals(Category(42, "test", null), categories[0])
-        Assert.assertEquals(Category(43, "socks", Color.RED), categories[1])
+        assertEquals(2, categories.size)
+        assertEquals(Category(42, "test", null), categories[0])
+        assertEquals(Category(43, "socks", Color.RED), categories[1])
     }
 
 }

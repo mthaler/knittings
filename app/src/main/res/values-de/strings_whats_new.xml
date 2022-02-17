@@ -2,6 +2,8 @@
 <resources>
     <string name="whats_new_title">Whats New</string>
     <string name="whats_new"><![CDATA[
+        <h3>Version 0.9.31</h3>
+        - Projekte zählen funktioniert wieder<br>
         <h3>Version 0.9.30</h3>
         - Library Versionen auf aktuellen Stand gebracht<br>
         <h3>Version 0.9.29</h3>

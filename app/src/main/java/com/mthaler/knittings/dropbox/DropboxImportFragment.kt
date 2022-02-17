@@ -154,7 +154,7 @@ class DropboxImportFragment : AbstractDropboxFragment() {
                         try {
                             lifecycleScope.launchWhenStarted() {
                                 val result =  dropboxApi.listFolders()
-                                importDatbase(result)
+                                importDatabase(result)
                             }
                         } catch (ex: java.lang.Exception) {
                             listener?.error(ex)
@@ -171,7 +171,7 @@ class DropboxImportFragment : AbstractDropboxFragment() {
                         try {
                             lifecycleScope.launchWhenStarted() {
                                 val result =  dropboxApi.listFolders()
-                                importDatbase(result)
+                                importDatabase(result)
                             }
                         } catch (ex: java.lang.Exception) {
                             listener?.error(ex)
@@ -184,7 +184,7 @@ class DropboxImportFragment : AbstractDropboxFragment() {
         }
     }
 
-    private suspend fun importDatbase(result: ListFolderResult) {
+    private suspend fun importDatabase(result: ListFolderResult) {
         val requestConfig = DbxRequestConfig(CLIENT_IDENTIFIER)
         val credential = getLocalCredential()
         credential?.let {

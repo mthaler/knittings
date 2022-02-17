@@ -17,6 +17,7 @@ import com.mthaler.knittings.model.Project
 import com.mthaler.knittings.service.JobStatus
 import com.mthaler.knittings.service.ServiceStatus
 import kotlinx.coroutines.*
+import java.io.Serializable
 
 class DropboxImportService : Service() {
 
@@ -39,7 +40,7 @@ class DropboxImportService : Service() {
         }
 
         val directory = intent?.getStringExtra(EXTRA_DIRECTORY)
-        val database = intent?.getParcelableExtra<ExportDatabase<Project>>(EXTRA_DATABASE)
+        val database = intent?.getSerializableExtra(EXTRA_DATABASE) as ExportDatabase<Project>
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val initialNotification = createNotificationBuilder(
@@ -151,15 +152,15 @@ class DropboxImportService : Service() {
     }
 
     companion object {
-        private val EXTRA_DIRECTORY = "directory"
-        private val EXTRA_DATABASE = "database"
+        private val EXTRA_DIRECTORY = "com.mthaler.knittings.directory"
+        private val EXTRA_DATABASE = "com.mthaler.knittings.database"
 
         val KNITTINGS = "com.mthaler.knittings"
 
         fun startService(context: Context, directory: String, database: ExportDatabase<Project>) {
             val startIntent = Intent(context, DropboxImportService::class.java)
             startIntent.putExtra(EXTRA_DIRECTORY, directory)
-            startIntent.putExtra(EXTRA_DATABASE, database as Parcelable)
+            startIntent.putExtra(EXTRA_DATABASE, database as Serializable)
             ContextCompat.startForegroundService(context, startIntent)
         }
 

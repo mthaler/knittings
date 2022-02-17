@@ -13,7 +13,7 @@ import com.mthaler.knittings.R
 import com.mthaler.knittings.model.*
 import java.lang.Exception
 
-object KnittingsDataSource  : AbstractObservableDatabase(), PhotoDataSource, CategoryDataSource,
+object KnittingsDataSource : AbstractObservableDatabase(), PhotoDataSource, CategoryDataSource,
     ProjectsDataSource<Knitting> {
 
     private const val TAG = "KnittingsDataSource"
@@ -543,6 +543,6 @@ object KnittingsDataSource  : AbstractObservableDatabase(), PhotoDataSource, Cat
     }
 
     fun init(context: Context) {
-        this.context = context.applicationContext
+        this.context = context
     }
 }

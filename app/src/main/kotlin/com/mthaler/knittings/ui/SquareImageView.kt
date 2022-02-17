@@ -1,4 +1,4 @@
-package com.mthaler.knittings.ui;
+package com.mthaler.knittings.ui
 
 import android.content.Context;
 import android.util.AttributeSet;
