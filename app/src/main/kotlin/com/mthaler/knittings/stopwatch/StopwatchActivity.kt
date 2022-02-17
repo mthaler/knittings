@@ -16,7 +16,7 @@ import java.util.Locale
 /**
  * StopWatchActivity shows a stopwatch that can be used to measure the time the user is working on a knitting
  */
-class   StopwatchActivity : BaseActivity() {
+class StopwatchActivity : BaseActivity() {
 
     private lateinit var binding: ActivityStopwatchBinding
     private var knittingID: Long = -1
