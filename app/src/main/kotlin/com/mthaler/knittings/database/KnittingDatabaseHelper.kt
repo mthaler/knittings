@@ -15,8 +15,6 @@ class KnittingDatabaseHelper(context: Context) : ManagedSQLiteOpenHelper(context
 
         private const val TAG = "KnittingDatabaseHelper"
 
-        // Use in-memory database for testing. This is an ugly hack, but I didn't find another way to do this
-        // if the database name is null, Android uses an in-memory database
         private val DB_NAME = try {
             Class.forName("androidx.test.espresso.Espresso")
             "knittings_test.db"
