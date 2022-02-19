@@ -1,4 +1,4 @@
-package com.mthaler.knittings.service
+package com.mthaler.knittings.compressphotos
 
 import android.util.Log
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -10,7 +10,8 @@ import org.junit.Before
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
-class BasicInstrumentationTest {
+class CompressPhotoTest {
+
     @Before
     fun setup() {
         val context = InstrumentationRegistry.getInstrumentation().targetContext
