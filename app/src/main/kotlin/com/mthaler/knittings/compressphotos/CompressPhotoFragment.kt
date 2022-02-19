@@ -69,6 +69,16 @@ class CompressPhotoFragment : Fragment() {
                                     sm.updateJobStatus(JobStatus.Error(Exception("Could not compress photos")))
                                     sm.updateServiceStatus(ServiceStatus.Stopped)
                                 }
+                                WorkInfo.State.BLOCKED -> {
+                                    val sm = CompressPhotosServiceManager.getInstance()
+                                    sm.updateJobStatus(JobStatus.Error(Exception("Could not compress photos")))
+                                    sm.updateServiceStatus(ServiceStatus.Stopped)
+                                }
+                                WorkInfo.State.CANCELLED -> {
+                                    val sm = CompressPhotosServiceManager.getInstance()
+                                    sm.updateJobStatus(JobStatus.Cancelled(context.resources.getString(R.string.compress_photos_cancelled)))
+                                    sm.updateServiceStatus(ServiceStatus.Stopped)
+                                }
                                 else -> {
                                     val sm = CompressPhotosServiceManager.getInstance()
                                     sm.updateJobStatus(JobStatus.Progress(0))
