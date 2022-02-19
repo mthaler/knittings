@@ -11,6 +11,7 @@ import com.mthaler.knittings.databinding.FragmentCompressPhotoBinding
 import com.mthaler.knittings.service.JobStatus
 import com.mthaler.knittings.service.ServiceStatus
 import com.mthaler.knittings.utils.Format
+import java.lang.Exception
 
 class CompressPhotoFragment : Fragment() {
 
@@ -21,7 +22,7 @@ class CompressPhotoFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
 
         val viewModel = ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory.getInstance(requireActivity().application)).get(CompressPhotosViewModel::class.java)
-        viewModel.statistics.observe(this, { statistics ->
+        viewModel.statistics.observe(viewLifecycleOwner, { statistics ->
             binding.numberOfPhotos.text = statistics.photos.toString()
             binding.totalSize.text = Format.humanReadableByteCountBin(statistics.totalSize)
             binding.willBeCompressed.text = statistics.photosToCompress.toString()
@@ -30,6 +31,62 @@ class CompressPhotoFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        binding.buttonStart.setOnClickListener {
+            val builder = AlertDialog.Builder(requireContext())
+            with(builder) {
+                setTitle(resources.getString(R.string.compress_photos_dialog_title))
+                setMessage(resources.getString(R.string.compress_photos_dialog_message))
+                setPositiveButton(resources.getString(R.string.compress_photos_dialog_button_compress)) { dialog, which ->
+                    val request = OneTimeWorkRequestBuilder<CompressPhotoWorker>().build()
+                    val workManager = WorkManager.getInstance(requireContext())
+                    workManager.enqueueUniqueWork(TAG,  ExistingWorkPolicy.REPLACE, request)
+                    workManager.getWorkInfoByIdLiveData(request.id).observe(viewLifecycleOwner) { workInfo ->
+                        if (workInfo != null) {
+                            when (workInfo.state) {
+                                WorkInfo.State.ENQUEUED -> {
+                                    val sm = CompressPhotosServiceManager.getInstance()
+                                    sm.updateJobStatus(JobStatus.Progress(0))
+                                    sm.updateServiceStatus(ServiceStatus.Started)
+                                }
+                                WorkInfo.State.RUNNING -> {
+                                    val sm = CompressPhotosServiceManager.getInstance()
+                                    sm.updateJobStatus(JobStatus.Progress(workInfo.progress.getInt(CompressPhotoWorker.Progress, 0)))
+                                    sm.updateServiceStatus(ServiceStatus.Started)
+                                }
+                                WorkInfo.State.SUCCEEDED -> {
+                                    val sm = CompressPhotosServiceManager.getInstance()
+                                    sm.updateJobStatus(JobStatus.Success("photos compressed"))
+                                    sm.updateServiceStatus(ServiceStatus.Started)
+                                }
+                                WorkInfo.State.FAILED -> {
+                                    val sm = CompressPhotosServiceManager.getInstance()
+                                    sm.updateJobStatus(JobStatus.Error(Exception("Could not compress photos")))
+                                    sm.updateServiceStatus(ServiceStatus.Stopped)
+                                }
+                                WorkInfo.State.BLOCKED -> {
+                                    val sm = CompressPhotosServiceManager.getInstance()
+                                    sm.updateJobStatus(JobStatus.Error(Exception("Could not compress photos")))
+                                    sm.updateServiceStatus(ServiceStatus.Stopped)
+                                }
+                                else -> {
+                                    val sm = CompressPhotosServiceManager.getInstance()
+                                    sm.updateJobStatus(JobStatus.Progress(0))
+                                    sm.updateServiceStatus(ServiceStatus.Stopped)
+                                }
+                            }
+                        }
+
+                    }
+                }
+                setNegativeButton(resources.getString(R.string.dialog_button_cancel)) { dialog, which -> }
+                show()
+            }
+        }
+
+        binding.cancelButton.setOnClickListener {
+            CompressPhotosServiceManager.getInstance().cancelled = true
+        }
 
         CompressPhotosServiceManager.getInstance().jobStatus.observe(viewLifecycleOwner, { jobStatus->
             when(jobStatus) {
@@ -74,32 +131,6 @@ class CompressPhotoFragment : Fragment() {
                 ServiceStatus.Started -> binding.buttonStart.isEnabled = false
             }
         })
-
-        binding.buttonStart.setOnClickListener {
-            val builder = AlertDialog.Builder(requireContext())
-            with(builder) {
-                setTitle(resources.getString(R.string.compress_photos_dialog_title))
-                setMessage(resources.getString(R.string.compress_photos_dialog_message))
-                setPositiveButton(resources.getString(R.string.compress_photos_dialog_button_compress)) { dialog, which ->
-                    val constraints = Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build()
-                    val request = OneTimeWorkRequestBuilder<CompressPhotoWorker>().setConstraints(constraints).build()
-                    val workManager = WorkManager.getInstance(requireContext())
-                    workManager.enqueueUniqueWork(TAG,  ExistingWorkPolicy.REPLACE, request)
-                    val workInfo = workManager.getWorkInfoByIdLiveData(request.id).observe(viewLifecycleOwner) { workInfo ->
-                        when (workInfo?.state) {
-                            WorkInfo.State.RUNNING -> CompressPhotosServiceManager.getInstance().updateServiceStatus(com.mthaler.knittings.service.ServiceStatus.Started)
-                            else -> CompressPhotosServiceManager.getInstance().updateServiceStatus(com.mthaler.knittings.service.ServiceStatus.Stopped)
-                        }
-                    }
-                }
-                setNegativeButton(resources.getString(R.string.dialog_button_cancel)) { dialog, which -> }
-                show()
-            }
-        }
-
-        binding.cancelButton.setOnClickListener {
-            CompressPhotosServiceManager.getInstance().cancelled = true
-        }
     }
 
     override fun onDestroyView() {
