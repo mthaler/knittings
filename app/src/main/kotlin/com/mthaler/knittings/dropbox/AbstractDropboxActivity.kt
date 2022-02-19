@@ -59,7 +59,7 @@ abstract class AbstractDropboxActivity : BaseActivity(), AbstractDropboxFragment
     }
 
     private fun clearDropboxClient() {
-        //DropboxClientFactory.clearClient()y
+        //DropboxClientFactory.clearClient()
     }
 
     private fun clearAuthActivity() {
