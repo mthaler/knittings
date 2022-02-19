@@ -56,7 +56,7 @@ class CompressPhotoFragment : Fragment() {
                                 }
                                 WorkInfo.State.SUCCEEDED -> {
                                     val sm = CompressPhotosServiceManager.getInstance()
-                                    sm.updateJobStatus(JobStatus.Success("photos compressed"))
+                                    sm.updateJobStatus(JobStatus.Success(context.resources.getString(R.string.compress_photos_completed)))
                                     sm.updateServiceStatus(ServiceStatus.Started)
                                 }
                                 WorkInfo.State.FAILED -> {
