@@ -6,6 +6,8 @@ import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.work.Constraints
 import androidx.work.NetworkType
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
 import com.mthaler.knittings.R
 import com.mthaler.knittings.databinding.FragmentCompressPhotoBinding
 
@@ -25,7 +27,9 @@ class CompressPhotoFragment : Fragment() {
                 setMessage(resources.getString(R.string.compress_photos_dialog_message))
                 setPositiveButton(resources.getString(R.string.compress_photos_dialog_button_compress)) { dialog, which ->
                     val constraints = Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build()
-                    CompressPhotosService.startService(requireContext(), "Foreground Service is running...")
+                    val request = OneTimeWorkRequestBuilder<CompressPhotoWorker>().setConstraints(constraints).build()
+                    WorkManager.getInstance(requireContext()).enqueue(request)
+                    //CompressPhotosService.startService(requireContext(), "Foreground Service is running...")
                 }
                 setNegativeButton(resources.getString(R.string.dialog_button_cancel)) { dialog, which -> }
                 show()
