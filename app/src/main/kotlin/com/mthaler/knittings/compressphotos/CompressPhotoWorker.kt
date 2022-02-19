@@ -15,7 +15,7 @@ class CompressPhotoWorker(val context: Context, workerParams: WorkerParameters) 
         TODO("Not yet implemented")
     }
 
-    private suspend fun compressPhotos(pendingIntent: PendingIntent): Boolean {
+    private suspend fun compressPhotos(pendingIntent: PendingIntent) {
         val sm = CompressPhotosServiceManager.getInstance()
         val photos = KnittingsDataSource.allPhotos
         val photosToCompress = photos.filter {
@@ -24,7 +24,7 @@ class CompressPhotoWorker(val context: Context, workerParams: WorkerParameters) 
         val count = photosToCompress.count()
         for ((index, photo) in photosToCompress.withIndex()) {
             if (sm.cancelled) {
-                return true
+                return
             }
             val progress = (index / count.toDouble() * 100).toInt()
             val file = photo.filename
@@ -44,6 +44,5 @@ class CompressPhotoWorker(val context: Context, workerParams: WorkerParameters) 
             }
             sm.updateJobStatus(JobStatus.Progress(progress))
         }
-        return false
     }
 }
