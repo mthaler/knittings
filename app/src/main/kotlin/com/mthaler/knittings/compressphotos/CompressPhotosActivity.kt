@@ -4,15 +4,10 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
-import android.view.View
-import androidx.appcompat.app.AlertDialog
 import androidx.core.app.NavUtils
-import androidx.lifecycle.ViewModelProvider
 import com.mthaler.knittings.BaseActivity
 import com.mthaler.knittings.R
 import com.mthaler.knittings.service.JobStatus
-import com.mthaler.knittings.service.ServiceStatus
-import com.mthaler.knittings.utils.Format
 import com.mthaler.knittings.databinding.ActivityCompressPhotosBinding
 
 class CompressPhotosActivity : BaseActivity() {
@@ -27,73 +22,10 @@ class CompressPhotosActivity : BaseActivity() {
         // enable up navigation
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        binding.buttonStart.setOnClickListener {
-            val builder = AlertDialog.Builder(this)
-            with(builder) {
-                setTitle(resources.getString(R.string.compress_photos_dialog_title))
-                setMessage(resources.getString(R.string.compress_photos_dialog_message))
-                setPositiveButton(resources.getString(R.string.compress_photos_dialog_button_compress)) { dialog, which ->
-                    CompressPhotosService.startService(this@CompressPhotosActivity, "Foreground Service is running...")
-                }
-                setNegativeButton(resources.getString(R.string.dialog_button_cancel)) { dialog, which -> }
-                show()
-            }
-        }
-
-        binding.cancelButton.setOnClickListener {
-            CompressPhotosServiceManager.getInstance().cancelled = true
-        }
-
-        val viewModel = ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory.getInstance(this.application)).get(CompressPhotosViewModel::class.java)
-        viewModel.statistics.observe(this, { statistics ->
-            binding.numberOfPhotos.text = statistics.photos.toString()
-            binding.totalSize.text = Format.humanReadableByteCountBin(statistics.totalSize)
-            binding.willBeCompressed.text = statistics.photosToCompress.toString()
-        })
-
-        CompressPhotosServiceManager.getInstance().jobStatus.observe(this, { jobStatus->
-            when(jobStatus) {
-                is JobStatus.Initialized -> {
-                    binding.buttonStart.isEnabled = true
-                    binding.compressingPhotosTitle.visibility = View.GONE
-                    binding.progressBar.visibility = View.GONE
-                    binding.cancelButton.visibility = View.GONE
-                    binding.result.visibility = View.GONE
-                }
-                is JobStatus.Progress -> {
-                    binding.buttonStart.isEnabled = false
-                    binding.compressingPhotosTitle.visibility = View.VISIBLE
-                    binding.progressBar.visibility = View.VISIBLE
-                    binding.cancelButton.visibility = View.VISIBLE
-                    binding.progressBar.progress = jobStatus.value
-                    binding.result.visibility = View.GONE
-                }
-                is JobStatus.Success -> {
-                    binding.buttonStart.isEnabled = true
-                    binding.compressingPhotosTitle.visibility = View.VISIBLE
-                    binding.progressBar.visibility = View.GONE
-                    binding.cancelButton.visibility = View.GONE
-                    binding.result.visibility = View.VISIBLE
-                    binding.result.text = jobStatus.msg
-                }
-                is JobStatus.Cancelled -> {
-                    CompressPhotosServiceManager.getInstance().cancelled = false
-                    binding.buttonStart.isEnabled = true
-                    binding.compressingPhotosTitle.visibility = View.VISIBLE
-                    binding.progressBar.visibility = View.GONE
-                    binding.cancelButton.visibility = View.GONE
-                    binding.result.visibility = View.VISIBLE
-                    binding.result.text = jobStatus.msg
-                }
-            }
-        })
-
-        CompressPhotosServiceManager.getInstance().serviceStatus.observe(this, { serviceStatus ->
-            when (serviceStatus) {
-                ServiceStatus.Stopped -> binding.buttonStart.isEnabled = true
-                ServiceStatus.Started -> binding.buttonStart.isEnabled = false
-            }
-        })
+        val f = CompressPhotoFragment.newInstance()
+        val ft = supportFragmentManager.beginTransaction()
+        ft.add(R.id.fragment_container, f)
+        ft.commit()
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean = when (item.itemId) {

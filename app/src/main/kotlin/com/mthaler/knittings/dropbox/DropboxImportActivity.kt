@@ -30,7 +30,7 @@ class DropboxImportActivity : AbstractDropboxActivity() {
         // retained across a configuration change.
         if (f == null) {
             val ff = DropboxImportFragment()
-            supportFragmentManager.beginTransaction().add(R.id.frament_container, ff, DropboxImportFragmentTag).commit()
+            supportFragmentManager.beginTransaction().add(R.id.fragment_container, ff, DropboxImportFragmentTag).commit()
         }
     }
 
@@ -73,7 +73,7 @@ class DropboxImportActivity : AbstractDropboxActivity() {
     override fun updateFragment() {
         val ft = supportFragmentManager.beginTransaction()
         val f = DropboxImportFragment()
-        ft.replace(R.id.frament_container, f)
+        ft.replace(R.id.fragment_container, f)
         ft.addToBackStack(null)
         ft.commit()
     }

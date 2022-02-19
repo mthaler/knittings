@@ -2,16 +2,16 @@ package com.mthaler.knittings.compressphotos
 
 import android.app.PendingIntent
 import android.content.Context
-import androidx.work.Worker
+import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.mthaler.knittings.database.KnittingsDataSource
 import com.mthaler.knittings.service.JobStatus
 import com.mthaler.knittings.utils.FileUtils
 import com.mthaler.knittings.utils.PictureUtils
 
-class CompressPhotoWorker(val context: Context, workerParams: WorkerParameters) : Worker(context, workerParams) {
+class CompressPhotoWorker(val context: Context, parameters: WorkerParameters) : CoroutineWorker(context, parameters) {
 
-    override fun doWork(): Result {
+    override suspend fun doWork(): Result {
         TODO("Not yet implemented")
     }
 

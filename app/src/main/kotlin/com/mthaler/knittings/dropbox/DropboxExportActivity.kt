@@ -29,7 +29,7 @@ class DropboxExportActivity : AbstractDropboxActivity() {
         // retained across a configuration change.
         if (f == null) {
             val ff = DropboxExportFragment()
-            supportFragmentManager.beginTransaction().add(R.id.frament_container, ff, DropboxExportFragmentTag).commit()
+            supportFragmentManager.beginTransaction().add(R.id.fragment_container, ff, DropboxExportFragmentTag).commit()
         }
     }
 
@@ -74,7 +74,7 @@ class DropboxExportActivity : AbstractDropboxActivity() {
     override fun updateFragment() {
         val ft = supportFragmentManager.beginTransaction()
         val f = DropboxExportFragment()
-        ft.replace(R.id.frament_container, f)
+        ft.replace(R.id.fragment_container, f)
         ft.addToBackStack(null)
         ft.commit()
     }
