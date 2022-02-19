@@ -150,10 +150,6 @@
             android:name=".dropbox.DropboxImportService"
             android:enabled="true"
             android:exported="false" />
-        <service
-            android:name=".compressphotos.CompressPhotosService"
-            android:enabled="true"
-            android:exported="false" />
     </application>
 
 </manifest>

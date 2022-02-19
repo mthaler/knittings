@@ -77,7 +77,7 @@ class CompressPhotoFragment : Fragment() {
                                 WorkInfo.State.CANCELLED -> {
                                     val sm = CompressPhotosServiceManager.getInstance()
                                     sm.updateJobStatus(JobStatus.Cancelled(context.resources.getString(R.string.compress_photos_cancelled)))
-                                    sm.updateServiceStatus(ServiceStatus.Stopped)
+                                    sm.updateServiceStatus(ServiceStatus.Started)
                                 }
                                 else -> {
                                     val sm = CompressPhotosServiceManager.getInstance()
