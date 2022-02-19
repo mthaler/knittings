@@ -1,5 +1,6 @@
 package com.mthaler.knittings.compressphotos
 
+import android.content.Context
 import android.util.Log
 import androidx.test.espresso.matcher.ViewMatchers.assertThat
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -10,6 +11,8 @@ import androidx.work.testing.WorkManagerTestInitHelper
 import org.hamcrest.core.Is.`is`
 import org.junit.*
 import org.junit.runner.RunWith
+import java.util.concurrent.Executor
+import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
 
 @RunWith(AndroidJUnit4::class)
@@ -20,9 +23,14 @@ class CompressPhotoTest {
         const val KEY_2 = "key2"
     }
 
+    lateinit var context: Context
+    lateinit var executor: Executor
+
     @Before
     fun setup() {
-        val context = InstrumentationRegistry.getInstrumentation().targetContext
+        context = InstrumentationRegistry.getInstrumentation().targetContext
+        executor = Executors.newSingleThreadExecutor()
+
         val config = Configuration.Builder()
             .setMinimumLoggingLevel(Log.DEBUG)
             .setExecutor(SynchronousExecutor())
@@ -35,7 +43,6 @@ class CompressPhotoTest {
     @Test
     @Throws(Exception::class)
     fun testEchoWorkerNoInput() {
-       val context = InstrumentationRegistry.getInstrumentation().targetContext
        // Create request
        val request = OneTimeWorkRequestBuilder<EchoWorker>().build()
 
@@ -53,7 +60,6 @@ class CompressPhotoTest {
     @Test
     @Throws(Exception::class)
     fun testWithInitialDelay() {
-        val context = InstrumentationRegistry.getInstrumentation().targetContext
         // Define input data
         val input = workDataOf(KEY_1 to 1, KEY_2 to 2)
 
@@ -82,8 +88,6 @@ class CompressPhotoTest {
     @Test
     @Throws(Exception::class)
     fun testWithConstraints() {
-        val context = InstrumentationRegistry.getInstrumentation().targetContext
-
         // Define input data
         val input = workDataOf(KEY_1 to 1, KEY_2 to 2)
 
@@ -115,8 +119,6 @@ class CompressPhotoTest {
     @Test
     @Throws(Exception::class)
     fun testPeriodicWork() {
-        val context = InstrumentationRegistry.getInstrumentation().targetContext
-
         // Define input data
         val input = workDataOf(KEY_1 to 1, KEY_2 to 2)
 
