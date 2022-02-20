@@ -5,7 +5,8 @@ import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
-import org.junit.Before
+import junit.framework.Assert.assertEquals
+import org.junit.*
 import org.junit.runner.RunWith
 import org.mockito.Mockito.mock
 
@@ -23,5 +24,11 @@ class NeedleAdapterTest {
         adapter = NeedleAdapter({ n -> {} }, { n -> {} })
         mockView = mock(View::class.java)
         mockFragment = mock(Fragment::class.java)
+    }
+
+    @Test
+    fun itemCount() {
+        adapter.setItems(emptyList())
+        assertEquals(adapter.itemCount, 0)
     }
 }
