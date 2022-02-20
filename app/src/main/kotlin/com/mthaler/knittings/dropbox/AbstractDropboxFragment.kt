@@ -1,6 +1,7 @@
 package com.mthaler.knittings.dropbox
 
 import android.app.Activity
+import android.app.AlertDialog
 import android.content.Context
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
@@ -8,7 +9,10 @@ import com.dropbox.core.DbxRequestConfig
 import com.dropbox.core.android.Auth
 import com.dropbox.core.oauth.DbxCredential
 import com.dropbox.core.v2.DbxClientV2
+import com.google.android.material.snackbar.Snackbar
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 /**
  * Base class for Dropbox fragments
@@ -61,20 +65,47 @@ abstract class AbstractDropboxFragment : Fragment() {
     }
 
     private fun revokeDropboxAuthorization() {
-        val clientIdentifier = "DropboxSampleAndroid/1.0.0"
-        val requestConfig = DbxRequestConfig(clientIdentifier)
-        val credential = getLocalCredential()
-        val dropboxClient = DbxClientV2(requestConfig, credential)
-        val dropboxApi = DropboxApi(dropboxClient)
-        lifecycleScope.launch {
-            dropboxApi.revokeDropboxAuthorization()
-        }
         val sharedPreferences = requireActivity().getSharedPreferences("dropbox-sample", Context.MODE_PRIVATE)
         sharedPreferences.edit().remove("credential").apply()
         clearData()
     }
 
-    protected abstract fun clearData()
+    private fun clearData() {
+        val builder = AlertDialog.Builder(requireContext())
+        with(builder) {
+            setTitle("Dropbox")
+            setMessage("Do you want to log out of Dropbox?")
+            setPositiveButton("OK") { dialog, which ->
+                lifecycleScope.launch {
+                    withContext(Dispatchers.IO) {
+                        try {
+                            //Check if we have an existing token stored, this will be used by DbxClient to make requests
+                            val localCredential: DbxCredential? = getLocalCredential()
+                            val credential: DbxCredential? = if (localCredential == null) {
+                                val credential = Auth.getDbxCredential() //fetch the result from the AuthActivity
+                                credential?.let {
+                                    //the user successfully connected their Dropbox account!
+                                    storeCredentialLocally(it)
+                                }
+                                credential
+                            } else localCredential
+
+                            // remove auth token from Dropbox server
+                            credential?.let {
+                                val requestConfig = DbxRequestConfig(CLIENT_IDENTIFIER)
+                                val dropboxClient = DbxClientV2(requestConfig, credential)
+                                val dropboxApi = DropboxApi(dropboxClient)
+                                dropboxApi.revokeDropboxAuthorization()
+                            }
+                        } catch (ex: Exception) {
+                        }
+                    }
+                    Snackbar.make(requireActivity().window.decorView.rootView, "Logged out of Dropbox", Snackbar.LENGTH_LONG).show()
+                }
+            }
+            show()
+        }
+    }
 
     //deserialize the credential from SharedPreferences if it exists
     protected fun getLocalCredential(): DbxCredential? {
