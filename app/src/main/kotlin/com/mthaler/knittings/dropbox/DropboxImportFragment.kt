@@ -1,11 +1,14 @@
 package com.mthaler.knittings.dropbox
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.core.app.NavUtils
 import androidx.lifecycle.lifecycleScope
 import com.dropbox.core.DbxRequestConfig
 import com.dropbox.core.android.Auth
@@ -31,6 +34,12 @@ class DropboxImportFragment : AbstractDropboxFragment() {
     override val APP_KEY = BuildConfig.DROPBOX_KEY
     override fun exception(ex: String) {
         binding.exceptionText.text = ex
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        setHasOptionsMenu(true)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -233,5 +242,27 @@ class DropboxImportFragment : AbstractDropboxFragment() {
                 }
             }
         }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean = when (item.itemId) {
+        R.id.menu_item_dropbox_logout -> {
+            clearData()
+            true
+        }
+        android.R.id.home -> {
+            // Respond to the action bar's Up/Home button
+            val upIntent: Intent? = NavUtils.getParentActivityIntent(requireActivity())
+            if (upIntent == null) {
+                throw IllegalStateException("No Parent Activity Intent")
+            } else {
+                val sm = DropboxImportServiceManager.getInstance()
+                if (sm.jobStatus.value is JobStatus.Success) {
+                    sm.updateJobStatus(JobStatus.Initialized)
+                }
+                NavUtils.navigateUpTo(requireActivity(), upIntent)
+            }
+            true
+        }
+        else -> super.onOptionsItemSelected(item)
     }
 }

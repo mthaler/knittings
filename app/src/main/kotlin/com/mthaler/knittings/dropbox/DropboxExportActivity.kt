@@ -4,8 +4,6 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
-import android.view.MenuItem
-import androidx.core.app.NavUtils
 import com.mthaler.knittings.R
 import com.mthaler.knittings.databinding.ActivityDropboxExportBinding
 import com.mthaler.knittings.service.JobStatus
@@ -37,30 +35,6 @@ class DropboxExportActivity : AbstractDropboxActivity() {
         // Inflate the menu; this adds items to the action bar if it is present.
         menuInflater.inflate(R.menu.dropbox_export, menu)
         return true
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-//            R.id.menu_item_dropbox_logout -> {
-//                logout()
-//                true
-//            }
-            android.R.id.home -> {
-                // Respond to the action bar's Up/Home button
-                val upIntent: Intent? = NavUtils.getParentActivityIntent(this)
-                if (upIntent == null) {
-                    throw IllegalStateException("No Parent Activity Intent")
-                } else {
-                    val sm = DropboxExportServiceManager.getInstance()
-                    if (sm.jobStatus.value is JobStatus.Success || sm.jobStatus.value is JobStatus.Cancelled) {
-                        sm.updateJobStatus(JobStatus.Initialized)
-                    }
-                    NavUtils.navigateUpTo(this, upIntent)
-                }
-                true
-            }
-            else -> super.onOptionsItemSelected(item)
-        }
     }
 
     override fun onBackPressed() {

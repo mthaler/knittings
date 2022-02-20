@@ -70,7 +70,7 @@ abstract class AbstractDropboxFragment : Fragment() {
         clearData()
     }
 
-    private fun clearData() {
+    protected fun clearData() {
         val builder = AlertDialog.Builder(requireContext())
         with(builder) {
             setTitle("Dropbox")
