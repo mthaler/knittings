@@ -23,8 +23,8 @@ class CompressPhotoTest {
         const val KEY_2 = "key2"
     }
 
-    lateinit var context: Context
-    lateinit var executor: Executor
+    private lateinit var context: Context
+    private lateinit var executor: Executor
 
     @Before
     fun setup() {

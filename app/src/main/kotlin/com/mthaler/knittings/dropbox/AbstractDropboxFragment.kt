@@ -3,9 +3,12 @@ package com.mthaler.knittings.dropbox
 import android.app.Activity
 import android.content.Context
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import com.dropbox.core.DbxRequestConfig
 import com.dropbox.core.android.Auth
 import com.dropbox.core.oauth.DbxCredential
+import com.dropbox.core.v2.DbxClientV2
+import kotlinx.coroutines.launch
 
 /**
  * Base class for Dropbox fragments
@@ -55,8 +58,23 @@ abstract class AbstractDropboxFragment : Fragment() {
         // Read more about Scopes here: https://developers.dropbox.com/oauth-guide#dropbox-api-permissions
         val scopes = listOf("account_info.read", "files.content.read", "files.content.write")
         Auth.startOAuth2PKCE(requireContext(), APP_KEY, requestConfig, scopes)
-        //Auth.startOAuth2Authentication(requireContext(), getString(R.string.app_name))
     }
+
+    private fun revokeDropboxAuthorization() {
+        val clientIdentifier = "DropboxSampleAndroid/1.0.0"
+        val requestConfig = DbxRequestConfig(clientIdentifier)
+        val credential = getLocalCredential()
+        val dropboxClient = DbxClientV2(requestConfig, credential)
+        val dropboxApi = DropboxApi(dropboxClient)
+        lifecycleScope.launch {
+            dropboxApi.revokeDropboxAuthorization()
+        }
+        val sharedPreferences = requireActivity().getSharedPreferences("dropbox-sample", Context.MODE_PRIVATE)
+        sharedPreferences.edit().remove("credential").apply()
+        clearData()
+    }
+
+    protected abstract fun clearData()
 
     //deserialize the credential from SharedPreferences if it exists
     protected fun getLocalCredential(): DbxCredential? {

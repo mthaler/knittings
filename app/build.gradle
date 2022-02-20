@@ -112,6 +112,8 @@ dependencies {
     androidTestImplementation "androidx.test:core-ktx:1.4.0"
 
     androidTestImplementation "androidx.work:work-testing:$work_version"
+
+    androidTestImplementation 'org.mockito:mockito-core:4.3.1'
 }
 
 def getLocalProperties() {
