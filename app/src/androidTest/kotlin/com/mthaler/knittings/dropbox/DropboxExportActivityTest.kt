@@ -6,11 +6,11 @@ import org.junit.Test
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
-class DropboxImportActivityTest {
+class DropboxExportActivityTest {
 
     @Test
-    fun testDropboxImportActivityRecreate() {
-          val scenario = launchActivity<DropboxImportActivity>()
+    fun testDropboxExpportActivityRecreate() {
+          val scenario = launchActivity<DropboxExportActivity>()
           scenario.recreate()
     }
 }
