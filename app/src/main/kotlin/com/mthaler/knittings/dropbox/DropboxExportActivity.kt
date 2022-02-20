@@ -41,10 +41,10 @@ class DropboxExportActivity : AbstractDropboxActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
-            R.id.menu_item_dropbox_logout -> {
-                logout()
-                true
-            }
+//            R.id.menu_item_dropbox_logout -> {
+//                logout()
+//                true
+//            }
             android.R.id.home -> {
                 // Respond to the action bar's Up/Home button
                 val upIntent: Intent? = NavUtils.getParentActivityIntent(this)
