@@ -21,29 +21,8 @@ import kotlinx.coroutines.withContext
  */
 abstract class AbstractDropboxFragment : Fragment() {
 
-    protected var listener: OnFragmentInteractionListener? = null
-
     abstract protected val APP_KEY: String
     abstract protected fun exception(ex: String)
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        if (context is OnFragmentInteractionListener) {
-            listener = context
-        } else {
-            throw RuntimeException("$context must implement OnFragmentInteractionListener")
-        }
-    }
-
-    override fun onDetach() {
-        super.onDetach()
-        listener = null
-    }
-
-    interface OnFragmentInteractionListener {
-
-        fun error(ex: Exception)
-    }
 
     /**
      * Starts the Dropbox OAuth process by launching the Dropbox official app or web

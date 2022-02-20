@@ -166,7 +166,6 @@ class DropboxImportFragment : AbstractDropboxFragment() {
                                 importDatabase(result)
                             }
                         } catch (ex: java.lang.Exception) {
-                            listener?.error(ex)
                             throw ex
                         }
                     }
@@ -183,11 +182,10 @@ class DropboxImportFragment : AbstractDropboxFragment() {
                                 importDatabase(result)
                             }
                         } catch (ex: java.lang.Exception) {
-                            listener?.error(ex)
                             throw ex
                         }
                     is Try.Failure ->
-                        listener?.error(result.exception)
+                        throw result.exception
                 }
             }
         }

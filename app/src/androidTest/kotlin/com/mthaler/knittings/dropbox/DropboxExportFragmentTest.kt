@@ -19,7 +19,7 @@ class DropboxExportFragmentTest {
     }
 
     @Test
-    fun testRDropboxExportFragmentecreate() {
+    fun testRDropboxExportFragmentRecreate() {
          val scenario = launchFragmentInContainer<DropboxExportFragment>()
          scenario.recreate()
     }
