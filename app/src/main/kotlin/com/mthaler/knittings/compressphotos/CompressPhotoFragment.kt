@@ -18,8 +18,8 @@ class CompressPhotoFragment : Fragment() {
     private var _binding: FragmentCompressPhotoBinding? = null
     private val binding get() = _binding!!
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         val viewModel = ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory.getInstance(requireActivity().application)).get(CompressPhotosViewModel::class.java)
         viewModel.statistics.observe(viewLifecycleOwner, { statistics ->
@@ -27,10 +27,6 @@ class CompressPhotoFragment : Fragment() {
             binding.totalSize.text = Format.humanReadableByteCountBin(statistics.totalSize)
             binding.willBeCompressed.text = statistics.photosToCompress.toString()
         })
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
 
         binding.buttonStart.setOnClickListener {
             val builder = AlertDialog.Builder(requireContext())
