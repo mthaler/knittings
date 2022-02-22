@@ -9,7 +9,7 @@ import org.junit.runner.RunWith
 class NeedleListActivityTest {
 
     @Test
-    fun testCategoryListActivityRecreate() {
+    fun testRecreate() {
           val scenario = launchActivity<NeedleListActivity>()
           scenario.recreate()
     }

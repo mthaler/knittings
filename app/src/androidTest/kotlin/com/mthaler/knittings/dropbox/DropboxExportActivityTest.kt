@@ -9,7 +9,7 @@ import org.junit.runner.RunWith
 class DropboxExportActivityTest {
 
     @Test
-    fun testDropboxExpportActivityRecreate() {
+    fun testDropboxRecreate() {
           val scenario = launchActivity<DropboxExportActivity>()
           scenario.recreate()
     }

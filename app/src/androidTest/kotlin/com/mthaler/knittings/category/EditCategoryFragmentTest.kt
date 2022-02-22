@@ -20,7 +20,7 @@ class EditCategoryFragmentTest {
     }
 
     @Test
-    fun testEditCategoryFragmentRecreate() {
+    fun testRecreate() {
          val scenario = launchFragmentInContainer<EditCategoryFragment>()
          scenario.recreate()
     }

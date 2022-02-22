@@ -9,7 +9,7 @@ import org.junit.runner.RunWith
 class CompressPhotosActivityTest {
 
     @Test
-    fun testCompressPhotosActivityRecreate() {
+    fun testRecreate() {
         val scenario = launchActivity<CompressPhotosActivity>()
         scenario.recreate()
     }

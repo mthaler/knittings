@@ -19,7 +19,7 @@ class EditNeedleFragmentTest {
     }
 
     @Test
-    fun testEditCategoryFragmentRecreate() {
+    fun testRecreate() {
          val scenario = launchFragmentInContainer<EditNeedleFragment>()
          scenario.recreate()
     }

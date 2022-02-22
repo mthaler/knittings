@@ -19,7 +19,7 @@ class DropboxImportFragmentTest {
     }
 
     @Test
-    fun testRDropboxImportFragmenteRecreate() {
+    fun testRecreate() {
          val scenario = launchFragmentInContainer<DropboxImportFragment>()
          scenario.recreate()
     }

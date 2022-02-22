@@ -9,7 +9,7 @@ import org.junit.runner.RunWith
 class CategoryListActivityTest {
 
       @Test
-      fun testCategoryListActivityRecreate() {
+      fun testRecreate() {
           val scenario = launchActivity<CategoryListActivity>()
           scenario.recreate()
       }
