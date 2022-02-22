@@ -20,7 +20,7 @@ class CompressPhotosFragmentTest {
 
     @Test
     fun testRecreate() {
-        val scenario = launchFragmentInContainer<CompressPhotoFragment>()
+        val scenario = launchFragmentInContainer<CompressPhotosFragment>()
         scenario.recreate()
     }
 }

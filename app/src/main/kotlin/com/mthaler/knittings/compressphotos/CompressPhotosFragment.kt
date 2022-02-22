@@ -13,7 +13,7 @@ import com.mthaler.knittings.service.ServiceStatus
 import com.mthaler.knittings.utils.Format
 import java.lang.Exception
 
-class CompressPhotoFragment : Fragment() {
+class CompressPhotosFragment : Fragment() {
 
     private var _binding: FragmentCompressPhotoBinding? = null
     private val binding get() = _binding!!
@@ -147,7 +147,7 @@ class CompressPhotoFragment : Fragment() {
     companion object {
         val TAG = "com.mthaler.knittings.compressphotos.CompressPhotoFragment"
 
-        fun newInstance() = CompressPhotoFragment()
+        fun newInstance() = CompressPhotosFragment()
 
     }
 }

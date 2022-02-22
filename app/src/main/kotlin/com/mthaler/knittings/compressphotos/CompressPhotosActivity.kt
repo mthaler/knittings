@@ -22,7 +22,7 @@ class CompressPhotosActivity : BaseActivity() {
         // enable up navigation
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        val f = CompressPhotoFragment.newInstance()
+        val f = CompressPhotosFragment.newInstance()
         val ft = supportFragmentManager.beginTransaction()
         ft.add(R.id.fragment_container, f)
         ft.commit()
