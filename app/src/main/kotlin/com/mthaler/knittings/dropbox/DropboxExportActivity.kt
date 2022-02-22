@@ -4,11 +4,12 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
+import com.mthaler.knittings.BaseActivity
 import com.mthaler.knittings.R
 import com.mthaler.knittings.databinding.ActivityDropboxExportBinding
 import com.mthaler.knittings.service.JobStatus
 
-class DropboxExportActivity : AbstractDropboxActivity() {
+class DropboxExportActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,14 +44,6 @@ class DropboxExportActivity : AbstractDropboxActivity() {
             sm.updateJobStatus(JobStatus.Initialized)
         }
         super.onBackPressed()
-    }
-
-    override fun updateFragment() {
-        val ft = supportFragmentManager.beginTransaction()
-        val f = DropboxExportFragment()
-        ft.replace(R.id.fragment_container, f)
-        ft.addToBackStack(null)
-        ft.commit()
     }
 
     companion object {
