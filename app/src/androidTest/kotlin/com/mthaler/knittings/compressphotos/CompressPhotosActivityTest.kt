@@ -2,6 +2,8 @@ package com.mthaler.knittings.compressphotos
 
 import androidx.test.core.app.launchActivity
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.mthaler.knittings.R
+import junit.framework.TestCase.assertEquals
 import org.junit.Test
 import org.junit.runner.RunWith
 
