@@ -2,11 +2,14 @@ package com.mthaler.knittings.compressphotos
 
 import android.app.AlertDialog
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.work.*
 import com.mthaler.knittings.R
+import com.mthaler.knittings.databinding.FragmentCategoryListBinding
 import com.mthaler.knittings.databinding.FragmentCompressPhotoBinding
 import com.mthaler.knittings.service.JobStatus
 import com.mthaler.knittings.service.ServiceStatus
@@ -18,8 +21,13 @@ class CompressPhotosFragment : Fragment() {
     private var _binding: FragmentCompressPhotoBinding? = null
     private val binding get() = _binding!!
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        _binding = FragmentCompressPhotoBinding.inflate(inflater, container, false)
+        val view = binding.root
 
         val viewModel = ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory.getInstance(requireActivity().application)).get(CompressPhotosViewModel::class.java)
         viewModel.statistics.observe(viewLifecycleOwner, { statistics ->
@@ -65,11 +73,6 @@ class CompressPhotosFragment : Fragment() {
                                     sm.updateJobStatus(JobStatus.Error(Exception("Could not compress photos")))
                                     sm.updateServiceStatus(ServiceStatus.Stopped)
                                 }
-                                WorkInfo.State.BLOCKED -> {
-                                    val sm = CompressPhotosServiceManager.getInstance()
-                                    sm.updateJobStatus(JobStatus.Error(Exception("Could not compress photos")))
-                                    sm.updateServiceStatus(ServiceStatus.Stopped)
-                                }
                                 WorkInfo.State.CANCELLED -> {
                                     val sm = CompressPhotosServiceManager.getInstance()
                                     sm.updateJobStatus(JobStatus.Cancelled(context.resources.getString(R.string.compress_photos_cancelled)))
@@ -93,6 +96,12 @@ class CompressPhotosFragment : Fragment() {
         binding.cancelButton.setOnClickListener {
             CompressPhotosServiceManager.getInstance().cancelled = true
         }
+
+        return view
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         CompressPhotosServiceManager.getInstance().jobStatus.observe(viewLifecycleOwner, { jobStatus->
             when(jobStatus) {
@@ -147,6 +156,7 @@ class CompressPhotosFragment : Fragment() {
     companion object {
         val TAG = "com.mthaler.knittings.compressphotos.CompressPhotoFragment"
 
+        @JvmStatic
         fun newInstance() = CompressPhotosFragment()
 
     }
