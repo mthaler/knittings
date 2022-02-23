@@ -61,7 +61,7 @@ class CompressPhotosFragment : Fragment() {
                                 WorkInfo.State.SUCCEEDED -> {
                                     val sm = CompressPhotosServiceManager.getInstance()
                                     sm.updateJobStatus(JobStatus.Success(context.resources.getString(R.string.compress_photos_completed)))
-                                    sm.updateServiceStatus(ServiceStatus.Started)
+                                    sm.updateServiceStatus(ServiceStatus.Stopped)
                                 }
                                 WorkInfo.State.FAILED -> {
                                     val sm = CompressPhotosServiceManager.getInstance()
@@ -97,11 +97,6 @@ class CompressPhotosFragment : Fragment() {
             CompressPhotosServiceManager.getInstance().cancelled = true
         }
 
-        return view
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
 
         CompressPhotosServiceManager.getInstance().jobStatus.observe(viewLifecycleOwner, { jobStatus->
             when(jobStatus) {
@@ -146,6 +141,8 @@ class CompressPhotosFragment : Fragment() {
                 ServiceStatus.Started -> binding.buttonStart.isEnabled = false
             }
         })
+
+        return view
     }
 
     override fun onDestroyView() {
