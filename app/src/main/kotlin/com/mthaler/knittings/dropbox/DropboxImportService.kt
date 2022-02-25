@@ -30,6 +30,7 @@ class DropboxImportService : Service() {
         val database = intent?.getSerializableExtra(EXTRA_DATABASE) as ExportDatabase<Project>
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            createNotificationChannel()
             val initialNotification = createNotificationBuilder(
                 pendingIntent,
                 getString(R.string.dropbox_import_notification_initial_msg)
