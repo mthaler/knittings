@@ -265,7 +265,7 @@ class DropboxExportFragment : AbstractDropboxFragment() {
         }
     }
 
-    protected fun clearData() {
+    protected override fun clearData() {
         binding.loginButton.visibility = View.VISIBLE
     }
 }

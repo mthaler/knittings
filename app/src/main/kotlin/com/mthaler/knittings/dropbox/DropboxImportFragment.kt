@@ -261,7 +261,7 @@ class DropboxImportFragment : AbstractDropboxFragment() {
         else -> super.onOptionsItemSelected(item)
     }
 
-    protected fun clearData() {
+    protected override fun clearData() {
         binding.loginButton.visibility = View.VISIBLE
     }
 }
