@@ -26,19 +26,6 @@ class DropboxImportService : Service() {
 
         val pendingIntent = PendingIntent.getActivity(this, 0, intent, 0)
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-        val channelId =
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                createNotificationChannel()
-            } else {
-                // If earlier version channel ID is not used
-                // https://developer.android.com/reference/android/support/v4/app/NotificationCompat.Builder.html#NotificationCompat.Builder(android.content.Context)
-                ""
-            }
-
-            createNotificationBuilder(pendingIntent, getString(R.string.dropbox_import_notification_channel_name))
-        }
-
         val directory = intent?.getStringExtra(EXTRA_DIRECTORY)
         val database = intent?.getSerializableExtra(EXTRA_DATABASE) as ExportDatabase<Project>
 
