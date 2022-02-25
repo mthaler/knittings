@@ -173,10 +173,10 @@ class DropboxExportService : Service() {
     private fun createNotificationChannel() {
         // Create the NotificationChannel, but only on API 26+ because
         // the NotificationChannel class is new and not in the support library
-        val name = getString(R.string.dropbox_import_notification_channel_name)
-        val descriptionText = getString(R.string.dropbox_import_notification_channel_name)
+        val name = getString(R.string.dropbox_export_notification_channel_name)
+        val descriptionText = getString(R.string.dropbox_export_notification_channel_name)
         val importance = NotificationManager.IMPORTANCE_LOW
-        val channel = NotificationChannel(getString(R.string.dropbox_import_notification_channel_id), name, importance).apply {
+        val channel = NotificationChannel(getString(R.string.dropbox_export_notification_channel_id), name, importance).apply {
             description = descriptionText
         }
         // Register the channel with the system
