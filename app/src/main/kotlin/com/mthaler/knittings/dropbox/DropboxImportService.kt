@@ -121,7 +121,6 @@ class DropboxImportService : Service() {
         notificationManager.createNotificationChannel(channel)
     }
 
-
     @RequiresApi(Build.VERSION_CODES.O)
     private fun createNotificationBuilder(pendingIntent: PendingIntent, msg: String, autoCancel: Boolean = true): NotificationCompat.Builder {
         return NotificationCompat.Builder(this, getString(R.string.dropbox_import_notification_channel_id)).apply {
