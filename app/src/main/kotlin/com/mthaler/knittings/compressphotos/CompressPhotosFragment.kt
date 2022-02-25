@@ -9,7 +9,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.work.*
 import com.mthaler.knittings.R
-import com.mthaler.knittings.databinding.FragmentCategoryListBinding
 import com.mthaler.knittings.databinding.FragmentCompressPhotoBinding
 import com.mthaler.knittings.service.JobStatus
 import com.mthaler.knittings.service.ServiceStatus

@@ -5,6 +5,7 @@ import android.app.AlertDialog
 import android.content.Context
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import androidx.preference.PreferenceManager
 import com.dropbox.core.DbxRequestConfig
 import com.dropbox.core.android.Auth
 import com.dropbox.core.oauth.DbxCredential
@@ -74,7 +75,7 @@ abstract class AbstractDropboxFragment : Fragment() {
                                 val requestConfig = DbxRequestConfig(CLIENT_IDENTIFIER)
                                 val dropboxClient = DbxClientV2(requestConfig, credential)
                                 val dropboxApi = DropboxApi(dropboxClient)
-                                dropboxApi.revokeDropboxAuthorization()
+                                clearDropboxClient(dropboxApi)
                             }
                         } catch (ex: Exception) {
                         }
@@ -97,6 +98,15 @@ abstract class AbstractDropboxFragment : Fragment() {
     protected fun storeCredentialLocally(dbxCredential: DbxCredential) {
         val sharedPreferences = requireActivity().getSharedPreferences(KNITTINGS, Activity.MODE_PRIVATE)
         sharedPreferences.edit().putString("credential", dbxCredential.toString()).apply()
+    }
+
+    private fun removeAccessToken() {
+        val prefs = PreferenceManager.getDefaultSharedPreferences(requireContext())
+        prefs.removeAccessToken()
+    }
+
+    private suspend fun clearDropboxClient(dropboxApi: DropboxApi) {
+        dropboxApi.revokeDropboxAuthorization()
     }
 
     companion object {
