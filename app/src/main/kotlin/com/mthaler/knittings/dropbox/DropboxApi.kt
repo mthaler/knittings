@@ -38,8 +38,6 @@ class DropboxApi(private val dropboxClient: DbxClientV2) {
     suspend fun revokeDropboxAuthorization() = withContext(Dispatchers.IO) {
         dropboxClient.auth().tokenRevoke()
     }
-
-
     private suspend fun getFilesForFolder(folderPath: String): GetFilesApiResponse =
         withContext(Dispatchers.IO) {
             try {

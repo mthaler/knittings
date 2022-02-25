@@ -109,6 +109,10 @@ abstract class AbstractDropboxFragment : Fragment() {
         dropboxApi.revokeDropboxAuthorization()
     }
 
+      private suspend fun clearAuthActivity(dropboxApi: DropboxApi) {
+        dropboxApi.revokeDropboxAuthorization()
+    }
+
     companion object {
         val CLIENT_IDENTIFIER = "KNITTINGS"
         val KNITTINGS = "com.mthaler.knittings"
