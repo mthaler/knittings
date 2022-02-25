@@ -184,11 +184,9 @@ class DropboxExportFragment : AbstractDropboxFragment() {
         if (credential == null) {
             with(binding) {
                 loginButton.visibility = View.VISIBLE
-                 //logoutButton.visibility = View.GONE
             }
         } else {
             with(binding) {
-                //logoutButton.visibility = View.VISIBLE
                 loginButton.visibility = View.GONE
             }
         }
@@ -246,7 +244,7 @@ class DropboxExportFragment : AbstractDropboxFragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.menu_item_dropbox_logout -> {
-                clearData()
+                logout()
                 true
             }
             android.R.id.home -> {
@@ -265,5 +263,9 @@ class DropboxExportFragment : AbstractDropboxFragment() {
             }
             else -> super.onOptionsItemSelected(item)
         }
+    }
+
+    protected fun clearData() {
+        binding.loginButton.visibility = View.VISIBLE
     }
 }

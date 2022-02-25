@@ -44,11 +44,6 @@ class DropboxImportFragment : AbstractDropboxFragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentDropboxImportBinding.inflate(inflater, container, false)
-        return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
 
         // this opens a web browser where the user can log in
         binding.loginButton.setOnClickListener {
@@ -60,6 +55,8 @@ class DropboxImportFragment : AbstractDropboxFragment() {
                 import()
             }
         }
+
+        return binding.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -244,7 +241,7 @@ class DropboxImportFragment : AbstractDropboxFragment() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean = when (item.itemId) {
         R.id.menu_item_dropbox_logout -> {
-            clearData()
+            logout()
             true
         }
         android.R.id.home -> {
@@ -262,5 +259,9 @@ class DropboxImportFragment : AbstractDropboxFragment() {
             true
         }
         else -> super.onOptionsItemSelected(item)
+    }
+
+    protected fun clearData() {
+        binding.loginButton.visibility = View.VISIBLE
     }
 }

@@ -36,8 +36,7 @@ abstract class AbstractDropboxFragment : Fragment() {
      **/
     protected fun startDropboxAuthorization() {
         // The client identifier is usually of the form "SoftwareName/SoftwareVersion".
-        val clientIdentifier = "KNITTINGS"
-        val requestConfig = DbxRequestConfig(clientIdentifier)
+        val requestConfig = DbxRequestConfig(CLIENT_IDENTIFIER)
 
         // The scope's your app will need from Dropbox
         // Read more about Scopes here: https://developers.dropbox.com/oauth-guide#dropbox-api-permissions
@@ -45,26 +44,7 @@ abstract class AbstractDropboxFragment : Fragment() {
         Auth.startOAuth2PKCE(requireContext(), APP_KEY, requestConfig, scopes)
     }
 
-    protected fun clearData() {
-        val builder = AlertDialog.Builder(requireContext())
-        with(builder) {
-            setTitle("Dropbox")
-            setMessage("Do you want to log out of Dropbox?")
-            setPositiveButton("OK") { dialog, which ->
-                lifecycleScope.launch {
-                    withContext(Dispatchers.IO) {
-                        try {
-                            revokeDropboxAuthorization()
-                        } catch (ex: Exception) {
-                            Log.e(TAG, "Could not log out of Dropbox: " + ex)
-                        }
-                    }
-                    Snackbar.make(requireActivity().window.decorView.rootView, "Logged out of Dropbox", Snackbar.LENGTH_LONG).show()
-                }
-            }
-            show()
-        }
-    }
+    protected abstract fun clearData()
 
 
     private fun revokeDropboxAuthorization() {
@@ -105,6 +85,27 @@ abstract class AbstractDropboxFragment : Fragment() {
 
       private suspend fun clearAuthActivity(dropboxApi: DropboxApi) {
         dropboxApi.revokeDropboxAuthorization()
+    }
+
+    protected fun logout() {
+        val builder = AlertDialog.Builder(requireContext())
+        with(builder) {
+            setTitle("Dropbox")
+            setMessage("Do you want to log out of Dropbox?")
+            setPositiveButton("OK") { dialog, which ->
+                lifecycleScope.launch {
+                    withContext(Dispatchers.IO) {
+                        try {
+                            revokeDropboxAuthorization()
+                        } catch (ex: Exception) {
+                            Log.e(TAG, "Could not log out of Dropbox: " + ex)
+                        }
+                    }
+                    Snackbar.make(requireActivity().window.decorView.rootView, "Logged out of Dropbox", Snackbar.LENGTH_LONG).show()
+                }
+            }
+            show()
+        }
     }
 
     companion object {
