@@ -37,7 +37,7 @@ class DropboxExportService : Service() {
         val pendingIntent = PendingIntent.getActivity(this, 0, intent, 0)
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-
+            createNotificationChannel()
             val initialNotification = createNotificationBuilder(
                 pendingIntent,
                 getString(R.string.dropbox_import_notification_initial_msg)
@@ -162,6 +162,29 @@ class DropboxExportService : Service() {
         }
     }
 
+    //deserialize the credential from SharedPreferences if it exists
+    protected fun getLocalCredential(): DbxCredential? {
+        val sharedPreferences = getSharedPreferences(KNITTINGS, Activity.MODE_PRIVATE)
+        val serializedCredential = sharedPreferences.getString("credential", null) ?: return null
+        return DbxCredential.Reader.readFully(serializedCredential)
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun createNotificationChannel() {
+        // Create the NotificationChannel, but only on API 26+ because
+        // the NotificationChannel class is new and not in the support library
+        val name = getString(R.string.dropbox_import_notification_channel_name)
+        val descriptionText = getString(R.string.dropbox_import_notification_channel_name)
+        val importance = NotificationManager.IMPORTANCE_LOW
+        val channel = NotificationChannel(getString(R.string.dropbox_import_notification_channel_id), name, importance).apply {
+            description = descriptionText
+        }
+        // Register the channel with the system
+        val notificationManager: NotificationManager =
+            getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        notificationManager.createNotificationChannel(channel)
+    }
+
     @RequiresApi(Build.VERSION_CODES.O)
     private fun createNotificationBuilder(pendingIntent: PendingIntent, msg: String, autoCancel: Boolean = true): NotificationCompat.Builder {
         return NotificationCompat.Builder(this, getString(R.string.dropbox_export_notification_channel_id)).apply {
@@ -178,14 +201,9 @@ class DropboxExportService : Service() {
         }
     }
 
-    //deserialize the credential from SharedPreferences if it exists
-    private fun getLocalCredential(): DbxCredential? {
-        val sharedPreferences = getSharedPreferences(DropboxImportService.KNITTINGS, Activity.MODE_PRIVATE)
-        val serializedCredential = sharedPreferences.getString("credential", null) ?: return null
-        return DbxCredential.Reader.readFully(serializedCredential)
-    }
-
     companion object {
+
+        val KNITTINGS = "com.mthaler.knittings"
 
         fun startService(context: Context) {
             val startIntent = Intent(context, DropboxExportService::class.java)
