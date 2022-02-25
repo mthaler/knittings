@@ -221,7 +221,7 @@ class DropboxImportFragment : AbstractDropboxFragment() {
                 when (val response = dropboxApi.getAccountInfo()) {
                     is DropboxAccountInfoResponse.Failure -> {
                         Toast.makeText(
-                            this@DropboxImportFragment.requireContext(),
+                            requireContext(),
                             "Error getting account info!",
                             Toast.LENGTH_SHORT
                         ).show()
