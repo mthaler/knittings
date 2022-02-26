@@ -14,6 +14,6 @@ class DropboxImportCreator(val directory: String, val database: ExportDatabase<K
         workerClassName: String,
         workerParameters: WorkerParameters
     ): ListenableWorker? {
-        DropboxImportWorker(directory,database, appContext, workerParameters)
+        return DropboxImportWorker(directory,database, appContext, workerParameters)
     }
 }
