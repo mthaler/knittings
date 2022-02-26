@@ -3,6 +3,8 @@ package com.mthaler.knittings.dropbox
 import android.app.Activity
 import android.app.PendingIntent
 import android.content.Context
+import android.os.PowerManager
+import android.util.Log
 import androidx.work.Worker
 import androidx.work.WorkerParameters
 import com.dropbox.core.DbxRequestConfig
@@ -17,14 +19,33 @@ import com.mthaler.knittings.service.JobStatus
 import java.io.ByteArrayInputStream
 import java.io.FileInputStream
 import com.mthaler.knittings.utils.FileUtils.getExtension
+import com.mthaler.knittings.utils.FileUtils.createDateTimeDirectoryName
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.lang.Exception
+import java.util.*
 
 class DropboxExportWorker(val context: Context, parameters: WorkerParameters) : Worker(context, parameters) {
 
     override fun doWork(): Result {
+          GlobalScope.launch {
+                val dir = createDateTimeDirectoryName(Date())
+            val cancelled = withContext(Dispatchers.IO) {
+                try {
+                    upload(dir)
+                } catch (ex: Exception) {
+                    Log.e(TAG, "Could not upload: " + ex)
+                }
+            }
+            onUploadCompleted()
+        }
+
         TODO("Not yet implemented")
     }
 
-    private fun upload(dir: String, pendingIntent: PendingIntent): Boolean {
+    private fun upload(dir: String): Boolean {
         val clientIdentifier = "Knittings"
         val requestConfig = DbxRequestConfig(clientIdentifier)
         val credential = getLocalCredential()
@@ -65,7 +86,7 @@ class DropboxExportWorker(val context: Context, parameters: WorkerParameters) : 
                 .uploadAndFinish(inputStream)
     }
 
-    private fun onUploadCompleted(dir: String, cancelled: Boolean, pendingIntent: PendingIntent) {
+    private fun onUploadCompleted() {
         DropboxExportServiceManager.getInstance().updateJobStatus(JobStatus.Success())
     }
 
@@ -75,5 +96,9 @@ class DropboxExportWorker(val context: Context, parameters: WorkerParameters) : 
         val sharedPreferences = context.getSharedPreferences(DropboxExportService.KNITTINGS, Activity.MODE_PRIVATE)
         val serializedCredential = sharedPreferences.getString("credential", null) ?: return null
         return DbxCredential.Reader.readFully(serializedCredential)
+    }
+
+    companion object {
+        const val TAG = "DropboxExportWorker"
     }
 }
