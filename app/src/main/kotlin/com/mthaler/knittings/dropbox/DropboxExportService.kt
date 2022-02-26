@@ -158,7 +158,7 @@ class DropboxExportService : Service() {
                 DropboxExportServiceManager.getInstance().updateJobStatus(JobStatus.Success())
             }
         } else {
-            DropboxExportServiceManager.getInstance().updateJobStatus(JobStatus.Cancelled(getString(R.string.dropbox_export_notification_cancelled_msg), dir))
+            DropboxExportServiceManager.getInstance().updateJobStatus(JobStatus.Success())
         }
     }
 
