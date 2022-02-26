@@ -65,9 +65,13 @@ class DropboxExportWorker(val context: Context, parameters: WorkerParameters) : 
                 .uploadAndFinish(inputStream)
     }
 
+    private fun onUploadCompleted(dir: String, cancelled: Boolean, pendingIntent: PendingIntent) {
+        DropboxExportServiceManager.getInstance().updateJobStatus(JobStatus.Success())
+    }
+
 
     //deserialize the credential from SharedPreferences if it exists
-    protected fun getLocalCredential(): DbxCredential? {
+    private fun getLocalCredential(): DbxCredential? {
         val sharedPreferences = context.getSharedPreferences(DropboxExportService.KNITTINGS, Activity.MODE_PRIVATE)
         val serializedCredential = sharedPreferences.getString("credential", null) ?: return null
         return DbxCredential.Reader.readFully(serializedCredential)
