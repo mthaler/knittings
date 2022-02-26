@@ -39,8 +39,7 @@ class DropboxExportWorker(val context: Context, parameters: WorkerParameters) : 
             }
             onUploadCompleted()
         }
-
-        TODO("Not yet implemented")
+        return Result.success()
     }
 
     private fun upload(dir: String): Boolean {
