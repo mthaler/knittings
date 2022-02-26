@@ -1,9 +1,7 @@
 package com.mthaler.knittings.dropbox
 
 import android.app.Activity
-import android.app.PendingIntent
 import android.content.Context
-import android.os.PowerManager
 import android.util.Log
 import androidx.work.Worker
 import androidx.work.WorkerParameters
