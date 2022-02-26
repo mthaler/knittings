@@ -139,10 +139,10 @@ class DropboxImportService : Service() {
     }
 
     companion object {
-        private val EXTRA_DIRECTORY = "com.mthaler.knittings.directory"
-        private val EXTRA_DATABASE = "com.mthaler.knittings.database"
+        private const val EXTRA_DIRECTORY = "com.mthaler.knittings.directory"
+        private const val EXTRA_DATABASE = "com.mthaler.knittings.database"
 
-        val KNITTINGS = "com.mthaler.knittings"
+        private const val KNITTINGS = "com.mthaler.knittings"
 
         fun startService(context: Context, directory: String, database: ExportDatabase<Project>) {
             val startIntent = Intent(context, DropboxImportService::class.java)

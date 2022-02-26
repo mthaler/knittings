@@ -90,12 +90,14 @@ class DropboxExportWorker(val context: Context, parameters: WorkerParameters) : 
 
     //deserialize the credential from SharedPreferences if it exists
     private fun getLocalCredential(): DbxCredential? {
-        val sharedPreferences = context.getSharedPreferences(DropboxExportService.KNITTINGS, Activity.MODE_PRIVATE)
+        val sharedPreferences = context.getSharedPreferences(KNITTINGS, Activity.MODE_PRIVATE)
         val serializedCredential = sharedPreferences.getString("credential", null) ?: return null
         return DbxCredential.Reader.readFully(serializedCredential)
     }
 
     companion object {
         const val TAG = "DropboxExportWorker"
+
+        private const val KNITTINGS = "com.mthaler.knittings"
     }
 }
