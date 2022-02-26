@@ -3,6 +3,8 @@ package com.mthaler.knittings.dropbox
 import android.content.Context
 import android.os.Environment
 import androidx.appcompat.app.AlertDialog
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
 import com.dropbox.core.DbxException
 import com.dropbox.core.v2.DbxClientV2
 import com.dropbox.core.v2.files.FileMetadata
@@ -19,7 +21,7 @@ import kotlinx.coroutines.withContext
 import org.json.JSONObject
 import java.io.ByteArrayOutputStream
 
-class DropboxApi(private val dropboxClient: DbxClientV2) {
+class DropboxApi(private val context: Context, private val dropboxClient: DbxClientV2) {
 
     suspend fun listFolders(): ListFolderResult =
         withContext(Dispatchers.IO) {
@@ -89,6 +91,9 @@ class DropboxApi(private val dropboxClient: DbxClientV2) {
                     )
                     setPositiveButton(R.string.dropbox_import_dialog_button_import) { dialog, which ->
                         val filteredDatabase = database.removeMissingPhotos(missingPhotos)
+                        val request = OneTimeWorkRequestBuilder<DropboxExportWorker>().build()
+                        val workManager = WorkManager.getInstance(context)
+
                         DropboxImportService.startService(ctx, directory, filteredDatabase)
                         DropboxImportServiceManager.getInstance().updateJobStatus(JobStatus.Progress(0))
                     }
