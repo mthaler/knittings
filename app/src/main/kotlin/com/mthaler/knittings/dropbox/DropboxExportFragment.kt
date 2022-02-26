@@ -169,7 +169,6 @@ class DropboxExportFragment : AbstractDropboxFragment() {
                             }
                         }
                     }
-
                 }
             }
         }
