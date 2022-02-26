@@ -5,7 +5,6 @@
         <h3>Version 0.9.32</h3>
         - Rewrote compress photos using WorkManager<br>
         - Dropbox import / export works again<br>
-        - Stopwatch now is a fragment<br>
         <h3>Version 0.9.31</h3>
         - Fixed project count<br>
         <h3>Version 0.9.30</h3>
