@@ -14,7 +14,7 @@ class NeedleConverter(val context: Context) {
         val name = dbRow.getString(NeedleTable.Cols.NAME)
         val description = dbRow.getString(NeedleTable.Cols.DESCRIPTION)
         val size = dbRow.getString(NeedleTable.Cols.SIZE)
-        val length = dbRow.getString(NeedleTable.Cols.DESCRIPTION)
+        val length = dbRow.getString(NeedleTable.Cols.LENGTH)
         val materialStr = dbRow.getString(NeedleTable.Cols.MATERIAL)
         val material = try {
             NeedleMaterial.valueOf(materialStr)
