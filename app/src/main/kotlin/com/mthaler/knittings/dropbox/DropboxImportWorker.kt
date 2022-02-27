@@ -17,24 +17,13 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.lang.Exception
 
-class DropboxImportWorker(val directory: String, val database: ExportDatabase<Knitting>, val context: Context, parameters: WorkerParameters) : Worker(context, parameters) {
+class DropboxImportWorker(val database: ExportDatabase<Knitting>, val context: Context, parameters: WorkerParameters) : Worker(context, parameters) {
 
     override fun doWork(): Result {
-        GlobalScope.launch {
-            withContext(Dispatchers.IO) {
-                try {
-                    downloadPhotos(database, directory)
-                } catch (ex: Exception) {
-                    Log.e(DropboxExportWorker.TAG, "Could not download: " + ex)
-                }
-            }
-            DropboxImportServiceManager.getInstance().updateJobStatus(JobStatus.Success(context.resources.getString(R.string.dropbox_import_completed)))
-        }
-
-        return Result.success()
+        TODO("Not yet implemented")
     }
 
-     private fun downloadPhotos(database: ExportDatabase<Knitting>, directory: String) {
+    private fun downloadPhotos(database: ExportDatabase<Knitting>, directory: String) {
         val clientIdentifier = "Knittings"
         val requestConfig = DbxRequestConfig(clientIdentifier)
         val credential = getLocalCredential()
@@ -55,8 +44,10 @@ class DropboxImportWorker(val directory: String, val database: ExportDatabase<Kn
     }
 
     companion object {
-        const val TAG = "DropboxImportWorker"
+        private  const val TAG = "DropboxImportWorker"
 
         private const val KNITTINGS = "com.mthaler.knittings"
+        const val Database = "com.mthaler.knittings.dropbox.database"
+        const val Directory = "com.mthaler.knittings.dropbox.directory"
     }
 }
