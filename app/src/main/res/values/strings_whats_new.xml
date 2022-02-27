@@ -4,6 +4,7 @@
     <string name="whats_new"><![CDATA[
         <h3>Version 0.9.33</h3>
         - Rewrote dropbox export using WorkManager<br>
+        - Fixed needle length<br>
         <h3>Version 0.9.32</h3>
         - Rewrote compress photos using WorkManager<br>
         - Dropbox import / export works again<br>

@@ -4,6 +4,7 @@
     <string name="whats_new"><![CDATA[
         <h3>Version 0.9.33</h3>
         - Dropbox Export mit WorkManager neu geschrieben<br>
+        - Nadel länge funktioniert wieder<br>
         <h3>Version 0.9.32</h3>
         - Compress photos mit WorkManager neu geschrieben<br>
         - Dropbox import / export funktioniert wieder<br>
