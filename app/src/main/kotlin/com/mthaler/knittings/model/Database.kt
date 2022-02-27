@@ -12,7 +12,7 @@ import java.io.File
 import java.io.FileOutputStream
 
 data class Database(override val projects: List<Knitting>, override val photos: List<Photo>, override val categories: List<Category>, val needles: List<Needle>, val rowCounters: List<RowCounter>) : AbstractExportDatabase<Knitting>() {
-
+ 
     override fun checkDatabase(): Database {
         val filteredPhotos = photos.filter { it.filename.exists() }
         val removedPhotos = photos.map { it.id }.toSet() - filteredPhotos.map { it.id}.toSet()
