@@ -24,8 +24,8 @@ class NeedleConverterTest {
 
     @Test
     fun testConvert() {
-        val dbRows = mapOf(NeedleTable.Cols.ID to 42, NeedleTable.Cols.NAME to "needle", NeedleTable.Cols.DESCRIPTION to "my first needle", NeedleTable.Cols.SIZE to "5 mm", NeedleTable.Cols.LENGTH to "20 cm",
-            NeedleTable.Cols.MATERIAL to  NeedleMaterial.METAL.toString(), NeedleTable.Cols.IN_USE to true, NeedleTable.Cols.TYPE to NeedleType.SET.toString())
+        val dbRows = mapOf(NeedleTable.Cols.ID to 42L, NeedleTable.Cols.NAME to "needle", NeedleTable.Cols.DESCRIPTION to "my first needle", NeedleTable.Cols.SIZE to "5 mm", NeedleTable.Cols.LENGTH to "20 cm",
+            NeedleTable.Cols.MATERIAL to  NeedleMaterial.METAL.toString(), NeedleTable.Cols.IN_USE to 1L, NeedleTable.Cols.TYPE to NeedleType.SET.toString())
         val result = NeedleConverter(context).convert(dbRows)
         val n = Needle(42, "needle", "my first needle", "5 mm", "20 cm", NeedleMaterial.METAL, true, NeedleType.SET)
         assertEquals(result, n)
