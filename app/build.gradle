@@ -61,7 +61,7 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.4.1'
 
     def fragment_version = "1.4.1"
-    def lifecycleVersion = '2.2.0'
+    def lifecycleVersion = '2.4.1'
 
     implementation "androidx.fragment:fragment-ktx:$fragment_version"
 
