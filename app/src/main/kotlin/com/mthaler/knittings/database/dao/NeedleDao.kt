@@ -15,6 +15,6 @@ interface NeedleDao {
     @Delete
     fun delete(needle: Needle)
 
-    @Query("SELECT * FROM NEEDLES")
+    @Query("SELECT * FROM needles")
     fun getAll(): List<Needle>
 }
