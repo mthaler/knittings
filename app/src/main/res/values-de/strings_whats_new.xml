@@ -2,6 +2,10 @@
 <resources>
     <string name="whats_new_title">Whats New</string>
     <string name="whats_new"><![CDATA[
+        <h3>Version 0.9.34</h3>
+        - Tests hinzugefügt<br>
+        - Kotlin Version auf 1.6.10 erhöht<br>
+        - Abhängigkeiten hinzugefügt<br>
         <h3>Version 0.9.33</h3>
         - Dropbox Export mit WorkManager neu geschrieben<br>
         - Nadel länge funktioniert wieder<br>
