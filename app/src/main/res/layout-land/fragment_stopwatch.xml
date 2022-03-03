@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".stopwatch.StopwatchActivity">
+
+    <!-- add toolbar -->
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/AppTheme.PopupOverlay"
+            app:title="@string/activity_stopwatch_name" />
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="16dp"
+        android:orientation="horizontal"
+        android:layout_marginTop="?attr/actionBarSize">
+        <TextView
+            android:id="@+id/time_view"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textAppearance="@android:style/TextAppearance.Large"
+            android:textSize="76sp" />
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <Button
+                style="@style/ButtonStopwatch"
+                android:id="@+id/start_button"
+                android:layout_marginTop="24dp"
+                android:onClick="onClickStart"
+                android:text="@string/stopwatch_start" />
+            <Button
+                style="@style/ButtonStopwatch"
+                android:id="@+id/stop_button"
+                android:layout_marginTop="20dp"
+                android:onClick="onClickStop"
+                android:text="@string/stopwatch_stop" />
+            <Button
+                style="@style/ButtonStopwatch"
+                android:id="@+id/discard_button"
+                android:layout_marginTop="48dp"
+                android:onClick="onClickDiscard"
+                android:text="@string/stopwatch_discard" />
+        </LinearLayout>
+    </LinearLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
