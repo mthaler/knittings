@@ -95,7 +95,7 @@ class PhotoGalleryFragment : Fragment() {
         return when (item.itemId) {
             R.id.menu_item_add_photo -> {
                 val ctx = requireContext()
-                val d = TakePhotoDialog.create(ctx, (ctx.applicationContext as DatabaseApplication<*>).getApplicationSettings().getFileProviderAuthority(), layoutInflater, this::takePhoto, this::importPhoto)
+                val d = TakePhotoDialog.create(ctx, (ctx.applicationContext as DatabaseApplication).getApplicationSettings().getFileProviderAuthority(), layoutInflater, this::takePhoto, this::importPhoto)
                 d.show()
                 true
             }

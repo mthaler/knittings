@@ -62,7 +62,7 @@ class DropboxExportFragment : AbstractDropboxFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         // this opens a web browser where the user can log in
-        binding.loginButton.setOnClickListener { Auth.startOAuth2Authentication(context, (requireContext().applicationContext as DatabaseApplication<Project>).dropboxAppKey) }
+        binding.loginButton.setOnClickListener { Auth.startOAuth2Authentication(context, (requireContext().applicationContext as DatabaseApplication).dropboxAppKey) }
 
         binding.exportButton.setOnClickListener {
             val isWiFi = NetworkUtils.isWifiConnected(requireContext())

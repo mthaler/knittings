@@ -41,7 +41,7 @@ class PhotoFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        ds = (requireContext().applicationContext as DatabaseApplication<*>).getPhotoDataSource()
+        ds = (requireContext().applicationContext as DatabaseApplication).getPhotoDataSource()
         arguments?.let {
             val photoID = it.getLong(EXTRA_PHOTO_ID)
             photo = ds.getPhoto(photoID)
@@ -188,7 +188,7 @@ class PhotoFragment : Fragment() {
             stream.flush()
             stream.close()
             val ctx = requireContext()
-            uri = FileProvider.getUriForFile(ctx, (ctx.applicationContext as DatabaseApplication<*>).getApplicationSettings().getFileProviderAuthority(), file)
+            uri = FileProvider.getUriForFile(ctx, (ctx.applicationContext as DatabaseApplication).getApplicationSettings().getFileProviderAuthority(), file)
         } catch (e: IOException) {
             error("IOException while trying to write file for sharing: " + e.message)
         }

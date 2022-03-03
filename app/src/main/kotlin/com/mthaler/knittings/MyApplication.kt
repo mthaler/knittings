@@ -11,7 +11,7 @@ import com.mthaler.knittings.settings.ThemeRepository
 import org.json.JSONObject
 import java.io.File
 
-class MyApplication : MultiDexApplication(), DatabaseApplication<Knitting> {
+class MyApplication : MultiDexApplication(), DatabaseApplication {
 
     override fun onCreate() {
         super.onCreate()

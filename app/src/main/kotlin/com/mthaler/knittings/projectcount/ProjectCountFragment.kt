@@ -23,7 +23,7 @@ class ProjectCountFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
         // get all knittings from database
-        val ds = (requireContext().applicationContext as com.mthaler.knittings.DatabaseApplication<*>).getProjectsDataSource()
+        val ds = (requireContext().applicationContext as com.mthaler.knittings.DatabaseApplication).getProjectsDataSource()
         val projects = ds.allProjects
 
         _binding = FragmentProjectCountBinding.inflate(inflater, container, false)
@@ -103,7 +103,7 @@ class ProjectCountFragment : Fragment() {
      * @return list of categories
      */
     private fun createCategoryNamesList(): List<String> {
-        val ds = (requireContext().applicationContext as com.mthaler.knittings.DatabaseApplication<*>).getCategoryDataSource()
+        val ds = (requireContext().applicationContext as com.mthaler.knittings.DatabaseApplication).getCategoryDataSource()
         val categories = ds.allCategories.sortedBy { it.name.toLowerCase() }
         return listOf(getString(R.string.filter_show_all)) + categories.map { it.name }.toList()
     }

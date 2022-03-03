@@ -33,7 +33,7 @@ import com.mthaler.knittings.settings.SettingsActivity
 import com.mthaler.knittings.whatsnew.WhatsNewDialog
 import java.util.*
 
-class MainActivity : AbstractMainActivity<Knitting>(), NavigationView.OnNavigationItemSelectedListener {
+class MainActivity : AbstractMainActivity(), NavigationView.OnNavigationItemSelectedListener {
 
     private var initialQuery: CharSequence? = null
     private var sv: SearchView? = null
@@ -137,7 +137,7 @@ class MainActivity : AbstractMainActivity<Knitting>(), NavigationView.OnNavigati
         val activeFilters = binding.knittingActiveFilters
 
         viewModel = ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory.getInstance(application)).get(
-            MainViewModel.javaClass())
+            MainViewModel::class.java)
         viewModel.projects.observe(this, { knittings ->
 
             when {
@@ -270,7 +270,7 @@ class MainActivity : AbstractMainActivity<Knitting>(), NavigationView.OnNavigati
                         0 -> viewModel.filter = CombinedFilter(f.filters.filterNot { it is SingleCategoryFilter })
                         else -> {
                             val category = categories[which - 1]
-                            val newFilter = SingleCategoryFilter<Knitting>(category)
+                            val newFilter = SingleCategoryFilter(category)
                             viewModel.filter = CombinedFilter(f.filters.filterNot { it is SingleCategoryFilter } + newFilter)
                         }
                     }

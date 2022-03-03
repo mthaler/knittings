@@ -1,6 +1,7 @@
 package com.mthaler.knittings.filter
 
 import com.mthaler.knittings.model.Category
+import com.mthaler.knittings.model.Knitting
 import com.mthaler.knittings.model.Project
 
 /**
@@ -8,7 +9,7 @@ import com.mthaler.knittings.model.Project
  *
  * @param category category used for filtering
  */
-data class SingleCategoryFilter<T : Project>(val category: Category) : Filter<T> {
+data class SingleCategoryFilter(val category: Category) : Filter<Knitting> {
 
-    override fun filter(projects: List<T>): List<T> = projects.filter { it.category == category }
+    override fun filter(projects: List<Knitting>): List<Knitting> = projects.filter { it.category == category }
 }

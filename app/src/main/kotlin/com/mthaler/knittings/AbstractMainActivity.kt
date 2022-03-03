@@ -4,11 +4,12 @@ import android.text.TextUtils
 import androidx.appcompat.widget.SearchView
 import com.mthaler.knittings.filter.CombinedFilter
 import com.mthaler.knittings.filter.ContainsFilter
+import com.mthaler.knittings.model.Knitting
 import com.mthaler.knittings.model.Project
 
-abstract class AbstractMainActivity<T : Project> : BaseActivity(), SearchView.OnQueryTextListener, SearchView.OnCloseListener {
+abstract class AbstractMainActivity : BaseActivity(), SearchView.OnQueryTextListener, SearchView.OnCloseListener {
 
-    protected lateinit var viewModel: MainViewModel<T>
+    protected lateinit var viewModel: MainViewModel
 
     /**
      * Called when the query text is changed by the use
@@ -19,7 +20,7 @@ abstract class AbstractMainActivity<T : Project> : BaseActivity(), SearchView.On
      */
     override fun onQueryTextChange(newText: String?): Boolean {
         if (newText == null || TextUtils.isEmpty(newText)) {
-            viewModel.filter = CombinedFilter.empty()
+            viewModel.filter = CombinedFilter.empty<Knitting>()
         } else {
             viewModel.filter = CombinedFilter(listOf(ContainsFilter(newText)))
         }
@@ -42,7 +43,7 @@ abstract class AbstractMainActivity<T : Project> : BaseActivity(), SearchView.On
      * @return true if the listener wants to override the default behavior of clearing the text field and dismissing it, false otherwise.
      */
     override fun onClose(): Boolean {
-        viewModel.filter = CombinedFilter.empty()
+        viewModel.filter = CombinedFilter.empty<Knitting>()
         return true
     }
 }

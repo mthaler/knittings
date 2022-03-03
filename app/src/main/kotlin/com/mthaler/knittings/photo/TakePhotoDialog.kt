@@ -104,7 +104,7 @@ object TakePhotoDialog {
         val orientation = PictureUtils.getOrientation(Uri.fromFile(file), context)
         val preview = PictureUtils.decodeSampledBitmapFromPath(file.absolutePath, 200, 200)
         val rotatedPreview = PictureUtils.rotateBitmap(preview, orientation)
-        val ds = (context.applicationContext as com.mthaler.knittings.DatabaseApplication<*>).getPhotoDataSource()
+        val ds = (context.applicationContext as com.mthaler.knittings.DatabaseApplication).getPhotoDataSource()
         val photo = ds.addPhoto(Photo(-1, file, ownerID, "", rotatedPreview))
         Log.d(TAG, "Created new photo from $file, owner id $ownerID")
         // add first photo as default photo
@@ -140,7 +140,7 @@ object TakePhotoDialog {
         val orientation = PictureUtils.getOrientation(Uri.fromFile(file), context)
         val preview = PictureUtils.decodeSampledBitmapFromPath(file.absolutePath, 200, 200)
         val rotatedPreview = PictureUtils.rotateBitmap(preview, orientation)
-        val ds = (context.applicationContext as com.mthaler.knittings.DatabaseApplication<*>).getPhotoDataSource()
+        val ds = (context.applicationContext as com.mthaler.knittings.DatabaseApplication).getPhotoDataSource()
         val photo = ds.addPhoto(Photo(-1, file, ownerID, "", rotatedPreview))
         Log.d(TAG, "Created new photo from $file, owner id $ownerID")
         // add first photo as default photo

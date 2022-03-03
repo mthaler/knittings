@@ -11,7 +11,7 @@ import kotlinx.coroutines.withContext
 
 class CategoryListViewModel(application: Application) : DataSourceViewModel(application) {
 
-    private val ds = (application as DatabaseApplication<*>).getCategoryDataSource()
+    private val ds = (application as DatabaseApplication).getCategoryDataSource()
 
     val categories = MutableLiveData(ds.allCategories.sortedBy { it.name.toLowerCase() })
 

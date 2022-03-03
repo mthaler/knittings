@@ -13,7 +13,7 @@ import kotlinx.coroutines.withContext
 
 class PhotoGalleryViewModel(application: Application) : DataSourceViewModel(application) {
 
-    private val ds: PhotoDataSource = (application as DatabaseApplication<*>).getPhotoDataSource()
+    private val ds: PhotoDataSource = (application as DatabaseApplication).getPhotoDataSource()
     private var ownerID = -1L
     val photos = MutableLiveData<ArrayList<Photo>>()
 

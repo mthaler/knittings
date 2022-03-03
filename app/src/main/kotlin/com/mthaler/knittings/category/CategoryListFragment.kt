@@ -32,7 +32,7 @@ class CategoryListFragment : Fragment() {
 
         binding.fabCreateCategory.setOnClickListener { listener?.createCategory() }
 
-        val appSettings = (requireContext().applicationContext as DatabaseApplication<*>).getApplicationSettings()
+        val appSettings = (requireContext().applicationContext as DatabaseApplication).getApplicationSettings()
         val emptyListBackground = appSettings.emptyCategoryListBackground()
         if (emptyListBackground != -1) {
             binding.categoryEmptyRecyclerView.setImageResource(emptyListBackground)
@@ -54,7 +54,7 @@ class CategoryListFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        val ds = (requireContext().applicationContext as DatabaseApplication<*>).getCategoryDataSource()
+        val ds = (requireContext().applicationContext as DatabaseApplication).getCategoryDataSource()
 
         binding.categoryRecyclerView.layoutManager = LinearLayoutManager(context)
         val adapter = CategoryAdapter({ category -> listener?.categoryClicked(category.id) }, { category ->

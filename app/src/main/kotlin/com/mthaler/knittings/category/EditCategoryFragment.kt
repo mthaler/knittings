@@ -24,7 +24,7 @@ class EditCategoryFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        ds = (requireContext().applicationContext as DatabaseApplication<*>).getCategoryDataSource()
+        ds = (requireContext().applicationContext as DatabaseApplication).getCategoryDataSource()
         arguments?.let {
             categoryID = it.getLong(EXTRA_CATEGORY_ID)
         }

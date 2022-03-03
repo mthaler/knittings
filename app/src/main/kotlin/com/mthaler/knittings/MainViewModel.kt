@@ -4,22 +4,23 @@ import android.app.Application
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.mthaler.knittings.database.DataSourceViewModel
-import com.mthaler.knittings.model.Project
+import com.mthaler.knittings.filter.CombinedFilter
+import com.mthaler.knittings.model.Knitting
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class MainViewModel<T : Project>(application: Application) : DataSourceViewModel(application) {
+class MainViewModel(application: Application) : DataSourceViewModel(application) {
 
-    private val ds = (application as DatabaseApplication<T>).getProjectsDataSource()
+    private val ds = (application as DatabaseApplication).getProjectsDataSource()
 
-    val projects = MutableLiveData<List<T>?>(null)
+    val projects = MutableLiveData<List<Knitting>>(null)
     var sorting: Sorting = Sorting.NewestFirst
         set(value) {
             field = value
             updateProjects()
         }
-    var filter: com.mthaler.knittings.filter.CombinedFilter<T> = com.mthaler.knittings.filter.CombinedFilter.empty()
+    var filter: CombinedFilter<Knitting> = CombinedFilter.empty()
         set(value) {
             field = value
             updateProjects()
@@ -47,9 +48,5 @@ class MainViewModel<T : Project>(application: Application) : DataSourceViewModel
             }
             projects.value = filtered
         }
-    }
-
-    companion object {
-        fun <T : Project>javaClass(): Class<MainViewModel<T>> = MainViewModel::class.java as Class<MainViewModel<T>>
     }
 }

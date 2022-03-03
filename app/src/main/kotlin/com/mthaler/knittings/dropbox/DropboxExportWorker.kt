@@ -11,6 +11,7 @@ import com.dropbox.core.v2.DbxClientV2
 import com.dropbox.core.v2.files.WriteMode
 import com.mthaler.knittings.DatabaseApplication
 import com.mthaler.knittings.model.ExportDatabase
+import com.mthaler.knittings.model.Knitting
 import com.mthaler.knittings.model.Photo
 import com.mthaler.knittings.model.Project
 import com.mthaler.knittings.service.JobStatus
@@ -50,7 +51,7 @@ class DropboxExportWorker(val context: Context, parameters: WorkerParameters) : 
             val dropboxClient = DbxClientV2(requestConfig, credential)
             val sm = DropboxExportServiceManager.getInstance()
             dropboxClient.files().createFolderV2("/$dir")
-            val database = (applicationContext as DatabaseApplication<Project>).createExportDatabase().checkDatabase()
+            val database = (applicationContext as DatabaseApplication).createExportDatabase().checkDatabase()
             uploadDatabase(dropboxClient, dir, database)
             // upload photos to dropbox
             val count = database.photos.size
@@ -66,7 +67,7 @@ class DropboxExportWorker(val context: Context, parameters: WorkerParameters) : 
         return false
     }
 
-    private fun uploadDatabase(dbxClient: DbxClientV2, dir: String, database: ExportDatabase<Project>) {
+    private fun uploadDatabase(dbxClient: DbxClientV2, dir: String, database: ExportDatabase<Knitting>) {
         val dbJSON = database.toJSON()
         val s = dbJSON.toString(2)
         val dbInputStream = ByteArrayInputStream(s.toByteArray())

@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.mthaler.knittings.database.DataSourceViewModel
 import com.mthaler.knittings.filter.CombinedFilter
 import com.mthaler.knittings.database.KnittingsDataSource
+import com.mthaler.knittings.model.Knitting
 import com.mthaler.knittings.model.Needle
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -30,8 +31,9 @@ class NeedleListViewModel(application: Application) : DataSourceViewModel(applic
 
     private fun updateNeedles() {
         viewModelScope.launch {
+            val ds = KnittingsDataSource
             val filteredNeedles = withContext(Dispatchers.IO) {
-                filter.filter(KnittingsDataSource.allNeedles)
+                filter.filter(ds.allNeedles)
             }
             needles.value = filteredNeedles
         }

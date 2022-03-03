@@ -12,7 +12,7 @@ import java.lang.Exception
 
 class DropboxExportViewModel(application: Application) : DataSourceViewModel(application)  {
 
-    private val ds = (application as DatabaseApplication<*>).getPhotoDataSource()
+    private val ds = (application as DatabaseApplication).getPhotoDataSource()
 
     val statistics = MutableLiveData(Statistics.EMPTY)
 

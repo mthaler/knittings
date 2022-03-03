@@ -13,6 +13,7 @@ import com.dropbox.core.oauth.DbxCredential
 import com.dropbox.core.v2.DbxClientV2
 import com.mthaler.knittings.R
 import com.mthaler.knittings.model.ExportDatabase
+import com.mthaler.knittings.model.Knitting
 import com.mthaler.knittings.model.Project
 import com.mthaler.knittings.service.JobStatus
 import com.mthaler.knittings.service.ServiceStatus
@@ -144,7 +145,7 @@ class DropboxImportService : Service() {
 
         private const val KNITTINGS = "com.mthaler.knittings"
 
-        fun startService(context: Context, directory: String, database: ExportDatabase<Project>) {
+        fun startService(context: Context, directory: String, database: ExportDatabase<Knitting>) {
             val startIntent = Intent(context, DropboxImportService::class.java)
             startIntent.putExtra(EXTRA_DIRECTORY, directory)
             startIntent.putExtra(EXTRA_DATABASE, database as Serializable)
