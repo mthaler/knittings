@@ -38,8 +38,13 @@ class StopwatchFragment : Fragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-         _binding = FragmentStopwatchBinding.inflate(inflater, container, false)
-         val view = binding.root
+          _binding = FragmentStopwatchBinding.inflate(inflater, container, false)
+          val view = binding.root
+
+          binding.startButton.setOnClickListener {
+              running = true
+              previousTime = System.currentTimeMillis()
+          }
 
          return view
     }
