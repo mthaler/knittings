@@ -8,9 +8,9 @@ import androidx.core.app.NavUtils
 import android.view.MenuItem
 import android.view.View
 import com.mthaler.knittings.BaseActivity
-import com.mthaler.knittings.Extras.EXTRA_KNITTING_ID
 import com.mthaler.knittings.database.KnittingsDataSource
 import com.mthaler.knittings.databinding.ActivityStopwatchBinding
+import com.mthaler.knittings.stopwatch.Extras.EXTRA_KNITTING_ID
 import java.util.Locale
 
 /**

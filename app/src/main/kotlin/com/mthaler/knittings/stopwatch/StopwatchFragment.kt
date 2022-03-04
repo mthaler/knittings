@@ -1,6 +1,7 @@
 package com.mthaler.knittings.stopwatch
 
 import android.os.Bundle
+import android.os.Handler
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -8,6 +9,8 @@ import android.view.ViewGroup
 import com.mthaler.knittings.Extras
 import com.mthaler.knittings.database.KnittingsDataSource
 import com.mthaler.knittings.databinding.FragmentStopwatchBinding
+import com.mthaler.knittings.stopwatch.Extras.EXTRA_KNITTING_ID
+import java.util.*
 
 class StopwatchFragment : Fragment() {
 
@@ -61,5 +64,36 @@ class StopwatchFragment : Fragment() {
         outState.putLong(StopwatchActivity.EXTRA_STOPWATCH_ACTIVITY_STOPPED_TIME, System.currentTimeMillis())
         outState.putBoolean(StopwatchActivity.EXTRA_STOPWATCH_RUNNING, running)
         super.onSaveInstanceState(outState)
+    }
+
+    private fun runTimer() {
+        previousTime = System.currentTimeMillis()
+        val handler = Handler()
+        handler.post(object : Runnable {
+            override fun run() {
+                val totalSeconds = elapsedTime / 1000
+                val hours = totalSeconds / 3600
+                val minutes = totalSeconds % 3600 / 60
+                val secs = totalSeconds % 60
+                val time = String.format(Locale.getDefault(), "%d:%02d:%02d", hours, minutes, secs)
+                binding.timeView.text = time
+                if (running) {
+                    val t = System.currentTimeMillis()
+                    elapsedTime += (t - previousTime)
+                    previousTime = t
+                }
+                handler.postDelayed(this, 500)
+            }
+        })
+    }
+
+     companion object {
+          @JvmStatic
+            fun newInstance(knittinhID: Long) =
+              StopwatchFragment().apply {
+                arguments = Bundle().apply {
+                    putLong(EXTRA_KNITTING_ID, knittinhID)
+                }
+            }
     }
 }
