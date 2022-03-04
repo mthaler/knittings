@@ -45,7 +45,6 @@
             style="@style/ButtonStopwatch"
             android:id="@+id/stop_button"
             android:layout_marginTop="20dp"
-            android:onClick="onClickStop"
             android:text="@string/stopwatch_stop" />
         <Button
             style="@style/ButtonStopwatch"

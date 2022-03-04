@@ -38,13 +38,19 @@ class StopwatchFragment : Fragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-          _binding = FragmentStopwatchBinding.inflate(inflater, container, false)
-          val view = binding.root
+         _binding = FragmentStopwatchBinding.inflate(inflater, container, false)
+         val view = binding.root
 
-          binding.startButton.setOnClickListener {
-              running = true
-              previousTime = System.currentTimeMillis()
-          }
+         binding.startButton.setOnClickListener {
+             running = true
+             previousTime = System.currentTimeMillis()
+         }
+
+         binding.stopButton.setOnClickListener {
+             running = false
+             val knitting = KnittingsDataSource.getProject(knittingID)
+             KnittingsDataSource.updateProject(knitting.copy(duration = elapsedTime))
+         }
 
          return view
     }
