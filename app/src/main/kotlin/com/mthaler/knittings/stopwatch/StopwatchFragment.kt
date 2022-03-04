@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.mthaler.knittings.Extras
-import com.mthaler.knittings.R
 import com.mthaler.knittings.database.KnittingsDataSource
 import com.mthaler.knittings.databinding.FragmentStopwatchBinding
 
@@ -19,14 +18,6 @@ class StopwatchFragment : Fragment() {
     private var elapsedTime = 0L
     private var previousTime = 0L
     private var running = false
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_stopwatch, container, false)
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,5 +35,20 @@ class StopwatchFragment : Fragment() {
         } else {
             error("Saved instance state is null")
         }
+    }
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+         _binding = FragmentStopwatchBinding.inflate(inflater, container, false)
+         val view = binding.root
+
+         return view
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        outState.putLong(Extras.EXTRA_KNITTING_ID, knittingID)
+        outState.putLong(StopwatchActivity.EXTRA_STOPWATCH_ELAPSED_TIME, elapsedTime)
+        outState.putLong(StopwatchActivity.EXTRA_STOPWATCH_ACTIVITY_STOPPED_TIME, System.currentTimeMillis())
+        outState.putBoolean(StopwatchActivity.EXTRA_STOPWATCH_RUNNING, running)
+        super.onSaveInstanceState(outState)
     }
 }
