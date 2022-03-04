@@ -55,6 +55,12 @@ class StopwatchFragment : Fragment() {
              KnittingsDataSource.updateProject(knitting.copy(duration = elapsedTime))
          }
 
+         binding.discardButton.setOnClickListener {
+               running = false
+               elapsedTime = 0
+               requireActivity().finish()
+         }
+
          return view
     }
 

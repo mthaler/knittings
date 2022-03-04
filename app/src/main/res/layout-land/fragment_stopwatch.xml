@@ -56,7 +56,6 @@
                 style="@style/ButtonStopwatch"
                 android:id="@+id/discard_button"
                 android:layout_marginTop="48dp"
-                android:onClick="onClickDiscard"
                 android:text="@string/stopwatch_discard" />
         </LinearLayout>
     </LinearLayout>
