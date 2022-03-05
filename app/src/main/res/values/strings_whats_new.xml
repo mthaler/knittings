@@ -6,6 +6,7 @@
         - Added tests<br>
         - Upgrade Kotlin to 1.6.10<br>
         - Added dependencies<br>
+        - Stopwatch now uses fragment<br>
         <h3>Version 0.9.33</h3>
         - Rewrote dropbox export using WorkManager<br>
         - Fixed needle length<br>
