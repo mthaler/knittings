@@ -7,10 +7,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.mthaler.knittings.Extras
+import com.mthaler.knittings.Extras.EXTRA_KNITTING_ID
 import com.mthaler.knittings.database.KnittingsDataSource
 import com.mthaler.knittings.databinding.FragmentStopwatchBinding
 import com.mthaler.knittings.model.Knitting
-import com.mthaler.knittings.stopwatch.Extras.EXTRA_KNITTING_ID
 import com.mthaler.knittings.stopwatch.Extras.EXTRA_STOPWATCH_ACTIVITY_STOPPED_TIME
 import com.mthaler.knittings.stopwatch.Extras.EXTRA_STOPWATCH_ELAPSED_TIME
 import com.mthaler.knittings.stopwatch.Extras.EXTRA_STOPWATCH_RUNNING
@@ -30,7 +30,7 @@ class StopwatchFragment : Fragment() {
         super.onCreate(savedInstanceState)
         val a = arguments
         if (a != null) {
-            knittingID = a.getLong(Extras.EXTRA_KNITTING_ID)
+            knittingID = a.getLong(EXTRA_KNITTING_ID)
             elapsedTime = KnittingsDataSource.getProject(knittingID).duration
         }
         if (savedInstanceState != null) {
@@ -66,7 +66,7 @@ class StopwatchFragment : Fragment() {
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
-        outState.putLong(Extras.EXTRA_KNITTING_ID, knittingID)
+        outState.putLong(EXTRA_KNITTING_ID, knittingID)
         outState.putLong(EXTRA_STOPWATCH_ELAPSED_TIME, elapsedTime)
         outState.putLong(EXTRA_STOPWATCH_ACTIVITY_STOPPED_TIME, System.currentTimeMillis())
         outState.putBoolean(EXTRA_STOPWATCH_RUNNING, running)

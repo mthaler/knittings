@@ -6,10 +6,10 @@ import android.os.Bundle
 import androidx.core.app.NavUtils
 import android.view.MenuItem
 import com.mthaler.knittings.BaseActivity
+import com.mthaler.knittings.Extras.EXTRA_KNITTING_ID
 import com.mthaler.knittings.R
 import com.mthaler.knittings.databinding.ActivityStopwatchBinding
 import com.mthaler.knittings.model.Knitting
-import com.mthaler.knittings.stopwatch.Extras.EXTRA_KNITTING_ID
 
 /**
  * StopWatchActivity shows a stopwatch that can be used to measure the time the user is working on a knitting
