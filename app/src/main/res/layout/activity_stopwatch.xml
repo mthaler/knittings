@@ -23,36 +23,9 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <LinearLayout
+    <FrameLayout
+        android:id="@+id/stopwatch_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="16dp"
-        android:orientation="vertical"
-        android:layout_marginTop="?attr/actionBarSize">
-        <TextView
-            android:id="@+id/time_view"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:textAppearance="@android:style/TextAppearance.Large"
-            android:textSize="80sp" />
-        <Button
-            style="@style/ButtonStopwatch"
-            android:id="@+id/start_button"
-            android:layout_marginTop="24dp"
-            android:onClick="onClickStart"
-            android:text="@string/stopwatch_start" />
-        <Button
-            style="@style/ButtonStopwatch"
-            android:id="@+id/stop_button"
-            android:layout_marginTop="20dp"
-            android:onClick="onClickStop"
-            android:text="@string/stopwatch_stop" />
-        <Button
-            style="@style/ButtonStopwatch"
-            android:id="@+id/discard_button"
-            android:layout_marginTop="48dp"
-            android:onClick="onClickDiscard"
-            android:text="@string/stopwatch_discard" />
-    </LinearLayout>
+        android:layout_marginTop="?attr/actionBarSize" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

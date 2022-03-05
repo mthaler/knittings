@@ -43,7 +43,7 @@ class StopwatchActivity : BaseActivity() {
             val f = StopwatchFragment.newInstance(knittingID)
             val fm = supportFragmentManager
             val ft = fm.beginTransaction()
-            ft.add(R.id.needle_list_container, f)
+            ft.add(R.id.stopwatch_container, f)
             ft.commit()
         }
     }
