@@ -8,6 +8,7 @@ import android.view.MenuItem
 import com.mthaler.knittings.BaseActivity
 import com.mthaler.knittings.R
 import com.mthaler.knittings.databinding.ActivityStopwatchBinding
+import com.mthaler.knittings.model.Knitting
 import com.mthaler.knittings.stopwatch.Extras.EXTRA_KNITTING_ID
 
 /**
@@ -16,7 +17,7 @@ import com.mthaler.knittings.stopwatch.Extras.EXTRA_KNITTING_ID
 class StopwatchActivity : BaseActivity() {
 
     private lateinit var binding: ActivityStopwatchBinding
-    private var knittingID: Long = -1
+    private var knittingID: Long = Knitting.EMPTY.id
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

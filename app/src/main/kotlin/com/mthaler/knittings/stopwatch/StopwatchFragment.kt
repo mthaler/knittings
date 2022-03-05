@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import com.mthaler.knittings.Extras
 import com.mthaler.knittings.database.KnittingsDataSource
 import com.mthaler.knittings.databinding.FragmentStopwatchBinding
+import com.mthaler.knittings.model.Knitting
 import com.mthaler.knittings.stopwatch.Extras.EXTRA_KNITTING_ID
 import com.mthaler.knittings.stopwatch.Extras.EXTRA_STOPWATCH_ACTIVITY_STOPPED_TIME
 import com.mthaler.knittings.stopwatch.Extras.EXTRA_STOPWATCH_ELAPSED_TIME
@@ -20,7 +21,7 @@ class StopwatchFragment : Fragment() {
     private var _binding: FragmentStopwatchBinding? = null
     private val binding get() = _binding!!
 
-    private var knittingID: Long = -1
+    private var knittingID: Long = Knitting.EMPTY.id
     private var elapsedTime = 0L
     private var previousTime = 0L
     private var running = false
