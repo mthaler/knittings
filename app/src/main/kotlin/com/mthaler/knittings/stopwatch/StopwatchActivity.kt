@@ -18,7 +18,6 @@ class StopwatchActivity : BaseActivity() {
 
     private lateinit var binding: ActivityStopwatchBinding
     private var knittingID: Long = -1
-    private var elapsedTime = 0L
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,7 +33,6 @@ class StopwatchActivity : BaseActivity() {
         val id = if (savedInstanceState != null) savedInstanceState.getLong(EXTRA_KNITTING_ID) else intent.getLongExtra(EXTRA_KNITTING_ID, -1L)
         if (id != -1L) {
             knittingID = id
-            elapsedTime = KnittingsDataSource.getProject(knittingID).duration
         } else {
             error("Could not get knitting id")
         }
