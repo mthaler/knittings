@@ -31,15 +31,11 @@ class StopwatchFragment : Fragment() {
         if (a != null) {
             knittingID = a.getLong(Extras.EXTRA_KNITTING_ID)
             elapsedTime = KnittingsDataSource.getProject(knittingID).duration
-        } else {
-            error("Could not get knitting id")
         }
         if (savedInstanceState != null) {
             val t = savedInstanceState.getLong(EXTRA_STOPWATCH_ACTIVITY_STOPPED_TIME)
             elapsedTime = savedInstanceState.getLong(EXTRA_STOPWATCH_ELAPSED_TIME) + (System.currentTimeMillis() - t)
             running = savedInstanceState.getBoolean(EXTRA_STOPWATCH_RUNNING)
-        } else {
-            error("Saved instance state is null")
         }
         runTimer()
     }
