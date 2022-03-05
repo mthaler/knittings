@@ -7,7 +7,6 @@ import androidx.core.app.NavUtils
 import android.view.MenuItem
 import com.mthaler.knittings.BaseActivity
 import com.mthaler.knittings.R
-import com.mthaler.knittings.database.KnittingsDataSource
 import com.mthaler.knittings.databinding.ActivityStopwatchBinding
 import com.mthaler.knittings.stopwatch.Extras.EXTRA_KNITTING_ID
 
