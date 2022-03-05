@@ -29,7 +29,7 @@ class StopwatchFragment : Fragment() {
         super.onCreate(savedInstanceState)
         val a = arguments
         if (a != null) {
-            knittingID = a.getLong(Extras.EXTRA_NEEDLE_ID)
+            knittingID = a.getLong(Extras.EXTRA_KNITTING_ID)
             elapsedTime = KnittingsDataSource.getProject(knittingID).duration
         } else {
             error("Could not get knitting id")
@@ -41,7 +41,7 @@ class StopwatchFragment : Fragment() {
         } else {
             error("Saved instance state is null")
         }
-
+        runTimer()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
