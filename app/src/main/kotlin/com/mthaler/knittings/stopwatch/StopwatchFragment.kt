@@ -10,6 +10,9 @@ import com.mthaler.knittings.Extras
 import com.mthaler.knittings.database.KnittingsDataSource
 import com.mthaler.knittings.databinding.FragmentStopwatchBinding
 import com.mthaler.knittings.stopwatch.Extras.EXTRA_KNITTING_ID
+import com.mthaler.knittings.stopwatch.Extras.EXTRA_STOPWATCH_ACTIVITY_STOPPED_TIME
+import com.mthaler.knittings.stopwatch.Extras.EXTRA_STOPWATCH_ELAPSED_TIME
+import com.mthaler.knittings.stopwatch.Extras.EXTRA_STOPWATCH_RUNNING
 import java.util.*
 
 class StopwatchFragment : Fragment() {
@@ -32,12 +35,13 @@ class StopwatchFragment : Fragment() {
             error("Could not get knitting id")
         }
         if (savedInstanceState != null) {
-            val t = savedInstanceState.getLong(StopwatchActivity.EXTRA_STOPWATCH_ACTIVITY_STOPPED_TIME)
-            elapsedTime = savedInstanceState.getLong(StopwatchActivity.EXTRA_STOPWATCH_ELAPSED_TIME) + (System.currentTimeMillis() - t)
-            running = savedInstanceState.getBoolean(StopwatchActivity.EXTRA_STOPWATCH_RUNNING)
+            val t = savedInstanceState.getLong(EXTRA_STOPWATCH_ACTIVITY_STOPPED_TIME)
+            elapsedTime = savedInstanceState.getLong(EXTRA_STOPWATCH_ELAPSED_TIME) + (System.currentTimeMillis() - t)
+            running = savedInstanceState.getBoolean(EXTRA_STOPWATCH_RUNNING)
         } else {
             error("Saved instance state is null")
         }
+
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -66,9 +70,9 @@ class StopwatchFragment : Fragment() {
 
     override fun onSaveInstanceState(outState: Bundle) {
         outState.putLong(Extras.EXTRA_KNITTING_ID, knittingID)
-        outState.putLong(StopwatchActivity.EXTRA_STOPWATCH_ELAPSED_TIME, elapsedTime)
-        outState.putLong(StopwatchActivity.EXTRA_STOPWATCH_ACTIVITY_STOPPED_TIME, System.currentTimeMillis())
-        outState.putBoolean(StopwatchActivity.EXTRA_STOPWATCH_RUNNING, running)
+        outState.putLong(EXTRA_STOPWATCH_ELAPSED_TIME, elapsedTime)
+        outState.putLong(EXTRA_STOPWATCH_ACTIVITY_STOPPED_TIME, System.currentTimeMillis())
+        outState.putBoolean(EXTRA_STOPWATCH_RUNNING, running)
         super.onSaveInstanceState(outState)
     }
 
