@@ -3,8 +3,6 @@ package com.mthaler.knittings.stopwatch
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import androidx.core.app.NavUtils
-import android.view.MenuItem
 import com.mthaler.knittings.BaseActivity
 import com.mthaler.knittings.Extras.EXTRA_KNITTING_ID
 import com.mthaler.knittings.R
@@ -44,21 +42,6 @@ class StopwatchActivity : BaseActivity() {
             ft.add(R.id.stopwatch_container, f)
             ft.commit()
         }
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean = when (item.itemId) {
-        android.R.id.home -> {
-            // Respond to the action bar's Up/Home button
-            val upIntent: Intent? = NavUtils.getParentActivityIntent(this)
-            if (upIntent == null) {
-                throw IllegalStateException("No Parent Activity Intent")
-            } else {
-                upIntent.putExtra(EXTRA_KNITTING_ID, knittingID)
-                NavUtils.navigateUpTo(this, upIntent)
-            }
-            true
-        }
-        else -> super.onOptionsItemSelected(item)
     }
 
     companion object {

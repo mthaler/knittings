@@ -1,12 +1,14 @@
 package com.mthaler.knittings.stopwatch
 
+import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import com.mthaler.knittings.Extras
+import androidx.core.app.NavUtils
 import com.mthaler.knittings.Extras.EXTRA_KNITTING_ID
 import com.mthaler.knittings.database.KnittingsDataSource
 import com.mthaler.knittings.databinding.FragmentStopwatchBinding
@@ -38,6 +40,9 @@ class StopwatchFragment : Fragment() {
             elapsedTime = savedInstanceState.getLong(EXTRA_STOPWATCH_ELAPSED_TIME) + (System.currentTimeMillis() - t)
             running = savedInstanceState.getBoolean(EXTRA_STOPWATCH_RUNNING)
         }
+
+        setHasOptionsMenu(true)
+
         runTimer()
     }
 
@@ -71,6 +76,22 @@ class StopwatchFragment : Fragment() {
         outState.putLong(EXTRA_STOPWATCH_ACTIVITY_STOPPED_TIME, System.currentTimeMillis())
         outState.putBoolean(EXTRA_STOPWATCH_RUNNING, running)
         super.onSaveInstanceState(outState)
+    }
+
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean = when (item.itemId) {
+        android.R.id.home -> {
+            // Respond to the action bar's Up/Home button
+            val upIntent: Intent? = NavUtils.getParentActivityIntent(requireActivity())
+            if (upIntent == null) {
+                throw IllegalStateException("No Parent Activity Intent")
+            } else {
+                upIntent.putExtra(EXTRA_KNITTING_ID, knittingID)
+                NavUtils.navigateUpTo(requireActivity(), upIntent)
+            }
+            true
+        }
+        else -> super.onOptionsItemSelected(item)
     }
 
     private fun runTimer() {
