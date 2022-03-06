@@ -41,8 +41,6 @@ class KnittingDetailsActivity : BaseActivity(), KnittingDetailsFragment.OnFragme
             val navController = navHostFragment.navController
 
             if (editOnly) {
-
-
                 val f = EditKnittingDetailsFragment.newInstance(knittingID, editOnly)
                 val ft = supportFragmentManager.beginTransaction()
                 ft.add(R.id.knitting_details_container, f)
