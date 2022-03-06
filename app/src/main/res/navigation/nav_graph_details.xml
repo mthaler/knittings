@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:app="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/nav_graph_details">
+            android:id="@+id/nav_graph_details"
+    app:startDestination="@id/knittingDetailsFragment">
+    <fragment
+        android:id="@+id/knittingDetailsFragment"
+        android:name="com.mthaler.knittings.details.KnittingDetailsFragment"
+        android:label="KnittingDetailsFragment" />
 </navigation>
