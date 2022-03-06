@@ -10,9 +10,26 @@
         <action
             android:id="@+id/action_knittingDetailsFragment_to_editKnittingDetailsFragment"
             app:destination="@id/editKnittingDetailsFragment" />
+        <argument
+            android:name="com.mthaler.knittings.KNITTING_ID"
+            app:argType="long"
+            android:defaultValue="-1L" />
+        <argument
+            android:name="com.mthaler.knittings.edit_only"
+            app:argType="boolean"
+            android:defaultValue="false" />
     </fragment>
     <fragment
         android:id="@+id/editKnittingDetailsFragment"
         android:name="com.mthaler.knittings.details.EditKnittingDetailsFragment"
         android:label="EditKnittingDetailsFragment" />
+        <argument
+            android:name="com.mthaler.knittings.KNITTING_ID"
+            app:argType="long"
+            android:defaultValue="-1L" />
+        <argument
+            android:name="com.mthaler.knittings.edit_only"
+            app:argType="boolean"
+            android:defaultValue="true" />
+    <fragment/>
 </navigation>

@@ -5,6 +5,8 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.core.app.NavUtils
 import android.view.MenuItem
+import androidx.core.os.bundleOf
+import androidx.navigation.NavDirections
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import com.mthaler.knittings.BaseActivity
@@ -40,15 +42,10 @@ class KnittingDetailsActivity : BaseActivity(), KnittingDetailsFragment.OnFragme
             val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
             val navController = navHostFragment.navController
             if (editOnly) {
-                val f = EditKnittingDetailsFragment.newInstance(knittingID, editOnly)
-                val ft = supportFragmentManager.beginTransaction()
-                ft.add(R.id.knitting_details_container, f)
-                ft.commit()
+                navController.navigate(R.id.editKnittingDetailsFragment)
             } else {
-                val f = KnittingDetailsFragment.newInstance(knittingID)
-                val ft = supportFragmentManager.beginTransaction()
-                ft.add(R.id.knitting_details_container, f)
-                ft.commit()
+                navController.navigate(R.id.knittingDetailsFragment)
+                //val f = KnittingDetailsFragment.newInstance(knittingID)
             }
         } else {
             if (savedInstanceState.containsKey(EXTRA_EDIT_ONLY)) {
@@ -85,22 +82,17 @@ class KnittingDetailsActivity : BaseActivity(), KnittingDetailsFragment.OnFragme
 
     override fun onBackPressed() {
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
-
-
-        val f = supportFragmentManager.findFragmentById(R.id.knitting_details_container)
-        if (f is EditKnittingDetailsFragment) {
-            f.onBackPressed()
-        } else {
-            super.onBackPressed()
+        val navController = navHostFragment.navController
+        if (!navController.navigateUp()) {
+            super.onNavigateUp()
         }
     }
 
     override fun editKnitting(id: Long) {
-        val f = EditKnittingDetailsFragment.newInstance(knittingID, editOnly)
-        val ft = supportFragmentManager.beginTransaction()
-        ft.replace(R.id.knitting_details_container, f)
-        ft.addToBackStack(null)
-        ft.commit()
+        val bundle = bundleOf(EXTRA_KNITTING_ID to id, EXTRA_EDIT_ONLY to true)
+        val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+        val navController = navHostFragment.navController
+        navController.navigate(R.id.editKnittingDetailsFragment, bundle)
     }
 
     companion object {
