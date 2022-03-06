@@ -38,6 +38,9 @@ class EditKnittingDetailsFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        setHasOptionsMenu(true)
+
         arguments?.let {
             knittingID = it.getLong(EXTRA_KNITTING_ID)
             editOnly = it.getBoolean(EXTRA_EDIT_ONLY)
@@ -178,6 +181,10 @@ class EditKnittingDetailsFragment : Fragment() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
+            android.R.id.home -> {
+                onBackPressed()
+                true
+            }
             R.id.menu_item_save_knitting -> {
                 val oldKnitting = if (knittingID != Knitting.EMPTY.id) KnittingsDataSource.getProject(knittingID) else Knitting.EMPTY
                 val newKnitting = createKnitting().copy(defaultPhoto = oldKnitting.defaultPhoto)

@@ -10,6 +10,7 @@ import android.os.Handler
 import android.view.*
 import android.widget.ImageView
 import android.widget.LinearLayout
+import androidx.core.app.NavUtils
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -50,6 +51,8 @@ class KnittingDetailsFragment : Fragment() {
         arguments?.let {
             knittingID = it.getLong(Extras.EXTRA_KNITTING_ID)
         }
+
+        setHasOptionsMenu(true)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -113,6 +116,16 @@ class KnittingDetailsFragment : Fragment() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
+            android.R.id.home -> {
+                // Respond to the action bar's Up/Home button
+                val upIntent: Intent? = NavUtils.getParentActivityIntent(requireActivity())
+                if (upIntent == null) {
+                    throw IllegalStateException("No Parent Activity Intent")
+                } else {
+                    NavUtils.navigateUpTo(requireActivity(), upIntent)
+                }
+                true
+            }
             R.id.menu_item_add_photo -> {
                 val d = TakePhotoDialog.create(requireContext(), "com.mthaler.knittings.fileprovider", layoutInflater, this::takePhoto, this::importPhoto)
                 d.show()

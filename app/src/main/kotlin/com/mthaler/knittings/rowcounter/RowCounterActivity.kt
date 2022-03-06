@@ -47,7 +47,7 @@ class RowCounterActivity : BaseActivity() {
             if (upIntent == null) {
                 throw IllegalStateException("No Parent Activity Intent")
             } else {
-                val f = supportFragmentManager.findFragmentById(R.id.knitting_details_container)
+                val f = supportFragmentManager.findFragmentById(R.id.row_counter_container)
                 upIntent.putExtra(Extras.EXTRA_KNITTING_ID, knittingID)
                 NavUtils.navigateUpTo(this, upIntent)
             }

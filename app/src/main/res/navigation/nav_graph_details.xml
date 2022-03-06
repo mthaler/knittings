@@ -22,7 +22,7 @@
     <fragment
         android:id="@+id/editKnittingDetailsFragment"
         android:name="com.mthaler.knittings.details.EditKnittingDetailsFragment"
-        android:label="EditKnittingDetailsFragment" />
+        android:label="EditKnittingDetailsFragment" >
         <argument
             android:name="com.mthaler.knittings.KNITTING_ID"
             app:argType="long"
@@ -31,5 +31,5 @@
             android:name="com.mthaler.knittings.edit_only"
             app:argType="boolean"
             android:defaultValue="true" />
-    <fragment/>
+    </fragment>
 </navigation>
