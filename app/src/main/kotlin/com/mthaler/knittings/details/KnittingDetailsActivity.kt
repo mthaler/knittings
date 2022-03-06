@@ -5,6 +5,8 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.core.app.NavUtils
 import android.view.MenuItem
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.NavHostFragment
 import com.mthaler.knittings.BaseActivity
 import com.mthaler.knittings.R
 import com.mthaler.knittings.Extras.EXTRA_KNITTING_ID
@@ -35,7 +37,12 @@ class KnittingDetailsActivity : BaseActivity(), KnittingDetailsFragment.OnFragme
         knittingID = if (savedInstanceState != null) savedInstanceState.getLong(EXTRA_KNITTING_ID) else intent.getLongExtra(EXTRA_KNITTING_ID, Knitting.EMPTY.id)
         editOnly = intent.getBooleanExtra(EXTRA_EDIT_ONLY, false)
         if (savedInstanceState == null) {
+            val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+            val navController = navHostFragment.navController
+
             if (editOnly) {
+
+
                 val f = EditKnittingDetailsFragment.newInstance(knittingID, editOnly)
                 val ft = supportFragmentManager.beginTransaction()
                 ft.add(R.id.knitting_details_container, f)
@@ -66,6 +73,7 @@ class KnittingDetailsActivity : BaseActivity(), KnittingDetailsFragment.OnFragme
             if (upIntent == null) {
                 throw IllegalStateException("No Parent Activity Intent")
             } else {
+
                 val f = supportFragmentManager.findFragmentById(R.id.knitting_details_container)
                 if (f is EditKnittingDetailsFragment) {
                     f.onBackPressed()
@@ -79,6 +87,9 @@ class KnittingDetailsActivity : BaseActivity(), KnittingDetailsFragment.OnFragme
     }
 
     override fun onBackPressed() {
+        val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+
+
         val f = supportFragmentManager.findFragmentById(R.id.knitting_details_container)
         if (f is EditKnittingDetailsFragment) {
             f.onBackPressed()
