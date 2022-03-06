@@ -6,5 +6,13 @@
     <fragment
         android:id="@+id/knittingDetailsFragment"
         android:name="com.mthaler.knittings.details.KnittingDetailsFragment"
-        android:label="KnittingDetailsFragment" />
+        android:label="KnittingDetailsFragment" >
+        <action
+            android:id="@+id/action_knittingDetailsFragment_to_editKnittingDetailsFragment"
+            app:destination="@id/editKnittingDetailsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/editKnittingDetailsFragment"
+        android:name="com.mthaler.knittings.details.EditKnittingDetailsFragment"
+        android:label="EditKnittingDetailsFragment" />
 </navigation>
