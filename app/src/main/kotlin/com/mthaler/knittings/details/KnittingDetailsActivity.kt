@@ -42,12 +42,12 @@ class KnittingDetailsActivity : BaseActivity(), KnittingDetailsFragment.OnFragme
             if (editOnly) {
                 val f = EditKnittingDetailsFragment.newInstance(knittingID, editOnly)
                 val ft = supportFragmentManager.beginTransaction()
-                ft.add(R.id.nav_host_fragment, f)
+                ft.add(R.id.knitting_details_container, f)
                 ft.commit()
             } else {
                 val f = KnittingDetailsFragment.newInstance(knittingID)
                 val ft = supportFragmentManager.beginTransaction()
-                ft.add(R.id.nav_host_fragment, f)
+                ft.add(R.id.knitting_details_container, f)
                 ft.commit()
             }
         } else {
@@ -64,7 +64,7 @@ class KnittingDetailsActivity : BaseActivity(), KnittingDetailsFragment.OnFragme
     }
 
     override fun onBackPressed() {
-        val f = supportFragmentManager.findFragmentById(R.id.nav_host_fragment)
+        val f = supportFragmentManager.findFragmentById(R.id.knitting_details_container)
         if (f is EditKnittingDetailsFragment) {
             f.onBackPressed()
         } else {
@@ -75,7 +75,7 @@ class KnittingDetailsActivity : BaseActivity(), KnittingDetailsFragment.OnFragme
     override fun editKnitting(id: Long) {
         val f = EditKnittingDetailsFragment.newInstance(knittingID, editOnly)
         val ft = supportFragmentManager.beginTransaction()
-        ft.replace(R.id.nav_host_fragment, f)
+        ft.replace(R.id.knitting_details_container, f)
         ft.addToBackStack(null)
         ft.commit()
     }
