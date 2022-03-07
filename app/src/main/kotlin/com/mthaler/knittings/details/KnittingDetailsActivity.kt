@@ -41,10 +41,15 @@ class KnittingDetailsActivity : BaseActivity(), KnittingDetailsFragment.OnFragme
         if (savedInstanceState == null) {
             val navController = findNavController(R.id.nav_host_fragment)
             if (editOnly) {
-                navController.navigate(R.id.editKnittingDetailsFragment)
+                val f = EditKnittingDetailsFragment.newInstance(knittingID, editOnly)
+                val ft = supportFragmentManager.beginTransaction()
+                ft.add(R.id.nav_host_fragment, f)
+                ft.commit()
             } else {
-                navController.navigate(R.id.knittingDetailsFragment)
-                //val f = KnittingDetailsFragment.newInstance(knittingID)
+                val f = KnittingDetailsFragment.newInstance(knittingID)
+                val ft = supportFragmentManager.beginTransaction()
+                ft.add(R.id.nav_host_fragment, f)
+                ft.commit()
             }
         } else {
             if (savedInstanceState.containsKey(EXTRA_EDIT_ONLY)) {
@@ -60,16 +65,20 @@ class KnittingDetailsActivity : BaseActivity(), KnittingDetailsFragment.OnFragme
     }
 
     override fun onBackPressed() {
-        val navController = findNavController(R.id.nav_host_fragment)
-        if (!navController.navigateUp()) {
-            super.onNavigateUp()
+        val f = supportFragmentManager.findFragmentById(R.id.nav_host_fragment)
+        if (f is EditKnittingDetailsFragment) {
+            f.onBackPressed()
+        } else {
+            super.onBackPressed()
         }
     }
 
     override fun editKnitting(id: Long) {
-        val bundle = bundleOf(EXTRA_KNITTING_ID to id, EXTRA_EDIT_ONLY to true)
-        val navController = findNavController(R.id.nav_host_fragment)
-        navController.navigate(R.id.editKnittingDetailsFragment, bundle)
+        val f = EditKnittingDetailsFragment.newInstance(knittingID, editOnly)
+        val ft = supportFragmentManager.beginTransaction()
+        ft.replace(R.id.nav_host_fragment, f)
+        ft.addToBackStack(null)
+        ft.commit()
     }
 
     companion object {

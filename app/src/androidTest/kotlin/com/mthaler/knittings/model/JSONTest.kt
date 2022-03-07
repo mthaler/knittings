@@ -13,7 +13,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 @RunWith(AndroidJUnit4::class)
-class JSON2Test {
+class JSONTest {
 
     private val dateFormat = SimpleDateFormat("yyyy-MM-dd")
 
