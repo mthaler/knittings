@@ -18,7 +18,7 @@ import com.mthaler.knittings.model.Knitting
 /**
  * Activity that displays knitting details (name, description, start time etc.)
  */
-class KnittingDetailsActivity : BaseActivity(), KnittingDetailsFragment.OnFragmentInteractionListener {
+class KnittingDetailsActivity : BaseActivity() {
 
     // id of the displayed knitting
     private var knittingID: Long = Knitting.EMPTY.id
@@ -70,14 +70,6 @@ class KnittingDetailsActivity : BaseActivity(), KnittingDetailsFragment.OnFragme
         } else {
             super.onBackPressed()
         }
-    }
-
-    override fun editKnitting(id: Long) {
-        val f = EditKnittingDetailsFragment.newInstance(knittingID, editOnly)
-        val ft = supportFragmentManager.beginTransaction()
-        ft.replace(R.id.knitting_details_container, f)
-        ft.addToBackStack(null)
-        ft.commit()
     }
 
     companion object {

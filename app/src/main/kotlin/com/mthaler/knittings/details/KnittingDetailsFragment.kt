@@ -11,13 +11,16 @@ import android.view.*
 import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.core.app.NavUtils
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import com.mthaler.knittings.DeleteDialog
 import com.mthaler.knittings.photo.PhotoGalleryActivity
 import com.mthaler.knittings.photo.TakePhotoDialog
 import com.mthaler.knittings.Extras
+import com.mthaler.knittings.Extras.EXTRA_KNITTING_ID
 import com.mthaler.knittings.R
 import com.mthaler.knittings.database.KnittingsDataSource
 import com.mthaler.knittings.databinding.FragmentKnittingDetailsBinding
@@ -41,7 +44,6 @@ class KnittingDetailsFragment : Fragment() {
     private var knittingID: Long = Knitting.EMPTY.id
     private lateinit var viewModel: KnittingDetailsViewModel
     private var currentPhotoPath: File? = null
-    private var listener: OnFragmentInteractionListener? = null
 
     private var _binding: FragmentKnittingDetailsBinding? = null
     private val binding get() = _binding!!
@@ -84,7 +86,9 @@ class KnittingDetailsFragment : Fragment() {
         }
 
         binding.editKnittingDetails.setOnClickListener {
-            listener?.editKnitting(knittingID)
+            val bundle = bundleOf(EXTRA_KNITTING_ID to knittingID)
+            findNavController().navigate(R.id.action_knittingDetailsFragment_to_editKnittingDetailsFragment, bundle)
+            //listener?.editKnitting(knittingID)
         }
 
         return view
@@ -236,26 +240,6 @@ class KnittingDetailsFragment : Fragment() {
             })
         }
     }
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        if (context is OnFragmentInteractionListener) {
-            listener = context
-        } else {
-            throw RuntimeException("$context must implement OnFragmentInteractionListener")
-        }
-    }
-
-    override fun onDetach() {
-        super.onDetach()
-        listener = null
-    }
-
-    interface OnFragmentInteractionListener {
-
-        fun editKnitting(id: Long)
-    }
-
 
     private suspend fun rotate(context: Context, file: File, width: Int, height: Int): Bitmap? {
         return withContext(Dispatchers.IO) {
