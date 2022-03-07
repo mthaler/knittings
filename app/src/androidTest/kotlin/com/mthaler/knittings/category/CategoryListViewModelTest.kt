@@ -13,7 +13,7 @@ import org.junit.runner.RunWith
 @RunWith(AndroidJUnit4::class)
 class CategoryListViewModelTest {
 
-    lateinit var application: DatabaseApplication<Knitting>
+    lateinit var application: DatabaseApplication
 
     @Before
     fun setUp() {

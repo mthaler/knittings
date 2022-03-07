@@ -39,7 +39,6 @@ class KnittingDetailsActivity : BaseActivity(), KnittingDetailsFragment.OnFragme
         knittingID = if (savedInstanceState != null) savedInstanceState.getLong(EXTRA_KNITTING_ID) else intent.getLongExtra(EXTRA_KNITTING_ID, Knitting.EMPTY.id)
         editOnly = intent.getBooleanExtra(EXTRA_EDIT_ONLY, false)
         if (savedInstanceState == null) {
-            val navController = findNavController(R.id.nav_host_fragment)
             if (editOnly) {
                 val f = EditKnittingDetailsFragment.newInstance(knittingID, editOnly)
                 val ft = supportFragmentManager.beginTransaction()
