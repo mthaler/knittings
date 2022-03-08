@@ -289,4 +289,11 @@ class JSONTest {
         assertEquals(Category(43, "socks", Color.RED), categories[1])
     }
 
+    @Test
+    fun testJSONToRowCounter() {
+        val s = """{"id": 42, "totalRows:" 43, "rowsPerRepeat:" 2, "knittingID:" 44}"""
+        val json = JSONObject(s)
+        val rc = json.toRowCounter()
+        assertEquals(RowCounter(42, 43, 2, 44), rc)
+    }
 }
