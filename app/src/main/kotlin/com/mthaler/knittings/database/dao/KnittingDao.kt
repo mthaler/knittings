@@ -5,7 +5,7 @@ import androidx.room.Insert
 import androidx.room.Query
 import com.mthaler.knittings.model.Knitting
 
-class KnittingDao {
+interface KnittingDao {
     @Insert
     fun insertAll(vararg knittings: Knitting)
 
