@@ -3,29 +3,24 @@ package com.mthaler.knittings.details
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.graphics.Bitmap
-import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.view.*
 import android.widget.ImageView
 import android.widget.LinearLayout
-import androidx.core.app.NavUtils
-import androidx.core.os.bundleOf
+import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.fragment.findNavController
 import com.mthaler.knittings.DeleteDialog
-import com.mthaler.knittings.photo.PhotoGalleryActivity
-import com.mthaler.knittings.photo.TakePhotoDialog
 import com.mthaler.knittings.Extras
-import com.mthaler.knittings.Extras.EXTRA_KNITTING_ID
 import com.mthaler.knittings.R
 import com.mthaler.knittings.database.KnittingsDataSource
 import com.mthaler.knittings.databinding.FragmentKnittingDetailsBinding
 import com.mthaler.knittings.model.Knitting
 import com.mthaler.knittings.model.Status
+import com.mthaler.knittings.photo.PhotoGalleryActivity
+import com.mthaler.knittings.photo.TakePhotoDialog
 import com.mthaler.knittings.rowcounter.RowCounterActivity
 import com.mthaler.knittings.stopwatch.StopwatchActivity
 import com.mthaler.knittings.utils.PictureUtils
@@ -44,6 +39,7 @@ class KnittingDetailsFragment : Fragment() {
     private var knittingID: Long = Knitting.EMPTY.id
     private lateinit var viewModel: KnittingDetailsViewModel
     private var currentPhotoPath: File? = null
+    private var listener: OnFragmentInteractionListener? = null
 
     private var _binding: FragmentKnittingDetailsBinding? = null
     private val binding get() = _binding!!
@@ -53,8 +49,6 @@ class KnittingDetailsFragment : Fragment() {
         arguments?.let {
             knittingID = it.getLong(Extras.EXTRA_KNITTING_ID)
         }
-
-        setHasOptionsMenu(true)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -86,9 +80,7 @@ class KnittingDetailsFragment : Fragment() {
         }
 
         binding.editKnittingDetails.setOnClickListener {
-            val bundle = bundleOf(EXTRA_KNITTING_ID to knittingID)
-            findNavController().navigate(R.id.action_knittingDetailsFragment_to_editKnittingDetailsFragment, bundle)
-            //listener?.editKnitting(knittingID)
+            listener?.editKnitting(knittingID)
         }
 
         return view
@@ -120,16 +112,6 @@ class KnittingDetailsFragment : Fragment() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
-            android.R.id.home -> {
-                // Respond to the action bar's Up/Home button
-                val upIntent: Intent? = NavUtils.getParentActivityIntent(requireActivity())
-                if (upIntent == null) {
-                    throw IllegalStateException("No Parent Activity Intent")
-                } else {
-                    NavUtils.navigateUpTo(requireActivity(), upIntent)
-                }
-                true
-            }
             R.id.menu_item_add_photo -> {
                 val d = TakePhotoDialog.create(requireContext(), "com.mthaler.knittings.fileprovider", layoutInflater, this::takePhoto, this::importPhoto)
                 d.show()
@@ -166,16 +148,19 @@ class KnittingDetailsFragment : Fragment() {
         when (requestCode) {
             REQUEST_IMAGE_CAPTURE -> {
                 currentPhotoPath?.let {
-                    lifecycleScope.launch(Dispatchers.IO) {
-                        TakePhotoDialog.handleTakePhotoResult(requireContext(), knittingID, it)
+                    lifecycleScope.launch {
+                        withContext(Dispatchers.IO) {
+                            TakePhotoDialog.handleTakePhotoResult(requireContext(), knittingID, it) }
                     }
                 }
             }
             REQUEST_IMAGE_IMPORT -> {
                 val f = currentPhotoPath
                 if (f != null && data != null) {
-                    lifecycleScope.launch(Dispatchers.IO) {
-                        TakePhotoDialog.handleImageImportResult(requireContext(), knittingID, f, data)
+                    lifecycleScope.launch {
+                        withContext(Dispatchers.IO) {
+                            TakePhotoDialog.handleImageImportResult(requireContext(), knittingID, f, data)
+                        }
                     }
                 }
             }
@@ -223,8 +208,20 @@ class KnittingDetailsFragment : Fragment() {
                     if (width > 0 && height > 0) {
                         if (knitting.defaultPhoto != null) {
                             viewLifecycleOwner.lifecycleScope.launch {
-                                val file = knitting.defaultPhoto.filename
-                                rotateAndShow(requireContext(), file, width, height, imageView)
+                                val result = withContext(Dispatchers.Default) {
+                                    val file = knitting.defaultPhoto.filename
+                                    if (file.exists()) {
+                                        val orientation = PictureUtils.getOrientation(file.absolutePath.toUri(), requireContext())
+                                        val photo = PictureUtils.decodeSampledBitmapFromPath(file.absolutePath, width, height)
+                                        val rotatedPhoto = PictureUtils.rotateBitmap(photo, orientation)
+                                        rotatedPhoto
+                                    } else {
+                                        null
+                                    }
+                                }
+                                if (result != null) {
+                                    imageView.setImageBitmap(result)
+                                }
                             }
                         } else {
                             imageView.setImageResource(R.drawable.categories)
@@ -241,28 +238,23 @@ class KnittingDetailsFragment : Fragment() {
         }
     }
 
-    private suspend fun rotate(context: Context, file: File, width: Int, height: Int): Bitmap? {
-        return withContext(Dispatchers.IO) {
-            if (file.exists()) {
-                val orientation = PictureUtils.getOrientation(Uri.fromFile(file), context)
-                val photo = PictureUtils.decodeSampledBitmapFromPath(file.absolutePath, width, height)
-                val rotatedPhoto = PictureUtils.rotateBitmap(photo, orientation)
-                rotatedPhoto
-            } else {
-                null
-            }
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        if (context is OnFragmentInteractionListener) {
+            listener = context
+        } else {
+            throw RuntimeException("$context must implement OnFragmentInteractionListener")
         }
     }
 
-    private suspend fun show(imageView: ImageView, result: Bitmap?) {
-        if (result != null) {
-            imageView.setImageBitmap(result)
-        }
+    override fun onDetach() {
+        super.onDetach()
+        listener = null
     }
 
-    private suspend fun rotateAndShow(context: Context, file: File, width: Int, height: Int, imageView: ImageView) {
-        val result = rotate(context, file, width, height)
-        show(imageView, result)
+    interface OnFragmentInteractionListener {
+
+        fun editKnitting(id: Long)
     }
 
     companion object {

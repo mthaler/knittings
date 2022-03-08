@@ -7,20 +7,20 @@ import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.app.NavUtils
-import com.mthaler.knittings.SaveChangesDialog
-import com.mthaler.knittings.category.SelectCategoryActivity
 import com.mthaler.knittings.R
 import com.mthaler.knittings.model.Knitting
 import com.mthaler.knittings.utils.TimeUtils
 import java.text.DateFormat
 import com.mthaler.knittings.durationpicker.DurationPickerDialog
-import com.mthaler.knittings.database.Extras.EXTRA_CATEGORY_ID
 import com.mthaler.knittings.Extras.EXTRA_KNITTING_ID
-import com.mthaler.knittings.utils.DatePickerUtils
+import com.mthaler.knittings.SaveChangesDialog
+import com.mthaler.knittings.category.SelectCategoryActivity
+import com.mthaler.knittings.database.Extras.EXTRA_CATEGORY_ID
 import com.mthaler.knittings.database.KnittingsDataSource
 import com.mthaler.knittings.databinding.FragmentEditKnittingDetailsBinding
 import com.mthaler.knittings.model.Category
 import com.mthaler.knittings.model.Status
+import com.mthaler.knittings.utils.DatePickerUtils
 import java.util.*
 
 class EditKnittingDetailsFragment : Fragment() {
@@ -38,9 +38,6 @@ class EditKnittingDetailsFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        setHasOptionsMenu(true)
-
         arguments?.let {
             knittingID = it.getLong(EXTRA_KNITTING_ID)
             editOnly = it.getBoolean(EXTRA_EDIT_ONLY)
@@ -181,10 +178,6 @@ class EditKnittingDetailsFragment : Fragment() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
-            android.R.id.home -> {
-                onBackPressed()
-                true
-            }
             R.id.menu_item_save_knitting -> {
                 val oldKnitting = if (knittingID != Knitting.EMPTY.id) KnittingsDataSource.getProject(knittingID) else Knitting.EMPTY
                 val newKnitting = createKnitting().copy(defaultPhoto = oldKnitting.defaultPhoto)

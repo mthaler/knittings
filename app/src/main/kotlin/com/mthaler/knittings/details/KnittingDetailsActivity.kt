@@ -5,10 +5,6 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.core.app.NavUtils
 import android.view.MenuItem
-import androidx.core.os.bundleOf
-import androidx.navigation.NavDirections
-import androidx.navigation.findNavController
-import androidx.navigation.fragment.NavHostFragment
 import com.mthaler.knittings.BaseActivity
 import com.mthaler.knittings.R
 import com.mthaler.knittings.Extras.EXTRA_KNITTING_ID
@@ -18,7 +14,7 @@ import com.mthaler.knittings.model.Knitting
 /**
  * Activity that displays knitting details (name, description, start time etc.)
  */
-class KnittingDetailsActivity : BaseActivity() {
+class KnittingDetailsActivity : BaseActivity(), KnittingDetailsFragment.OnFragmentInteractionListener {
 
     // id of the displayed knitting
     private var knittingID: Long = Knitting.EMPTY.id
@@ -63,6 +59,25 @@ class KnittingDetailsActivity : BaseActivity() {
         super.onSaveInstanceState(savedInstanceState)
     }
 
+    override fun onOptionsItemSelected(item: MenuItem): Boolean = when (item.itemId) {
+        android.R.id.home -> {
+            // Respond to the action bar's Up/Home button
+            val upIntent: Intent? = NavUtils.getParentActivityIntent(this)
+            if (upIntent == null) {
+                throw IllegalStateException("No Parent Activity Intent")
+            } else {
+                val f = supportFragmentManager.findFragmentById(R.id.knitting_details_container)
+                if (f is EditKnittingDetailsFragment) {
+                    f.onBackPressed()
+                } else {
+                    NavUtils.navigateUpTo(this, upIntent)
+                }
+            }
+            true
+        }
+        else -> super.onOptionsItemSelected(item)
+    }
+
     override fun onBackPressed() {
         val f = supportFragmentManager.findFragmentById(R.id.knitting_details_container)
         if (f is EditKnittingDetailsFragment) {
@@ -70,6 +85,14 @@ class KnittingDetailsActivity : BaseActivity() {
         } else {
             super.onBackPressed()
         }
+    }
+
+    override fun editKnitting(id: Long) {
+        val f = EditKnittingDetailsFragment.newInstance(knittingID, editOnly)
+        val ft = supportFragmentManager.beginTransaction()
+        ft.replace(R.id.knitting_details_container, f)
+        ft.addToBackStack(null)
+        ft.commit()
     }
 
     companion object {
