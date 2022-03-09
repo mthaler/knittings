@@ -296,4 +296,15 @@ class JSONTest {
         val rc = json.toRowCounter()
         assertEquals(RowCounter(42, 43, 2, 44), rc)
     }
+
+    @Test
+    fun testRowCounterToJSON() {
+        val rc = RowCounter(42, 43, 2, 44)
+        val json = rc.toJson()
+        val expected = JSONObject("""{"id": 42, "totalRows": 43, "rowsPerRepeat": 2, "knittingID": 44}""")
+        assertEquals((expected["id"] as Int).toLong(), json["id"])
+        assertEquals(expected["totalRows"], json["totalRows"])
+        assertEquals(expected["rowsPerRepeat"], json["rowsPerRepeat"])
+         assertEquals((expected["knittingID"] as Int).toLong(), json["knittingID"])
+    }
 }
