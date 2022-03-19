@@ -1,4 +1,4 @@
-package projectcount
+package com.mthaler.knittings.projectcount
 
 import com.mthaler.knittings.model.Knitting
 import com.mthaler.knittings.model.Photo
