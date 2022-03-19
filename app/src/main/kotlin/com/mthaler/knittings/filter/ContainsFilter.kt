@@ -1,7 +1,6 @@
 package com.mthaler.knittings.filter
 
 import com.mthaler.knittings.model.Knitting
-import com.mthaler.knittings.model.Project
 import com.mthaler.knittings.utils.StringUtils
 
 /**
