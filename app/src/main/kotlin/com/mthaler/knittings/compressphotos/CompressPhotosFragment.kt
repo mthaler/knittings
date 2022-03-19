@@ -28,7 +28,7 @@ class CompressPhotosFragment : Fragment() {
         _binding = FragmentCompressPhotoBinding.inflate(inflater, container, false)
         val view = binding.root
 
-        val viewModel = ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory.getInstance(requireActivity().application)).get(CompressPhotosViewModel::class.java)
+        val viewModel = ViewModelProvider(requireActivity()).get(CompressPhotosViewModel::class.java)
         viewModel.statistics.observe(viewLifecycleOwner, { statistics ->
             binding.numberOfPhotos.text = statistics.photos.toString()
             binding.totalSize.text = Format.humanReadableByteCountBin(statistics.totalSize)

@@ -1,6 +1,5 @@
 package com.mthaler.knittings.compressphotos
 
-import android.app.Application
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.mthaler.knittings.database.DataSourceViewModel
@@ -10,7 +9,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.lang.Exception
 
-class CompressPhotosViewModel(application: Application) : DataSourceViewModel() {
+class CompressPhotosViewModel() : DataSourceViewModel() {
 
     val statistics = MutableLiveData(Statistics.EMPTY)
 
