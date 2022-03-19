@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.lifecycle.ViewModelProvider
 import com.mthaler.knittings.R
 import com.mthaler.knittings.databinding.FragmentProjectCountBinding
 import com.mthaler.knittings.model.Project
@@ -19,6 +20,8 @@ class ProjectCountFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        viewModel = ViewModelProvider(requireActivity()).get(ProjectCountViewModel::class.java)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -42,7 +45,7 @@ class ProjectCountFragment : Fragment() {
                 val year = if (position == 0) null else Integer.parseInt(years[position])
                 val p = binding.categorySpinner.selectedItemPosition
                 val categoryName = if (p == 0) null else categoryNames[p]
-                val projectCount = getProjectCount(projects, year, categoryName)
+                val projectCount = viewModel.getProjectCount(projects, year, categoryName)
                 binding.projectCount.text = Integer.toString(projectCount) + " / " + Integer.toString(projects.size)
                 val percent = if (projects.size > 0) 100.0 * projectCount / projects.size else 0.0
                 binding.progressBarCircle.progress = percent.toFloat()
@@ -58,7 +61,7 @@ class ProjectCountFragment : Fragment() {
                 val p = binding.yearSpinner.selectedItemPosition
                 val year = if (p == 0) null else Integer.parseInt(years[p])
                 val categoryName = if (position == 0) null else categoryNames[position]
-                val projectCount = getProjectCount(projects, year, categoryName)
+                val projectCount = viewModel.getProjectCount(projects, year, categoryName)
                 binding.projectCount.text = Integer.toString(projectCount) + " / " + Integer.toString(projects.size)
                 val percent = if (projects.size > 0) 100.0 * projectCount / projects.size else 0
                 binding.progressBarCircle.progress = percent.toFloat()
@@ -104,51 +107,9 @@ class ProjectCountFragment : Fragment() {
      * @return list of categories
      */
     private fun createCategoryNamesList(): List<String> {
-        val ds = (requireContext().applicationContext as com.mthaler.knittings.DatabaseApplication).getCategoryDataSource()
+        val ds =
+            (requireContext().applicationContext as com.mthaler.knittings.DatabaseApplication).getCategoryDataSource()
         val categories = ds.allCategories.sortedBy { it.name.toLowerCase() }
         return listOf(getString(R.string.filter_show_all)) + categories.map { it.name }.toList()
-    }
-
-    companion object {
-
-        /**
-         * Gets the project count for the given year and category name
-         *
-         * @param projects list of all projects
-         * @param year year to get the project count for or null for all years
-         * @param categoryName name of the category to get the project count for or null for all categories
-         */
-        private fun getProjectCount(projects: List<Project>, year: Int?, categoryName: String?): Int {
-            if (year == null && categoryName == null) {
-                return projects.size
-            } else if (year != null && categoryName == null) {
-                return projects.count {
-                    val finished = it.finished
-                    if (finished != null) {
-                        val c = Calendar.getInstance()
-                        c.time = finished
-                        year == c.get(Calendar.YEAR)
-                    } else {
-                        false
-                    }
-                }
-            } else if (year == null && categoryName != null) {
-                return projects.count {
-                    val category = it.category
-                    category != null && category.name == categoryName }
-            } else {
-                return projects.count {
-                    val finished = it.finished
-                    if (finished != null) {
-                        val c = Calendar.getInstance()
-                        c.time = finished
-                        val category = it.category
-                        year == c.get(Calendar.YEAR) && category != null && category.name == categoryName
-                    } else {
-                        false
-                    }
-                }
-            }
-        }
     }
 }

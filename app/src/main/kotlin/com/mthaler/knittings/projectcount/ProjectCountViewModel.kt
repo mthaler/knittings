@@ -1,9 +1,10 @@
 package com.mthaler.knittings.projectcount
 
+import androidx.lifecycle.ViewModel
 import com.mthaler.knittings.model.Project
 import java.util.*
 
-class ProjectCountViewModel {
+class ProjectCountViewModel: ViewModel() {
 
         /**
          * Gets the project count for the given year and category name
