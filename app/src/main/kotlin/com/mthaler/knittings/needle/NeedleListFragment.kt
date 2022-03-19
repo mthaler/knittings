@@ -89,7 +89,7 @@ class NeedleListFragment : Fragment() {
 
         val activeFilters = binding.knittingActiveFilters
 
-        viewModel = ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory.getInstance(requireActivity().application)).get(NeedleListViewModel::class.java)
+        viewModel = ViewModelProvider(requireActivity()).get(NeedleListViewModel::class.java)
         viewModel.needles.observe(viewLifecycleOwner, { needles ->
             // show image if category list is empty
             if (needles.isEmpty()) {
