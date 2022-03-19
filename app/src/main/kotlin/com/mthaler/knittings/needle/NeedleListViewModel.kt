@@ -12,7 +12,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class NeedleListViewModel(application: Application) : DataSourceViewModel(application) {
+class NeedleListViewModel(application: Application) : DataSourceViewModel() {
 
     val needles = MutableLiveData<List<Needle>>(emptyList())
     var filter: CombinedFilter<Needle> = CombinedFilter.empty()

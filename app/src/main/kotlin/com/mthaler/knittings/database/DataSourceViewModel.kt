@@ -1,9 +1,8 @@
 package com.mthaler.knittings.database
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.ViewModel
 
-abstract class DataSourceViewModel(application: Application) : AndroidViewModel(application), DatabaseObserver {
+abstract class DataSourceViewModel : ViewModel(), DatabaseObserver {
 
     init {
         ObservableDatabase.addObserver(this)

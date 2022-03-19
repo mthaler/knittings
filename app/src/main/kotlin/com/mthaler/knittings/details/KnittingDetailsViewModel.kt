@@ -10,7 +10,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class KnittingDetailsViewModel(application: Application) : DataSourceViewModel(application) {
+class KnittingDetailsViewModel(application: Application) : DataSourceViewModel() {
 
     private var knittingID = Knitting.EMPTY.id
     private var deleted = false

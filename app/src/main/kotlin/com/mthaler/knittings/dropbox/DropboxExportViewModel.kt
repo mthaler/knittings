@@ -10,7 +10,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.lang.Exception
 
-class DropboxExportViewModel(application: Application) : DataSourceViewModel(application)  {
+class DropboxExportViewModel(application: Application) : DataSourceViewModel()  {
 
     private val ds = (application as DatabaseApplication).getPhotoDataSource()
 

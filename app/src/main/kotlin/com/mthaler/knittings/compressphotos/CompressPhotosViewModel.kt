@@ -10,7 +10,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.lang.Exception
 
-class CompressPhotosViewModel(application: Application) : DataSourceViewModel(application) {
+class CompressPhotosViewModel(application: Application) : DataSourceViewModel() {
 
     val statistics = MutableLiveData(Statistics.EMPTY)
 
