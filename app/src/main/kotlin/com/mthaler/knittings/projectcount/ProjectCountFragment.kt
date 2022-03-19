@@ -9,8 +9,6 @@ import android.widget.*
 import androidx.lifecycle.ViewModelProvider
 import com.mthaler.knittings.R
 import com.mthaler.knittings.databinding.FragmentProjectCountBinding
-import com.mthaler.knittings.model.Project
-import java.util.Calendar
 
 class ProjectCountFragment : Fragment() {
 
@@ -33,7 +31,7 @@ class ProjectCountFragment : Fragment() {
         _binding = FragmentProjectCountBinding.inflate(inflater, container, false)
         val view = binding.root
 
-        val years = createYearsList(projects)
+        val years = viewModel.createYearsList(projects)
         val categoryNames = createCategoryNamesList()
 
         val yearAdapter = ArrayAdapter(requireContext(), R.layout.my_spinner, years)
@@ -74,31 +72,6 @@ class ProjectCountFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-    }
-
-    /**
-     * Creates a list of years starting with the year of the oldest knitting until the current year
-     * All is added as the first element of the list
-     *
-     * @param projects list of all projects
-     * @return list of years
-     */
-    private fun createYearsList(projects: List<Project>): List<String> {
-        val oldest = projects.minByOrNull { it.started.time }
-        val years = ArrayList<String>()
-        val thisYear = Calendar.getInstance().get(Calendar.YEAR)
-        if (oldest != null) {
-            val c = Calendar.getInstance()
-            c.time = oldest.started
-            for (i in c.get(Calendar.YEAR)..thisYear) {
-                years.add(i.toString())
-            }
-        } else {
-            years.add(thisYear.toString())
-        }
-        //years.add(getString(R.string.filter_show_all))
-        years.reverse()
-        return years
     }
 
     /**
