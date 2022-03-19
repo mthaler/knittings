@@ -15,6 +15,7 @@ class ProjectCountFragment : Fragment() {
 
     private var _binding: FragmentProjectCountBinding? = null
     private val binding get() = _binding!!
+    private lateinit var viewModel: ProjectCountViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
