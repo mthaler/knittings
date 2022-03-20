@@ -1,12 +1,13 @@
 package com.mthaler.knittings.stopwatch
 
 import android.os.Handler
+import androidx.lifecycle.ViewModel
 
-class StopwatchViewModel {
+class StopwatchViewModel: ViewModel() {
 
-    private var elapsedTime = 0L
-    private var previousTime = 0L
-    private var running = false
+    var elapsedTime = 0L
+    var previousTime = 0L
+    var running = false
 
     fun runTimer() {
         previousTime = System.currentTimeMillis()
