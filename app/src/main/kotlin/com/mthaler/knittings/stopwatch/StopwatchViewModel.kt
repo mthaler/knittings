@@ -14,9 +14,6 @@ class StopwatchViewModel {
         handler.post(object : Runnable {
             override fun run() {
                 val totalSeconds = elapsedTime / 1000
-                val hours = totalSeconds / 3600
-                val minutes = totalSeconds % 3600 / 60
-                val secs = totalSeconds % 60
                 if (running) {
                     val t = System.currentTimeMillis()
                     elapsedTime += (t - previousTime)
