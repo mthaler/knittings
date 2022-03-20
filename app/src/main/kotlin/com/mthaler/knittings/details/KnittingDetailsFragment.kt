@@ -93,7 +93,7 @@ class KnittingDetailsFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory.getInstance(requireActivity().application)).get(KnittingDetailsViewModel::class.java)
+        viewModel = ViewModelProvider(requireActivity()).get(KnittingDetailsViewModel::class.java)
         viewModel.init(knittingID)
         viewModel.knitting.observe(viewLifecycleOwner, { knitting ->
             updateDetails(knitting)

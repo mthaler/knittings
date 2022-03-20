@@ -1,6 +1,5 @@
 package com.mthaler.knittings.details
 
-import android.app.Application
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.mthaler.knittings.database.DataSourceViewModel
@@ -10,7 +9,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class KnittingDetailsViewModel(application: Application) : DataSourceViewModel() {
+class KnittingDetailsViewModel : DataSourceViewModel() {
 
     private var knittingID = Knitting.EMPTY.id
     private var deleted = false
