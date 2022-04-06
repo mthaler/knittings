@@ -1,14 +1,27 @@
 package com.mthaler.knittings.projectcount
 
+import android.app.Application
+import androidx.test.core.app.launchActivity
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.mthaler.knittings.model.Knitting
 import com.mthaler.knittings.model.Photo
-import com.mthaler.knittings.projectcount.ProjectCountViewModel
 import org.junit.Test
 import org.junit.Assert.*
+import org.junit.Before
+import org.junit.runner.RunWith
 import java.io.File
 import java.util.*
 
+@RunWith(AndroidJUnit4::class)
 class ProjectCountViewModelTest {
+
+    private lateinit var app: Application
+
+    @Before
+    fun setUp() {
+        val s = launchActivity<ProjectCountActivity>().use {}
+        
+    }
 
     @Test
     fun testGetProjectCount() {

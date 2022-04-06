@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.lifecycle.ViewModelProvider
 import com.mthaler.knittings.R
+import com.mthaler.knittings.category.CategoryListViewModel
 import com.mthaler.knittings.databinding.FragmentProjectCountBinding
 
 class ProjectCountFragment : Fragment() {
@@ -18,8 +19,7 @@ class ProjectCountFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        viewModel = ViewModelProvider(requireActivity()).get(ProjectCountViewModel::class.java)
+        viewModel = ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory.getInstance(requireActivity().application)).get(ProjectCountViewModel::class.java)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -32,7 +32,7 @@ class ProjectCountFragment : Fragment() {
         val view = binding.root
 
         val years = viewModel.createYearsList(projects)
-        val categoryNames = createCategoryNamesList()
+        val categoryNames = viewModel.createCategoryNamesList()
 
         val yearAdapter = ArrayAdapter(requireContext(), R.layout.my_spinner, years)
         binding.yearSpinner.adapter = yearAdapter
@@ -72,17 +72,5 @@ class ProjectCountFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-    }
-
-    /**
-     * Creates a list of categories. All is added as the first element of the list
-     *
-     * @return list of categories
-     */
-    private fun createCategoryNamesList(): List<String> {
-        val ds =
-            (requireContext().applicationContext as com.mthaler.knittings.DatabaseApplication).getCategoryDataSource()
-        val categories = ds.allCategories.sortedBy { it.name.toLowerCase() }
-        return listOf(getString(R.string.filter_show_all)) + categories.map { it.name }.toList()
     }
 }

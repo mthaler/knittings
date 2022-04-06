@@ -1,9 +1,7 @@
 package com.mthaler.knittings.dropbox
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.os.Environment
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
@@ -18,26 +16,19 @@ import com.dropbox.core.android.Auth
 import com.dropbox.core.oauth.DbxCredential
 import com.dropbox.core.v2.DbxClientV2
 import com.dropbox.core.v2.files.ListFolderResult
+import com.github.michaelbull.result.Err
+import com.github.michaelbull.result.Ok
+import com.github.michaelbull.result.get
+import com.github.michaelbull.result.runCatching
 import com.mthaler.knittings.BuildConfig
-import com.mthaler.knittings.DatabaseApplication
 import com.mthaler.knittings.R
-import com.mthaler.knittings.compressphotos.CompressPhotoWorker
-import com.mthaler.knittings.compressphotos.CompressPhotosFragment
-import com.mthaler.knittings.compressphotos.CompressPhotosServiceManager
 import com.mthaler.knittings.databinding.FragmentDropboxImportBinding
-import com.mthaler.knittings.model.Project
 import com.mthaler.knittings.service.JobStatus
 import com.mthaler.knittings.service.ServiceStatus
-import com.mthaler.knittings.utils.FileUtils
 import com.mthaler.knittings.utils.NetworkUtils
-import com.mthaler.knittings.utils.Try
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import org.json.JSONObject
-import java.io.ByteArrayOutputStream
-import java.lang.Exception
 
 class DropboxImportFragment : AbstractDropboxFragment() {
 
@@ -187,9 +178,10 @@ class DropboxImportFragment : AbstractDropboxFragment() {
                     show()
                 }
             } else {
-                val result = Try { GlobalScope.launch(Dispatchers.IO) { dropboxApi.listFolders() } }
+                val result = runCatching { GlobalScope.launch(Dispatchers.IO) { dropboxApi.listFolders() } }
+
                 when (result) {
-                    is Try.Success ->
+                    is Ok ->
                         try {
                             lifecycleScope.launchWhenStarted() {
                                 val result = dropboxApi.listFolders()
@@ -198,8 +190,8 @@ class DropboxImportFragment : AbstractDropboxFragment() {
                         } catch (ex: java.lang.Exception) {
                             throw ex
                         }
-                    is Try.Failure ->
-                        throw result.exception
+                    is Err ->
+                        throw result.error
                 }
             }
         }
