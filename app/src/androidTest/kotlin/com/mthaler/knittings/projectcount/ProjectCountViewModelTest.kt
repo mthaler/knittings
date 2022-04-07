@@ -3,6 +3,7 @@ package com.mthaler.knittings.projectcount
 import android.app.Application
 import androidx.test.core.app.launchActivity
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.mthaler.knittings.R
 import com.mthaler.knittings.model.Knitting
 import com.mthaler.knittings.model.Photo
 import org.junit.Test
@@ -41,8 +42,8 @@ class ProjectCountViewModelTest {
         assertEquals(expected, 1)
     }
 
-     @Test
-     fun testCreateYearsList() {
+    @Test
+    fun testCreateYearsList() {
         val c = GregorianCalendar()
         c.set(2018, 0, 10)
         val started = c.time
@@ -53,6 +54,6 @@ class ProjectCountViewModelTest {
         val k1 = Knitting(42, "knitting", "my first knitting", started, finished, "3.0", "41.0", p0, 5.0)
         val viewModel = ProjectCountViewModel(app)
         val expected = viewModel.createYearsList(listOf(k0, k1))
-        assertEquals(expected, listOf("2022", "2021", "2020", "2019", "2018"))
-     }
+        assertEquals(expected, listOf(app.applicationContext.resources.getString(R.string.filter_show_all), "2022", "2021", "2020", "2019", "2018"))
+    }
 }
