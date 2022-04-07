@@ -3,4 +3,6 @@
     <string name="activity_project_count">Count Projects</string>
     <string name="project_count_year">Year:</string>
     <string name="project_count_category">Category:</string>
+    <string name="project_count_category_all">All</string>
+    <string name="project_count_year_all">All</string>
 </resources>
