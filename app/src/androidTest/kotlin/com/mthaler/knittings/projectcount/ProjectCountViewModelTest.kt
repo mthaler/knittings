@@ -15,13 +15,13 @@ import java.util.*
 @RunWith(AndroidJUnit4::class)
 class ProjectCountViewModelTest {
 
-    private lateinit var application: Application
+    private lateinit var app: Application
 
     @Before
     fun setUp() {
         launchActivity<ProjectCountActivity>().use { scenario ->
             scenario.onActivity { activity ->
-                application = activity.application
+                app = activity.application
             }
         }
     }
@@ -36,7 +36,7 @@ class ProjectCountViewModelTest {
         val finished = c.time
         val p0 = Photo(42, File("/tmp/photo1.jpg"), 43, "socks", null)
         val k1 = Knitting(42, "knitting", "my first knitting", started, finished, "3.0", "41.0", p0, 5.0)
-        val viewModel = ProjectCountViewModel(application)
+        val viewModel = ProjectCountViewModel(app)
         val expected = viewModel.getProjectCount(listOf(k0, k1),2018, null)
         assertEquals(expected, 1)
     }
@@ -51,7 +51,7 @@ class ProjectCountViewModelTest {
         val finished = c.time
         val p0 = Photo(42, File("/tmp/photo1.jpg"), 43, "socks", null)
         val k1 = Knitting(42, "knitting", "my first knitting", started, finished, "3.0", "41.0", p0, 5.0)
-        val viewModel = ProjectCountViewModel(application)
+        val viewModel = ProjectCountViewModel(app)
         val expected = viewModel.createYearsList(listOf(k0, k1))
         assertEquals(expected, listOf("2022", "2021", "2020", "2019", "2018"))
      }
