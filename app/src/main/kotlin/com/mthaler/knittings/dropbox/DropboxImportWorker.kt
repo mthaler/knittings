@@ -35,7 +35,7 @@ class DropboxImportWorker(val ctx: Context, val app: DatabaseApplication, val da
             wakeLock.release()
         }
         DropboxImportServiceManager.getInstance().updateJobStatus(JobStatus.Success(ctx.resources.getString(R.string.dropbox_import_completed)))
-        TODO("Not yet implemented")
+        return Result.success()
     }
 
     private fun downloadPhotos(database: ExportDatabase<Knitting>, directory: String) {
