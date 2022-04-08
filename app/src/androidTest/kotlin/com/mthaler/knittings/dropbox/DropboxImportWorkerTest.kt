@@ -24,5 +24,6 @@ class DropboxImportWorkerTest {
         val data = DropboxImportWorker.data("test", db)
         assertEquals(true, data.hasKeyWithValueOfType(DropboxImportWorker.Directory, String::class.java))
         assertEquals(true, data.hasKeyWithValueOfType(DropboxImportWorker.Database, String::class.java))
+        assertEquals("test", data.getString(DropboxImportWorker.Directory))
     }
 }
