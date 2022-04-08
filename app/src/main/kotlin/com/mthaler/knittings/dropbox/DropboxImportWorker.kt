@@ -60,7 +60,7 @@ class DropboxImportWorker(val ctx: Context, val app: DatabaseApplication, val da
 
 
     companion object {
-        private const val TAG = "DropboxImportWorker"
+        val TAG = "com.mthaler.knittings.compressphotos.DropboxImportWorkerr"
 
         private const val KNITTINGS = "com.mthaler.knittings"
         const val Database = "com.mthaler.knittings.dropbox.database"

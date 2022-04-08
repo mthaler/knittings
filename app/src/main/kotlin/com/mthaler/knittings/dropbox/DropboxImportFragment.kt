@@ -272,8 +272,4 @@ class DropboxImportFragment : AbstractDropboxFragment() {
     protected override fun clearData() {
         binding.loginButton.visibility = View.VISIBLE
     }
-
-    companion object {
-        val TAG = "com.mthaler.knittings.dropbox.DropboxImportFragment"
-    }
 }

@@ -102,7 +102,7 @@ class DropboxApi(private val dropboxClient: DbxClientV2, val lifecycleOwner: Lif
                         val filteredDatabase = database.removeMissingPhotos(missingPhotos)
                         val request = OneTimeWorkRequestBuilder<DropboxExportWorker>().build()
                         val workManager = WorkManager.getInstance(ctx)
-                        workManager.enqueueUniqueWork(CompressPhotosFragment.TAG,  ExistingWorkPolicy.REPLACE, request)
+                        workManager.enqueueUniqueWork(DropboxImportWorker.Tag,  ExistingWorkPolicy.REPLACE, request)
                         workManager.getWorkInfoByIdLiveData(request.id).observe(lifecycleOwner) { workInfo ->
                             if (workInfo != null) {
                                 when (workInfo.state) {
