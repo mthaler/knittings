@@ -21,6 +21,7 @@ import java.lang.Exception
 class DropboxImportWorker(val database: ExportDatabase<Knitting>, val context: Context, parameters: WorkerParameters) : Worker(context, parameters) {
 
     override fun doWork(): Result {
+        val directory = inputData.getString(Directory)
         TODO("Not yet implemented")
     }
 
