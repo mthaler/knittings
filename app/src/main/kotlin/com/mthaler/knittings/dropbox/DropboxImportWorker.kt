@@ -60,7 +60,6 @@ class DropboxImportWorker(val database: ExportDatabase<Knitting>, val context: C
             val json = JSONObject(database)
             val file = File(directory)
             val db = application.createExportDatabaseFromJSON(json, file)
-            db.checkValidity()
             return db
         }
     }

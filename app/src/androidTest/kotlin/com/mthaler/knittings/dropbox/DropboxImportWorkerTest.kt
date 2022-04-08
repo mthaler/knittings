@@ -46,7 +46,15 @@ class DropboxImportWorkerTest {
     @Test
     fun readDatabaseTest() {
         val app = application as MyApplication
-        val db =DropboxImportWorker.readDatabase(app, "test", "{\"version\":5,\"knittings\":[{\"id\":42,\"title\":\"knitting\",\"description\":\"my first knitting\",\"started\":\"2018-01-10\",\"needleDiameter\":\"3.0\",\"size\":\"41.0\",\"rating\":5,\"duration\":0,\"status\":\"PLANNED\"},{\"id\":42,\"title\":\"knitting\",\"description\":\"my first knitting\",\"started\":\"2018-01-10\",\"finished\":\"2018-01-11\",\"needleDiameter\":\"3.0\",\"size\":\"41.0\",\"rating\":5,\"defaultPhoto\":42,\"duration\":0,\"status\":\"PLANNED\"}],\"photos\":[{\"id\":42,\"filename\":\"\\/tmp\\/photo1.jpg\",\"knittingID\":43,\"description\":\"socks\"}],\"categories\":[],\"needles\":[],\"rowCounters\":[]}")
-        print(db)
+        val db = DropboxImportWorker.readDatabase(app, "test", "{\"version\":5,\"knittings\":[{\"id\":42,\"title\":\"knitting\",\"description\":\"my first knitting\",\"started\":\"2018-01-10\",\"needleDiameter\":\"3.0\",\"size\":\"41.0\",\"rating\":5,\"duration\":0,\"status\":\"PLANNED\"},{\"id\":42,\"title\":\"knitting\",\"description\":\"my first knitting\",\"started\":\"2018-01-10\",\"finished\":\"2018-01-11\",\"needleDiameter\":\"3.0\",\"size\":\"41.0\",\"rating\":5,\"defaultPhoto\":42,\"duration\":0,\"status\":\"PLANNED\"}],\"photos\":[{\"id\":42,\"filename\":\"\\/tmp\\/photo1.jpg\",\"knittingID\":43,\"description\":\"socks\"}],\"categories\":[],\"needles\":[],\"rowCounters\":[]}")
+          val c = GregorianCalendar()
+        c.set(2018, 0, 10)
+        val started = c.time
+        val k0 = Knitting(42, "knitting", "my first knitting", started, null, "3.0", "41.0", null, 5.0)
+        c.set(2018, 0, 11)
+        val finished = c.time
+        val p0 = Photo(42, File("/tmp/photo1.jpg"), 43, "socks", null)
+        val k1 = Knitting(42, "knitting", "my first knitting", started, finished, "3.0", "41.0", p0, 5.0)
+        assertEquals(2, db.projects.size)
     }
 }
