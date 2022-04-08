@@ -10,7 +10,6 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.NavUtils
 import androidx.lifecycle.lifecycleScope
-import androidx.work.*
 import com.dropbox.core.DbxRequestConfig
 import com.dropbox.core.android.Auth
 import com.dropbox.core.oauth.DbxCredential
@@ -272,5 +271,9 @@ class DropboxImportFragment : AbstractDropboxFragment() {
 
     protected override fun clearData() {
         binding.loginButton.visibility = View.VISIBLE
+    }
+
+    companion object {
+        val TAG = "com.mthaler.knittings.dropbox.DropboxImportFragment"
     }
 }
