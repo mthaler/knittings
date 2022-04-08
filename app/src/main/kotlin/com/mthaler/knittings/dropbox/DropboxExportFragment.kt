@@ -26,7 +26,6 @@ import com.mthaler.knittings.compressphotos.CompressPhotoWorker
 import com.mthaler.knittings.compressphotos.CompressPhotosFragment
 import com.mthaler.knittings.compressphotos.CompressPhotosServiceManager
 import com.mthaler.knittings.databinding.FragmentDropboxExportBinding
-import com.mthaler.knittings.model.Project
 import com.mthaler.knittings.service.JobStatus
 import com.mthaler.knittings.service.ServiceStatus
 import com.mthaler.knittings.utils.Format
@@ -76,7 +75,7 @@ class DropboxExportFragment : AbstractDropboxFragment() {
 
                         val request = OneTimeWorkRequestBuilder<DropboxExportWorker>().build()
                         val workManager = WorkManager.getInstance(requireContext())
-                        workManager.enqueueUniqueWork(CompressPhotosFragment.TAG,  ExistingWorkPolicy.REPLACE, request)
+                        workManager.enqueueUniqueWork(TAG,  ExistingWorkPolicy.REPLACE, request)
                         workManager.getWorkInfoByIdLiveData(request.id).observe(viewLifecycleOwner) { workInfo ->
                             if (workInfo != null) {
                                 when (workInfo.state) {

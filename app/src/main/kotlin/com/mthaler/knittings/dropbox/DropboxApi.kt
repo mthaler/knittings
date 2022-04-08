@@ -144,9 +144,6 @@ class DropboxApi(private val dropboxClient: DbxClientV2, val lifecycleOwner: Lif
                                 }
                             }
                         }
-
-
-                        DropboxImportService.startService(ctx, directory, filteredDatabase)
                         DropboxImportServiceManager.getInstance().updateJobStatus(JobStatus.Progress(0))
                     }
                     setNegativeButton(ctx.resources.getString(R.string.dialog_button_cancel)) { dialog, which -> }
@@ -160,6 +157,7 @@ class DropboxApi(private val dropboxClient: DbxClientV2, val lifecycleOwner: Lif
                     setTitle(ctx.resources.getString(R.string.dropbox_import_dialog_title))
                     setMessage(ctx.resources.getString(R.string.dropbox_import_dialog_msg))
                     setPositiveButton(ctx.resources.getString(R.string.dropbox_import_dialog_button_import)) { dialog, which ->
+
                         DropboxImportService.startService(ctx, directory, database)
                         DropboxImportServiceManager.getInstance().updateJobStatus(JobStatus.Progress(0))
                     }

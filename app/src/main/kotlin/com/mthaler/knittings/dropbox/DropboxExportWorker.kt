@@ -97,7 +97,7 @@ class DropboxExportWorker(val context: Context, parameters: WorkerParameters) : 
     }
 
     companion object {
-        const val TAG = "DropboxExportWorker"
+        val TAG = "com.mthaler.knittings.compressphotos.DropboxExportWorker"
 
         private const val KNITTINGS = "com.mthaler.knittings"
     }
