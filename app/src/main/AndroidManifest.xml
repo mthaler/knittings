@@ -133,11 +133,6 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>
-
-        <service
-            android:name=".dropbox.DropboxImportService"
-            android:enabled="true"
-            android:exported="false" />
     </application>
 
 </manifest>
