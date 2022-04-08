@@ -56,5 +56,7 @@ class DropboxImportWorkerTest {
         val p0 = Photo(42, File("/tmp/photo1.jpg"), 43, "socks", null)
         val k1 = Knitting(42, "knitting", "my first knitting", started, finished, "3.0", "41.0", p0, 5.0)
         assertEquals(2, db.projects.size)
+        assertEquals(1, db.photos.size)
+        assertEquals(0, db.categories.size)
     }
 }
