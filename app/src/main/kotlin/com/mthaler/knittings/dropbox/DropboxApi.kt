@@ -24,6 +24,7 @@ import com.mthaler.knittings.model.Project
 import com.mthaler.knittings.service.JobStatus
 import com.mthaler.knittings.service.ServiceStatus
 import com.mthaler.knittings.utils.FileUtils
+import com.mthaler.knittings.utils.WorkerUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.json.JSONObject
@@ -112,8 +113,7 @@ class DropboxApi(private val dropboxClient: DbxClientV2, val lifecycleOwner: Lif
                                     }
                                     WorkInfo.State.RUNNING -> {
                                         val sm = CompressPhotosServiceManager.getInstance()
-                                        sm.updateJobStatus(JobStatus.Progress(workInfo.progress.getInt(
-                                            CompressPhotoWorker.Progress, 0)))
+                                        sm.updateJobStatus(JobStatus.Progress(workInfo.progress.getInt(WorkerUtils.Progress, 0)))
                                         sm.updateServiceStatus(ServiceStatus.Started)
                                     }
                                     WorkInfo.State.SUCCEEDED -> {

@@ -9,6 +9,7 @@ import com.mthaler.knittings.database.KnittingsDataSource
 import com.mthaler.knittings.service.JobStatus
 import com.mthaler.knittings.utils.FileUtils
 import com.mthaler.knittings.utils.PictureUtils
+import com.mthaler.knittings.utils.WorkerUtils
 import java.lang.Exception
 
 class CompressPhotoWorker(val context: Context, parameters: WorkerParameters) : CoroutineWorker(context, parameters) {
@@ -56,13 +57,9 @@ class CompressPhotoWorker(val context: Context, parameters: WorkerParameters) : 
                     error("Could not delete $compressed")
                 }
             }
-            setProgressAsync(Data.Builder().putInt(Progress, progress).build())
+            setProgressAsync(Data.Builder().putInt(WorkerUtils.Progress, progress).build())
             sm.updateJobStatus(JobStatus.Progress(progress))
         }
         return false
-    }
-
-    companion object {
-        const val Progress = "Progress"
     }
 }

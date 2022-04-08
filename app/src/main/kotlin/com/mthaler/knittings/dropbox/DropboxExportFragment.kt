@@ -22,14 +22,12 @@ import com.dropbox.core.v2.DbxClientV2
 import com.mthaler.knittings.BuildConfig
 import com.mthaler.knittings.DatabaseApplication
 import com.mthaler.knittings.R
-import com.mthaler.knittings.compressphotos.CompressPhotoWorker
-import com.mthaler.knittings.compressphotos.CompressPhotosFragment
-import com.mthaler.knittings.compressphotos.CompressPhotosServiceManager
 import com.mthaler.knittings.databinding.FragmentDropboxExportBinding
 import com.mthaler.knittings.service.JobStatus
 import com.mthaler.knittings.service.ServiceStatus
 import com.mthaler.knittings.utils.Format
 import com.mthaler.knittings.utils.NetworkUtils
+import com.mthaler.knittings.utils.WorkerUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -75,42 +73,42 @@ class DropboxExportFragment : AbstractDropboxFragment() {
 
                         val request = OneTimeWorkRequestBuilder<DropboxExportWorker>().build()
                         val workManager = WorkManager.getInstance(requireContext())
-                        workManager.enqueueUniqueWork(TAG,  ExistingWorkPolicy.REPLACE, request)
+                        workManager.enqueueUniqueWork(DropboxExportWorker.TAG,  ExistingWorkPolicy.REPLACE, request)
                         workManager.getWorkInfoByIdLiveData(request.id).observe(viewLifecycleOwner) { workInfo ->
                             if (workInfo != null) {
                                 when (workInfo.state) {
                                     WorkInfo.State.ENQUEUED -> {
-                                        val sm = CompressPhotosServiceManager.getInstance()
+                                        val sm = DropboxExportServiceManager.getInstance()
                                         sm.updateJobStatus(JobStatus.Progress(0))
                                         sm.updateServiceStatus(ServiceStatus.Started)
                                     }
                                     WorkInfo.State.RUNNING -> {
-                                        val sm = CompressPhotosServiceManager.getInstance()
-                                        sm.updateJobStatus(JobStatus.Progress(workInfo.progress.getInt(CompressPhotoWorker.Progress, 0)))
+                                        val sm = DropboxExportServiceManager.getInstance()
+                                        sm.updateJobStatus(JobStatus.Progress(workInfo.progress.getInt(WorkerUtils.Progress, 0)))
                                         sm.updateServiceStatus(ServiceStatus.Started)
                                     }
                                     WorkInfo.State.SUCCEEDED -> {
-                                        val sm = CompressPhotosServiceManager.getInstance()
+                                        val sm = DropboxExportServiceManager.getInstance()
                                         sm.updateJobStatus(JobStatus.Success(context.resources.getString(R.string.compress_photos_completed)))
                                         sm.updateServiceStatus(ServiceStatus.Stopped)
                                     }
                                     WorkInfo.State.FAILED -> {
-                                        val sm = CompressPhotosServiceManager.getInstance()
+                                        val sm = DropboxExportServiceManager.getInstance()
                                         sm.updateJobStatus(JobStatus.Error(Exception("Could not compress photos")))
                                         sm.updateServiceStatus(ServiceStatus.Stopped)
                                     }
                                     WorkInfo.State.BLOCKED -> {
-                                        val sm = CompressPhotosServiceManager.getInstance()
+                                        val sm = DropboxExportServiceManager.getInstance()
                                         sm.updateJobStatus(JobStatus.Error(Exception("Could not compress photos")))
                                         sm.updateServiceStatus(ServiceStatus.Stopped)
                                     }
                                     WorkInfo.State.CANCELLED -> {
-                                        val sm = CompressPhotosServiceManager.getInstance()
+                                        val sm = DropboxExportServiceManager.getInstance()
                                         sm.updateJobStatus(JobStatus.Cancelled(context.resources.getString(R.string.compress_photos_cancelled)))
                                         sm.updateServiceStatus(ServiceStatus.Started)
                                     }
                                     else -> {
-                                        val sm = CompressPhotosServiceManager.getInstance()
+                                        val sm = DropboxExportServiceManager.getInstance()
                                         sm.updateJobStatus(JobStatus.Progress(0))
                                         sm.updateServiceStatus(ServiceStatus.Stopped)
                                     }
@@ -126,42 +124,42 @@ class DropboxExportFragment : AbstractDropboxFragment() {
                 val request = OneTimeWorkRequestBuilder<DropboxExportWorker>().build()
                 val workManager = WorkManager.getInstance(requireContext())
 
-                workManager.enqueueUniqueWork(CompressPhotosFragment.TAG,  ExistingWorkPolicy.REPLACE, request)
+                workManager.enqueueUniqueWork(DropboxExportWorker.TAG,  ExistingWorkPolicy.REPLACE, request)
                 workManager.getWorkInfoByIdLiveData(request.id).observe(viewLifecycleOwner) { workInfo ->
                     if (workInfo != null) {
                         when (workInfo.state) {
                             WorkInfo.State.ENQUEUED -> {
-                                val sm = CompressPhotosServiceManager.getInstance()
+                                val sm = DropboxExportServiceManager.getInstance()
                                 sm.updateJobStatus(JobStatus.Progress(0))
                                 sm.updateServiceStatus(ServiceStatus.Started)
                             }
                             WorkInfo.State.RUNNING -> {
-                                val sm = CompressPhotosServiceManager.getInstance()
-                                sm.updateJobStatus(JobStatus.Progress(workInfo.progress.getInt(CompressPhotoWorker.Progress, 0)))
+                                val sm = DropboxExportServiceManager.getInstance()
+                                sm.updateJobStatus(JobStatus.Progress(workInfo.progress.getInt(WorkerUtils.Progress, 0)))
                                 sm.updateServiceStatus(ServiceStatus.Started)
                             }
                             WorkInfo.State.SUCCEEDED -> {
-                                val sm = CompressPhotosServiceManager.getInstance()
+                                val sm = DropboxExportServiceManager.getInstance()
                                 sm.updateJobStatus(JobStatus.Success(requireContext().resources.getString(R.string.compress_photos_completed)))
                                 sm.updateServiceStatus(ServiceStatus.Stopped)
                             }
                             WorkInfo.State.FAILED -> {
-                                val sm = CompressPhotosServiceManager.getInstance()
+                                val sm = DropboxExportServiceManager.getInstance()
                                 sm.updateJobStatus(JobStatus.Error(Exception("Could not compress photos")))
                                 sm.updateServiceStatus(ServiceStatus.Stopped)
                             }
                             WorkInfo.State.BLOCKED -> {
-                                val sm = CompressPhotosServiceManager.getInstance()
+                                val sm = DropboxExportServiceManager.getInstance()
                                 sm.updateJobStatus(JobStatus.Error(Exception("Could not compress photos")))
                                 sm.updateServiceStatus(ServiceStatus.Stopped)
                             }
                             WorkInfo.State.CANCELLED -> {
-                                val sm = CompressPhotosServiceManager.getInstance()
+                                val sm = DropboxExportServiceManager.getInstance()
                                 sm.updateJobStatus(JobStatus.Cancelled(requireContext().resources.getString(R.string.compress_photos_cancelled)))
                                 sm.updateServiceStatus(ServiceStatus.Started)
                             }
                             else -> {
-                                val sm = CompressPhotosServiceManager.getInstance()
+                                val sm = DropboxExportServiceManager.getInstance()
                                 sm.updateJobStatus(JobStatus.Progress(0))
                                 sm.updateServiceStatus(ServiceStatus.Stopped)
                             }

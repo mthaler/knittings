@@ -13,6 +13,7 @@ import com.mthaler.knittings.databinding.FragmentCompressPhotoBinding
 import com.mthaler.knittings.service.JobStatus
 import com.mthaler.knittings.service.ServiceStatus
 import com.mthaler.knittings.utils.Format
+import com.mthaler.knittings.utils.WorkerUtils
 import java.lang.Exception
 
 class CompressPhotosFragment : Fragment() {
@@ -54,7 +55,7 @@ class CompressPhotosFragment : Fragment() {
                                 }
                                 WorkInfo.State.RUNNING -> {
                                     val sm = CompressPhotosServiceManager.getInstance()
-                                    sm.updateJobStatus(JobStatus.Progress(workInfo.progress.getInt(CompressPhotoWorker.Progress, 0)))
+                                    sm.updateJobStatus(JobStatus.Progress(workInfo.progress.getInt(WorkerUtils.Progress, 0)))
                                     sm.updateServiceStatus(ServiceStatus.Started)
                                 }
                                 WorkInfo.State.SUCCEEDED -> {
