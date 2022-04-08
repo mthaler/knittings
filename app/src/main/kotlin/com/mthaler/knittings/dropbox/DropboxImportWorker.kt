@@ -9,6 +9,7 @@ import com.dropbox.core.DbxRequestConfig
 import com.dropbox.core.oauth.DbxCredential
 import com.dropbox.core.v2.DbxClientV2
 import com.mthaler.knittings.DatabaseApplication
+import com.mthaler.knittings.R
 import com.mthaler.knittings.model.ExportDatabase
 import com.mthaler.knittings.model.Knitting
 import com.mthaler.knittings.service.JobStatus
@@ -33,6 +34,7 @@ class DropboxImportWorker(val ctx: Context, val app: DatabaseApplication, val da
         } finally {
             wakeLock.release()
         }
+        DropboxImportServiceManager.getInstance().updateJobStatus(JobStatus.Success(ctx.resources.getString(R.string.dropbox_import_completed)))
         TODO("Not yet implemented")
     }
 
