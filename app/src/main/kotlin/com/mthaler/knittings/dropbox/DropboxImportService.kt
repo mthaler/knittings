@@ -80,7 +80,7 @@ class DropboxImportService : Service() {
         DropboxImportServiceManager.getInstance().updateServiceStatus(ServiceStatus.Stopped)
     }
 
-    private suspend fun downloadPhotos(database: ExportDatabase<Project>, directory: String, pendingIntent: PendingIntent) {
+    private fun downloadPhotos(database: ExportDatabase<Project>, directory: String, pendingIntent: PendingIntent) {
         val clientIdentifier = "Knittings"
         val requestConfig = DbxRequestConfig(clientIdentifier)
         val credential = getLocalCredential()

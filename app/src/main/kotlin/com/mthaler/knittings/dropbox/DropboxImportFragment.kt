@@ -18,7 +18,6 @@ import com.dropbox.core.v2.DbxClientV2
 import com.dropbox.core.v2.files.ListFolderResult
 import com.github.michaelbull.result.Err
 import com.github.michaelbull.result.Ok
-import com.github.michaelbull.result.get
 import com.github.michaelbull.result.runCatching
 import com.mthaler.knittings.BuildConfig
 import com.mthaler.knittings.R
@@ -270,61 +269,6 @@ class DropboxImportFragment : AbstractDropboxFragment() {
         }
         else -> super.onOptionsItemSelected(item)
     }
-
-    /*suspend fun readDatabase(directory: String, ctx: Context) {
-        val (database, idsFromPhotoFiles) = withContext(Dispatchers.IO) {
-            val os = ByteArrayOutputStream()
-            dropboxClient.files().download("/$directory/db.json").download(os)
-            val bytes = os.toByteArray()
-            val jsonStr = String(bytes)
-            val json = JSONObject(jsonStr)
-            val externalFilesDir = ctx.getExternalFilesDir(Environment.DIRECTORY_PICTURES)!!
-            val database = (ctx.applicationContext as DatabaseApplication<Project>).createExportDatabaseFromJSON(json, externalFilesDir
-            )
-            database.checkValidity()
-            val entries = dropboxClient.files().listFolder("/$directory").entries
-            val ids = entries.filter { it.name != "db.json" }
-                .map { FileUtils.getFilenameWithoutExtension(it.name).toLong() }.toHashSet()
-            Pair(database, ids)
-        }
-        val ids = database.photos.map { it.id }.toHashSet()
-        val missingPhotos = ids - idsFromPhotoFiles
-        if (missingPhotos.isNotEmpty()) {
-            withContext(Dispatchers.Main) {
-                val builder = AlertDialog.Builder(ctx)
-                with(builder) {
-                    setTitle(R.string.dropbox_import_dialog_title)
-                    setMessage(
-                        ctx.resources.getString(
-                            R.string.dropbox_import_dialog_incomplete_msg,
-                            missingPhotos.size as Any
-                        )
-                    )
-                    setPositiveButton(R.string.dropbox_import_dialog_button_import) { dialog, which ->
-                        val filteredDatabase = database.removeMissingPhotos(missingPhotos)
-                        DropboxImportService.startService(ctx, directory, filteredDatabase)
-                        DropboxImportServiceManager.getInstance().updateJobStatus(JobStatus.Progress(0))
-                    }
-                    setNegativeButton(ctx.resources.getString(R.string.dialog_button_cancel)) { dialog, which -> }
-                    show()
-                }
-            }
-        } else {
-            withContext(Dispatchers.Main) {
-                val builder = AlertDialog.Builder(ctx)
-                with(builder) {
-                    setTitle(ctx.resources.getString(R.string.dropbox_import_dialog_title))
-                    setMessage(ctx.resources.getString(R.string.dropbox_import_dialog_msg))
-                    setPositiveButton(ctx.resources.getString(R.string.dropbox_import_dialog_button_import)) { dialog, which ->
-                        DropboxImportService.startService(ctx, directory, database)
-                        DropboxImportServiceManager.getInstance().updateJobStatus(JobStatus.Progress(0))
-                    }
-                    setNegativeButton(ctx.resources.getString(R.string.dialog_button_cancel)) { dialog, which -> }
-                    show()
-                }
-            }
-        }
-    }*/
 
     protected override fun clearData() {
         binding.loginButton.visibility = View.VISIBLE

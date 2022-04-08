@@ -2,6 +2,7 @@ package com.mthaler.knittings.dropbox
 
 import android.content.Context
 import android.util.Log
+import androidx.work.Data
 import androidx.work.Worker
 import androidx.work.WorkerParameters
 import com.dropbox.core.DbxRequestConfig
@@ -49,5 +50,12 @@ class DropboxImportWorker(val database: ExportDatabase<Knitting>, val context: C
         private const val KNITTINGS = "com.mthaler.knittings"
         const val Database = "com.mthaler.knittings.dropbox.database"
         const val Directory = "com.mthaler.knittings.dropbox.directory"
+
+        fun data(directory: String, database: ExportDatabase<Knitting>): Data  {
+            val data = Data.Builder()
+            data.putString(Directory, directory)
+            data.putString(Database, database.toJSON().toString())
+            return data.build()
+        }
     }
 }
