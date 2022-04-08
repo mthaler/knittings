@@ -66,8 +66,7 @@ class DropboxApi(private val dropboxClient: DbxClientV2) {
             val jsonStr = String(bytes)
             val json = JSONObject(jsonStr)
             val externalFilesDir = ctx.getExternalFilesDir(Environment.DIRECTORY_PICTURES)!!
-            val database = (ctx.applicationContext as DatabaseApplication).createExportDatabaseFromJSON(json, externalFilesDir
-            )
+            val database = (ctx.applicationContext as DatabaseApplication).createExportDatabaseFromJSON(json, externalFilesDir)
             database.checkValidity()
             val entries = dropboxClient.files().listFolder("/$directory").entries
             val ids = entries.filter { it.name != "db.json" }

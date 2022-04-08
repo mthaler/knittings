@@ -1,22 +1,19 @@
 package com.mthaler.knittings.dropbox
 
 import android.content.Context
-import android.util.Log
 import androidx.work.Data
 import androidx.work.Worker
 import androidx.work.WorkerParameters
 import com.dropbox.core.DbxRequestConfig
 import com.dropbox.core.oauth.DbxCredential
 import com.dropbox.core.v2.DbxClientV2
-import com.mthaler.knittings.R
+import com.mthaler.knittings.DatabaseApplication
 import com.mthaler.knittings.model.ExportDatabase
 import com.mthaler.knittings.model.Knitting
 import com.mthaler.knittings.service.JobStatus
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import java.lang.Exception
+import org.json.JSONObject
+import java.io.ByteArrayOutputStream
+import java.io.File
 
 class DropboxImportWorker(val database: ExportDatabase<Knitting>, val context: Context, parameters: WorkerParameters) : Worker(context, parameters) {
 
@@ -52,11 +49,22 @@ class DropboxImportWorker(val database: ExportDatabase<Knitting>, val context: C
         const val Database = "com.mthaler.knittings.dropbox.database"
         const val Directory = "com.mthaler.knittings.dropbox.directory"
 
-        fun data(directory: String, database: ExportDatabase<Knitting>): Data  {
+        fun data(directory: String, database: ExportDatabase<Knitting>): Data {
             val data = Data.Builder()
             data.putString(Directory, directory)
             data.putString(Database, database.toJSON().toString())
             return data.build()
         }
-    }
+
+        fun readDatabase(application: DatabaseApplication, directory: String, database: String): ExportDatabase<Knitting> {
+            val os = ByteArrayOutputStream()
+            os.write(database.toByteArray())
+            val bytes = os.toByteArray()
+            val jsonStr = String(bytes)
+            val json = JSONObject(jsonStr)
+            val file = File(directory)
+            val db = application.createExportDatabaseFromJSON(json, file)
+            db.checkValidity()
+            return db
+        }
 }
