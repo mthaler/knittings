@@ -4,7 +4,6 @@ import android.content.Context
 import android.os.Environment
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.LifecycleOwner
-import androidx.test.internal.platform.app.ActivityLifecycleTimeout
 import androidx.work.ExistingWorkPolicy
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkInfo
@@ -17,10 +16,7 @@ import com.dropbox.core.v2.files.Metadata
 import com.dropbox.core.v2.users.FullAccount
 import com.mthaler.knittings.DatabaseApplication
 import com.mthaler.knittings.R
-import com.mthaler.knittings.compressphotos.CompressPhotoWorker
-import com.mthaler.knittings.compressphotos.CompressPhotosFragment
 import com.mthaler.knittings.compressphotos.CompressPhotosServiceManager
-import com.mthaler.knittings.model.Project
 import com.mthaler.knittings.service.JobStatus
 import com.mthaler.knittings.service.ServiceStatus
 import com.mthaler.knittings.utils.FileUtils
@@ -102,7 +98,7 @@ class DropboxApi(private val dropboxClient: DbxClientV2, val lifecycleOwner: Lif
                         val filteredDatabase = database.removeMissingPhotos(missingPhotos)
                         val request = OneTimeWorkRequestBuilder<DropboxExportWorker>().build()
                         val workManager = WorkManager.getInstance(ctx)
-                        workManager.enqueueUniqueWork(DropboxImportWorker.Tag,  ExistingWorkPolicy.REPLACE, request)
+                        workManager.enqueueUniqueWork(DropboxImportWorker.TAG,  ExistingWorkPolicy.REPLACE, request)
                         workManager.getWorkInfoByIdLiveData(request.id).observe(lifecycleOwner) { workInfo ->
                             if (workInfo != null) {
                                 when (workInfo.state) {
