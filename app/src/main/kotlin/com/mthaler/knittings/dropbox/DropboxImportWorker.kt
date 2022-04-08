@@ -1,8 +1,9 @@
 package com.mthaler.knittings.dropbox
 
 import android.content.Context
+import android.os.PowerManager
+import androidx.work.CoroutineWorker
 import androidx.work.Data
-import androidx.work.Worker
 import androidx.work.WorkerParameters
 import com.dropbox.core.DbxRequestConfig
 import com.dropbox.core.oauth.DbxCredential
@@ -11,14 +12,27 @@ import com.mthaler.knittings.DatabaseApplication
 import com.mthaler.knittings.model.ExportDatabase
 import com.mthaler.knittings.model.Knitting
 import com.mthaler.knittings.service.JobStatus
+import com.mthaler.knittings.service.ServiceStatus
 import org.json.JSONObject
-import java.io.ByteArrayOutputStream
 import java.io.File
 
-class DropboxImportWorker(val database: ExportDatabase<Knitting>, val context: Context, parameters: WorkerParameters) : Worker(context, parameters) {
+class DropboxImportWorker(val ctx: Context, val app: DatabaseApplication, val database: ExportDatabase<Knitting>, val context: Context, parameters: WorkerParameters) : CoroutineWorker(context, parameters) {
 
-    override fun doWork(): Result {
-        val directory = inputData.getString(Directory)
+    override suspend  fun doWork(): Result {
+        DropboxImportServiceManager.getInstance().updateServiceStatus(ServiceStatus.Started)
+        val directory = inputData.getString(Directory)!!
+        val database = readDatabase(app, directory, inputData.getString(Database)!!)
+        val wakeLock: PowerManager.WakeLock =
+        (ctx.getSystemService(Context.POWER_SERVICE) as PowerManager).run {
+            newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "Knittings::DropboxImport").apply {
+                acquire()
+            }
+        }
+        try {
+            downloadPhotos(database, directory)
+        } finally {
+            wakeLock.release()
+        }
         TODO("Not yet implemented")
     }
 
@@ -41,6 +55,7 @@ class DropboxImportWorker(val database: ExportDatabase<Knitting>, val context: C
         val serializedCredential = sharedPreferences.getString("credential", null) ?: return null
         return DbxCredential.Reader.readFully(serializedCredential)
     }
+
 
     companion object {
         private const val TAG = "DropboxImportWorker"
