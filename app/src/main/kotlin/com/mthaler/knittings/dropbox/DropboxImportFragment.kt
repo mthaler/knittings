@@ -155,7 +155,7 @@ class DropboxImportFragment : AbstractDropboxFragment() {
         val credential = getLocalCredential()
         credential?.let {
             val dropboxClient = DbxClientV2(requestConfig, credential)
-            val dropboxApi = DropboxApi(dropboxClient, viewLifecycleOwner)
+            val dropboxApi = DropboxApi(dropboxClient, requireContext(), viewLifecycleOwner)
             val isWiFi = NetworkUtils.isWifiConnected(requireContext())
             if (!isWiFi) {
                 val builder = AlertDialog.Builder(requireContext())
@@ -201,14 +201,14 @@ class DropboxImportFragment : AbstractDropboxFragment() {
         credential?.let {
             val files = result.entries.map { it.name }.sortedDescending().toTypedArray()
             val dropboxClient = DbxClientV2(requestConfig, credential)
-            val dropboxApi = DropboxApi(dropboxClient, viewLifecycleOwner)
+            val dropboxApi = DropboxApi(dropboxClient, requireContext(), viewLifecycleOwner)
             val dialogBuilder = AlertDialog.Builder(requireContext())
             dialogBuilder.setTitle("Backups")
             dialogBuilder.setItems(files) { dialog, item ->
                 val directory = files[item]
                 lifecycleScope.launch(Dispatchers.IO) {
 
-                    dropboxApi.readDatabase(directory, requireContext())
+                    dropboxApi.readDatabase(directory)
                 }
             }
             dialogBuilder.setNegativeButton("Cancel") { dialog, which -> }
@@ -224,7 +224,7 @@ class DropboxImportFragment : AbstractDropboxFragment() {
         val credential = getLocalCredential()
         credential?.let {
             val dropboxClient = DbxClientV2(requestConfig, credential)
-            val dropboxApi = DropboxApi(dropboxClient, viewLifecycleOwner)
+            val dropboxApi = DropboxApi(dropboxClient, requireContext(), viewLifecycleOwner)
             lifecycleScope.launch {
                 when (val response = dropboxApi.getAccountInfo()) {
                     is DropboxAccountInfoResponse.Failure -> {

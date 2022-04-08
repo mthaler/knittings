@@ -27,7 +27,7 @@ import org.json.JSONObject
 import java.io.ByteArrayOutputStream
 import java.lang.Exception
 
-class DropboxApi(private val dropboxClient: DbxClientV2, val lifecycleOwner: LifecycleOwner) {
+class DropboxApi(private val dropboxClient: DbxClientV2, val ctx: Context, val lifecycleOwner: LifecycleOwner) {
 
     suspend fun listFolders(): ListFolderResult =
         withContext(Dispatchers.IO) {
@@ -66,7 +66,7 @@ class DropboxApi(private val dropboxClient: DbxClientV2, val lifecycleOwner: Lif
     }
 
 
-    suspend fun readDatabase(directory: String, ctx: Context) {
+    suspend fun readDatabase(directory: String) {
         val (database, idsFromPhotoFiles) = withContext(Dispatchers.IO) {
             val os = ByteArrayOutputStream()
             dropboxClient.files().download("/$directory/db.json").download(os)
@@ -88,15 +88,12 @@ class DropboxApi(private val dropboxClient: DbxClientV2, val lifecycleOwner: Lif
                 val builder = AlertDialog.Builder(ctx)
                 with(builder) {
                     setTitle(R.string.dropbox_import_dialog_title)
-                    setMessage(
-                        ctx.resources.getString(
-                            R.string.dropbox_import_dialog_incomplete_msg,
-                            missingPhotos.size as Any
-                        )
-                    )
+                    setMessage(ctx.resources.getString(R.string.dropbox_import_dialog_incomplete_msg, missingPhotos.size as Any))
                     setPositiveButton(R.string.dropbox_import_dialog_button_import) { dialog, which ->
                         val filteredDatabase = database.removeMissingPhotos(missingPhotos)
-                        val request = OneTimeWorkRequestBuilder<DropboxExportWorker>().build()
+                        DropboxImportWorker.readDatabase(ctx.applicationContext as DatabaseApplication, directory, filteredDatabase.toJSON().toString())
+                        val data = DropboxImportWorker.data(directory, filteredDatabase)
+                        val request = OneTimeWorkRequestBuilder<DropboxExportWorker>().setInputData(data).build()
                         val workManager = WorkManager.getInstance(ctx)
                         workManager.enqueueUniqueWork(DropboxImportWorker.TAG,  ExistingWorkPolicy.REPLACE, request)
                         workManager.getWorkInfoByIdLiveData(request.id).observe(lifecycleOwner) { workInfo ->
@@ -153,8 +150,54 @@ class DropboxApi(private val dropboxClient: DbxClientV2, val lifecycleOwner: Lif
                     setTitle(ctx.resources.getString(R.string.dropbox_import_dialog_title))
                     setMessage(ctx.resources.getString(R.string.dropbox_import_dialog_msg))
                     setPositiveButton(ctx.resources.getString(R.string.dropbox_import_dialog_button_import)) { dialog, which ->
-
-                        DropboxImportService.startService(ctx, directory, database)
+                        val app = ctx.applicationContext as DatabaseApplication
+                        val database =  app.createExportDatabase()
+                        DropboxImportWorker.readDatabase(ctx.applicationContext as DatabaseApplication, directory, database.toJSON().toString())
+                        val data = DropboxImportWorker.data(directory, database)
+                        val request = OneTimeWorkRequestBuilder<DropboxExportWorker>().setInputData(data).build()
+                        val workManager = WorkManager.getInstance(ctx)
+                        workManager.enqueueUniqueWork(DropboxImportWorker.TAG,  ExistingWorkPolicy.REPLACE, request)
+                        workManager.getWorkInfoByIdLiveData(request.id).observe(lifecycleOwner) { workInfo ->
+                            if (workInfo != null) {
+                                when (workInfo.state) {
+                                    WorkInfo.State.ENQUEUED -> {
+                                        val sm = CompressPhotosServiceManager.getInstance()
+                                        sm.updateJobStatus(JobStatus.Progress(0))
+                                        sm.updateServiceStatus(ServiceStatus.Started)
+                                    }
+                                    WorkInfo.State.RUNNING -> {
+                                        val sm = CompressPhotosServiceManager.getInstance()
+                                        sm.updateJobStatus(JobStatus.Progress(workInfo.progress.getInt(WorkerUtils.Progress, 0)))
+                                        sm.updateServiceStatus(ServiceStatus.Started)
+                                    }
+                                    WorkInfo.State.SUCCEEDED -> {
+                                        val sm = CompressPhotosServiceManager.getInstance()
+                                        sm.updateJobStatus(JobStatus.Success(context.resources.getString(R.string.compress_photos_completed)))
+                                        sm.updateServiceStatus(ServiceStatus.Stopped)
+                                    }
+                                    WorkInfo.State.FAILED -> {
+                                        val sm = CompressPhotosServiceManager.getInstance()
+                                        sm.updateJobStatus(JobStatus.Error(Exception("Could not compress photos")))
+                                        sm.updateServiceStatus(ServiceStatus.Stopped)
+                                    }
+                                    WorkInfo.State.BLOCKED -> {
+                                        val sm = CompressPhotosServiceManager.getInstance()
+                                        sm.updateJobStatus(JobStatus.Error(Exception("Could not compress photos")))
+                                        sm.updateServiceStatus(ServiceStatus.Stopped)
+                                    }
+                                    WorkInfo.State.CANCELLED -> {
+                                        val sm = CompressPhotosServiceManager.getInstance()
+                                        sm.updateJobStatus(JobStatus.Cancelled(context.resources.getString(R.string.compress_photos_cancelled)))
+                                        sm.updateServiceStatus(ServiceStatus.Started)
+                                    }
+                                    else -> {
+                                        val sm = CompressPhotosServiceManager.getInstance()
+                                        sm.updateJobStatus(JobStatus.Progress(0))
+                                        sm.updateServiceStatus(ServiceStatus.Stopped)
+                                    }
+                                }
+                            }
+                        }
                         DropboxImportServiceManager.getInstance().updateJobStatus(JobStatus.Progress(0))
                     }
                     setNegativeButton(ctx.resources.getString(R.string.dialog_button_cancel)) { dialog, which -> }

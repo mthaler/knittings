@@ -3,12 +3,8 @@ package com.mthaler.knittings.dropbox
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.Context
-import android.content.ContextWrapper
 import android.util.Log
-import android.view.View
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
-import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import com.dropbox.core.DbxRequestConfig
 import com.dropbox.core.android.Auth
@@ -54,7 +50,7 @@ abstract class AbstractDropboxFragment : Fragment() {
         val requestConfig = DbxRequestConfig(clientIdentifier)
         val credential = getLocalCredential()
         val dropboxClient = DbxClientV2(requestConfig, credential)
-        val dropboxApi = DropboxApi(dropboxClient, viewLifecycleOwner)
+        val dropboxApi = DropboxApi(dropboxClient, requireContext(),  viewLifecycleOwner)
         lifecycleScope.launch {
             dropboxApi.revokeDropboxAuthorization()
         }
