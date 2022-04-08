@@ -76,7 +76,6 @@ class DropboxExportFragment : AbstractDropboxFragment() {
 
                         val request = OneTimeWorkRequestBuilder<DropboxExportWorker>().build()
                         val workManager = WorkManager.getInstance(requireContext())
-
                         workManager.enqueueUniqueWork(CompressPhotosFragment.TAG,  ExistingWorkPolicy.REPLACE, request)
                         workManager.getWorkInfoByIdLiveData(request.id).observe(viewLifecycleOwner) { workInfo ->
                             if (workInfo != null) {
@@ -316,7 +315,7 @@ class DropboxExportFragment : AbstractDropboxFragment() {
         val credential = getLocalCredential()
         credential?.let {
             val dropboxClient = DbxClientV2(requestConfig, credential)
-            val dropboxApi = DropboxApi(dropboxClient)
+            val dropboxApi = DropboxApi(dropboxClient, viewLifecycleOwner)
             lifecycleScope.launch {
                 when (val response = dropboxApi.getAccountInfo()) {
                     is DropboxAccountInfoResponse.Failure -> {

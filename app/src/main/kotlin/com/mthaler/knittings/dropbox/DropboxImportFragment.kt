@@ -156,7 +156,7 @@ class DropboxImportFragment : AbstractDropboxFragment() {
         val credential = getLocalCredential()
         credential?.let {
             val dropboxClient = DbxClientV2(requestConfig, credential)
-            val dropboxApi = DropboxApi(dropboxClient)
+            val dropboxApi = DropboxApi(dropboxClient, viewLifecycleOwner)
             val isWiFi = NetworkUtils.isWifiConnected(requireContext())
             if (!isWiFi) {
                 val builder = AlertDialog.Builder(requireContext())
@@ -202,7 +202,7 @@ class DropboxImportFragment : AbstractDropboxFragment() {
         credential?.let {
             val files = result.entries.map { it.name }.sortedDescending().toTypedArray()
             val dropboxClient = DbxClientV2(requestConfig, credential)
-            val dropboxApi = DropboxApi(dropboxClient)
+            val dropboxApi = DropboxApi(dropboxClient, viewLifecycleOwner)
             val dialogBuilder = AlertDialog.Builder(requireContext())
             dialogBuilder.setTitle("Backups")
             dialogBuilder.setItems(files) { dialog, item ->
@@ -225,7 +225,7 @@ class DropboxImportFragment : AbstractDropboxFragment() {
         val credential = getLocalCredential()
         credential?.let {
             val dropboxClient = DbxClientV2(requestConfig, credential)
-            val dropboxApi = DropboxApi(dropboxClient)
+            val dropboxApi = DropboxApi(dropboxClient, viewLifecycleOwner)
             lifecycleScope.launch {
                 when (val response = dropboxApi.getAccountInfo()) {
                     is DropboxAccountInfoResponse.Failure -> {
