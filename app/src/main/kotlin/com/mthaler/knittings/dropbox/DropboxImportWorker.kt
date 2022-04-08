@@ -43,7 +43,7 @@ class DropboxImportWorker(val database: ExportDatabase<Knitting>, val context: C
     }
 
     companion object {
-        private  const val TAG = "DropboxImportWorker"
+        private const val TAG = "DropboxImportWorker"
 
         private const val KNITTINGS = "com.mthaler.knittings"
         const val Database = "com.mthaler.knittings.dropbox.database"
@@ -57,14 +57,11 @@ class DropboxImportWorker(val database: ExportDatabase<Knitting>, val context: C
         }
 
         fun readDatabase(application: DatabaseApplication, directory: String, database: String): ExportDatabase<Knitting> {
-            val os = ByteArrayOutputStream()
-            os.write(database.toByteArray())
-            val bytes = os.toByteArray()
-            val jsonStr = String(bytes)
-            val json = JSONObject(jsonStr)
+            val json = JSONObject(database)
             val file = File(directory)
             val db = application.createExportDatabaseFromJSON(json, file)
             db.checkValidity()
             return db
         }
+    }
 }
