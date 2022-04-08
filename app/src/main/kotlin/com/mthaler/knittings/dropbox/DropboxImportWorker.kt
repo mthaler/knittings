@@ -17,14 +17,15 @@ import com.mthaler.knittings.service.ServiceStatus
 import org.json.JSONObject
 import java.io.File
 
-class DropboxImportWorker(val ctx: Context, val app: DatabaseApplication, val database: ExportDatabase<Knitting>, val context: Context, parameters: WorkerParameters) : CoroutineWorker(context, parameters) {
+class DropboxImportWorker(val context: Context, val database: ExportDatabase<Knitting>, parameters: WorkerParameters) : CoroutineWorker(context, parameters) {
 
     override suspend  fun doWork(): Result {
         DropboxImportServiceManager.getInstance().updateServiceStatus(ServiceStatus.Started)
         val directory = inputData.getString(Directory)!!
+        val app: DatabaseApplication = context.applicationContext as DatabaseApplication
         val database = readDatabase(app, directory, inputData.getString(Database)!!)
         val wakeLock: PowerManager.WakeLock =
-        (ctx.getSystemService(Context.POWER_SERVICE) as PowerManager).run {
+        (context.getSystemService(Context.POWER_SERVICE) as PowerManager).run {
             newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "Knittings::DropboxImport").apply {
                 acquire()
             }
@@ -34,7 +35,7 @@ class DropboxImportWorker(val ctx: Context, val app: DatabaseApplication, val da
         } finally {
             wakeLock.release()
         }
-        DropboxImportServiceManager.getInstance().updateJobStatus(JobStatus.Success(ctx.resources.getString(R.string.dropbox_import_completed)))
+        DropboxImportServiceManager.getInstance().updateJobStatus(JobStatus.Success(context.resources.getString(R.string.dropbox_import_completed)))
         return Result.success()
     }
 
