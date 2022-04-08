@@ -5,7 +5,6 @@ import com.mthaler.knittings.database.PhotoDataSource
 import com.mthaler.knittings.database.ProjectsDataSource
 import com.mthaler.knittings.model.ExportDatabase
 import com.mthaler.knittings.model.Knitting
-import com.mthaler.knittings.model.Project
 import org.json.JSONObject
 import java.io.File
 

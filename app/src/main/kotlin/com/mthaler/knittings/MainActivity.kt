@@ -26,7 +26,6 @@ import com.mthaler.knittings.filter.SingleCategoryFilter
 import com.mthaler.knittings.projectcount.ProjectCountActivity
 import com.mthaler.knittings.databinding.ActivityMainBinding
 import com.mthaler.knittings.filter.SingleStatusFilter
-import com.mthaler.knittings.model.Knitting
 import com.mthaler.knittings.model.Status
 import com.mthaler.knittings.needle.NeedleListActivity
 import com.mthaler.knittings.settings.SettingsActivity

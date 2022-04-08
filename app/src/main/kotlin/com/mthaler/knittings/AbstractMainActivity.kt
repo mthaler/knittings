@@ -5,7 +5,6 @@ import androidx.appcompat.widget.SearchView
 import com.mthaler.knittings.filter.CombinedFilter
 import com.mthaler.knittings.filter.ContainsFilter
 import com.mthaler.knittings.model.Knitting
-import com.mthaler.knittings.model.Project
 
 abstract class AbstractMainActivity : BaseActivity(), SearchView.OnQueryTextListener, SearchView.OnCloseListener {
 
