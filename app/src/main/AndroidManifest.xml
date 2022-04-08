@@ -135,10 +135,6 @@
         </provider>
 
         <service
-            android:name=".dropbox.DropboxExportService"
-            android:enabled="true"
-            android:exported="false" />
-        <service
             android:name=".dropbox.DropboxImportService"
             android:enabled="true"
             android:exported="false" />
