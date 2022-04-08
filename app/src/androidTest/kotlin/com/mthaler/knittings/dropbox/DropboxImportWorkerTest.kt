@@ -46,8 +46,7 @@ class DropboxImportWorkerTest {
     @Test
     fun readDatabaseTest() {
         val app = application as MyApplication
-        val db =DropboxImportWorker.readDatabase(app, "test", "com.mthaler.knittings.dropbox.database -> {\"version\":5,\"knittings\":[{\"id\":42,\"title\":\"knitting\",\"description\":\"my first knitting\",\"started\":\"2018-01-10\",\"needleDiameter\":\"3.0\",\"size\":\"41.0\",\"rating\":5,\"duration\":0,\"status\":\"PLANNED\"},{\"id\":42,\"title\":\"knitting\",\"description\":\"my first knitting\",\"started\":\"2018-01-10\",\"finished\":\"2018-01-11\",\"needleDiameter\":\"3.0\",\"size\":\"41.0\",\"rating\":5,\"defaultPhoto\":42,\"duration\":0,\"status\":\"PLANNED\"}],\"photos\":[{\"id\":42,\"filename\":\"\\/tmp\\/photo1.jpg\",\"knittingID\":43,\"description\":\"socks\"}],\"categories\":[],\"needles\":[],\"rowCounters\":[]}")
-        assertEquals(true, db)
+        val db =DropboxImportWorker.readDatabase(app, "test", "{\"version\":5,\"knittings\":[{\"id\":42,\"title\":\"knitting\",\"description\":\"my first knitting\",\"started\":\"2018-01-10\",\"needleDiameter\":\"3.0\",\"size\":\"41.0\",\"rating\":5,\"duration\":0,\"status\":\"PLANNED\"},{\"id\":42,\"title\":\"knitting\",\"description\":\"my first knitting\",\"started\":\"2018-01-10\",\"finished\":\"2018-01-11\",\"needleDiameter\":\"3.0\",\"size\":\"41.0\",\"rating\":5,\"defaultPhoto\":42,\"duration\":0,\"status\":\"PLANNED\"}],\"photos\":[{\"id\":42,\"filename\":\"\\/tmp\\/photo1.jpg\",\"knittingID\":43,\"description\":\"socks\"}],\"categories\":[],\"needles\":[],\"rowCounters\":[]}")
         print(db)
     }
 }
