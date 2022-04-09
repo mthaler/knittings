@@ -135,7 +135,6 @@ class MainActivity : AbstractMainActivity(), NavigationView.OnNavigationItemSele
         rv.adapter = adapter
 
         val activeFilters = binding.knittingActiveFilters
-        viewModel = ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory.getInstance(application)).get(MainViewModel::class.java)
         viewModel.projects.observe(this, { knittings ->
 
             when {

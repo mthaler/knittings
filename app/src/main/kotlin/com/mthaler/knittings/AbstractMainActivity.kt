@@ -1,6 +1,7 @@
 package com.mthaler.knittings
 
 import android.text.TextUtils
+import androidx.activity.viewModels
 import androidx.appcompat.widget.SearchView
 import com.mthaler.knittings.filter.CombinedFilter
 import com.mthaler.knittings.filter.ContainsFilter
@@ -8,7 +9,7 @@ import com.mthaler.knittings.model.Knitting
 
 abstract class AbstractMainActivity : BaseActivity(), SearchView.OnQueryTextListener, SearchView.OnCloseListener {
 
-    protected lateinit var viewModel: MainViewModel
+    protected val viewModel: MainViewModel by viewModels<MainViewModel>()
 
     /**
      * Called when the query text is changed by the use
