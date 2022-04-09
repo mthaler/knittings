@@ -11,7 +11,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class PhotoGalleryViewModel(application: Application) : DataSourceViewModel() {
+class PhotoGalleryViewModel(application: Application? = null) : DataSourceViewModel() {
 
     private val ds: PhotoDataSource = (application as DatabaseApplication).getPhotoDataSource()
     private var ownerID = -1L

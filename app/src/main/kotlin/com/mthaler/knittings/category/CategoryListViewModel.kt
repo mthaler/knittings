@@ -9,7 +9,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class CategoryListViewModel(application: Application) : DataSourceViewModel() {
+class CategoryListViewModel(application: Application? = null) : DataSourceViewModel() {
 
     private val ds = (application as DatabaseApplication).getCategoryDataSource()
 

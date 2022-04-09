@@ -28,6 +28,7 @@ import com.mthaler.knittings.databinding.ActivityMainBinding
 import com.mthaler.knittings.filter.SingleStatusFilter
 import com.mthaler.knittings.model.Status
 import com.mthaler.knittings.needle.NeedleListActivity
+import com.mthaler.knittings.needle.NeedleListViewModel
 import com.mthaler.knittings.settings.SettingsActivity
 import com.mthaler.knittings.whatsnew.WhatsNewDialog
 import java.util.*
@@ -134,9 +135,7 @@ class MainActivity : AbstractMainActivity(), NavigationView.OnNavigationItemSele
         rv.adapter = adapter
 
         val activeFilters = binding.knittingActiveFilters
-
-        viewModel = ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory.getInstance(application)).get(
-            MainViewModel::class.java)
+        viewModel = ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory.getInstance(application)).get(MainViewModel::class.java)
         viewModel.projects.observe(this, { knittings ->
 
             when {
