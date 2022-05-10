@@ -9,7 +9,8 @@ import com.mthaler.knittings.model.Knitting
 
 abstract class AbstractMainActivity : BaseActivity(), SearchView.OnQueryTextListener, SearchView.OnCloseListener {
 
-    protected val viewModel: MainViewModel by viewModels<MainViewModel>()
+    protected lateinit var viewModel: MainViewModel
+
 
     /**
      * Called when the query text is changed by the use

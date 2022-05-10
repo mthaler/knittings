@@ -7,12 +7,11 @@ import androidx.fragment.app.Fragment
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ActionMode
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.lifecycle.ViewModelProvider
 import com.mthaler.knittings.DatabaseApplication
 import com.mthaler.knittings.DeleteDialog
 import com.mthaler.knittings.R
 import com.mthaler.knittings.databinding.FragmentCategoryListBinding
-import com.mthaler.knittings.model.Category
+import com.mthaler.knittings.utils.AndroidViewModelFactory
 
 class CategoryListFragment : Fragment() {
 
@@ -98,7 +97,7 @@ class CategoryListFragment : Fragment() {
         })
         binding.categoryRecyclerView.adapter = adapter
 
-        val viewModel = ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory.getInstance(requireActivity().application)).get(CategoryListViewModel::class.java)
+        val viewModel = AndroidViewModelFactory(requireActivity().application).create(CategoryListViewModel::class.java)
         viewModel.categories.observe(viewLifecycleOwner, { categories ->
             // show image if category list is empty
             if (categories.isEmpty()) {

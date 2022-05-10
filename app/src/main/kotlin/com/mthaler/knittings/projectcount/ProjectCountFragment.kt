@@ -6,10 +6,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
-import androidx.lifecycle.ViewModelProvider
 import com.mthaler.knittings.R
-import com.mthaler.knittings.category.CategoryListViewModel
 import com.mthaler.knittings.databinding.FragmentProjectCountBinding
+import com.mthaler.knittings.utils.AndroidViewModelFactory
 
 class ProjectCountFragment : Fragment() {
 
@@ -19,7 +18,7 @@ class ProjectCountFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel = ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory.getInstance(requireActivity().application)).get(ProjectCountViewModel::class.java)
+        viewModel = AndroidViewModelFactory(requireActivity().application).create(ProjectCountViewModel::class.java)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {

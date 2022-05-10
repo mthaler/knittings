@@ -10,7 +10,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class MainViewModel(application: Application? = null) : DataSourceViewModel() {
+class MainViewModel(application: Application) : DataSourceViewModel() {
 
     private val ds = (application as DatabaseApplication).getProjectsDataSource()
 
