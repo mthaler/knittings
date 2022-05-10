@@ -41,6 +41,10 @@ class StopwatchFragment : Fragment() {
          _binding = FragmentStopwatchBinding.inflate(inflater, container, false)
          val view = binding.root
 
+         viewModel.time.observe(viewLifecycleOwner, { time ->
+            binding.timeView.text = time
+         })
+
          binding.startButton.setOnClickListener {
              viewModel.running = true
              viewModel.previousTime = System.currentTimeMillis()
