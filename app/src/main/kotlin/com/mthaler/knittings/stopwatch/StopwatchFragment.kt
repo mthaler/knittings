@@ -33,8 +33,6 @@ class StopwatchFragment : Fragment() {
         }
 
         setHasOptionsMenu(true)
-
-        viewModel.runTimer()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -78,6 +76,11 @@ class StopwatchFragment : Fragment() {
             true
         }
         else -> super.onOptionsItemSelected(item)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        viewModel.timer.cancel()
     }
 
      companion object {
