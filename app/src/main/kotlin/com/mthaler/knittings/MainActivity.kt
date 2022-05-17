@@ -9,8 +9,6 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.view.ActionMode
 import androidx.appcompat.widget.SearchView
 import androidx.core.view.GravityCompat
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -29,7 +27,6 @@ import com.mthaler.knittings.databinding.ActivityMainBinding
 import com.mthaler.knittings.filter.SingleStatusFilter
 import com.mthaler.knittings.model.Status
 import com.mthaler.knittings.needle.NeedleListActivity
-import com.mthaler.knittings.needle.NeedleListViewModel
 import com.mthaler.knittings.settings.SettingsActivity
 import com.mthaler.knittings.utils.AndroidViewModelFactory
 import com.mthaler.knittings.whatsnew.WhatsNewDialog

@@ -140,7 +140,6 @@ object KnittingsDataSource : AbstractObservableDatabase(), PhotoDataSource, Cate
 
     @Synchronized
     override fun getProject(id: Long): Knitting {
-        Log.d(TAG, "Getting knitting for id $id")
         context.database.readableDatabase.use { database ->
             val cursor = database.query(KnittingTable.KNITTINGS,
                     KnittingTable.Columns, KnittingTable.Cols.ID + "=" + id, null, null, null, null)

@@ -108,6 +108,8 @@ dependencies {
 
     testImplementation "androidx.room:room-testing:$room_version"
 
+    testImplementation 'com.jraska.livedata:testing-ktx:1.2.0'
+
     debugImplementation "androidx.fragment:fragment-testing:$fragment_version"
 
      // Kotlin extensions for androidx.test.ext.junit

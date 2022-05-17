@@ -12,24 +12,23 @@ import androidx.lifecycle.ViewModelProvider
 import com.mthaler.knittings.Extras.EXTRA_KNITTING_ID
 import com.mthaler.knittings.database.KnittingsDataSource
 import com.mthaler.knittings.databinding.FragmentStopwatchBinding
-import com.mthaler.knittings.model.Knitting
 
 class StopwatchFragment : Fragment() {
 
     private var _binding: FragmentStopwatchBinding? = null
     private val binding get() = _binding!!
     private lateinit var viewModel: StopwatchViewModel
-    private var knittingID: Long = Knitting.EMPTY.id
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         viewModel = ViewModelProvider(requireActivity()).get(StopwatchViewModel::class.java)
+        viewModel.start()
 
         val a = arguments
         if (a != null) {
-            knittingID = a.getLong(EXTRA_KNITTING_ID)
-            viewModel.elapsedTime = KnittingsDataSource.getProject(knittingID).duration
+            viewModel.knittingID = a.getLong(EXTRA_KNITTING_ID)
+            viewModel.elapsedTime = KnittingsDataSource.getProject(viewModel.knittingID).duration
         }
 
         setHasOptionsMenu(true)
@@ -50,7 +49,7 @@ class StopwatchFragment : Fragment() {
 
          binding.stopButton.setOnClickListener {
              viewModel.running = false
-             val knitting = KnittingsDataSource.getProject(knittingID)
+             val knitting = KnittingsDataSource.getProject(viewModel.knittingID)
              KnittingsDataSource.updateProject(knitting.copy(duration = viewModel.elapsedTime))
          }
 
@@ -70,7 +69,7 @@ class StopwatchFragment : Fragment() {
             if (upIntent == null) {
                 throw IllegalStateException("No Parent Activity Intent")
             } else {
-                upIntent.putExtra(EXTRA_KNITTING_ID, knittingID)
+                upIntent.putExtra(EXTRA_KNITTING_ID, viewModel.knittingID)
                 NavUtils.navigateUpTo(requireActivity(), upIntent)
             }
             true
