@@ -7,7 +7,7 @@ import com.mthaler.knittings.R
 import com.mthaler.knittings.model.Project
 import java.util.*
 
-class ProjectCountViewModel(application: Application): AndroidViewModel(application!!) {
+class ProjectCountViewModel(application: Application): AndroidViewModel(application) {
 
     /**
      * Gets the project count for the given year and category name

@@ -13,12 +13,12 @@ class CategoryListViewModel(application: Application) : DataSourceViewModel() {
 
     private val ds = (application as DatabaseApplication).getCategoryDataSource()
 
-    val categories = MutableLiveData(ds.allCategories.sortedBy { it.name.toLowerCase() })
+    val categories = MutableLiveData(ds.allCategories.sortedBy { it.name.lowercase() })
 
     override fun databaseChanged() {
         viewModelScope.launch {
             val allCategories = withContext(Dispatchers.IO) {
-                ds.allCategories.sortedBy { it.name.toLowerCase() }
+                ds.allCategories.sortedBy { it.name.lowercase() }
             }
             categories.value = allCategories
         }

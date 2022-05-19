@@ -58,7 +58,7 @@ class EditCategoryFragment : Fragment() {
             color?.let { binding.buttonSelectColor.setBackgroundColor(it) }
         }
 
-        binding.buttonSelectColor.setOnClickListener { view -> showColorPicker() }
+        binding.buttonSelectColor.setOnClickListener { showColorPicker() }
 
         return view
     }
