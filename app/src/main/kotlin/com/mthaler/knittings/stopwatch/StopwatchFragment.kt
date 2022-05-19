@@ -43,20 +43,19 @@ class StopwatchFragment : Fragment() {
          })
 
          binding.startButton.setOnClickListener {
-             viewModel.running = true
-             viewModel.previousTime = System.currentTimeMillis()
+             viewModel.start()
          }
 
          binding.stopButton.setOnClickListener {
-             viewModel.running = false
+             viewModel.stop()
              val knitting = KnittingsDataSource.getProject(viewModel.knittingID)
              KnittingsDataSource.updateProject(knitting.copy(duration = viewModel.elapsedTime))
          }
 
          binding.discardButton.setOnClickListener {
-               viewModel.running = false
-               viewModel.elapsedTime = 0
-               requireActivity().finish()
+              viewModel.stop()
+              viewModel.elapsedTime = 0
+              requireActivity().finish()
          }
 
          return view
