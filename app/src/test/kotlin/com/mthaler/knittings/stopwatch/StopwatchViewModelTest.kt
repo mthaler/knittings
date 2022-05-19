@@ -29,6 +29,7 @@ class StopwatchViewModelTest {
     fun testTime() {
         viewModel.start()
         viewModel.time.test()
+            .awaitValue()
             .assertHasValue()
             .assertValue("0:00:00")
     }

@@ -28,7 +28,7 @@ class StopwatchViewModel: ViewModel() {
                     _time.value = s
                 }
             }
-        }, 500, 500)
+        }, 0, 500)
     }
 
     fun stop() {
