@@ -1,5 +1,6 @@
 package com.mthaler.knittings.stopwatch
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.mthaler.knittings.database.KnittingsDataSource
@@ -15,6 +16,7 @@ class StopwatchViewModel: ViewModel() {
     var previousTime = 0L
     var running = false
     lateinit var timer: Timer
+    val _time = MutableLiveData("")
 
     fun start() {
         timer = Timer()
@@ -24,7 +26,7 @@ class StopwatchViewModel: ViewModel() {
                 val hours = totalSeconds / 3600
                 val minutes = totalSeconds % 3600 / 60
                 val secs = totalSeconds % 60
-                time.setMutVal(String.format(Locale.getDefault(), "%d:%02d:%02d", hours, minutes, secs))
+                _time.setMutVal(String.format(Locale.getDefault(), "%d:%02d:%02d", hours, minutes, secs))
                 if (running) {
                     val t = System.currentTimeMillis()
                     elapsedTime += (t - previousTime)
@@ -34,5 +36,9 @@ class StopwatchViewModel: ViewModel() {
         }, 500, 500)
     }
 
-    val time = MutableLiveData("")
+    val time: LiveData<String> = _time
+
+    fun setNewValue(newValue: String) {
+        _time.setMutVal(newValue)
+    }
 }

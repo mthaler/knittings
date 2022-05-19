@@ -2,6 +2,7 @@ package com.mthaler.knittings.stopwatch
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.jraska.livedata.test
+import junit.framework.TestCase.assertEquals
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -19,10 +20,15 @@ class StopwatchViewModelTest {
     }
 
     @Test
-    fun time() {
-        val s = StopwatchViewModel()
-        s.start()
-        s.time.test()
+    fun testIsLiveDataEmitting() {
+        viewModel._time.value = "foo"
+        assertEquals(viewModel.time.value, "foo") // Passes
+    }
+
+    @Test
+    fun testTime() {
+        viewModel.start()
+        viewModel.time.test()
             .assertHasValue()
             .assertValue("0:00:00")
     }
