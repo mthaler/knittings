@@ -241,7 +241,7 @@ class MainActivity : AbstractMainActivity(), NavigationView.OnNavigationItemSele
                       }
                     dialog.dismiss()
                 }
-                builder.setNegativeButton(R.string.dialog_button_cancel) { dialog, which -> dialog.dismiss() }
+                builder.setNegativeButton(R.string.dialog_button_cancel) { dialog, _ -> dialog.dismiss() }
                 val dialog = builder.create()
                 dialog.show()
                 true
@@ -251,7 +251,7 @@ class MainActivity : AbstractMainActivity(), NavigationView.OnNavigationItemSele
                 true
             }
             R.id.menu_item_category_filter -> {
-                val categories = KnittingsDataSource.allCategories.sortedBy { it.name.toLowerCase() }
+                val categories = KnittingsDataSource.allCategories.sortedBy { it.name.lowercase() }
                 val listItems = (listOf(getString(R.string.filter_show_all)) + categories.map { it.name }.toList()).toTypedArray()
                 val builder = AlertDialog.Builder(this)
                 val f = viewModel.filter
@@ -274,7 +274,7 @@ class MainActivity : AbstractMainActivity(), NavigationView.OnNavigationItemSele
                     }
                     dialog.dismiss()
                 }
-                builder.setNegativeButton(R.string.dialog_button_cancel) { dialog, which -> dialog.dismiss() }
+                builder.setNegativeButton(R.string.dialog_button_cancel) { dialog, _ -> dialog.dismiss() }
                 val dialog = builder.create()
                 dialog.show()
                 true
@@ -302,10 +302,9 @@ class MainActivity : AbstractMainActivity(), NavigationView.OnNavigationItemSele
                     }
                     dialog.dismiss()
                 }
-                builder.setNegativeButton(R.string.dialog_button_cancel) { dialog, which -> dialog.dismiss() }
+                builder.setNegativeButton(R.string.dialog_button_cancel) { dialog, _ -> dialog.dismiss() }
                 val dialog = builder.create()
                 dialog.show()
-                true
                 true
             }
             R.id.menu_item_count -> {

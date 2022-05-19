@@ -17,7 +17,7 @@ object AboutDialog {
         appName.text = (appName.text.toString() + " " + BuildConfig.VERSION_NAME)
         val b = AlertDialog.Builder(activity)
         b.setView(v)
-        b.setPositiveButton(android.R.string.ok) { diag, i -> diag.dismiss() }
+        b.setPositiveButton(android.R.string.ok) { diag, _ -> diag.dismiss() }
         b.create().show()
     }
 }

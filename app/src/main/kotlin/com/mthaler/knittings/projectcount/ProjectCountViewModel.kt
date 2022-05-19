@@ -56,7 +56,7 @@ class ProjectCountViewModel(application: Application): AndroidViewModel(applicat
      */
     fun createCategoryNamesList(): List<String> {
         val ds = (getApplication<MyApplication>().applicationContext as com.mthaler.knittings.DatabaseApplication).getCategoryDataSource()
-        val categories = ds.allCategories.sortedBy { it.name.toLowerCase() }
+        val categories = ds.allCategories.sortedBy { it.name.lowercase() }
         return listOf(getApplication<MyApplication>().resources.getString(R.string.project_count_category_all)) + categories.map { it.name }.toList()
     }
 

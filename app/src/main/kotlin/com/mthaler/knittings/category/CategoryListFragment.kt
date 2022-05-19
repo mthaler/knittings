@@ -19,12 +19,6 @@ class CategoryListFragment : Fragment() {
     private val binding get() = _binding!!
     private var listener: OnFragmentInteractionListener? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        retainInstance = true
-    }
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentCategoryListBinding.inflate(inflater, container, false)
         val view = binding.root

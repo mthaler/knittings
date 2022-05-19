@@ -33,7 +33,7 @@ class NeedleListFragment : Fragment() {
         _binding = FragmentNeedleListBinding.inflate(inflater, container, false)
         val view = binding.root
         setHasOptionsMenu(true)
-        binding.fabCreateNeedle.setOnClickListener { v -> listener?.createNeedle() }
+        binding.fabCreateNeedle.setOnClickListener { listener?.createNeedle() }
         return view
     }
 

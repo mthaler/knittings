@@ -89,7 +89,7 @@ class DropboxApi(private val dropboxClient: DbxClientV2, val ctx: Context, val l
                 with(builder) {
                     setTitle(R.string.dropbox_import_dialog_title)
                     setMessage(ctx.resources.getString(R.string.dropbox_import_dialog_incomplete_msg, missingPhotos.size as Any))
-                    setPositiveButton(R.string.dropbox_import_dialog_button_import) { dialog, which ->
+                    setPositiveButton(R.string.dropbox_import_dialog_button_import) { _, _ ->
                         val filteredDatabase = database.removeMissingPhotos(missingPhotos)
                         DropboxImportWorker.readDatabase(ctx.applicationContext as DatabaseApplication, directory, filteredDatabase.toJSON().toString())
                         val data = DropboxImportWorker.data(directory, filteredDatabase)

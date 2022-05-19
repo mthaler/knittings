@@ -38,8 +38,8 @@ class KnittingAdapter(
     inner class ViewHolder(val context: Context, val binding: ListItemKnittingBinding) : RecyclerView.ViewHolder(binding.root) {
 
         init {
-            itemView.setOnClickListener { v -> onItemClick(knittings[adapterPosition]) }
-            itemView.setOnLongClickListener { v -> onItemLongClick(knittings[adapterPosition]); true }
+            itemView.setOnClickListener { onItemClick(knittings[adapterPosition]) }
+            itemView.setOnLongClickListener { onItemLongClick(knittings[adapterPosition]); true }
         }
 
         fun bind(knitting: Knitting) {

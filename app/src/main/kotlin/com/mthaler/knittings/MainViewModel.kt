@@ -42,7 +42,7 @@ class MainViewModel(application: Application) : DataSourceViewModel() {
                 val sorted = when (sorting) {
                     Sorting.NewestFirst -> filtered.sortedByDescending { it.started }
                     Sorting.OldestFirst -> filtered.sortedBy { it.started }
-                    Sorting.Alphabetical -> filtered.sortedBy { it.title.toLowerCase() }
+                    Sorting.Alphabetical -> filtered.sortedBy { it.title.lowercase() }
                 }
                 sorted
             }

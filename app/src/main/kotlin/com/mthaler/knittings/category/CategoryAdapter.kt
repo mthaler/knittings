@@ -36,8 +36,8 @@ class CategoryAdapter(
         fun bind(category: Category, onItemClick: (Category) -> Unit, onItemLongClick: (Category) -> Unit) {
             category.color?.let { binding.color.color = it }
             binding.name.text = category.name
-            itemView.setOnClickListener { v -> onItemClick(category) }
-            itemView.setOnLongClickListener { v -> onItemLongClick(category); true }
+            itemView.setOnClickListener { onItemClick(category) }
+            itemView.setOnLongClickListener { onItemLongClick(category); true }
         }
     }
 }

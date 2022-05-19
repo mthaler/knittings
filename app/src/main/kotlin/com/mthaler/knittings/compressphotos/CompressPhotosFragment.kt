@@ -41,7 +41,7 @@ class CompressPhotosFragment : Fragment() {
             with(builder) {
                 setTitle(resources.getString(R.string.compress_photos_dialog_title))
                 setMessage(resources.getString(R.string.compress_photos_dialog_message))
-                setPositiveButton(resources.getString(R.string.compress_photos_dialog_button_compress)) { dialog, which ->
+                setPositiveButton(resources.getString(R.string.compress_photos_dialog_button_compress)) { _, _ ->
                     val request = OneTimeWorkRequestBuilder<CompressPhotoWorker>().build()
                     val workManager = WorkManager.getInstance(requireContext())
                     workManager.enqueueUniqueWork(TAG,  ExistingWorkPolicy.REPLACE, request)

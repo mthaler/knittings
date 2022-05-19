@@ -51,7 +51,7 @@ object TakePhotoDialog {
             d.dismiss()
             val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
             // create a photo file for the photo
-            val f = getPhotoFile(context)?.let {
+            getPhotoFile(context)?.let {
                 val packageManager = context.packageManager
                 val canTakePhoto = takePictureIntent.resolveActivity(packageManager) != null
                 if (canTakePhoto) {
