@@ -9,7 +9,7 @@ import org.junit.Test
 
 class StopwatchViewModelTest {
 
-    @get:Rule
+    @get: Rule
     val schedulers = InstantTaskExecutorRule()
 
     lateinit var viewModel: StopwatchViewModel
@@ -22,7 +22,7 @@ class StopwatchViewModelTest {
     @Test
     fun testIsLiveDataEmitting() {
         viewModel._time.value = "foo"
-        assertEquals(viewModel.time.value, "foo") // Passes
+        assertEquals(viewModel.time.value, "foo")
     }
 
     @Test

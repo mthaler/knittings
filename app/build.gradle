@@ -121,6 +121,8 @@ dependencies {
     // Kotlin extensions for androidx.test.core
     androidTestImplementation "androidx.test:core-ktx:1.4.0"
 
+    androidTestImplementation 'androidx.arch.core:core-testing:2.1.0'
+
     androidTestImplementation "androidx.work:work-testing:$work_version"
 }
 

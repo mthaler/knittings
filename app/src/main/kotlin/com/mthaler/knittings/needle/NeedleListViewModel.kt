@@ -1,5 +1,6 @@
 package com.mthaler.knittings.needle
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.mthaler.knittings.database.DataSourceViewModel
@@ -12,7 +13,10 @@ import kotlinx.coroutines.withContext
 
 class NeedleListViewModel : DataSourceViewModel() {
 
-    val needles = MutableLiveData<List<Needle>>(emptyList())
+    val _needles = MutableLiveData<List<Needle>>(emptyList())
+    val needles: LiveData<List<Needle>> = _needles
+
+
     var filter: CombinedFilter<Needle> = CombinedFilter.empty()
         set(value) {
             field = value
@@ -33,7 +37,7 @@ class NeedleListViewModel : DataSourceViewModel() {
             val filteredNeedles = withContext(Dispatchers.IO) {
                 filter.filter(ds.allNeedles)
             }
-            needles.value = filteredNeedles
+            _needles.value = filteredNeedles
         }
     }
 }
