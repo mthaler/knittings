@@ -12,53 +12,61 @@ import androidx.lifecycle.ViewModelProvider
 import com.mthaler.knittings.Extras.EXTRA_KNITTING_ID
 import com.mthaler.knittings.database.KnittingsDataSource
 import com.mthaler.knittings.databinding.FragmentStopwatchBinding
+import com.mthaler.knittings.model.Knitting
 
 class StopwatchFragment : Fragment() {
 
     private var _binding: FragmentStopwatchBinding? = null
     private val binding get() = _binding!!
     private lateinit var viewModel: StopwatchViewModel
+    private var knittingID: Long = Knitting.EMPTY.id
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         viewModel = ViewModelProvider(requireActivity()).get(StopwatchViewModel::class.java)
-        viewModel.start()
 
         val a = arguments
         if (a != null) {
-            viewModel.knittingID = a.getLong(EXTRA_KNITTING_ID)
-            viewModel.elapsedTime = KnittingsDataSource.getProject(viewModel.knittingID).duration
+            knittingID = a.getLong(EXTRA_KNITTING_ID)
+            viewModel.elapsedTime = KnittingsDataSource.getProject(knittingID).duration
         }
 
         setHasOptionsMenu(true)
+
+        viewModel.runTimer()
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-         _binding = FragmentStopwatchBinding.inflate(inflater, container, false)
-         val view = binding.root
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = FragmentStopwatchBinding.inflate(inflater, container, false)
+        val view = binding.root
 
-         viewModel.time.observe(viewLifecycleOwner, { time ->
+        viewModel.time.observe(viewLifecycleOwner, { time ->
             binding.timeView.text = time
-         })
+        })
 
-         binding.startButton.setOnClickListener {
-             viewModel.start()
-         }
+        binding.startButton.setOnClickListener {
+            viewModel.running = true
+            viewModel.previousTime = System.currentTimeMillis()
+        }
 
-         binding.stopButton.setOnClickListener {
-             viewModel.stop()
-             val knitting = KnittingsDataSource.getProject(viewModel.knittingID)
-             KnittingsDataSource.updateProject(knitting.copy(duration = viewModel.elapsedTime))
-         }
+        binding.stopButton.setOnClickListener {
+            viewModel.running = false
+            val knitting = KnittingsDataSource.getProject(knittingID)
+            KnittingsDataSource.updateProject(knitting.copy(duration = viewModel.elapsedTime))
+        }
 
-         binding.discardButton.setOnClickListener {
-              viewModel.stop()
-              viewModel.elapsedTime = 0
-              requireActivity().finish()
-         }
+        binding.discardButton.setOnClickListener {
+            viewModel.running = false
+            viewModel.elapsedTime = 0
+            requireActivity().finish()
+        }
 
-         return view
+        return view
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean = when (item.itemId) {
@@ -68,7 +76,7 @@ class StopwatchFragment : Fragment() {
             if (upIntent == null) {
                 throw IllegalStateException("No Parent Activity Intent")
             } else {
-                upIntent.putExtra(EXTRA_KNITTING_ID, viewModel.knittingID)
+                upIntent.putExtra(EXTRA_KNITTING_ID, knittingID)
                 NavUtils.navigateUpTo(requireActivity(), upIntent)
             }
             true
@@ -76,15 +84,10 @@ class StopwatchFragment : Fragment() {
         else -> super.onOptionsItemSelected(item)
     }
 
-    override fun onPause() {
-        super.onPause()
-        viewModel.timer.cancel()
-    }
-
-     companion object {
-          @JvmStatic
-            fun newInstance(knittinhID: Long) =
-              StopwatchFragment().apply {
+    companion object {
+        @JvmStatic
+        fun newInstance(knittinhID: Long) =
+            StopwatchFragment().apply {
                 arguments = Bundle().apply {
                     putLong(EXTRA_KNITTING_ID, knittinhID)
                 }
