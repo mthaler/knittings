@@ -1,5 +1,6 @@
 package com.mthaler.knittings.details
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.mthaler.knittings.database.DataSourceViewModel
@@ -13,7 +14,8 @@ class KnittingDetailsViewModel : DataSourceViewModel() {
 
     private var knittingID = Knitting.EMPTY.id
     private var deleted = false
-    val knitting = MutableLiveData<Knitting>()
+    val _knitting = MutableLiveData<Knitting>()
+    val knitting: LiveData<Knitting> = _knitting
 
     fun init(id: Long) {
         if (id != knittingID) {
@@ -22,7 +24,7 @@ class KnittingDetailsViewModel : DataSourceViewModel() {
                 val k =  withContext(Dispatchers.IO) {
                     KnittingsDataSource.getProject(id)
                 }
-                knitting.value = k
+                _knitting.value = k
             }
         }
     }
@@ -43,7 +45,7 @@ class KnittingDetailsViewModel : DataSourceViewModel() {
                 val k =  withContext(Dispatchers.IO) {
                     KnittingsDataSource.getProject(knittingID)
                 }
-                knitting.value = k
+                _knitting.value = k
             }
         }
     }
