@@ -25,7 +25,7 @@ class StopwatchViewModel: ViewModel() {
                 val secs = totalSeconds % 60
                 val s = String.format(Locale.getDefault(), "%d:%02d:%02d", hours, minutes, secs)
                 if (s != "") {
-                    _time.value = s
+                    _time.postValue(s)
                 }
             }
         }, 0, 500)
