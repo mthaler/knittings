@@ -13,7 +13,7 @@ class StopwatchViewModel: ViewModel() {
     var elapsedTime = 0L
     var previousTime = 0L
     var running = false
-    val _time = MutableLiveData("")
+    val _time = MutableLiveData("0:00:00")
 
     fun runTimer() {
         previousTime = System.currentTimeMillis()
@@ -24,7 +24,8 @@ class StopwatchViewModel: ViewModel() {
                 val hours = totalSeconds / 3600
                 val minutes = totalSeconds % 3600 / 60
                 val secs = totalSeconds % 60
-                _time.postValue(String.format(Locale.getDefault(), "%d:%02d:%02d", hours, minutes, secs))
+                val s = String.format(Locale.getDefault(), "%d:%02d:%02d", hours, minutes, secs)
+                _time.postValue(s)
                 if (running) {
                     val t = System.currentTimeMillis()
                     elapsedTime += (t - previousTime)
