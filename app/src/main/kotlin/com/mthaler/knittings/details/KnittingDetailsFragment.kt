@@ -191,7 +191,7 @@ class KnittingDetailsFragment : Fragment() {
             binding.knittingDuration.text = TimeUtils.formatDuration(knitting.duration)
             val c = knitting.category
             binding.knittingCategory.text = c?.name ?: ""
-            binding.knittingStatusImage.setImageResource(Status.getDrawableResource(it.context, knitting.status))
+            binding.knittingStatusImage.setImageResource(Status.getDrawableResource(knitting.status))
             binding.knittingStatus.text = Status.format(it.context, knitting.status)
             binding.ratingBar.rating = knitting.rating.toFloat()
         }

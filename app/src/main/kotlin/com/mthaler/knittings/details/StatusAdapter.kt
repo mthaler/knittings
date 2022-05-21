@@ -16,7 +16,7 @@ class StatusAdapter(context: Context) : ArrayAdapter<Status>(context, 0, Status.
         val status = getItem(position)!!
         val view = recycledView ?: LayoutInflater.from(context).inflate(R.layout.spinner_status_selected, parent, false)
         val statusImage = view.findViewById<ImageView>(R.id.statusImage)
-        statusImage.setImageResource(Status.getDrawableResource(context, status))
+        statusImage.setImageResource(Status.getDrawableResource(status))
         val statusText = view.findViewById<TextView>(R.id.statusText)
         statusText.text = Status.format(context, status)
         return view
@@ -26,7 +26,7 @@ class StatusAdapter(context: Context) : ArrayAdapter<Status>(context, 0, Status.
         val status = getItem(position)!!
         val view = recycledView ?: LayoutInflater.from(context).inflate(R.layout.spinner_status_row, parent, false)
         val statusImage = view.findViewById<ImageView>(R.id.statusImage)
-        statusImage.setImageResource(Status.getDrawableResource(context, status))
+        statusImage.setImageResource(Status.getDrawableResource(status))
         val statusText = view.findViewById<TextView>(R.id.statusText)
         statusText.text = Status.format(context, status)
         return view

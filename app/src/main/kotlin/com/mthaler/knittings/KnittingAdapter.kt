@@ -62,7 +62,7 @@ class KnittingAdapter(
             } else {
                 binding.knittingListItemCategoryIndicator.color = Color.WHITE
             }
-            binding.knittingListItemStatusImageView.setImageResource(Status.getDrawableResource(context, knitting.status))
+            binding.knittingListItemStatusImageView.setImageResource(Status.getDrawableResource(knitting.status))
         }
     }
 }

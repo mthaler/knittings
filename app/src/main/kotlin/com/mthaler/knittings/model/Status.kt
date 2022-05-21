@@ -57,7 +57,7 @@ enum class Status {
          * @param status status enum value
          * @return drawable resource for the given status
          */
-        fun getDrawableResource(context: Context, status: Status): Int = when (status) {
+        fun getDrawableResource(status: Status): Int = when (status) {
             IN_THE_WORKS -> R.drawable.ic_play_circle_outline_black_24dp
             FINISHED -> R.drawable.ic_check_circle_outline_24px
             PLANNED -> R.drawable.ic_outline_assignment_24px
