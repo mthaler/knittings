@@ -57,6 +57,13 @@ object KnittingsDataSource : AbstractObservableDatabase(), PhotoDataSource, Cate
         }
     }
 
+    val MIGRATION_3_4 = object : Migration(3, 4) {
+        override fun migrate(database: SupportSQLiteDatabase) {
+            database.execSQL(NeedleTable.SQL_ADD_TYPE)
+            Log.i(TAG, "Added type column to needle table")
+        }
+    }
+
     override val allProjects: ArrayList<Knitting>
         @Synchronized
         get() = context.database.readableDatabase.use { database ->
