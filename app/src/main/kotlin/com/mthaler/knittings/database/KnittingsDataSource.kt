@@ -4,6 +4,8 @@ import android.content.Context
 import android.database.Cursor
 import android.util.Log
 import androidx.preference.PreferenceManager
+import androidx.room.migration.Migration
+import androidx.sqlite.db.SupportSQLiteDatabase
 import java.io.File
 import java.util.ArrayList
 import java.util.Date
@@ -19,6 +21,23 @@ object KnittingsDataSource : AbstractObservableDatabase(), PhotoDataSource, Cate
     private const val TAG = "KnittingsDataSource"
 
     private lateinit var context: Context
+
+    val MIGRATION_1_2 = object : Migration(1, 2) {
+        override fun migrate(database: SupportSQLiteDatabase) {
+            database.execSQL(KnittingTable.SQL_ADD_DURATION)
+            Log.i(TAG, "Added duration colomn to knitting table")
+            database.execSQL(KnittingTable.SQL_ADD_CATEGORY)
+            Log.i(TAG, "Added category ID colomn to knitting table")
+
+            try {
+                CategoryTable.create(database)
+                Log.d(TAG, "Category table created")
+            } catch (ex: Exception) {
+                Log.e(TAG, "Could not create category table", ex)
+            }
+        }
+    }
+
 
     override val allProjects: ArrayList<Knitting>
         @Synchronized
