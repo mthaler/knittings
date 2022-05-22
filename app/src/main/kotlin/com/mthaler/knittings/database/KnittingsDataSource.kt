@@ -39,7 +39,7 @@ object KnittingsDataSource : AbstractObservableDatabase(), PhotoDataSource, Cate
     }
 
 
-    val MIGRATION_2_3 = object : Migration(1, 2) {
+    val MIGRATION_2_3 = object : Migration(2, 3) {
         override fun migrate(database: SupportSQLiteDatabase) {
             try {
                 database.execSQL(KnittingTable.SQL_ADD_STATUS)
