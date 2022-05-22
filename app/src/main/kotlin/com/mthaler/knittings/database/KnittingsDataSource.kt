@@ -64,6 +64,17 @@ object KnittingsDataSource : AbstractObservableDatabase(), PhotoDataSource, Cate
         }
     }
 
+    val MIGRATION_4_5 = object : Migration(4, 5) {
+        override fun migrate(database: SupportSQLiteDatabase) {
+            try {
+                RowCounterTable.create(database)
+                Log.d(TAG, "RowCounter table created")
+            } catch (ex: Exception) {
+                Log.e(TAG, "Could not create row counter table", ex)
+            }
+        }
+    }
+
     override val allProjects: ArrayList<Knitting>
         @Synchronized
         get() = context.database.readableDatabase.use { database ->
