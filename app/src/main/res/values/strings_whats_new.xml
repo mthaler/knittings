@@ -2,6 +2,7 @@
 <resources>
     <string name="whats_new_title">Whats New</string>
     <string name="whats_new"><![CDATA[
+        <h3>Version 0.9.35</h3>
         - Rewrote Dropbox Import / Export with WorkManager<br>
         <h3>Version 0.9.34</h3>
         - Added tests<br>
