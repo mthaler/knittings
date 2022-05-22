@@ -2,6 +2,7 @@
 <resources>
     <string name="whats_new_title">Whats New</string>
     <string name="whats_new"><![CDATA[
+        - Rewrote Dropbox Import / Export with WorkManager<br>
         <h3>Version 0.9.34</h3>
         - Added tests<br>
         - Upgrade Kotlin to 1.6.10<br>
