@@ -39,6 +39,24 @@ object KnittingsDataSource : AbstractObservableDatabase(), PhotoDataSource, Cate
     }
 
 
+    val MIGRATION_2_3 = object : Migration(1, 2) {
+        override fun migrate(database: SupportSQLiteDatabase) {
+            try {
+                database.execSQL(KnittingTable.SQL_ADD_STATUS)
+                Log.i(TAG, "Added status column to knitting table")
+            } catch (ex: Exception) {
+                Log.e(TAG, "Could not add status column to knitting table", ex)
+            }
+
+            try {
+                NeedleTable.create(database)
+                Log.d(TAG, "Needle table created")
+            } catch (ex: Exception) {
+                Log.e(TAG, "Could not create needle table", ex)
+            }
+        }
+    }
+
     override val allProjects: ArrayList<Knitting>
         @Synchronized
         get() = context.database.readableDatabase.use { database ->

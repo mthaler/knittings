@@ -2,6 +2,7 @@ package com.mthaler.knittings.database.table
 
 import android.content.ContentValues
 import android.database.sqlite.SQLiteDatabase
+import androidx.sqlite.db.SupportSQLiteDatabase
 import com.mthaler.knittings.database.table.*
 import com.mthaler.knittings.model.Needle
 
@@ -22,6 +23,19 @@ object NeedleTable {
     }
 
     fun create(db: SQLiteDatabase) {
+        val CREATE_NEEDLE_TABLE = "CREATE TABLE $IF_NOT_EXISTS $NEEDLES ( " +
+                "${Cols.ID} $INTEGER $PRIMARY_KEY $AUTOINCREMENT, " +
+                "${Cols.NAME} $TEXT $NOT_NULL, " +
+                "${Cols.DESCRIPTION} $TEXT $NOT_NULL, " +
+                "${Cols.SIZE} $TEXT $NOT_NULL, " +
+                "${Cols.LENGTH} $TEXT $NOT_NULL, " +
+                "${Cols.MATERIAL} $TEXT $NOT_NULL, " +
+                "${Cols.IN_USE} $INTEGER, " +
+                "${Cols.TYPE} $TEXT $NOT_NULL )"
+        db.execSQL(CREATE_NEEDLE_TABLE)
+    }
+
+    fun create(db: SupportSQLiteDatabase) {
         val CREATE_NEEDLE_TABLE = "CREATE TABLE $IF_NOT_EXISTS $NEEDLES ( " +
                 "${Cols.ID} $INTEGER $PRIMARY_KEY $AUTOINCREMENT, " +
                 "${Cols.NAME} $TEXT $NOT_NULL, " +
