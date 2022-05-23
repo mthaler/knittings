@@ -10,5 +10,5 @@ import com.mthaler.knittings.model.Status
  */
 data class SingleStatusFilter(val status: Status) : Filter<Knitting> {
 
-    override fun filter(knittings: List<Knitting>): List<Knitting> = knittings.filter { it.status == status }
+    override fun filter(items: List<Knitting>): List<Knitting> = items.filter { it.status == status }
 }
