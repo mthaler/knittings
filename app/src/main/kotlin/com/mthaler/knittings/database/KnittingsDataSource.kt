@@ -81,48 +81,22 @@ object KnittingsDataSource : AbstractObservableDatabase(), PhotoDataSource, Cate
         }
     }
 
-//    val db = Room.databaseBuilder(
-//        context,
-//        AppDatabase::class.java, "database-name"
-//    ).addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5, MIGRATION_5_6).build()
+    val db = Room.databaseBuilder(
+        context,
+        AppDatabase::class.java, "database-name"
+    ).addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5, MIGRATION_5_6).build()
 
 
     override val allProjects: List<Knitting>
-        @Synchronized
-        get() = context.database.readableDatabase.use { database ->
-            val knittings = ArrayList<Knitting>()
-            val cursor = database.query(KnittingTable.KNITTINGS, KnittingTable.Columns, null, null, null, null, null)
-            cursor.moveToFirst()
-            var knitting: Knitting
-            while (!cursor.isAfterLast) {
-                knitting = cursorToKnitting(cursor)
-                knittings.add(knitting)
-                Log.d(TAG, "Read knitting " + knitting.id + ", default photo: " + knitting.defaultPhoto)
-                cursor.moveToNext()
-            }
-            cursor.close()
-            return knittings
-        }
+        get() = db.knittingDao().getAll()
 
     override val allPhotos: List<Photo>
-        @Synchronized
-        get() = context.database.readableDatabase.use { database ->
-            val photos = ArrayList<Photo>()
-            val cursor = database.query(PhotoTable.PHOTOS, PhotoTable.Columns, null, null, null, null, null)
-            val result = cursor.toList(PhotoConverter::convert)
-            photos.addAll(result)
-            return photos
-        }
+        get() = db.photoDao().getAll()
 
     override val allCategories: List<Category>
-        @Synchronized
-        get() = context.database.readableDatabase.use { database ->
-            val cursor = database.query(CategoryTable.CATEGORY, CategoryTable.Columns, null, null, null, null, null)
-            cursor.toList(CategoryConverter::convert)
-        }
+        get() = db.categoryDao().getAll()
 
-    val allNeedles: ArrayList<Needle>
-        @Synchronized
+    val allNeedles: List<Needle>
         get() = context.database.readableDatabase.use { database ->
             val needles = ArrayList<Needle>()
             val cursor = database.query(NeedleTable.NEEDLES, NeedleTable.Columns, null, null, null, null, null)
@@ -132,7 +106,7 @@ object KnittingsDataSource : AbstractObservableDatabase(), PhotoDataSource, Cate
             return needles
         }
 
-    val allRowCounters: ArrayList<RowCounter>
+    val allRowCounters: List<RowCounter>
         @Synchronized
         get() = context.database.readableDatabase.use { database ->
             val rowCounters = ArrayList<RowCounter>()
