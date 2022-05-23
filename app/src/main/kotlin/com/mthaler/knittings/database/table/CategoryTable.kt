@@ -6,7 +6,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 import com.mthaler.knittings.model.Category
 
 object CategoryTable {
-    val CATEGORY = "category"
+    const val CATEGORY = "category"
 
     val Columns = arrayOf(Cols.ID, Cols.NAME, Cols.COLOR)
 
