@@ -2,9 +2,10 @@ package com.mthaler.knittings.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.mthaler.knittings.database.table.NeedleTable
 import java.io.Serializable
 
-@Entity
+@Entity(tableName = NeedleTable.NEEDLES)
 data class Needle(
     @PrimaryKey val id: Long = -1,
     val name: String = "",

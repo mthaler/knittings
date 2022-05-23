@@ -7,7 +7,7 @@ import com.mthaler.knittings.database.table.*
 import com.mthaler.knittings.model.Needle
 
 object NeedleTable {
-    val NEEDLES = "needles"
+    const val NEEDLES = "needles"
 
     val Columns = arrayOf(Cols.ID, Cols.NAME, Cols.DESCRIPTION, Cols.SIZE, Cols.LENGTH, Cols.MATERIAL, Cols.IN_USE, Cols.TYPE)
 
