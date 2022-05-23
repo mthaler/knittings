@@ -15,7 +15,7 @@ class PhotoGalleryViewModel(application: Application) : DataSourceViewModel() {
 
     private val ds: PhotoDataSource = (application as DatabaseApplication).getPhotoDataSource()
     private var ownerID = -1L
-    val photos = MutableLiveData<ArrayList<Photo>>()
+    val photos = MutableLiveData<List<Photo>>()
 
     fun init(id: Long) {
         if (id != ownerID) {

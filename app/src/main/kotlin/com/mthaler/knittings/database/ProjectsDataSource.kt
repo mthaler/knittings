@@ -5,7 +5,7 @@ import java.util.ArrayList
 
 interface ProjectsDataSource<T : Project> {
 
-    val allProjects: ArrayList<T>
+    val allProjects: List<T>
 
     fun addProject(project: T, manualID: Boolean = false): T
 

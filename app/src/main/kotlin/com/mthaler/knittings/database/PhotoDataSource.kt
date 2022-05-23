@@ -5,7 +5,7 @@ import java.util.ArrayList
 
 interface PhotoDataSource {
 
-    val allPhotos: ArrayList<Photo>
+    val allPhotos: List<Photo>
 
     fun getPhoto(id: Long): Photo
 
@@ -17,7 +17,7 @@ interface PhotoDataSource {
 
     fun deleteAllPhotos()
 
-    fun getAllPhotos(id: Long): ArrayList<Photo>
+    fun getAllPhotos(id: Long): List<Photo>
 
     fun setDefaultPhoto(ownerID: Long, photo: Photo)
 }

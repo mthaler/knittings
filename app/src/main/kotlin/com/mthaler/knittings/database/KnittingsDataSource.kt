@@ -4,6 +4,7 @@ import android.content.Context
 import android.database.Cursor
 import android.util.Log
 import androidx.preference.PreferenceManager
+import androidx.room.Room
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import java.io.File
@@ -15,8 +16,7 @@ import com.mthaler.knittings.R
 import com.mthaler.knittings.model.*
 import java.lang.Exception
 
-object KnittingsDataSource : AbstractObservableDatabase(), PhotoDataSource, CategoryDataSource,
-    ProjectsDataSource<Knitting> {
+object KnittingsDataSource : AbstractObservableDatabase(), PhotoDataSource, CategoryDataSource, ProjectsDataSource<Knitting> {
 
     private const val TAG = "KnittingsDataSource"
 
@@ -81,8 +81,13 @@ object KnittingsDataSource : AbstractObservableDatabase(), PhotoDataSource, Cate
         }
     }
 
+//    val db = Room.databaseBuilder(
+//        context,
+//        AppDatabase::class.java, "database-name"
+//    ).addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5, MIGRATION_5_6).build()
 
-    override val allProjects: ArrayList<Knitting>
+
+    override val allProjects: List<Knitting>
         @Synchronized
         get() = context.database.readableDatabase.use { database ->
             val knittings = ArrayList<Knitting>()
@@ -99,7 +104,7 @@ object KnittingsDataSource : AbstractObservableDatabase(), PhotoDataSource, Cate
             return knittings
         }
 
-    override val allPhotos: ArrayList<Photo>
+    override val allPhotos: List<Photo>
         @Synchronized
         get() = context.database.readableDatabase.use { database ->
             val photos = ArrayList<Photo>()

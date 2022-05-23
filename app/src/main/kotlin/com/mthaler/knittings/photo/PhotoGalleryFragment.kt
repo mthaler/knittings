@@ -81,7 +81,7 @@ class PhotoGalleryFragment : Fragment() {
         viewModel.init(ownerID)
         viewModel.photos.observe(viewLifecycleOwner, { photos ->
             // show the newest photos first. The id is incremented for each photo that is added, thus we can sort by id
-            photos.sortByDescending { it.id }
+            val photos = photos.sortedByDescending { it.id }
             photoGalleryAdapter.setPhotos(photos)
         })
     }
