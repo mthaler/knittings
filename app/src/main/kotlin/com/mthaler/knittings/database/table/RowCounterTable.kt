@@ -8,7 +8,7 @@ import com.mthaler.knittings.model.RowCounter
 
 object RowCounterTable {
 
-    val ROW_COUNTERS = "row_counters"
+    const val ROW_COUNTERS = "row_counters"
 
     object Cols {
         val ID = "_id"

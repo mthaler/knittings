@@ -2,9 +2,10 @@ package com.mthaler.knittings.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.mthaler.knittings.database.table.RowCounterTable
 import java.io.Serializable
 
-@Entity
+@Entity(tableName = RowCounterTable.ROW_COUNTERS)
 data class RowCounter(
     @PrimaryKey val id: Long = -1,
     val totalRows: Int = 0,
