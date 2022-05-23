@@ -7,7 +7,7 @@ import com.mthaler.knittings.model.Photo
 
 object PhotoTable {
 
-    val PHOTOS = "photos"
+    const val PHOTOS = "photos"
 
     object Cols {
         val ID = "_id"
