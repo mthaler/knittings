@@ -88,15 +88,41 @@ object KnittingsDataSource : AbstractObservableDatabase(), PhotoDataSource, Cate
 
 
     override val allProjects: List<Knitting>
-        get() = db.knittingDao().getAll()
+        @Synchronized
+        get() = context.database.readableDatabase.use { database ->
+            val knittings = ArrayList<Knitting>()
+            val cursor = database.query(KnittingTable.KNITTINGS, KnittingTable.Columns, null, null, null, null, null)
+            cursor.moveToFirst()
+            var knitting: Knitting
+            while (!cursor.isAfterLast) {
+                knitting = cursorToKnitting(cursor)
+                knittings.add(knitting)
+                Log.d(TAG, "Read knitting " + knitting.id + ", default photo: " + knitting.defaultPhoto)
+                cursor.moveToNext()
+            }
+            cursor.close()
+            return knittings
+        }
 
     override val allPhotos: List<Photo>
-        get() = db.photoDao().getAll()
+        @Synchronized
+        get() = context.database.readableDatabase.use { database ->
+            val photos = ArrayList<Photo>()
+            val cursor = database.query(PhotoTable.PHOTOS, PhotoTable.Columns, null, null, null, null, null)
+            val result = cursor.toList(PhotoConverter::convert)
+            photos.addAll(result)
+            return photos
+        }
 
     override val allCategories: List<Category>
-        get() = db.categoryDao().getAll()
+        @Synchronized
+        get() = context.database.readableDatabase.use { database ->
+            val cursor = database.query(CategoryTable.CATEGORY, CategoryTable.Columns, null, null, null, null, null)
+            cursor.toList(CategoryConverter::convert)
+        }
 
     val allNeedles: List<Needle>
+        @Synchronized
         get() = context.database.readableDatabase.use { database ->
             val needles = ArrayList<Needle>()
             val cursor = database.query(NeedleTable.NEEDLES, NeedleTable.Columns, null, null, null, null, null)
