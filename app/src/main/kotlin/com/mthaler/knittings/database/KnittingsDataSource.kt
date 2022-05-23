@@ -75,6 +75,13 @@ object KnittingsDataSource : AbstractObservableDatabase(), PhotoDataSource, Cate
         }
     }
 
+    val MIGRATION_5_6 = object : Migration(5, 6) {
+        override fun migrate(database: SupportSQLiteDatabase) {
+            // Empty implementation, because the schema isn't changing.
+        }
+    }
+
+
     override val allProjects: ArrayList<Knitting>
         @Synchronized
         get() = context.database.readableDatabase.use { database ->
