@@ -81,10 +81,10 @@ object KnittingsDataSource : AbstractObservableDatabase(), PhotoDataSource, Cate
         }
     }
 
-    val db = Room.databaseBuilder(
-        context,
-        AppDatabase::class.java, "database-name"
-    ).addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5, MIGRATION_5_6).build()
+//    val db = Room.databaseBuilder(
+//        context,
+//        AppDatabase::class.java, "database-name"
+//    ).addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5, MIGRATION_5_6).build()
 
 
     override val allProjects: List<Knitting>
