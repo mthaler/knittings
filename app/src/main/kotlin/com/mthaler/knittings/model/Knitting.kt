@@ -2,13 +2,14 @@ package com.mthaler.knittings.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.mthaler.knittings.database.table.KnittingTable
 import java.io.Serializable
 import java.util.Date
 
 /**
  * The Knitting class stores data for a single knitting
  */
-@Entity
+@Entity(tableName = KnittingTable.KNITTINGS)
 data class Knitting(
     @PrimaryKey override val id: Long = -1,
     override val title: String = "",

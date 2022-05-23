@@ -9,7 +9,7 @@ import com.mthaler.knittings.model.Knitting
  * Class that defines the knittings database table schema
  */
 object KnittingTable {
-    val KNITTINGS = "knittings"
+    const val KNITTINGS = "knittings"
 
     val Columns = arrayOf(Cols.ID, Cols.TITLE, Cols.DESCRIPTION, Cols.STARTED, Cols.FINISHED,
             Cols.NEEDLE_DIAMETER, Cols.SIZE, Cols.DEFAULT_PHOTO_ID, Cols.RATING, Cols.DURATION,
