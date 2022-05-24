@@ -1,12 +1,8 @@
 package com.mthaler.knittings.database
 
-import android.content.Context
 import android.database.Cursor
 import android.util.Log
 import androidx.preference.PreferenceManager
-import androidx.room.Room
-import androidx.room.migration.Migration
-import androidx.sqlite.db.SupportSQLiteDatabase
 import java.io.File
 import java.util.ArrayList
 import java.util.Date
@@ -40,17 +36,12 @@ object KnittingsDataSource : AbstractObservableDatabase(), PhotoDataSource, Cate
 
     @Synchronized
     override fun addProject(project: Knitting, manualID: Boolean): Knitting {
-        db.knittingDao().insertAll(project)
-        context.database.writableDatabase.use { database ->
-            val values = KnittingTable.createContentValues(project, manualID)
-            val id = database.insert(KnittingTable.KNITTINGS, null, values)
-            val cursor = database.query(KnittingTable.KNITTINGS,
-                    KnittingTable.Columns, KnittingTable.Cols.ID + "=" + id, null, null, null, null)
-            cursor.moveToFirst()
-            val knittings = cursorToKnitting(cursor)
-            cursor.close()
+        if (manualID != 0) {
+
+        } else {
+            val id = db.knittingDao().insert(project)
             notifyObservers()
-            return knittings
+            return project.copy(id = id)
         }
     }
 
