@@ -20,130 +20,27 @@ object KnittingsDataSource : AbstractObservableDatabase(), PhotoDataSource, Cate
 
     private const val TAG = "KnittingsDataSource"
 
-    private lateinit var context: Context
-
-    val MIGRATION_1_2 = object : Migration(1, 2) {
-        override fun migrate(database: SupportSQLiteDatabase) {
-            database.execSQL(KnittingTable.SQL_ADD_DURATION)
-            Log.i(TAG, "Added duration colomn to knitting table")
-            database.execSQL(KnittingTable.SQL_ADD_CATEGORY)
-            Log.i(TAG, "Added category ID colomn to knitting table")
-
-            try {
-                CategoryTable.create(database)
-                Log.d(TAG, "Category table created")
-            } catch (ex: Exception) {
-                Log.e(TAG, "Could not create category table", ex)
-            }
-        }
-    }
-
-
-    val MIGRATION_2_3 = object : Migration(2, 3) {
-        override fun migrate(database: SupportSQLiteDatabase) {
-            try {
-                database.execSQL(KnittingTable.SQL_ADD_STATUS)
-                Log.i(TAG, "Added status column to knitting table")
-            } catch (ex: Exception) {
-                Log.e(TAG, "Could not add status column to knitting table", ex)
-            }
-
-            try {
-                NeedleTable.create(database)
-                Log.d(TAG, "Needle table created")
-            } catch (ex: Exception) {
-                Log.e(TAG, "Could not create needle table", ex)
-            }
-        }
-    }
-
-    val MIGRATION_3_4 = object : Migration(3, 4) {
-        override fun migrate(database: SupportSQLiteDatabase) {
-            database.execSQL(NeedleTable.SQL_ADD_TYPE)
-            Log.i(TAG, "Added type column to needle table")
-        }
-    }
-
-    val MIGRATION_4_5 = object : Migration(4, 5) {
-        override fun migrate(database: SupportSQLiteDatabase) {
-            try {
-                RowCounterTable.create(database)
-                Log.d(TAG, "RowCounter table created")
-            } catch (ex: Exception) {
-                Log.e(TAG, "Could not create row counter table", ex)
-            }
-        }
-    }
-
-    val MIGRATION_5_6 = object : Migration(5, 6) {
-        override fun migrate(database: SupportSQLiteDatabase) {
-            // Empty implementation, because the schema isn't changing.
-        }
-    }
-
-//    val db = Room.databaseBuilder(
-//        context,
-//        AppDatabase::class.java, "database-name"
-//    ).addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5, MIGRATION_5_6).build()
-
+    private lateinit var db: AppDatabase
 
     override val allProjects: List<Knitting>
-        @Synchronized
-        get() = context.database.readableDatabase.use { database ->
-            val knittings = ArrayList<Knitting>()
-            val cursor = database.query(KnittingTable.KNITTINGS, KnittingTable.Columns, null, null, null, null, null)
-            cursor.moveToFirst()
-            var knitting: Knitting
-            while (!cursor.isAfterLast) {
-                knitting = cursorToKnitting(cursor)
-                knittings.add(knitting)
-                Log.d(TAG, "Read knitting " + knitting.id + ", default photo: " + knitting.defaultPhoto)
-                cursor.moveToNext()
-            }
-            cursor.close()
-            return knittings
-        }
+        get() = db.knittingDao().getAll()
 
     override val allPhotos: List<Photo>
-        @Synchronized
-        get() = context.database.readableDatabase.use { database ->
-            val photos = ArrayList<Photo>()
-            val cursor = database.query(PhotoTable.PHOTOS, PhotoTable.Columns, null, null, null, null, null)
-            val result = cursor.toList(PhotoConverter::convert)
-            photos.addAll(result)
-            return photos
-        }
+        get() = db.photoDao().getAll()
 
     override val allCategories: List<Category>
         @Synchronized
-        get() = context.database.readableDatabase.use { database ->
-            val cursor = database.query(CategoryTable.CATEGORY, CategoryTable.Columns, null, null, null, null, null)
-            cursor.toList(CategoryConverter::convert)
-        }
+        get() = db.categoryDao().getAll()
 
     val allNeedles: List<Needle>
-        @Synchronized
-        get() = context.database.readableDatabase.use { database ->
-            val needles = ArrayList<Needle>()
-            val cursor = database.query(NeedleTable.NEEDLES, NeedleTable.Columns, null, null, null, null, null)
-            val converter = NeedleConverter(context)
-            val result = cursor.toList(converter::convert)
-            needles.addAll(result)
-            return needles
-        }
+        get() = db.needleDao().getAll()
 
     val allRowCounters: List<RowCounter>
-        @Synchronized
-        get() = context.database.readableDatabase.use { database ->
-            val rowCounters = ArrayList<RowCounter>()
-            val cursor = database.query(RowCounterTable.ROW_COUNTERS, RowCounterTable.Columns, null, null, null, null, null)
-            val result = cursor.toList(RowCounterConverter::convert)
-            rowCounters.addAll(result)
-            return rowCounters
-        }
+        get() = db.rowCounterDao().getAll()
 
     @Synchronized
     override fun addProject(project: Knitting, manualID: Boolean): Knitting {
+        db.knittingDao().insertAll(project)
         context.database.writableDatabase.use { database ->
             val values = KnittingTable.createContentValues(project, manualID)
             val id = database.insert(KnittingTable.KNITTINGS, null, values)
@@ -608,7 +505,7 @@ object KnittingsDataSource : AbstractObservableDatabase(), PhotoDataSource, Cate
         }
     }
 
-    fun init(context: Context) {
-        this.context = context
+    fun init(db: AppDatabase) {
+        this.db = db
     }
 }
