@@ -1,5 +1,6 @@
 package com.mthaler.knittings.database.dao
 
+import androidx.lifecycle.LiveData
 import androidx.room.*
 import com.mthaler.knittings.model.Category
 
@@ -14,4 +15,7 @@ interface CategoryDao {
 
     @Query("SELECT * FROM CATEGORY")
     fun getAll(): List<Category>
+
+    @Query("SELECT * FROM CATEGORY WHERE id=:id")
+    fun get(id: Long): LiveData<Category>
 }
