@@ -7,8 +7,8 @@ import com.mthaler.knittings.model.Category
 @Dao
 interface CategoryDao {
 
-    @Insert
-    fun insertAll(vararg categorieds: Category)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insert(knitting: Category): Long
 
     @Delete
     fun delete(category: Category)

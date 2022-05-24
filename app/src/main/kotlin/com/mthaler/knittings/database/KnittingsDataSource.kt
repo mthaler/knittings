@@ -25,7 +25,6 @@ object KnittingsDataSource : AbstractObservableDatabase(), PhotoDataSource, Cate
         get() = db.photoDao().getAll()
 
     override val allCategories: List<Category>
-        @Synchronized
         get() = db.categoryDao().getAll()
 
     val allNeedles: List<Needle>
@@ -34,18 +33,12 @@ object KnittingsDataSource : AbstractObservableDatabase(), PhotoDataSource, Cate
     val allRowCounters: List<RowCounter>
         get() = db.rowCounterDao().getAll()
 
-    @Synchronized
     override fun addProject(project: Knitting, manualID: Boolean): Knitting {
-        if (manualID != 0) {
-
-        } else {
-            val id = db.knittingDao().insert(project)
-            notifyObservers()
-            return project.copy(id = id)
-        }
+         val id = db.knittingDao().insert(project)
+         notifyObservers()
+         return project.copy(id = id)
     }
 
-    @Synchronized
     override fun updateProject(project: Knitting): Knitting {
         val result = updateKnittingImpl(project)
         notifyObservers()
@@ -54,27 +47,15 @@ object KnittingsDataSource : AbstractObservableDatabase(), PhotoDataSource, Cate
 
     private fun updateKnittingImpl(knitting: Knitting): Knitting {
         Log.d(TAG, "Updating knitting " + knitting + ", default photo: " + knitting.defaultPhoto)
-        context.database.writableDatabase.use { database ->
-            val values = KnittingTable.createContentValues(knitting)
-            database.update(KnittingTable.KNITTINGS,
-                    values,
-                    KnittingTable.Cols.ID + "=" + knitting.id, null)
-            val cursor = database.query(KnittingTable.KNITTINGS,
-                    KnittingTable.Columns, KnittingTable.Cols.ID + "=" + knitting.id, null, null, null, null)
-            cursor.moveToFirst()
-            val result = cursorToKnitting(cursor)
-            cursor.close()
-            return result
-        }
+        db.knittingDao().insert(knitting)
+        return knitting
     }
 
-    @Synchronized
     override fun deleteProject(project: Knitting) {
         deleteKnittingImpl(project)
         notifyObservers()
     }
 
-    @Synchronized
     override fun deleteAllProjects() {
         for (knitting in allProjects) {
             deleteKnittingImpl(knitting)
@@ -83,14 +64,10 @@ object KnittingsDataSource : AbstractObservableDatabase(), PhotoDataSource, Cate
     }
 
     private fun deleteKnittingImpl(knitting: Knitting) {
-        val id = knitting.id
         // delete all photos from the database
         deleteAllPhotos(knitting)
         deleteAllRowCounters(knitting)
-        context.database.writableDatabase.use { database ->
-            database.delete(KnittingTable.KNITTINGS, KnittingTable.Cols.ID + "=" + id, null)
-            Log.d(TAG, "Deleted knitting $id: $knitting")
-        }
+        db.knittingDao().delete(knitting)
     }
 
     @Synchronized
