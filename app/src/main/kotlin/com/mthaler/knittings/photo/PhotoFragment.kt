@@ -15,7 +15,6 @@ import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
 import androidx.lifecycle.lifecycleScope
-import androidx.preference.PreferenceManager
 import com.mthaler.knittings.DatabaseApplication
 import com.mthaler.knittings.DeleteDialog
 import com.mthaler.knittings.R
@@ -133,15 +132,6 @@ class PhotoFragment : Fragment() {
                 true
             }
             R.id.menu_item_rotate_photo -> {
-                true
-            }
-            R.id.menu_item_share -> {
-                val path = photo.filename.absolutePath
-                val prefs = PreferenceManager.getDefaultSharedPreferences(requireActivity())
-                val size = Integer.parseInt(prefs.getString(resources.getString(R.string.key_share_photo_size), "1200")!!)
-                val scaled = PictureUtils.decodeSampledBitmapFromPath(path, size, size)
-                val uri = saveImage(scaled)
-                uri?.let { shareImageUri(it) }
                 true
             }
             R.id.menu_item_save_photo -> {
