@@ -7,6 +7,5 @@
     <string name="delete_photo">Delete photo</string>
     <string name="set_main_photo">Use as preview</string>
     <string name="rotate_photo">Rotate</string>
-    <string name="share_photo">Share</string>
     <string name="set_preview">Set as preview</string>
 </resources>
