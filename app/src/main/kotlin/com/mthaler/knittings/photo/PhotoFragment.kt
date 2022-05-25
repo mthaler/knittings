@@ -1,19 +1,13 @@
 package com.mthaler.knittings.photo
 
-import android.content.Intent
-import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import com.google.android.material.snackbar.Snackbar
 import androidx.fragment.app.Fragment
-import androidx.core.content.FileProvider
 import android.view.*
 import android.widget.ImageView
 import com.mthaler.knittings.database.Extras.EXTRA_PHOTO_ID
-import java.io.File
-import java.io.FileOutputStream
-import java.io.IOException
 import androidx.lifecycle.lifecycleScope
 import com.mthaler.knittings.DatabaseApplication
 import com.mthaler.knittings.DeleteDialog
@@ -163,34 +157,6 @@ class PhotoFragment : Fragment() {
         view?.let {
             Snackbar.make(it, "Used as main photo", Snackbar.LENGTH_SHORT).show()
         }
-    }
-
-    private fun saveImage(image: Bitmap): Uri? {
-        // TODO - Should be processed in another thread
-        var uri: Uri? = null
-        val imagesFolder = File(requireContext().cacheDir, "images")
-        try {
-            imagesFolder.mkdirs()
-            val file = File(imagesFolder, "shared_image.jpg")
-
-            val stream = FileOutputStream(file)
-            image.compress(Bitmap.CompressFormat.JPEG, 90, stream)
-            stream.flush()
-            stream.close()
-            val ctx = requireContext()
-            uri = FileProvider.getUriForFile(ctx, (ctx.applicationContext as DatabaseApplication).getApplicationSettings().getFileProviderAuthority(), file)
-        } catch (e: IOException) {
-            error("IOException while trying to write file for sharing: " + e.message)
-        }
-        return uri
-    }
-
-    private fun shareImageUri(uri: Uri) {
-        val intent = Intent(Intent.ACTION_SEND)
-        intent.putExtra(Intent.EXTRA_STREAM, uri)
-        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-        intent.type = "image/png"
-        startActivity(intent)
     }
 
     private fun deletePhoto() {

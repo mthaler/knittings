@@ -30,8 +30,6 @@ class MyApplication : MultiDexApplication(), DatabaseApplication {
 
     override fun getApplicationSettings(): ApplicationSettings = object : ApplicationSettings {
 
-        override fun getFileProviderAuthority(): String = "com.mthaler.knittings.fileprovider"
-
         override fun emptyCategoryListBackground(): Int = R.drawable.categories
 
         override fun categoryListBackground(): Int = R.drawable.categories2
