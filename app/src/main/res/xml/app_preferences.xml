@@ -23,18 +23,6 @@
             app:icon="@drawable/ic_photo_camera_black_24dp"/>
     </androidx.preference.PreferenceCategory>
     <androidx.preference.PreferenceCategory
-        android:key="category_sharing"
-        android:title="@string/pref_header_sharing"
-        app:iconSpaceReserved="false">
-        <androidx.preference.EditTextPreference
-            android:key="@string/key_share_photo_size"
-            android:defaultValue="1200"
-            android:inputType="number"
-            android:title="@string/pref_size_of_shared_photos"
-            app:useSimpleSummaryProvider="true"
-            app:icon="@drawable/ic_photo_size_select_large_black_24dp"/>
-    </androidx.preference.PreferenceCategory>
-    <androidx.preference.PreferenceCategory
         android:key="category_development"
         android:title="@string/pref_header_development"
         app:iconSpaceReserved="false">
