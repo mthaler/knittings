@@ -91,18 +91,6 @@ class PhotoGalleryFragment : Fragment() {
         inflater.inflate(R.menu.photo_gallery, menu)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            R.id.menu_item_add_photo -> {
-                val ctx = requireContext()
-                val d = TakePhotoDialog.create(ctx, (ctx.applicationContext as DatabaseApplication).getApplicationSettings().getFileProviderAuthority(), layoutInflater, this::takePhoto, this::importPhoto)
-                d.show()
-                true
-            }
-            else -> super.onOptionsItemSelected(item)
-        }
-    }
-
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (resultCode != Activity.RESULT_OK) {
             return
