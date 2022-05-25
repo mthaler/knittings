@@ -9,7 +9,6 @@ import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
-import com.mthaler.knittings.DatabaseApplication
 import com.mthaler.knittings.R
 import com.mthaler.knittings.database.Extras.EXTRA_OWNER_ID
 import com.mthaler.knittings.databinding.FragmentPhotoGalleryBinding
@@ -89,6 +88,17 @@ class PhotoGalleryFragment : Fragment() {
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.photo_gallery, menu)
+    }
+
+     override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.menu_item_add_photo -> {
+                val d = TakePhotoDialog.create(requireContext(), "com.mthaler.knittings.fileprovider", layoutInflater, this::takePhoto, this::importPhoto)
+                d.show()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
