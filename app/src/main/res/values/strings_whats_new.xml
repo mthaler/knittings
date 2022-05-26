@@ -2,6 +2,8 @@
 <resources>
     <string name="whats_new_title">Whats New</string>
     <string name="whats_new"><![CDATA[
+        <h3>Version 0.9.38</h3>
+        - Fixed Crash when taking photos<br>
         <h3>Version 0.9.37</h3>
         - Use ActivityResultLauncher for EditKnittingDetailsFragment<br>
         <h3>Version 0.9.36</h3>
