@@ -4,6 +4,8 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.*
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.app.NavUtils
@@ -35,6 +37,19 @@ class EditKnittingDetailsFragment : Fragment() {
     private var finished: Date? = null
     private var duration = 0L
     private var category: Category? = null
+
+    private val launcher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+        if (result.resultCode == Activity.RESULT_OK) {
+             result.data?.let {
+                val categoryID = it.getLongExtra(EXTRA_CATEGORY_ID, Category.EMPTY.id)
+                if (categoryID != Category.EMPTY.id) {
+                    val c = KnittingsDataSource.getCategory(categoryID)
+                    binding.knittingCategory.text = c?.name ?: resources.getString(R.string.edit_knitting_details_category_hint)
+                    category = c
+                }
+            }
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -134,7 +149,7 @@ class EditKnittingDetailsFragment : Fragment() {
         }
         binding.knittingCategory.setOnClickListener {
             val i = SelectCategoryActivity.newIntent(requireContext(), knittingID)
-            startActivityForResult(i, REQUEST_SELECT_CATEGORY)
+            launcher.launch(i)
         }
 
         return view
@@ -196,23 +211,6 @@ class EditKnittingDetailsFragment : Fragment() {
         }
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode != Activity.RESULT_OK) {
-            return
-        }
-        if (requestCode == REQUEST_SELECT_CATEGORY) {
-            data?.let {
-                val categoryID = it.getLongExtra(EXTRA_CATEGORY_ID, Category.EMPTY.id)
-                if (categoryID != Category.EMPTY.id) {
-                    val c = KnittingsDataSource.getCategory(categoryID)
-                    binding.knittingCategory.text = c?.name ?: resources.getString(R.string.edit_knitting_details_category_hint)
-                    category = c
-                }
-            }
-        }
-    }
-
     fun onBackPressed() {
         activity?.let {
             // Respond to the action bar's Up/Home button
@@ -269,10 +267,7 @@ class EditKnittingDetailsFragment : Fragment() {
         private const val EXTRA_DURATION = "com.mthaler.knittings.needle.DURATION"
         private const val EXTRA_CATEGORY = "com.mthaler.knittings.needle.CATEGORY"
         private const val EXTRA_EDIT_ONLY = "com.mthaler.knittings.edit_only"
-        private const val DIALOG_DATE = "date"
-        private const val REQUEST_STARTED = 0
-        private const val REQUEST_FINISHED = 1
-        private const val REQUEST_SELECT_CATEGORY = 2
+        private const val REQUEST_SELECT_CATEGORY = 1
 
         @JvmStatic
         fun newInstance(knittingID: Long, editOnly: Boolean) =
