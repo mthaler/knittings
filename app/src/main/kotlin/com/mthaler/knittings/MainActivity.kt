@@ -1,6 +1,7 @@
 package com.mthaler.knittings
 
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -164,14 +165,18 @@ class MainActivity : AbstractMainActivity(), NavigationView.OnNavigationItemSele
                 if (hasCategoryFilter) {
                     sb.append(resources.getString(R.string.category))
                 }
-                if (hasCategoryFilter && hasStatusFilter) {
-                    sb.append(", ")
+                try {
+                    if (hasCategoryFilter && hasStatusFilter) {
+                        sb.append(", ")
+                    }
+                    if (hasStatusFilter) {
+                        sb.append(resources.getString(R.string.status))
+                    }
+                    activeFilters.text = sb.toString()
+                    activeFilters.visibility = View.VISIBLE
+                } catch (ex: java.lang.Exception) {
+                    Log.e(MainActivity::class.simpleName, "Could not append filter or status", ex)
                 }
-                if (hasStatusFilter) {
-                    sb.append(resources.getString(R.string.status))
-                }
-                activeFilters.text = sb.toString()
-                activeFilters.visibility = View.VISIBLE
             }
             adapter.setKnittings(knittings ?: emptyList())
         })
