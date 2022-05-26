@@ -2,7 +2,7 @@
 <resources>
     <string name="whats_new_title">Whats New</string>
     <string name="whats_new"><![CDATA[
-         <h3>Version 0.9.37</h3>
+        <h3>Version 0.9.37</h3>
         - ActivityResultLauncher wird für EditKnittingDetailsFragment verwendet<br>
         <h3>Version 0.9.36</h3>
         - Teilen von Photos entfernt<br>
