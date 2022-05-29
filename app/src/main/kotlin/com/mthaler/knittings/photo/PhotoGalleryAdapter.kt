@@ -51,7 +51,7 @@ class PhotoGalleryAdapter(context: Context, private val lifecycleScope: Lifecycl
         var image: ImageView = view.findViewById(R.id.image)
 
         init {
-            view.setOnClickListener { onItemClick(photos[adapterPosition]) }
+            view.setOnClickListener { onItemClick(photos[bindingAdapterPosition]) }
         }
 
         fun bind(photo: Photo) {

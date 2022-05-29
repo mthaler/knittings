@@ -188,7 +188,7 @@ class NeedleListFragment : Fragment() {
                 }
                     dialog.dismiss()
                 }
-                builder.setNegativeButton(R.string.dialog_button_cancel) { dialog, which -> dialog.dismiss() }
+                builder.setNegativeButton(R.string.dialog_button_cancel) { dialog, _ -> dialog.dismiss() }
                 val dialog = builder.create()
                 dialog.show()
                 true
