@@ -1,11 +1,10 @@
 package com.mthaler.knittings
 
 import android.os.Bundle
-import android.util.Log
+import android.text.TextUtils
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.TextView
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.view.ActionMode
@@ -18,16 +17,13 @@ import com.google.android.material.navigation.NavigationView
 import com.mthaler.knittings.category.CategoryListActivity
 import com.mthaler.knittings.dropbox.DropboxExportActivity
 import com.mthaler.knittings.dropbox.DropboxImportActivity
-import com.mthaler.knittings.filter.CombinedFilter
 import com.mthaler.knittings.about.AboutDialog
 import com.mthaler.knittings.compressphotos.CompressPhotosActivity
 import com.mthaler.knittings.database.KnittingsDataSource
 import com.mthaler.knittings.details.KnittingDetailsActivity
-import com.mthaler.knittings.filter.SingleCategoryFilter
 import com.mthaler.knittings.projectcount.ProjectCountActivity
 import com.mthaler.knittings.databinding.ActivityMainBinding
-import com.mthaler.knittings.filter.Filter
-import com.mthaler.knittings.filter.SingleStatusFilter
+import com.mthaler.knittings.filter.*
 import com.mthaler.knittings.model.Status
 import com.mthaler.knittings.needle.NeedleListActivity
 import com.mthaler.knittings.settings.SettingsActivity
@@ -35,7 +31,9 @@ import com.mthaler.knittings.utils.AndroidViewModelFactory
 import com.mthaler.knittings.whatsnew.WhatsNewDialog
 import java.util.*
 
-class MainActivity : AbstractMainActivity(), NavigationView.OnNavigationItemSelectedListener {
+class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedListener, SearchView.OnQueryTextListener, SearchView.OnCloseListener {
+
+    private lateinit var viewModel: MainViewModel
 
     private var initialQuery: CharSequence? = null
     private var sv: SearchView? = null
@@ -393,6 +391,42 @@ class MainActivity : AbstractMainActivity(), NavigationView.OnNavigationItemSele
             sv.setQuery(initialQuery, true)
         }
         this.sv = sv
+    }
+
+     /**
+     * Called when the query text is changed by the use
+     *
+     * @param newText the new content of the query text field
+     * @return false if the SearchView should perform the default action of showing any suggestions
+     *         if available, true if the action was handled by the listener
+     */
+    override fun onQueryTextChange(newText: String?): Boolean {
+        if (newText == null || TextUtils.isEmpty(newText)) {
+            viewModel.filter = CombinedFilter.empty()
+        } else {
+            viewModel.filter = CombinedFilter(listOf(ContainsFilter(newText)))
+        }
+        return true
+    }
+
+      /**
+     * Called when the user submits the query. This could be due to a key press on the keyboard or due to pressing a submit button.
+     * The listener can override the standard behavior by returning true to indicate that it has handled the submit request.
+     * Otherwise return false to let the SearchView handle the submission by launching any associated intent.
+     *
+     * @param newText new content of the query text field
+     * @return true if the query has been handled by the listener, false to let the SearchView perform the default action.
+     */
+    override fun onQueryTextSubmit(newText: String?): Boolean = false
+
+    /**
+     * The user is attempting to close the SearchView.
+     *
+     * @return true if the listener wants to override the default behavior of clearing the text field and dismissing it, false otherwise.
+     */
+    override fun onClose(): Boolean {
+        viewModel.filter = CombinedFilter.empty()
+        return true
     }
 
     companion object {
