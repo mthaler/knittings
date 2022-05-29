@@ -77,7 +77,7 @@ abstract class AbstractDropboxFragment : Fragment() {
         with(builder) {
             setTitle("Dropbox")
             setMessage("Do you want to log out of Dropbox?")
-            setPositiveButton("OK") { dialog, which ->
+            setPositiveButton("OK") { _, _ ->
                 lifecycleScope.launch {
                     withContext(Dispatchers.IO) {
                         try {
