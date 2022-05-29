@@ -176,7 +176,7 @@ class DropboxExportFragment : AbstractDropboxFragment() {
             with(builder) {
                 setTitle(resources.getString(R.string.dropbox_export_cancel_dialog_title))
                 setMessage(resources.getString(R.string.dropbox_export_cancel_dialog_message))
-                setPositiveButton(resources.getString(R.string.dropbox_export_cancel_dialog_ok_button)) { dialog, which ->
+                setPositiveButton(resources.getString(R.string.dropbox_export_cancel_dialog_ok_button)) { _, _ ->
                     DropboxExportServiceManager.getInstance().cancelled = true
                 }
                 show()
