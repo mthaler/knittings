@@ -139,7 +139,7 @@ class DropboxApi(private val dropboxClient: DbxClientV2, val ctx: Context, val l
                         }
                         DropboxImportServiceManager.getInstance().updateJobStatus(JobStatus.Progress(0))
                     }
-                    setNegativeButton(ctx.resources.getString(R.string.dialog_button_cancel)) { dialog, which -> }
+                    setNegativeButton(ctx.resources.getString(R.string.dialog_button_cancel)) { _, _ -> }
                     show()
                 }
             }
