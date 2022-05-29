@@ -69,7 +69,7 @@ class DropboxExportFragment : AbstractDropboxFragment() {
                 with(builder) {
                     setTitle(resources.getString(R.string.dropbox_export))
                     setMessage(resources.getString(R.string.dropbox_export_no_wifi_question))
-                    setPositiveButton(resources.getString(R.string.dropbox_export_dialog_export_button)) { dialog, which ->
+                    setPositiveButton(resources.getString(R.string.dropbox_export_dialog_export_button)) { _, _ ->
                         DropboxExportServiceManager.getInstance().updateJobStatus(JobStatus.Progress(0))
 
                         val request = OneTimeWorkRequestBuilder<DropboxExportWorker>().build()
