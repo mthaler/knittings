@@ -149,7 +149,7 @@ class DropboxApi(private val dropboxClient: DbxClientV2, val ctx: Context, val l
                 with(builder) {
                     setTitle(ctx.resources.getString(R.string.dropbox_import_dialog_title))
                     setMessage(ctx.resources.getString(R.string.dropbox_import_dialog_msg))
-                    setPositiveButton(ctx.resources.getString(R.string.dropbox_import_dialog_button_import)) { dialog, which ->
+                    setPositiveButton(ctx.resources.getString(R.string.dropbox_import_dialog_button_import)) { _, _ ->
                         val app = ctx.applicationContext as DatabaseApplication
                         val database =  app.createExportDatabase()
                         DropboxImportWorker.readDatabase(ctx.applicationContext as DatabaseApplication, directory, database.toJSON().toString())
