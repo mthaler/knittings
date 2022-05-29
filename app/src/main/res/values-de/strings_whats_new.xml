@@ -2,6 +2,8 @@
 <resources>
     <string name="whats_new_title">Whats New</string>
     <string name="whats_new"><![CDATA[
+        <h3>Version 0.9.39</h3>
+        - Code aufgeräumt<br>
         <h3>Version 0.9.38</h3>
         - Absturz beim Aufnehmen von Fotos beseitigt<br>
         <h3>Version 0.9.37</h3>
