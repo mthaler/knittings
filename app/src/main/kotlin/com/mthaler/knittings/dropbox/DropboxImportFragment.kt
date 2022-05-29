@@ -65,8 +65,8 @@ class DropboxImportFragment : AbstractDropboxFragment() {
         return binding.root
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         val sm = DropboxImportServiceManager.getInstance()
 
@@ -102,7 +102,6 @@ class DropboxImportFragment : AbstractDropboxFragment() {
             }
         })
     }
-
 
     override fun onResume() {
         super.onResume()

@@ -117,7 +117,7 @@ class DropboxExportFragment : AbstractDropboxFragment() {
                             }
                         }
                     }
-                    setNegativeButton(resources.getString(R.string.dialog_button_cancel)) { dialog, which -> }
+                    setNegativeButton(resources.getString(R.string.dialog_button_cancel)) { _, _ -> }
                     show()
                 }
             } else {
