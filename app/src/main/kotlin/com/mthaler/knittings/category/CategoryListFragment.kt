@@ -44,8 +44,8 @@ class CategoryListFragment : Fragment() {
         _binding = null
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         val ds = (requireContext().applicationContext as DatabaseApplication).getCategoryDataSource()
 
