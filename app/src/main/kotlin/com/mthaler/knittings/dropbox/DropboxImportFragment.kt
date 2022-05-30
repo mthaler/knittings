@@ -162,6 +162,7 @@ class DropboxImportFragment : AbstractDropboxFragment() {
             binding.nameText.visibility = View.VISIBLE
             binding.typeText.visibility = View.VISIBLE
             binding.importButton.isEnabled = true
+            fetchAccountInfo()
         } else {
             // user is logged out, show login button, hide other buttons
             binding.loginButton.visibility = View.VISIBLE
@@ -267,15 +268,6 @@ class DropboxImportFragment : AbstractDropboxFragment() {
                     }
                 }
             }
-        }
-    }
-
-    suspend fun getAccountInfo(dropboxClient: DbxClientV2): DropboxAccountInfoResponse = withContext(Dispatchers.IO) {
-        try {
-            val accountInfo = dropboxClient.users().currentAccount
-            DropboxAccountInfoResponse.Success(accountInfo)
-        } catch (exception: DbxException) {
-            DropboxAccountInfoResponse.Failure(exception)
         }
     }
 
