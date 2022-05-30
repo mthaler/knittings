@@ -46,7 +46,47 @@ class DropboxExportFragment : AbstractDropboxFragment() {
 
     private val requestMultiplePermissions = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions())  { permissions ->
         if (permissions != null && permissions.size == 1) {
-            lifecycleScope.launchWhenStarted { fetchAccountInfo() }
+            //Check if we have an existing token stored, this will be used by DbxClient to make requests
+            val localCredential: DbxCredential? = getLocalCredential()
+            val credential: DbxCredential? = if (localCredential == null) {
+                val credential = Auth.getDbxCredential() //fetch the result from the AuthActivity
+                credential?.let {
+                    //the user successfully connected their Dropbox account!
+                    storeCredentialLocally(it)
+                }
+                credential
+            } else localCredential
+
+            if (credential == null) {
+                with(binding) {
+                    loginButton.visibility = View.VISIBLE
+                }
+            } else {
+                with(binding) {
+                    loginButton.visibility = View.GONE
+                }
+            }
+
+            if (credential != null) {
+                // user is logged in, hide login button, show other buttons
+                binding.loginButton.visibility = View.GONE
+                binding.account.visibility = View.VISIBLE
+                binding.emailText.visibility = View.VISIBLE
+                binding.nameText.visibility = View.VISIBLE
+                binding.typeText.visibility = View.VISIBLE
+                binding.dataTitle.visibility = View.VISIBLE
+                binding.exportButton.isEnabled = true
+                fetchAccountInfo()
+            } else {
+                // user is logged out, show login button, hide other buttons
+                binding.loginButton.visibility = View.VISIBLE
+                binding.account.visibility = View.GONE
+                binding.emailText.visibility = View.GONE
+                binding.nameText.visibility = View.GONE
+                binding.typeText.visibility = View.GONE
+                binding.dataTitle.visibility = View.GONE
+                binding.exportButton.isEnabled = false
+            }
         } else if (permissions != null && permissions.size == 2) {
             val wakeLock: PowerManager.WakeLock =
                 (requireContext().getSystemService(Context.POWER_SERVICE) as PowerManager).run {
@@ -199,48 +239,7 @@ class DropboxExportFragment : AbstractDropboxFragment() {
     override fun onResume() {
         super.onResume()
 
-         //Check if we have an existing token stored, this will be used by DbxClient to make requests
-        val localCredential: DbxCredential? = getLocalCredential()
-        val credential: DbxCredential? = if (localCredential == null) {
-            val credential = Auth.getDbxCredential() //fetch the result from the AuthActivity
-            credential?.let {
-                //the user successfully connected their Dropbox account!
-                storeCredentialLocally(it)
-            }
-            credential
-        } else localCredential
-
-        if (credential == null) {
-            with(binding) {
-                loginButton.visibility = View.VISIBLE
-            }
-        } else {
-            with(binding) {
-                loginButton.visibility = View.GONE
-            }
-        }
-
-        if (credential != null) {
-            // user is logged in, hide login button, show other buttons
-            binding.loginButton.visibility = View.GONE
-            binding.account.visibility = View.VISIBLE
-            binding.emailText.visibility = View.VISIBLE
-            binding.nameText.visibility = View.VISIBLE
-            binding.typeText.visibility = View.VISIBLE
-            binding.dataTitle.visibility = View.VISIBLE
-            binding.exportButton.isEnabled = true
-            requestMultiplePermissions.launch(arrayOf(Manifest.permission.INTERNET))
-        } else {
-            // user is logged out, show login button, hide other buttons
-            binding.loginButton.visibility = View.VISIBLE
-            binding.account.visibility = View.GONE
-            binding.emailText.visibility = View.GONE
-            binding.nameText.visibility = View.GONE
-            binding.typeText.visibility = View.GONE
-            binding.dataTitle.visibility = View.GONE
-            binding.exportButton.isEnabled = false
-            requestMultiplePermissions.launch(arrayOf(Manifest.permission.INTERNET))
-        }
+        requestMultiplePermissions.launch(arrayOf(Manifest.permission.INTERNET))
     }
 
 
