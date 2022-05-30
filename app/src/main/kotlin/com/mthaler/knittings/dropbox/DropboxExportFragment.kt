@@ -58,7 +58,7 @@ class DropboxExportFragment : AbstractDropboxFragment() {
                 wakeLock.release()
             }
         } else {
-            Toast.makeText(requireContext(), "Permission denied", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), "Access network state permission denied", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -295,7 +295,7 @@ class DropboxExportFragment : AbstractDropboxFragment() {
     }
 
     private fun export() {
-        requestPermissionLauncher.launch(Manifest.permission.ACCESS_WIFI_STATE)
+        requestPermissionLauncher.launch(Manifest.permission.ACCESS_NETWORK_STATE)
         val request = OneTimeWorkRequestBuilder<DropboxExportWorker>().build()
         val workManager = WorkManager.getInstance(requireContext())
         workManager.enqueueUniqueWork(DropboxExportWorker.TAG,  ExistingWorkPolicy.REPLACE, request)

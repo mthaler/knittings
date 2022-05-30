@@ -174,7 +174,7 @@ class DropboxImportFragment : AbstractDropboxFragment() {
     }
 
     private fun import() {
-        requestPermissionLauncher.launch(Manifest.permission.ACCESS_WIFI_STATE)
+        requestPermissionLauncher.launch(Manifest.permission.ACCESS_NETWORK_STATE)
         val requestConfig = DbxRequestConfig(CLIENT_IDENTIFIER)
         val credential = getLocalCredential()
         credential?.let {
