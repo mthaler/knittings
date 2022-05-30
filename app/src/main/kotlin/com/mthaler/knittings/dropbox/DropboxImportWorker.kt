@@ -17,7 +17,7 @@ import com.mthaler.knittings.service.ServiceStatus
 import org.json.JSONObject
 import java.io.File
 
-class DropboxImportWorker(val context: Context, val database: ExportDatabase<Knitting>, parameters: WorkerParameters) : CoroutineWorker(context, parameters) {
+class DropboxImportWorker(val context: Context, parameters: WorkerParameters) : CoroutineWorker(context, parameters) {
 
     override suspend  fun doWork(): Result {
         DropboxImportServiceManager.getInstance().updateServiceStatus(ServiceStatus.Started)
