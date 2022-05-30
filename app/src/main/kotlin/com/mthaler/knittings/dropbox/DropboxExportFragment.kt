@@ -18,6 +18,7 @@ import androidx.work.ExistingWorkPolicy
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkInfo
 import androidx.work.WorkManager
+import com.dropbox.core.DbxException
 import com.dropbox.core.DbxRequestConfig
 import com.dropbox.core.android.Auth
 import com.dropbox.core.oauth.DbxCredential
@@ -44,8 +45,10 @@ class DropboxExportFragment : AbstractDropboxFragment() {
 
     override protected val APP_KEY = BuildConfig.DROPBOX_KEY
 
-    private val requestPermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
-         if (isGranted) {
+    private val requestMultiplePermissions = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions())  { permissions ->
+        if (permissions != null && permissions.size == 1) {
+            lifecycleScope.launchWhenStarted { fetchAccountInfo() }
+        } else if (permissions != null && permissions.size == 2) {
             val wakeLock: PowerManager.WakeLock =
                 (requireContext().getSystemService(Context.POWER_SERVICE) as PowerManager).run {
                     newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "Knittings::DropboxImport").apply {
@@ -227,7 +230,7 @@ class DropboxExportFragment : AbstractDropboxFragment() {
             binding.typeText.visibility = View.VISIBLE
             binding.dataTitle.visibility = View.VISIBLE
             binding.exportButton.isEnabled = true
-            fetchAccountInfo()
+            requestMultiplePermissions.launch(arrayOf(Manifest.permission.INTERNET))
         } else {
             // user is logged out, show login button, hide other buttons
             binding.loginButton.visibility = View.VISIBLE
@@ -237,8 +240,10 @@ class DropboxExportFragment : AbstractDropboxFragment() {
             binding.typeText.visibility = View.GONE
             binding.dataTitle.visibility = View.GONE
             binding.exportButton.isEnabled = false
+            requestMultiplePermissions.launch(arrayOf(Manifest.permission.INTERNET))
         }
     }
+
 
     private fun fetchAccountInfo() {
         val requestConfig = DbxRequestConfig(CLIENT_IDENTIFIER)
@@ -268,6 +273,7 @@ class DropboxExportFragment : AbstractDropboxFragment() {
         }
     }
 
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.menu_item_dropbox_logout -> {
@@ -293,7 +299,7 @@ class DropboxExportFragment : AbstractDropboxFragment() {
     }
 
     private fun export() {
-        requestPermissionLauncher.launch(Manifest.permission.ACCESS_NETWORK_STATE)
+        requestMultiplePermissions.launch(arrayOf(Manifest.permission.ACCESS_NETWORK_STATE, Manifest.permission.INTERNET))
         val request = OneTimeWorkRequestBuilder<DropboxExportWorker>().build()
         val workManager = WorkManager.getInstance(requireContext())
         workManager.enqueueUniqueWork(DropboxExportWorker.TAG,  ExistingWorkPolicy.REPLACE, request)
