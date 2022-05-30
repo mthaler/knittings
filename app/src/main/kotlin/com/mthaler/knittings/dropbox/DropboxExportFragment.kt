@@ -44,8 +44,8 @@ class DropboxExportFragment : AbstractDropboxFragment() {
 
     override protected val APP_KEY = BuildConfig.DROPBOX_KEY
 
-    private val requestMultiplePermissions = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions())  { permissions ->
-        if (permissions != null && permissions.size == 1) {
+    private val requestPermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
+        if (isGranted) {
             val wakeLock: PowerManager.WakeLock =
                 (requireContext().getSystemService(Context.POWER_SERVICE) as PowerManager).run {
                     newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "Knittings::DropboxImport").apply {
@@ -295,7 +295,7 @@ class DropboxExportFragment : AbstractDropboxFragment() {
     }
 
     private fun export() {
-        requestMultiplePermissions.launch(arrayOf(Manifest.permission.ACCESS_WIFI_STATE))
+        requestPermissionLauncher.launch(Manifest.permission.ACCESS_WIFI_STATE)
         val request = OneTimeWorkRequestBuilder<DropboxExportWorker>().build()
         val workManager = WorkManager.getInstance(requireContext())
         workManager.enqueueUniqueWork(DropboxExportWorker.TAG,  ExistingWorkPolicy.REPLACE, request)
