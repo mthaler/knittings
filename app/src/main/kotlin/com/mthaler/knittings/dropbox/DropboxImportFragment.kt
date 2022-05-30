@@ -83,7 +83,7 @@ class DropboxImportFragment : AbstractDropboxFragment() {
 
         binding.importButton.setOnClickListener {
             lifecycleScope.launch(Dispatchers.IO) {
-                import()
+                requestPermissionLauncher.launch(Manifest.permission.ACCESS_NETWORK_STATE)
             }
         }
 
@@ -174,8 +174,7 @@ class DropboxImportFragment : AbstractDropboxFragment() {
         }
     }
 
-    private fun import() {
-        requestPermissionLauncher.launch(Manifest.permission.ACCESS_NETWORK_STATE)
+    private suspend fun import() {
         val requestConfig = DbxRequestConfig(CLIENT_IDENTIFIER)
         val credential = getLocalCredential()
         credential?.let {
@@ -189,10 +188,8 @@ class DropboxImportFragment : AbstractDropboxFragment() {
                     setMessage(resources.getString(R.string.dropbox_export_no_wifi_question))
                     setPositiveButton(resources.getString(R.string.dropbox_export_dialog_export_button)) { _, _ ->
                         try {
-                            lifecycleScope.launchWhenStarted() {
                                 val result = dropboxApi.listFolders()
                                 importDatabase(result)
-                            }
                         } catch (ex: java.lang.Exception) {
                             throw ex
                         }
