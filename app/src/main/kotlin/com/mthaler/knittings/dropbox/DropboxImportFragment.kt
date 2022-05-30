@@ -1,12 +1,16 @@
 package com.mthaler.knittings.dropbox
 
+import android.Manifest
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.os.PowerManager
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.NavUtils
 import androidx.lifecycle.lifecycleScope
@@ -32,6 +36,31 @@ class DropboxImportFragment : AbstractDropboxFragment() {
 
     private var _binding: FragmentDropboxImportBinding? = null
     private val binding get() = _binding!!
+
+    private val requestPermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
+
+        if (isGranted) {
+            val wakeLock: PowerManager.WakeLock =
+                (requireContext().getSystemService(Context.POWER_SERVICE) as PowerManager).run {
+                    newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "Knittings::DropboxImport").apply {
+                        acquire()
+                    }
+                }
+            try {
+                import()
+            } finally {
+                wakeLock.release()
+            }
+        } else {
+            // Explain to the user that the feature is unavailable because the
+            // features requires a permission that the user has denied. At the
+            // same time, respect the user's decision. Don't link to system
+            // settings in an effort to convince the user to change their
+            // decision.
+            Toast.makeText(requireContext(), "Access network state permission denied", Toast.LENGTH_SHORT).show()
+        }
+    }
+
 
     override val APP_KEY = BuildConfig.DROPBOX_KEY
     override fun exception(ex: String) {
@@ -149,7 +178,8 @@ class DropboxImportFragment : AbstractDropboxFragment() {
         }
     }
 
-    private suspend fun import() {
+    private fun import() {
+        requestPermissionLauncher.launch(Manifest.permission.ACCESS_NETWORK_STATE)
         val requestConfig = DbxRequestConfig(CLIENT_IDENTIFIER)
         val credential = getLocalCredential()
         credential?.let {
@@ -206,7 +236,6 @@ class DropboxImportFragment : AbstractDropboxFragment() {
             dialogBuilder.setItems(files) { dialog, item ->
                 val directory = files[item]
                 lifecycleScope.launch(Dispatchers.IO) {
-
                     dropboxApi.readDatabase(directory)
                 }
             }
@@ -268,7 +297,7 @@ class DropboxImportFragment : AbstractDropboxFragment() {
         else -> super.onOptionsItemSelected(item)
     }
 
-    protected override fun clearData() {
+    override fun clearData() {
         binding.loginButton.visibility = View.VISIBLE
     }
 }

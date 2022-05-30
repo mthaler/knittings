@@ -26,15 +26,6 @@ abstract class AbstractDropboxFragment : Fragment() {
     abstract protected val APP_KEY: String
     abstract protected fun exception(ex: String)
 
-    protected val permissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
-        if (isGranted) {
-            // Do if the permission is granted
-        }
-        else {
-            // Do otherwise
-        }
-    }
-
     /**
      * Starts the Dropbox OAuth process by launching the Dropbox official app or web
      * browser if dropbox official app is not available. In browser flow, normally user needs to
