@@ -105,13 +105,13 @@ class PhotoGalleryFragment : Fragment() {
      override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.menu_item_add_photo -> {
-                val d = TakePhotoDialog.create(requireContext(), "com.mthaler.knittings.fileprovider", layoutInflater, this::takePhoto, this::importPhoto)
-                d.show()
+                requestMultiplePermissions.launch(arrayOf(Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE))
                 true
             }
             else -> super.onOptionsItemSelected(item)
         }
     }
+
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (resultCode != Activity.RESULT_OK) {
@@ -122,33 +122,20 @@ class PhotoGalleryFragment : Fragment() {
                 currentPhotoPath?.let {
                     viewLifecycleOwner.lifecycleScope.launch {
                         withContext(Dispatchers.IO) {
-                            requestMultiplePermissions.launch(
-                                arrayOf(
-                                    Manifest.permission.CAMERA,
-                                    Manifest.permission.READ_EXTERNAL_STORAGE,
-                                    Manifest.permission.WRITE_EXTERNAL_STORAGE
-                                )
-                            )
-                        }
+                            TakePhotoDialog.handleTakePhotoResult(requireContext(), ownerID, it) }
                     }
                 }
             }
             REQUEST_IMAGE_IMPORT -> {
-                  val f = currentPhotoPath
-                    if (f != null && data != null) {
-                        viewLifecycleOwner.lifecycleScope.launch {
-                            withContext(Dispatchers.IO) {
-                                requestMultiplePermissions.launch(
-                                    arrayOf(
-                                        Manifest.permission.CAMERA,
-                                        Manifest.permission.READ_EXTERNAL_STORAGE,
-                                        Manifest.permission.WRITE_EXTERNAL_STORAGE
-                                    )
-                                )
-                            }
+                val f = currentPhotoPath
+                if (f != null && data != null) {
+                    viewLifecycleOwner.lifecycleScope.launch {
+                        withContext(Dispatchers.IO) {
+                            TakePhotoDialog.handleImageImportResult(requireContext(), ownerID, f, data)
                         }
                     }
                 }
+            }
             else -> super.onActivityResult(requestCode, resultCode, data)
         }
     }
