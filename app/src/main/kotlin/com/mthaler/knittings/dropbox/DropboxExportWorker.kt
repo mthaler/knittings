@@ -13,7 +13,6 @@ import com.mthaler.knittings.DatabaseApplication
 import com.mthaler.knittings.model.ExportDatabase
 import com.mthaler.knittings.model.Knitting
 import com.mthaler.knittings.model.Photo
-import com.mthaler.knittings.model.Project
 import com.mthaler.knittings.service.JobStatus
 import java.io.ByteArrayInputStream
 import java.io.FileInputStream
@@ -97,7 +96,7 @@ class DropboxExportWorker(val context: Context, parameters: WorkerParameters) : 
     }
 
     companion object {
-        val TAG = "com.mthaler.knittings.compressphotos.DropboxExportWorker"
+        val TAG = "DropboxExportWorker"
 
         private const val KNITTINGS = "com.mthaler.knittings"
     }

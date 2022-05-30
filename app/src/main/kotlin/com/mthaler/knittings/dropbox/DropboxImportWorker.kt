@@ -1,7 +1,6 @@
 package com.mthaler.knittings.dropbox
 
 import android.content.Context
-import android.os.PowerManager
 import androidx.work.CoroutineWorker
 import androidx.work.Data
 import androidx.work.WorkerParameters
@@ -24,17 +23,7 @@ class DropboxImportWorker(val context: Context, val database: ExportDatabase<Kni
         val directory = inputData.getString(Directory)!!
         val app: DatabaseApplication = context.applicationContext as DatabaseApplication
         val database = readDatabase(app, directory, inputData.getString(Database)!!)
-        val wakeLock: PowerManager.WakeLock =
-        (context.getSystemService(Context.POWER_SERVICE) as PowerManager).run {
-            newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "Knittings::DropboxImport").apply {
-                acquire()
-            }
-        }
-        try {
-            downloadPhotos(database, directory)
-        } finally {
-            wakeLock.release()
-        }
+        downloadPhotos(database, directory)
         DropboxImportServiceManager.getInstance().updateJobStatus(JobStatus.Success(context.resources.getString(R.string.dropbox_import_completed)))
         return Result.success()
     }

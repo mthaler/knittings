@@ -38,7 +38,6 @@ class DropboxImportFragment : AbstractDropboxFragment() {
     private val binding get() = _binding!!
 
     private val requestPermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
-
         if (isGranted) {
             val wakeLock: PowerManager.WakeLock =
                 (requireContext().getSystemService(Context.POWER_SERVICE) as PowerManager).run {
@@ -52,11 +51,6 @@ class DropboxImportFragment : AbstractDropboxFragment() {
                 wakeLock.release()
             }
         } else {
-            // Explain to the user that the feature is unavailable because the
-            // features requires a permission that the user has denied. At the
-            // same time, respect the user's decision. Don't link to system
-            // settings in an effort to convince the user to change their
-            // decision.
             Toast.makeText(requireContext(), "Access network state permission denied", Toast.LENGTH_SHORT).show()
         }
     }
