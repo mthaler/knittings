@@ -1,11 +1,14 @@
 package com.mthaler.knittings.photo
 
+import android.Manifest
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
 import android.view.*
+import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
@@ -33,6 +36,15 @@ class PhotoGalleryFragment : Fragment() {
         super.onCreate(savedInstanceState)
         arguments?.let {
             ownerID = it.getLong(EXTRA_OWNER_ID)
+        }
+    }
+
+    private val requestMultiplePermissions = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
+        if (permissions != null && permissions.size == 3) {
+            val d = TakePhotoDialog.create(requireContext(), "com.mthaler.knittings.fileprovider", layoutInflater, this::takePhoto, this::importPhoto)
+            d.show()
+        } else {
+            Toast.makeText(requireContext(), "Permissions denied", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -110,20 +122,33 @@ class PhotoGalleryFragment : Fragment() {
                 currentPhotoPath?.let {
                     viewLifecycleOwner.lifecycleScope.launch {
                         withContext(Dispatchers.IO) {
-                            TakePhotoDialog.handleTakePhotoResult(requireContext(), ownerID, it) }
-                    }
-                }
-            }
-            REQUEST_IMAGE_IMPORT -> {
-                val f = currentPhotoPath
-                if (f != null && data != null) {
-                    viewLifecycleOwner.lifecycleScope.launch {
-                        withContext(Dispatchers.IO) {
-                            TakePhotoDialog.handleImageImportResult(requireContext(), ownerID, f, data)
+                            requestMultiplePermissions.launch(
+                                arrayOf(
+                                    Manifest.permission.CAMERA,
+                                    Manifest.permission.READ_EXTERNAL_STORAGE,
+                                    Manifest.permission.WRITE_EXTERNAL_STORAGE
+                                )
+                            )
                         }
                     }
                 }
             }
+            REQUEST_IMAGE_IMPORT -> {
+                  val f = currentPhotoPath
+                    if (f != null && data != null) {
+                        viewLifecycleOwner.lifecycleScope.launch {
+                            withContext(Dispatchers.IO) {
+                                requestMultiplePermissions.launch(
+                                    arrayOf(
+                                        Manifest.permission.CAMERA,
+                                        Manifest.permission.READ_EXTERNAL_STORAGE,
+                                        Manifest.permission.WRITE_EXTERNAL_STORAGE
+                                    )
+                                )
+                            }
+                        }
+                    }
+                }
             else -> super.onActivityResult(requestCode, resultCode, data)
         }
     }
