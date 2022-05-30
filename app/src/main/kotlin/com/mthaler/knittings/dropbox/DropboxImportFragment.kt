@@ -13,6 +13,9 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.NavUtils
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleCoroutineScope
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import com.dropbox.core.DbxException
 import com.dropbox.core.DbxRequestConfig
@@ -48,7 +51,9 @@ class DropboxImportFragment : AbstractDropboxFragment() {
                     }
                 }
             try {
-                import()
+                lifecycleScope.launchWhenStarted {
+                    import(lifecycleScope)
+                }
             } finally {
                 wakeLock.release()
             }
@@ -174,7 +179,7 @@ class DropboxImportFragment : AbstractDropboxFragment() {
         }
     }
 
-    private suspend fun import() {
+    private suspend fun import(lifecycleScope: LifecycleCoroutineScope) {
         val requestConfig = DbxRequestConfig(CLIENT_IDENTIFIER)
         val credential = getLocalCredential()
         credential?.let {
@@ -188,8 +193,10 @@ class DropboxImportFragment : AbstractDropboxFragment() {
                     setMessage(resources.getString(R.string.dropbox_export_no_wifi_question))
                     setPositiveButton(resources.getString(R.string.dropbox_export_dialog_export_button)) { _, _ ->
                         try {
+                            lifecycleScope.launchWhenStarted {
                                 val result = dropboxApi.listFolders()
                                 importDatabase(result)
+                            }
                         } catch (ex: java.lang.Exception) {
                             throw ex
                         }
