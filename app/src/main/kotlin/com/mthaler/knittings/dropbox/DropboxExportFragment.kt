@@ -18,7 +18,6 @@ import androidx.work.ExistingWorkPolicy
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkInfo
 import androidx.work.WorkManager
-import com.dropbox.core.DbxException
 import com.dropbox.core.DbxRequestConfig
 import com.dropbox.core.android.Auth
 import com.dropbox.core.oauth.DbxCredential
@@ -61,7 +60,7 @@ class DropboxExportFragment : AbstractDropboxFragment() {
                 wakeLock.release()
             }
         } else {
-            Toast.makeText(requireContext(), "Access network state permission denied", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), "Permission denied", Toast.LENGTH_SHORT).show()
         }
     }
 

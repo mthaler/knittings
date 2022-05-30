@@ -3,10 +3,6 @@
     package="com.mthaler.knittings"
     android:requestLegacyExternalStorage="true">
 
-    <uses-feature android:name="android.hardware.camera" android:required="false" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" android:maxSdkVersion="28" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" android:maxSdkVersion="28" />
-
     <application
         android:name=".MyApplication"
         android:icon="@mipmap/ic_knittings"
