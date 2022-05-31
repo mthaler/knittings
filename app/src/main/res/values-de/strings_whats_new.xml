@@ -3,7 +3,7 @@
     <string name="whats_new_title">Whats New</string>
     <string name="whats_new"><![CDATA[
         <h3>Version 0.9.40</h3>
-        - Alle Permissions aus AndroidManifest.xml entfernt<br>
+        - Einige Permissions aus AndroidManifest.xml entfernt<br>
         <h3>Version 0.9.39</h3>
         - Code aufgeräumt<br>
         <h3>Version 0.9.38</h3>
