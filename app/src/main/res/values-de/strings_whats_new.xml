@@ -2,8 +2,16 @@
 <resources>
     <string name="whats_new_title">Whats New</string>
     <string name="whats_new"><![CDATA[
+        <h3>Version 0.9.40</h3>
+        - Einige Permissions aus AndroidManifest.xml entfernt<br>
+        <h3>Version 0.9.39</h3>
+        - Code aufgeräumt<br>
+        <h3>Version 0.9.38</h3>
+        - Absturz beim Aufnehmen von Fotos beseitigt<br>
+        <h3>Version 0.9.37</h3>
+        - ActivityResultLauncher wird für EditKnittingDetailsFragment verwendet<br>
         <h3>Version 0.9.36</h3>
-        - Teilen von photos entferntr<br>
+        - Teilen von Photos entfernt<br>
         <h3>Version 0.9.35</h3>
         - Dropbox Import / Export mit WorkManager neu geschrieben<br>
         <h3>Version 0.9.34</h3>

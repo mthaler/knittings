@@ -1,15 +1,23 @@
 package com.mthaler.knittings.dropbox
 
+import android.Manifest
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.os.PowerManager
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.NavUtils
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleCoroutineScope
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
+import com.dropbox.core.DbxException
 import com.dropbox.core.DbxRequestConfig
 import com.dropbox.core.android.Auth
 import com.dropbox.core.oauth.DbxCredential
@@ -27,11 +35,33 @@ import com.mthaler.knittings.utils.NetworkUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class DropboxImportFragment : AbstractDropboxFragment() {
 
     private var _binding: FragmentDropboxImportBinding? = null
     private val binding get() = _binding!!
+
+    private val requestPermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
+        if (isGranted) {
+            val wakeLock: PowerManager.WakeLock =
+                (requireContext().getSystemService(Context.POWER_SERVICE) as PowerManager).run {
+                    newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "Knittings::DropboxImport").apply {
+                        acquire()
+                    }
+                }
+            try {
+                lifecycleScope.launchWhenStarted {
+                    import(lifecycleScope)
+                }
+            } finally {
+                wakeLock.release()
+            }
+        } else {
+            Toast.makeText(requireContext(), "Access network state permission denied", Toast.LENGTH_SHORT).show()
+        }
+    }
+
 
     override val APP_KEY = BuildConfig.DROPBOX_KEY
     override fun exception(ex: String) {
@@ -58,15 +88,15 @@ class DropboxImportFragment : AbstractDropboxFragment() {
 
         binding.importButton.setOnClickListener {
             lifecycleScope.launch(Dispatchers.IO) {
-                import()
+                requestPermissionLauncher.launch(Manifest.permission.ACCESS_NETWORK_STATE)
             }
         }
 
         return binding.root
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         val sm = DropboxImportServiceManager.getInstance()
 
@@ -102,7 +132,6 @@ class DropboxImportFragment : AbstractDropboxFragment() {
             }
         })
     }
-
 
     override fun onResume() {
         super.onResume()
@@ -150,7 +179,7 @@ class DropboxImportFragment : AbstractDropboxFragment() {
         }
     }
 
-    private suspend fun import() {
+    private suspend fun import(lifecycleScope: LifecycleCoroutineScope) {
         val requestConfig = DbxRequestConfig(CLIENT_IDENTIFIER)
         val credential = getLocalCredential()
         credential?.let {
@@ -164,7 +193,7 @@ class DropboxImportFragment : AbstractDropboxFragment() {
                     setMessage(resources.getString(R.string.dropbox_export_no_wifi_question))
                     setPositiveButton(resources.getString(R.string.dropbox_export_dialog_export_button)) { _, _ ->
                         try {
-                            lifecycleScope.launchWhenStarted() {
+                            lifecycleScope.launchWhenStarted {
                                 val result = dropboxApi.listFolders()
                                 importDatabase(result)
                             }
@@ -207,7 +236,6 @@ class DropboxImportFragment : AbstractDropboxFragment() {
             dialogBuilder.setItems(files) { dialog, item ->
                 val directory = files[item]
                 lifecycleScope.launch(Dispatchers.IO) {
-
                     dropboxApi.readDatabase(directory)
                 }
             }
@@ -269,7 +297,7 @@ class DropboxImportFragment : AbstractDropboxFragment() {
         else -> super.onOptionsItemSelected(item)
     }
 
-    protected override fun clearData() {
+    override fun clearData() {
         binding.loginButton.visibility = View.VISIBLE
     }
 }

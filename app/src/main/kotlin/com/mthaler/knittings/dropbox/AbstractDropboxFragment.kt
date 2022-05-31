@@ -4,6 +4,7 @@ import android.app.Activity
 import android.app.AlertDialog
 import android.content.Context
 import android.util.Log
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.dropbox.core.DbxRequestConfig
@@ -77,7 +78,7 @@ abstract class AbstractDropboxFragment : Fragment() {
         with(builder) {
             setTitle("Dropbox")
             setMessage("Do you want to log out of Dropbox?")
-            setPositiveButton("OK") { dialog, which ->
+            setPositiveButton("OK") { _, _ ->
                 lifecycleScope.launch {
                     withContext(Dispatchers.IO) {
                         try {

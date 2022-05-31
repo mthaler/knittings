@@ -42,8 +42,8 @@ class NeedleListFragment : Fragment() {
         _binding = null
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         binding.needlesRecyclerView.layoutManager = LinearLayoutManager(context)
 
@@ -188,7 +188,7 @@ class NeedleListFragment : Fragment() {
                 }
                     dialog.dismiss()
                 }
-                builder.setNegativeButton(R.string.dialog_button_cancel) { dialog, which -> dialog.dismiss() }
+                builder.setNegativeButton(R.string.dialog_button_cancel) { dialog, _ -> dialog.dismiss() }
                 val dialog = builder.create()
                 dialog.show()
                 true
