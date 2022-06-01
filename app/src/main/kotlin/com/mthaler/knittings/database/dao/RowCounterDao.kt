@@ -1,9 +1,6 @@
 package com.mthaler.knittings.database.dao
 
-import androidx.room.Dao
-import androidx.room.Delete
-import androidx.room.Insert
-import androidx.room.Query
+import androidx.room.*
 import com.mthaler.knittings.model.RowCounter
 
 @Dao
@@ -17,4 +14,7 @@ interface RowCounterDao {
 
     @Query("SELECT * FROM row_counters")
     fun getAll(): List<RowCounter>
+
+    @Query("SELECT * FROM row_counters WHERE id=:id")
+    fun get(id: Long): RowCounter
 }
