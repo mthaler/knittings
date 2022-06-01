@@ -6,8 +6,8 @@ import com.mthaler.knittings.model.RowCounter
 @Dao
 interface RowCounterDao {
 
-    @Insert
-    fun insertAll(vararg rowCounter: RowCounter)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insert(rowCounter: RowCounter): Long
 
     @Delete
     fun delete(rowCounter: RowCounter)
