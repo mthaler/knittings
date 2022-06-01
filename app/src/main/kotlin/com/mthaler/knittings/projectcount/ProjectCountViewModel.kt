@@ -4,7 +4,7 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import com.mthaler.knittings.MyApplication
 import com.mthaler.knittings.R
-import com.mthaler.knittings.model.Project
+import com.mthaler.knittings.model.Knitting
 import java.util.*
 
 class ProjectCountViewModel(application: Application): AndroidViewModel(application) {
@@ -16,7 +16,7 @@ class ProjectCountViewModel(application: Application): AndroidViewModel(applicat
      * @param year year to get the project count for or null for all years
      * @param categoryName name of the category to get the project count for or null for all categories
      */
-    fun getProjectCount(projects: List<Project>, year: Int?, categoryName: String?): Int {
+    fun getProjectCount(projects: List<Knitting>, year: Int?, categoryName: String?): Int {
         if (year == null && categoryName == null) {
             return projects.size
         } else if (year != null && categoryName == null) {
@@ -67,7 +67,7 @@ class ProjectCountViewModel(application: Application): AndroidViewModel(applicat
      * @param projects list of all projects
      * @return list of years
      */
-    fun createYearsList(projects: List<Project>): List<String> {
+    fun createYearsList(projects: List<Knitting>): List<String> {
         val oldest = projects.minByOrNull { it.started.time }
         val years = ArrayList<String>()
         val thisYear = Calendar.getInstance().get(Calendar.YEAR)

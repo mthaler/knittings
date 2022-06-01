@@ -92,20 +92,14 @@ object KnittingsDataSource : AbstractObservableDatabase(), PhotoDataSource, Cate
     @Synchronized
     override fun updatePhoto(photo: Photo): Photo {
         Log.d(TAG, "Updating photo $photo")
-        context.database.writableDatabase.use { database ->
-            val values = PhotoTable.createContentValues(photo)
-            database.update(PhotoTable.PHOTOS,
-                    values,
-                    PhotoTable.Cols.ID + "=" + photo.id, null)
-            val cursor = database.query(PhotoTable.PHOTOS,
-                    PhotoTable.Columns, PhotoTable.Cols.ID + "=" + photo.id, null, null, null, null)
-            val result = cursor.first(PhotoConverter::convert)
-            notifyObservers()
-            return result
+        val photoDao = db.photoDao()
+        photoDao.insert(photo)
+        notifyObservers()
+        val result = photoDao.get(photo.id)
+        return result
         }
     }
 
-    @Synchronized
     override fun deletePhoto(photo: Photo) {
         val knitting = getProject(photo.ownerID)
         if (knitting.defaultPhoto != null && knitting.defaultPhoto.id == photo.id) {

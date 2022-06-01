@@ -8,7 +8,7 @@ interface CategoryDataSource {
 
     fun getCategory(id: Long): Category?
 
-    fun addCategory(category: Category, manualID: Boolean = false): Category
+    fun addCategory(category: Category): Category
 
     fun updateCategory(category: Category): Category
 

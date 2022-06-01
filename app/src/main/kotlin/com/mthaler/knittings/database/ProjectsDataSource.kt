@@ -1,19 +1,19 @@
 package com.mthaler.knittings.database
 
-import com.mthaler.knittings.model.Project
+import com.mthaler.knittings.model.Knitting
 import java.util.ArrayList
 
-interface ProjectsDataSource<T : Project> {
+interface ProjectsDataSource {
 
-    val allProjects: List<T>
+    val allProjects: List<Knitting>
 
-    fun addProject(project: T, manualID: Boolean = false): T
+    fun addProject(project: Knitting): Knitting
 
-    fun updateProject(project: T): T
+    fun updateProject(project: Knitting): Knitting
 
-    fun deleteProject(project: T)
+    fun deleteProject(project: Knitting)
 
     fun deleteAllProjects()
 
-    fun getProject(id: Long): T
+    fun getProject(id: Long): Knitting
 }

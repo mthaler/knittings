@@ -11,19 +11,19 @@ import java.util.Date
  */
 @Entity(tableName = KnittingTable.KNITTINGS)
 data class Knitting(
-    @PrimaryKey override val id: Long = -1,
-    override val title: String = "",
-    override val description: String = "",
-    override val started: Date = Date(),
-    override val finished: Date? = null,
+    @PrimaryKey val id: Long = -1,
+    val title: String = "",
+    val description: String = "",
+    val started: Date = Date(),
+    val finished: Date? = null,
     val needleDiameter: String = "",
     val size: String = "",
-    override val defaultPhoto: Photo? = null,
+    val defaultPhoto: Photo? = null,
     val rating: Double = 0.0,
     val duration: Long = 0L,
-    override val category: Category? = null,
+    val category: Category? = null,
     val status: Status = Status.PLANNED
-) : Serializable, Project {
+) : Serializable {
 
     companion object {
 

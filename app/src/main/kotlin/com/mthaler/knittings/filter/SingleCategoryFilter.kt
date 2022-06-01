@@ -2,7 +2,6 @@ package com.mthaler.knittings.filter
 
 import com.mthaler.knittings.model.Category
 import com.mthaler.knittings.model.Knitting
-import com.mthaler.knittings.model.Project
 
 /**
  * A filter that filters the project list by category
