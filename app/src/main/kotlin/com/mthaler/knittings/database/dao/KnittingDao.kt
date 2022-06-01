@@ -1,6 +1,5 @@
 package com.mthaler.knittings.database.dao
 
-import androidx.lifecycle.LiveData
 import androidx.room.*
 import com.mthaler.knittings.model.Knitting
 
@@ -17,5 +16,5 @@ interface KnittingDao {
     fun getAll(): List<Knitting>
 
     @Query("SELECT * FROM KNITTINGS WHERE id=:id")
-    fun get(id: Long): LiveData<Knitting>
+    fun get(id: Long): Knitting
 }

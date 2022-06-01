@@ -1,6 +1,5 @@
 package com.mthaler.knittings.database.dao
 
-import androidx.lifecycle.LiveData
 import androidx.room.*
 import com.mthaler.knittings.model.Category
 
@@ -8,7 +7,7 @@ import com.mthaler.knittings.model.Category
 interface CategoryDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert(knitting: Category): Long
+    fun insert(category: Category): Long
 
     @Delete
     fun delete(category: Category)
@@ -17,5 +16,5 @@ interface CategoryDao {
     fun getAll(): List<Category>
 
     @Query("SELECT * FROM CATEGORY WHERE id=:id")
-    fun get(id: Long): LiveData<Category>
+    fun get(id: Long): Category
 }
