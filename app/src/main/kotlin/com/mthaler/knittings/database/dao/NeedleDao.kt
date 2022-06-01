@@ -6,8 +6,8 @@ import com.mthaler.knittings.model.Needle
 @Dao
 interface NeedleDao {
 
-    @Insert
-    fun insertAll(vararg needles: Needle)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insert(needle: Needle): Long
 
     @Delete
     fun delete(needle: Needle)
