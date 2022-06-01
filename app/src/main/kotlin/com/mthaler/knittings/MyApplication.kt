@@ -1,6 +1,7 @@
 package com.mthaler.knittings
 
 import androidx.multidex.MultiDexApplication
+import androidx.room.Room
 import com.mthaler.knittings.database.*
 import com.mthaler.knittings.settings.Theme
 import com.mthaler.knittings.model.Database
@@ -15,7 +16,11 @@ class MyApplication : MultiDexApplication(), DatabaseApplication {
 
     override fun onCreate() {
         super.onCreate()
-        KnittingsDataSource.init(this)
+        val db = Room.databaseBuilder(
+            applicationContext,
+            AppDatabase::class.java, "knittings.db"
+        ).build()
+        KnittingsDataSource.init(db)
         ObservableDatabase.init(KnittingsDataSource)
         Theme.setThemes(ThemeRepository.themes)
     }
