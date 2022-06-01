@@ -12,9 +12,9 @@ interface KnittingDao {
     @Delete
     fun delete(knitting: Knitting)
 
-    @Query("SELECT * FROM KNITTINGS")
+    @Query("SELECT * FROM knittings")
     fun getAll(): List<Knitting>
 
-    @Query("SELECT * FROM KNITTINGS WHERE id=:id")
+    @Query("SELECT * FROM knittings WHERE id=:id")
     fun get(id: Long): Knitting
 }

@@ -12,9 +12,9 @@ interface CategoryDao {
     @Delete
     fun delete(category: Category)
 
-    @Query("SELECT * FROM CATEGORY")
+    @Query("SELECT * FROM category")
     fun getAll(): List<Category>
 
-    @Query("SELECT * FROM CATEGORY WHERE id=:id")
+    @Query("SELECT * FROM category WHERE id=:id")
     fun get(id: Long): Category
 }
