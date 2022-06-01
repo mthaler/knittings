@@ -13,7 +13,7 @@ import com.mthaler.knittings.R
 import com.mthaler.knittings.model.*
 import java.lang.Exception
 
-object KnittingsDataSource : AbstractObservableDatabase(), PhotoDataSource, CategoryDataSource, ProjectsDataSource<Knitting> {
+object KnittingsDataSource : AbstractObservableDatabase(), PhotoDataSource, CategoryDataSource, ProjectsDataSource {
 
     private const val TAG = "KnittingsDataSource"
 
@@ -34,7 +34,7 @@ object KnittingsDataSource : AbstractObservableDatabase(), PhotoDataSource, Cate
     val allRowCounters: List<RowCounter>
         get() = db.rowCounterDao().getAll()
 
-    override fun addProject(project: Knitting, manualID: Boolean): Knitting {
+    override fun addProject(project: Knitting): Knitting {
          val id = db.knittingDao().insert(project)
          notifyObservers()
          return project.copy(id = id)
@@ -89,7 +89,6 @@ object KnittingsDataSource : AbstractObservableDatabase(), PhotoDataSource, Cate
         return photo.copy(id = id)
     }
 
-    @Synchronized
     override fun updatePhoto(photo: Photo): Photo {
         Log.d(TAG, "Updating photo $photo")
         val photoDao = db.photoDao()
@@ -97,7 +96,6 @@ object KnittingsDataSource : AbstractObservableDatabase(), PhotoDataSource, Cate
         notifyObservers()
         val result = photoDao.get(photo.id)
         return result
-        }
     }
 
     override fun deletePhoto(photo: Photo) {
@@ -114,7 +112,6 @@ object KnittingsDataSource : AbstractObservableDatabase(), PhotoDataSource, Cate
         notifyObservers()
     }
 
-    @Synchronized
     private fun deleteAllPhotos(knitting: Knitting) {
         for (photo in getAllPhotos(knitting.id)) {
             deletePhotoFile(photo.filename)
@@ -138,11 +135,8 @@ object KnittingsDataSource : AbstractObservableDatabase(), PhotoDataSource, Cate
 
     private fun deletePhotoImpl(photo: Photo) {
         deletePhotoFile(photo.filename)
-        val id = photo.id
-        context.database.writableDatabase.use { database ->
-            database.delete(PhotoTable.PHOTOS, PhotoTable.Cols.ID + "=" + id, null)
-            Log.d(TAG, "Deleted photo $id: $photo")
-        }
+        db.photoDao().delete(photo)
+        Log.d(TAG, "Deleted photo $id: $photo")
     }
 
     @Synchronized
