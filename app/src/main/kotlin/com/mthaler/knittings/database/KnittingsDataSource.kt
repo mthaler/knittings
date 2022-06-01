@@ -3,6 +3,7 @@ package com.mthaler.knittings.database
 import android.database.Cursor
 import android.util.Log
 import androidx.preference.PreferenceManager
+import androidx.room.getQueryDispatcher
 import java.io.File
 import java.util.ArrayList
 import java.util.Date
@@ -47,8 +48,8 @@ object KnittingsDataSource : AbstractObservableDatabase(), PhotoDataSource, Cate
 
     private fun updateKnittingImpl(knitting: Knitting): Knitting {
         Log.d(TAG, "Updating knitting " + knitting + ", default photo: " + knitting.defaultPhoto)
-        db.knittingDao().insert(knitting)
-        return knitting
+        val id = db.knittingDao().insert(knitting)
+        return knitting.copy(id = id)
     }
 
     override fun deleteProject(project: Knitting) {
@@ -70,52 +71,22 @@ object KnittingsDataSource : AbstractObservableDatabase(), PhotoDataSource, Cate
         db.knittingDao().delete(knitting)
     }
 
-    @Synchronized
     override fun getProject(id: Long): Knitting {
-        context.database.readableDatabase.use { database ->
-            val cursor = database.query(KnittingTable.KNITTINGS,
-                    KnittingTable.Columns, KnittingTable.Cols.ID + "=" + id, null, null, null, null)
-            cursor.moveToFirst()
-            val knitting = cursorToKnitting(cursor)
-            cursor.close()
-            return knitting
-        }
+        Log.d(TAG, "Getting knittinh for id $id")
+        return db.knittingDao().get(id)
     }
 
-    @Synchronized
     override fun getPhoto(id: Long): Photo {
         Log.d(TAG, "Getting photo for id $id")
-        context.database.readableDatabase.use { database ->
-            val cursor = database.query(PhotoTable.PHOTOS,
-                    PhotoTable.Columns, PhotoTable.Cols.ID + "=" + id, null, null, null, null)
-            return cursor.first(PhotoConverter::convert)
-        }
+        return db.photoDao().get(id)
     }
 
-    @Synchronized
-    override fun getAllPhotos(id: Long): ArrayList<Photo> {
-        context.database.readableDatabase.use { database ->
-            val photos = ArrayList<Photo>()
-            val whereClause = PhotoTable.Cols.KNITTING_ID + " = ?"
-            val whereArgs = arrayOf(id.toString())
-            val cursor = database.query(PhotoTable.PHOTOS, PhotoTable.Columns, whereClause, whereArgs, null, null, null)
-            val result = cursor.toList(PhotoConverter::convert)
-            photos.addAll(result)
-            return photos
-        }
-    }
+    override fun getAllPhotos(id: Long): List<Photo> = db.photoDao().getAll()
 
-    @Synchronized
-    override fun addPhoto(photo: Photo, manualID: Boolean): Photo {
-        context.database.writableDatabase.use { database ->
-            val values = PhotoTable.createContentValues(photo, manualID)
-            val id = database.insert(PhotoTable.PHOTOS, null, values)
-            val cursor = database.query(PhotoTable.PHOTOS,
-                    PhotoTable.Columns, PhotoTable.Cols.ID + "=" + id, null, null, null, null)
-            val result = cursor.first(PhotoConverter::convert)
-            notifyObservers()
-            return result
-        }
+    override fun addPhoto(photo: Photo): Photo {
+        val id = db.photoDao().insert(photo)
+        notifyObservers()
+        return photo.copy(id = id)
     }
 
     @Synchronized
@@ -409,55 +380,6 @@ object KnittingsDataSource : AbstractObservableDatabase(), PhotoDataSource, Cate
             Log.d(TAG, "Deleted row counter " + r.id + ": " + r)
         }
         notifyObservers()
-    }
-
-    @Synchronized
-    private fun cursorToKnitting(cursor: Cursor): Knitting {
-        val idIndex = cursor.getColumnIndex(KnittingTable.Cols.ID)
-        val idTitle = cursor.getColumnIndex(KnittingTable.Cols.TITLE)
-        val idDescription = cursor.getColumnIndex(KnittingTable.Cols.DESCRIPTION)
-        val idStarted = cursor.getColumnIndex(KnittingTable.Cols.STARTED)
-        val idFinished = cursor.getColumnIndex(KnittingTable.Cols.FINISHED)
-        val idNeedleDiameter = cursor.getColumnIndex(KnittingTable.Cols.NEEDLE_DIAMETER)
-        val idSize = cursor.getColumnIndex(KnittingTable.Cols.SIZE)
-        val idDefaultPhoto = cursor.getColumnIndex(KnittingTable.Cols.DEFAULT_PHOTO_ID)
-        val idRating = cursor.getColumnIndex(KnittingTable.Cols.RATING)
-        val idDuration = cursor.getColumnIndex(KnittingTable.Cols.DURATION)
-        val idCategory = cursor.getColumnIndex(KnittingTable.Cols.CATEGORY_ID)
-        val idStatus = cursor.getColumnIndex(KnittingTable.Cols.STATUS)
-
-        val id = cursor.getLong(idIndex)
-        val title = cursor.getString(idTitle)
-        val description = cursor.getString(idDescription)
-        val started = Date(cursor.getLong(idStarted))
-        val finished = if (cursor.isNull(idFinished)) null else Date(cursor.getLong(idFinished))
-        val needleDiameter = cursor.getString(idNeedleDiameter)
-        val size = cursor.getString(idSize)
-        val rating = cursor.getDouble(idRating)
-        val duration = cursor.getLong(idDuration)
-
-        var defaultPhoto: Photo? = null
-        if (!cursor.isNull(idDefaultPhoto)) {
-            val defaultPhotoID = cursor.getLong(idDefaultPhoto)
-            defaultPhoto = getPhoto(defaultPhotoID)
-        }
-        var category: Category? = null
-        if (!cursor.isNull(idCategory)) {
-            val categoryID = cursor.getLong(idCategory)
-            category = getCategory(categoryID)
-        }
-        val status = if (cursor.isNull(idStatus)) {
-            Status.PLANNED
-        } else {
-            val statusStr = cursor.getString(idStatus)
-            try {
-                Status.valueOf(statusStr)
-            } catch (ex: Exception) {
-                Status.parse(context, statusStr)
-            }
-        }
-        return Knitting(id, title = title, description = description, started = started, finished = finished, needleDiameter = needleDiameter,
-                size = size, rating = rating, defaultPhoto = defaultPhoto, duration = duration, category = category, status = status)
     }
 
     @Synchronized

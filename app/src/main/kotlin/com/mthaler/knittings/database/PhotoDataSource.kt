@@ -9,7 +9,7 @@ interface PhotoDataSource {
 
     fun getPhoto(id: Long): Photo
 
-    fun addPhoto(photo: Photo, manualID: Boolean = false): Photo
+    fun addPhoto(photo: Photo): Photo
 
     fun updatePhoto(photo: Photo): Photo
 
