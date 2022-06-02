@@ -157,12 +157,7 @@ object KnittingsDataSource : AbstractObservableDatabase(), PhotoDataSource, Cate
     @Synchronized
     override fun getCategory(id: Long): Category? {
         Log.d(TAG, "Getting category for id $id")
-        context.database.readableDatabase.use { database ->
-            val cursor = database.query(
-                CategoryTable.CATEGORY,
-                    CategoryTable.Columns, CategoryTable.Cols.ID + "=" + id, null, null, null, null)
-            return cursor.firstOrNull(CategoryConverter::convert)
-        }
+        return db.categoryDao().get(id)
     }
 
     @Synchronized
@@ -209,22 +204,12 @@ object KnittingsDataSource : AbstractObservableDatabase(), PhotoDataSource, Cate
             updateProject(knitting.copy(category = null))
         }
         Log.d(TAG, "Removed category " + category.id + " from " + knittings.size + "knittings")
-        context.database.writableDatabase.use { database ->
-            // delete the category
-            database.delete(CategoryTable.CATEGORY, CategoryTable.Cols.ID + "=" + category.id, null)
-            Log.d(TAG, "Deleted category " + category.id + ": " + category)
-        }
+        db.categoryDao().delete(category)
     }
 
-    @Synchronized
     fun getNeedle(id: Long): Needle {
         Log.d(TAG, "Getting needle for id $id")
-        context.database.readableDatabase.use { database ->
-            val cursor = database.query(NeedleTable.NEEDLES,
-                    NeedleTable.Columns, NeedleTable.Cols.ID + "=" + id, null, null, null, null)
-            val converter = NeedleConverter(context)
-            return cursor.first(converter::convert)
-        }
+        return db.needleDao().get(id)
     }
 
     @Synchronized
