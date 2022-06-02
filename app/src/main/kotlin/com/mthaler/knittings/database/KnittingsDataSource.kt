@@ -233,14 +233,9 @@ object KnittingsDataSource : AbstractObservableDatabase(), PhotoDataSource, Cate
         db.needleDao().delete(needle)
     }
 
-    @Synchronized
     fun getRowCounter(id: Long): RowCounter {
         Log.d(TAG, "Getting row counter for id $id")
-        context.database.readableDatabase.use { database ->
-            val cursor = database.query(RowCounterTable.ROW_COUNTERS,
-                    NeedleTable.Columns, RowCounterTable.Cols.ID + "=" + id, null, null, null, null)
-            return  cursor.first(RowCounterConverter::convert)
-        }
+        return db.rowCounterDao().get(id)
     }
 
     @Synchronized
