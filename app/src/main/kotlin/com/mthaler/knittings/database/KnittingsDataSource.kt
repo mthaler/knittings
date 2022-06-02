@@ -91,11 +91,9 @@ object KnittingsDataSource : AbstractObservableDatabase(), PhotoDataSource, Cate
 
     override fun updatePhoto(photo: Photo): Photo {
         Log.d(TAG, "Updating photo $photo")
-        val photoDao = db.photoDao()
         val id = db.photoDao().insert(photo)
         notifyObservers()
-        val result = photoDao.get(id)
-        return result
+        return photo.copy(id = id)
     }
 
     override fun deletePhoto(photo: Photo) {
@@ -161,17 +159,10 @@ object KnittingsDataSource : AbstractObservableDatabase(), PhotoDataSource, Cate
     }
 
     @Synchronized
-    override fun addCategory(category: Category, manualID: Boolean): Category {
-        context.database.writableDatabase.use { database ->
-            val values = CategoryTable.createContentValues(category, manualID)
-            val id = database.insert(CategoryTable.CATEGORY, null, values)
-            val cursor = database.query(
-                CategoryTable.CATEGORY,
-                    CategoryTable.Columns, CategoryTable.Cols.ID + "=" + id, null, null, null, null)
-            val result = cursor.first(CategoryConverter::convert)
-            notifyObservers()
-            return result
-        }
+    override fun addCategory(category: Category): Category {
+        val id = db.categoryDao().insert(category)
+        notifyObservers()
+        return category.copy(id = id)
     }
 
     override fun updateCategory(category: Category): Category {
@@ -212,18 +203,10 @@ object KnittingsDataSource : AbstractObservableDatabase(), PhotoDataSource, Cate
         return db.needleDao().get(id)
     }
 
-    @Synchronized
-    fun addNeedle(needle: Needle, manualID: Boolean = false): Needle {
-        context.database.writableDatabase.use { database ->
-            val values = NeedleTable.createContentValues(needle, manualID)
-            val id = database.insert(NeedleTable.NEEDLES, null, values)
-            val cursor = database.query(NeedleTable.NEEDLES,
-                    NeedleTable.Columns, NeedleTable.Cols.ID + "=" + id, null, null, null, null)
-            val converter = NeedleConverter(context)
-            val result = cursor.first(converter::convert)
-            notifyObservers()
-            return result
-        }
+    fun addNeedle(needle: Needle): Needle {
+        val id = db.needleDao().insert(needle)
+        notifyObservers()
+        return needle.copy(id = id)
     }
 
     @Synchronized
