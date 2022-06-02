@@ -92,9 +92,9 @@ object KnittingsDataSource : AbstractObservableDatabase(), PhotoDataSource, Cate
     override fun updatePhoto(photo: Photo): Photo {
         Log.d(TAG, "Updating photo $photo")
         val photoDao = db.photoDao()
-        photoDao.insert(photo)
+        val id = db.photoDao().insert(photo)
         notifyObservers()
-        val result = photoDao.get(photo.id)
+        val result = photoDao.get(id)
         return result
     }
 
@@ -179,25 +179,15 @@ object KnittingsDataSource : AbstractObservableDatabase(), PhotoDataSource, Cate
         }
     }
 
-    @Synchronized
     override fun updateCategory(category: Category): Category {
         Log.d(TAG, "Updating category $category")
-        context.database.writableDatabase.use { database ->
-            val values = CategoryTable.createContentValues(category)
-            database.update(
-                CategoryTable.CATEGORY,
-                    values,
-                    CategoryTable.Cols.ID + "=" + category.id, null)
-            val cursor = database.query(
-                CategoryTable.CATEGORY,
-                    CategoryTable.Columns, CategoryTable.Cols.ID + "=" + category.id, null, null, null, null)
-            val result = cursor.first(CategoryConverter::convert)
-            notifyObservers()
-            return result
-        }
+        val categoryDao = db.categoryDao()
+        val id = categoryDao.insert(category)
+        notifyObservers()
+        val result = categoryDao.get(id)
+        return result
     }
 
-    @Synchronized
     override fun deleteCategory(category: Category) {
         deleteCategoryImpl(category)
         notifyObservers()
