@@ -167,11 +167,9 @@ object KnittingsDataSource : AbstractObservableDatabase(), PhotoDataSource, Cate
 
     override fun updateCategory(category: Category): Category {
         Log.d(TAG, "Updating category $category")
-        val categoryDao = db.categoryDao()
-        val id = categoryDao.insert(category)
+        val id = db.categoryDao().insert(category)
         notifyObservers()
-        val result = categoryDao.get(id)
-        return result
+        return category.copy(id = id)
     }
 
     override fun deleteCategory(category: Category) {
@@ -212,18 +210,9 @@ object KnittingsDataSource : AbstractObservableDatabase(), PhotoDataSource, Cate
     @Synchronized
     fun updateNeedle(needle: Needle): Needle {
         Log.d(TAG, "Updating needle $needle")
-        context.database.writableDatabase.use { database ->
-            val values = NeedleTable.createContentValues(needle)
-            database.update(NeedleTable.NEEDLES,
-                    values,
-                    NeedleTable.Cols.ID + "=" + needle.id, null)
-            val cursor = database.query(NeedleTable.NEEDLES,
-                    NeedleTable.Columns, NeedleTable.Cols.ID + "=" + needle.id, null, null, null, null)
-            val converter = NeedleConverter(context)
-            val result = cursor.first(converter::convert)
-            notifyObservers()
-            return result
-        }
+        val id = db.needleDao().insert(needle)
+        notifyObservers()
+        return needle.copy(id = id)
     }
 
     @Synchronized
@@ -241,12 +230,7 @@ object KnittingsDataSource : AbstractObservableDatabase(), PhotoDataSource, Cate
     }
 
     private fun deleteNeedleImpl(needle: Needle) {
-        context.database.writableDatabase.use { database ->
-            // delete the category
-            database.delete(NeedleTable.NEEDLES, NeedleTable.Cols.ID + "=" + needle.id, null)
-            Log.d(TAG, "Deleted needle " + needle.id + ": " + needle)
-        }
-        notifyObservers()
+        db.needleDao().delete(needle)
     }
 
     @Synchronized
@@ -273,17 +257,10 @@ object KnittingsDataSource : AbstractObservableDatabase(), PhotoDataSource, Cate
         }
     }
 
-    @Synchronized
-    fun addRowCounter(rowCounter: RowCounter, manualID: Boolean = false): RowCounter {
-        context.database.writableDatabase.use { database ->
-            val values = RowCounterTable.createContentValues(rowCounter, manualID)
-            val id = database.insert(RowCounterTable.ROW_COUNTERS, null, values)
-            val cursor = database.query(RowCounterTable.ROW_COUNTERS,
-                    RowCounterTable.Columns, RowCounterTable.Cols.ID + "=" + id, null, null, null, null)
-            val result = cursor.first(RowCounterConverter::convert)
-            notifyObservers()
-            return result
-        }
+    fun addRowCounter(rowCounter: RowCounter): RowCounter {
+        val id = db.rowCounterDao().insert(rowCounter)
+        notifyObservers()
+        return rowCounter.copy(id = id)
     }
 
     @Synchronized
