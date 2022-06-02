@@ -16,11 +16,11 @@ interface DatabaseApplication {
 
     fun getPhotoDataSource(): PhotoDataSource
 
-    fun getProjectsDataSource(): ProjectsDataSource<Knitting>
+    fun getProjectsDataSource(): ProjectsDataSource
 
     fun getApplicationSettings(): ApplicationSettings
 
-    fun createExportDatabase(): ExportDatabase<Knitting>
+    fun createExportDatabase(): ExportDatabase
 
-    fun createExportDatabaseFromJSON(json: JSONObject, externalFilesDir: File): ExportDatabase<Knitting>
+    fun createExportDatabaseFromJSON(json: JSONObject, externalFilesDir: File): ExportDatabase
 }
