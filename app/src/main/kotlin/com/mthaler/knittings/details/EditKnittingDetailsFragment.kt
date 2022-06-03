@@ -141,7 +141,7 @@ class EditKnittingDetailsFragment : Fragment() {
         }
 
         binding.knittingDuration.setOnClickListener {
-            val d = DurationPickerDialog(requireContext(), { durationPicker, d ->
+            val d = DurationPickerDialog(requireContext(), { _, d ->
                 binding.knittingDuration.text = TimeUtils.formatDuration(d)
                 duration = d
             }, duration)
