@@ -2,20 +2,21 @@ package com.mthaler.knittings
 
 import android.os.Build
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.Menu
-import android.view.View
-import android.view.ViewGroup
+import android.text.TextUtils
+import android.view.*
 import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.navigation.NavigationView
+import com.mthaler.knittings.about.AboutDialog
 import com.mthaler.knittings.databinding.ActivityMainBinding
 import com.mthaler.knittings.details.KnittingDetailsActivity
 import com.mthaler.knittings.filter.CombinedFilter
+import com.mthaler.knittings.filter.ContainsFilter
 import com.mthaler.knittings.filter.SingleCategoryFilter
 import com.mthaler.knittings.filter.SingleStatusFilter
 import com.mthaler.knittings.utils.AndroidViewModelFactory
@@ -154,6 +155,41 @@ class MainFragment : Fragment(), NavigationView.OnNavigationItemSelectedListener
         super.onSaveInstanceState(outState)
     }
 
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.menu_item_about -> {
+                AboutDialog.show(requireActivity())
+                true
+            }
+            R.id.menu_item_sort -> {
+                val listItems = arrayOf(
+                    resources.getString(R.string.sorting_newest_first),
+                    resources.getString(R.string.sorting_oldest_first),
+                    resources.getString(R.string.sorting_alphabetical)
+                )
+                val builder = AlertDialog.Builder(requireContext())
+                val checkedItem = when (viewModel.sorting) {
+                    Sorting.NewestFirst -> 0
+                    Sorting.OldestFirst -> 1
+                    Sorting.Alphabetical -> 2
+                }
+                builder.setSingleChoiceItems(listItems, checkedItem) { dialog, which ->
+                    when (which) {
+                        0 -> viewModel.sorting = Sorting.NewestFirst
+                        1 -> viewModel.sorting = Sorting.OldestFirst
+                        2 -> viewModel.sorting = Sorting.Alphabetical
+                    }
+                    dialog.dismiss()
+                }
+                builder.setNegativeButton(R.string.dialog_button_cancel) { dialog, _ -> dialog.dismiss() }
+                val dialog = builder.create()
+                dialog.show()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
     private fun configureSearchView(menu: Menu) {
         val search = menu.findItem(R.id.search)
         val sv = search.actionView as SearchView
@@ -167,6 +203,22 @@ class MainFragment : Fragment(), NavigationView.OnNavigationItemSelectedListener
             sv.setQuery(initialQuery, true)
         }
         this.sv = sv
+    }
+
+    /**
+     * Called when the query text is changed by the use
+     *
+     * @param newText the new content of the query text field
+     * @return false if the SearchView should perform the default action of showing any suggestions
+     *         if available, true if the action was handled by the listener
+     */
+    override fun onQueryTextChange(newText: String?): Boolean {
+        if (newText == null || TextUtils.isEmpty(newText)) {
+            viewModel.filter = CombinedFilter.empty()
+        } else {
+            viewModel.filter = CombinedFilter(listOf(ContainsFilter(newText)))
+        }
+        return true
     }
 
     /**
