@@ -1,5 +1,6 @@
 package com.mthaler.knittings
 
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -7,10 +8,15 @@ import android.view.ViewGroup
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
+import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.mthaler.knittings.databinding.ActivityMainBinding
 import com.mthaler.knittings.details.KnittingDetailsActivity
+import com.mthaler.knittings.filter.SingleCategoryFilter
+import com.mthaler.knittings.filter.SingleStatusFilter
+import com.mthaler.knittings.utils.AndroidViewModelFactory
+import com.mthaler.knittings.whatsnew.WhatsNewDialog
 
 class MainFragment : Fragment() {
 
@@ -66,13 +72,64 @@ class MainFragment : Fragment() {
 
         val rv = binding.knittingRecyclerView
         rv.layoutManager = LinearLayoutManager(requireContext())
+
+        viewModel = AndroidViewModelFactory(requireActivity().application).create(MainViewModel::class.java)
+        viewModel.projects.observe(this, { knittings ->
+
+            when {
+                knittings == null -> {
+                    binding.knittingListEmptyRecyclerView.visibility = View.GONE
+                    binding.knittingRecyclerView.visibility = View.VISIBLE
+                }
+                knittings.isEmpty() -> {
+                    binding.knittingListEmptyRecyclerView.visibility = View.VISIBLE
+                    binding.knittingRecyclerView.visibility = View.GONE
+                }
+                else -> {
+                    binding.knittingListEmptyRecyclerView.visibility = View.GONE
+                    binding.knittingRecyclerView.visibility = View.VISIBLE
+                }
+            }
+            if (viewModel.filter.filters.filter { it is SingleCategoryFilter || it is SingleStatusFilter }
+                    .isEmpty()) {
+                activeFilters.text = ""
+                activeFilters.visibility = View.GONE
+            } else {
+                val hasCategoryFilter =
+                    viewModel.filter.filters.filter { it is SingleCategoryFilter }.isNotEmpty()
+                val hasStatusFilter =
+                    viewModel.filter.filters.filter { it is SingleStatusFilter }.isNotEmpty()
+                val filterText = createFilterText(hasCategoryFilter, hasStatusFilter)
+                activeFilters.text = filterText
+                activeFilters.visibility = View.VISIBLE
+            }
+            adapter.setKnittings(knittings ?: emptyList())
+        })
     }
 
-     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-         super.onViewCreated(view, savedInstanceState)
-     }
+    private fun init() {
+        val sharedPref = PreferenceManager.getDefaultSharedPreferences(requireContext())
+        var currentVersionNumber = 0L
+        val savedVersionNumber = sharedPref.getInt(VERSION_KEY, 0)
+        try {
+            val pi = requireActivity().packageManager.getPackageInfo(requireActivity().packageName, 0)
+            if (Build.VERSION.SDK_INT >= 27) {
+                currentVersionNumber = pi.longVersionCode
+            } else {
+                currentVersionNumber = pi.versionCode.toLong()
+            }
+        } catch (e: Exception) {
+        }
+        if (currentVersionNumber > savedVersionNumber) {
+            WhatsNewDialog.show(requireActivity())
+            val editor = sharedPref.edit()
+            editor.putLong(VERSION_KEY, currentVersionNumber)
+            editor.commit()
+        }
+    }
 
      companion object {
-         private val STATE_QUERY = "q"
+         private const val STATE_QUERY = "q"
+         private const val VERSION_KEY = "version_number"
      }
 }
