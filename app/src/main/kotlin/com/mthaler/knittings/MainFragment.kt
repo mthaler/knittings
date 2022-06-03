@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import com.mthaler.knittings.databinding.ActivityMainBinding
+import com.mthaler.knittings.details.KnittingDetailsActivity
 
 class MainFragment : Fragment() {
 
@@ -33,4 +34,22 @@ class MainFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        if (savedInstanceState != null) {
+            initialQuery = savedInstanceState.getCharSequence(MainActivity.STATE_QUERY)
+        }
+
+        // set on click handler of floating action button that creates a new knitting
+        binding.fabCreateAddKnitting.setOnClickListener {
+            // start knitting activity with newly created knitting
+            startActivity(KnittingDetailsActivity.newIntent(this, -1L, true))
+        }
+    }
+
+     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+         super.onViewCreated(view, savedInstanceState)
+     }
 }
