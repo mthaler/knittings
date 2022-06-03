@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.mthaler.knittings.about.AboutDialog
 import com.mthaler.knittings.databinding.ActivityMainBinding
+import com.mthaler.knittings.databinding.FragmentMainBinding
 import com.mthaler.knittings.details.KnittingDetailsActivity
 import com.mthaler.knittings.filter.CombinedFilter
 import com.mthaler.knittings.filter.ContainsFilter
@@ -28,7 +29,7 @@ class MainFragment : Fragment(), SearchView.OnQueryTextListener, SearchView.OnCl
     private var initialQuery: CharSequence? = null
     private var sv: SearchView? = null
 
-    private var _binding: ActivityMainBinding? = null
+    private var _binding: FragmentMainBinding? = null
     private val binding get() = _binding!!
 
     override fun onCreateView(
@@ -36,7 +37,7 @@ class MainFragment : Fragment(), SearchView.OnQueryTextListener, SearchView.OnCl
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = ActivityMainBinding.inflate(inflater, container, false)
+        _binding = FragmentMainBinding.inflate(inflater, container, false)
         val view = binding.root
         setHasOptionsMenu(true)
         return view
