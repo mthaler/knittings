@@ -39,17 +39,21 @@ class MainFragment : Fragment() {
         super.onCreate(savedInstanceState)
 
         if (savedInstanceState != null) {
-            initialQuery = savedInstanceState.getCharSequence(MainActivity.STATE_QUERY)
+            initialQuery = savedInstanceState.getCharSequence(STATE_QUERY)
         }
 
         // set on click handler of floating action button that creates a new knitting
         binding.fabCreateAddKnitting.setOnClickListener {
             // start knitting activity with newly created knitting
-            startActivity(KnittingDetailsActivity.newIntent(this, -1L, true))
+            startActivity(KnittingDetailsActivity.newIntent(requireContext(), -1L, true))
         }
     }
 
      override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
          super.onViewCreated(view, savedInstanceState)
+     }
+
+     companion object {
+         private val STATE_QUERY = "q"
      }
 }
