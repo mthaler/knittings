@@ -4,8 +4,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.mthaler.knittings.databinding.ActivityMainBinding
 import com.mthaler.knittings.details.KnittingDetailsActivity
 
@@ -47,6 +50,22 @@ class MainFragment : Fragment() {
             // start knitting activity with newly created knitting
             startActivity(KnittingDetailsActivity.newIntent(requireContext(), -1L, true))
         }
+
+        val toggle = ActionBarDrawerToggle(
+            requireActivity(),
+            binding.drawerLayout,
+            binding.toolbar,
+            R.string.navigation_drawer_open,
+            R.string.navigation_drawer_close
+        )
+        binding.drawerLayout.addDrawerListener(toggle)
+
+        toggle.syncState()
+
+        binding.navView.setNavigationItemSelectedListener(this)
+
+        val rv = binding.knittingRecyclerView
+        rv.layoutManager = LinearLayoutManager(requireContext())
     }
 
      override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
