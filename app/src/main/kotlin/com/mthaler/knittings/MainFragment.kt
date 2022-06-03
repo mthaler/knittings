@@ -11,7 +11,6 @@ import androidx.fragment.app.Fragment
 import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.navigation.NavigationView
 import com.mthaler.knittings.about.AboutDialog
 import com.mthaler.knittings.databinding.ActivityMainBinding
 import com.mthaler.knittings.details.KnittingDetailsActivity
@@ -22,7 +21,7 @@ import com.mthaler.knittings.filter.SingleStatusFilter
 import com.mthaler.knittings.utils.AndroidViewModelFactory
 import com.mthaler.knittings.whatsnew.WhatsNewDialog
 
-class MainFragment : Fragment(), NavigationView.OnNavigationItemSelectedListener, SearchView.OnQueryTextListener, SearchView.OnCloseListener {
+class MainFragment : Fragment(), SearchView.OnQueryTextListener, SearchView.OnCloseListener {
 
     private lateinit var viewModel: MainViewModel
 
