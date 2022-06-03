@@ -6,5 +6,5 @@ import com.mthaler.knittings.model.NeedleType
 
 data class SingleTypeFilter(val type: NeedleType) : Filter<Needle> {
 
-    override fun filter(needles: List<Needle>): List<Needle> = needles.filter { it.type == type }
+    override fun filter(items: List<Needle>): List<Needle> = items.filter { it.type == type }
 }

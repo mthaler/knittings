@@ -8,5 +8,5 @@ import com.mthaler.knittings.utils.StringUtils
  */
 data class ContainsFilter(val text: String) : Filter<Knitting> {
 
-    override fun filter(projects: List<Knitting>): List<Knitting> = projects.filter { StringUtils.containsIgnoreCase(it.title, text) || StringUtils.containsIgnoreCase(it.description, text) }
+    override fun filter(items: List<Knitting>): List<Knitting> = items.filter { StringUtils.containsIgnoreCase(it.title, text) || StringUtils.containsIgnoreCase(it.description, text) }
 }
