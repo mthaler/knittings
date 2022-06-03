@@ -114,15 +114,6 @@ class DropboxExportFragment : AbstractDropboxFragment() {
                 show()
             }
         }
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
 
         val sm = DropboxExportServiceManager.getInstance()
 
@@ -157,7 +148,7 @@ class DropboxExportFragment : AbstractDropboxFragment() {
                             with(builder) {
                                 setTitle(R.string.dropbox_export_cancelled_dialog_title)
                                 setMessage(R.string.dropbox_export_cancelled_dialog_msg)
-                                setPositiveButton(R.string.dropbox_export_cancelled_dialog_ok_button) { dialog, which ->
+                                setPositiveButton(R.string.dropbox_export_cancelled_dialog_ok_button) { _, _ ->
                                     viewLifecycleOwner.lifecycleScope.launch {
                                         withContext(Dispatchers.IO) {
                                             //DropboxClientFactory.getClient().files().deleteV2("/${jobStatus.data}")
@@ -192,6 +183,11 @@ class DropboxExportFragment : AbstractDropboxFragment() {
             binding.photoCount.text = statistics.photos.toString()
             binding.photoTotalSize.text = Format.humanReadableByteCountBin(statistics.totalSize)
         })
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     override fun onResume() {

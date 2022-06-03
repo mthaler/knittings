@@ -83,11 +83,9 @@ class PhotoGalleryFragment : Fragment() {
         val photoGalleryAdapter = PhotoGalleryAdapter(requireContext(), viewLifecycleOwner.lifecycleScope) { photo -> listener?.photoClicked(photo.id) }
         val orientation = this.resources.configuration.orientation
         val columns = if (orientation == Configuration.ORIENTATION_PORTRAIT) 2 else 3
-        view?.let {
-            val gridLayoutManager = GridLayoutManager(requireContext(), columns)
-            binding.gridView.layoutManager = gridLayoutManager
-            binding.gridView.adapter = photoGalleryAdapter
-        }
+        val gridLayoutManager = GridLayoutManager(requireContext(), columns)
+        binding.gridView.layoutManager = gridLayoutManager
+        binding.gridView.adapter = photoGalleryAdapter
         val viewModel = AndroidViewModelFactory(requireActivity().application).create(PhotoGalleryViewModel::class.java)
         viewModel.init(ownerID)
         viewModel.photos.observe(viewLifecycleOwner, { photos ->

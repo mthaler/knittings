@@ -1,5 +1,6 @@
 package com.mthaler.knittings
 
+import android.os.Build
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.Menu
@@ -188,17 +189,21 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
     private fun init() {
         val sharedPref = PreferenceManager.getDefaultSharedPreferences(this)
-        var currentVersionNumber = 0
+        var currentVersionNumber = 0L
         val savedVersionNumber = sharedPref.getInt(VERSION_KEY, 0)
         try {
             val pi = packageManager.getPackageInfo(packageName, 0)
-            currentVersionNumber = pi.versionCode
+            if (Build.VERSION.SDK_INT >= 27) {
+                currentVersionNumber = pi.longVersionCode
+            } else {
+                currentVersionNumber = pi.versionCode.toLong()
+            }
         } catch (e: Exception) {
         }
         if (currentVersionNumber > savedVersionNumber) {
             WhatsNewDialog.show(this)
             val editor = sharedPref.edit()
-            editor.putInt(VERSION_KEY, currentVersionNumber)
+            editor.putLong(VERSION_KEY, currentVersionNumber)
             editor.commit()
         }
     }
