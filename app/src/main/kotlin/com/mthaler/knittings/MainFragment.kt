@@ -3,6 +3,7 @@ package com.mthaler.knittings
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.ActionBarDrawerToggle
@@ -11,6 +12,7 @@ import androidx.fragment.app.Fragment
 import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.navigation.NavigationView
 import com.mthaler.knittings.databinding.ActivityMainBinding
 import com.mthaler.knittings.details.KnittingDetailsActivity
 import com.mthaler.knittings.filter.SingleCategoryFilter
@@ -18,7 +20,7 @@ import com.mthaler.knittings.filter.SingleStatusFilter
 import com.mthaler.knittings.utils.AndroidViewModelFactory
 import com.mthaler.knittings.whatsnew.WhatsNewDialog
 
-class MainFragment : Fragment() {
+class MainFragment : Fragment(), NavigationView.OnNavigationItemSelectedListener, SearchView.OnQueryTextListener, SearchView.OnCloseListener {
 
     private lateinit var viewModel: MainViewModel
 
@@ -126,6 +128,21 @@ class MainFragment : Fragment() {
             editor.putLong(VERSION_KEY, currentVersionNumber)
             editor.commit()
         }
+    }
+
+    private fun configureSearchView(menu: Menu) {
+        val search = menu.findItem(R.id.search)
+        val sv = search.actionView as SearchView
+        sv.setOnQueryTextListener(this)
+        sv.setOnCloseListener(this)
+        sv.isSubmitButtonEnabled = false
+        sv.setIconifiedByDefault(true)
+        if (initialQuery != null) {
+            sv.isIconified = false
+            search.expandActionView()
+            sv.setQuery(initialQuery, true)
+        }
+        this.sv = sv
     }
 
      companion object {
