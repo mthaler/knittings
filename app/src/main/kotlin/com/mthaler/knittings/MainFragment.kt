@@ -71,10 +71,10 @@ class MainFragment : Fragment(), SearchView.OnQueryTextListener, SearchView.OnCl
 
         toggle.syncState()
 
-        binding.navView.setNavigationItemSelectedListener(this)
-
         val rv = binding.knittingRecyclerView
         rv.layoutManager = LinearLayoutManager(requireContext())
+
+        val activeFilters = binding.knittingActiveFilters
 
         viewModel = AndroidViewModelFactory(requireActivity().application).create(MainViewModel::class.java)
         viewModel.projects.observe(this, { knittings ->
