@@ -233,7 +233,7 @@ class DropboxImportFragment : AbstractDropboxFragment() {
             val dropboxApi = DropboxApi(dropboxClient, requireContext(), viewLifecycleOwner)
             val dialogBuilder = AlertDialog.Builder(requireContext())
             dialogBuilder.setTitle("Backups")
-            dialogBuilder.setItems(files) { dialog, item ->
+            dialogBuilder.setItems(files) { _, item ->
                 val directory = files[item]
                 lifecycleScope.launch(Dispatchers.IO) {
                     dropboxApi.readDatabase(directory)

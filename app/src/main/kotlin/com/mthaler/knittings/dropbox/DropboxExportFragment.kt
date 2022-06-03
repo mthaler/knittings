@@ -114,15 +114,6 @@ class DropboxExportFragment : AbstractDropboxFragment() {
                 show()
             }
         }
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
 
         val sm = DropboxExportServiceManager.getInstance()
 
@@ -192,6 +183,11 @@ class DropboxExportFragment : AbstractDropboxFragment() {
             binding.photoCount.text = statistics.photos.toString()
             binding.photoTotalSize.text = Format.humanReadableByteCountBin(statistics.totalSize)
         })
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     override fun onResume() {
