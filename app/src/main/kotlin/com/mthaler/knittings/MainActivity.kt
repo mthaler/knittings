@@ -1,5 +1,6 @@
 package com.mthaler.knittings
 
+import android.os.Build
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.Menu
@@ -192,7 +193,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         val savedVersionNumber = sharedPref.getInt(VERSION_KEY, 0)
         try {
             val pi = packageManager.getPackageInfo(packageName, 0)
-            if (BuildConfig.VERSION_CODE >= 27) {
+            if (Build.VERSION.SDK_INT >= 27) {
                 currentVersionNumber = pi.longVersionCode
             } else {
                 currentVersionNumber = pi.versionCode.toLong()
