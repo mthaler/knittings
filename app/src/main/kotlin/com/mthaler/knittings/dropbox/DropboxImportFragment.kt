@@ -239,7 +239,7 @@ class DropboxImportFragment : AbstractDropboxFragment() {
                     dropboxApi.readDatabase(directory)
                 }
             }
-            dialogBuilder.setNegativeButton("Cancel") { dialog, which -> }
+            dialogBuilder.setNegativeButton("Cancel") { _, _ -> }
             // Create alert dialog object via builder
             val alertDialogObject = dialogBuilder.create()
             // Show the dialog
