@@ -113,7 +113,8 @@ class EditKnittingDetailsFragment : Fragment() {
             binding.ratingBar.rating = knitting.rating.toFloat()
         }
         binding.knittingStarted.text = DateFormat.getDateInstance().format(started)
-        binding.knittingFinished.text = if (finished != null) DateFormat.getDateInstance().format(finished) else ""
+        val f = finished
+        binding.knittingFinished.text = if (f != null) DateFormat.getDateInstance().format(f)!! else ""
         binding.knittingDuration.text = TimeUtils.formatDuration(duration)
         category?.let {
             binding.knittingCategory.text = it.name
