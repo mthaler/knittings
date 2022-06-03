@@ -1,5 +1,6 @@
 package com.mthaler.knittings.filter
 
+import android.widget.RemoteViews
 import com.mthaler.knittings.model.Knitting
 import com.mthaler.knittings.model.Status
 

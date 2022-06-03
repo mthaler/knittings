@@ -55,7 +55,7 @@ fun JSONObject.toKnitting(context: Context): Triple<Knitting, Long?, Long?> {
     } else {
         Status.PLANNED
     }
-    return Triple(Knitting(id, title, description, started, finished, needleDiameter, size, null, rating, duration, status = status), defaultPhoto, category)
+    return Triple(Knitting(id, title, description, started!!, finished, needleDiameter, size, null, rating, duration, status = status), defaultPhoto, category)
 }
 
 fun Photo.toJSON(): JSONObject {

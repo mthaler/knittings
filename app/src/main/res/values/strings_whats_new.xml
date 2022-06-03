@@ -2,7 +2,10 @@
 <resources>
     <string name="whats_new_title">Whats New</string>
     <string name="whats_new"><![CDATA[
-         <h3>Version 0.9.40</h3>
+        <h3>Version 0.9.41</h3>
+        - Some code cleanups<br>
+        - Downgraded Kotlin to 1.4.10<br>
+        <h3>Version 0.9.40</h3>
         - Removed some permissions from AndroidManifest.xml<br>
         <h3>Version 0.9.39</h3>
         - Some code cleanups<br>
