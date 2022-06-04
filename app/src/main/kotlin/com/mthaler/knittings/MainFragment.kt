@@ -1,11 +1,13 @@
 package com.mthaler.knittings
 
+import android.app.Activity
 import android.os.Build
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.*
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ActionMode
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
@@ -115,7 +117,7 @@ class MainFragment : Fragment(), SearchView.OnQueryTextListener, SearchView.OnCl
         val adapter = KnittingAdapter(requireContext(), { knitting ->
             startActivity(KnittingDetailsActivity.newIntent(requireContext(), knitting.id, false))
         }, { knitting ->
-            requireActivity().startSupportActionMode(object : ActionMode.Callback {
+            (requireActivity() as AppCompatActivity).startSupportActionMode(object : ActionMode.Callback {
                 /**
                  * Called to report a user click on an action button.
                  *
