@@ -64,10 +64,16 @@ class MainFragment : Fragment(), SearchView.OnQueryTextListener, SearchView.OnCl
         val rv = binding.knittingRecyclerView
         rv.layoutManager = LinearLayoutManager(requireContext())
 
+        init()
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
         val activeFilters = binding.knittingActiveFilters
 
         viewModel = AndroidViewModelFactory(requireActivity().application).create(MainViewModel::class.java)
-        viewModel.projects.observe(this, { knittings ->
+        viewModel.projects.observe(viewLifecycleOwner, { knittings ->
 
             when {
                 knittings == null -> {
