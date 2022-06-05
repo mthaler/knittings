@@ -43,12 +43,6 @@ class MainFragment : Fragment(), SearchView.OnQueryTextListener, SearchView.OnCl
             initialQuery = savedInstanceState.getCharSequence(STATE_QUERY)
         }
 
-        // set on click handler of floating action button that creates a new knitting
-        binding.fabCreateAddKnitting.setOnClickListener {
-            // start knitting activity with newly created knitting
-            startActivity(KnittingDetailsActivity.newIntent(requireContext(), -1L, true))
-        }
-
         init()
     }
 
@@ -62,6 +56,13 @@ class MainFragment : Fragment(), SearchView.OnQueryTextListener, SearchView.OnCl
         _binding = FragmentMainBinding.inflate(inflater, container, false)
         val view = binding.root
         setHasOptionsMenu(true)
+
+        // set on click handler of floating action button that creates a new knitting
+        binding.fabCreateAddKnitting.setOnClickListener {
+            // start knitting activity with newly created knitting
+            startActivity(KnittingDetailsActivity.newIntent(requireContext(), -1L, true))
+        }
+
         return view
     }
 
@@ -305,7 +306,7 @@ class MainFragment : Fragment(), SearchView.OnQueryTextListener, SearchView.OnCl
     private fun init() {
         val sharedPref = PreferenceManager.getDefaultSharedPreferences(requireContext())
         var currentVersionNumber = 0L
-        val savedVersionNumber = sharedPref.getInt(VERSION_KEY, 0)
+        val savedVersionNumber = sharedPref.getLong(VERSION_KEY, 0)
         try {
             val pi = requireActivity().packageManager.getPackageInfo(requireActivity().packageName, 0)
             if (Build.VERSION.SDK_INT >= 27) {
