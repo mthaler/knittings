@@ -188,6 +188,12 @@ class MainFragment : Fragment(), SearchView.OnQueryTextListener, SearchView.OnCl
         binding.knittingRecyclerView.adapter = adapter
     }
 
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+
+        configureSearchView(menu)
+    }
+
     private fun init() {
         val sharedPref = PreferenceManager.getDefaultSharedPreferences(requireContext())
         var currentVersionNumber = 0L

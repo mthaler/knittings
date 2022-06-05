@@ -1,6 +1,5 @@
 package com.mthaler.knittings
 
-import android.os.Build
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.Menu
@@ -8,12 +7,7 @@ import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.view.ActionMode
-import androidx.appcompat.widget.SearchView
 import androidx.core.view.GravityCompat
-import androidx.preference.PreferenceManager
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.navigation.NavigationView
 import com.mthaler.knittings.category.CategoryListActivity
 import com.mthaler.knittings.dropbox.DropboxExportActivity
@@ -21,16 +15,12 @@ import com.mthaler.knittings.dropbox.DropboxImportActivity
 import com.mthaler.knittings.about.AboutDialog
 import com.mthaler.knittings.compressphotos.CompressPhotosActivity
 import com.mthaler.knittings.database.KnittingsDataSource
-import com.mthaler.knittings.details.KnittingDetailsActivity
 import com.mthaler.knittings.projectcount.ProjectCountActivity
 import com.mthaler.knittings.databinding.ActivityMainBinding
-import com.mthaler.knittings.databinding.ActivityNeedleListBinding
 import com.mthaler.knittings.filter.*
 import com.mthaler.knittings.model.Status
 import com.mthaler.knittings.needle.NeedleListActivity
 import com.mthaler.knittings.settings.SettingsActivity
-import com.mthaler.knittings.utils.AndroidViewModelFactory
-import com.mthaler.knittings.whatsnew.WhatsNewDialog
 import java.util.*
 
 class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedListener {
@@ -57,7 +47,6 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
         menuInflater.inflate(R.menu.knitting_list, menu)
-        configureSearchView(menu)
         return true
     }
 
