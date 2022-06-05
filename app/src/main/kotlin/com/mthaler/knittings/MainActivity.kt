@@ -3,6 +3,7 @@ package com.mthaler.knittings
 import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
+import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.app.NavUtils
 import androidx.core.view.GravityCompat
 import com.google.android.material.navigation.NavigationView
@@ -29,6 +30,15 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
         // enable up navigation
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
+        val toggle = ActionBarDrawerToggle(
+            this,
+            binding.drawerLayout,
+            binding.toolbar,
+            R.string.navigation_drawer_open,
+            R.string.navigation_drawer_close
+        )
+        binding.drawerLayout.addDrawerListener(toggle)
 
         if (savedInstanceState == null) {
             val f = MainFragment()
