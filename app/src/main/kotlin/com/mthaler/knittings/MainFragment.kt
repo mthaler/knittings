@@ -53,9 +53,6 @@ class MainFragment : Fragment(), SearchView.OnQueryTextListener, SearchView.OnCl
             startActivity(KnittingDetailsActivity.newIntent(requireContext(), -1L, true))
         }
 
-        val rv = binding.knittingRecyclerView
-        rv.layoutManager = LinearLayoutManager(requireContext())
-
         init()
     }
 
@@ -113,6 +110,9 @@ class MainFragment : Fragment(), SearchView.OnQueryTextListener, SearchView.OnCl
             }
             adapter.setKnittings(knittings ?: emptyList())
         })
+
+
+
 
         val adapter = KnittingAdapter(requireContext(), { knitting ->
             startActivity(KnittingDetailsActivity.newIntent(requireContext(), knitting.id, false))
