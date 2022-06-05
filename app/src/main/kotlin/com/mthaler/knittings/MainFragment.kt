@@ -31,8 +31,6 @@ class MainFragment : Fragment(), SearchView.OnQueryTextListener, SearchView.OnCl
     private var initialQuery: CharSequence? = null
     private var sv: SearchView? = null
 
-    private lateinit var adapter: KnittingAdapter
-
     private var _binding: FragmentMainBinding? = null
     private val binding get() = _binding!!
 
@@ -74,43 +72,6 @@ class MainFragment : Fragment(), SearchView.OnQueryTextListener, SearchView.OnCl
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        val activeFilters = binding.knittingActiveFilters
-
-        viewModel = AndroidViewModelFactory(requireActivity().application).create(MainViewModel::class.java)
-        viewModel.projects.observe(viewLifecycleOwner, { knittings ->
-
-            when {
-                knittings == null -> {
-                    binding.knittingListEmptyRecyclerView.visibility = View.GONE
-                    binding.knittingRecyclerView.visibility = View.VISIBLE
-                }
-                knittings.isEmpty() -> {
-                    binding.knittingListEmptyRecyclerView.visibility = View.VISIBLE
-                    binding.knittingRecyclerView.visibility = View.GONE
-                }
-                else -> {
-                    binding.knittingListEmptyRecyclerView.visibility = View.GONE
-                    binding.knittingRecyclerView.visibility = View.VISIBLE
-                }
-            }
-            if (viewModel.filter.filters.filter { it is SingleCategoryFilter || it is SingleStatusFilter }
-                    .isEmpty()) {
-                activeFilters.text = ""
-                activeFilters.visibility = View.GONE
-            } else {
-                val hasCategoryFilter =
-                    viewModel.filter.filters.filter { it is SingleCategoryFilter }.isNotEmpty()
-                val hasStatusFilter =
-                    viewModel.filter.filters.filter { it is SingleStatusFilter }.isNotEmpty()
-                val filterText = createFilterText(hasCategoryFilter, hasStatusFilter)
-                activeFilters.text = filterText
-                activeFilters.visibility = View.VISIBLE
-            }
-            adapter.setKnittings(knittings ?: emptyList())
-        })
-
-
 
 
         val adapter = KnittingAdapter(requireContext(), { knitting ->
@@ -184,6 +145,42 @@ class MainFragment : Fragment(), SearchView.OnQueryTextListener, SearchView.OnCl
                 }
             })
         })
+
+        val activeFilters = binding.knittingActiveFilters
+
+        viewModel = AndroidViewModelFactory(requireActivity().application).create(MainViewModel::class.java)
+        viewModel.projects.observe(viewLifecycleOwner, { knittings ->
+
+            when {
+                knittings == null -> {
+                    binding.knittingListEmptyRecyclerView.visibility = View.GONE
+                    binding.knittingRecyclerView.visibility = View.VISIBLE
+                }
+                knittings.isEmpty() -> {
+                    binding.knittingListEmptyRecyclerView.visibility = View.VISIBLE
+                    binding.knittingRecyclerView.visibility = View.GONE
+                }
+                else -> {
+                    binding.knittingListEmptyRecyclerView.visibility = View.GONE
+                    binding.knittingRecyclerView.visibility = View.VISIBLE
+                }
+            }
+            if (viewModel.filter.filters.filter { it is SingleCategoryFilter || it is SingleStatusFilter }
+                    .isEmpty()) {
+                activeFilters.text = ""
+                activeFilters.visibility = View.GONE
+            } else {
+                val hasCategoryFilter =
+                    viewModel.filter.filters.filter { it is SingleCategoryFilter }.isNotEmpty()
+                val hasStatusFilter =
+                    viewModel.filter.filters.filter { it is SingleStatusFilter }.isNotEmpty()
+                val filterText = createFilterText(hasCategoryFilter, hasStatusFilter)
+                activeFilters.text = filterText
+                activeFilters.visibility = View.VISIBLE
+            }
+            adapter.setKnittings(knittings ?: emptyList())
+        })
+
         binding.knittingRecyclerView.adapter = adapter
     }
 
