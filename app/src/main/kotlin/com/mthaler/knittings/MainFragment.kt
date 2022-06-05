@@ -268,7 +268,7 @@ class MainFragment : Fragment(), SearchView.OnQueryTextListener, SearchView.OnCl
             }
             R.id.menu_item_status_filter -> {
                 val listItems =
-                    (listOf(getString(R.string.filter_show_all)) + Status.formattedValues(this)).toTypedArray()
+                    (listOf(getString(R.string.filter_show_all)) + Status.formattedValues(requireContext())).toTypedArray()
                 val builder = AlertDialog.Builder(requireContext())
                 val f = viewModel.filter
                 val checkedItem = let {
