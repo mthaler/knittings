@@ -193,6 +193,7 @@ class MainFragment : Fragment(), SearchView.OnQueryTextListener, SearchView.OnCl
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
 
+        inflater.inflate(R.menu.knitting_list, menu)
         configureSearchView(menu)
     }
 
@@ -200,6 +201,101 @@ class MainFragment : Fragment(), SearchView.OnQueryTextListener, SearchView.OnCl
         return when (item.itemId) {
             R.id.menu_item_about -> {
                 AboutDialog.show(requireActivity())
+                true
+            }
+            R.id.menu_item_sort -> {
+                val listItems = arrayOf(
+                    getString(R.string.sorting_newest_first),
+                    getString(R.string.sorting_oldest_first),
+                    getString(R.string.sorting_alphabetical)
+                )
+                val builder = AlertDialog.Builder(requireContext())
+                val checkedItem = when (viewModel.sorting) {
+                    Sorting.NewestFirst -> 0
+                    Sorting.OldestFirst -> 1
+                    Sorting.Alphabetical -> 2
+                }
+                builder.setSingleChoiceItems(listItems, checkedItem) { dialog, which ->
+                    when (which) {
+                        0 -> viewModel.sorting = Sorting.NewestFirst
+                        1 -> viewModel.sorting = Sorting.OldestFirst
+                        2 -> viewModel.sorting = Sorting.Alphabetical
+                    }
+                    dialog.dismiss()
+                }
+                builder.setNegativeButton(R.string.dialog_button_cancel) { dialog, _ -> dialog.dismiss() }
+                val dialog = builder.create()
+                dialog.show()
+                true
+            }
+            R.id.menu_item_clear_filters -> {
+                viewModel.filter = CombinedFilter.empty()
+                true
+            }
+            R.id.menu_item_category_filter -> {
+                val categories = KnittingsDataSource.allCategories.sortedBy { it.name.lowercase() }
+                val listItems =
+                    (listOf(getString(R.string.filter_show_all)) + categories.map { it.name }
+                        .toList()).toTypedArray()
+                val builder = AlertDialog.Builder(requireContext())
+                val f = viewModel.filter
+                val checkedItem: Int = let {
+                    val result = f.filters.find { it is SingleCategoryFilter }
+                    if (result != null && result is SingleCategoryFilter) {
+                        val index = categories.indexOf(result.category)
+                        index + 1
+                    } else {
+                        0
+                    }
+                }
+                builder.setSingleChoiceItems(listItems, checkedItem) { dialog, which ->
+                    when (which) {
+                        0 -> viewModel.filter =
+                            CombinedFilter(f.filters.filterNot { it is SingleCategoryFilter })
+                        else -> {
+                            val category = categories[which - 1]
+                            val newFilter = SingleCategoryFilter(category)
+                            viewModel.filter =
+                                CombinedFilter(f.filters.filterNot { it is SingleCategoryFilter } + newFilter)
+                        }
+                    }
+                    dialog.dismiss()
+                }
+                builder.setNegativeButton(R.string.dialog_button_cancel) { dialog, _ -> dialog.dismiss() }
+                val dialog = builder.create()
+                dialog.show()
+                true
+            }
+            R.id.menu_item_status_filter -> {
+                val listItems =
+                    (listOf(getString(R.string.filter_show_all)) + Status.formattedValues(this)).toTypedArray()
+                val builder = AlertDialog.Builder(requireContext())
+                val f = viewModel.filter
+                val checkedItem = let {
+                    val result = f.filters.find { it is SingleStatusFilter }
+                    if (result != null && result is SingleStatusFilter) {
+                        val index = Status.values().indexOf(result.status)
+                        index + 1
+                    } else {
+                        0
+                    }
+                }
+                builder.setSingleChoiceItems(listItems, checkedItem) { dialog, which ->
+                    when (which) {
+                        0 -> viewModel.filter =
+                            CombinedFilter(f.filters.filterNot { it is SingleStatusFilter })
+                        else -> {
+                            val status = Status.values()[which - 1]
+                            val newFilter = SingleStatusFilter(status)
+                            viewModel.filter =
+                                CombinedFilter(f.filters.filterNot { it is SingleStatusFilter } + newFilter)
+                        }
+                    }
+                    dialog.dismiss()
+                }
+                builder.setNegativeButton(R.string.dialog_button_cancel) { dialog, _ -> dialog.dismiss() }
+                val dialog = builder.create()
+                dialog.show()
                 true
             }
             else -> super.onOptionsItemSelected(item)
