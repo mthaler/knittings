@@ -61,6 +61,8 @@ class MainFragment : Fragment(), SearchView.OnQueryTextListener, SearchView.OnCl
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        setHasOptionsMenu(true)
+
         _binding = FragmentMainBinding.inflate(inflater, container, false)
         val view = binding.root
         setHasOptionsMenu(true)
@@ -194,6 +196,16 @@ class MainFragment : Fragment(), SearchView.OnQueryTextListener, SearchView.OnCl
         configureSearchView(menu)
     }
 
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.menu_item_about -> {
+                AboutDialog.show(requireActivity())
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
     private fun init() {
         val sharedPref = PreferenceManager.getDefaultSharedPreferences(requireContext())
         var currentVersionNumber = 0L
@@ -227,50 +239,6 @@ class MainFragment : Fragment(), SearchView.OnQueryTextListener, SearchView.OnCl
             sb.append(resources.getString(R.string.status))
         }
         return sb.toString()
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        val sv = this.sv
-        if (sv != null && !sv.isIconified) {
-            outState.putCharSequence(STATE_QUERY, sv.query)
-        }
-
-        super.onSaveInstanceState(outState)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            R.id.menu_item_about -> {
-                AboutDialog.show(requireActivity())
-                true
-            }
-            R.id.menu_item_sort -> {
-                val listItems = arrayOf(
-                    resources.getString(R.string.sorting_newest_first),
-                    resources.getString(R.string.sorting_oldest_first),
-                    resources.getString(R.string.sorting_alphabetical)
-                )
-                val builder = AlertDialog.Builder(requireContext())
-                val checkedItem = when (viewModel.sorting) {
-                    Sorting.NewestFirst -> 0
-                    Sorting.OldestFirst -> 1
-                    Sorting.Alphabetical -> 2
-                }
-                builder.setSingleChoiceItems(listItems, checkedItem) { dialog, which ->
-                    when (which) {
-                        0 -> viewModel.sorting = Sorting.NewestFirst
-                        1 -> viewModel.sorting = Sorting.OldestFirst
-                        2 -> viewModel.sorting = Sorting.Alphabetical
-                    }
-                    dialog.dismiss()
-                }
-                builder.setNegativeButton(R.string.dialog_button_cancel) { dialog, _ -> dialog.dismiss() }
-                val dialog = builder.create()
-                dialog.show()
-                true
-            }
-            else -> super.onOptionsItemSelected(item)
-        }
     }
 
     private fun configureSearchView(menu: Menu) {
