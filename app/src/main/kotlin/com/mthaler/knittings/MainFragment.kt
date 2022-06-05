@@ -1,22 +1,17 @@
 package com.mthaler.knittings
 
-import android.app.Activity
 import android.os.Build
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.*
-import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ActionMode
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.preference.PreferenceManager
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.mthaler.knittings.about.AboutDialog
 import com.mthaler.knittings.database.KnittingsDataSource
-import com.mthaler.knittings.databinding.ActivityMainBinding
 import com.mthaler.knittings.databinding.FragmentMainBinding
 import com.mthaler.knittings.details.KnittingDetailsActivity
 import com.mthaler.knittings.filter.CombinedFilter
@@ -24,6 +19,7 @@ import com.mthaler.knittings.filter.ContainsFilter
 import com.mthaler.knittings.filter.SingleCategoryFilter
 import com.mthaler.knittings.filter.SingleStatusFilter
 import com.mthaler.knittings.model.Status
+import com.mthaler.knittings.projectcount.ProjectCountActivity
 import com.mthaler.knittings.utils.AndroidViewModelFactory
 import com.mthaler.knittings.whatsnew.WhatsNewDialog
 import java.util.*
@@ -296,6 +292,10 @@ class MainFragment : Fragment(), SearchView.OnQueryTextListener, SearchView.OnCl
                 builder.setNegativeButton(R.string.dialog_button_cancel) { dialog, _ -> dialog.dismiss() }
                 val dialog = builder.create()
                 dialog.show()
+                true
+            }
+            R.id.menu_item_count -> {
+                startActivity(ProjectCountActivity.newIntent(requireContext()))
                 true
             }
             else -> super.onOptionsItemSelected(item)
