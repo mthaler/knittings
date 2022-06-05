@@ -40,6 +40,10 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         )
         binding.drawerLayout.addDrawerListener(toggle)
 
+        toggle.syncState()
+
+        binding.navView.setNavigationItemSelectedListener(this)
+
         if (savedInstanceState == null) {
             val f = MainFragment()
             val fm = supportFragmentManager
