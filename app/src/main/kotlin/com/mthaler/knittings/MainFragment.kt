@@ -10,6 +10,7 @@ import androidx.appcompat.view.ActionMode
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.preference.PreferenceManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.mthaler.knittings.about.AboutDialog
 import com.mthaler.knittings.database.KnittingsDataSource
 import com.mthaler.knittings.databinding.FragmentMainBinding
@@ -73,6 +74,8 @@ class MainFragment : Fragment(), SearchView.OnQueryTextListener, SearchView.OnCl
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val rv = binding.knittingRecyclerView
+        rv.layoutManager = LinearLayoutManager(requireContext())
 
         val adapter = KnittingAdapter(requireContext(), { knitting ->
             startActivity(KnittingDetailsActivity.newIntent(requireContext(), knitting.id, false))
