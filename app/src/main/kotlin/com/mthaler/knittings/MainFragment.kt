@@ -305,21 +305,21 @@ class MainFragment : Fragment(), SearchView.OnQueryTextListener, SearchView.OnCl
 
     private fun init() {
         val sharedPref = PreferenceManager.getDefaultSharedPreferences(requireContext())
-        var currentVersionNumber = 0L
-        val savedVersionNumber = sharedPref.getLong(VERSION_KEY, 0)
+        var currentVersionNumber = 0
+        val savedVersionNumber = sharedPref.getInt(VERSION_KEY, 0)
         try {
             val pi = requireActivity().packageManager.getPackageInfo(requireActivity().packageName, 0)
             if (Build.VERSION.SDK_INT >= 27) {
-                currentVersionNumber = pi.longVersionCode
+                currentVersionNumber = pi.longVersionCode.toInt()
             } else {
-                currentVersionNumber = pi.versionCode.toLong()
+                currentVersionNumber = pi.versionCode
             }
         } catch (e: Exception) {
         }
         if (currentVersionNumber > savedVersionNumber) {
             WhatsNewDialog.show(requireActivity())
             val editor = sharedPref.edit()
-            editor.putLong(VERSION_KEY, currentVersionNumber)
+            editor.putInt(VERSION_KEY, currentVersionNumber)
             editor.commit()
         }
     }
