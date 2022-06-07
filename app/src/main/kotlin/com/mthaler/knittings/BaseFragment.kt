@@ -1,7 +1,10 @@
 package com.mthaler.knittings
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.mthaler.knittings.databinding.FragmentBaseBinding
 
@@ -10,14 +13,21 @@ class BaseFragment: Fragment() {
     private var _binding: FragmentBaseBinding? = null
     private val binding get() = _binding!!
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
 
-        configureToolbar()
+        _binding = FragmentBaseBinding.inflate(inflater, container, false)
+        val view = binding.root
+        return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        configureToolbar()
     }
 
     override fun onDestroyView() {
@@ -26,6 +36,9 @@ class BaseFragment: Fragment() {
     }
 
     private fun configureToolbar() {
+        (requireActivity() as AppCompatActivity).setSupportActionBar(binding.toolbar)
 
+        // enable up navigation
+        (requireActivity() as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
 }
