@@ -9,12 +9,13 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ActionMode
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.commit
 import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mthaler.knittings.about.AboutDialog
 import com.mthaler.knittings.database.KnittingsDataSource
 import com.mthaler.knittings.databinding.FragmentMainBinding
-import com.mthaler.knittings.details.KnittingDetailsActivity
+import com.mthaler.knittings.details.KnittingDetailsFragment
 import com.mthaler.knittings.filter.CombinedFilter
 import com.mthaler.knittings.filter.ContainsFilter
 import com.mthaler.knittings.filter.SingleCategoryFilter
@@ -59,7 +60,11 @@ class MainFragment : Fragment(), SearchView.OnQueryTextListener, SearchView.OnCl
         // set on click handler of floating action button that creates a new knitting
         binding.fabCreateAddKnitting.setOnClickListener {
             // start knitting activity with newly created knitting
-            startActivity(KnittingDetailsActivity.newIntent(requireContext(), -1L, true))
+            requireActivity().supportFragmentManager.commit {
+                replace(R.id.knitting_list_container, KnittingDetailsFragment.newInstance(-1L))
+                setReorderingAllowed(true)
+                addToBackStack(null) // name can be null
+            }
         }
 
         return view
@@ -78,7 +83,11 @@ class MainFragment : Fragment(), SearchView.OnQueryTextListener, SearchView.OnCl
         rv.layoutManager = LinearLayoutManager(requireContext())
 
         val adapter = KnittingAdapter(requireContext(), { knitting ->
-            startActivity(KnittingDetailsActivity.newIntent(requireContext(), knitting.id, false))
+            requireActivity().supportFragmentManager.commit {
+                replace(R.id.knitting_list_container, KnittingDetailsFragment.newInstance(knitting.id))
+                setReorderingAllowed(true)
+                addToBackStack(null) // name can be null
+            }
         }, { knitting ->
             (requireActivity() as AppCompatActivity).startSupportActionMode(object : ActionMode.Callback {
                 /**

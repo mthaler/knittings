@@ -6,12 +6,14 @@ import android.view.MenuItem
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.app.NavUtils
 import androidx.core.view.GravityCompat
+import androidx.fragment.app.commit
 import com.google.android.material.navigation.NavigationView
 import com.mthaler.knittings.category.CategoryListActivity
 import com.mthaler.knittings.dropbox.DropboxExportActivity
 import com.mthaler.knittings.dropbox.DropboxImportActivity
 import com.mthaler.knittings.compressphotos.CompressPhotosActivity
 import com.mthaler.knittings.databinding.ActivityMainBinding
+import com.mthaler.knittings.details.KnittingDetailsFragment
 import com.mthaler.knittings.needle.EditNeedleFragment
 import com.mthaler.knittings.needle.NeedleListActivity
 import com.mthaler.knittings.settings.SettingsActivity

@@ -20,20 +20,6 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".details.KnittingDetailsActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity" />
-        </activity> <!-- we define our own toolbar in MainActivity, use theme without toolbar -->
-        <activity
-            android:name=".photo.PhotoGalleryActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".details.KnittingDetailsActivity" />
-        </activity> <!-- we define our own toolbar in MainActivity, use theme without toolbar -->
-        <activity
             android:name=".dropbox.DropboxExportActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
@@ -52,21 +38,21 @@
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".details.KnittingDetailsActivity" />
+                android:value=".MainActivity" />
         </activity>
         <activity
             android:name=".category.CategoryListActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity" />
+                android:value="MainActivity" />
         </activity>
         <activity
             android:name=".category.SelectCategoryActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".details.KnittingDetailsActivity" />
+                android:value=".MainActivity" />
         </activity>
         <activity
             android:name=".projectcount.ProjectCountActivity"
