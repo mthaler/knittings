@@ -28,11 +28,6 @@ class MainActivity : BaseActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        setSupportActionBar(binding.toolbar)
-
-        // enable up navigation
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-
         if (savedInstanceState == null) {
             val f = MainFragment()
             val fm = supportFragmentManager
