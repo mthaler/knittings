@@ -41,4 +41,6 @@ open class BaseFragment: Fragment() {
         // enable up navigation
         (requireActivity() as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
+
+    protected fun getToolbar() = binding.toolbar.toolbar
 }

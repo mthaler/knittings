@@ -206,7 +206,7 @@ class MainFragment : BaseFragment(), SearchView.OnQueryTextListener, SearchView.
 
         val toggle = ActionBarDrawerToggle(
             requireActivity(),
-            binding.toolbar,
+            getToolbar(),
             R.string.navigation_drawer_open,
             R.string.navigation_drawer_close
         )
@@ -423,22 +423,22 @@ class MainFragment : BaseFragment(), SearchView.OnQueryTextListener, SearchView.
         // Handle navigation view item clicks here.
         when (item.itemId) {
             R.id.nav_edit_categories -> {
-                startActivity(CategoryListActivity.newIntent(this))
+                startActivity(CategoryListActivity.newIntent(requireContext()))
             }
             R.id.nav_edit_needles -> {
-                startActivity(NeedleListActivity.newIntent(this))
+                startActivity(NeedleListActivity.newIntent(requireContext()))
             }
             R.id.nav_compress_photos -> {
-                startActivity(CompressPhotosActivity.newIntent(this))
+                startActivity(CompressPhotosActivity.newIntent(requireContext()))
             }
             R.id.nav_dropbox_export -> {
-                startActivity(DropboxExportActivity.newIntent(this))
+                startActivity(DropboxExportActivity.newIntent(requireContext()))
             }
             R.id.nav_dropbox_import -> {
-                startActivity(DropboxImportActivity.newIntent(this))
+                startActivity(DropboxImportActivity.newIntent(requireContext()))
             }
             R.id.nav_edit_settings -> {
-                startActivity(SettingsActivity.newIntent(this))
+                startActivity(SettingsActivity.newIntent(requireContext()))
             }
         }
 
