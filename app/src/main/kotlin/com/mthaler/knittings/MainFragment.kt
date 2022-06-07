@@ -4,29 +4,38 @@ import android.os.Build
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.*
+import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ActionMode
 import androidx.appcompat.widget.SearchView
+import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.navigation.NavigationView
 import com.mthaler.knittings.about.AboutDialog
+import com.mthaler.knittings.category.CategoryListActivity
+import com.mthaler.knittings.compressphotos.CompressPhotosActivity
 import com.mthaler.knittings.database.KnittingsDataSource
 import com.mthaler.knittings.databinding.FragmentMainBinding
 import com.mthaler.knittings.details.KnittingDetailsFragment
+import com.mthaler.knittings.dropbox.DropboxExportActivity
+import com.mthaler.knittings.dropbox.DropboxImportActivity
 import com.mthaler.knittings.filter.CombinedFilter
 import com.mthaler.knittings.filter.ContainsFilter
 import com.mthaler.knittings.filter.SingleCategoryFilter
 import com.mthaler.knittings.filter.SingleStatusFilter
 import com.mthaler.knittings.model.Status
+import com.mthaler.knittings.needle.NeedleListActivity
 import com.mthaler.knittings.projectcount.ProjectCountActivity
+import com.mthaler.knittings.settings.SettingsActivity
 import com.mthaler.knittings.utils.AndroidViewModelFactory
 import com.mthaler.knittings.whatsnew.WhatsNewDialog
 import java.util.*
 
-class MainFragment : Fragment(), SearchView.OnQueryTextListener, SearchView.OnCloseListener {
+class MainFragment : Fragment(), SearchView.OnQueryTextListener, SearchView.OnCloseListener, NavigationView.OnNavigationItemSelectedListener {
 
     private lateinit var viewModel: MainViewModel
 
@@ -194,6 +203,18 @@ class MainFragment : Fragment(), SearchView.OnQueryTextListener, SearchView.OnCl
         })
 
         binding.knittingRecyclerView.adapter = adapter
+
+        val toggle = ActionBarDrawerToggle(
+            requireActivity(),
+            binding.toolbar,
+            R.string.navigation_drawer_open,
+            R.string.navigation_drawer_close
+        )
+        binding.drawerLayout.addDrawerListener(toggle)
+
+        toggle.syncState()
+
+        binding.navView.setNavigationItemSelectedListener(this)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -395,6 +416,33 @@ class MainFragment : Fragment(), SearchView.OnQueryTextListener, SearchView.OnCl
      */
     override fun onClose(): Boolean {
         viewModel.filter = CombinedFilter.empty()
+        return true
+    }
+
+    override fun onNavigationItemSelected(item: MenuItem): Boolean {
+        // Handle navigation view item clicks here.
+        when (item.itemId) {
+            R.id.nav_edit_categories -> {
+                startActivity(CategoryListActivity.newIntent(this))
+            }
+            R.id.nav_edit_needles -> {
+                startActivity(NeedleListActivity.newIntent(this))
+            }
+            R.id.nav_compress_photos -> {
+                startActivity(CompressPhotosActivity.newIntent(this))
+            }
+            R.id.nav_dropbox_export -> {
+                startActivity(DropboxExportActivity.newIntent(this))
+            }
+            R.id.nav_dropbox_import -> {
+                startActivity(DropboxImportActivity.newIntent(this))
+            }
+            R.id.nav_edit_settings -> {
+                startActivity(SettingsActivity.newIntent(this))
+            }
+        }
+
+        binding.drawerLayout.closeDrawer(GravityCompat.START)
         return true
     }
 

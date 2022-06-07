@@ -18,7 +18,7 @@ import com.mthaler.knittings.needle.EditNeedleFragment
 import com.mthaler.knittings.needle.NeedleListActivity
 import com.mthaler.knittings.settings.SettingsActivity
 
-class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedListener {
+class MainActivity : BaseActivity() {
 
     lateinit var binding: ActivityMainBinding
 
@@ -32,19 +32,6 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
         // enable up navigation
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-
-        val toggle = ActionBarDrawerToggle(
-            this,
-            binding.drawerLayout,
-            binding.toolbar,
-            R.string.navigation_drawer_open,
-            R.string.navigation_drawer_close
-        )
-        binding.drawerLayout.addDrawerListener(toggle)
-
-        toggle.syncState()
-
-        binding.navView.setNavigationItemSelectedListener(this)
 
         if (savedInstanceState == null) {
             val f = MainFragment()
@@ -63,7 +50,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
             if (upIntent == null) {
                 throw IllegalStateException("No Parent Activity Intent")
             } else {
-                val f = supportFragmentManager.findFragmentById(R.id.needle_list_container)
+                val f = supportFragmentManager.findFragmentById(R.id.knitting_list_container)
                 if (f is EditNeedleFragment) {
                     f.onBackPressed()
                 } else {
@@ -81,32 +68,5 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         } else {
             super.onBackPressed()
         }
-    }
-
-    override fun onNavigationItemSelected(item: MenuItem): Boolean {
-        // Handle navigation view item clicks here.
-        when (item.itemId) {
-            R.id.nav_edit_categories -> {
-                startActivity(CategoryListActivity.newIntent(this))
-            }
-            R.id.nav_edit_needles -> {
-                startActivity(NeedleListActivity.newIntent(this))
-            }
-            R.id.nav_compress_photos -> {
-                startActivity(CompressPhotosActivity.newIntent(this))
-            }
-            R.id.nav_dropbox_export -> {
-                startActivity(DropboxExportActivity.newIntent(this))
-            }
-            R.id.nav_dropbox_import -> {
-                startActivity(DropboxImportActivity.newIntent(this))
-            }
-            R.id.nav_edit_settings -> {
-                startActivity(SettingsActivity.newIntent(this))
-            }
-        }
-
-        binding.drawerLayout.closeDrawer(GravityCompat.START)
-        return true
     }
 }
