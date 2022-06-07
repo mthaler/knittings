@@ -36,7 +36,7 @@ class BaseFragment: Fragment() {
     }
 
     private fun configureToolbar() {
-        (requireActivity() as AppCompatActivity).setSupportActionBar(binding.toolbar)
+        (requireActivity() as AppCompatActivity).setSupportActionBar(binding.toolbar.toolbar)
 
         // enable up navigation
         (requireActivity() as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
