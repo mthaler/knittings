@@ -65,6 +65,7 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.4.2'
     implementation 'androidx.activity:activity-ktx:1.4.0'
     implementation 'androidx.test:rules:1.4.0'
+    implementation 'androidx.benchmark:benchmark-macro-junit4:1.1.0-alpha03'
 
     def fragment_version = "1.4.1"
     def lifecycleVersion = '2.4.1'
@@ -128,6 +129,8 @@ dependencies {
     androidTestImplementation 'androidx.arch.core:core-testing:2.1.0'
 
     androidTestImplementation "androidx.work:work-testing:$work_version"
+
+    androidTestImplementation 'androidx.benchmark:benchmark-junit4:1.0.0'
 }
 
 def getLocalProperties() {
