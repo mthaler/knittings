@@ -152,9 +152,9 @@ class DropboxApi(private val dropboxClient: DbxClientV2, val ctx: Context, val l
                     setMessage(ctx.resources.getString(R.string.dropbox_import_dialog_msg))
                     setPositiveButton(ctx.resources.getString(R.string.dropbox_import_dialog_button_import)) { _, _ ->
                         val app = ctx.applicationContext as DatabaseApplication
-                        val database =  app.createExportDatabase()
-                        DropboxImportWorker.readDatabase(ctx.applicationContext as DatabaseApplication, directory, database.toJSON().toString())
-                        val data = DropboxImportWorker.data(directory, database)
+                        val db =  app.createExportDatabase()
+                        DropboxImportWorker.readDatabase(ctx.applicationContext as DatabaseApplication, directory, db.toJSON().toString())
+                        val data = DropboxImportWorker.data(directory, db)
                         val request = OneTimeWorkRequestBuilder<DropboxExportWorker>().setInputData(data).build()
                         val workManager = WorkManager.getInstance(ctx)
                         workManager.enqueueUniqueWork(DropboxImportWorker.TAG,  ExistingWorkPolicy.REPLACE, request)
