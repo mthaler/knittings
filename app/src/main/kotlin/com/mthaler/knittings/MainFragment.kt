@@ -63,10 +63,9 @@ class MainFragment : Fragment(), SearchView.OnQueryTextListener, SearchView.OnCl
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        setHasOptionsMenu(true)
-
         _binding = FragmentMainBinding.inflate(inflater, container, false)
         val view = binding.root
+
         setHasOptionsMenu(true)
 
         // set on click handler of floating action button that creates a new knitting
