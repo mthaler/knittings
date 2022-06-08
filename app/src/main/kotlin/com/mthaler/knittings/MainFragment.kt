@@ -31,7 +31,6 @@ import com.mthaler.knittings.filter.ContainsFilter
 import com.mthaler.knittings.filter.SingleCategoryFilter
 import com.mthaler.knittings.filter.SingleStatusFilter
 import com.mthaler.knittings.model.Status
-import com.mthaler.knittings.needle.EditNeedleFragment
 import com.mthaler.knittings.needle.NeedleListActivity
 import com.mthaler.knittings.projectcount.ProjectCountActivity
 import com.mthaler.knittings.settings.SettingsActivity
@@ -373,7 +372,7 @@ class MainFragment : Fragment(), SearchView.OnQueryTextListener, SearchView.OnCl
         }
     }
 
-    fun createFilterText(hasCategoryFilter: Boolean, hasStatusFilter: Boolean): String {
+    private fun createFilterText(hasCategoryFilter: Boolean, hasStatusFilter: Boolean): String {
         val sb = StringBuilder()
         if (hasCategoryFilter) {
             sb.append(resources.getString(R.string.category))
