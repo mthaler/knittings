@@ -140,6 +140,7 @@ class CompressPhotosFragment : Fragment() {
             when (serviceStatus) {
                 ServiceStatus.Stopped -> binding.buttonStart.isEnabled = true
                 ServiceStatus.Started -> binding.buttonStart.isEnabled = false
+                else -> throw IllegalArgumentException("Unknown serviceStatus: " + serviceStatus)
             }
         })
 
