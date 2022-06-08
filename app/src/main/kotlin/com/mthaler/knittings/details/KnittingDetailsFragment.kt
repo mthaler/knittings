@@ -2,6 +2,7 @@ package com.mthaler.knittings.details
 
 import android.Manifest
 import android.app.Activity
+import android.app.AppComponentFactory
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -12,12 +13,14 @@ import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.mthaler.knittings.DeleteDialog
 import com.mthaler.knittings.Extras.EXTRA_KNITTING_ID
+import com.mthaler.knittings.MainActivity
 import com.mthaler.knittings.R
 import com.mthaler.knittings.database.KnittingsDataSource
 import com.mthaler.knittings.databinding.FragmentKnittingDetailsBinding
@@ -56,6 +59,15 @@ class KnittingDetailsFragment : Fragment() {
         }
     }
 
+    private val requestMultiplePermissions = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
+        if (permissions != null && permissions.size == 3) {
+            val d = TakePhotoDialog.create(requireContext(), "com.mthaler.knittings.fileprovider", layoutInflater, this::takePhoto, this::importPhoto)
+            d.show()
+        } else {
+            Toast.makeText(requireContext(), "Permissions denied", Toast.LENGTH_SHORT).show()
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val a = arguments
@@ -70,15 +82,6 @@ class KnittingDetailsFragment : Fragment() {
         savedInstanceState.putBoolean(EXTRA_EDIT_ONLY, editOnly)
         currentPhotoPath?.let { savedInstanceState.putString(CURRENT_PHOTO_PATH, it.absolutePath) }
         super.onSaveInstanceState(savedInstanceState)
-    }
-
-    private val requestMultiplePermissions = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
-        if (permissions != null && permissions.size == 3) {
-            val d = TakePhotoDialog.create(requireContext(), "com.mthaler.knittings.fileprovider", layoutInflater, this::takePhoto, this::importPhoto)
-            d.show()
-        } else {
-            Toast.makeText(requireContext(), "Permissions denied", Toast.LENGTH_SHORT).show()
-        }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -128,6 +131,8 @@ class KnittingDetailsFragment : Fragment() {
         viewModel.knitting.observe(viewLifecycleOwner, { knitting ->
             updateDetails(knitting)
         })
+
+        (requireActivity() as MainActivity).binding.toolbar.setTitle(R.string.activity_knitting_details)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
