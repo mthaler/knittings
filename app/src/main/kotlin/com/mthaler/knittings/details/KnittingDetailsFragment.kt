@@ -13,16 +13,14 @@ import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.net.toUri
-import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.mthaler.knittings.DeleteDialog
-import com.mthaler.knittings.Extras
+import com.mthaler.knittings.Extras.EXTRA_KNITTING_ID
 import com.mthaler.knittings.R
 import com.mthaler.knittings.database.KnittingsDataSource
 import com.mthaler.knittings.databinding.FragmentKnittingDetailsBinding
-import com.mthaler.knittings.model.Category
 import com.mthaler.knittings.model.Knitting
 import com.mthaler.knittings.model.Status
 import com.mthaler.knittings.photo.PhotoGalleryActivity
@@ -46,6 +44,7 @@ class KnittingDetailsFragment : Fragment() {
     private lateinit var viewModel: KnittingDetailsViewModel
     private var currentPhotoPath: File? = null
     private var listener: OnFragmentInteractionListener? = null
+    private var editOnly: Boolean = false
 
     private var _binding: FragmentKnittingDetailsBinding? = null
     private val binding get() = _binding!!
@@ -60,9 +59,18 @@ class KnittingDetailsFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            knittingID = it.getLong(Extras.EXTRA_KNITTING_ID)
+        val a = arguments
+        if (a != null) {
+            knittingID = a.getLong(EXTRA_KNITTING_ID)
+            editOnly = a.getBoolean(EXTRA_EDIT_ONLY)
         }
+    }
+
+    override fun onSaveInstanceState(savedInstanceState: Bundle) {
+        savedInstanceState.putLong(EXTRA_KNITTING_ID, knittingID)
+        savedInstanceState.putBoolean(EXTRA_EDIT_ONLY, editOnly)
+        currentPhotoPath?.let { savedInstanceState.putString(CURRENT_PHOTO_PATH, it.absolutePath) }
+        super.onSaveInstanceState(savedInstanceState)
     }
 
     private val requestMultiplePermissions = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
@@ -123,11 +131,6 @@ class KnittingDetailsFragment : Fragment() {
         })
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        currentPhotoPath?.let { outState.putString(CURRENT_PHOTO_PATH, it.absolutePath) }
-    }
-
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.knitting_details, menu)
@@ -161,6 +164,14 @@ class KnittingDetailsFragment : Fragment() {
             }
             else -> super.onOptionsItemSelected(item)
         }
+    }
+
+     fun editKnitting(id: Long) {
+        val f = EditKnittingDetailsFragment.newInstance(knittingID, editOnly)
+        val ft = requireActivity().supportFragmentManager.beginTransaction()
+        ft.replace(R.id.knitting_details_container, f)
+        ft.addToBackStack(null)
+        ft.commit()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -284,12 +295,13 @@ class KnittingDetailsFragment : Fragment() {
         private const val REQUEST_IMAGE_CAPTURE = 0
         private const val REQUEST_IMAGE_IMPORT = 1
         private const val CURRENT_PHOTO_PATH = "com.mthaler.knittings.CURRENT_PHOTO_PATH"
+        private const val EXTRA_EDIT_ONLY = "com.mthaler.knittings.edit_only"
 
         @JvmStatic
         fun newInstance(knittingID: Long) =
             KnittingDetailsFragment().apply {
                 arguments = Bundle().apply {
-                    putLong(Extras.EXTRA_KNITTING_ID, knittingID)
+                    putLong(EXTRA_KNITTING_ID, knittingID)
                 }
             }
     }
