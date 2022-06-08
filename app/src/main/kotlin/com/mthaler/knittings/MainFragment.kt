@@ -210,7 +210,7 @@ class MainFragment : Fragment(), SearchView.OnQueryTextListener, SearchView.OnCl
 
         val toggle = ActionBarDrawerToggle(
             requireActivity(),
-            getToolbar(),
+            binding.drawerLayout,
             R.string.navigation_drawer_open,
             R.string.navigation_drawer_close
         )
@@ -335,7 +335,7 @@ class MainFragment : Fragment(), SearchView.OnQueryTextListener, SearchView.OnCl
             }
             android.R.id.home -> {
                 // Respond to the action bar's Up/Home button
-                val upIntent: Intent? = NavUtils.getParentActivityIntent(this)
+                val upIntent: Intent? = NavUtils.getParentActivityIntent(requireActivity())
                 if (upIntent == null) {
                     throw IllegalStateException("No Parent Activity Intent")
                 } else {
