@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.mthaler.knittings"
     android:requestLegacyExternalStorage="true">
 
@@ -87,7 +88,7 @@
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".details.KnittingDetailsActivity" />
+                android:value=".MainActivity" />
         </activity>
         <activity
             android:name="com.dropbox.core.android.AuthActivity"
@@ -112,6 +113,11 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>
+
+        <!-- enable profiling by macrobenchmark -->
+        <profileable
+            android:shell="true"
+            tools:targetApi="q" />
     </application>
 
     <uses-permission android:name="android.permission.INTERNET" />
