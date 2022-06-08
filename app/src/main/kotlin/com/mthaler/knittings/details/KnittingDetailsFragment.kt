@@ -43,7 +43,6 @@ class KnittingDetailsFragment : Fragment() {
     private var knittingID: Long = Knitting.EMPTY.id
     private lateinit var viewModel: KnittingDetailsViewModel
     private var currentPhotoPath: File? = null
-    private var listener: OnFragmentInteractionListener? = null
     private var editOnly: Boolean = false
 
     private var _binding: FragmentKnittingDetailsBinding? = null
@@ -111,7 +110,7 @@ class KnittingDetailsFragment : Fragment() {
         }
 
         binding.editKnittingDetails.setOnClickListener {
-            listener?.editKnitting(knittingID)
+            editKnitting(knittingID)
         }
 
         return view
@@ -269,25 +268,6 @@ class KnittingDetailsFragment : Fragment() {
                 }
             })
         }
-    }
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        if (context is OnFragmentInteractionListener) {
-            listener = context
-        } else {
-            throw RuntimeException("$context must implement OnFragmentInteractionListener")
-        }
-    }
-
-    override fun onDetach() {
-        super.onDetach()
-        listener = null
-    }
-
-    interface OnFragmentInteractionListener {
-
-        fun editKnitting(id: Long)
     }
 
     companion object {
