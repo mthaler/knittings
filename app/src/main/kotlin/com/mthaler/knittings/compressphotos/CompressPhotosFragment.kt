@@ -132,6 +132,7 @@ class CompressPhotosFragment : Fragment() {
                     binding.result.visibility = View.VISIBLE
                     binding.result.text = jobStatus.msg
                 }
+                else -> throw IllegalArgumentException("Unknown jobStatus: " + jobStatus)
             }
         })
 
