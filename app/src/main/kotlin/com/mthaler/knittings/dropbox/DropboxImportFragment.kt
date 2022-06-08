@@ -122,6 +122,7 @@ class DropboxImportFragment : AbstractDropboxFragment() {
                     binding.result.visibility = View.VISIBLE
                     binding.result.text = jobStatus.msg
                 }
+                else -> throw IllegalArgumentException("Unknown jobStatus: " + jobStatus)
             }
         })
 
@@ -129,6 +130,7 @@ class DropboxImportFragment : AbstractDropboxFragment() {
             when (serviceStatus) {
                 ServiceStatus.Stopped -> binding.importButton.isEnabled = true
                 ServiceStatus.Started -> binding.importButton.isEnabled = false
+                else -> throw IllegalArgumentException("Unknown serviceStatus: " + serviceStatus)
             }
         })
     }
