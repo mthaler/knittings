@@ -90,6 +90,8 @@ class MainFragment : Fragment(), SearchView.OnQueryTextListener, SearchView.OnCl
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        (requireActivity() as AppCompatActivity).setSupportActionBar(binding.toolbar)
+
         val rv = binding.knittingRecyclerView
         rv.layoutManager = LinearLayoutManager(requireContext())
 
