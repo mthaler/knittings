@@ -1,5 +1,6 @@
 package com.mthaler.knittings
 
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.text.TextUtils
@@ -9,6 +10,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ActionMode
 import androidx.appcompat.widget.SearchView
+import androidx.core.app.NavUtils
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
@@ -20,6 +22,7 @@ import com.mthaler.knittings.category.CategoryListActivity
 import com.mthaler.knittings.compressphotos.CompressPhotosActivity
 import com.mthaler.knittings.database.KnittingsDataSource
 import com.mthaler.knittings.databinding.FragmentMainBinding
+import com.mthaler.knittings.details.EditKnittingDetailsFragment
 import com.mthaler.knittings.details.KnittingDetailsFragment
 import com.mthaler.knittings.dropbox.DropboxExportActivity
 import com.mthaler.knittings.dropbox.DropboxImportActivity
@@ -28,6 +31,7 @@ import com.mthaler.knittings.filter.ContainsFilter
 import com.mthaler.knittings.filter.SingleCategoryFilter
 import com.mthaler.knittings.filter.SingleStatusFilter
 import com.mthaler.knittings.model.Status
+import com.mthaler.knittings.needle.EditNeedleFragment
 import com.mthaler.knittings.needle.NeedleListActivity
 import com.mthaler.knittings.projectcount.ProjectCountActivity
 import com.mthaler.knittings.settings.SettingsActivity
@@ -327,6 +331,21 @@ class MainFragment : Fragment(), SearchView.OnQueryTextListener, SearchView.OnCl
             }
             R.id.menu_item_count -> {
                 startActivity(ProjectCountActivity.newIntent(requireContext()))
+                true
+            }
+            android.R.id.home -> {
+                // Respond to the action bar's Up/Home button
+                val upIntent: Intent? = NavUtils.getParentActivityIntent(this)
+                if (upIntent == null) {
+                    throw IllegalStateException("No Parent Activity Intent")
+                } else {
+                    val f = requireActivity().supportFragmentManager.findFragmentById(R.id.knitting_list_container)
+                    if (f is EditKnittingDetailsFragment) {
+                        f.onBackPressed()
+                    } else {
+                        NavUtils.navigateUpTo(requireActivity(), upIntent)
+                    }
+                }
                 true
             }
             else -> super.onOptionsItemSelected(item)
