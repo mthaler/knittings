@@ -35,7 +35,7 @@ import com.mthaler.knittings.utils.AndroidViewModelFactory
 import com.mthaler.knittings.whatsnew.WhatsNewDialog
 import java.util.*
 
-class MainFragment : BaseFragment(), SearchView.OnQueryTextListener, SearchView.OnCloseListener, NavigationView.OnNavigationItemSelectedListener {
+class MainFragment : Fragment(), SearchView.OnQueryTextListener, SearchView.OnCloseListener, NavigationView.OnNavigationItemSelectedListener {
 
     private lateinit var viewModel: MainViewModel
 
