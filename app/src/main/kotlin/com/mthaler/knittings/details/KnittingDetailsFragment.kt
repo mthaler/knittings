@@ -2,8 +2,6 @@ package com.mthaler.knittings.details
 
 import android.Manifest
 import android.app.Activity
-import android.app.AppComponentFactory
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
@@ -11,11 +9,10 @@ import android.view.*
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toUri
-import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -76,6 +73,12 @@ class KnittingDetailsFragment : Fragment() {
             knittingID = a.getLong(EXTRA_KNITTING_ID)
             editOnly = a.getBoolean(EXTRA_EDIT_ONLY)
         }
+
+        val callback = object : OnBackPressedCallback() {
+            override fun handleOnBackPressed() {
+                TODO("Not yet implemented")
+            }
+        }
     }
 
     override fun onSaveInstanceState(savedInstanceState: Bundle) {
@@ -102,7 +105,7 @@ class KnittingDetailsFragment : Fragment() {
         _binding = FragmentKnittingDetailsBinding.inflate(inflater, container, false)
         val view = binding.root
         val imageView = binding.image
-        
+
         if (ratio >= 1.9) {
             // make the image smaller on devices like the Samsung Galaxy A9 that has a 18:9 aspect ratio
             val layoutParams = imageView.layoutParams as LinearLayout.LayoutParams
