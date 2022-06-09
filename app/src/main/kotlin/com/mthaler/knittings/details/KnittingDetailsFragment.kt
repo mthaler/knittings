@@ -2,8 +2,6 @@ package com.mthaler.knittings.details
 
 import android.Manifest
 import android.app.Activity
-import android.app.AppComponentFactory
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
@@ -13,9 +11,7 @@ import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toUri
-import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -79,8 +75,9 @@ class KnittingDetailsFragment : Fragment() {
         // This callback will only be called when MyFragment is at least Started.
         val callback = requireActivity().onBackPressedDispatcher.addCallback(this) {
             // Handle the back button event
+
         }
-        
+
     }
 
     override fun onSaveInstanceState(savedInstanceState: Bundle) {

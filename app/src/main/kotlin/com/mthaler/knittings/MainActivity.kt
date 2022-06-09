@@ -2,22 +2,12 @@ package com.mthaler.knittings
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.Menu
 import android.view.MenuItem
-import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.app.NavUtils
 import androidx.core.view.GravityCompat
-import androidx.fragment.app.commit
-import com.google.android.material.navigation.NavigationView
-import com.mthaler.knittings.category.CategoryListActivity
-import com.mthaler.knittings.dropbox.DropboxExportActivity
-import com.mthaler.knittings.dropbox.DropboxImportActivity
-import com.mthaler.knittings.compressphotos.CompressPhotosActivity
 import com.mthaler.knittings.databinding.ActivityMainBinding
-import com.mthaler.knittings.details.KnittingDetailsFragment
+import com.mthaler.knittings.details.EditKnittingDetailsFragment
 import com.mthaler.knittings.needle.EditNeedleFragment
-import com.mthaler.knittings.needle.NeedleListActivity
-import com.mthaler.knittings.settings.SettingsActivity
 
 class MainActivity : BaseActivity() {
 
@@ -60,11 +50,21 @@ class MainActivity : BaseActivity() {
         else -> super.onOptionsItemSelected(item)
     }
 
+
     override fun onBackPressed() {
         if (binding.drawerLayout.isDrawerOpen(GravityCompat.START)) {
             binding.drawerLayout.closeDrawer(GravityCompat.START)
+            val f = supportFragmentManager.findFragmentById(R.id.knitting_details_container)
+            if (f is EditKnittingDetailsFragment) {
+                f.onBackPressed()
+            }
         } else {
-            super.onBackPressed()
+            val f = supportFragmentManager.findFragmentById(R.id.knitting_details_container)
+            if (f is EditKnittingDetailsFragment) {
+                f.onBackPressed()
+            } else {
+                super.onBackPressed()
+            }
         }
     }
 }
