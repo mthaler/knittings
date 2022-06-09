@@ -9,6 +9,7 @@ import android.view.*
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.net.toUri
@@ -72,11 +73,15 @@ class KnittingDetailsFragment : Fragment() {
             knittingID = a.getLong(EXTRA_KNITTING_ID)
             editOnly = a.getBoolean(EXTRA_EDIT_ONLY)
         }
-        // This callback will only be called when MyFragment is at least Started.
-        val callback = requireActivity().onBackPressedDispatcher.addCallback(this) {
-            // Handle the back button event
 
+        val callback = object : OnBackPressedCallback() {
+            override fun handleOnBackPressed() {
+                TODO("Not yet implemented")
+            }
         }
+
+        // This callback will only be called when MyFragment is at least Started.
+        requireActivity().onBackPressedDispatcher.addCallback(this, callback)
 
     }
 
