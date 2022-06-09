@@ -15,6 +15,7 @@ import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toUri
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -102,9 +103,6 @@ class KnittingDetailsFragment : Fragment() {
         val view = binding.root
 
         val imageView = binding.image
-        imageView.setOnClickListener {
-            startActivity(PhotoGalleryActivity.newIntent(requireContext(), knittingID))
-        }
         if (ratio >= 1.9) {
             // make the image smaller on devices like the Samsung Galaxy A9 that has a 18:9 aspect ratio
             val layoutParams = imageView.layoutParams as LinearLayout.LayoutParams
@@ -126,6 +124,12 @@ class KnittingDetailsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val imageView = binding.image
+        imageView.setOnClickListener {
+            startActivity(PhotoGalleryActivity.newIntent(requireContext(), knittingID))
+        }
+
         viewModel = ViewModelProvider(requireActivity()).get(KnittingDetailsViewModel::class.java)
         viewModel.init(knittingID)
         viewModel.knitting.observe(viewLifecycleOwner, { knitting ->
