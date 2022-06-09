@@ -10,7 +10,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ActionMode
 import androidx.appcompat.widget.SearchView
 import androidx.core.view.GravityCompat
-import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import androidx.preference.PreferenceManager
@@ -39,9 +38,6 @@ import java.util.*
 class MainFragment : Fragment(), SearchView.OnQueryTextListener, SearchView.OnCloseListener, NavigationView.OnNavigationItemSelectedListener {
 
     private lateinit var viewModel: MainViewModel
-
-    private lateinit var drawer: DrawerLayout;
-    private lateinit var drawerToggle: ActionBarDrawerToggle
 
     private var initialQuery: CharSequence? = null
     private var sv: SearchView? = null
@@ -78,6 +74,13 @@ class MainFragment : Fragment(), SearchView.OnQueryTextListener, SearchView.OnCl
                 addToBackStack(null) // name can be null
             }
         }
+
+        val drawer = binding.drawerLayout
+        val toggle = ActionBarDrawerToggle(requireActivity(), drawer, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
+
+        toggle.syncState()
+
+        binding.navView.setNavigationItemSelectedListener(this)
 
         return view
     }
@@ -207,18 +210,15 @@ class MainFragment : Fragment(), SearchView.OnQueryTextListener, SearchView.OnCl
 
         binding.knittingRecyclerView.adapter = adapter
 
-        drawer = view.findViewById(R.id.drawer_layout) as DrawerLayout
-        drawerToggle = ActionBarDrawerToggle(requireActivity(), drawer, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
-
-        // Where do I put this?
-
-        // Where do I put this?
-        drawerToggle.syncState()
-
-        binding.navView.setNavigationItemSelectedListener(this)
-
         // add toolbar to activity
         (requireActivity() as AppCompatActivity).setSupportActionBar(binding.toolbar)
+    }
+
+    override fun onStart() {
+        super.onStart()
+         if (binding.navView.isDrawerOpen(Gravity.LEFT)) {
+                 drawer_layout.closeDrawer(Gravity.LEFT);
+             }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
