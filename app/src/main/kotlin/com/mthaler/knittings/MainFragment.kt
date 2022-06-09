@@ -331,21 +331,6 @@ class MainFragment : Fragment(), SearchView.OnQueryTextListener, SearchView.OnCl
                 startActivity(ProjectCountActivity.newIntent(requireContext()))
                 true
             }
-            android.R.id.home -> {
-                // Respond to the action bar's Up/Home button
-                val upIntent: Intent? = NavUtils.getParentActivityIntent(requireActivity())
-                if (upIntent == null) {
-                    throw IllegalStateException("No Parent Activity Intent")
-                } else {
-                    val f = requireActivity().supportFragmentManager.findFragmentById(R.id.knitting_list_container)
-                    if (f is EditKnittingDetailsFragment) {
-                        f.onBackPressed()
-                    } else {
-                        NavUtils.navigateUpTo(requireActivity(), upIntent)
-                    }
-                }
-                true
-            }
             else -> super.onOptionsItemSelected(item)
         }
     }

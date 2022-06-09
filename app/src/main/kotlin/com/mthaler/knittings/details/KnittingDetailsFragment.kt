@@ -25,6 +25,7 @@ import com.mthaler.knittings.database.KnittingsDataSource
 import com.mthaler.knittings.databinding.FragmentKnittingDetailsBinding
 import com.mthaler.knittings.model.Knitting
 import com.mthaler.knittings.model.Status
+import com.mthaler.knittings.needle.EditNeedleFragment
 import com.mthaler.knittings.photo.PhotoGalleryActivity
 import com.mthaler.knittings.photo.TakePhotoDialog
 import com.mthaler.knittings.rowcounter.RowCounterActivity
@@ -78,7 +79,12 @@ class KnittingDetailsFragment : Fragment() {
         val callback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
                 val upIntent: Intent? = NavUtils.getParentActivityIntent(requireActivity())
-                NavUtils.navigateUpTo(requireActivity(), upIntent!!)
+                if (upIntent == null) {
+                    throw IllegalStateException("No Parent Activity Intent")
+                } else {
+                    NavUtils.navigateUpTo(requireActivity(), upIntent)
+                }
+
             }
         }
 
