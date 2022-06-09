@@ -12,6 +12,7 @@ import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.app.NavUtils
 import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -74,9 +75,10 @@ class KnittingDetailsFragment : Fragment() {
             editOnly = a.getBoolean(EXTRA_EDIT_ONLY)
         }
 
-        val callback = object : OnBackPressedCallback() {
+        val callback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                TODO("Not yet implemented")
+                val upIntent: Intent? = NavUtils.getParentActivityIntent(requireActivity())
+                NavUtils.navigateUpTo(requireActivity(), upIntent!!)
             }
         }
 
