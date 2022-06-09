@@ -79,6 +79,9 @@ class KnittingDetailsFragment : Fragment() {
                 TODO("Not yet implemented")
             }
         }
+
+        // This callback will only be called when MyFragment is at least Started.
+        requireActivity().onBackPressedDispatcher.addCallback(this, callback)
     }
 
     override fun onSaveInstanceState(savedInstanceState: Bundle) {
