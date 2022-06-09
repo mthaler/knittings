@@ -149,8 +149,6 @@ class KnittingDetailsFragment : Fragment() {
         viewModel.knitting.observe(viewLifecycleOwner, { knitting ->
             updateDetails(knitting)
         })
-
-        (requireActivity() as MainActivity).binding.toolbar.setTitle(R.string.activity_knitting_details)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

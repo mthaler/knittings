@@ -1,6 +1,5 @@
 package com.mthaler.knittings
 
-import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.text.TextUtils
@@ -10,7 +9,6 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ActionMode
 import androidx.appcompat.widget.SearchView
-import androidx.core.app.NavUtils
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
@@ -22,7 +20,6 @@ import com.mthaler.knittings.category.CategoryListActivity
 import com.mthaler.knittings.compressphotos.CompressPhotosActivity
 import com.mthaler.knittings.database.KnittingsDataSource
 import com.mthaler.knittings.databinding.FragmentMainBinding
-import com.mthaler.knittings.details.EditKnittingDetailsFragment
 import com.mthaler.knittings.details.KnittingDetailsFragment
 import com.mthaler.knittings.dropbox.DropboxExportActivity
 import com.mthaler.knittings.dropbox.DropboxImportActivity
@@ -217,6 +214,10 @@ class MainFragment : Fragment(), SearchView.OnQueryTextListener, SearchView.OnCl
         toggle.syncState()
 
         binding.navView.setNavigationItemSelectedListener(this)
+
+        // add toolbar to activity
+        (requireActivity() as AppCompatActivity).setSupportActionBar(binding.toolbar)
+        (requireActivity() as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -251,7 +252,7 @@ class MainFragment : Fragment(), SearchView.OnQueryTextListener, SearchView.OnCl
                         2 -> viewModel.sorting = Sorting.Alphabetical
                     }
                     dialog.dismiss()
-                }
+               }
                 builder.setNegativeButton(R.string.dialog_button_cancel) { dialog, _ -> dialog.dismiss() }
                 val dialog = builder.create()
                 dialog.show()

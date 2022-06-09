@@ -154,8 +154,6 @@ class EditKnittingDetailsFragment : Fragment() {
             launcher.launch(i)
         }
 
-        (requireActivity() as MainActivity).binding.toolbar.setTitle(R.string.activity_knitting_details)
-
         return view
     }
 
