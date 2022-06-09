@@ -30,26 +30,6 @@ class CategoryListActivity : BaseActivity(), CategoryListFragment.OnFragmentInte
         }
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean = when (item.itemId) {
-        android.R.id.home -> {
-            // Respond to the action bar's Up/Home button
-            val upIntent: Intent? = NavUtils.getParentActivityIntent(this)
-            if (upIntent == null) {
-                throw IllegalStateException("No Parent Activity Intent")
-            } else {
-                val fm = supportFragmentManager
-                val f = fm.findFragmentById(R.id.category_list_container)
-                if (f is EditCategoryFragment) {
-                    f.onBackPressed { fm.popBackStack() }
-                } else {
-                    NavUtils.navigateUpTo(this, upIntent)
-                }
-            }
-            true
-        }
-        else -> super.onOptionsItemSelected(item)
-    }
-
     override fun onBackPressed() {
         val fm = supportFragmentManager
         val f = fm.findFragmentById(R.id.category_list_container)
