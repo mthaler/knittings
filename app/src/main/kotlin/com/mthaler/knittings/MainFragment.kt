@@ -5,6 +5,7 @@ import android.os.Build
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.*
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -214,8 +215,14 @@ class MainFragment : Fragment(), SearchView.OnQueryTextListener, SearchView.OnCl
 
         binding.knittingRecyclerView.adapter = adapter
 
-        // add toolbar to activity
-        (requireActivity() as AppCompatActivity).setSupportActionBar(binding.toolbar)
+        requireActivity().onBackPressedDispatcher?.addCallback(requireActivity(), object : OnBackPressedCallback(true) {
+
+            override fun handleOnBackPressed() {
+                if (binding.drawerLayout.isDrawerOpen(GravityCompat.START)) {
+                    binding.drawerLayout.closeDrawer(GravityCompat.START)
+                }
+            }
+        })
     }
 
     override fun onConfigurationChanged(newConfig: Configuration) {
