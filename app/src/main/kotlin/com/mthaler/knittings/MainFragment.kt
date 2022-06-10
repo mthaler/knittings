@@ -1,5 +1,6 @@
 package com.mthaler.knittings
 
+import android.content.res.Configuration
 import android.os.Build
 import android.os.Bundle
 import android.text.TextUtils
@@ -42,6 +43,8 @@ class MainFragment : Fragment(), SearchView.OnQueryTextListener, SearchView.OnCl
     private var initialQuery: CharSequence? = null
     private var sv: SearchView? = null
 
+    private lateinit var toggle: ActionBarDrawerToggle
+
     private var _binding: FragmentMainBinding? = null
     private val binding get() = _binding!!
 
@@ -51,6 +54,8 @@ class MainFragment : Fragment(), SearchView.OnQueryTextListener, SearchView.OnCl
         if (savedInstanceState != null) {
             initialQuery = savedInstanceState.getCharSequence(STATE_QUERY)
         }
+
+        setHasOptionsMenu(true)
 
         init()
     }
@@ -63,8 +68,6 @@ class MainFragment : Fragment(), SearchView.OnQueryTextListener, SearchView.OnCl
         _binding = FragmentMainBinding.inflate(inflater, container, false)
         val view = binding.root
 
-        setHasOptionsMenu(true)
-
         // set on click handler of floating action button that creates a new knitting
         binding.fabCreateAddKnitting.setOnClickListener {
             // start knitting activity with newly created knitting
@@ -76,8 +79,9 @@ class MainFragment : Fragment(), SearchView.OnQueryTextListener, SearchView.OnCl
         }
 
         val drawer = binding.drawerLayout
-        val toggle = ActionBarDrawerToggle(requireActivity(), drawer, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
+        toggle = ActionBarDrawerToggle(requireActivity(), drawer, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
 
+        // Where do I put this?
         toggle.syncState()
 
         binding.navView.setNavigationItemSelectedListener(this)
@@ -214,11 +218,9 @@ class MainFragment : Fragment(), SearchView.OnQueryTextListener, SearchView.OnCl
         (requireActivity() as AppCompatActivity).setSupportActionBar(binding.toolbar)
     }
 
-    override fun onStart() {
-        super.onStart()
-         if (binding.navView.isDrawerOpen(Gravity.LEFT)) {
-                 drawer_layout.closeDrawer(Gravity.LEFT);
-             }
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+        toggle.onConfigurationChanged(newConfig)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -229,6 +231,9 @@ class MainFragment : Fragment(), SearchView.OnQueryTextListener, SearchView.OnCl
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (toggle.onOptionsItemSelected(item)) {
+            return true
+        }
         return when (item.itemId) {
             R.id.menu_item_about -> {
                 AboutDialog.show(requireActivity())
