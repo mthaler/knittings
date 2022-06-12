@@ -16,7 +16,6 @@ import com.mthaler.knittings.utils.TimeUtils
 import java.text.DateFormat
 import com.mthaler.knittings.durationpicker.DurationPickerDialog
 import com.mthaler.knittings.Extras.EXTRA_KNITTING_ID
-import com.mthaler.knittings.MainActivity
 import com.mthaler.knittings.SaveChangesDialog
 import com.mthaler.knittings.category.SelectCategoryActivity
 import com.mthaler.knittings.database.Extras.EXTRA_CATEGORY_ID
