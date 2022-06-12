@@ -1,23 +1,19 @@
 package com.mthaler.knittings.database
 
-import android.database.Cursor
+import android.content.Context
 import android.util.Log
 import androidx.preference.PreferenceManager
-import androidx.room.getQueryDispatcher
 import java.io.File
-import java.util.ArrayList
-import java.util.Date
-import com.mthaler.knittings.database.table.CategoryTable
 import com.mthaler.knittings.database.table.*
 import com.mthaler.knittings.R
 import com.mthaler.knittings.model.*
-import java.lang.Exception
 
 object KnittingsDataSource : AbstractObservableDatabase(), PhotoDataSource, CategoryDataSource, ProjectsDataSource {
 
     private const val TAG = "KnittingsDataSource"
 
     private lateinit var db: AppDatabase
+    private lateinit var context: Context
 
     override val allProjects: List<Knitting>
         get() = db.knittingDao().getAll()
@@ -300,7 +296,8 @@ object KnittingsDataSource : AbstractObservableDatabase(), PhotoDataSource, Cate
         }
     }
 
-    fun init(db: AppDatabase) {
+    fun init(db: AppDatabase, context: Context) {
         this.db = db
+        this.context = context
     }
 }
