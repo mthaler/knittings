@@ -69,16 +69,6 @@ class MainFragment : Fragment(), SearchView.OnQueryTextListener, SearchView.OnCl
         _binding = FragmentMainBinding.inflate(inflater, container, false)
         val view = binding.root
 
-        // set on click handler of floating action button that creates a new knitting
-        binding.fabCreateAddKnitting.setOnClickListener {
-            // start knitting activity with newly created knitting
-            requireActivity().supportFragmentManager.commit {
-                replace(R.id.knitting_list_container, KnittingDetailsFragment.newInstance(-1L))
-                setReorderingAllowed(true)
-                addToBackStack(null) // name can be null
-            }
-        }
-
         val drawer = binding.drawerLayout
         toggle = ActionBarDrawerToggle(requireActivity(), drawer, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
 

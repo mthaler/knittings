@@ -15,7 +15,7 @@
 
         <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize">
+            android:layout_height="match_parent">
 
             <!-- image that is shown if the category list is empty -->
             <ImageView

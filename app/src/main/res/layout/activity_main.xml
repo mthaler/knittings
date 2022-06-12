@@ -22,7 +22,8 @@
 <FrameLayout
     android:id="@+id/knitting_list_container"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" />
+    android:layout_height="match_parent"
+    android:layout_marginTop="?attr/actionBarSize"/>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 
