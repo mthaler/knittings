@@ -111,12 +111,6 @@ object KnittingsDataSource : AbstractObservableDatabase(), PhotoDataSource, Cate
             deletePhotoFile(photo.filename)
         }
         val id = knitting.id
-        context.database.writableDatabase.use { database ->
-            val whereClause = PhotoTable.Cols.KNITTING_ID + "= ?"
-            val whereArgs = arrayOf(id.toString())
-            database.delete(PhotoTable.PHOTOS, whereClause, whereArgs)
-            Log.d(TAG, "Removed knitting $id: $knitting")
-        }
     }
 
     @Synchronized
@@ -130,10 +124,9 @@ object KnittingsDataSource : AbstractObservableDatabase(), PhotoDataSource, Cate
     private fun deletePhotoImpl(photo: Photo) {
         deletePhotoFile(photo.filename)
         db.photoDao().delete(photo)
-        Log.d(TAG, "Deleted photo $id: $photo")
+        Log.d(TAG, "Deleted photo: $photo")
     }
 
-    @Synchronized
     override fun setDefaultPhoto(ownerID: Long, photo: Photo) {
         val knitting = getProject(ownerID)
         val prefs = PreferenceManager.getDefaultSharedPreferences(context)
