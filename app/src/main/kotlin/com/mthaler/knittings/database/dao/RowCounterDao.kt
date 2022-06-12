@@ -17,7 +17,7 @@ interface RowCounterDao {
     fun getAll(): List<RowCounter>
 
     @Query("SELECT * FROM row_counters WHERE knitting_id=knittingID")
-    fun loadAllUsersBetweenAges(knitting: Knitting): Array<RowCounter>
+    fun getAll(knitting: Knitting): Array<RowCounter>
 
 
     @Query("SELECT * FROM row_counters WHERE id=:id")
