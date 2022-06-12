@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.*
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.app.NavUtils
@@ -186,6 +187,12 @@ class EditKnittingDetailsFragment : Fragment() {
             savedInstanceState.putLong(EXTRA_CATEGORY, it.id)
         }
         super.onSaveInstanceState(savedInstanceState)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        (requireActivity() as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

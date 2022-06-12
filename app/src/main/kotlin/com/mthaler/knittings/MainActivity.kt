@@ -23,9 +23,6 @@ class MainActivity : BaseActivity() {
         setContentView(binding.root)
 
         setSupportActionBar(binding.toolbar)
-
-        // enable up navigation
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
 
 //    override fun onBackPressed() {
