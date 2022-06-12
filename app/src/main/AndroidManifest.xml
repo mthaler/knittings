@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.mthaler.knittings"
     android:requestLegacyExternalStorage="true">
 
@@ -20,19 +21,12 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".details.KnittingDetailsActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity" />
-        </activity> <!-- we define our own toolbar in MainActivity, use theme without toolbar -->
-        <activity
             android:name=".photo.PhotoGalleryActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".details.KnittingDetailsActivity" />
-        </activity> <!-- we define our own toolbar in MainActivity, use theme without toolbar -->
+                android:value=".MainActivity" />
+        </activity>
         <activity
             android:name=".dropbox.DropboxExportActivity"
             android:theme="@style/AppTheme.NoActionBar">
@@ -52,21 +46,21 @@
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".details.KnittingDetailsActivity" />
+                android:value=".MainActivity" />
         </activity>
         <activity
             android:name=".category.CategoryListActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity" />
+                android:value="MainActivity" />
         </activity>
         <activity
             android:name=".category.SelectCategoryActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".details.KnittingDetailsActivity" />
+                android:value=".MainActivity" />
         </activity>
         <activity
             android:name=".projectcount.ProjectCountActivity"
@@ -101,7 +95,7 @@
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".details.KnittingDetailsActivity" />
+                android:value=".MainActivity" />
         </activity>
         <activity
             android:name="com.dropbox.core.android.AuthActivity"
@@ -126,6 +120,11 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>
+
+        <!-- enable profiling by macrobenchmark -->
+        <profileable
+            android:shell="true"
+            tools:targetApi="q" />
     </application>
 
     <uses-permission android:name="android.permission.INTERNET" />

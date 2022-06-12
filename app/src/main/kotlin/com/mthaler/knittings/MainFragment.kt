@@ -1,37 +1,50 @@
 package com.mthaler.knittings
 
+import android.content.res.Configuration
 import android.os.Build
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.*
+import androidx.activity.OnBackPressedCallback
+import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ActionMode
 import androidx.appcompat.widget.SearchView
+import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.commit
 import androidx.preference.PreferenceManager
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.navigation.NavigationView
 import com.mthaler.knittings.about.AboutDialog
+import com.mthaler.knittings.category.CategoryListActivity
+import com.mthaler.knittings.compressphotos.CompressPhotosActivity
 import com.mthaler.knittings.database.KnittingsDataSource
 import com.mthaler.knittings.databinding.FragmentMainBinding
-import com.mthaler.knittings.details.KnittingDetailsActivity
+import com.mthaler.knittings.details.KnittingDetailsFragment
+import com.mthaler.knittings.dropbox.DropboxExportActivity
+import com.mthaler.knittings.dropbox.DropboxImportActivity
 import com.mthaler.knittings.filter.CombinedFilter
 import com.mthaler.knittings.filter.ContainsFilter
 import com.mthaler.knittings.filter.SingleCategoryFilter
 import com.mthaler.knittings.filter.SingleStatusFilter
 import com.mthaler.knittings.model.Status
+import com.mthaler.knittings.needle.NeedleListActivity
 import com.mthaler.knittings.projectcount.ProjectCountActivity
+import com.mthaler.knittings.settings.SettingsActivity
 import com.mthaler.knittings.utils.AndroidViewModelFactory
 import com.mthaler.knittings.whatsnew.WhatsNewDialog
 import java.util.*
 
-class MainFragment : Fragment(), SearchView.OnQueryTextListener, SearchView.OnCloseListener {
+class MainFragment : Fragment(), SearchView.OnQueryTextListener, SearchView.OnCloseListener, NavigationView.OnNavigationItemSelectedListener {
 
     private lateinit var viewModel: MainViewModel
 
     private var initialQuery: CharSequence? = null
     private var sv: SearchView? = null
 
-    private lateinit var adapter: KnittingAdapter
+    private lateinit var toggle: ActionBarDrawerToggle
 
     private var _binding: FragmentMainBinding? = null
     private val binding get() = _binding!!
@@ -43,11 +56,7 @@ class MainFragment : Fragment(), SearchView.OnQueryTextListener, SearchView.OnCl
             initialQuery = savedInstanceState.getCharSequence(STATE_QUERY)
         }
 
-        // set on click handler of floating action button that creates a new knitting
-        binding.fabCreateAddKnitting.setOnClickListener {
-            // start knitting activity with newly created knitting
-            startActivity(KnittingDetailsActivity.newIntent(requireContext(), -1L, true))
-        }
+        setHasOptionsMenu(true)
 
         init()
     }
@@ -57,11 +66,27 @@ class MainFragment : Fragment(), SearchView.OnQueryTextListener, SearchView.OnCl
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        setHasOptionsMenu(true)
-
         _binding = FragmentMainBinding.inflate(inflater, container, false)
         val view = binding.root
-        setHasOptionsMenu(true)
+
+        // set on click handler of floating action button that creates a new knitting
+        binding.fabCreateAddKnitting.setOnClickListener {
+            // start knitting activity with newly created knitting
+            requireActivity().supportFragmentManager.commit {
+                replace(R.id.knitting_list_container, KnittingDetailsFragment.newInstance(-1L))
+                setReorderingAllowed(true)
+                addToBackStack(null) // name can be null
+            }
+        }
+
+        val drawer = binding.drawerLayout
+        toggle = ActionBarDrawerToggle(requireActivity(), drawer, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
+
+        // Where do I put this?
+        toggle.syncState()
+
+        binding.navView.setNavigationItemSelectedListener(this)
+
         return view
     }
 
@@ -74,46 +99,15 @@ class MainFragment : Fragment(), SearchView.OnQueryTextListener, SearchView.OnCl
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val activeFilters = binding.knittingActiveFilters
-
-        viewModel = AndroidViewModelFactory(requireActivity().application).create(MainViewModel::class.java)
-        viewModel.projects.observe(viewLifecycleOwner, { knittings ->
-
-            when {
-                knittings == null -> {
-                    binding.knittingListEmptyRecyclerView.visibility = View.GONE
-                    binding.knittingRecyclerView.visibility = View.VISIBLE
-                }
-                knittings.isEmpty() -> {
-                    binding.knittingListEmptyRecyclerView.visibility = View.VISIBLE
-                    binding.knittingRecyclerView.visibility = View.GONE
-                }
-                else -> {
-                    binding.knittingListEmptyRecyclerView.visibility = View.GONE
-                    binding.knittingRecyclerView.visibility = View.VISIBLE
-                }
-            }
-            if (viewModel.filter.filters.filter { it is SingleCategoryFilter || it is SingleStatusFilter }
-                    .isEmpty()) {
-                activeFilters.text = ""
-                activeFilters.visibility = View.GONE
-            } else {
-                val hasCategoryFilter =
-                    viewModel.filter.filters.filter { it is SingleCategoryFilter }.isNotEmpty()
-                val hasStatusFilter =
-                    viewModel.filter.filters.filter { it is SingleStatusFilter }.isNotEmpty()
-                val filterText = createFilterText(hasCategoryFilter, hasStatusFilter)
-                activeFilters.text = filterText
-                activeFilters.visibility = View.VISIBLE
-            }
-            adapter.setKnittings(knittings ?: emptyList())
-        })
-
-
-
+        val rv = binding.knittingRecyclerView
+        rv.layoutManager = LinearLayoutManager(requireContext())
 
         val adapter = KnittingAdapter(requireContext(), { knitting ->
-            startActivity(KnittingDetailsActivity.newIntent(requireContext(), knitting.id, false))
+            requireActivity().supportFragmentManager.commit {
+                replace(R.id.knitting_list_container, KnittingDetailsFragment.newInstance(knitting.id))
+                setReorderingAllowed(true)
+                addToBackStack(null) // name can be null
+            }
         }, { knitting ->
             (requireActivity() as AppCompatActivity).startSupportActionMode(object : ActionMode.Callback {
                 /**
@@ -183,7 +177,57 @@ class MainFragment : Fragment(), SearchView.OnQueryTextListener, SearchView.OnCl
                 }
             })
         })
+
+        val activeFilters = binding.knittingActiveFilters
+
+        viewModel = AndroidViewModelFactory(requireActivity().application).create(MainViewModel::class.java)
+        viewModel.projects.observe(viewLifecycleOwner, { knittings ->
+
+            when {
+                knittings == null -> {
+                    binding.knittingListEmptyRecyclerView.visibility = View.GONE
+                    binding.knittingRecyclerView.visibility = View.VISIBLE
+                }
+                knittings.isEmpty() -> {
+                    binding.knittingListEmptyRecyclerView.visibility = View.VISIBLE
+                    binding.knittingRecyclerView.visibility = View.GONE
+                }
+                else -> {
+                    binding.knittingListEmptyRecyclerView.visibility = View.GONE
+                    binding.knittingRecyclerView.visibility = View.VISIBLE
+                }
+            }
+            if (viewModel.filter.filters.filter { it is SingleCategoryFilter || it is SingleStatusFilter }
+                    .isEmpty()) {
+                activeFilters.text = ""
+                activeFilters.visibility = View.GONE
+            } else {
+                val hasCategoryFilter =
+                    viewModel.filter.filters.filter { it is SingleCategoryFilter }.isNotEmpty()
+                val hasStatusFilter =
+                    viewModel.filter.filters.filter { it is SingleStatusFilter }.isNotEmpty()
+                val filterText = createFilterText(hasCategoryFilter, hasStatusFilter)
+                activeFilters.text = filterText
+                activeFilters.visibility = View.VISIBLE
+            }
+            adapter.setKnittings(knittings ?: emptyList())
+        })
+
         binding.knittingRecyclerView.adapter = adapter
+
+        requireActivity().onBackPressedDispatcher?.addCallback(requireActivity(), object : OnBackPressedCallback(true) {
+
+            override fun handleOnBackPressed() {
+                if (binding.drawerLayout.isDrawerOpen(GravityCompat.START)) {
+                    binding.drawerLayout.closeDrawer(GravityCompat.START)
+                }
+            }
+        })
+    }
+
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+        toggle.onConfigurationChanged(newConfig)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -194,6 +238,9 @@ class MainFragment : Fragment(), SearchView.OnQueryTextListener, SearchView.OnCl
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (toggle.onOptionsItemSelected(item)) {
+            return true
+        }
         return when (item.itemId) {
             R.id.menu_item_about -> {
                 AboutDialog.show(requireActivity())
@@ -218,7 +265,7 @@ class MainFragment : Fragment(), SearchView.OnQueryTextListener, SearchView.OnCl
                         2 -> viewModel.sorting = Sorting.Alphabetical
                     }
                     dialog.dismiss()
-                }
+               }
                 builder.setNegativeButton(R.string.dialog_button_cancel) { dialog, _ -> dialog.dismiss() }
                 val dialog = builder.create()
                 dialog.show()
@@ -304,26 +351,26 @@ class MainFragment : Fragment(), SearchView.OnQueryTextListener, SearchView.OnCl
 
     private fun init() {
         val sharedPref = PreferenceManager.getDefaultSharedPreferences(requireContext())
-        var currentVersionNumber = 0L
+        var currentVersionNumber = 0
         val savedVersionNumber = sharedPref.getInt(VERSION_KEY, 0)
         try {
             val pi = requireActivity().packageManager.getPackageInfo(requireActivity().packageName, 0)
             if (Build.VERSION.SDK_INT >= 27) {
-                currentVersionNumber = pi.longVersionCode
+                currentVersionNumber = pi.longVersionCode.toInt()
             } else {
-                currentVersionNumber = pi.versionCode.toLong()
+                currentVersionNumber = pi.versionCode
             }
         } catch (e: Exception) {
         }
         if (currentVersionNumber > savedVersionNumber) {
             WhatsNewDialog.show(requireActivity())
             val editor = sharedPref.edit()
-            editor.putLong(VERSION_KEY, currentVersionNumber)
+            editor.putInt(VERSION_KEY, currentVersionNumber)
             editor.commit()
         }
     }
 
-    fun createFilterText(hasCategoryFilter: Boolean, hasStatusFilter: Boolean): String {
+    private fun createFilterText(hasCategoryFilter: Boolean, hasStatusFilter: Boolean): String {
         val sb = StringBuilder()
         if (hasCategoryFilter) {
             sb.append(resources.getString(R.string.category))
@@ -385,6 +432,33 @@ class MainFragment : Fragment(), SearchView.OnQueryTextListener, SearchView.OnCl
      */
     override fun onClose(): Boolean {
         viewModel.filter = CombinedFilter.empty()
+        return true
+    }
+
+    override fun onNavigationItemSelected(item: MenuItem): Boolean {
+        // Handle navigation view item clicks here.
+        when (item.itemId) {
+            R.id.nav_edit_categories -> {
+                startActivity(CategoryListActivity.newIntent(requireContext()))
+            }
+            R.id.nav_edit_needles -> {
+                startActivity(NeedleListActivity.newIntent(requireContext()))
+            }
+            R.id.nav_compress_photos -> {
+                startActivity(CompressPhotosActivity.newIntent(requireContext()))
+            }
+            R.id.nav_dropbox_export -> {
+                startActivity(DropboxExportActivity.newIntent(requireContext()))
+            }
+            R.id.nav_dropbox_import -> {
+                startActivity(DropboxImportActivity.newIntent(requireContext()))
+            }
+            R.id.nav_edit_settings -> {
+                startActivity(SettingsActivity.newIntent(requireContext()))
+            }
+        }
+
+        binding.drawerLayout.closeDrawer(GravityCompat.START)
         return true
     }
 

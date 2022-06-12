@@ -12,15 +12,19 @@ abstract class AbstractServiceManager {
     private val _cancelled = AtomicBoolean(false)
 
     val jobStatus: LiveData<JobStatus>
+        @Synchronized
         get() = _jobStatus
 
     val serviceStatus: LiveData<ServiceStatus>
+        @Synchronized
         get() = _serviceStatus
 
+    @Synchronized
     fun updateJobStatus(jobStatus: JobStatus) {
         this._jobStatus.setMutVal(jobStatus)
     }
 
+    @Synchronized
     fun updateServiceStatus(serviceStatus: ServiceStatus) {
         if (serviceStatus == ServiceStatus.Started) {
             _cancelled.set(false)
@@ -29,6 +33,8 @@ abstract class AbstractServiceManager {
     }
 
     var cancelled: Boolean
+        @Synchronized
         get() = _cancelled.get()
+        @Synchronized
         set(value) = _cancelled.set(value)
 }

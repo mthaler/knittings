@@ -132,6 +132,7 @@ class CompressPhotosFragment : Fragment() {
                     binding.result.visibility = View.VISIBLE
                     binding.result.text = jobStatus.msg
                 }
+                else -> throw IllegalArgumentException("Unknown jobStatus: " + jobStatus)
             }
         })
 
@@ -139,6 +140,7 @@ class CompressPhotosFragment : Fragment() {
             when (serviceStatus) {
                 ServiceStatus.Stopped -> binding.buttonStart.isEnabled = true
                 ServiceStatus.Started -> binding.buttonStart.isEnabled = false
+                else -> throw IllegalArgumentException("Unknown serviceStatus: " + serviceStatus)
             }
         })
 

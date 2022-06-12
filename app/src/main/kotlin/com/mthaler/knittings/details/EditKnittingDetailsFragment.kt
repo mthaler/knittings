@@ -15,6 +15,7 @@ import com.mthaler.knittings.utils.TimeUtils
 import java.text.DateFormat
 import com.mthaler.knittings.durationpicker.DurationPickerDialog
 import com.mthaler.knittings.Extras.EXTRA_KNITTING_ID
+import com.mthaler.knittings.MainActivity
 import com.mthaler.knittings.SaveChangesDialog
 import com.mthaler.knittings.category.SelectCategoryActivity
 import com.mthaler.knittings.database.Extras.EXTRA_CATEGORY_ID
@@ -114,7 +115,7 @@ class EditKnittingDetailsFragment : Fragment() {
         }
         binding.knittingStarted.text = DateFormat.getDateInstance().format(started)
         val f = finished
-        binding.knittingFinished.text = if (f != null) DateFormat.getDateInstance().format(f)!! else ""
+        binding.knittingFinished.text = if (f != null) DateFormat.getDateInstance().format(f) else ""
         binding.knittingDuration.text = TimeUtils.formatDuration(duration)
         category?.let {
             binding.knittingCategory.text = it.name

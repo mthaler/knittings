@@ -75,8 +75,8 @@ class PhotoGalleryAdapter(context: Context, private val lifecycleScope: Lifecycl
                                     if (file.exists()) {
                                         val imageSize = if (displayPhotoSize) File(filename).length() else 0L
                                         val orientation = PictureUtils.getOrientation(Uri.parse(filename), imageView.context)
-                                        val photo = PictureUtils.decodeSampledBitmapFromPath(filename, width, height)
-                                        val rotatedPhoto = PictureUtils.rotateBitmap(photo, orientation)
+                                        val p = PictureUtils.decodeSampledBitmapFromPath(filename, width, height)
+                                        val rotatedPhoto = PictureUtils.rotateBitmap(p, orientation)
                                         Pair(imageSize, rotatedPhoto)
                                     } else {
                                         null

@@ -71,7 +71,7 @@ class DurationPicker @JvmOverloads constructor(context: Context, attrs: Attribut
         hourPicker = findViewById(R.id.hour)
         hourPicker.minValue = 0
         hourPicker.maxValue = 9999
-        hourPicker.setOnValueChangedListener { picker, oldVal, newVal ->
+        hourPicker.setOnValueChangedListener { _, oldVal, newVal ->
             currentHours = newVal
             onTimeChanged()
         }

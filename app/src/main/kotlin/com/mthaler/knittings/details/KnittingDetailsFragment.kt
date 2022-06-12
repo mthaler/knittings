@@ -2,7 +2,6 @@ package com.mthaler.knittings.details
 
 import android.Manifest
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
@@ -10,18 +9,23 @@ import android.view.*
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
+import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.app.NavUtils
 import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.mthaler.knittings.DeleteDialog
-import com.mthaler.knittings.Extras
+import com.mthaler.knittings.Extras.EXTRA_KNITTING_ID
+import com.mthaler.knittings.MainActivity
 import com.mthaler.knittings.R
 import com.mthaler.knittings.database.KnittingsDataSource
 import com.mthaler.knittings.databinding.FragmentKnittingDetailsBinding
 import com.mthaler.knittings.model.Knitting
 import com.mthaler.knittings.model.Status
+import com.mthaler.knittings.needle.EditNeedleFragment
 import com.mthaler.knittings.photo.PhotoGalleryActivity
 import com.mthaler.knittings.photo.TakePhotoDialog
 import com.mthaler.knittings.rowcounter.RowCounterActivity
@@ -42,15 +46,16 @@ class KnittingDetailsFragment : Fragment() {
     private var knittingID: Long = Knitting.EMPTY.id
     private lateinit var viewModel: KnittingDetailsViewModel
     private var currentPhotoPath: File? = null
-    private var listener: OnFragmentInteractionListener? = null
+    private var editOnly: Boolean = false
 
     private var _binding: FragmentKnittingDetailsBinding? = null
     private val binding get() = _binding!!
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            knittingID = it.getLong(Extras.EXTRA_KNITTING_ID)
+    private val launcher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            result.data?.let {
+
+            }
         }
     }
 
@@ -61,6 +66,37 @@ class KnittingDetailsFragment : Fragment() {
         } else {
             Toast.makeText(requireContext(), "Permissions denied", Toast.LENGTH_SHORT).show()
         }
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        val a = arguments
+        if (a != null) {
+            knittingID = a.getLong(EXTRA_KNITTING_ID)
+            editOnly = a.getBoolean(EXTRA_EDIT_ONLY)
+        }
+
+        val callback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                val upIntent: Intent? = NavUtils.getParentActivityIntent(requireActivity())
+                if (upIntent == null) {
+                    throw IllegalStateException("No Parent Activity Intent")
+                } else {
+                    NavUtils.navigateUpTo(requireActivity(), upIntent)
+                }
+
+            }
+        }
+
+        // This callback will only be called when MyFragment is at least Started.
+        requireActivity().onBackPressedDispatcher.addCallback(this, callback)
+    }
+
+    override fun onSaveInstanceState(savedInstanceState: Bundle) {
+        savedInstanceState.putLong(EXTRA_KNITTING_ID, knittingID)
+        savedInstanceState.putBoolean(EXTRA_EDIT_ONLY, editOnly)
+        currentPhotoPath?.let { savedInstanceState.putString(CURRENT_PHOTO_PATH, it.absolutePath) }
+        super.onSaveInstanceState(savedInstanceState)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -79,11 +115,8 @@ class KnittingDetailsFragment : Fragment() {
 
         _binding = FragmentKnittingDetailsBinding.inflate(inflater, container, false)
         val view = binding.root
-
         val imageView = binding.image
-        imageView.setOnClickListener {
-            startActivity(PhotoGalleryActivity.newIntent(requireContext(), knittingID))
-        }
+
         if (ratio >= 1.9) {
             // make the image smaller on devices like the Samsung Galaxy A9 that has a 18:9 aspect ratio
             val layoutParams = imageView.layoutParams as LinearLayout.LayoutParams
@@ -92,7 +125,7 @@ class KnittingDetailsFragment : Fragment() {
         }
 
         binding.editKnittingDetails.setOnClickListener {
-            listener?.editKnitting(knittingID)
+            editKnitting(knittingID)
         }
 
         return view
@@ -105,16 +138,17 @@ class KnittingDetailsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val imageView = binding.image
+        imageView.setOnClickListener {
+            startActivity(PhotoGalleryActivity.newIntent(requireContext(), knittingID))
+        }
+
         viewModel = ViewModelProvider(requireActivity()).get(KnittingDetailsViewModel::class.java)
         viewModel.init(knittingID)
         viewModel.knitting.observe(viewLifecycleOwner, { knitting ->
             updateDetails(knitting)
         })
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        currentPhotoPath?.let { outState.putString(CURRENT_PHOTO_PATH, it.absolutePath) }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -150,6 +184,14 @@ class KnittingDetailsFragment : Fragment() {
             }
             else -> super.onOptionsItemSelected(item)
         }
+    }
+
+     fun editKnitting(id: Long) {
+        val f = EditKnittingDetailsFragment.newInstance(knittingID, editOnly)
+        val ft = requireActivity().supportFragmentManager.beginTransaction()
+        ft.replace(R.id.knitting_list_container, f)
+        ft.addToBackStack(null)
+        ft.commit()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -249,36 +291,18 @@ class KnittingDetailsFragment : Fragment() {
         }
     }
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        if (context is OnFragmentInteractionListener) {
-            listener = context
-        } else {
-            throw RuntimeException("$context must implement OnFragmentInteractionListener")
-        }
-    }
-
-    override fun onDetach() {
-        super.onDetach()
-        listener = null
-    }
-
-    interface OnFragmentInteractionListener {
-
-        fun editKnitting(id: Long)
-    }
-
     companion object {
 
         private const val REQUEST_IMAGE_CAPTURE = 0
         private const val REQUEST_IMAGE_IMPORT = 1
         private const val CURRENT_PHOTO_PATH = "com.mthaler.knittings.CURRENT_PHOTO_PATH"
+        private const val EXTRA_EDIT_ONLY = "com.mthaler.knittings.edit_only"
 
         @JvmStatic
         fun newInstance(knittingID: Long) =
             KnittingDetailsFragment().apply {
                 arguments = Bundle().apply {
-                    putLong(Extras.EXTRA_KNITTING_ID, knittingID)
+                    putLong(EXTRA_KNITTING_ID, knittingID)
                 }
             }
     }
