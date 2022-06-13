@@ -11,7 +11,7 @@ import org.json.JSONObject
 import java.io.File
 import java.io.FileOutputStream
 
-data class Database(override val projects: List<Knitting>, override val photos: List<Photo>, override val categories: List<Category>, val needles: List<Needle>, val rowCounters: List<RowCounter>) : AbstractExportDatabase<Knitting>() {
+data class Database(override val projects: List<Knitting>, override val photos: List<Photo>, override val categories: List<Category>, val needles: List<Needle>, val rowCounters: List<RowCounter>) : AbstractExportDatabase() {
 
     override fun checkDatabase(): Database {
         val filteredPhotos = photos.filter { it.filename.exists() }
@@ -40,19 +40,19 @@ data class Database(override val projects: List<Knitting>, override val photos: 
         KnittingsDataSource.deleteAllRowCounters()
         // add downloaded database
         for (photo in photos) {
-            KnittingsDataSource.addPhoto(photo, manualID = true)
+            KnittingsDataSource.addPhoto(photo)
         }
         for (category in categories) {
-            KnittingsDataSource.addCategory(category, manualID = true)
+            KnittingsDataSource.addCategory(category)
         }
         for (needle in needles) {
-            KnittingsDataSource.addNeedle(needle, manualID = true)
+            KnittingsDataSource.addNeedle(needle)
         }
         for (r in rowCounters) {
-            KnittingsDataSource.addRowCounter(r, manualID = true)
+            KnittingsDataSource.addRowCounter(r)
         }
         for (knitting in projects) {
-            KnittingsDataSource.addProject(knitting, manualID = true)
+            KnittingsDataSource.addProject(knitting)
         }
         for ((index, photo) in photos.withIndex()) {
             val filename = "/" + directory + "/" + photo.id + "." + FileUtils.getExtension(photo.filename.name)
