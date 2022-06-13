@@ -20,5 +20,4 @@ class BitmapConverters {
 
     @TypeConverter
     public fun previewToByteArray(b: Bitmap?) = Photo.getBytes(b)
-    }
 }
