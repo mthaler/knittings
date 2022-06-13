@@ -99,7 +99,7 @@ class KnittingDetailsFragment : Fragment() {
 
         if (savedInstanceState != null) {
             if (savedInstanceState.containsKey(CURRENT_PHOTO_PATH)) {
-                currentPhotoPath = File(savedInstanceState.getString(CURRENT_PHOTO_PATH))
+                currentPhotoPath = File(savedInstanceState.getString(CURRENT_PHOTO_PATH)!!)
             }
         }
 
