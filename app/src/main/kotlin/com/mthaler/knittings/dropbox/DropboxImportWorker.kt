@@ -28,7 +28,7 @@ class DropboxImportWorker(val context: Context, parameters: WorkerParameters) : 
         return Result.success()
     }
 
-    private fun downloadPhotos(database: ExportDatabase<Knitting>, directory: String) {
+    private fun downloadPhotos(database: ExportDatabase, directory: String) {
         val clientIdentifier = "Knittings"
         val requestConfig = DbxRequestConfig(clientIdentifier)
         val credential = getLocalCredential()
