@@ -11,5 +11,5 @@ import com.mthaler.knittings.model.Project
  */
 data class SingleCategoryFilter(val category: Category) : Filter<Knitting> {
 
-    override fun filter(projects: List<Knitting>): List<Knitting> = projects.filter { it.category == category }
+    override fun filter(items: List<Knitting>): List<Knitting> = items.filter { it.category == category }
 }
