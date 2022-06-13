@@ -11,7 +11,6 @@ import com.dropbox.core.v2.DbxClientV2
 import com.dropbox.core.v2.files.WriteMode
 import com.mthaler.knittings.DatabaseApplication
 import com.mthaler.knittings.model.ExportDatabase
-import com.mthaler.knittings.model.Knitting
 import com.mthaler.knittings.model.Photo
 import com.mthaler.knittings.service.JobStatus
 import java.io.ByteArrayInputStream
@@ -62,7 +61,7 @@ class DropboxExportWorker(val context: Context, parameters: WorkerParameters) : 
         return false
     }
 
-    private fun uploadDatabase(dbxClient: DbxClientV2, dir: String, database: ExportDatabase<Knitting>) {
+    private fun uploadDatabase(dbxClient: DbxClientV2, dir: String, database: ExportDatabase) {
         val dbJSON = database.toJSON()
         val s = dbJSON.toString(2)
         val dbInputStream = ByteArrayInputStream(s.toByteArray())
