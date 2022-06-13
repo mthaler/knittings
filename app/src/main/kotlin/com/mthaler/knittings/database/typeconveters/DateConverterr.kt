@@ -15,11 +15,11 @@ class DateConverter {
      }
 
      @TypeConverter
-     public fun dateToMillis(d: Date?): Long {
+     public fun dateToMillis(d: Date?): Long? {
         if (d != null) {
             return d.time
         } else {
-            return -1L
+            return null
         }
      }
 }

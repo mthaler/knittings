@@ -13,10 +13,11 @@ import com.mthaler.knittings.database.table.CategoryTable
 import com.mthaler.knittings.database.table.KnittingTable
 import com.mthaler.knittings.database.table.NeedleTable
 import com.mthaler.knittings.database.table.RowCounterTable
+import com.mthaler.knittings.database.typeconveters.FileConverter
 import com.mthaler.knittings.model.*
 
 @Database(entities = [Category::class, Knitting::class, Needle::class, Photo::class, RowCounter::class], version = 6)
-@TypeConverters(DateConverter::class)
+@TypeConverters(DateConverter::class, FileConverter::class)
 abstract class AppDatabase : RoomDatabase() {
 
     abstract fun categoryDao(): CategoryDao
