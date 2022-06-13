@@ -26,25 +26,6 @@ object KnittingTable {
         val STATUS = "status"
     }
 
-    fun create(db: SQLiteDatabase) {
-        val CREATE_KNITTING_TABLE = "CREATE TABLE $IF_NOT_EXISTS $KNITTINGS ( " +
-                "${Cols.ID} $INTEGER $PRIMARY_KEY $AUTOINCREMENT, " +
-                "${Cols.TITLE} $TEXT $NOT_NULL, " +
-                "${Cols.DESCRIPTION} $TEXT $NOT_NULL, " +
-                "${Cols.STARTED} $INTEGER $NOT_NULL ${DEFAULT("0")}, " +
-                "${Cols.FINISHED} $INTEGER, " +
-                "${Cols.NEEDLE_DIAMETER} $TEXT $NOT_NULL, " +
-                "${Cols.SIZE} $TEXT $NOT_NULL, " +
-                "${Cols.DEFAULT_PHOTO_ID} $INTEGER, " +
-                "${Cols.RATING} $REAL $NOT_NULL ${DEFAULT("0.0")}, " +
-                "${Cols.DURATION} $INTEGER $NOT_NULL ${DEFAULT("0")}, " +
-                "${Cols.CATEGORY_ID} $INTEGER, " +
-                "${Cols.STATUS} $TEXT $NOT_NULL, " +
-                "${FOREIGN_KEY(Cols.DEFAULT_PHOTO_ID, PhotoTable.PHOTOS, PhotoTable.Cols.ID)}, " +
-                "${FOREIGN_KEY(Cols.CATEGORY_ID, CategoryTable.CATEGORY, CategoryTable.Cols.ID)} )"
-        db.execSQL(CREATE_KNITTING_TABLE)
-    }
-
     val SQL_ADD_DURATION = "ALTER TABLE " + KNITTINGS + " ADD COLUMN " + Cols.DURATION + " INTEGER NOT NULL DEFAULT 0"
     val SQL_ADD_CATEGORY = "ALTER TABLE " + KNITTINGS + " ADD COLUMN " + Cols.CATEGORY_ID + " INTEGER"
     val SQL_ADD_STATUS = "ALTER TABLE " + KNITTINGS + " ADD COLUMN " + Cols.STATUS + " TEXT"
