@@ -164,7 +164,6 @@ object KnittingsDataSource : AbstractObservableDatabase(), PhotoDataSource, Cate
         notifyObservers()
     }
 
-    @Synchronized
     override fun deleteAllCategories() {
         for (category in allCategories) {
             deleteCategoryImpl(category)
@@ -222,7 +221,7 @@ object KnittingsDataSource : AbstractObservableDatabase(), PhotoDataSource, Cate
         return db.rowCounterDao().get(id)
     }
 
-    fun getRowCounter(knitting: Knitting): RowCounter? {
+    fun getRowCounter(knitting: Knitting): RowCounter {
         Log.d(TAG, "Getting row counter for knitting id ${knitting.id}")
         return db.rowCounterDao().get(knitting.id)
     }

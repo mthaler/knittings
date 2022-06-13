@@ -13,6 +13,9 @@ interface RowCounterDao {
     @Delete
     fun delete(rowCounter: RowCounter)
 
+    @Query("DELETE FROM row_counters WHERE row_counters.knitting_id=:knittingID")
+    fun delete(knittingID: Long)
+
     @Query("SELECT * FROM row_counters")
     fun getAll(): List<RowCounter>
 
@@ -20,6 +23,4 @@ interface RowCounterDao {
     fun getAll(knittingID: Long): Array<RowCounter>
 
 
-    @Query("SELECT * FROM row_counters WHERE id=:id")
-    fun get(id: Long): RowCounter
 }
