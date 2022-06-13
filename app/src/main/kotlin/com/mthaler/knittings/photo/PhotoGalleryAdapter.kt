@@ -3,6 +3,7 @@ package com.mthaler.knittings.photo
 import android.content.Context
 import android.net.Uri
 import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -104,7 +105,7 @@ class PhotoGalleryAdapter(context: Context, private val lifecycleScope: Lifecycl
                                 }
                             }
                         } else {
-                            val handler = Handler()
+                            val handler = Handler(Looper.myLooper()!!)
                             handler.postDelayed({
                                 updateImageView(imageView, titleView, photo, delayMillis * 2)
                             }, delayMillis)

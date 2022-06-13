@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.Context
 import android.util.Log
 import androidx.work.CoroutineWorker
-import androidx.work.Worker
 import androidx.work.WorkerParameters
 import com.dropbox.core.DbxRequestConfig
 import com.dropbox.core.oauth.DbxCredential
@@ -20,8 +19,6 @@ import java.io.FileInputStream
 import com.mthaler.knittings.utils.FileUtils.getExtension
 import com.mthaler.knittings.utils.FileUtils.createDateTimeDirectoryName
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.lang.Exception
 import java.util.*
