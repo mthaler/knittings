@@ -119,7 +119,7 @@ class KnittingDetailsFragment : Fragment() {
         }
 
         binding.editKnittingDetails.setOnClickListener {
-            editKnitting(knittingID)
+            editKnitting()
         }
 
         return view
@@ -180,7 +180,7 @@ class KnittingDetailsFragment : Fragment() {
         }
     }
 
-     fun editKnitting(id: Long) {
+     fun editKnitting() {
         val f = EditKnittingDetailsFragment.newInstance(knittingID, editOnly)
         val ft = requireActivity().supportFragmentManager.beginTransaction()
         ft.replace(R.id.knitting_list_container, f)
