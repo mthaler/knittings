@@ -213,8 +213,8 @@ class DropboxImportFragment : AbstractDropboxFragment() {
                     is Ok ->
                         try {
                             lifecycleScope.launchWhenStarted() {
-                                val result = dropboxApi.listFolders()
-                                importDatabase(result)
+                                val r = dropboxApi.listFolders()
+                                importDatabase(r)
                             }
                         } catch (ex: java.lang.Exception) {
                             throw ex
