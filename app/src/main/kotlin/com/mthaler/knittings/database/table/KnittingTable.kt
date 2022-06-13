@@ -11,10 +11,6 @@ import com.mthaler.knittings.model.Knitting
 object KnittingTable {
     const val KNITTINGS = "knittings"
 
-    val Columns = arrayOf(Cols.ID, Cols.TITLE, Cols.DESCRIPTION, Cols.STARTED, Cols.FINISHED,
-            Cols.NEEDLE_DIAMETER, Cols.SIZE, Cols.DEFAULT_PHOTO_ID, Cols.RATING, Cols.DURATION,
-            Cols.CATEGORY_ID, Cols.STATUS)
-
     object Cols {
         val ID = "_id"
         val TITLE = "title"
@@ -47,38 +43,5 @@ object KnittingTable {
                 "${FOREIGN_KEY(Cols.DEFAULT_PHOTO_ID, PhotoTable.PHOTOS, PhotoTable.Cols.ID)}, " +
                 "${FOREIGN_KEY(Cols.CATEGORY_ID, CategoryTable.CATEGORY, CategoryTable.Cols.ID)} )"
         db.execSQL(CREATE_KNITTING_TABLE)
-    }
-
-    val SQL_ADD_DURATION = "ALTER TABLE " + KNITTINGS + " ADD COLUMN " + Cols.DURATION + " INTEGER NOT NULL DEFAULT 0"
-    val SQL_ADD_CATEGORY = "ALTER TABLE " + KNITTINGS + " ADD COLUMN " + Cols.CATEGORY_ID + " INTEGER"
-    val SQL_ADD_STATUS = "ALTER TABLE " + KNITTINGS + " ADD COLUMN " + Cols.STATUS + " TEXT"
-
-    fun createContentValues(knitting: Knitting, manualID: Boolean = false): ContentValues {
-        val values = ContentValues()
-        if (manualID) {
-            values.put(Cols.ID, knitting.id)
-        }
-        values.put(Cols.TITLE, knitting.title)
-        values.put(Cols.DESCRIPTION, knitting.description)
-        values.put(Cols.STARTED, knitting.started.time)
-        if (knitting.finished != null) {
-            values.put(Cols.FINISHED, knitting.finished.time)
-        }
-        values.put(Cols.NEEDLE_DIAMETER, knitting.needleDiameter)
-        values.put(Cols.SIZE, knitting.size)
-        if (knitting.defaultPhoto != null) {
-            values.put(Cols.DEFAULT_PHOTO_ID, knitting.defaultPhoto.id)
-        } else {
-            values.putNull(Cols.DEFAULT_PHOTO_ID)
-        }
-        values.put(Cols.RATING, knitting.rating)
-        values.put(Cols.DURATION, knitting.duration)
-        if (knitting.category != null) {
-            values.put(Cols.CATEGORY_ID, knitting.category.id)
-        } else {
-            values.putNull(Cols.CATEGORY_ID)
-        }
-        values.put(Cols.STATUS, knitting.status.name)
-        return values
     }
 }
