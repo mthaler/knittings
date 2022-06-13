@@ -3,7 +3,7 @@ package com.mthaler.knittings.database.typeconveters
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import androidx.room.TypeConverter
-import java.util.*
+import com.mthaler.knittings.model.Photo
 
 class BitmapConverters {
 
@@ -17,4 +17,8 @@ class BitmapConverters {
              return null
          }
      }
+
+    @TypeConverter
+    public fun previewToByteArray(b: Bitmap?) = Photo.getBytes(b)
+    }
 }
