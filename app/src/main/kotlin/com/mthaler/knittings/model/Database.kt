@@ -22,7 +22,7 @@ data class Database(override val projects: List<Knitting>, override val photos: 
         return filteredDatabase
     }
 
-    override fun removeMissingPhotos(missingPhotos: Set<Long>): ExportDatabase<Knitting> {
+    override fun removeMissingPhotos(missingPhotos: Set<Long>): ExportDatabase {
         val filteredPhotos = photos.filterNot { missingPhotos.contains(it.id) }
         val updatedKnittings = projects.map { if (missingPhotos.contains(it.defaultPhoto?.id)) it.copy(defaultPhoto = null) else it }
         val filteredDatabase = copy(projects = updatedKnittings, photos = filteredPhotos)
