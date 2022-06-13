@@ -56,10 +56,8 @@ class DurationPickerDialog(
     }
 
     override fun onClick(dialog: DialogInterface, which: Int) {
-        if (callback != null) {
-            mTimePicker.clearFocus()
-            callback(mTimePicker, mTimePicker.duration)
-        }
+        mTimePicker.clearFocus()
+        callback(mTimePicker, mTimePicker.duration)
     }
 
     override fun onDurationChanged(view: DurationPicker, duration: Long) {
