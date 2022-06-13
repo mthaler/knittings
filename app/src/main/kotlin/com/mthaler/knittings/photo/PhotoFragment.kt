@@ -3,6 +3,7 @@ package com.mthaler.knittings.photo
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import com.google.android.material.snackbar.Snackbar
 import androidx.fragment.app.Fragment
 import android.view.*
@@ -90,7 +91,7 @@ class PhotoFragment : Fragment() {
                             imageView.setImageBitmap(rotated)
                         }
                     } else {
-                        val handler = Handler()
+                        val handler = Handler(Looper.myLooper()!!)
                         handler.postDelayed({
                             updateImageView(imageView, photo, delayMillis * 2)
                         }, delayMillis)

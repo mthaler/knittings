@@ -3,7 +3,7 @@ package com.mthaler.knittings.dropbox
 import android.app.Activity
 import android.content.Context
 import android.util.Log
-import androidx.work.Worker
+import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.dropbox.core.DbxRequestConfig
 import com.dropbox.core.oauth.DbxCredential
@@ -19,26 +19,22 @@ import java.io.FileInputStream
 import com.mthaler.knittings.utils.FileUtils.getExtension
 import com.mthaler.knittings.utils.FileUtils.createDateTimeDirectoryName
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.lang.Exception
 import java.util.*
 
-class DropboxExportWorker(val context: Context, parameters: WorkerParameters) : Worker(context, parameters) {
+class DropboxExportWorker(val context: Context, parameters: WorkerParameters) : CoroutineWorker(context, parameters) {
 
-    override fun doWork(): Result {
-          GlobalScope.launch {
-                val dir = createDateTimeDirectoryName(Date())
-            val cancelled = withContext(Dispatchers.IO) {
-                try {
-                    upload(dir)
-                } catch (ex: Exception) {
-                    Log.e(TAG, "Could not upload: " + ex)
-                }
+    override  suspend fun doWork(): Result {
+        val dir = createDateTimeDirectoryName(Date())
+        val cancelled = withContext(Dispatchers.IO) {
+            try {
+                upload(dir)
+            } catch (ex: Exception) {
+                Log.e(TAG, "Could not upload: " + ex)
             }
-            onUploadCompleted()
         }
+        onUploadCompleted()
         return Result.success()
     }
 

@@ -5,6 +5,7 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import android.view.*
 import android.widget.ImageView
 import android.widget.LinearLayout
@@ -119,7 +120,7 @@ class KnittingDetailsFragment : Fragment() {
         }
 
         binding.editKnittingDetails.setOnClickListener {
-            editKnitting(knittingID)
+            editKnitting()
         }
 
         return view
@@ -180,7 +181,7 @@ class KnittingDetailsFragment : Fragment() {
         }
     }
 
-     fun editKnitting(id: Long) {
+     fun editKnitting() {
         val f = EditKnittingDetailsFragment.newInstance(knittingID, editOnly)
         val ft = requireActivity().supportFragmentManager.beginTransaction()
         ft.replace(R.id.knitting_list_container, f)
@@ -274,7 +275,7 @@ class KnittingDetailsFragment : Fragment() {
                             imageView.setImageResource(R.drawable.categories)
                         }
                     } else {
-                        val handler = Handler()
+                        val handler = Handler(Looper.myLooper()!!)
                         handler.postDelayed({
                             updateImageView(imageView, knitting, delayMillis * 2)
                         }, delayMillis)

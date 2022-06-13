@@ -132,8 +132,8 @@ class EditKnittingDetailsFragment : Fragment() {
         }
 
         binding.knittingFinished.setOnClickListener {
-            val f = finished ?: Date()
-            val dialog = DatePickerUtils.create(requireContext(), f) { _, date ->
+            val fi = finished ?: Date()
+            val dialog = DatePickerUtils.create(requireContext(), fi) { _, date ->
                 if (date != finished) {
                     binding.knittingFinished.text = DateFormat.getDateInstance().format(date)
                     finished = date

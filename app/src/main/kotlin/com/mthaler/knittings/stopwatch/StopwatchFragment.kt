@@ -3,6 +3,7 @@ package com.mthaler.knittings.stopwatch
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.MenuItem
@@ -90,7 +91,7 @@ class StopwatchFragment : Fragment() {
 
       private fun runTimer() {
         previousTime = System.currentTimeMillis()
-        val handler = Handler()
+        val handler = Handler(Looper.myLooper()!!)
         handler.post(object : Runnable {
             override fun run() {
                 val totalSeconds = elapsedTime / 1000
