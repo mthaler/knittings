@@ -111,9 +111,9 @@ object KnittingsDataSource : AbstractObservableDatabase(), PhotoDataSource, Cate
             deletePhotoFile(photo.filename)
         }
         val id = knitting.id
+        knitting.copy(id = id)
     }
 
-    @Synchronized
     override fun deleteAllPhotos() {
         for (photo in allPhotos) {
             deletePhotoImpl(photo)
@@ -141,13 +141,11 @@ object KnittingsDataSource : AbstractObservableDatabase(), PhotoDataSource, Cate
         notifyObservers()
     }
 
-    @Synchronized
     override fun getCategory(id: Long): Category? {
         Log.d(TAG, "Getting category for id $id")
         return db.categoryDao().get(id)
     }
 
-    @Synchronized
     override fun addCategory(category: Category): Category {
         val id = db.categoryDao().insert(category)
         notifyObservers()
@@ -196,7 +194,6 @@ object KnittingsDataSource : AbstractObservableDatabase(), PhotoDataSource, Cate
         return needle.copy(id = id)
     }
 
-    @Synchronized
     fun updateNeedle(needle: Needle): Needle {
         Log.d(TAG, "Updating needle $needle")
         val id = db.needleDao().insert(needle)
@@ -204,13 +201,11 @@ object KnittingsDataSource : AbstractObservableDatabase(), PhotoDataSource, Cate
         return needle.copy(id = id)
     }
 
-    @Synchronized
     fun deleteNeedle(needle: Needle) {
         deleteNeedleImpl(needle)
         notifyObservers()
     }
 
-    @Synchronized
     fun deleteAllNeedles() {
         for (needle in allNeedles) {
             deleteNeedleImpl(needle)
@@ -246,14 +241,12 @@ object KnittingsDataSource : AbstractObservableDatabase(), PhotoDataSource, Cate
         return rowCounter.copy(id = id)
     }
 
-    @Synchronized
     fun updateRowCounter(rowCounter: RowCounter): RowCounter {
         Log.d(TAG, "Updating row counter $rowCounter")
         val id = db.rowCounterDao().insert(rowCounter)
         return rowCounter.copy(id = id)
     }
 
-    @Synchronized
     private fun deleteAllRowCounters(knitting: Knitting) {
         context.database.writableDatabase.use { database ->
             val whereClause = RowCounterTable.Cols.KNITTING_ID + "= ?"
@@ -263,7 +256,6 @@ object KnittingsDataSource : AbstractObservableDatabase(), PhotoDataSource, Cate
         }
     }
 
-    @Synchronized
     fun deleteAllRowCounters() {
         for (r in allRowCounters) {
             deleteRowCounterImpl(r)
@@ -276,7 +268,6 @@ object KnittingsDataSource : AbstractObservableDatabase(), PhotoDataSource, Cate
         notifyObservers()
     }
 
-    @Synchronized
     private fun deletePhotoFile(file: File) {
         if (file.exists()) {
             if (file.delete()) {

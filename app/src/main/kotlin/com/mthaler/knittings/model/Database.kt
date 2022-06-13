@@ -83,7 +83,7 @@ data class Database(override val projects: List<Knitting>, override val photos: 
 
     companion object {
 
-        fun createDatabase(): Database {
+        fun createDatabase(): {
             val projects = KnittingsDataSource.allProjects
             val photos = KnittingsDataSource.allPhotos
             val categories = KnittingsDataSource.allCategories
