@@ -60,7 +60,7 @@ class PhotoGalleryFragment : Fragment() {
                 ownerID = savedInstanceState.getLong(EXTRA_OWNER_ID)
             }
             if (savedInstanceState.containsKey(CURRENT_PHOTO_PATH)) {
-                currentPhotoPath = File(savedInstanceState.getString(CURRENT_PHOTO_PATH))
+                currentPhotoPath = File(savedInstanceState.getString(CURRENT_PHOTO_PATH)!!)
             }
         }
 
