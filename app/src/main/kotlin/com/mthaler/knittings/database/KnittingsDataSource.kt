@@ -223,16 +223,8 @@ object KnittingsDataSource : AbstractObservableDatabase(), PhotoDataSource, Cate
     }
 
     fun getRowCounter(knitting: Knitting): RowCounter? {
-        context.database.readableDatabase.use { database ->
-            val whereClause = RowCounterTable.Cols.KNITTING_ID + " = ?"
-            val whereArgs = arrayOf(knitting.id.toString())
-            val cursor = database.query(RowCounterTable.ROW_COUNTERS, RowCounterTable.Columns, whereClause, whereArgs, null, null, null)
-            if (!cursor.isAfterLast) {
-                return cursor.first(RowCounterConverter::convert)
-            } else {
-                return null
-            }
-        }
+        Log.d(TAG, "Getting row counter for knitting id ${knitting.id}")
+        return db.rowCounterDao().get(knitting.id)
     }
 
     fun addRowCounter(rowCounter: RowCounter): RowCounter {
