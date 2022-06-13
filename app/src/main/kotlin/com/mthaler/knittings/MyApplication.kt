@@ -4,9 +4,8 @@ import androidx.multidex.MultiDexApplication
 import androidx.room.Room
 import com.mthaler.knittings.database.*
 import com.mthaler.knittings.settings.Theme
-import com.mthaler.knittings.model.Database
+import com.mthaler.knittings.database.Database
 import com.mthaler.knittings.model.ExportDatabase
-import com.mthaler.knittings.model.Knitting
 import com.mthaler.knittings.model.toDatabase
 import com.mthaler.knittings.settings.ThemeRepository
 import org.json.JSONObject

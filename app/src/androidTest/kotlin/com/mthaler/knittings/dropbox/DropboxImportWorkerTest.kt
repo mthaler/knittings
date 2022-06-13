@@ -3,7 +3,7 @@ package com.mthaler.knittings.dropbox
 import android.app.Application
 import androidx.test.core.app.launchActivity
 import com.mthaler.knittings.MyApplication
-import com.mthaler.knittings.model.Database
+import com.mthaler.knittings.database.Database
 import com.mthaler.knittings.model.Knitting
 import com.mthaler.knittings.model.Photo
 import org.junit.Assert.assertEquals

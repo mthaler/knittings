@@ -1,6 +1,7 @@
 package com.mthaler.knittings.model
 
 import android.graphics.Color
+import com.mthaler.knittings.database.Database
 import com.mthaler.knittings.utils.SerializeUtils
 import org.junit.Assert.*
 import org.junit.Test

@@ -1,11 +1,10 @@
-package com.mthaler.knittings.model
+package com.mthaler.knittings.database
 
 import android.content.Context
 import android.net.Uri
 import com.dropbox.core.v2.DbxClientV2
 import com.mthaler.knittings.utils.FileUtils
-import com.mthaler.knittings.database.KnittingDatabaseHelper
-import com.mthaler.knittings.database.KnittingsDataSource
+import com.mthaler.knittings.model.*
 import com.mthaler.knittings.utils.PictureUtils
 import org.json.JSONObject
 import java.io.File
@@ -72,7 +71,7 @@ data class Database(override val projects: List<Knitting>, override val photos: 
 
     override fun toJSON(): JSONObject {
         val result = JSONObject()
-        result.put("version", KnittingDatabaseHelper.DB_VERSION)
+        result.put("version", 6)
         result.put("knittings", knittingsToJSON(projects))
         result.put("photos", photosToJSON(photos))
         result.put("categories", categoriesToJSON(categories))

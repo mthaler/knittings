@@ -5,6 +5,7 @@ import android.util.Log
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.mthaler.knittings.database.dao.*
@@ -15,6 +16,7 @@ import com.mthaler.knittings.database.table.RowCounterTable
 import com.mthaler.knittings.model.*
 
 @Database(entities = [Category::class, Knitting::class, Needle::class, Photo::class, RowCounter::class], version = 6)
+@TypeConverters(DateConverter::class)
 abstract class AppDatabase : RoomDatabase() {
 
     abstract fun categoryDao(): CategoryDao
@@ -26,6 +28,8 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun photoDao(): PhotoDao
 
     abstract fun rowCounterDao(): RowCounterDao
+
+
 
     companion object {
          private val TAG = "AppDatabase"

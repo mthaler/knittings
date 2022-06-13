@@ -2,6 +2,7 @@ package com.mthaler.knittings.model
 
 import android.content.Context
 import android.graphics.Color
+import com.mthaler.knittings.database.Database
 import org.json.JSONObject
 import java.text.SimpleDateFormat
 import org.json.JSONArray
