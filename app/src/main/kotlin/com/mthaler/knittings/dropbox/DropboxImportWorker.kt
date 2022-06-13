@@ -56,14 +56,14 @@ class DropboxImportWorker(val context: Context, parameters: WorkerParameters) : 
         const val Database = "com.mthaler.knittings.dropbox.database"
         const val Directory = "com.mthaler.knittings.dropbox.directory"
 
-        fun data(directory: String, database: ExportDatabase<Knitting>): Data {
+        fun data(directory: String, database: ExportDatabas): Data {
             val data = Data.Builder()
             data.putString(Directory, directory)
             data.putString(Database, database.toJSON().toString())
             return data.build()
         }
 
-        fun readDatabase(application: DatabaseApplication, directory: String, database: String): ExportDatabase<Knitting> {
+        fun readDatabase(application: DatabaseApplication, directory: String, database: String): ExportDatabase {
             val json = JSONObject(database)
             val file = File(directory)
             val db = application.createExportDatabaseFromJSON(json, file)
