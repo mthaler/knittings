@@ -78,13 +78,7 @@ class KnittingDetailsFragment : Fragment() {
 
         val callback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                val upIntent: Intent? = NavUtils.getParentActivityIntent(requireActivity())
-                if (upIntent == null) {
-                    throw IllegalStateException("No Parent Activity Intent")
-                } else {
-                    NavUtils.navigateUpTo(requireActivity(), upIntent)
-                }
-
+                requireActivity().supportFragmentManager.popBackStack()
             }
         }
 
@@ -105,7 +99,7 @@ class KnittingDetailsFragment : Fragment() {
 
         if (savedInstanceState != null) {
             if (savedInstanceState.containsKey(CURRENT_PHOTO_PATH)) {
-                currentPhotoPath = File(savedInstanceState.getString(CURRENT_PHOTO_PATH))
+                currentPhotoPath = File(savedInstanceState.getString(CURRENT_PHOTO_PATH)!!)
             }
         }
 

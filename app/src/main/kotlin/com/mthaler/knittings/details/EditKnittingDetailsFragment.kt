@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.*
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.app.NavUtils
@@ -15,7 +16,6 @@ import com.mthaler.knittings.utils.TimeUtils
 import java.text.DateFormat
 import com.mthaler.knittings.durationpicker.DurationPickerDialog
 import com.mthaler.knittings.Extras.EXTRA_KNITTING_ID
-import com.mthaler.knittings.MainActivity
 import com.mthaler.knittings.SaveChangesDialog
 import com.mthaler.knittings.category.SelectCategoryActivity
 import com.mthaler.knittings.database.Extras.EXTRA_CATEGORY_ID
@@ -186,6 +186,12 @@ class EditKnittingDetailsFragment : Fragment() {
             savedInstanceState.putLong(EXTRA_CATEGORY, it.id)
         }
         super.onSaveInstanceState(savedInstanceState)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        (requireActivity() as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
