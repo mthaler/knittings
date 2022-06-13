@@ -21,6 +21,4 @@ interface RowCounterDao {
 
     @Query("SELECT * FROM row_counters WHERE row_counters.knitting_id=:knittingID")
     fun getAll(knittingID: Long): Array<RowCounter>
-
-
 }

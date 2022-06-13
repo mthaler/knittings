@@ -4,7 +4,6 @@ import android.content.Context
 import android.util.Log
 import androidx.preference.PreferenceManager
 import java.io.File
-import com.mthaler.knittings.database.table.*
 import com.mthaler.knittings.R
 import com.mthaler.knittings.model.*
 
@@ -216,14 +215,9 @@ object KnittingsDataSource : AbstractObservableDatabase(), PhotoDataSource, Cate
         db.needleDao().delete(needle)
     }
 
-    fun getRowCounter(id: Long): RowCounter {
-        Log.d(TAG, "Getting row counter for id $id")
-        return db.rowCounterDao().get(id)
-    }
-
     fun getRowCounter(knitting: Knitting): RowCounter {
         Log.d(TAG, "Getting row counter for knitting id ${knitting.id}")
-        return db.rowCounterDao().get(knitting.id)
+        return db.rowCounterDao().getAll(knitting.id).get(0)
     }
 
     fun addRowCounter(rowCounter: RowCounter): RowCounter {
@@ -239,12 +233,8 @@ object KnittingsDataSource : AbstractObservableDatabase(), PhotoDataSource, Cate
     }
 
     private fun deleteAllRowCounters(knitting: Knitting) {
-        context.database.writableDatabase.use { database ->
-            val whereClause = RowCounterTable.Cols.KNITTING_ID + "= ?"
-            val whereArgs = arrayOf(knitting.id.toString())
-            database.delete(RowCounterTable.ROW_COUNTERS, whereClause, whereArgs)
-            Log.d(TAG, "Removed knitting ${knitting.id}: $knitting")
-        }
+        Log.d(TAG, "Removed row counter for knitting id ${knitting.id}")
+        db.rowCounterDao().delete(knitting.id)
     }
 
     fun deleteAllRowCounters() {
