@@ -65,7 +65,14 @@ class KnittingDetailsFragment : Fragment() {
     private val launchImageImport = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
         if (result.resultCode == Activity.RESULT_OK) {
             result.data?.let {
-
+                val f = currentPhotoPath
+                if (f != null) {
+                    lifecycleScope.launch {
+                        withContext(Dispatchers.IO) {
+                            TakePhotoDialog.handleImageImportResult(requireContext(), knittingID, f, it)
+                        }
+                    }
+                }
             }
         }
     }
@@ -199,19 +206,6 @@ class KnittingDetailsFragment : Fragment() {
         ft.commit()
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (resultCode != Activity.RESULT_OK) {
-            return
-        }
-        when (requestCode) {
-
-            REQUEST_IMAGE_IMPORT -> {
-
-            }
-            else -> super.onActivityResult(requestCode, resultCode, data)
-        }
-    }
-
     private fun takePhoto(file: File, intent: Intent) {
         currentPhotoPath = file
         launchImageCapture.launch(intent)
@@ -219,7 +213,7 @@ class KnittingDetailsFragment : Fragment() {
 
     private fun importPhoto(file: File, intent: Intent) {
         currentPhotoPath = file
-        startActivityForResult(intent, REQUEST_IMAGE_IMPORT)
+        launchImageImport.launch(intent)
     }
 
     private fun updateDetails(knitting: Knitting) {
@@ -284,7 +278,6 @@ class KnittingDetailsFragment : Fragment() {
 
     companion object {
 
-        private const val REQUEST_IMAGE_IMPORT = 1
         private const val CURRENT_PHOTO_PATH = "com.mthaler.knittings.CURRENT_PHOTO_PATH"
         private const val EXTRA_EDIT_ONLY = "com.mthaler.knittings.edit_only"
 
