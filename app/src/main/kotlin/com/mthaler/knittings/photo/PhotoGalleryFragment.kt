@@ -28,8 +28,37 @@ class PhotoGalleryFragment : Fragment() {
 
     private var ownerID: Long = -1
     private var currentPhotoPath: File? = null
+
     private var _binding: FragmentPhotoGalleryBinding? = null
     private val binding get() = _binding!!
+
+    private val launchImageCapture = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            result.data?.let {
+                currentPhotoPath?.let {
+                    lifecycleScope.launch {
+                        withContext(Dispatchers.IO) {
+                            TakePhotoDialog.handleTakePhotoResult(requireContext(), ownerID, it) }
+                    }
+                }
+            }
+        }
+    }
+
+    private val launchImageImport = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            result.data?.let {
+                val f = currentPhotoPath
+                if (f != null) {
+                    lifecycleScope.launch {
+                        withContext(Dispatchers.IO) {
+                            TakePhotoDialog.handleImageImportResult(requireContext(), ownerID, f, it)
+                        }
+                    }
+                }
+            }
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -118,41 +147,14 @@ class PhotoGalleryFragment : Fragment() {
     }
 
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (resultCode != Activity.RESULT_OK) {
-            return
-        }
-        when (requestCode) {
-            REQUEST_IMAGE_CAPTURE -> {
-                currentPhotoPath?.let {
-                    viewLifecycleOwner.lifecycleScope.launch {
-                        withContext(Dispatchers.IO) {
-                            TakePhotoDialog.handleTakePhotoResult(requireContext(), ownerID, it) }
-                    }
-                }
-            }
-            REQUEST_IMAGE_IMPORT -> {
-                val f = currentPhotoPath
-                if (f != null && data != null) {
-                    viewLifecycleOwner.lifecycleScope.launch {
-                        withContext(Dispatchers.IO) {
-                            TakePhotoDialog.handleImageImportResult(requireContext(), ownerID, f, data)
-                        }
-                    }
-                }
-            }
-            else -> super.onActivityResult(requestCode, resultCode, data)
-        }
-    }
-
     private fun takePhoto(file: File, intent: Intent) {
         currentPhotoPath = file
-        startActivityForResult(intent, REQUEST_IMAGE_CAPTURE)
+        launchImageCapture.launch(intent)
     }
 
     private fun importPhoto(file: File, intent: Intent) {
         currentPhotoPath = file
-        startActivityForResult(intent, REQUEST_IMAGE_IMPORT)
+        launchImageImport.launch(intent)
     }
 
     fun photoClicked(photoID: Long) {
@@ -174,7 +176,5 @@ class PhotoGalleryFragment : Fragment() {
             }
 
         const val CURRENT_PHOTO_PATH = "com.mthaler.dbapp.CURRENT_PHOTO_PATH"
-        const val REQUEST_IMAGE_CAPTURE = 0
-        const val REQUEST_IMAGE_IMPORT = 1
     }
 }
