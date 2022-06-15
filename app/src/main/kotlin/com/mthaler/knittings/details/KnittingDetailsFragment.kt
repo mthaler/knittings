@@ -52,7 +52,15 @@ class KnittingDetailsFragment : Fragment() {
     private var _binding: FragmentKnittingDetailsBinding? = null
     private val binding get() = _binding!!
 
-    private val launcher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+    private val launchImageCapture = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            result.data?.let {
+
+            }
+        }
+    }
+
+    private val launchImageImport = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
         if (result.resultCode == Activity.RESULT_OK) {
             result.data?.let {
 

@@ -2,12 +2,12 @@ package com.mthaler.knittings.photo
 
 import android.Manifest
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
 import android.view.*
 import android.widget.Toast
+import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
@@ -30,12 +30,19 @@ class PhotoGalleryFragment : Fragment() {
     private var currentPhotoPath: File? = null
     private var _binding: FragmentPhotoGalleryBinding? = null
     private val binding get() = _binding!!
-    private var listener: OnFragmentInteractionListener? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
             ownerID = it.getLong(EXTRA_OWNER_ID)
+        }
+    }
+
+    private val launcher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            result.data?.let {
+
+            }
         }
     }
 
@@ -80,7 +87,7 @@ class PhotoGalleryFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val photoGalleryAdapter = PhotoGalleryAdapter(requireContext(), viewLifecycleOwner.lifecycleScope) { photo -> listener?.photoClicked(photo.id) }
+        val photoGalleryAdapter = PhotoGalleryAdapter(requireContext(), viewLifecycleOwner.lifecycleScope) { photo -> photoClicked(photo.id) }
         val orientation = this.resources.configuration.orientation
         val columns = if (orientation == Configuration.ORIENTATION_PORTRAIT) 2 else 3
         val gridLayoutManager = GridLayoutManager(requireContext(), columns)
@@ -148,23 +155,12 @@ class PhotoGalleryFragment : Fragment() {
         startActivityForResult(intent, REQUEST_IMAGE_IMPORT)
     }
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        if (context is OnFragmentInteractionListener) {
-            listener = context
-        } else {
-            throw RuntimeException("$context must implement OnFragmentInteractionListener")
-        }
-    }
-
-    override fun onDetach() {
-        super.onDetach()
-        listener = null
-    }
-
-    interface OnFragmentInteractionListener {
-
-        fun photoClicked(photoID: Long)
+    fun photoClicked(photoID: Long) {
+        val f = PhotoFragment.newInstance(photoID)
+        val ft = requireActivity().supportFragmentManager.beginTransaction()
+        ft.replace(R.id.photo_gallery_container, f)
+        ft.addToBackStack(null)
+        ft.commit()
     }
 
     companion object {
