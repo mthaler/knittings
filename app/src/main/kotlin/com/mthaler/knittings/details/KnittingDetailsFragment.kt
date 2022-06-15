@@ -13,20 +13,17 @@ import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.app.NavUtils
 import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.mthaler.knittings.DeleteDialog
 import com.mthaler.knittings.Extras.EXTRA_KNITTING_ID
-import com.mthaler.knittings.MainActivity
 import com.mthaler.knittings.R
 import com.mthaler.knittings.database.KnittingsDataSource
 import com.mthaler.knittings.databinding.FragmentKnittingDetailsBinding
 import com.mthaler.knittings.model.Knitting
 import com.mthaler.knittings.model.Status
-import com.mthaler.knittings.needle.EditNeedleFragment
 import com.mthaler.knittings.photo.PhotoGalleryActivity
 import com.mthaler.knittings.photo.TakePhotoDialog
 import com.mthaler.knittings.rowcounter.RowCounterActivity
@@ -55,7 +52,12 @@ class KnittingDetailsFragment : Fragment() {
     private val launchImageCapture = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
         if (result.resultCode == Activity.RESULT_OK) {
             result.data?.let {
-
+                currentPhotoPath?.let {
+                    lifecycleScope.launch {
+                        withContext(Dispatchers.IO) {
+                            TakePhotoDialog.handleTakePhotoResult(requireContext(), knittingID, it) }
+                    }
+                }
             }
         }
     }
@@ -202,23 +204,9 @@ class KnittingDetailsFragment : Fragment() {
             return
         }
         when (requestCode) {
-            REQUEST_IMAGE_CAPTURE -> {
-                currentPhotoPath?.let {
-                    lifecycleScope.launch {
-                        withContext(Dispatchers.IO) {
-                            TakePhotoDialog.handleTakePhotoResult(requireContext(), knittingID, it) }
-                    }
-                }
-            }
+
             REQUEST_IMAGE_IMPORT -> {
-                val f = currentPhotoPath
-                if (f != null && data != null) {
-                    lifecycleScope.launch {
-                        withContext(Dispatchers.IO) {
-                            TakePhotoDialog.handleImageImportResult(requireContext(), knittingID, f, data)
-                        }
-                    }
-                }
+
             }
             else -> super.onActivityResult(requestCode, resultCode, data)
         }
@@ -226,7 +214,7 @@ class KnittingDetailsFragment : Fragment() {
 
     private fun takePhoto(file: File, intent: Intent) {
         currentPhotoPath = file
-        startActivityForResult(intent, REQUEST_IMAGE_CAPTURE)
+        launchImageCapture.launch(intent)
     }
 
     private fun importPhoto(file: File, intent: Intent) {
@@ -296,7 +284,6 @@ class KnittingDetailsFragment : Fragment() {
 
     companion object {
 
-        private const val REQUEST_IMAGE_CAPTURE = 0
         private const val REQUEST_IMAGE_IMPORT = 1
         private const val CURRENT_PHOTO_PATH = "com.mthaler.knittings.CURRENT_PHOTO_PATH"
         private const val EXTRA_EDIT_ONLY = "com.mthaler.knittings.edit_only"
