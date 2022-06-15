@@ -7,8 +7,6 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ActionMode
 import androidx.recyclerview.widget.LinearLayoutManager
-import android.view.*
-import androidx.lifecycle.ViewModelProvider
 import com.mthaler.knittings.DeleteDialog
 import com.mthaler.knittings.filter.CombinedFilter
 import com.mthaler.knittings.R
@@ -17,6 +15,8 @@ import com.mthaler.knittings.databinding.FragmentNeedleListBinding
 import com.mthaler.knittings.model.NeedleType
 import com.mthaler.knittings.needle.filter.InUseFilter
 import com.mthaler.knittings.needle.filter.SingleTypeFilter
+import androidx.lifecycle.ViewModelProvider
+import android.view.*
 
 class NeedleListFragment : Fragment() {
 
