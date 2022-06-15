@@ -13,10 +13,7 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.NavUtils
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleCoroutineScope
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.*
 import com.dropbox.core.DbxException
 import com.dropbox.core.DbxRequestConfig
 import com.dropbox.core.android.Auth
@@ -207,8 +204,7 @@ class DropboxImportFragment : AbstractDropboxFragment() {
                     show()
                 }
             } else {
-                val result = runCatching { GlobalScope.launch(Dispatchers.IO) { dropboxApi.listFolders() } }
-
+                val result = runCatching { lifecycleScope.launch(Dispatchers.IO){ dropboxApi.listFolders() } }
                 when (result) {
                     is Ok ->
                         try {
