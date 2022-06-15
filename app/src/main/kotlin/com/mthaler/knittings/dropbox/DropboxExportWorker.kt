@@ -62,7 +62,7 @@ class DropboxExportWorker(val context: Context, parameters: WorkerParameters) : 
         return false
     }
 
-    private fun uploadDatabase(dbxClient: DbxClientV2, dir: String, database: ExportDatabase<Knitting>) {
+    private fun uploadDatabase(dbxClient: DbxClientV2, dir: String, database: ExportDatabase) {
         val dbJSON = database.toJSON()
         val s = dbJSON.toString(2)
         val dbInputStream = ByteArrayInputStream(s.toByteArray())

@@ -26,7 +26,7 @@ class MyApplication : MultiDexApplication(), DatabaseApplication {
 
     override fun getPhotoDataSource(): PhotoDataSource = KnittingsDataSource
 
-    override fun getProjectsDataSource(): ProjectsDataSource<Knitting> = KnittingsDataSource
+    override fun getProjectsDataSource(): ProjectsDataSource = KnittingsDataSource
 
     override fun getApplicationSettings(): ApplicationSettings = object : ApplicationSettings {
 
@@ -35,7 +35,7 @@ class MyApplication : MultiDexApplication(), DatabaseApplication {
         override fun categoryListBackground(): Int = R.drawable.categories2
     }
 
-    override fun createExportDatabase(): ExportDatabase<Knitting> = Database.createDatabase()
+    override fun createExportDatabase(): ExportDatabase = Database.createDatabase()
 
-    override fun createExportDatabaseFromJSON(json: JSONObject, externalFilesDir: File): ExportDatabase<Knitting> = json.toDatabase(this, externalFilesDir)
+    override fun createExportDatabaseFromJSON(json: JSONObject, externalFilesDir: File): ExportDatabase = json.toDatabase(this, externalFilesDir)
 }

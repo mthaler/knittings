@@ -11,7 +11,7 @@ import org.json.JSONObject
 import java.io.File
 import java.io.FileOutputStream
 
-data class Database(override val projects: List<Knitting>, override val photos: List<Photo>, override val categories: List<Category>, val needles: List<Needle>, val rowCounters: List<RowCounter>) : AbstractExportDatabase<Knitting>() {
+data class Database(override val projects: List<Knitting>, override val photos: List<Photo>, override val categories: List<Category>, val needles: List<Needle>, val rowCounters: List<RowCounter>) : AbstractExportDatabase() {
 
     override fun checkDatabase(): Database {
         val filteredPhotos = photos.filter { it.filename.exists() }
@@ -22,7 +22,7 @@ data class Database(override val projects: List<Knitting>, override val photos: 
         return filteredDatabase
     }
 
-    override fun removeMissingPhotos(missingPhotos: Set<Long>): ExportDatabase<Knitting> {
+    override fun removeMissingPhotos(missingPhotos: Set<Long>): ExportDatabase {
         val filteredPhotos = photos.filterNot { missingPhotos.contains(it.id) }
         val updatedKnittings = projects.map { if (missingPhotos.contains(it.defaultPhoto?.id)) it.copy(defaultPhoto = null) else it }
         val filteredDatabase = copy(projects = updatedKnittings, photos = filteredPhotos)

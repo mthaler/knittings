@@ -6,7 +6,7 @@ import com.mthaler.knittings.database.getString
 import com.mthaler.knittings.database.table.CategoryTable
 import java.lang.IllegalArgumentException
 
-abstract class AbstractExportDatabase<T : Project> : ExportDatabase<T> {
+abstract class AbstractExportDatabase : ExportDatabase {
 
     override fun checkValidity() {
         checkPhotosValidity()

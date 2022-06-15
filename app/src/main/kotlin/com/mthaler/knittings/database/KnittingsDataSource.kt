@@ -14,7 +14,7 @@ import com.mthaler.knittings.model.*
 import java.lang.Exception
 
 object KnittingsDataSource : AbstractObservableDatabase(), PhotoDataSource, CategoryDataSource,
-    ProjectsDataSource<Knitting> {
+    ProjectsDataSource {
 
     private const val TAG = "KnittingsDataSource"
 
