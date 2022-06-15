@@ -1,8 +1,8 @@
 package com.mthaler.knittings.model
 
-import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import androidx.room.Relation
 import com.mthaler.knittings.database.table.KnittingTable
 import java.io.Serializable
 import java.util.Date
@@ -19,10 +19,10 @@ data class Knitting(
     val finished: Date? = null,
     val needleDiameter: String = "",
     val size: String = "",
-    @Embedded val defaultPhoto: Photo? = null,
+    val defaultPhoto: Photo? = null,
     val rating: Double = 0.0,
     val duration: Long = 0L,
-    @Embedded val category: Category? = null,
+    val category: Category? = null,
     val status: Status = Status.PLANNED
 ) : Serializable {
 
