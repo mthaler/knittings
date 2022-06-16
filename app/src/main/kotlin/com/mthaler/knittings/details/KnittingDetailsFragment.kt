@@ -13,6 +13,8 @@ import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.camera.core.ImageCapture
+import androidx.camera.core.ImageCapture.*
 import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -48,19 +50,6 @@ class KnittingDetailsFragment : Fragment() {
 
     private var _binding: FragmentKnittingDetailsBinding? = null
     private val binding get() = _binding!!
-
-    private val launchImageCapture = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
-        if (result.resultCode == Activity.RESULT_OK) {
-            result.data?.let {
-                currentPhotoPath?.let {
-                    lifecycleScope.launch {
-                        withContext(Dispatchers.IO) {
-                            TakePhotoDialog.handleTakePhotoResult(requireContext(), knittingID, it) }
-                    }
-                }
-            }
-        }
-    }
 
     private val launchImageImport = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
         if (result.resultCode == Activity.RESULT_OK) {
@@ -206,9 +195,9 @@ class KnittingDetailsFragment : Fragment() {
         ft.commit()
     }
 
-    private fun takePhoto(file: File, intent: Intent) {
+    private fun takePhoto(file: File) {
         currentPhotoPath = file
-        launchImageCapture.launch(intent)
+
     }
 
     private fun importPhoto(file: File, intent: Intent) {
