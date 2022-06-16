@@ -26,7 +26,7 @@ class DropboxExportWorker(val context: Context, parameters: WorkerParameters) : 
 
     override  suspend fun doWork(): Result {
         val dir = createDateTimeDirectoryName(Date())
-        val cancelled = withContext(Dispatchers.IO) {
+        withContext(Dispatchers.IO) {
             try {
                 upload(dir)
             } catch (ex: Exception) {

@@ -1,7 +1,6 @@
 package com.mthaler.knittings.database
 
 import com.mthaler.knittings.model.Knitting
-import java.util.ArrayList
 
 interface ProjectsDataSource {
 

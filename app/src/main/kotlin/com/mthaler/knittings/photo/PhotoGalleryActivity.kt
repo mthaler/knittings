@@ -10,7 +10,7 @@ import com.mthaler.knittings.R
 import com.mthaler.knittings.database.Extras.EXTRA_OWNER_ID
 import com.mthaler.knittings.databinding.ActivityPhotoGalleryBinding
 
-class PhotoGalleryActivity : BaseActivity(), PhotoGalleryFragment.OnFragmentInteractionListener {
+class PhotoGalleryActivity : BaseActivity() {
 
     private var ownerID: Long = -1
 
@@ -71,14 +71,6 @@ class PhotoGalleryActivity : BaseActivity(), PhotoGalleryFragment.OnFragmentInte
         } else {
             super.onBackPressed()
         }
-    }
-
-    override fun photoClicked(photoID: Long) {
-        val f = PhotoFragment.newInstance(photoID)
-        val ft = supportFragmentManager.beginTransaction()
-        ft.replace(R.id.photo_gallery_container, f)
-        ft.addToBackStack(null)
-        ft.commit()
     }
 
     companion object {

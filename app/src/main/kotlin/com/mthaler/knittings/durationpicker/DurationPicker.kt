@@ -91,7 +91,7 @@ class DurationPicker @JvmOverloads constructor(context: Context, attrs: Attribut
         secondPicker.minValue = 0
         secondPicker.maxValue = 59
         secondPicker.setFormatter(TWO_DIGIT_FORMATTER)
-        secondPicker.setOnValueChangedListener { picker, oldVal, newVal ->
+        secondPicker.setOnValueChangedListener { _, _, newVal ->
             currentSeconds = newVal
             onTimeChanged()
         }

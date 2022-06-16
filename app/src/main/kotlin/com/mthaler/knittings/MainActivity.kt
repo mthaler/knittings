@@ -30,6 +30,7 @@ import com.mthaler.knittings.needle.NeedleListActivity
 import com.mthaler.knittings.settings.SettingsActivity
 import com.mthaler.knittings.utils.AndroidViewModelFactory
 import com.mthaler.knittings.whatsnew.WhatsNewDialog
+import java.lang.ClassCastException
 import java.util.*
 
 class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedListener, SearchView.OnQueryTextListener, SearchView.OnCloseListener {
@@ -190,7 +191,11 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     private fun init() {
         val sharedPref = PreferenceManager.getDefaultSharedPreferences(this)
         var currentVersionNumber = 0L
-        val savedVersionNumber = sharedPref.getInt(VERSION_KEY, 0)
+        val savedVersionNumber: Int = try {
+            sharedPref.getInt(VERSION_KEY, 0)
+        } catch (ex: ClassCastException) {
+            sharedPref.getLong(VERSION_KEY, 0L).toInt()
+        }
         try {
             val pi = packageManager.getPackageInfo(packageName, 0)
             if (Build.VERSION.SDK_INT >= 27) {

@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.view.*
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.app.NavUtils
@@ -132,8 +131,8 @@ class EditKnittingDetailsFragment : Fragment() {
         }
 
         binding.knittingFinished.setOnClickListener {
-            val fi = finished ?: Date()
-            val dialog = DatePickerUtils.create(requireContext(), fi) { _, date ->
+            val f = finished ?: Date()
+            val dialog = DatePickerUtils.create(requireContext(), f) { _, date ->
                 if (date != finished) {
                     binding.knittingFinished.text = DateFormat.getDateInstance().format(date)
                     finished = date
@@ -157,10 +156,12 @@ class EditKnittingDetailsFragment : Fragment() {
         return view
     }
 
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
+
 
     override fun onResume() {
         super.onResume()
@@ -174,6 +175,8 @@ class EditKnittingDetailsFragment : Fragment() {
         }
     }
 
+
+
     override fun onSaveInstanceState(savedInstanceState: Bundle) {
         savedInstanceState.putLong(EXTRA_KNITTING_ID, knittingID)
         savedInstanceState.putBoolean(EXTRA_EDIT_ONLY, editOnly)
@@ -186,12 +189,6 @@ class EditKnittingDetailsFragment : Fragment() {
             savedInstanceState.putLong(EXTRA_CATEGORY, it.id)
         }
         super.onSaveInstanceState(savedInstanceState)
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        (requireActivity() as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -218,6 +215,7 @@ class EditKnittingDetailsFragment : Fragment() {
             else -> super.onOptionsItemSelected(item)
         }
     }
+
 
     fun onBackPressed() {
         activity?.let {
