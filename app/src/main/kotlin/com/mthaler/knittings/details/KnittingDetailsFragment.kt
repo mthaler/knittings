@@ -3,9 +3,11 @@ package com.mthaler.knittings.details
 import android.Manifest
 import android.app.Activity
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.*
 import android.widget.ImageView
 import android.widget.LinearLayout
@@ -27,6 +29,7 @@ import com.mthaler.knittings.R
 import com.mthaler.knittings.database.KnittingsDataSource
 import com.mthaler.knittings.databinding.FragmentKnittingDetailsBinding
 import com.mthaler.knittings.model.Knitting
+import com.mthaler.knittings.model.Photo
 import com.mthaler.knittings.model.Status
 import com.mthaler.knittings.photo.PhotoGalleryActivity
 import com.mthaler.knittings.photo.TakePhotoDialog
@@ -57,19 +60,6 @@ class KnittingDetailsFragment : Fragment() {
 
     private var _binding: FragmentKnittingDetailsBinding? = null
     private val binding get() = _binding!!
-
-    private val launchImageCapture = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
-        if (result.resultCode == Activity.RESULT_OK) {
-            result.data?.let {
-                currentPhotoPath?.let {
-                    lifecycleScope.launch {
-                        withContext(Dispatchers.IO) {
-                            TakePhotoDialog.handleTakePhotoResult(requireContext(), knittingID, it) }
-                    }
-                }
-            }
-        }
-    }
 
     private val launchImageImport = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
         if (result.resultCode == Activity.RESULT_OK) {
@@ -229,11 +219,11 @@ class KnittingDetailsFragment : Fragment() {
         val callback = object : ImageCapture.OnImageCapturedCallback() {
 
             override fun onCaptureSuccess(image: ImageProxy) {
-                super.onCaptureSuccess(image)
-            }
 
-            override fun onError(exception: ImageCaptureException) {
-                super.onError(exception)
+                lifecycleScope.launch {
+                        withContext(Dispatchers.IO) {
+                            TakePhotoDialog.handleTakePhotoResult(requireContext(), knittingID, file) }
+                    }
             }
         }
 
