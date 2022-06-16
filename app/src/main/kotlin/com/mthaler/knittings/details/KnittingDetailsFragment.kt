@@ -2,7 +2,6 @@ package com.mthaler.knittings.details
 
 import android.Manifest
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
@@ -14,9 +13,6 @@ import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.camera.core.CameraSelector
-import androidx.camera.lifecycle.ProcessCameraProvider
-import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -39,8 +35,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.File
 import java.text.DateFormat
-import java.util.concurrent.ExecutorService
-import java.util.concurrent.Executors
 
 /**
  * Fragment that displays knitting details (name, description, start time etc.)
@@ -52,15 +46,21 @@ class KnittingDetailsFragment : Fragment() {
     private var currentPhotoPath: File? = null
     private var editOnly: Boolean = false
 
-    private lateinit var outputDirectory: File
-     /** Blocking camera operations are performed using this executor */
-    private lateinit var cameraExecutor: ExecutorService
-
-    private var cameraProvider: ProcessCameraProvider? = null
-        private var lensFacing: Int = CameraSelector.LENS_FACING_BACK
-
     private var _binding: FragmentKnittingDetailsBinding? = null
     private val binding get() = _binding!!
+
+    private val launchImageCapture = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            result.data?.let {
+                currentPhotoPath?.let {
+                    lifecycleScope.launch {
+                        withContext(Dispatchers.IO) {
+                            TakePhotoDialog.handleTakePhotoResult(requireContext(), knittingID, it) }
+                    }
+                }
+            }
+        }
+    }
 
     private val launchImageImport = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
         if (result.resultCode == Activity.RESULT_OK) {
@@ -88,6 +88,7 @@ class KnittingDetailsFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         val a = arguments
         if (a != null) {
             knittingID = a.getLong(EXTRA_KNITTING_ID)
@@ -146,16 +147,11 @@ class KnittingDetailsFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-
-        // Shut down our background executor
-        cameraExecutor.shutdown()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Initialize our background executor
-        cameraExecutor = Executors.newSingleThreadExecutor()
 
         val imageView = binding.image
         imageView.setOnClickListener {
@@ -167,12 +163,6 @@ class KnittingDetailsFragment : Fragment() {
         viewModel.knitting.observe(viewLifecycleOwner, { knitting ->
             updateDetails(knitting)
         })
-
-        // Determine the output directory
-        outputDirectory = KnittingDetailsFragment.getOutputDirectory(requireContext())
-
-        // Set up the camera and its use cases
-        setUpCamera()
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -218,11 +208,10 @@ class KnittingDetailsFragment : Fragment() {
         ft.commit()
     }
 
-    private fun takePhoto(file: File) {
+    private fun takePhoto(file: File, intent: Intent) {
         currentPhotoPath = file
-
+        launchImageCapture.launch(intent)
     }
-
 
     private fun importPhoto(file: File, intent: Intent) {
         currentPhotoPath = file
@@ -289,39 +278,6 @@ class KnittingDetailsFragment : Fragment() {
         }
     }
 
-      /** Returns true if the device has an available back camera. False otherwise */
-    private fun hasBackCamera(): Boolean {
-        return cameraProvider?.hasCamera(CameraSelector.DEFAULT_BACK_CAMERA) ?: false
-    }
-
-    /** Returns true if the device has an available front camera. False otherwise */
-    private fun hasFrontCamera(): Boolean {
-        return cameraProvider?.hasCamera(CameraSelector.DEFAULT_FRONT_CAMERA) ?: false
-    }
-
-    /** Initialize CameraX, and prepare to bind the camera use cases  */
-    private fun setUpCamera() {
-        val cameraProviderFuture = ProcessCameraProvider.getInstance(requireContext())
-        cameraProviderFuture.addListener(Runnable {
-
-            // CameraProvider
-            cameraProvider = cameraProviderFuture.get()
-
-            // Select lensFacing depending on the available cameras
-            lensFacing = when {
-                hasBackCamera() -> CameraSelector.LENS_FACING_BACK
-                hasFrontCamera() -> CameraSelector.LENS_FACING_FRONT
-                else -> throw IllegalStateException("Back and front camera are unavailable")
-            }
-
-            // Enable or disable switching between cameras
-            updateCameraSwitchButton()
-
-            // Build and bind the camera use cases
-            bindCameraUseCases()
-        }, ContextCompat.getMainExecutor(requireContext()))
-    }
-
     companion object {
 
         private const val TAG = "KnittingDetailsFragment"
@@ -337,14 +293,5 @@ class KnittingDetailsFragment : Fragment() {
                     putLong(EXTRA_KNITTING_ID, knittingID)
                 }
             }
-
-        /** Use external media if it is available, our app's file directory otherwise */
-        fun getOutputDirectory(context: Context): File {
-            val appContext = context.applicationContext
-            val mediaDir = context.externalMediaDirs.firstOrNull()?.let {
-                File(it, appContext.resources.getString(R.string.app_name)).apply { mkdirs() } }
-            return if (mediaDir != null && mediaDir.exists())
-                mediaDir else appContext.filesDir
-        }
     }
 }
