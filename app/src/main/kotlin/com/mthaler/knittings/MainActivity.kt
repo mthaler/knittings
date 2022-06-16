@@ -191,7 +191,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     private fun init() {
         val sharedPref = PreferenceManager.getDefaultSharedPreferences(this)
         var currentVersionNumber = 0L
-        val savedVersionNumber = try {
+        val savedVersionNumber: Int = try {
             sharedPref.getInt(VERSION_KEY, 0)
         } catch (ex: ClassCastException) {
             sharedPref.getLong(VERSION_KEY, 0L).toInt()
