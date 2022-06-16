@@ -201,7 +201,7 @@ class KnittingDetailsFragment : Fragment() {
      fun editKnitting() {
         val f = EditKnittingDetailsFragment.newInstance(knittingID, editOnly)
         val ft = requireActivity().supportFragmentManager.beginTransaction()
-        ft.replace(R.id.knitting_list_container, f)
+        ft.replace(R.id.knitting_details_container, f)
         ft.addToBackStack(null)
         ft.commit()
     }
