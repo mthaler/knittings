@@ -13,6 +13,10 @@ import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.camera.core.ImageCapture
+import androidx.camera.core.ImageCaptureException
+import androidx.camera.core.ImageProxy
+import androidx.camera.core.impl.ImageCaptureConfig
 import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -35,6 +39,8 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.File
 import java.text.DateFormat
+import java.util.concurrent.ExecutorService
+import java.util.concurrent.Executors
 
 /**
  * Fragment that displays knitting details (name, description, start time etc.)
@@ -45,6 +51,9 @@ class KnittingDetailsFragment : Fragment() {
     private lateinit var viewModel: KnittingDetailsViewModel
     private var currentPhotoPath: File? = null
     private var editOnly: Boolean = false
+
+    /** Blocking camera operations are performed using this executor */
+    private lateinit var cameraExecutor: ExecutorService
 
     private var _binding: FragmentKnittingDetailsBinding? = null
     private val binding get() = _binding!!
@@ -101,6 +110,9 @@ class KnittingDetailsFragment : Fragment() {
             }
         }
 
+         // Initialize our background executor
+        cameraExecutor = Executors.newSingleThreadExecutor()
+
         // This callback will only be called when MyFragment is at least Started.
         requireActivity().onBackPressedDispatcher.addCallback(this, callback)
     }
@@ -147,6 +159,9 @@ class KnittingDetailsFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+
+        // Shut down our background executor
+        cameraExecutor.shutdown()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -210,7 +225,20 @@ class KnittingDetailsFragment : Fragment() {
 
     private fun takePhoto(file: File, intent: Intent) {
         currentPhotoPath = file
-        launchImageCapture.launch(intent)
+
+        val callback = object : ImageCapture.OnImageCapturedCallback() {
+
+            override fun onCaptureSuccess(image: ImageProxy) {
+                super.onCaptureSuccess(image)
+            }
+
+            override fun onError(exception: ImageCaptureException) {
+                super.onError(exception)
+            }
+        }
+
+        val imageCapture = ImageCapture.Builder().build()
+        imageCapture.takePicture(cameraExecutor, callback)
     }
 
     private fun importPhoto(file: File, intent: Intent) {
