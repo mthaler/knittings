@@ -3,11 +3,9 @@ package com.mthaler.knittings.details
 import android.Manifest
 import android.app.Activity
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import android.view.*
 import android.widget.ImageView
 import android.widget.LinearLayout
@@ -15,10 +13,12 @@ import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageCapture
-import androidx.camera.core.ImageCaptureException
 import androidx.camera.core.ImageProxy
-import androidx.camera.core.impl.ImageCaptureConfig
+import androidx.camera.core.UseCase
+import androidx.camera.lifecycle.ProcessCameraProvider
+import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -29,7 +29,6 @@ import com.mthaler.knittings.R
 import com.mthaler.knittings.database.KnittingsDataSource
 import com.mthaler.knittings.databinding.FragmentKnittingDetailsBinding
 import com.mthaler.knittings.model.Knitting
-import com.mthaler.knittings.model.Photo
 import com.mthaler.knittings.model.Status
 import com.mthaler.knittings.photo.PhotoGalleryActivity
 import com.mthaler.knittings.photo.TakePhotoDialog
@@ -168,6 +167,8 @@ class KnittingDetailsFragment : Fragment() {
         viewModel.knitting.observe(viewLifecycleOwner, { knitting ->
             updateDetails(knitting)
         })
+
+        startCamera()
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -295,6 +296,23 @@ class KnittingDetailsFragment : Fragment() {
             })
         }
     }
+
+    private fun startCamera(){
+        val cameraProviderFuture = ProcessCameraProvider.getInstance(requireContext())
+
+        cameraProviderFuture.addListener({
+
+            val cameraProvider: ProcessCameraProvider = cameraProviderFuture.get()
+
+            val cameraSelector = CameraSelector.Builder()
+                .requireLensFacing(CameraSelector.LENS_FACING_BACK)
+                .build()
+
+            cameraProvider.unbindAll()
+            cameraProvider.bindToLifecycle(
+                viewLifecycleOwner, cameraSelector)
+        }, ContextCompat.getMainExecutor(requireContext()))
+}
 
     companion object {
 
