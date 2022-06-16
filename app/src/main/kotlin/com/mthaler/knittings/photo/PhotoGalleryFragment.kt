@@ -9,6 +9,9 @@ import android.view.*
 import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.camera.core.CameraSelector
+import androidx.camera.lifecycle.ProcessCameraProvider
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
@@ -129,6 +132,8 @@ class PhotoGalleryFragment : Fragment() {
             photos.sortByDescending { it.id }
             photoGalleryAdapter.setPhotos(photos)
         })
+
+        startCamera()
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -157,13 +162,30 @@ class PhotoGalleryFragment : Fragment() {
         launchImageImport.launch(intent)
     }
 
-    fun photoClicked(photoID: Long) {
+    private fun photoClicked(photoID: Long) {
         val f = PhotoFragment.newInstance(photoID)
         val ft = requireActivity().supportFragmentManager.beginTransaction()
         ft.replace(R.id.photo_gallery_container, f)
         ft.addToBackStack(null)
         ft.commit()
     }
+
+    private fun startCamera() {
+        val cameraProviderFuture = ProcessCameraProvider.getInstance(requireContext())
+
+        cameraProviderFuture.addListener({
+
+            val cameraProvider: ProcessCameraProvider = cameraProviderFuture.get()
+
+            val cameraSelector = CameraSelector.Builder()
+                .requireLensFacing(CameraSelector.LENS_FACING_BACK)
+                .build()
+
+            cameraProvider.unbindAll()
+            cameraProvider.bindToLifecycle(viewLifecycleOwner, cameraSelector)
+        }, ContextCompat.getMainExecutor(requireContext()))
+    }
+
 
     companion object {
 

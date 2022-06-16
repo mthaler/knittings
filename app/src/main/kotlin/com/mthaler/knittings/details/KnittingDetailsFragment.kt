@@ -6,6 +6,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.*
 import android.widget.ImageView
 import android.widget.LinearLayout
@@ -13,10 +14,7 @@ import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.camera.core.CameraSelector
-import androidx.camera.core.ImageCapture
-import androidx.camera.core.ImageProxy
-import androidx.camera.core.UseCase
+import androidx.camera.core.*
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
@@ -56,6 +54,9 @@ class KnittingDetailsFragment : Fragment() {
 
     /** Blocking camera operations are performed using this executor */
     private lateinit var cameraExecutor: ExecutorService
+
+       // Get a stable reference of the modifiable image capture use case
+    private lateinit var imageCapture: ImageCapture
 
     private var _binding: FragmentKnittingDetailsBinding? = null
     private val binding get() = _binding!!
@@ -226,9 +227,12 @@ class KnittingDetailsFragment : Fragment() {
                             TakePhotoDialog.handleTakePhotoResult(requireContext(), knittingID, file) }
                     }
             }
+
+            override fun onError(exception: ImageCaptureException) {
+                Log.e(TAG, "Photo capture failed: ${exception.message}", exception)
+            }
         }
 
-        val imageCapture = ImageCapture.Builder().build()
         imageCapture.takePicture(cameraExecutor, callback)
     }
 
@@ -297,22 +301,32 @@ class KnittingDetailsFragment : Fragment() {
         }
     }
 
-    private fun startCamera(){
+    private fun startCamera() {
         val cameraProviderFuture = ProcessCameraProvider.getInstance(requireContext())
 
         cameraProviderFuture.addListener({
+           // Used to bind the lifecycle of cameras to the lifecycle owner
+           val cameraProvider: ProcessCameraProvider = cameraProviderFuture.get()
 
-            val cameraProvider: ProcessCameraProvider = cameraProviderFuture.get()
+           imageCapture = ImageCapture.Builder().build()
 
-            val cameraSelector = CameraSelector.Builder()
-                .requireLensFacing(CameraSelector.LENS_FACING_BACK)
-                .build()
+           // Select back camera as a default
+           val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
 
-            cameraProvider.unbindAll()
-            cameraProvider.bindToLifecycle(
-                viewLifecycleOwner, cameraSelector)
-        }, ContextCompat.getMainExecutor(requireContext()))
+           try {
+               // Unbind use cases before rebinding
+               cameraProvider.unbindAll()
+
+               // Bind use cases to camera
+               cameraProvider.bindToLifecycle(
+                   this, cameraSelector, imageCapture)
+
+           } catch(exc: Exception) {
+               Log.e(TAG, "Use case binding failed", exc)
+           }
+   }, ContextCompat.getMainExecutor(requireContext()))
 }
+
 
     companion object {
 
