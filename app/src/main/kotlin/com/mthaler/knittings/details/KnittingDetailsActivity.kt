@@ -53,6 +53,7 @@ class KnittingDetailsActivity : BaseActivity() {
         }
     }
 
+
     override fun onSaveInstanceState(savedInstanceState: Bundle) {
         savedInstanceState.putLong(EXTRA_KNITTING_ID, knittingID)
         savedInstanceState.putBoolean(EXTRA_EDIT_ONLY, editOnly)
