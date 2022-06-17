@@ -2,14 +2,10 @@ package com.mthaler.knittings.details
 
 import android.Manifest
 import android.app.Activity
-import android.content.ContentValues
 import android.content.Intent
-import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.provider.MediaStore
 import android.util.Log
 import android.view.*
 import android.widget.ImageView
@@ -46,8 +42,6 @@ import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.FileOutputStream
 import java.text.DateFormat
-import java.text.SimpleDateFormat
-import java.util.*
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
@@ -87,7 +81,7 @@ class KnittingDetailsFragment : Fragment() {
 
     private val requestMultiplePermissions = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
         if (permissions != null && permissions.size == 3) {
-            val d = TakePhotoDialog.create(requireContext(), "com.mthaler.knittings.fileprovider", layoutInflater, this::takePhoto, this::importPhoto)
+            val d = TakePhotoDialog.create(requireContext(), layoutInflater, this::takePhoto, this::importPhoto)
             d.show()
         } else {
             Toast.makeText(requireContext(), "Permissions denied", Toast.LENGTH_SHORT).show()
@@ -221,20 +215,8 @@ class KnittingDetailsFragment : Fragment() {
         ft.commit()
     }
 
-    private fun takePhoto(file: File, intent: Intent) {
+    private fun takePhoto(file: File) {
         currentPhotoPath = file
-
-        val name = SimpleDateFormat(FILENAME_FORMAT, Locale.US)
-            .format(System.currentTimeMillis())
-
-
-        val contentValues = ContentValues().apply {
-            put(MediaStore.MediaColumns.DISPLAY_NAME, name)
-            put(MediaStore.MediaColumns.MIME_TYPE, "image/jpeg")
-            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.P) {
-                put(MediaStore.Images.Media.RELATIVE_PATH, "Pictures/CameraX-Image")
-            }
-        }
 
         if (imageCapture == null) {
             startCamera()
@@ -358,7 +340,6 @@ class KnittingDetailsFragment : Fragment() {
     companion object {
 
         private const val TAG = "KnittingDetailsFragment"
-        private const val FILENAME_FORMAT = "yyyy-MM-dd-HH-mm-ss-SSS"
 
         private const val CURRENT_PHOTO_PATH = "com.mthaler.knittings.CURRENT_PHOTO_PATH"
         private const val EXTRA_EDIT_ONLY = "com.mthaler.knittings.edit_only"
