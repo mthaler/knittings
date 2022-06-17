@@ -80,7 +80,7 @@ class KnittingDetailsFragment : Fragment() {
     }
 
     private val requestMultiplePermissions = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
-        if (permissions != null && permissions.size == 3) {
+        if (permissions != null && permissions.size == 2) {
             val d = TakePhotoDialog.create(requireContext(), layoutInflater, this::takePhoto, this::importPhoto)
             d.show()
         } else {
@@ -172,6 +172,12 @@ class KnittingDetailsFragment : Fragment() {
         })
     }
 
+    override fun onResume() {
+        super.onResume()
+
+        startCamera()
+    }
+
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.knitting_details, menu)
@@ -180,7 +186,7 @@ class KnittingDetailsFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.menu_item_add_photo -> {
-                requestMultiplePermissions.launch(arrayOf(Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE))
+                requestMultiplePermissions.launch(arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE))
                 true
             }
             R.id.menu_item_show_gallery -> {
@@ -217,11 +223,6 @@ class KnittingDetailsFragment : Fragment() {
 
     private fun takePhoto(file: File) {
         currentPhotoPath = file
-
-        if (imageCapture == null) {
-            startCamera()
-        }
-
 
         val callback = object : ImageCapture.OnImageCapturedCallback() {
 
