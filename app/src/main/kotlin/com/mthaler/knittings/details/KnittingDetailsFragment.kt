@@ -2,10 +2,14 @@ package com.mthaler.knittings.details
 
 import android.Manifest
 import android.app.Activity
+import android.content.ContentValues
 import android.content.Intent
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.provider.MediaStore
 import android.util.Log
 import android.view.*
 import android.widget.ImageView
@@ -27,6 +31,7 @@ import com.mthaler.knittings.R
 import com.mthaler.knittings.database.KnittingsDataSource
 import com.mthaler.knittings.databinding.FragmentKnittingDetailsBinding
 import com.mthaler.knittings.model.Knitting
+import com.mthaler.knittings.model.Photo
 import com.mthaler.knittings.model.Status
 import com.mthaler.knittings.photo.PhotoGalleryActivity
 import com.mthaler.knittings.photo.TakePhotoDialog
@@ -34,11 +39,15 @@ import com.mthaler.knittings.rowcounter.RowCounterActivity
 import com.mthaler.knittings.stopwatch.StopwatchActivity
 import com.mthaler.knittings.utils.PictureUtils
 import com.mthaler.knittings.utils.TimeUtils
+import com.mthaler.knittings.utils.toBitmap
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.File
+import java.io.FileOutputStream
 import java.text.DateFormat
+import java.text.SimpleDateFormat
+import java.util.*
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
@@ -215,18 +224,36 @@ class KnittingDetailsFragment : Fragment() {
     private fun takePhoto(file: File, intent: Intent) {
         currentPhotoPath = file
 
+        val name = SimpleDateFormat(FILENAME_FORMAT, Locale.US)
+            .format(System.currentTimeMillis())
+
+
+        val contentValues = ContentValues().apply {
+            put(MediaStore.MediaColumns.DISPLAY_NAME, name)
+            put(MediaStore.MediaColumns.MIME_TYPE, "image/jpeg")
+            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.P) {
+                put(MediaStore.Images.Media.RELATIVE_PATH, "Pictures/CameraX-Image")
+            }
+        }
+
         if (imageCapture == null) {
             startCamera()
         }
 
+
         val callback = object : ImageCapture.OnImageCapturedCallback() {
 
+            @androidx.camera.core.ExperimentalGetImage
             override fun onCaptureSuccess(image: ImageProxy) {
 
                 lifecycleScope.launch {
-                        withContext(Dispatchers.IO) {
-                            TakePhotoDialog.handleTakePhotoResult(requireContext(), knittingID, file) }
+                    withContext(Dispatchers.IO) {
+                        val f = file
+                        val fos = FileOutputStream(f)
+                        fos.write(Photo.getBytes(image.image?.let {  it.toBitmap() } ) )
                     }
+                    TakePhotoDialog.handleTakePhotoResult(requireContext(), knittingID, file)
+                }
             }
 
             override fun onError(exception: ImageCaptureException) {
@@ -234,7 +261,7 @@ class KnittingDetailsFragment : Fragment() {
             }
         }
 
-        imageCapture?.let { it.takePicture(cameraExecutor, callback) }
+        imageCapture?.let{ it.takePicture(cameraExecutor, callback) }
     }
 
     private fun importPhoto(file: File, intent: Intent) {
@@ -325,9 +352,8 @@ class KnittingDetailsFragment : Fragment() {
            } catch(exc: Exception) {
                Log.e(TAG, "Use case binding failed", exc)
            }
-   }, ContextCompat.getMainExecutor(requireContext()))
-}
-
+        }, ContextCompat.getMainExecutor(requireContext()))
+    }
 
     companion object {
 
