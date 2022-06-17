@@ -3,6 +3,8 @@ package com.mthaler.knittings.details
 import android.Manifest
 import android.app.Activity
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -213,7 +215,23 @@ class KnittingDetailsFragment : Fragment() {
         }
     }
 
-     fun editKnitting() {
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+       if (requestCode == REQUEST_CODE_PERMISSIONS) {
+           if (allPermissionsGranted()) {
+               startCamera()
+           } else {
+               Toast.makeText(requireContext(), "Permissions not granted by the user.", Toast.LENGTH_SHORT).show()
+               requireActivity().finish()
+           }
+       }
+    }
+
+      private fun allPermissionsGranted() = REQUIRED_PERMISSIONS.all {
+          ContextCompat.checkSelfPermission(requireContext(), it) == PackageManager.PERMISSION_GRANTED
+      }
+
+
+    fun editKnitting() {
         val f = EditKnittingDetailsFragment.newInstance(knittingID, editOnly)
         val ft = requireActivity().supportFragmentManager.beginTransaction()
         ft.replace(R.id.knitting_details_container, f)
@@ -344,6 +362,17 @@ class KnittingDetailsFragment : Fragment() {
 
         private const val CURRENT_PHOTO_PATH = "com.mthaler.knittings.CURRENT_PHOTO_PATH"
         private const val EXTRA_EDIT_ONLY = "com.mthaler.knittings.edit_only"
+        private const val REQUEST_CODE_PERMISSIONS = 10
+        private val REQUIRED_PERMISSIONS =
+           mutableListOf (
+               Manifest.permission.CAMERA,
+               Manifest.permission.RECORD_AUDIO
+           ).apply {
+               if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.P) {
+                   add(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+               }
+           }.toTypedArray()
+
 
         @JvmStatic
         fun newInstance(knittingID: Long) =
