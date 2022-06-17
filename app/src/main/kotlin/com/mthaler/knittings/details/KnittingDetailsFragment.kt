@@ -55,8 +55,8 @@ class KnittingDetailsFragment : Fragment() {
     /** Blocking camera operations are performed using this executor */
     private lateinit var cameraExecutor: ExecutorService
 
-       // Get a stable reference of the modifiable image capture use case
-    private lateinit var imageCapture: ImageCapture
+    // Get a stable reference of the modifiable image capture use case
+    private var imageCapture: ImageCapture? = null
 
     private var _binding: FragmentKnittingDetailsBinding? = null
     private val binding get() = _binding!!
@@ -142,7 +142,6 @@ class KnittingDetailsFragment : Fragment() {
         binding.editKnittingDetails.setOnClickListener {
             editKnitting()
         }
-
         return view
     }
 
@@ -168,8 +167,6 @@ class KnittingDetailsFragment : Fragment() {
         viewModel.knitting.observe(viewLifecycleOwner, { knitting ->
             updateDetails(knitting)
         })
-
-        startCamera()
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -218,6 +215,10 @@ class KnittingDetailsFragment : Fragment() {
     private fun takePhoto(file: File, intent: Intent) {
         currentPhotoPath = file
 
+        if (imageCapture == null) {
+            startCamera()
+        }
+
         val callback = object : ImageCapture.OnImageCapturedCallback() {
 
             override fun onCaptureSuccess(image: ImageProxy) {
@@ -233,7 +234,7 @@ class KnittingDetailsFragment : Fragment() {
             }
         }
 
-        imageCapture.takePicture(cameraExecutor, callback)
+        imageCapture?.let { it.takePicture(cameraExecutor, callback) }
     }
 
     private fun importPhoto(file: File, intent: Intent) {
