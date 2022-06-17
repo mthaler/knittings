@@ -188,7 +188,7 @@ class PhotoGalleryFragment : Fragment() {
                         val fos = FileOutputStream(f)
                         fos.write(Photo.getBytes(image.image?.let {  it.toBitmap() } ) )
                     }
-                    TakePhotoDialog.handleTakePhotoResult(requireContext(), knittingID, file)
+                    TakePhotoDialog.handleTakePhotoResult(requireContext(), ownerID, file)
                 }
             }
 
