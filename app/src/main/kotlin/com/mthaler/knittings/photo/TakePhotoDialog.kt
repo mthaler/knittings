@@ -32,8 +32,9 @@ object TakePhotoDialog {
      */
     fun create(
             context: Context,
+            authority: String,
             layoutInflater: LayoutInflater,
-            takePhoto: (File) -> Unit,
+            takePhoto: (File, Intent) -> Unit,
             importPhoto: (File, Intent) -> Unit
     ): AlertDialog {
 
@@ -48,9 +49,22 @@ object TakePhotoDialog {
         // take a photo if the user clicks the take photo button
         buttonTakePhoto.setOnClickListener {
             d.dismiss()
+            val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
             // create a photo file for the photo
             getPhotoFile(context)?.let {
-                takePhoto(it)
+                val packageManager = context.packageManager
+                val canTakePhoto = takePictureIntent.resolveActivity(packageManager) != null
+                if (canTakePhoto) {
+                    val uri = FileProvider.getUriForFile(context, authority, it)
+                    takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, uri)
+                    // this is needed on older android versions to net get a security exception
+                    if (Build.VERSION.SDK_INT >= 16 && Build.VERSION.SDK_INT <= 21) {
+                        takePictureIntent.clipData = ClipData.newRawUri("", uri)
+                        takePictureIntent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION or Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                    }
+                    Log.d(TAG, "Created take picture intent")
+                    takePhoto(it, takePictureIntent)
+                }
             }
         }
         buttonImportPhoto.setOnClickListener {

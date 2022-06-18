@@ -36,12 +36,10 @@ import com.mthaler.knittings.rowcounter.RowCounterActivity
 import com.mthaler.knittings.stopwatch.StopwatchActivity
 import com.mthaler.knittings.utils.PictureUtils
 import com.mthaler.knittings.utils.TimeUtils
-import com.mthaler.knittings.utils.toBitmap
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.File
-import java.io.FileOutputStream
 import java.text.DateFormat
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
@@ -67,7 +65,7 @@ class KnittingDetailsFragment : Fragment() {
 
     private val requestMultiplePermissions = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
         if (permissions != null && permissions.size == 3) {
-            val d = TakePhotoDialog.create(requireContext(), layoutInflater, this::takePhoto, this::importPhoto)
+            val d = TakePhotoDialog.create(requireContext(), "com.mthaler.knittings.fileprovider",  layoutInflater, this::takePhoto, this::importPhoto)
             d.show()
         } else {
             Log.e(TAG, "Permissions denied")
@@ -223,30 +221,8 @@ class KnittingDetailsFragment : Fragment() {
         ft.commit()
     }
 
-    private fun takePhoto(file: File) {
+    private fun takePhoto(file: File, intent: Intent) {
         currentPhotoPath = file
-
-        val callback = object : ImageCapture.OnImageCapturedCallback() {
-
-            @androidx.camera.core.ExperimentalGetImage
-            override fun onCaptureSuccess(image: ImageProxy) {
-
-                lifecycleScope.launch {
-                    withContext(Dispatchers.IO) {
-                        val f = file
-                        val fos = FileOutputStream(f)
-                        fos.write(Photo.getBytes(image.image?.let {  it.toBitmap() } ) )
-                    }
-                    TakePhotoDialog.handleTakePhotoResult(requireContext(), knittingID, file)
-                }
-            }
-
-            override fun onError(exception: ImageCaptureException) {
-                Log.e(TAG, "Photo capture failed: ${exception.message}", exception)
-            }
-        }
-
-        imageCapture?.let{ it.takePicture(cameraExecutor, callback) }
     }
 
     private fun importPhoto(file: File, intent: Intent) {
