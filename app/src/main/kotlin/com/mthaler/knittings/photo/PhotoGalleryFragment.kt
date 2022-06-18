@@ -24,7 +24,6 @@ import com.mthaler.knittings.database.Extras.EXTRA_OWNER_ID
 import com.mthaler.knittings.databinding.FragmentPhotoGalleryBinding
 import com.mthaler.knittings.model.Photo
 import com.mthaler.knittings.utils.AndroidViewModelFactory
-import com.mthaler.knittings.utils.toBitmap
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -94,7 +93,7 @@ class PhotoGalleryFragment : Fragment() {
 
     private val requestMultiplePermissions = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
         if (permissions != null && permissions.size == 3) {
-            val d = TakePhotoDialog.create(requireContext(), layoutInflater, this::takePhoto, this::importPhoto)
+            val d = TakePhotoDialog.create(requireContext(), "com.mthaler.knittings.fileprovider", layoutInflater, this::takePhoto, this::importPhoto)
             d.show()
         } else {
             Toast.makeText(requireContext(), "Permissions denied", Toast.LENGTH_SHORT).show()
@@ -169,7 +168,7 @@ class PhotoGalleryFragment : Fragment() {
     }
 
 
-    private fun takePhoto(file: File) {
+    private fun takePhoto(file: File, intent: Intent) {
         currentPhotoPath = file
 
         if (imageCapture == null) {
