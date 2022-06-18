@@ -222,15 +222,11 @@ class KnittingDetailsFragment : Fragment() {
                             Snackbar.LENGTH_INDEFINITE,
                             getString(R.string.ok)
                         ) {
-                            requestPermissionLauncher.launch(
-                                Manifest.permission.CAMERA
-                            )
+                            requestMultiplePermissions.launch(arrayOf(Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE))
                         }
                     }
                     else -> {
-                        requestPermissionLauncher.launch(
-                            Manifest.permission.CAMERA
-                        )
+                        requestMultiplePermissions.launch(arrayOf(Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE))
                     }
                 }
                 true

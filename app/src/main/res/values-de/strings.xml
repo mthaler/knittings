@@ -70,4 +70,6 @@
 
     <!-- filter -->
     <string name="filter_show_all">Alle</string>
+
+    <string name="ok">OK</string>
 </resources>

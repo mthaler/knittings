@@ -11,6 +11,7 @@
     <string name="knitting_details_category">Kategorie:</string>
     <string name="knitting_details_status">Status:</string>
     <string name="permission_required">Kamera Berechtigung wird benötigt um Fotos aufzunehmen.</string>
+    <string name="permission_granted">Berechtigungen erteilt. Sie können die Kamera jetzt bentzen.</string>
 
     <!-- knitting details -->
     <string name="delete_knitting">Strickerei löschen</string>
