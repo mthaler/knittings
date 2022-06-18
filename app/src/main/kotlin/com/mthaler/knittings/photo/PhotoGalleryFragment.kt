@@ -9,13 +9,10 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
 import android.view.*
-import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageCapture
-import androidx.camera.core.ImageCaptureException
-import androidx.camera.core.ImageProxy
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -25,14 +22,11 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.mthaler.knittings.R
 import com.mthaler.knittings.database.Extras.EXTRA_OWNER_ID
 import com.mthaler.knittings.databinding.FragmentPhotoGalleryBinding
-import com.mthaler.knittings.details.KnittingDetailsFragment
-import com.mthaler.knittings.model.Photo
 import com.mthaler.knittings.utils.AndroidViewModelFactory
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.File
-import java.io.FileOutputStream
 import java.util.concurrent.ExecutorService
 
 /**
@@ -223,14 +217,14 @@ class PhotoGalleryFragment : Fragment() {
         if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.CAMERA)
             != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(requireActivity(), arrayOf(Manifest.permission.CAMERA),
-                KnittingDetailsFragment.REQUEST_PERMISSION
+               REQUEST_PERMISSION
             )
         }
     }
     private fun openCamera() {
         Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { intent ->
             intent.resolveActivity(requireActivity().packageManager)?.also {
-                startActivityForResult(intent, KnittingDetailsFragment.REQUEST_IMAGE_CAPTURE)
+                startActivityForResult(intent, REQUEST_IMAGE_CAPTURE)
             }
         }
     }
@@ -246,6 +240,9 @@ class PhotoGalleryFragment : Fragment() {
     companion object {
 
         private const val TAG = "PhotoGalleryFragment"
+
+        private val REQUEST_IMAGE_CAPTURE = 1
+        private val REQUEST_PERMISSION = 100
 
         @JvmStatic
         fun newInstance(ownerID: Long) =

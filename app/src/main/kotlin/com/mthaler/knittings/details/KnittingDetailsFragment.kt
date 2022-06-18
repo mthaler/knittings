@@ -317,7 +317,6 @@ class KnittingDetailsFragment : Fragment() {
         private const val TAG = "KnittingDetailsFragment"
 
         private val REQUEST_IMAGE_CAPTURE = 1
-        private val REQUEST_PICK_IMAGE = 2
         private val REQUEST_PERMISSION = 100
 
         private const val CURRENT_PHOTO_PATH = "com.mthaler.knittings.CURRENT_PHOTO_PATH"
