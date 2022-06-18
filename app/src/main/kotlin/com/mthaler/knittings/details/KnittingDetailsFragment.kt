@@ -164,12 +164,6 @@ class KnittingDetailsFragment : Fragment() {
         })
     }
 
-    override fun onResume() {
-        super.onResume()
-
-        checkCameraPermission()
-    }
-
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.knitting_details, menu)
@@ -244,6 +238,7 @@ class KnittingDetailsFragment : Fragment() {
 
     private fun takePhoto(file: File, intent: Intent) {
         currentPhotoPath = file
+        launchImageCapture.launch(intent)
     }
 
     private fun importPhoto(file: File, intent: Intent) {
