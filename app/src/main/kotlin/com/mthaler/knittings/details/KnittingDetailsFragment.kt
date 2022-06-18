@@ -170,7 +170,7 @@ class KnittingDetailsFragment : Fragment() {
     override fun onResume() {
         super.onResume()
 
-        startCamera()
+        checkCameraPermission()
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -207,22 +207,6 @@ class KnittingDetailsFragment : Fragment() {
             else -> super.onOptionsItemSelected(item)
         }
     }
-
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
-       if (requestCode == REQUEST_CODE_PERMISSIONS) {
-           if (allPermissionsGranted()) {
-               startCamera()
-           } else {
-               Toast.makeText(requireContext(), "Permissions not granted by the user.", Toast.LENGTH_SHORT).show()
-               requireActivity().finish()
-           }
-       }
-    }
-
-      private fun allPermissionsGranted() = REQUIRED_PERMISSIONS.all {
-          ContextCompat.checkSelfPermission(requireContext(), it) == PackageManager.PERMISSION_GRANTED
-      }
-
 
     fun editKnitting() {
         val f = EditKnittingDetailsFragment.newInstance(knittingID, editOnly)
@@ -323,32 +307,6 @@ class KnittingDetailsFragment : Fragment() {
         }
     }
 
-    private fun startCamera() {
-        val cameraProviderFuture = ProcessCameraProvider.getInstance(requireContext())
-
-        cameraProviderFuture.addListener({
-           // Used to bind the lifecycle of cameras to the lifecycle owner
-           val cameraProvider: ProcessCameraProvider = cameraProviderFuture.get()
-
-           imageCapture = ImageCapture.Builder().build()
-
-           // Select back camera as a default
-           val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
-
-           try {
-               // Unbind use cases before rebinding
-               cameraProvider.unbindAll()
-
-               // Bind use cases to camera
-               cameraProvider.bindToLifecycle(
-                   this, cameraSelector, imageCapture)
-
-           } catch(exc: Exception) {
-               Log.e(TAG, "Use case binding failed", exc)
-           }
-        }, ContextCompat.getMainExecutor(requireContext()))
-    }
-
     private fun checkCameraPermission() {
        if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.CAMERA)
                != PackageManager.PERMISSION_GRANTED) {
@@ -381,18 +339,7 @@ class KnittingDetailsFragment : Fragment() {
 
         private const val CURRENT_PHOTO_PATH = "com.mthaler.knittings.CURRENT_PHOTO_PATH"
         private const val EXTRA_EDIT_ONLY = "com.mthaler.knittings.edit_only"
-        private const val REQUEST_CODE_PERMISSIONS = 10
-        private val REQUIRED_PERMISSIONS =
-           mutableListOf (
-               Manifest.permission.CAMERA,
-               Manifest.permission.RECORD_AUDIO
-           ).apply {
-               if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.P) {
-                   add(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-               }
-           }.toTypedArray()
-
-
+        
         @JvmStatic
         fun newInstance(knittingID: Long) =
             KnittingDetailsFragment().apply {
