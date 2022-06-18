@@ -87,7 +87,7 @@ object TakePhotoDialog {
      */
     suspend fun handleTakePhotoResult(context: Context, ownerID: Long, file: File) {
         // add photo to database
-        val compressed = com.mthaler.knittings.utils.PictureUtils.compress(context, file)
+        val compressed = PictureUtils.compress(context, file)
         if (compressed.length() < file.length()) {
             if (!file.delete()) {
                 error("Could not delete $file")

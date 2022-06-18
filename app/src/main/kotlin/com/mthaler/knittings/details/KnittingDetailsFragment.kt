@@ -72,6 +72,18 @@ class KnittingDetailsFragment : Fragment() {
         }
     }
 
+    private val launchImageCapture = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            result.data?.let {
+                currentPhotoPath?.let {
+                    lifecycleScope.launch {
+                        withContext(Dispatchers.IO) {
+                            TakePhotoDialog.handleTakePhotoResult(requireContext(), knittingID, it) }
+                    }
+                }
+            }
+        }
+    }
 
     private val launchImageImport = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
         if (result.resultCode == Activity.RESULT_OK) {
@@ -299,6 +311,7 @@ class KnittingDetailsFragment : Fragment() {
    private fun openCamera() {
        Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { intent ->
            intent.resolveActivity(requireActivity().packageManager)?.also {
+
                startActivityForResult(intent, REQUEST_IMAGE_CAPTURE)
            }
        }
