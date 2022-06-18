@@ -3,19 +3,12 @@ package com.mthaler.knittings.photo
 import android.Manifest
 import android.app.Activity
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.os.Bundle
-import android.provider.MediaStore
 import android.util.Log
 import android.view.*
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.camera.core.CameraSelector
-import androidx.camera.core.ImageCapture
-import androidx.camera.lifecycle.ProcessCameraProvider
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
@@ -27,7 +20,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.File
-import java.util.concurrent.ExecutorService
 
 /**
  * A fragment that displays a list of photos using a grid
@@ -36,12 +28,6 @@ class PhotoGalleryFragment : Fragment() {
 
     private var ownerID: Long = -1
     private var currentPhotoPath: File? = null
-
-    /** Blocking camera operations are performed using this executor */
-    private lateinit var cameraExecutor: ExecutorService
-
-    // Get a stable reference of the modifiable image capture use case
-    private var imageCapture: ImageCapture? = null
 
     private var _binding: FragmentPhotoGalleryBinding? = null
     private val binding get() = _binding!!
@@ -117,14 +103,6 @@ class PhotoGalleryFragment : Fragment() {
         return view
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-
-        // Shut down our background executor
-        cameraExecutor.shutdown()
-    }
-
     override fun onSaveInstanceState(savedInstanceState: Bundle) {
         savedInstanceState.putLong(EXTRA_OWNER_ID, ownerID)
         currentPhotoPath?.let { savedInstanceState.putString(CURRENT_PHOTO_PATH, it.absolutePath) }
@@ -146,8 +124,6 @@ class PhotoGalleryFragment : Fragment() {
             photos.sortByDescending { it.id }
             photoGalleryAdapter.setPhotos(photos)
         })
-
-        startCamera()
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -169,9 +145,6 @@ class PhotoGalleryFragment : Fragment() {
     private fun takePhoto(file: File, intent: Intent) {
         currentPhotoPath = file
 
-        if (imageCapture == null) {
-            startCamera()
-        }
     }
 
     private fun importPhoto(file: File, intent: Intent) {
@@ -187,62 +160,8 @@ class PhotoGalleryFragment : Fragment() {
         ft.commit()
     }
 
-    private fun startCamera() {
-        val cameraProviderFuture = ProcessCameraProvider.getInstance(requireContext())
-
-        cameraProviderFuture.addListener({
-           // Used to bind the lifecycle of cameras to the lifecycle owner
-           val cameraProvider: ProcessCameraProvider = cameraProviderFuture.get()
-
-           imageCapture = ImageCapture.Builder().build()
-
-           // Select back camera as a default
-           val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
-
-           try {
-               // Unbind use cases before rebinding
-               cameraProvider.unbindAll()
-
-               // Bind use cases to camera
-               cameraProvider.bindToLifecycle(
-                   this, cameraSelector, imageCapture)
-
-           } catch(exc: Exception) {
-               Log.e(TAG, "Use case binding failed", exc)
-           }
-        }, ContextCompat.getMainExecutor(requireContext()))
-    }
-
-    private fun checkCameraPermission() {
-        if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.CAMERA)
-            != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(requireActivity(), arrayOf(Manifest.permission.CAMERA),
-               REQUEST_PERMISSION
-            )
-        }
-    }
-    private fun openCamera() {
-        Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { intent ->
-            intent.resolveActivity(requireActivity().packageManager)?.also {
-                startActivityForResult(intent, REQUEST_IMAGE_CAPTURE)
-            }
-        }
-    }
-    private fun openGallery() {
-        Intent(Intent.ACTION_GET_CONTENT).also { intent ->
-            intent.type = "image/*"
-            intent.resolveActivity(requireActivity().packageManager)?.also {
-                launchImageImport.launch(intent)
-            }
-        }
-    }
-
     companion object {
-
         private const val TAG = "PhotoGalleryFragment"
-
-        private val REQUEST_IMAGE_CAPTURE = 1
-        private val REQUEST_PERMISSION = 100
 
         @JvmStatic
         fun newInstance(ownerID: Long) =

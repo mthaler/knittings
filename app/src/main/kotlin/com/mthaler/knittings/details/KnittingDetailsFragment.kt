@@ -7,7 +7,6 @@ import android.content.pm.PackageManager
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.provider.MediaStore
 import android.util.Log
 import android.view.*
 import android.widget.ImageView
@@ -15,7 +14,6 @@ import android.widget.LinearLayout
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.camera.core.*
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
@@ -41,8 +39,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.File
 import java.text.DateFormat
-import java.util.concurrent.ExecutorService
-import java.util.concurrent.Executors
 import com.mthaler.knittings.utils.showSnackbar
 
 /**
@@ -54,12 +50,6 @@ class KnittingDetailsFragment : Fragment() {
     private lateinit var viewModel: KnittingDetailsViewModel
     private var currentPhotoPath: File? = null
     private var editOnly: Boolean = false
-
-    /** Blocking camera operations are performed using this executor */
-    private lateinit var cameraExecutor: ExecutorService
-
-    // Get a stable reference of the modifiable image capture use case
-    private var imageCapture: ImageCapture? = null
 
     private var _binding: FragmentKnittingDetailsBinding? = null
     private val binding get() = _binding!!
@@ -116,9 +106,6 @@ class KnittingDetailsFragment : Fragment() {
             }
         }
 
-         // Initialize our background executor
-        cameraExecutor = Executors.newSingleThreadExecutor()
-
         // This callback will only be called when MyFragment is at least Started.
         requireActivity().onBackPressedDispatcher.addCallback(this, callback)
     }
@@ -159,14 +146,6 @@ class KnittingDetailsFragment : Fragment() {
             editKnitting()
         }
         return view
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-
-        // Shut down our background executor
-        cameraExecutor.shutdown()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -332,35 +311,8 @@ class KnittingDetailsFragment : Fragment() {
         }
     }
 
-    private fun checkCameraPermission() {
-       if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.CAMERA)
-               != PackageManager.PERMISSION_GRANTED) {
-           ActivityCompat.requestPermissions(requireActivity(), arrayOf(Manifest.permission.CAMERA), REQUEST_PERMISSION)
-       }
-   }
-   private fun openCamera() {
-       Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { intent ->
-           intent.resolveActivity(requireActivity().packageManager)?.also {
-
-               startActivityForResult(intent, REQUEST_IMAGE_CAPTURE)
-           }
-       }
-   }
-   private fun openGallery() {
-       Intent(Intent.ACTION_GET_CONTENT).also { intent ->
-           intent.type = "image/*"
-           intent.resolveActivity(requireActivity().packageManager)?.also {
-               launchImageImport.launch(intent)
-           }
-       }
-   }
-
     companion object {
-
         private const val TAG = "KnittingDetailsFragment"
-
-        private val REQUEST_IMAGE_CAPTURE = 1
-        private val REQUEST_PERMISSION = 100
 
         private const val CURRENT_PHOTO_PATH = "com.mthaler.knittings.CURRENT_PHOTO_PATH"
         private const val EXTRA_EDIT_ONLY = "com.mthaler.knittings.edit_only"
