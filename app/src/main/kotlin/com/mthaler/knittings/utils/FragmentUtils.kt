@@ -14,7 +14,7 @@ fun Fragment.showSnackbar(
     val snackbar = Snackbar.make(view, msg, length)
     if (actionMessage != null) {
         snackbar.setAction(actionMessage) {
-            action(this)
+            action(this.requireView())
         }.show()
     } else {
         snackbar.show()
