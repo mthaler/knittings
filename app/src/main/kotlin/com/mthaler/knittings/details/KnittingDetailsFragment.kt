@@ -65,6 +65,16 @@ class KnittingDetailsFragment : Fragment() {
     private var _binding: FragmentKnittingDetailsBinding? = null
     private val binding get() = _binding!!
 
+    private val requestMultiplePermissions = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
+        if (permissions != null && permissions.size == 3) {
+            val d = TakePhotoDialog.create(requireContext(), layoutInflater, this::takePhoto, this::importPhoto)
+            d.show()
+        } else {
+            Log.e(TAG, "Permissions denied")
+        }
+    }
+
+
     private val launchImageImport = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
         if (result.resultCode == Activity.RESULT_OK) {
             result.data?.let {
@@ -178,7 +188,7 @@ class KnittingDetailsFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.menu_item_add_photo -> {
-                //requestPermissions(permissionsList, REQUEST_CODE);
+                requestMultiplePermissions.launch(arrayOf(Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE))
                 true
             }
             R.id.menu_item_show_gallery -> {
@@ -321,7 +331,7 @@ class KnittingDetailsFragment : Fragment() {
        Intent(Intent.ACTION_GET_CONTENT).also { intent ->
            intent.type = "image/*"
            intent.resolveActivity(requireActivity().packageManager)?.also {
-               startActivityForResult(intent, REQUEST_PICK_IMAGE)
+               launchImageImport.launch(intent)
            }
        }
    }
