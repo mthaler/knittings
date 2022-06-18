@@ -10,6 +10,7 @@
     <string name="knitting_details_duration">Dauer:</string>
     <string name="knitting_details_category">Kategorie:</string>
     <string name="knitting_details_status">Status:</string>
+    <string name="permission_required">Kamera Berechtigung wird benötigt um Fotos aufzunehmen.</string>
 
     <!-- knitting details -->
     <string name="delete_knitting">Strickerei löschen</string>

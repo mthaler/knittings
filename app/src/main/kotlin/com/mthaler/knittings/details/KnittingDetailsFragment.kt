@@ -22,13 +22,13 @@ import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import com.google.android.material.snackbar.Snackbar
 import com.mthaler.knittings.DeleteDialog
 import com.mthaler.knittings.Extras.EXTRA_KNITTING_ID
 import com.mthaler.knittings.R
 import com.mthaler.knittings.database.KnittingsDataSource
 import com.mthaler.knittings.databinding.FragmentKnittingDetailsBinding
 import com.mthaler.knittings.model.Knitting
-import com.mthaler.knittings.model.Photo
 import com.mthaler.knittings.model.Status
 import com.mthaler.knittings.photo.PhotoGalleryActivity
 import com.mthaler.knittings.photo.TakePhotoDialog
@@ -43,6 +43,7 @@ import java.io.File
 import java.text.DateFormat
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
+import com.mthaler.knittings.utils.showSnackbar
 
 /**
  * Fragment that displays knitting details (name, description, start time etc.)
@@ -66,7 +67,7 @@ class KnittingDetailsFragment : Fragment() {
     private val requestMultiplePermissions = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
         if (permissions != null && permissions.size == 3) {
             val d = TakePhotoDialog.create(requireContext(), "com.mthaler.knittings.fileprovider",  layoutInflater, this::takePhoto, this::importPhoto)
-            d.show()
+               d.show()
         } else {
             Log.e(TAG, "Permissions denied")
         }
@@ -198,7 +199,40 @@ class KnittingDetailsFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.menu_item_add_photo -> {
-                requestMultiplePermissions.launch(arrayOf(Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE))
+                when {
+                    ContextCompat.checkSelfPermission(
+                        requireContext(),
+                        Manifest.permission.CAMERA
+                    ) == PackageManager.PERMISSION_GRANTED -> {
+                        showSnackbar(
+                            requireView(),
+                            getString(R.string.permission_granted),
+                            Snackbar.LENGTH_INDEFINITE,
+                            null
+                        ) {}
+                    }
+
+                    ActivityCompat.shouldShowRequestPermissionRationale(
+                        requireActivity(),
+                        Manifest.permission.CAMERA
+                    ) -> {
+                        showSnackbar(
+                            requireView(),
+                            getString(R.string.permission_required),
+                            Snackbar.LENGTH_INDEFINITE,
+                            getString(R.string.ok)
+                        ) {
+                            requestPermissionLauncher.launch(
+                                Manifest.permission.CAMERA
+                            )
+                        }
+                    }
+                    else -> {
+                        requestPermissionLauncher.launch(
+                            Manifest.permission.CAMERA
+                        )
+                    }
+                }
                 true
             }
             R.id.menu_item_show_gallery -> {
