@@ -3,8 +3,10 @@ package com.mthaler.knittings.photo
 import android.Manifest
 import android.app.Activity
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.os.Bundle
+import android.provider.MediaStore
 import android.util.Log
 import android.view.*
 import android.widget.Toast
@@ -15,6 +17,7 @@ import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCaptureException
 import androidx.camera.core.ImageProxy
 import androidx.camera.lifecycle.ProcessCameraProvider
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
@@ -22,6 +25,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.mthaler.knittings.R
 import com.mthaler.knittings.database.Extras.EXTRA_OWNER_ID
 import com.mthaler.knittings.databinding.FragmentPhotoGalleryBinding
+import com.mthaler.knittings.details.KnittingDetailsFragment
 import com.mthaler.knittings.model.Photo
 import com.mthaler.knittings.utils.AndroidViewModelFactory
 import kotlinx.coroutines.Dispatchers
@@ -47,6 +51,15 @@ class PhotoGalleryFragment : Fragment() {
 
     private var _binding: FragmentPhotoGalleryBinding? = null
     private val binding get() = _binding!!
+
+    private val requestMultiplePermissions = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
+        if (permissions != null && permissions.size == 3) {
+            val d = TakePhotoDialog.create(requireContext(), "com.mthaler.knittings.fileprovider",  layoutInflater, this::takePhoto, this::importPhoto)
+            d.show()
+        } else {
+            Log.e(TAG, "Permissions denied")
+        }
+    }
 
     private val launchImageCapture = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
         if (result.resultCode == Activity.RESULT_OK) {
@@ -88,15 +101,6 @@ class PhotoGalleryFragment : Fragment() {
             result.data?.let {
 
             }
-        }
-    }
-
-    private val requestMultiplePermissions = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
-        if (permissions != null && permissions.size == 3) {
-            val d = TakePhotoDialog.create(requireContext(), "com.mthaler.knittings.fileprovider", layoutInflater, this::takePhoto, this::importPhoto)
-            d.show()
-        } else {
-            Toast.makeText(requireContext(), "Permissions denied", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -174,29 +178,6 @@ class PhotoGalleryFragment : Fragment() {
         if (imageCapture == null) {
             startCamera()
         }
-
-
-        val callback = object : ImageCapture.OnImageCapturedCallback() {
-
-            @androidx.camera.core.ExperimentalGetImage
-            override fun onCaptureSuccess(image: ImageProxy) {
-
-                lifecycleScope.launch {
-                    withContext(Dispatchers.IO) {
-                        val f = file
-                        val fos = FileOutputStream(f)
-                        fos.write(Photo.getBytes(image.image?.let {  it.toBitmap() } ) )
-                    }
-                    TakePhotoDialog.handleTakePhotoResult(requireContext(), ownerID, file)
-                }
-            }
-
-            override fun onError(exception: ImageCaptureException) {
-                Log.e(TAG, "Photo capture failed: ${exception.message}", exception)
-            }
-        }
-
-        imageCapture?.let{ it.takePicture(cameraExecutor, callback) }
     }
 
     private fun importPhoto(file: File, intent: Intent) {
@@ -236,6 +217,30 @@ class PhotoGalleryFragment : Fragment() {
                Log.e(TAG, "Use case binding failed", exc)
            }
         }, ContextCompat.getMainExecutor(requireContext()))
+    }
+
+    private fun checkCameraPermission() {
+        if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.CAMERA)
+            != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(requireActivity(), arrayOf(Manifest.permission.CAMERA),
+                KnittingDetailsFragment.REQUEST_PERMISSION
+            )
+        }
+    }
+    private fun openCamera() {
+        Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { intent ->
+            intent.resolveActivity(requireActivity().packageManager)?.also {
+                startActivityForResult(intent, KnittingDetailsFragment.REQUEST_IMAGE_CAPTURE)
+            }
+        }
+    }
+    private fun openGallery() {
+        Intent(Intent.ACTION_GET_CONTENT).also { intent ->
+            intent.type = "image/*"
+            intent.resolveActivity(requireActivity().packageManager)?.also {
+                launchImageImport.launch(intent)
+            }
+        }
     }
 
     companion object {
