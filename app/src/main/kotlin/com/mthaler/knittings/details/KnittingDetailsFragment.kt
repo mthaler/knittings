@@ -8,6 +8,7 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.provider.MediaStore
 import android.util.Log
 import android.view.*
 import android.widget.ImageView
@@ -18,6 +19,7 @@ import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.camera.core.*
 import androidx.camera.lifecycle.ProcessCameraProvider
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
@@ -78,15 +80,6 @@ class KnittingDetailsFragment : Fragment() {
                     }
                 }
             }
-        }
-    }
-
-    private val requestMultiplePermissions = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
-        if (permissions != null && permissions.size == 2) {
-            val d = TakePhotoDialog.create(requireContext(), layoutInflater, this::takePhoto, this::importPhoto)
-            d.show()
-        } else {
-            Toast.makeText(requireContext(), "Permissions denied", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -188,7 +181,7 @@ class KnittingDetailsFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.menu_item_add_photo -> {
-                requestMultiplePermissions.launch(arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE))
+                //requestPermissions(permissionsList, REQUEST_CODE);
                 true
             }
             R.id.menu_item_show_gallery -> {
@@ -356,9 +349,35 @@ class KnittingDetailsFragment : Fragment() {
         }, ContextCompat.getMainExecutor(requireContext()))
     }
 
+    private fun checkCameraPermission() {
+       if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.CAMERA)
+               != PackageManager.PERMISSION_GRANTED) {
+           ActivityCompat.requestPermissions(requireActivity(), arrayOf(Manifest.permission.CAMERA), REQUEST_PERMISSION)
+       }
+   }
+   private fun openCamera() {
+       Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { intent ->
+           intent.resolveActivity(requireActivity().packageManager)?.also {
+               startActivityForResult(intent, REQUEST_IMAGE_CAPTURE)
+           }
+       }
+   }
+   private fun openGallery() {
+       Intent(Intent.ACTION_GET_CONTENT).also { intent ->
+           intent.type = "image/*"
+           intent.resolveActivity(requireActivity().packageManager)?.also {
+               startActivityForResult(intent, REQUEST_PICK_IMAGE)
+           }
+       }
+   }
+
     companion object {
 
         private const val TAG = "KnittingDetailsFragment"
+
+        private val REQUEST_IMAGE_CAPTURE = 1
+        private val REQUEST_PICK_IMAGE = 2
+        private val REQUEST_PERMISSION = 100
 
         private const val CURRENT_PHOTO_PATH = "com.mthaler.knittings.CURRENT_PHOTO_PATH"
         private const val EXTRA_EDIT_ONLY = "com.mthaler.knittings.edit_only"
