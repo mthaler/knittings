@@ -57,7 +57,7 @@ class KnittingDetailsFragment : Fragment() {
     private val requestMultiplePermissions = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
         if (permissions != null && permissions.size == 3) {
             val d = TakePhotoDialog.create(requireContext(), "com.mthaler.knittings.fileprovider",  layoutInflater, this::takePhoto, this::importPhoto)
-               d.show()
+            d.show()
         } else {
             Log.e(TAG, "Permissions denied")
         }

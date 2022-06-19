@@ -3,19 +3,24 @@ package com.mthaler.knittings.photo
 import android.Manifest
 import android.app.Activity
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.os.Bundle
 import android.util.Log
 import android.view.*
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
+import com.google.android.material.snackbar.Snackbar
 import com.mthaler.knittings.R
 import com.mthaler.knittings.database.Extras.EXTRA_OWNER_ID
 import com.mthaler.knittings.databinding.FragmentPhotoGalleryBinding
 import com.mthaler.knittings.utils.AndroidViewModelFactory
+import com.mthaler.knittings.utils.showSnackbar
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -134,17 +139,45 @@ class PhotoGalleryFragment : Fragment() {
      override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.menu_item_add_photo -> {
-                requestMultiplePermissions.launch(arrayOf(Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE))
+                when {
+                    ContextCompat.checkSelfPermission(
+                        requireContext(),
+                        Manifest.permission.CAMERA
+                    ) == PackageManager.PERMISSION_GRANTED -> {
+                        showSnackbar(
+                            requireView(),
+                            getString(R.string.permission_granted),
+                            Snackbar.LENGTH_INDEFINITE,
+                            null
+                        ) {}
+                    }
+
+                    ActivityCompat.shouldShowRequestPermissionRationale(
+                        requireActivity(),
+                        Manifest.permission.CAMERA
+                    ) -> {
+                        showSnackbar(
+                            requireView(),
+                            getString(R.string.permission_required),
+                            Snackbar.LENGTH_INDEFINITE,
+                            getString(R.string.ok)
+                        ) {
+                            requestMultiplePermissions.launch(arrayOf(Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE))
+                        }
+                    }
+                    else -> {
+                        requestMultiplePermissions.launch(arrayOf(Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE))
+                    }
+                }
                 true
             }
             else -> super.onOptionsItemSelected(item)
         }
     }
 
-
     private fun takePhoto(file: File, intent: Intent) {
         currentPhotoPath = file
-
+        launchImageCapture.launch(intent)
     }
 
     private fun importPhoto(file: File, intent: Intent) {
