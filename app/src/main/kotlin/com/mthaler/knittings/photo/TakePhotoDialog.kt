@@ -37,7 +37,6 @@ object TakePhotoDialog {
         takePhoto: (File, Intent) -> Unit,
         importPhoto: (File, Intent) -> Unit
     ): AlertDialog {
-
         // create the dialog
         val b = AlertDialog.Builder(context)
         @SuppressLint("InflateParams")

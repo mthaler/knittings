@@ -158,10 +158,8 @@ class PhotoGalleryFragment : Fragment() {
                         Manifest.permission.CAMERA
                     ) -> {
                         Log.d(TAG, resources.getString(R.string.permission_required))
-                        TakePhotoDialog.create(requireContext(), "com.mthaler.knittings.fileprovider", layoutInflater, this::takePhoto, this::importPhoto)
-                        requestMultiplePermissions.launch(
-                            arrayOf(Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                        )
+                        val d = TakePhotoDialog.create(requireContext(), "com.mthaler.knittings.fileprovider", layoutInflater, this::takePhoto, this::importPhoto)
+                        d.show()
 
                     }
                     else -> {
