@@ -140,36 +140,34 @@ class PhotoGalleryFragment : Fragment() {
      override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.menu_item_add_photo -> {
-                when {
-                    when {
-                        ContextCompat.checkSelfPermission(
+            when {
+                    ContextCompat.checkSelfPermission(
+                        requireContext(),
+                        Manifest.permission.CAMERA
+                    ) == PackageManager.PERMISSION_GRANTED -> {
+                        TakePhotoDialog.create(
                             requireContext(),
-                            Manifest.permission.CAMERA
-                        ) == PackageManager.PERMISSION_GRANTED -> {
-                            TakePhotoDialog.create(
-                                requireContext(),
-                                "com.mthaler.knittings.fileprovider",
-                                layoutInflater,
-                                this::takePhoto,
-                                this::importPhoto
-                            )
-                        }
-                        ActivityCompat.shouldShowRequestPermissionRationale(
-                            requireActivity(),
-                            Manifest.permission.CAMERA
-                        ) -> {
-                            Log.d(TAG, resources.getString(R.string.permission_required))
-                            TakePhotoDialog.create(requireContext(), "com.mthaler.knittings.fileprovider", layoutInflater, this::takePhoto, this::importPhoto)
-                            requestMultiplePermissions.launch(
-                                arrayOf(Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                            )
+                            "com.mthaler.knittings.fileprovider",
+                            layoutInflater,
+                            this::takePhoto,
+                            this::importPhoto
+                        )
+                    }
+                    ActivityCompat.shouldShowRequestPermissionRationale(
+                        requireActivity(),
+                        Manifest.permission.CAMERA
+                    ) -> {
+                        Log.d(TAG, resources.getString(R.string.permission_required))
+                        TakePhotoDialog.create(requireContext(), "com.mthaler.knittings.fileprovider", layoutInflater, this::takePhoto, this::importPhoto)
+                        requestMultiplePermissions.launch(
+                            arrayOf(Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                        )
 
-                        }
-                        else -> {
-                            requestMultiplePermissions.launch(
-                                arrayOf(Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                            )
-                        }
+                    }
+                    else -> {
+                        requestMultiplePermissions.launch(
+                            arrayOf(Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                        )
                     }
                 }
                 true
