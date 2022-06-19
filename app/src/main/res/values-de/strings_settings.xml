@@ -5,8 +5,6 @@
     <string name="pref_header_theme">Aussehen</string>
     <string name="pref_header_photos">Fotos</string>
     <string name="pref_use_newest_photo_as_preview">Neuestes Foto als Vorschau verwenden</string>
-    <string name="pref_header_sharing">Teilen</string>
-    <string name="pref_size_of_shared_photos">Größe geteilter Fotos</string>
     <string name="pref_header_development">Entwickleroptionen</string>
     <string name="pref_display_photo_size">Größe von Fotos anzeigen</string>
     <string name="pref_color_theme">Farbschema</string>
