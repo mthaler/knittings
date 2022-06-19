@@ -2,6 +2,12 @@
 <resources>
     <string name="whats_new_title">Whats New</string>
     <string name="whats_new"><![CDATA[
+        <h3>Version 0.9.43</h3>
+        - Fixed all warnings<br>
+        - Fixed non-translated strings<br>
+        - Updated AndroidManifest.xml<br>
+        - Updated KnittingDetailsFragment, PhotoGalleryFragment, PictureUtils and TakePhotoDialog<br>
+        - Added XML declaration to resources<br>
         <h3>Version 0.9.42</h3>
         - Knitting list now is a fragment<br>
         - Upgrade Kotlin to 1.6.10<br>
