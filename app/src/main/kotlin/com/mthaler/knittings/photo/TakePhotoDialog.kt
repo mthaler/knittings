@@ -1,6 +1,7 @@
 package com.mthaler.knittings.photo
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.app.AlertDialog
 import android.content.ClipData
 import android.content.Context
@@ -150,4 +151,21 @@ object TakePhotoDialog {
         val externalFilesDir = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
         return if (externalFilesDir != null) File(externalFilesDir, Photo.photoFilename) else null
     }
+
+    private fun dispatchTakePictureIntent(activity: Activity, authority: String, f: File): Intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
+        // Ensure that there's a camera activity to handle the intent
+        takePictureIntent.resolveActivity(activity.packageManager)?.also {
+            // Create the File where the photo should go
+            // Continue only if the File was successfully created
+            f.also {
+                val photoURI: Uri = FileProvider.getUriForFile(
+                    activity,
+                    authority,
+                    it
+                )
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
+            }
+        }
+    }
+
 }
