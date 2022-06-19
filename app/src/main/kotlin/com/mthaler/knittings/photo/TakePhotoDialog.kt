@@ -6,6 +6,7 @@ import android.app.AlertDialog
 import android.content.ClipData
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
 import android.os.Environment
@@ -14,6 +15,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.widget.Button
 import androidx.core.content.FileProvider
+import androidx.core.content.PackageManagerCompat
 import com.mthaler.knittings.R
 import com.mthaler.knittings.model.Photo
 import com.mthaler.knittings.utils.PictureUtils
@@ -49,19 +51,12 @@ object TakePhotoDialog {
         // take a photo if the user clicks the take photo button
         buttonTakePhoto.setOnClickListener {
             d.dismiss()
-            val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
             // create a photo file for the photo
             getPhotoFile(context)?.let {
                 val packageManager = context.packageManager
+                val takePictureIntent = dispatchTakePictureIntent(context, packageManager, authority, it)
                 val canTakePhoto = takePictureIntent.resolveActivity(packageManager) != null
                 if (canTakePhoto) {
-                    val uri = FileProvider.getUriForFile(context, authority, it)
-                    takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, uri)
-                    // this is needed on older android versions to net get a security exception
-                    if (Build.VERSION.SDK_INT >= 16 && Build.VERSION.SDK_INT <= 21) {
-                        takePictureIntent.clipData = ClipData.newRawUri("", uri)
-                        takePictureIntent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION or Intent.FLAG_GRANT_READ_URI_PERMISSION)
-                    }
                     Log.d(TAG, "Created take picture intent")
                     takePhoto(it, takePictureIntent)
                 }
@@ -87,7 +82,7 @@ object TakePhotoDialog {
      */
     suspend fun handleTakePhotoResult(context: Context, ownerID: Long, file: File) {
         // add photo to database
-        val compressed = com.mthaler.knittings.utils.PictureUtils.compress(context, file)
+        val compressed = PictureUtils.compress(context, file)
         if (compressed.length() < file.length()) {
             if (!file.delete()) {
                 error("Could not delete $file")
@@ -152,14 +147,14 @@ object TakePhotoDialog {
         return if (externalFilesDir != null) File(externalFilesDir, Photo.photoFilename) else null
     }
 
-    private fun dispatchTakePictureIntent(activity: Activity, authority: String, f: File): Intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
+    private fun dispatchTakePictureIntent(context: Context, packageManager: PackageManager, authority: String, f: File): Intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
         // Ensure that there's a camera activity to handle the intent
-        takePictureIntent.resolveActivity(activity.packageManager)?.also {
+        takePictureIntent.resolveActivity(packageManager)?.also {
             // Create the File where the photo should go
             // Continue only if the File was successfully created
             f.also {
                 val photoURI: Uri = FileProvider.getUriForFile(
-                    activity,
+                    context,
                     authority,
                     it
                 )

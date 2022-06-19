@@ -67,14 +67,10 @@ class KnittingDetailsFragment : Fragment() {
     }
 
     private val launchImageCapture = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
-        if (result.resultCode == Activity.RESULT_OK) {
-            result.data?.let {
-                currentPhotoPath?.let {
-                    lifecycleScope.launch {
-                        withContext(Dispatchers.IO) {
-                            TakePhotoDialog.handleTakePhotoResult(requireContext(), knittingID, it) }
-                    }
-                }
+        currentPhotoPath?.let {
+            lifecycleScope.launch {
+                withContext(Dispatchers.IO) {
+                    TakePhotoDialog.handleTakePhotoResult(requireContext(), knittingID, it) }
             }
         }
     }
@@ -224,7 +220,6 @@ class KnittingDetailsFragment : Fragment() {
 
     private fun takePhoto(file: File, intent: Intent) {
         currentPhotoPath = file
-        val i =
         launchImageCapture.launch(intent)
     }
 
