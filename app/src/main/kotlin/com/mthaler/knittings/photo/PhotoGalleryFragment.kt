@@ -44,7 +44,7 @@ class PhotoGalleryFragment : Fragment() {
         }
     }
 
-    private val launchImageCapture = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+    private val launchImageCapture = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
        currentPhotoPath?.let {
             lifecycleScope.launch {
                 withContext(Dispatchers.IO) {
