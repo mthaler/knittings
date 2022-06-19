@@ -31,11 +31,11 @@ object TakePhotoDialog {
      * @param importPhoto function that is called if the user wants to import a photo
      */
     fun create(
-            context: Context,
-            authority: String,
-            layoutInflater: LayoutInflater,
-            takePhoto: (File, Intent) -> Unit,
-            importPhoto: (File, Intent) -> Unit
+        context: Context,
+        authority: String,
+        layoutInflater: LayoutInflater,
+        takePhoto: (File, Intent) -> Unit,
+        importPhoto: (File, Intent) -> Unit
     ): AlertDialog {
 
         // create the dialog
@@ -87,7 +87,7 @@ object TakePhotoDialog {
      */
     suspend fun handleTakePhotoResult(context: Context, ownerID: Long, file: File) {
         // add photo to database
-        val compressed = PictureUtils.compress(context, file)
+        val compressed = com.mthaler.knittings.utils.PictureUtils.compress(context, file)
         if (compressed.length() < file.length()) {
             if (!file.delete()) {
                 error("Could not delete $file")

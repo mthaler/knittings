@@ -4,12 +4,12 @@ plugins {
 }
 
 android {
-    compileSdkVersion 31
+    compileSdkVersion 32
 
     defaultConfig {
         applicationId "com.mthaler.knittings"
         minSdkVersion 21
-        targetSdkVersion 31
+        targetSdkVersion 32
         versionCode 64
         versionName "0.9.42"
 
@@ -19,7 +19,6 @@ android {
         manifestPlaceholders = [dropboxKey: dropboxKey]
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        consumerProguardFiles "consumer-rules.pro"
 
         multiDexEnabled true
     }
@@ -63,10 +62,8 @@ android {
 dependencies {
     implementation "androidx.core:core-ktx:1.8.0"
     implementation 'androidx.appcompat:appcompat:1.4.2'
-    implementation 'androidx.activity:activity-ktx:1.4.0'
     implementation 'androidx.test:rules:1.4.0'
     implementation 'androidx.benchmark:benchmark-macro-junit4:1.1.0-alpha03'
-    implementation 'androidx.camera:camera-core:1.0.0'
 
     def fragment_version = "1.4.1"
     def lifecycleVersion = '2.4.1'
@@ -86,14 +83,11 @@ dependencies {
     implementation 'androidx.vectordrawable:vectordrawable:1.1.0'
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0'
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.0'
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.recyclerview:recyclerview:1.2.1'
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'androidx.vectordrawable:vectordrawable:1.1.0'
-    def multidex_version = "2.0.1"
-    implementation "androidx.multidex:multidex:$multidex_version"
     implementation 'com.dropbox.core:dropbox-core-sdk:5.2.0'
     implementation 'ch.temparus.colorpicker:library:1.2.0'
     implementation 'id.zelory:compressor:3.0.1'
@@ -105,7 +99,7 @@ dependencies {
     def work_version = "2.7.1"
     implementation "androidx.work:work-runtime-ktx:$work_version"
 
-    implementation("androidx.profileinstaller:profileinstaller:1.2.0-beta01")
+    implementation 'androidx.profileinstaller:profileinstaller:1.2.0-beta01'
 
     testImplementation 'junit:junit:4.13.2'
 
