@@ -1,17 +1,16 @@
 package com.mthaler.knittings
 
-import androidx.multidex.MultiDexApplication
+import android.app.Application
 import com.mthaler.knittings.database.*
 import com.mthaler.knittings.settings.Theme
 import com.mthaler.knittings.model.Database
 import com.mthaler.knittings.model.ExportDatabase
-import com.mthaler.knittings.model.Knitting
 import com.mthaler.knittings.model.toDatabase
 import com.mthaler.knittings.settings.ThemeRepository
 import org.json.JSONObject
 import java.io.File
 
-class MyApplication : MultiDexApplication(), DatabaseApplication {
+class MyApplication : Application(), DatabaseApplication {
 
     override fun onCreate() {
         super.onCreate()
