@@ -58,7 +58,6 @@ object PictureUtils {
             // Decode the image file into a Bitmap sized to fill the View
             inJustDecodeBounds = false
             inSampleSize = scaleFactor
-            inPurgeable = true
         }
         return BitmapFactory.decodeFile(path, bmOptions)
     }
