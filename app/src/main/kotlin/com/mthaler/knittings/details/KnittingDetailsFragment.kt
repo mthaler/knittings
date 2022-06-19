@@ -177,26 +177,16 @@ class KnittingDetailsFragment : Fragment() {
                         requireContext(),
                         Manifest.permission.CAMERA
                     ) == PackageManager.PERMISSION_GRANTED -> {
-                        showSnackbar(
-                            requireView(),
-                            getString(R.string.permission_granted),
-                            Snackbar.LENGTH_INDEFINITE,
-                            null
-                        ) {}
+                        TakePhotoDialog.create(requireContext(), "com.mthaler.knittings.fileprovider", layoutInflater, this::takePhoto, this::importPhoto)
                     }
-
                     ActivityCompat.shouldShowRequestPermissionRationale(
                         requireActivity(),
                         Manifest.permission.CAMERA
                     ) -> {
-                        showSnackbar(
-                            requireView(),
-                            getString(R.string.permission_required),
-                            Snackbar.LENGTH_INDEFINITE,
-                            getString(R.string.ok)
-                        ) {
-                            requestMultiplePermissions.launch(arrayOf(Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE))
-                        }
+                        Log.d(TAG, resources.getString(R.string.permission_required))
+                        TakePhotoDialog.create(requireContext(), "com.mthaler.knittings.fileprovider", layoutInflater, this::takePhoto, this::importPhoto)
+                        requestMultiplePermissions.launch(arrayOf(Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE))
+
                     }
                     else -> {
                         requestMultiplePermissions.launch(arrayOf(Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE))
