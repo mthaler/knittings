@@ -34,13 +34,6 @@
                 android:value=".MainActivity" />
         </activity>
         <activity
-            android:name=".photo.PhotoGalleryActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity" />
-        </activity>
-        <activity
             android:name=".dropbox.DropboxExportActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data

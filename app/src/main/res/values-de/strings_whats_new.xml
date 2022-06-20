@@ -3,10 +3,10 @@
     <string name="whats_new_title">Whats New</string>
     <string name="whats_new"><![CDATA[
        <h3>Version 0.9.43</h3>
-        - Alle warnings gefixt<br>
+        - Alle Warnungen gefixt<br>
         - Alle Texte übersetzt<br>
         - AndroidManifest.xml aktualisiert<br>
-        - KnittingDetailsFragment, PhotoGalleryFragment, PictureUtils and TakePhotoDialog aktualisiert<br>
+        - KnittingDetailsFragment, PhotoGalleryFragment, PictureUtils und TakePhotoDialog aktualisiert<br>
         - XML deklaration zu Resourcen hinzugefügt<br>
       <h3>Version 0.9.42</h3>
         - Strickerei Liste ist jetzt ein Fragment<br>

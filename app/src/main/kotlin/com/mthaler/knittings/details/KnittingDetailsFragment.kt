@@ -4,12 +4,9 @@ import android.Manifest
 import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.net.Uri
 import android.os.Bundle
-import android.os.Environment
 import android.os.Handler
 import android.os.Looper
-import android.provider.MediaStore
 import android.util.Log
 import android.view.*
 import android.widget.ImageView
@@ -19,7 +16,6 @@ import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.core.content.FileProvider
 import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -31,7 +27,7 @@ import com.mthaler.knittings.database.KnittingsDataSource
 import com.mthaler.knittings.databinding.FragmentKnittingDetailsBinding
 import com.mthaler.knittings.model.Knitting
 import com.mthaler.knittings.model.Status
-import com.mthaler.knittings.photo.PhotoGalleryActivity
+import com.mthaler.knittings.photo.PhotoGalleryFragment
 import com.mthaler.knittings.photo.TakePhotoDialog
 import com.mthaler.knittings.rowcounter.RowCounterActivity
 import com.mthaler.knittings.stopwatch.StopwatchActivity
@@ -41,7 +37,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.File
-import java.io.IOException
 import java.text.DateFormat
 
 /**
@@ -153,7 +148,11 @@ class KnittingDetailsFragment : Fragment() {
 
         val imageView = binding.image
         imageView.setOnClickListener {
-            startActivity(PhotoGalleryActivity.newIntent(requireContext(), knittingID))
+            val f = PhotoGalleryFragment.newInstance(knittingID)
+            val ft = requireActivity().supportFragmentManager.beginTransaction()
+            ft.replace(R.id.knitting_details_container, f)
+            ft.addToBackStack(null)
+            ft.commit()
         }
 
         viewModel = ViewModelProvider(requireActivity()).get(KnittingDetailsViewModel::class.java)
@@ -187,7 +186,11 @@ class KnittingDetailsFragment : Fragment() {
                 true
             }
             R.id.menu_item_show_gallery -> {
-                startActivity(PhotoGalleryActivity.newIntent(requireContext(), knittingID))
+                val f = PhotoGalleryFragment.newInstance(knittingID)
+                val ft = requireActivity().supportFragmentManager.beginTransaction()
+                ft.replace(R.id.knitting_details_container, f)
+                ft.addToBackStack(null)
+                ft.commit()
                 true
             }
             R.id.menu_item_show_stopwatch -> {
