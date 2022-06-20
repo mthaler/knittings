@@ -39,6 +39,7 @@
                 app:iconGravity="textStart"
                 app:iconSize="100dp"
                 app:iconPadding="0dp"
+                app:iconTint="@color/white"
                 app:backgroundColor="?attr/colorPrimary" />
         <com.mthaler.knittings.rowcounter.CircularButton
             android:id="@+id/button_reset"
