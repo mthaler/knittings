@@ -27,14 +27,14 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <com.mthaler.knittings.projectcount.CircularButton
+        <com.mthaler.knittings.rowcounter.CircularButton
             android:id="@+id/button_plus"
             android:layout_width="230dp"
             android:layout_height="230dp"
             android:layout_gravity="center"
             app:srcCompat="@drawable/ic_baseline_add"
             app:backgroundColor="?attr/colorPrimary" />
-        <com.mthaler.knittings.projectcount.CircularButton
+        <com.mthaler.knittings.rowcounter.CircularButton
             android:id="@+id/button_reset"
             android:layout_width="60dp"
             android:layout_height="60dp"
@@ -43,7 +43,7 @@
             android:layout_gravity="top|left"
             app:srcCompat="@drawable/ic_baseline_clear"
             app:backgroundColor="?attr/colorPrimary" />
-        <com.mthaler.knittings.projectcount.CircularButton
+        <com.mthaler.knittings.rowcounter.CircularButton
             android:id="@+id/button_minus"
             android:layout_width="60dp"
             android:layout_height="60dp"
