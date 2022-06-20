@@ -30,11 +30,16 @@
         android:layout_weight="5">
         <com.mthaler.knittings.rowcounter.CircularButton
             android:id="@+id/button_plus"
-            android:layout_width="250dp"
-            android:layout_height="250dp"
-            android:layout_gravity="center"
-            app:srcCompat="@drawable/ic_baseline_add"
-            app:backgroundColor="?attr/colorPrimary" />
+                android:theme="@style/MatButton"
+                android:layout_width="230dp"
+                android:layout_height="230dp"
+                android:layout_gravity="center"
+                app:cornerRadius="125dp"
+                app:icon="@drawable/ic_baseline_add"
+                app:iconGravity="textStart"
+                app:iconSize="100dp"
+                app:iconPadding="0dp"
+                app:backgroundColor="?attr/colorPrimary" />
         <com.mthaler.knittings.rowcounter.CircularButton
             android:id="@+id/button_reset"
             android:layout_width="60dp"
