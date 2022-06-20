@@ -40,23 +40,35 @@
             app:iconSize="100dp"
             app:iconPadding="0dp"
             app:iconTint="@color/white" />
-        <com.mthaler.knittings.rowcounter.CircularButton
+         <com.google.android.material.button.MaterialButton
             android:id="@+id/button_reset"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
+            android:theme="@style/MatButton"
+            android:layout_width="70dp"
+            android:layout_height="80dp"
             android:layout_marginTop="20dp"
             android:layout_marginLeft="20dp"
             android:layout_gravity="top|left"
-            app:srcCompat="@drawable/ic_baseline_clear"
-            app:backgroundColor="?attr/colorPrimary" />
-        <com.mthaler.knittings.rowcounter.CircularButton
+            app:cornerRadius="35dp"
+            app:icon="@drawable/ic_baseline_clear"
+            app:iconGravity="textStart"
+            app:iconSize="55dp"
+            app:iconPadding="0dp"
+            app:iconTint="@color/white"
+            app:backgroundTint="@color/colorPrimary" />
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/button_minus"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
+            android:theme="@style/MatButton"
+            android:layout_width="70dp"
+            android:layout_height="80dp"
             android:layout_marginTop="20dp"
             android:layout_marginRight="20dp"
             android:layout_gravity="top|right"
-            app:srcCompat="@drawable/ic_baseline_remove"
-            app:backgroundColor="?attr/colorPrimary" />
+            app:cornerRadius="35dp"
+            app:icon="@drawable/ic_baseline_remove"
+            app:iconGravity="textStart"
+            app:iconSize="55dp"
+            app:iconPadding="0dp"
+            app:iconTint="@color/white"
+            app:backgroundTint="@color/colorPrimary" />
     </FrameLayout>
 </LinearLayout>
