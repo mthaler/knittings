@@ -4,12 +4,12 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
-import com.mthaler.knittings.BaseActivity
+import androidx.appcompat.app.AppCompatActivity
 import com.mthaler.knittings.R
 import com.mthaler.knittings.databinding.ActivityDropboxImportBinding
 import com.mthaler.knittings.service.JobStatus
 
-class DropboxImportActivity : BaseActivity() {
+class DropboxImportActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

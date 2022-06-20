@@ -5,14 +5,14 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
-import com.mthaler.knittings.BaseActivity
+import androidx.appcompat.app.AppCompatActivity
 import com.mthaler.knittings.R
 import com.mthaler.knittings.database.Extras
 import com.mthaler.knittings.database.Extras.EXTRA_OWNER_ID
 import com.mthaler.knittings.databinding.ActivitySelectCategoryBinding
 import com.mthaler.knittings.model.Category
 
-class SelectCategoryActivity : BaseActivity(), CategoryListFragment.OnFragmentInteractionListener, EditCategoryFragment.OnFragmentInteractionListener {
+class SelectCategoryActivity : AppCompatActivity(), CategoryListFragment.OnFragmentInteractionListener, EditCategoryFragment.OnFragmentInteractionListener {
 
     private var ownerID = -1L
 

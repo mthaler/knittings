@@ -3,14 +3,12 @@ package com.mthaler.knittings.category
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import androidx.core.app.NavUtils
-import android.view.MenuItem
-import com.mthaler.knittings.BaseActivity
+import androidx.appcompat.app.AppCompatActivity
 import com.mthaler.knittings.R
 import com.mthaler.knittings.databinding.ActivityCategoryListBinding
 import com.mthaler.knittings.model.Category
 
-class CategoryListActivity : BaseActivity(), CategoryListFragment.OnFragmentInteractionListener, EditCategoryFragment.OnFragmentInteractionListener {
+class CategoryListActivity : AppCompatActivity(), CategoryListFragment.OnFragmentInteractionListener, EditCategoryFragment.OnFragmentInteractionListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

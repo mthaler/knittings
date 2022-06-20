@@ -3,7 +3,7 @@ package com.mthaler.knittings.stopwatch
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import com.mthaler.knittings.BaseActivity
+import androidx.appcompat.app.AppCompatActivity
 import com.mthaler.knittings.Extras.EXTRA_KNITTING_ID
 import com.mthaler.knittings.R
 import com.mthaler.knittings.databinding.ActivityStopwatchBinding
@@ -12,7 +12,7 @@ import com.mthaler.knittings.model.Knitting
 /**
  * StopWatchActivity shows a stopwatch that can be used to measure the time the user is working on a knitting
  */
-class StopwatchActivity : BaseActivity() {
+class StopwatchActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityStopwatchBinding
     private var knittingID: Long = Knitting.EMPTY.id

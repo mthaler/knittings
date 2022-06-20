@@ -38,9 +38,7 @@
             app:icon="@drawable/ic_baseline_add"
             app:iconGravity="textStart"
             app:iconSize="100dp"
-            app:iconPadding="0dp"
-            app:backgroundTint ="#aabbcc"
-            app:backgroundTintMode="add"/>
+            app:iconPadding="0dp" />
         <com.mthaler.knittings.rowcounter.CircularButton
             android:id="@+id/button_reset"
             android:layout_width="60dp"

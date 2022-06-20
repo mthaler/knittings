@@ -4,14 +4,14 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NavUtils
-import com.mthaler.knittings.BaseActivity
 import com.mthaler.knittings.Extras
 import com.mthaler.knittings.R
 import com.mthaler.knittings.databinding.ActivityRowCounterBinding
 import com.mthaler.knittings.model.Knitting
 
-class RowCounterActivity : BaseActivity() {
+class RowCounterActivity : AppCompatActivity() {
 
     private var knittingID: Long = Knitting.EMPTY.id
 
