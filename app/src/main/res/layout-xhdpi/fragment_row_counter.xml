@@ -29,17 +29,17 @@
         android:layout_height="match_parent">
         <com.google.android.material.button.MaterialButton
             android:id="@+id/button_plus"
-            android:theme="@style/MatButton"
-            android:layout_width="230dp"
-            android:layout_height="230dp"
+            style="@style/MatButton"
+            android:layout_width="250dp"
+            android:layout_height="250dp"
             android:layout_gravity="center"
             app:cornerRadius="125dp"
             app:icon="@drawable/ic_baseline_add"
             app:iconGravity="textStart"
             app:iconSize="100dp"
             app:iconPadding="0dp"
-            app:iconTint="@color/white"
-            app:backgroundColor="?attr/colorPrimary" />
+            app:backgroundTint="#aabbcc"
+            app:backgroundTintMode="add" />
         <com.mthaler.knittings.rowcounter.CircularButton
             android:id="@+id/button_reset"
             android:layout_width="60dp"

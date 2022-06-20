@@ -40,7 +40,8 @@
             app:iconSize="100dp"
             app:iconPadding="0dp"
             app:iconTint="@color/white"
-            app:backgroundColor="?attr/colorPrimary" />
+            app:backgroundTint="#aabbcc"
+            app:backgroundTintMode="add"/>
         <com.mthaler.knittings.rowcounter.CircularButton
             android:id="@+id/button_reset"
             android:layout_width="60dp"
@@ -49,7 +50,7 @@
             android:layout_marginRight="20dp"
             android:layout_gravity="top|left"
             app:srcCompat="@drawable/ic_baseline_clear"
-            app:backgroundColor="?attr/colorPrimary" />
+            app:backgroundColor="?attr/colorPrimary"/>
         <com.mthaler.knittings.rowcounter.CircularButton
             android:id="@+id/button_minus"
             android:layout_width="60dp"
