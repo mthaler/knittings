@@ -38,7 +38,7 @@
                 app:indicatorSize="90dp"
                 app:indicatorColor="@color/colorPrimary"
                 app:trackThickness="10dp"
-                app:trackColor="@color/battleship_grey"
+                app:trackColor="@color/colorAccent"
                 tools:progress="75"/>
 
 
