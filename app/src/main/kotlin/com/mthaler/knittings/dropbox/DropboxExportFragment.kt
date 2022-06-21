@@ -13,6 +13,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.NavUtils
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.work.ExistingWorkPolicy
 import androidx.work.OneTimeWorkRequestBuilder
@@ -28,7 +29,6 @@ import com.mthaler.knittings.R
 import com.mthaler.knittings.databinding.FragmentDropboxExportBinding
 import com.mthaler.knittings.service.JobStatus
 import com.mthaler.knittings.service.ServiceStatus
-import com.mthaler.knittings.utils.AndroidViewModelFactory
 import com.mthaler.knittings.utils.Format
 import com.mthaler.knittings.utils.NetworkUtils
 import com.mthaler.knittings.utils.WorkerUtils
@@ -181,7 +181,7 @@ class DropboxExportFragment : AbstractDropboxFragment() {
             }
         })
 
-        val viewModel = AndroidViewModelFactory(requireActivity().application).create(DropboxExportViewModel::class.java)
+        val viewModel = ViewModelProvider(requireActivity()).get(DropboxExportViewModel::class.java)
         viewModel.statistics.observe(viewLifecycleOwner, { statistics ->
             binding.photoCount.text = statistics.photos.toString()
             binding.photoTotalSize.text = Format.humanReadableByteCountBin(statistics.totalSize)
