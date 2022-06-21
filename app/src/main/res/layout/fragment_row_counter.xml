@@ -7,16 +7,16 @@
     android:orientation="vertical"
     tools:context="com.mthaler.knittings.projectcount.ProjectCountActivity">
 
-    <com.mthaler.knittings.rowcounter.CountFrame
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:layout_marginTop="20dp"
-        app:frameWidth="13dp"
-        app:frameRadiusX="36dp"
-        app:frameRadiusY="36dp"
-        app:frameColor="#DDDDDD">
+        android:layout_marginTop="20dp">
+        <ImageView
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:src="@drawable/count_frame" />
         <TextView
             android:id="@+id/rows"
             android:layout_width="match_parent"
@@ -24,7 +24,7 @@
             android:gravity="center"
             android:textColor="?attr/colorAccent"
             android:textSize="150dp"/>
-    </com.mthaler.knittings.rowcounter.CountFrame>
+    </FrameLayout>
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
