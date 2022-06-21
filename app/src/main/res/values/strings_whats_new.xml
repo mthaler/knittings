@@ -7,7 +7,6 @@
         - Removed CircularProgressBar<br>
         - Removed CountFrame and CircuarButton<br>
         - Removed PhotoGalleryActivity<br>
-        - Added XML declaration to resources<br>
         <h3>Version 0.9.43</h3>
         - Fixed all warnings<br>
         - Fixed non-translated strings<br>
