@@ -8,6 +8,8 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.lifecycle.ViewModelProvider
 import com.mthaler.knittings.R
+import com.mthaler.knittings.database.KnittingsDataSource
+import com.mthaler.knittings.database.ProjectsDataSource
 import com.mthaler.knittings.databinding.FragmentProjectCountBinding
 
 class ProjectCountFragment : Fragment() {
@@ -24,7 +26,7 @@ class ProjectCountFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
         // get all knittings from database
-        val ds = (requireContext().applicationContext as com.mthaler.knittings.DatabaseApplication).getProjectsDataSource()
+        val ds = KnittingsDataSource as ProjectsDataSource
         val projects = ds.allProjects
 
         _binding = FragmentProjectCountBinding.inflate(inflater, container, false)
