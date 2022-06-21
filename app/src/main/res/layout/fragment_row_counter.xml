@@ -39,7 +39,8 @@
             app:iconGravity="textStart"
             app:iconSize="100dp"
             app:iconPadding="0dp"
-            app:iconTint="@color/white" />
+            app:iconTint="@color/white"
+            app:backgroundTint="@color/colorPrimary" />
          <com.google.android.material.button.MaterialButton
             android:id="@+id/button_reset"
             android:theme="@style/MatButton"
