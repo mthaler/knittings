@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="horizontal">
 
-    <com.mthaler.knittings.projectcount.CountFrame
+    <com.mthaler.knittings.rowcounter.CountFrame
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_margin="10dp"
@@ -23,7 +23,7 @@
             android:layout_gravity="center"
             android:textColor="?attr/colorAccent"
             android:textSize="150dp"/>
-    </com.mthaler.knittings.projectcount.CountFrame>
+    </com.mthaler.knittings.rowcounter.CountFrame>
     <FrameLayout
         android:layout_width="0dp"
         android:layout_height="match_parent"
