@@ -1,11 +1,11 @@
 package com.mthaler.knittings.projectcount
 
 import androidx.lifecycle.ViewModel
-import com.mthaler.knittings.MyApplication
 import com.mthaler.knittings.R
 import com.mthaler.knittings.database.CategoryDataSource
 import com.mthaler.knittings.database.KnittingsDataSource
 import com.mthaler.knittings.model.Knitting
+import com.mthaler.knittings.utils.ResourcesProvider
 import java.util.*
 
 class ProjectCountViewModel : ViewModel() {
@@ -58,7 +58,7 @@ class ProjectCountViewModel : ViewModel() {
     fun createCategoryNamesList(): List<String> {
         val ds = KnittingsDataSource as CategoryDataSource
         val categories = ds.allCategories.sortedBy { it.name.lowercase() }
-        return listOf(getApplication<MyApplication>().resources.getString(R.string.project_count_category_all)) + categories.map { it.name }.toList()
+        return listOf(ResourcesProvider.getString(R.string.project_count_category_all)) + categories.map { it.name }.toList()
     }
 
     /**
@@ -81,7 +81,7 @@ class ProjectCountViewModel : ViewModel() {
         } else {
             years.add(thisYear.toString())
         }
-        years.add(getApplication<MyApplication>().resources.getString(R.string.project_count_year_all))
+        years.add(ResourcesProvider.getString(R.string.project_count_year_all))
         years.reverse()
         return years
     }

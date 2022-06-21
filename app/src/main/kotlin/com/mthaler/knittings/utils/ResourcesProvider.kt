@@ -11,5 +11,5 @@ object ResourcesProvider {
         this.context = context
     }
 
-    fun getString(redId: Int): String? = context.getString(redId)
+    fun getString(redId: Int): String = context.getString(redId)
 }
