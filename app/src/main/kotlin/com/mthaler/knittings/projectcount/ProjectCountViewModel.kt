@@ -1,14 +1,14 @@
 package com.mthaler.knittings.projectcount
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.ViewModel
 import com.mthaler.knittings.MyApplication
 import com.mthaler.knittings.R
+import com.mthaler.knittings.database.CategoryDataSource
+import com.mthaler.knittings.database.KnittingsDataSource
 import com.mthaler.knittings.model.Knitting
-import com.mthaler.knittings.model.Project
 import java.util.*
 
-class ProjectCountViewModel(application: Application): AndroidViewModel(application) {
+class ProjectCountViewModel : ViewModel() {
 
     /**
      * Gets the project count for the given year and category name
@@ -56,7 +56,7 @@ class ProjectCountViewModel(application: Application): AndroidViewModel(applicat
      * @return list of categories
      */
     fun createCategoryNamesList(): List<String> {
-        val ds = (getApplication<MyApplication>().applicationContext as com.mthaler.knittings.DatabaseApplication).getCategoryDataSource()
+        val ds = KnittingsDataSource as CategoryDataSource
         val categories = ds.allCategories.sortedBy { it.name.lowercase() }
         return listOf(getApplication<MyApplication>().resources.getString(R.string.project_count_category_all)) + categories.map { it.name }.toList()
     }
