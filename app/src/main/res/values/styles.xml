@@ -90,4 +90,9 @@
         <item name="android:background">@drawable/button</item>
         <item name="android:textSize">@dimen/action_button_text_size</item>
     </style>
+
+    <style name="MatButton" parent="Theme.MaterialComponents">
+         <item name="cornerFamily">rounded</item>
+         <item name="cornerSize">50%</item>
+    </style>
 </resources>
