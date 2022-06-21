@@ -18,7 +18,7 @@
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp">
 
-            <!-- com.mthaler.knittings.projectcount.CircularProgressBar
+            <com.mthaler.knittings.projectcount.CircularProgressBar
                 android:id="@+id/progressBarCircle"
                 style="?android:attr/progressBarStyleHorizontal"
                 android:layout_width="250dp"
@@ -28,9 +28,9 @@
                 android:max="100"
                 android:progress="100"
                 android:rotation="-90"
-                app:ringColor="?attr/colorAccent" /-->
+                app:ringColor="?attr/colorAccent" />
 
-            <com.google.android.material.progressindicator.CircularProgressIndicator
+            <!--com.google.android.material.progressindicator.CircularProgressIndicator
                 android:id="@+id/progressBarCircle"
                 android:layout_width="250dp"
                 android:layout_height="250dp"
@@ -39,7 +39,7 @@
                 app:indicatorColor="@color/colorPrimary"
                 app:trackThickness="10dp"
                 app:trackColor="@color/colorAccent"
-                tools:progress="75"/>
+                tools:progress="75"/-->
 
 
             <TextView

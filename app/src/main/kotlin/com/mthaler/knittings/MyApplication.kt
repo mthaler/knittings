@@ -2,11 +2,9 @@ package com.mthaler.knittings
 
 import android.app.Application
 import com.mthaler.knittings.database.*
-import com.mthaler.knittings.settings.Theme
 import com.mthaler.knittings.model.Database
 import com.mthaler.knittings.model.ExportDatabase
 import com.mthaler.knittings.model.toDatabase
-import com.mthaler.knittings.settings.ThemeRepository
 import org.json.JSONObject
 import java.io.File
 
@@ -16,7 +14,6 @@ class MyApplication : Application(), DatabaseApplication {
         super.onCreate()
         KnittingsDataSource.init(this)
         ObservableDatabase.init(KnittingsDataSource)
-        Theme.setThemes(ThemeRepository.themes)
     }
 
     override val dropboxAppKey: String = "6ybf7tgqdbhf641"
