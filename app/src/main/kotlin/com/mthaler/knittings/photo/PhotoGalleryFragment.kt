@@ -14,12 +14,12 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import com.mthaler.knittings.R
 import com.mthaler.knittings.database.Extras.EXTRA_OWNER_ID
 import com.mthaler.knittings.databinding.FragmentPhotoGalleryBinding
-import com.mthaler.knittings.utils.AndroidViewModelFactory
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -118,7 +118,7 @@ class PhotoGalleryFragment : Fragment() {
         val gridLayoutManager = GridLayoutManager(requireContext(), columns)
         binding.gridView.layoutManager = gridLayoutManager
         binding.gridView.adapter = photoGalleryAdapter
-        val viewModel = AndroidViewModelFactory(requireActivity().application).create(PhotoGalleryViewModel::class.java)
+        val viewModel = ViewModelProvider(requireActivity()).get(PhotoGalleryViewModel::class.java)
         viewModel.init(ownerID)
         viewModel.photos.observe(viewLifecycleOwner, { photos ->
             // show the newest photos first. The id is incremented for each photo that is added, thus we can sort by id

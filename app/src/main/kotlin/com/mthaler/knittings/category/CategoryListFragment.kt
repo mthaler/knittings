@@ -12,8 +12,6 @@ import com.mthaler.knittings.DatabaseApplication
 import com.mthaler.knittings.DeleteDialog
 import com.mthaler.knittings.R
 import com.mthaler.knittings.databinding.FragmentCategoryListBinding
-import com.mthaler.knittings.details.KnittingDetailsViewModel
-import com.mthaler.knittings.utils.AndroidViewModelFactory
 
 class CategoryListFragment : Fragment() {
 
