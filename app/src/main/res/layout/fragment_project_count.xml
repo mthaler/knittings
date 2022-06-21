@@ -21,9 +21,9 @@
             android:layout_gravity="center"
             android:layout_centerInParent="true"
             app:indicatorSize="250dp"
-            app:indicatorColor="@color/colorPrimary"
+            app:indicatorColor="@color/colorAccent"
             app:trackThickness="10dp"
-            app:trackColor="@color/colorAccent"
+            app:trackColor="@color/colorPrimary"
             tools:progress="75"/>
 
         <TextView
