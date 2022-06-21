@@ -2,7 +2,7 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="AppTheme" parent="Theme.MaterialComponents.Light.DarkActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
@@ -24,6 +24,23 @@
 
     <style name="ButtonStyle" parent="Widget.AppCompat.Button.Colored" />
 
+    <!-- mint theme -->
+    <style name="Theme.App.Mint" parent="AppTheme.NoActionBar">
+        <item name="colorPrimary">@color/mintColorPrimary</item>
+        <item name="colorPrimaryDark">@color/mintColorPrimaryDark</item>
+        <item name="colorAccent">@color/mintColorAccent</item>
+    </style>
+    <!-- rose theme -->
+    <style name="Theme.App.Rose" parent="AppTheme.NoActionBar">
+        <item name="colorPrimary">@color/roseColorPrimary</item>
+        <item name="colorPrimaryDark">@color/roseColorPrimaryDark</item>
+        <item name="colorAccent">@color/roseColorAccent</item>
+    </style>
+    <style name="Theme.App.Sky" parent="AppTheme.NoActionBar">
+        <item name="colorPrimary">@color/skyColorPrimary</item>
+        <item name="colorPrimaryDark">@color/skyColorPrimaryDark</item>
+        <item name="colorAccent">@color/skyColorAccent</item>
+    </style>
     <style name="Divider">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">1dp</item>
