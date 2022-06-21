@@ -5,7 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.core.app.NavUtils
 import android.view.MenuItem
-import androidx.appcompat.app.AppCompatActivity
+import com.mthaler.knittings.BaseActivity
 import com.mthaler.knittings.R
 import com.mthaler.knittings.Extras.EXTRA_KNITTING_ID
 import com.mthaler.knittings.databinding.ActivityKnittingDetailsBinding
@@ -14,7 +14,7 @@ import com.mthaler.knittings.model.Knitting
 /**
  * Activity that displays knitting details (name, description, start time etc.)
  */
-class KnittingDetailsActivity : AppCompatActivity() {
+class KnittingDetailsActivity : BaseActivity() {
 
     // id of the displayed knitting
     private var knittingID: Long = Knitting.EMPTY.id

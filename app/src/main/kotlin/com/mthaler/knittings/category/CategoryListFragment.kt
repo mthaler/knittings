@@ -11,6 +11,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.mthaler.knittings.DatabaseApplication
 import com.mthaler.knittings.DeleteDialog
 import com.mthaler.knittings.R
+import com.mthaler.knittings.database.CategoryDataSource
+import com.mthaler.knittings.database.KnittingsDataSource
 import com.mthaler.knittings.databinding.FragmentCategoryListBinding
 
 class CategoryListFragment : Fragment() {
@@ -47,7 +49,7 @@ class CategoryListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val ds = (requireContext().applicationContext as DatabaseApplication).getCategoryDataSource()
+        val ds = KnittingsDataSource as CategoryDataSource
 
         binding.categoryRecyclerView.layoutManager = LinearLayoutManager(context)
         val adapter = CategoryAdapter({ category -> listener?.categoryClicked(category.id) }, { category ->

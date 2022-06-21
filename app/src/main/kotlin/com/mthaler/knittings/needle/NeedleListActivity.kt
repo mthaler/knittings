@@ -4,13 +4,13 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NavUtils
+import com.mthaler.knittings.BaseActivity
 import com.mthaler.knittings.R
 import com.mthaler.knittings.databinding.ActivityNeedleListBinding
 import com.mthaler.knittings.model.Needle
 
-class NeedleListActivity : AppCompatActivity(), NeedleListFragment.OnFragmentInteractionListener {
+class NeedleListActivity : BaseActivity(), NeedleListFragment.OnFragmentInteractionListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
