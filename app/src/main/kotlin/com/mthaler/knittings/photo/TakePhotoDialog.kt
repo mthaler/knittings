@@ -17,6 +17,8 @@ import android.widget.Button
 import androidx.core.content.FileProvider
 import androidx.core.content.PackageManagerCompat
 import com.mthaler.knittings.R
+import com.mthaler.knittings.database.KnittingsDataSource
+import com.mthaler.knittings.database.PhotoDataSource
 import com.mthaler.knittings.model.Photo
 import com.mthaler.knittings.utils.PictureUtils
 import java.io.File
@@ -99,7 +101,7 @@ object TakePhotoDialog {
         val orientation = PictureUtils.getOrientation(Uri.fromFile(file), context)
         val preview = PictureUtils.decodeSampledBitmapFromPath(file.absolutePath, 200, 200)
         val rotatedPreview = PictureUtils.rotateBitmap(preview, orientation)
-        val ds = (context.applicationContext as com.mthaler.knittings.DatabaseApplication).getPhotoDataSource()
+        val ds = KnittingsDataSource as PhotoDataSource
         val photo = ds.addPhoto(Photo(-1, file, ownerID, "", rotatedPreview))
         Log.d(TAG, "Created new photo from $file, owner id $ownerID")
         // add first photo as default photo
@@ -135,7 +137,7 @@ object TakePhotoDialog {
         val orientation = PictureUtils.getOrientation(Uri.fromFile(file), context)
         val preview = PictureUtils.decodeSampledBitmapFromPath(file.absolutePath, 200, 200)
         val rotatedPreview = PictureUtils.rotateBitmap(preview, orientation)
-        val ds = (context.applicationContext as com.mthaler.knittings.DatabaseApplication).getPhotoDataSource()
+        val ds = KnittingsDataSource as PhotoDataSource
         val photo = ds.addPhoto(Photo(-1, file, ownerID, "", rotatedPreview))
         Log.d(TAG, "Created new photo from $file, owner id $ownerID")
         // add first photo as default photo
