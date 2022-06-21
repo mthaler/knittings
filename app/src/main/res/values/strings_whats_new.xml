@@ -2,6 +2,12 @@
 <resources>
     <string name="whats_new_title">Whats New</string>
     <string name="whats_new"><![CDATA[
+        <h3>Version 0.9.44</h3>
+        - Removed setting to set theme<br>
+        - Removed CircularProgressBar<br>
+        - Removed CountFrame and CircuarButton<br>
+        - Removed PhotoGalleryActivity<br>
+        - Added XML declaration to resources<br>
         <h3>Version 0.9.43</h3>
         - Fixed all warnings<br>
         - Fixed non-translated strings<br>

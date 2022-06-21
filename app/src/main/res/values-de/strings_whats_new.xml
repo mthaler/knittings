@@ -2,16 +2,21 @@
 <resources>
     <string name="whats_new_title">Whats New</string>
     <string name="whats_new"><![CDATA[
-       <h3>Version 0.9.43</h3>
+        <h3>Version 0.9.44</h3>
+        - Removed setting to set theme<br>
+        - Removed CircularProgressBar<br>
+        - Removed CountFrame and CircuarButton<br>
+        - Removed PhotoGalleryActivity<br>
+        <h3>Version 0.9.43</h3>
         - Alle Warnungen gefixt<br>
         - Alle Texte übersetzt<br>
         - AndroidManifest.xml aktualisiert<br>
         - KnittingDetailsFragment, PhotoGalleryFragment, PictureUtils und TakePhotoDialog aktualisiert<br>
         - XML deklaration zu Resourcen hinzugefügt<br>
-      <h3>Version 0.9.42</h3>
+        <h3>Version 0.9.42</h3>
         - Strickerei Liste ist jetzt ein Fragment<br>
         - Kotlin Version auf 1.6.10 erhöht<br>
-         <h3>Version 0.9.41</h3>
+        <h3>Version 0.9.41</h3>
         - Code aufgeräumt<br>
         - Kotlin Version auf 1.4.10 erniedrigt<br>
         <h3>Version 0.9.40</h3>
