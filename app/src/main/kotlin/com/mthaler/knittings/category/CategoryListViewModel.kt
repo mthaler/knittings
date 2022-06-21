@@ -1,10 +1,8 @@
 package com.mthaler.knittings.category
 
-import android.app.Application
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.mthaler.knittings.database.DataSourceViewModel
-import com.mthaler.knittings.DatabaseApplication
 import com.mthaler.knittings.database.CategoryDataSource
 import com.mthaler.knittings.database.KnittingsDataSource
 import kotlinx.coroutines.Dispatchers

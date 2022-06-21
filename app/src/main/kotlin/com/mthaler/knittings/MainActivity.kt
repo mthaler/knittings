@@ -153,7 +153,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         val activeFilters = binding.knittingActiveFilters
 
-        viewModel = ViewModelProvider.AndroidViewModelFactory(application).create(MainViewModel::class.java)
+        viewModel =  ViewModelProvider(this).get(MainViewModel::class.java)
         viewModel.projects.observe(this, { knittings ->
 
             when {
