@@ -5,10 +5,7 @@ import com.mthaler.knittings.R
 import com.mthaler.knittings.database.CategoryDataSource
 import com.mthaler.knittings.database.KnittingsDataSource
 import com.mthaler.knittings.model.Knitting
-<<<<<<< HEAD
-=======
 import com.mthaler.knittings.utils.ResourcesProvider
->>>>>>> master
 import java.util.*
 
 class ProjectCountViewModel : ViewModel() {
