@@ -14,22 +14,21 @@
 
         <RelativeLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
+            android:layout_height="match_parent"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp">
 
-            <com.google.android.material.progressindicator.CircularProgressIndicator
+            <com.mthaler.knittings.projectcount.CircularProgressBar
                 android:id="@+id/progressBarCircle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="250dp"
+                android:layout_height="250dp"
                 android:layout_centerInParent="true"
-                app:indicatorSize="90dp"
-                app:indicatorColor="@color/colorAccent"
-                app:trackThickness="10dp"
-                app:trackColor="#BF3060"
-                tools:progress="75"/>
-
+                android:indeterminate="false"
+                android:max="100"
+                android:progress="100"
+                android:rotation="-90"
+                app:ringColor="?attr/colorAccent" />
 
             <TextView
                 android:id="@+id/projectCount"
