@@ -47,7 +47,7 @@ class ProjectCountFragment : Fragment() {
                 val projectCount = viewModel.getProjectCount(projects, year, categoryName)
                 binding.projectCount.text = Integer.toString(projectCount) + " / " + Integer.toString(projects.size)
                 val percent = if (projects.size > 0) 100.0 * projectCount / projects.size else 0.0
-                binding.progressBarCircle.progress = percent.toInt()
+                binding.progressBarCircle.progress = percent.toFloat()
             }
         }
 
@@ -63,7 +63,7 @@ class ProjectCountFragment : Fragment() {
                 val projectCount = viewModel.getProjectCount(projects, year, categoryName)
                 binding.projectCount.text = Integer.toString(projectCount) + " / " + Integer.toString(projects.size)
                 val percent = if (projects.size > 0) 100.0 * projectCount / projects.size else 0
-                binding.progressBarCircle.progress = percent.toInt()
+                binding.progressBarCircle.progress = percent.toFloat()
             }
         }
 
