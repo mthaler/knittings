@@ -1,20 +1,13 @@
 package com.mthaler.knittings.dropbox
 
-import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
-import androidx.lifecycle.lifecycleScope
-import com.google.android.material.snackbar.Snackbar
 import com.mthaler.knittings.BaseActivity
 import com.mthaler.knittings.R
 import com.mthaler.knittings.databinding.ActivityDropboxExportBinding
 import com.mthaler.knittings.service.JobStatus
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class DropboxExportActivity : BaseActivity() {
 

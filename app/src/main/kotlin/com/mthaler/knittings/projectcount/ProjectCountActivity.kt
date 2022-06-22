@@ -3,9 +3,11 @@ package com.mthaler.knittings.projectcount
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
+import com.mthaler.knittings.BaseActivity
 import com.mthaler.knittings.databinding.ActivityProjectCountBinding
 
-class ProjectCountActivity : com.mthaler.knittings.BaseActivity() {
+class ProjectCountActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

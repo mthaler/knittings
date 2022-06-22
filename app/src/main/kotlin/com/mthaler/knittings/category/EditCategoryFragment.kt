@@ -8,6 +8,7 @@ import com.mthaler.knittings.*
 import com.mthaler.knittings.color.ColorPicker
 import com.mthaler.knittings.database.Extras.EXTRA_CATEGORY_ID
 import com.mthaler.knittings.database.CategoryDataSource
+import com.mthaler.knittings.database.KnittingsDataSource
 import com.mthaler.knittings.databinding.FragmentEditCategoryBinding
 import com.mthaler.knittings.model.Category
 
@@ -24,7 +25,7 @@ class EditCategoryFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        ds = (requireContext().applicationContext as DatabaseApplication).getCategoryDataSource()
+        ds = KnittingsDataSource
         arguments?.let {
             categoryID = it.getLong(EXTRA_CATEGORY_ID)
         }

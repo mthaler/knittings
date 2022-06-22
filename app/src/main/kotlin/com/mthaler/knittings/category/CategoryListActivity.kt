@@ -3,8 +3,6 @@ package com.mthaler.knittings.category
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import androidx.core.app.NavUtils
-import android.view.MenuItem
 import com.mthaler.knittings.BaseActivity
 import com.mthaler.knittings.R
 import com.mthaler.knittings.databinding.ActivityCategoryListBinding

@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <com.mthaler.knittings.projectcount.CountFrame
+    <com.mthaler.knittings.rowcounter.CountFrame
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
@@ -22,18 +23,18 @@
             android:gravity="center"
             android:textColor="?attr/colorAccent"
             android:textSize="130dp"/>
-    </com.mthaler.knittings.projectcount.CountFrame>
+    </com.mthaler.knittings.rowcounter.CountFrame>
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <com.mthaler.knittings.projectcount.CircularButton
+        <com.mthaler.knittings.rowcounter.CircularButton
             android:id="@+id/button_plus"
             android:layout_width="230dp"
             android:layout_height="230dp"
             android:layout_gravity="center"
             app:srcCompat="@drawable/ic_baseline_add"
             app:backgroundColor="?attr/colorPrimary" />
-        <com.mthaler.knittings.projectcount.CircularButton
+        <com.mthaler.knittings.rowcounter.CircularButton
             android:id="@+id/button_reset"
             android:layout_width="60dp"
             android:layout_height="60dp"
@@ -42,7 +43,7 @@
             android:layout_gravity="top|left"
             app:srcCompat="@drawable/ic_baseline_clear"
             app:backgroundColor="?attr/colorPrimary" />
-        <com.mthaler.knittings.projectcount.CircularButton
+        <com.mthaler.knittings.rowcounter.CircularButton
             android:id="@+id/button_minus"
             android:layout_width="60dp"
             android:layout_height="60dp"

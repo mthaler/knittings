@@ -1,4 +1,4 @@
-package com.mthaler.knittings.projectcount
+package com.mthaler.knittings.rowcounter
 
 import android.content.Context
 import android.graphics.Canvas
@@ -10,9 +10,9 @@ import android.widget.FrameLayout
 import com.mthaler.knittings.R
 
 class CountFrame @JvmOverloads constructor(
-        context: Context,
-        attrs: AttributeSet? = null,
-        defStyleAttr: Int = 0
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0
 ) : FrameLayout(context, attrs, defStyleAttr) {
 
     private val paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {

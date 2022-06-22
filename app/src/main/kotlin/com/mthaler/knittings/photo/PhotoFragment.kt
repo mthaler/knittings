@@ -10,10 +10,10 @@ import android.view.*
 import android.widget.ImageView
 import com.mthaler.knittings.database.Extras.EXTRA_PHOTO_ID
 import androidx.lifecycle.lifecycleScope
-import com.mthaler.knittings.DatabaseApplication
 import com.mthaler.knittings.DeleteDialog
 import com.mthaler.knittings.R
 import com.mthaler.knittings.SaveChangesDialog
+import com.mthaler.knittings.database.KnittingsDataSource
 import com.mthaler.knittings.database.PhotoDataSource
 import com.mthaler.knittings.databinding.FragmentPhotoBinding
 import com.mthaler.knittings.model.Photo
@@ -35,7 +35,7 @@ class PhotoFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        ds = (requireContext().applicationContext as DatabaseApplication).getPhotoDataSource()
+        ds = KnittingsDataSource
         arguments?.let {
             val photoID = it.getLong(EXTRA_PHOTO_ID)
             photo = ds.getPhoto(photoID)

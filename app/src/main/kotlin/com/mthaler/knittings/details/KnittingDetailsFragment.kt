@@ -3,16 +3,19 @@ package com.mthaler.knittings.details
 import android.Manifest
 import android.app.Activity
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.*
 import android.widget.ImageView
 import android.widget.LinearLayout
-import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -24,7 +27,7 @@ import com.mthaler.knittings.database.KnittingsDataSource
 import com.mthaler.knittings.databinding.FragmentKnittingDetailsBinding
 import com.mthaler.knittings.model.Knitting
 import com.mthaler.knittings.model.Status
-import com.mthaler.knittings.photo.PhotoGalleryActivity
+import com.mthaler.knittings.photo.PhotoGalleryFragment
 import com.mthaler.knittings.photo.TakePhotoDialog
 import com.mthaler.knittings.rowcounter.RowCounterActivity
 import com.mthaler.knittings.stopwatch.StopwatchActivity
@@ -49,15 +52,20 @@ class KnittingDetailsFragment : Fragment() {
     private var _binding: FragmentKnittingDetailsBinding? = null
     private val binding get() = _binding!!
 
-    private val launchImageCapture = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
-        if (result.resultCode == Activity.RESULT_OK) {
-            result.data?.let {
-                currentPhotoPath?.let {
-                    lifecycleScope.launch {
-                        withContext(Dispatchers.IO) {
-                            TakePhotoDialog.handleTakePhotoResult(requireContext(), knittingID, it) }
-                    }
-                }
+    private val requestMultiplePermissions = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
+        if (permissions != null && permissions.size == 3) {
+            val d = TakePhotoDialog.create(requireContext(), "com.mthaler.knittings.fileprovider",  layoutInflater, this::takePhoto, this::importPhoto)
+            d.show()
+        } else {
+            Log.e(TAG, "Permissions denied")
+        }
+    }
+
+    private val launchImageCapture = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+        currentPhotoPath?.let {
+            lifecycleScope.launch {
+                withContext(Dispatchers.IO) {
+                    TakePhotoDialog.handleTakePhotoResult(requireContext(), knittingID, it) }
             }
         }
     }
@@ -77,17 +85,9 @@ class KnittingDetailsFragment : Fragment() {
         }
     }
 
-    private val requestMultiplePermissions = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
-        if (permissions != null && permissions.size == 3) {
-            val d = TakePhotoDialog.create(requireContext(), "com.mthaler.knittings.fileprovider", layoutInflater, this::takePhoto, this::importPhoto)
-            d.show()
-        } else {
-            Toast.makeText(requireContext(), "Permissions denied", Toast.LENGTH_SHORT).show()
-        }
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         val a = arguments
         if (a != null) {
             knittingID = a.getLong(EXTRA_KNITTING_ID)
@@ -139,21 +139,20 @@ class KnittingDetailsFragment : Fragment() {
         binding.editKnittingDetails.setOnClickListener {
             editKnitting()
         }
-
         return view
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+
         val imageView = binding.image
         imageView.setOnClickListener {
-            startActivity(PhotoGalleryActivity.newIntent(requireContext(), knittingID))
+            val f = PhotoGalleryFragment.newInstance(knittingID)
+            val ft = requireActivity().supportFragmentManager.beginTransaction()
+            ft.replace(R.id.knitting_details_container, f)
+            ft.addToBackStack(null)
+            ft.commit()
         }
 
         viewModel = ViewModelProvider(requireActivity()).get(KnittingDetailsViewModel::class.java)
@@ -171,11 +170,27 @@ class KnittingDetailsFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.menu_item_add_photo -> {
-                requestMultiplePermissions.launch(arrayOf(Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE))
+                when {
+                    ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED -> {
+                        val d = TakePhotoDialog.create(requireContext(), "com.mthaler.knittings.fileprovider", layoutInflater, this::takePhoto, this::importPhoto)
+                        d.show()
+                    }
+                    ActivityCompat.shouldShowRequestPermissionRationale(requireActivity(), Manifest.permission.CAMERA) -> {
+                        Log.d(TAG, resources.getString(R.string.permission_required))
+                        requestMultiplePermissions.launch(arrayOf(Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE))
+                    }
+                    else -> {
+                        requestMultiplePermissions.launch(arrayOf(Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE))
+                    }
+                }
                 true
             }
             R.id.menu_item_show_gallery -> {
-                startActivity(PhotoGalleryActivity.newIntent(requireContext(), knittingID))
+                val f = PhotoGalleryFragment.newInstance(knittingID)
+                val ft = requireActivity().supportFragmentManager.beginTransaction()
+                ft.replace(R.id.knitting_details_container, f)
+                ft.addToBackStack(null)
+                ft.commit()
                 true
             }
             R.id.menu_item_show_stopwatch -> {
@@ -198,7 +213,7 @@ class KnittingDetailsFragment : Fragment() {
         }
     }
 
-     fun editKnitting() {
+    fun editKnitting() {
         val f = EditKnittingDetailsFragment.newInstance(knittingID, editOnly)
         val ft = requireActivity().supportFragmentManager.beginTransaction()
         ft.replace(R.id.knitting_details_container, f)
@@ -277,6 +292,7 @@ class KnittingDetailsFragment : Fragment() {
     }
 
     companion object {
+        private const val TAG = "KnittingDetailsFragment"
 
         private const val CURRENT_PHOTO_PATH = "com.mthaler.knittings.CURRENT_PHOTO_PATH"
         private const val EXTRA_EDIT_ONLY = "com.mthaler.knittings.edit_only"

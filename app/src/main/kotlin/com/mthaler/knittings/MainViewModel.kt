@@ -1,18 +1,19 @@
 package com.mthaler.knittings
 
-import android.app.Application
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.mthaler.knittings.database.DataSourceViewModel
+import com.mthaler.knittings.database.KnittingsDataSource
+import com.mthaler.knittings.database.ProjectsDataSource
 import com.mthaler.knittings.filter.CombinedFilter
 import com.mthaler.knittings.model.Knitting
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class MainViewModel(application: Application) : DataSourceViewModel() {
+class MainViewModel : DataSourceViewModel() {
 
-    private val ds = (application as DatabaseApplication).getProjectsDataSource()
+    private val ds = KnittingsDataSource as ProjectsDataSource
 
     val projects = MutableLiveData<List<Knitting>>(null)
     var sorting: Sorting = Sorting.NewestFirst

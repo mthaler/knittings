@@ -5,14 +5,16 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.mthaler.knittings.DatabaseApplication
 import com.mthaler.knittings.database.DataSourceViewModel
+import com.mthaler.knittings.database.KnittingsDataSource
+import com.mthaler.knittings.database.PhotoDataSource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.lang.Exception
 
-class DropboxExportViewModel(application: Application) : DataSourceViewModel()  {
+class DropboxExportViewModel : DataSourceViewModel()  {
 
-    private val ds = (application as DatabaseApplication).getPhotoDataSource()
+    private val ds = KnittingsDataSource as PhotoDataSource
 
     val statistics = MutableLiveData(Statistics.EMPTY)
 

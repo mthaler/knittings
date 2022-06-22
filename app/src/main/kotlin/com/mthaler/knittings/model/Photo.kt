@@ -1,9 +1,12 @@
 package com.mthaler.knittings.model
 
 import android.graphics.Bitmap
+<<<<<<< HEAD
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.mthaler.knittings.database.table.PhotoTable
+=======
+>>>>>>> master
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.Serializable
@@ -13,9 +16,12 @@ import java.util.*
 /**
  * The photo class represents a photo. It has an id (used in the database), a filename and an optional preview
  */
+<<<<<<< HEAD
 @Entity(tableName = PhotoTable.PHOTOS)
+=======
+>>>>>>> master
 data class Photo(
-    @PrimaryKey val id: Long,
+    val id: Long,
     val filename: File,
     val ownerID: Long,
     val description: String = "",

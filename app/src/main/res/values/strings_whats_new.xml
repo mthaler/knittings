@@ -2,6 +2,25 @@
 <resources>
     <string name="whats_new_title">Whats New</string>
     <string name="whats_new"><![CDATA[
+        <h3>Version 0.9.46</h3>
+        - Fixed settings<br>
+        <h3>Version 0.9.45</h3>
+        - Readded setting to set theme<br>
+        - Readded CircularProgressBar<br>
+        - Readded CountFrame and CircuarButton<br>
+        - Readded PhotoGalleryActivity<br>
+        - Removed AndroidViewModelFactory<br>
+        <h3>Version 0.9.44</h3>
+        - Removed setting to set theme<br>
+        - Removed CircularProgressBar<br>
+        - Removed CountFrame and CircuarButton<br>
+        - Removed PhotoGalleryActivity<br>
+        <h3>Version 0.9.43</h3>
+        - Fixed all warnings<br>
+        - Fixed non-translated strings<br>
+        - Updated AndroidManifest.xml<br>
+        - Updated KnittingDetailsFragment, PhotoGalleryFragment, PictureUtils and TakePhotoDialog<br>
+        - Added XML declaration to resources<br>
         <h3>Version 0.9.42</h3>
         - Knitting list now is a fragment<br>
         - Upgrade Kotlin to 1.6.10<br>

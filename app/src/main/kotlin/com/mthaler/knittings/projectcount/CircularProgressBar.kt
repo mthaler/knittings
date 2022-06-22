@@ -12,9 +12,9 @@ import com.mthaler.knittings.R
 import kotlin.math.min
 
 class CircularProgressBar @JvmOverloads constructor(
-        context: Context,
-        attrs: AttributeSet? = null,
-        defStyleAttr: Int = 0
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0
 ) : View(context, attrs, defStyleAttr) {
 
     private val paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
@@ -30,25 +30,25 @@ class CircularProgressBar @JvmOverloads constructor(
     private val ringColor: Int
 
     var progress: Float = 0f
-    set(value) {
-        field = value
-        invalidate()
-        requestLayout()
-    }
+        set(value) {
+            field = value
+            invalidate()
+            requestLayout()
+        }
 
     init {
         context.theme.obtainStyledAttributes(
             attrs,
             R.styleable.CircularProgressBar,
             0, 0).apply {
-                try {
-                    val ringWidth = getDimension(R.styleable.CircularProgressBar_ringWidth, 25f)
-                    paint.strokeWidth = ringWidth
-                    ringColor = getColor(R.styleable.CircularProgressBar_ringColor,0)
-                    progress = getFloat(R.styleable.CircularProgressBar_progress, 0f)
-                } finally {
-                   recycle()
-                }
+            try {
+                val ringWidth = getDimension(R.styleable.CircularProgressBar_ringWidth, 25f)
+                paint.strokeWidth = ringWidth
+                ringColor = getColor(R.styleable.CircularProgressBar_ringColor,0)
+                progress = getFloat(R.styleable.CircularProgressBar_progress, 0f)
+            } finally {
+                recycle()
+            }
         }
     }
 

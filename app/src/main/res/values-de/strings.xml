@@ -70,4 +70,8 @@
 
     <!-- filter -->
     <string name="filter_show_all">Alle</string>
+
+    <string name="colorpicker_dialog_title">Choose the color</string>
+    <string name="colorpicker_dialog_cancel">CANCEL</string>
+    <string name="colorpicker_dialog_ok">OK</string>
 </resources>
