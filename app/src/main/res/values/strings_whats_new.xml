@@ -3,7 +3,7 @@
     <string name="whats_new_title">Whats New</string>
     <string name="whats_new"><![CDATA[
         <h3>Version 0.9.46</h3>
-        - Fixed settings
+        - Fixed settings<br>
         <h3>Version 0.9.45</h3>
         - Readded setting to set theme<br>
         - Readded CircularProgressBar<br>
