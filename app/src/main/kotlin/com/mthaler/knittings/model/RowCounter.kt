@@ -12,7 +12,7 @@ data class RowCounter(
     @ColumnInfo(name = "total_rows") val totalRows: Int = 0,
     @ColumnInfo(name = "rows_per_repeat") val rowsPerRepeat: Int = 0,
     @ColumnInfo(name = "knitting_id") val knittingID: Long = -1) : Serializable {
-    
+
     companion object {
 
         val EMPTY = RowCounter()
