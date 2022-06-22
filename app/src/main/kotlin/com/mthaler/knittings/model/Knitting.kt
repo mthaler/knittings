@@ -1,24 +1,17 @@
 package com.mthaler.knittings.model
 
-<<<<<<< HEAD
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import androidx.room.Relation
 import com.mthaler.knittings.database.table.KnittingTable
-=======
->>>>>>> master
 import java.io.Serializable
 import java.util.Date
 
 /**
  * The Knitting class stores data for a single knitting
  */
-<<<<<<< HEAD
 @Entity(tableName = KnittingTable.KNITTINGS)
-=======
->>>>>>> master
 data class Knitting(
-    val id: Long = -1,
+    @PrimaryKey val id: Long = -1,
     val title: String = "",
     val description: String = "",
     val started: Date = Date(),
