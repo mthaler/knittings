@@ -10,7 +10,7 @@ import com.mthaler.knittings.R
 import com.mthaler.knittings.databinding.ActivityNeedleListBinding
 import com.mthaler.knittings.model.Needle
 
-class NeedleListActivity : BaseActivity(), NeedleListFragment.OnFragmentInteractionListener {
+class NeedleListActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,22 +57,6 @@ class NeedleListActivity : BaseActivity(), NeedleListFragment.OnFragmentInteract
         } else {
             super.onBackPressed()
         }
-    }
-
-    override fun createNeedle() {
-        val f = EditNeedleFragment.newInstance(Needle.EMPTY.id)
-        val ft = supportFragmentManager.beginTransaction()
-        ft.replace(R.id.needle_list_container, f)
-        ft.addToBackStack(null)
-        ft.commit()
-    }
-
-    override fun needleClicked(needleID: Long) {
-        val f = EditNeedleFragment.newInstance(needleID)
-        val ft = supportFragmentManager.beginTransaction()
-        ft.replace(R.id.needle_list_container, f)
-        ft.addToBackStack(null)
-        ft.commit()
     }
 
     companion object {

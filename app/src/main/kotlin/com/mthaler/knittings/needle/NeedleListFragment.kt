@@ -1,6 +1,5 @@
 package com.mthaler.knittings.needle
 
-import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import androidx.appcompat.app.AlertDialog
@@ -17,12 +16,12 @@ import com.mthaler.knittings.needle.filter.InUseFilter
 import com.mthaler.knittings.needle.filter.SingleTypeFilter
 import androidx.lifecycle.ViewModelProvider
 import android.view.*
+import com.mthaler.knittings.model.Needle
 
 class NeedleListFragment : Fragment() {
 
     private var _binding: FragmentNeedleListBinding? = null
     private val binding get() = _binding!!
-    private var listener: OnFragmentInteractionListener? = null
     private lateinit var viewModel: NeedleListViewModel
 
     override fun onCreateView(
@@ -33,7 +32,7 @@ class NeedleListFragment : Fragment() {
         _binding = FragmentNeedleListBinding.inflate(inflater, container, false)
         val view = binding.root
         setHasOptionsMenu(true)
-        binding.fabCreateNeedle.setOnClickListener { listener?.createNeedle() }
+        binding.fabCreateNeedle.setOnClickListener { createNeedle() }
         return view
     }
 
@@ -47,7 +46,7 @@ class NeedleListFragment : Fragment() {
 
         binding.needlesRecyclerView.layoutManager = LinearLayoutManager(context)
 
-        val adapter = NeedleAdapter({ needle -> listener?.needleClicked(needle.id) }, { needle ->
+        val adapter = NeedleAdapter({ needle -> needleClicked(needle.id) }, { needle ->
             (activity as AppCompatActivity).startSupportActionMode(object : ActionMode.Callback {
 
                 override fun onActionItemClicked(mode: ActionMode?, menu: MenuItem?): Boolean {
@@ -197,24 +196,19 @@ class NeedleListFragment : Fragment() {
         }
     }
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        if (context is OnFragmentInteractionListener) {
-            listener = context
-        } else {
-            throw RuntimeException("$context must implement OnFragmentInteractionListener")
-        }
+    private fun createNeedle() {
+        val f = EditNeedleFragment.newInstance(Needle.EMPTY.id)
+        val ft = requireActivity().supportFragmentManager.beginTransaction()
+        ft.replace(R.id.needle_list_container, f)
+        ft.addToBackStack(null)
+        ft.commit()
     }
 
-    override fun onDetach() {
-        super.onDetach()
-        listener = null
-    }
-
-    interface OnFragmentInteractionListener {
-
-        fun createNeedle()
-
-        fun needleClicked(needleID: Long)
+    private fun needleClicked(needleID: Long) {
+        val f = EditNeedleFragment.newInstance(needleID)
+        val ft = requireActivity().supportFragmentManager.beginTransaction()
+        ft.replace(R.id.needle_list_container, f)
+        ft.addToBackStack(null)
+        ft.commit()
     }
 }
