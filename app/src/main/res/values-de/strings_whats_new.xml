@@ -2,6 +2,12 @@
 <resources>
     <string name="whats_new_title">Whats New</string>
     <string name="whats_new"><![CDATA[
+        <h3>Version 0.9.45</h3>
+        - setting to set theme wieder hinzugefügt<br>
+        - CircularProgressBar wieder hinzugefügt<br>
+        - CountFrame and CircuarButton wieder hinzugefügt<br>
+        - PhotoGalleryActivity wieder hinzugefügt<br>
+        - AndroidViewModelFactory entfernt<br>
         <h3>Version 0.9.44</h3>
         - setting to set theme entfernt<br>
         - CircularProgressBar entfernt<br>
