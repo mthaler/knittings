@@ -6,9 +6,8 @@ import android.os.Bundle
 import com.mthaler.knittings.BaseActivity
 import com.mthaler.knittings.R
 import com.mthaler.knittings.databinding.ActivityCategoryListBinding
-import com.mthaler.knittings.model.Category
 
-class CategoryListActivity : BaseActivity(), CategoryListFragment.OnFragmentInteractionListener, EditCategoryFragment.OnFragmentInteractionListener {
+class CategoryListActivity : BaseActivity(), EditCategoryFragment.OnFragmentInteractionListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,22 +35,6 @@ class CategoryListActivity : BaseActivity(), CategoryListFragment.OnFragmentInte
         } else {
             super.onBackPressed()
         }
-    }
-
-    override fun createCategory() {
-        val f = EditCategoryFragment.newInstance(Category.EMPTY.id)
-        val ft = supportFragmentManager.beginTransaction()
-        ft.replace(R.id.category_list_container, f)
-        ft.addToBackStack(null)
-        ft.commit()
-    }
-
-    override fun categoryClicked(categoryID: Long) {
-        val f = EditCategoryFragment.newInstance(categoryID)
-        val ft = supportFragmentManager.beginTransaction()
-        ft.replace(R.id.category_list_container, f)
-        ft.addToBackStack(null)
-        ft.commit()
     }
 
     override fun categorySaved(categoryID: Long) {

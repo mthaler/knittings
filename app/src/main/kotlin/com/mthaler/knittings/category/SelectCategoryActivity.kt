@@ -12,7 +12,7 @@ import com.mthaler.knittings.database.Extras.EXTRA_OWNER_ID
 import com.mthaler.knittings.databinding.ActivitySelectCategoryBinding
 import com.mthaler.knittings.model.Category
 
-class SelectCategoryActivity : BaseActivity(), CategoryListFragment.OnFragmentInteractionListener, EditCategoryFragment.OnFragmentInteractionListener {
+class SelectCategoryActivity : BaseActivity(), EditCategoryFragment.OnFragmentInteractionListener {
 
     private var ownerID = -1L
 
@@ -78,20 +78,6 @@ class SelectCategoryActivity : BaseActivity(), CategoryListFragment.OnFragmentIn
             true
         }
         else -> super.onOptionsItemSelected(item)
-    }
-
-    override fun createCategory() {
-        val f = EditCategoryFragment.newInstance(Category.EMPTY.id)
-        val ft =  supportFragmentManager.beginTransaction()
-        ft.replace(R.id.select_category_container, f)
-        ft.commit()
-    }
-
-    override fun categoryClicked(categoryID: Long) {
-        val i = Intent()
-        i.putExtra(Extras.EXTRA_CATEGORY_ID, categoryID)
-        setResult(Activity.RESULT_OK, i)
-        finish()
     }
 
     override fun categorySaved(categoryID: Long) {

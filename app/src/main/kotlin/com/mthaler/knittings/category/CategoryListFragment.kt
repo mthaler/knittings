@@ -14,18 +14,18 @@ import com.mthaler.knittings.R
 import com.mthaler.knittings.database.CategoryDataSource
 import com.mthaler.knittings.database.KnittingsDataSource
 import com.mthaler.knittings.databinding.FragmentCategoryListBinding
+import com.mthaler.knittings.model.Category
 
 class CategoryListFragment : Fragment() {
 
     private var _binding: FragmentCategoryListBinding? = null
     private val binding get() = _binding!!
-    private var listener: OnFragmentInteractionListener? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentCategoryListBinding.inflate(inflater, container, false)
         val view = binding.root
 
-        binding.fabCreateCategory.setOnClickListener { listener?.createCategory() }
+        binding.fabCreateCategory.setOnClickListener { createCategory() }
 
         val appSettings = (requireContext().applicationContext as DatabaseApplication).getApplicationSettings()
         val emptyListBackground = appSettings.emptyCategoryListBackground()
@@ -52,7 +52,7 @@ class CategoryListFragment : Fragment() {
         val ds = KnittingsDataSource as CategoryDataSource
 
         binding.categoryRecyclerView.layoutManager = LinearLayoutManager(context)
-        val adapter = CategoryAdapter({ category -> listener?.categoryClicked(category.id) }, { category ->
+        val adapter = CategoryAdapter({ category -> categoryClicked(category.id) }, { category ->
             (activity as AppCompatActivity).startSupportActionMode(object : ActionMode.Callback {
 
                 override fun onActionItemClicked(mode: ActionMode?, menu: MenuItem?): Boolean {
@@ -109,25 +109,20 @@ class CategoryListFragment : Fragment() {
         })
     }
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        if (context is OnFragmentInteractionListener) {
-            listener = context
-        } else {
-            throw RuntimeException("$context must implement OnFragmentInteractionListener")
-        }
+    private fun createCategory() {
+        val f = EditCategoryFragment.newInstance(Category.EMPTY.id)
+        val ft = requireActivity().supportFragmentManager.beginTransaction()
+        ft.replace(R.id.category_list_container, f)
+        ft.addToBackStack(null)
+        ft.commit()
     }
 
-    override fun onDetach() {
-        super.onDetach()
-        listener = null
-    }
-
-    interface OnFragmentInteractionListener {
-
-        fun createCategory()
-
-        fun categoryClicked(categoryID: Long)
+    private fun categoryClicked(categoryID: Long) {
+        val f = EditCategoryFragment.newInstance(categoryID)
+        val ft = requireActivity().supportFragmentManager.beginTransaction()
+        ft.replace(R.id.category_list_container, f)
+        ft.addToBackStack(null)
+        ft.commit()
     }
 
     companion object {
