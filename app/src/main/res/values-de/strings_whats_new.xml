@@ -2,6 +2,8 @@
 <resources>
     <string name="whats_new_title">Whats New</string>
     <string name="whats_new"><![CDATA[
+        <h3>Version 0.9.46</h3>
+        - Settings repariert
         <h3>Version 0.9.45</h3>
         - setting to set theme wieder hinzugefügt<br>
         - CircularProgressBar wieder hinzugefügt<br>
