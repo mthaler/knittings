@@ -144,13 +144,6 @@ class EditCategoryFragment : Fragment() {
         colorPicker.show()
     }
 
-    private fun deleteCategory() {
-        val category = ds.getCategory(categoryID)
-        if (category != null) {
-            ds.deleteCategory(category)
-        }
-    }
-
     private fun saveCategory(category: Category) {
         if (category.id == Category.EMPTY.id) {
             val result = ds.addCategory(category)
@@ -195,6 +188,14 @@ class EditCategoryFragment : Fragment() {
 
 
     private fun createCategory(): Category = Category(categoryID, "test", Color.RED)
+    
+    private fun deleteCategory() {
+        val category = ds.getCategory(categoryID)
+        if (category != null) {
+            ds.deleteCategory(category)
+        }
+    }
+
 
     companion object {
 
