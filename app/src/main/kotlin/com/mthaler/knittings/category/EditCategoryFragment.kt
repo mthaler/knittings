@@ -177,7 +177,7 @@ class EditCategoryFragment : Fragment() {
         private const val EXTRA_COLOR = "com.mthaler.knittings.category.COLOR"
 
         @JvmStatic
-        fun newInstance(categoryID: Long, ownerID: Long) =
+        fun newInstance(categoryID: Long) =
             EditCategoryFragment().apply {
                 arguments = Bundle().apply {
                     putLong(EXTRA_CATEGORY_ID, categoryID)

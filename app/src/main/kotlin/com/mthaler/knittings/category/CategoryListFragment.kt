@@ -109,7 +109,7 @@ class CategoryListFragment : Fragment() {
     }
 
     private fun createCategory() {
-        val f = EditCategoryFragment.newInstance(Category.EMPTY.id, -1)
+        val f = EditCategoryFragment.newInstance(Category.EMPTY.id)
         val ft = requireActivity().supportFragmentManager.beginTransaction()
         ft.replace(R.id.category_list_container, f)
         ft.addToBackStack(null)
@@ -117,7 +117,7 @@ class CategoryListFragment : Fragment() {
     }
 
     private fun categoryClicked(categoryID: Long) {
-        val f = EditCategoryFragment.newInstance(categoryID, -1)
+        val f = EditCategoryFragment.newInstance(categoryID)
         val ft = requireActivity().supportFragmentManager.beginTransaction()
         ft.replace(R.id.category_list_container, f)
         ft.addToBackStack(null)
