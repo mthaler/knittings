@@ -15,6 +15,8 @@ interface ExportDatabase  : Serializable {
 
     val needles: List<Needle>
 
+    val rowCounters: List<RowCounter>
+
     fun checkDatabase(): ExportDatabase
 
     fun checkValidity()
