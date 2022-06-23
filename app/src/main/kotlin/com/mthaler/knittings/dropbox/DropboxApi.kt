@@ -47,26 +47,6 @@ class DropboxApi(private val dropboxClient: DbxClientV2, val ctx: Context, val l
         dropboxClient.auth().tokenRevoke()
     }
 
-    private suspend fun getFilesForFolder(folderPath: String): GetFilesApiResponse =
-        withContext(Dispatchers.IO) {
-            try {
-                val files = dropboxClient.files().listFolder(folderPath)
-                GetFilesApiResponse.Success(files)
-            } catch (exception: DbxException) {
-                GetFilesApiResponse.Failure(exception)
-            }
-        }
-
-    private suspend fun getFilesForFolderContinue(cursor: String) = withContext(Dispatchers.IO) {
-        try {
-            val files = dropboxClient.files().listFolderContinue(cursor)
-            GetFilesApiResponse.Success(files)
-        } catch (exception: DbxException) {
-            GetFilesApiResponse.Failure(exception)
-        }
-    }
-
-
     suspend fun readDatabase(directory: String) {
         val (database, idsFromPhotoFiles) = withContext(Dispatchers.IO) {
             val os = ByteArrayOutputStream()
