@@ -144,19 +144,6 @@ class EditCategoryFragment : Fragment() {
         colorPicker.show()
     }
 
-    private fun saveCategory(category: Category) {
-        if (category.id == Category.EMPTY.id) {
-            val result = ds.addCategory(category)
-            categoryID = result.id
-        } else {
-            ds.updateCategory(category)
-        }
-    }
-
-    private fun categorySaved(categoryID: Long) {
-        requireActivity().supportFragmentManager.popBackStack()
-    }
-
 //    private fun categorySaved(categoryID: Long) {
 //        if (categoryID == Category.EMPTY.id) {
 //            requireActivity().finish()
@@ -186,6 +173,18 @@ class EditCategoryFragment : Fragment() {
         }
     }
 
+    private fun saveCategory(category: Category) {
+        if (category.id == Category.EMPTY.id) {
+            val result = ds.addCategory(category)
+            categoryID = result.id
+        } else {
+            ds.updateCategory(category)
+        }
+    }
+
+    private fun categorySaved(categoryID: Long) {
+        requireActivity().supportFragmentManager.popBackStack()
+    }
 
     private fun createCategory(): Category = Category(categoryID, "test", Color.RED)
     
