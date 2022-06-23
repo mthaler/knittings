@@ -1,5 +1,6 @@
 package com.mthaler.knittings.category
 
+import android.graphics.Color
 import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
@@ -10,6 +11,9 @@ import com.mthaler.knittings.database.CategoryDataSource
 import com.mthaler.knittings.database.KnittingsDataSource
 import com.mthaler.knittings.databinding.FragmentEditCategoryBinding
 import com.mthaler.knittings.model.Category
+import com.mthaler.knittings.model.Needle
+import com.mthaler.knittings.model.NeedleMaterial
+import com.mthaler.knittings.model.NeedleType
 
 class EditCategoryFragment : Fragment() {
 
@@ -188,6 +192,10 @@ class EditCategoryFragment : Fragment() {
             parentFragmentManager.popBackStack()
         }
     }
+
+
+    private fun createCategory(): Category = Category(categoryID, "test", Color.RED)
+
     companion object {
 
         private const val EXTRA_COLOR = "com.mthaler.knittings.category.COLOR"
