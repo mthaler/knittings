@@ -53,6 +53,7 @@ class DropboxImportWorker(val context: Context, parameters: WorkerParameters) : 
         KnittingsDataSource.deleteAllPhotos()
         KnittingsDataSource.deleteAllCategories()
         KnittingsDataSource.deleteAllNeedles()
+        KnittingsDataSource.deleteAllRowCounters()
         // add downloaded database
         for (photo in database.photos) {
             KnittingsDataSource.addPhoto(photo, manualID = true)
@@ -65,6 +66,9 @@ class DropboxImportWorker(val context: Context, parameters: WorkerParameters) : 
         }
         for (knitting in database.projects) {
             KnittingsDataSource.addProject(knitting, manualID = true)
+        }
+        for (rowCounter in database.rowCounters) {
+            KnittingsDataSource.addRowCounter(rowCounter, manualID = true)
         }
         for ((index, photo) in database.photos.withIndex()) {
             // Download the file.
