@@ -1,6 +1,5 @@
 package com.mthaler.knittings.category
 
-import android.content.Context
 import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
@@ -118,7 +117,7 @@ class CategoryListFragment : Fragment() {
     }
 
     private fun categoryClicked(categoryID: Long) {
-        val f = EditCategoryFragment.newInstance(categoryID)
+        val f = EditCategoryFragment.newInstance(categoryID, -1)
         val ft = requireActivity().supportFragmentManager.beginTransaction()
         ft.replace(R.id.category_list_container, f)
         ft.addToBackStack(null)
