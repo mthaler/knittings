@@ -3,6 +3,8 @@ package com.mthaler.knittings.category
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.MenuItem
+import androidx.core.app.NavUtils
 import com.mthaler.knittings.BaseActivity
 import com.mthaler.knittings.R
 import com.mthaler.knittings.databinding.ActivityCategoryListBinding
@@ -25,6 +27,25 @@ class CategoryListActivity : BaseActivity(), EditCategoryFragment.OnFragmentInte
             ft.add(R.id.category_list_container, f)
             ft.commit()
         }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean = when (item.itemId) {
+        android.R.id.home -> {
+            // Respond to the action bar's Up/Home button
+            val upIntent: Intent? = NavUtils.getParentActivityIntent(this)
+            if (upIntent == null) {
+                throw IllegalStateException("No Parent Activity Intent")
+            } else {
+                val f = supportFragmentManager.findFragmentById(R.id.category_list_container)
+                if (f is EditCategoryFragment) {
+                    //f.onBackPressed()
+                } else {
+                    NavUtils.navigateUpTo(this, upIntent)
+                }
+            }
+            true
+        }
+        else -> super.onOptionsItemSelected(item)
     }
 
     override fun onBackPressed() {
