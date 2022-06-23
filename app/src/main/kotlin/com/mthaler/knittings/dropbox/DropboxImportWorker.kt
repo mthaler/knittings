@@ -9,12 +9,16 @@ import com.dropbox.core.oauth.DbxCredential
 import com.dropbox.core.v2.DbxClientV2
 import com.mthaler.knittings.DatabaseApplication
 import com.mthaler.knittings.R
+import com.mthaler.knittings.database.KnittingsDataSource
 import com.mthaler.knittings.model.ExportDatabase
 import com.mthaler.knittings.model.Knitting
 import com.mthaler.knittings.service.JobStatus
 import com.mthaler.knittings.service.ServiceStatus
+import com.mthaler.knittings.utils.FileUtils
+import com.mthaler.knittings.utils.PictureUtils
 import org.json.JSONObject
 import java.io.File
+import java.io.FileOutputStream
 
 class DropboxImportWorker(val context: Context, parameters: WorkerParameters) : CoroutineWorker(context, parameters) {
 
@@ -25,6 +29,7 @@ class DropboxImportWorker(val context: Context, parameters: WorkerParameters) : 
         val database = readDatabase(app, directory, inputData.getString(Database)!!)
         downloadPhotos(database, directory)
         DropboxImportServiceManager.getInstance().updateJobStatus(JobStatus.Success(context.resources.getString(R.string.dropbox_import_completed)))
+        DropboxImportServiceManager.getInstance().updateServiceStatus(ServiceStatus.Stopped)
         return Result.success()
     }
 
@@ -38,6 +43,42 @@ class DropboxImportWorker(val context: Context, parameters: WorkerParameters) : 
             database.write(context, dropboxClient, directory) { progress ->
                 sm.updateJobStatus(JobStatus.Progress(progress))
             }
+        }
+
+        val sm = DropboxImportServiceManager.getInstance()
+        val count = database.photos.size
+        // remove all existing entries from the database
+        KnittingsDataSource.deleteAllProjects()
+        KnittingsDataSource.deleteAllPhotos()
+        KnittingsDataSource.deleteAllCategories()
+        KnittingsDataSource.deleteAllNeedles()
+        // add downloaded database
+        for (photo in database.photos) {
+            KnittingsDataSource.addPhoto(photo, manualID = true)
+        }
+        for (category in database.categories) {
+            KnittingsDataSource.addCategory(category, manualID = true)
+        }
+        for (needle in database.needles) {
+            KnittingsDataSource.addNeedle(needle, manualID = true)
+        }
+        for (knitting in database.projects) {
+            KnittingsDataSource.addProject(knitting, manualID = true)
+        }
+        for ((index, photo) in database.photos.withIndex()) {
+            // Download the file.
+            val filename = "/" + directory + "/" + photo.id + "." + FileUtils.getExtension(photo.filename.name)
+            FileOutputStream(photo.filename).use {
+                dbxClient.files().download(filename).download(it)
+            }
+            // generate preview
+            val orientation = PictureUtils.getOrientation(photo.filename.absolutePath)
+            val preview = PictureUtils.decodeSampledBitmapFromPath(photo.filename.absolutePath, 200, 200)
+            val rotatedPreview = PictureUtils.rotateBitmap(preview, orientation)
+            val photoWithPreview = photo.copy(preview = rotatedPreview)
+            KnittingsDataSource.updatePhoto(photoWithPreview)
+            val progress = (index / count.toFloat() * 100).toInt()
+            sm.updateJobStatus(JobStatus.Progress(progress))
         }
     }
 
