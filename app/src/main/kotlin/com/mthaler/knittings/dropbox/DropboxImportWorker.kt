@@ -47,6 +47,7 @@ class DropboxImportWorker(val context: Context, parameters: WorkerParameters) : 
 
         val sm = DropboxImportServiceManager.getInstance()
         val count = database.photos.size
+        val dropboxClient = DbxClientV2(requestConfig, credential)
         // remove all existing entries from the database
         KnittingsDataSource.deleteAllProjects()
         KnittingsDataSource.deleteAllPhotos()
@@ -69,7 +70,7 @@ class DropboxImportWorker(val context: Context, parameters: WorkerParameters) : 
             // Download the file.
             val filename = "/" + directory + "/" + photo.id + "." + FileUtils.getExtension(photo.filename.name)
             FileOutputStream(photo.filename).use {
-                dbxClient.files().download(filename).download(it)
+                dropboxClient.files().download(filename).download(it)
             }
             // generate preview
             val orientation = PictureUtils.getOrientation(photo.filename.toUri(), context)
