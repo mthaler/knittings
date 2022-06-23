@@ -80,18 +80,6 @@ class SelectCategoryActivity : BaseActivity() {
         else -> super.onOptionsItemSelected(item)
     }
 
-    private fun categorySaved(categoryID: Long) {
-        if (categoryID == Category.EMPTY.id) {
-            finish()
-        } else {
-            val i = Intent()
-            i.putExtra(EXTRA_OWNER_ID, ownerID)
-            i.putExtra(Extras.EXTRA_CATEGORY_ID, categoryID)
-            setResult(Activity.RESULT_OK, i)
-            finish()
-        }
-    }
-
     companion object {
 
         fun newIntent(context: Context, ownerID: Long): Intent {
