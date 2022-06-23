@@ -99,7 +99,7 @@ dependencies {
     def work_version = "2.7.1"
     implementation "androidx.work:work-runtime-ktx:$work_version"
 
-    implementation 'androidx.profileinstaller:profileinstaller:1.2.0-beta01'
+    implementation 'androidx.profileinstaller:profileinstaller:1.2.0-rc01'
 
     testImplementation 'junit:junit:4.13.2'
 
