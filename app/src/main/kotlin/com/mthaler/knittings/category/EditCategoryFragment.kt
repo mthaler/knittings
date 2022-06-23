@@ -11,9 +11,6 @@ import com.mthaler.knittings.database.CategoryDataSource
 import com.mthaler.knittings.database.KnittingsDataSource
 import com.mthaler.knittings.databinding.FragmentEditCategoryBinding
 import com.mthaler.knittings.model.Category
-import com.mthaler.knittings.model.Needle
-import com.mthaler.knittings.model.NeedleMaterial
-import com.mthaler.knittings.model.NeedleType
 
 class EditCategoryFragment : Fragment() {
 
@@ -110,7 +107,7 @@ class EditCategoryFragment : Fragment() {
         }
     }
 
-    fun onBackPressed(action: (Long) -> Unit) {
+    /*fun onBackPressed(action: (Long) -> Unit) {
         val oldCategory = if (categoryID != Category.EMPTY.id) ds.getCategory(categoryID) else Category.EMPTY
         val newCategory = Category(categoryID, binding.categoryName.text.toString(), color)
         if (newCategory != oldCategory) {
@@ -123,7 +120,7 @@ class EditCategoryFragment : Fragment() {
         } else {
             action(categoryID)
         }
-    }
+    }*/
 
     private fun showColorPicker() {
         val colorPicker = ColorPicker(activity)
@@ -156,14 +153,12 @@ class EditCategoryFragment : Fragment() {
 //        }
 //    }
 
-
-
     fun onBackPressed() {
-        val oldNeedle = if (categoryID != Category.EMPTY.id) KnittingsDataSource.getCategory(categoryID) else Category.EMPTY
-        val newNeedle = createCategory()
-        if (newNeedle != oldNeedle) {
+        val oldCategory = if (categoryID != Category.EMPTY.id) KnittingsDataSource.getCategory(categoryID) else Category.EMPTY
+        val newCategory = createCategory()
+        if (newCategory != oldCategory) {
             SaveChangesDialog.create(requireContext(), {
-                saveCategory(newNeedle)
+                saveCategory(newCategory)
                 parentFragmentManager.popBackStack()
             }, {
                 parentFragmentManager.popBackStack()

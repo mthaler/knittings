@@ -8,6 +8,7 @@ import androidx.core.app.NavUtils
 import com.mthaler.knittings.BaseActivity
 import com.mthaler.knittings.R
 import com.mthaler.knittings.databinding.ActivityCategoryListBinding
+import com.mthaler.knittings.needle.EditNeedleFragment
 
 class CategoryListActivity : BaseActivity() {
 
@@ -49,10 +50,9 @@ class CategoryListActivity : BaseActivity() {
     }
 
     override fun onBackPressed() {
-        val fm = supportFragmentManager
-        val f = fm.findFragmentById(R.id.category_list_container)
+        val f = supportFragmentManager.findFragmentById(R.id.category_list_container)
         if (f is EditCategoryFragment) {
-            f.onBackPressed { fm.popBackStack() }
+            f.onBackPressed()
         } else {
             super.onBackPressed()
         }

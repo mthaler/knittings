@@ -46,38 +46,10 @@ class SelectCategoryActivity : BaseActivity() {
     override fun onBackPressed() {
         val f =  supportFragmentManager.findFragmentById(R.id.select_category_container)
         if (f is EditCategoryFragment) {
-            f.onBackPressed { _ ->
-                val i = Intent()
-                i.putExtra(Extras.EXTRA_CATEGORY_ID, f.getCategoryID())
-                setResult(Activity.RESULT_OK, i)
-                super.onBackPressed()
-            }
+            f.onBackPressed()
         } else {
             super.onBackPressed()
         }
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean = when (item.itemId) {
-        android.R.id.home -> {
-            val f =  supportFragmentManager.findFragmentById(R.id.select_category_container)
-            if (f is EditCategoryFragment) {
-                f.onBackPressed {
-                    if (f.getCategoryID() == Category.EMPTY.id) {
-                        finish()
-                    } else {
-                        val i = Intent()
-                        i.putExtra(EXTRA_OWNER_ID, ownerID)
-                        i.putExtra(Extras.EXTRA_CATEGORY_ID, f.getCategoryID())
-                        setResult(Activity.RESULT_OK, i)
-                        finish()
-                    }
-                }
-            } else {
-                finish()
-            }
-            true
-        }
-        else -> super.onOptionsItemSelected(item)
     }
 
     companion object {
