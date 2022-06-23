@@ -1,6 +1,5 @@
 package com.mthaler.knittings.category
 
-import android.content.Context
 import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
@@ -87,7 +86,7 @@ class EditCategoryFragment : Fragment() {
                 if (newCategory != oldCategory) {
                     saveCategory(newCategory)
                 }
-                listener?.categorySaved(categoryID)
+                categorySaved(categoryID)
                 true
             }
             R.id.menu_item_delete_category -> {
@@ -160,6 +159,18 @@ class EditCategoryFragment : Fragment() {
     private fun categorySaved(categoryID: Long) {
         requireActivity().supportFragmentManager.popBackStack()
     }
+
+//    private fun categorySaved(categoryID: Long) {
+//        if (categoryID == Category.EMPTY.id) {
+//            requireActivity().finish()
+//        } else {
+//            val i = Intent()
+//            i.putExtra(Extras.EXTRA_OWNER_ID, ownerID)
+//            i.putExtra(Extras.EXTRA_CATEGORY_ID, categoryID)
+//            setResult(Activity.RESULT_OK, i)
+//            finish()
+//        }
+//    }
 
     companion object {
 

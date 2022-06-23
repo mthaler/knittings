@@ -12,7 +12,7 @@ import com.mthaler.knittings.database.Extras.EXTRA_OWNER_ID
 import com.mthaler.knittings.databinding.ActivitySelectCategoryBinding
 import com.mthaler.knittings.model.Category
 
-class SelectCategoryActivity : BaseActivity(), EditCategoryFragment.OnFragmentInteractionListener {
+class SelectCategoryActivity : BaseActivity() {
 
     private var ownerID = -1L
 
@@ -80,7 +80,7 @@ class SelectCategoryActivity : BaseActivity(), EditCategoryFragment.OnFragmentIn
         else -> super.onOptionsItemSelected(item)
     }
 
-    override fun categorySaved(categoryID: Long) {
+    private fun categorySaved(categoryID: Long) {
         if (categoryID == Category.EMPTY.id) {
             finish()
         } else {
