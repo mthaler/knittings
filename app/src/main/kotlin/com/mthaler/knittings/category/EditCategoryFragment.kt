@@ -87,7 +87,7 @@ class EditCategoryFragment : Fragment() {
                 if (newCategory != oldCategory) {
                     saveCategory(newCategory)
                 }
-                categorySaved(categoryID)
+                categorySaved()
                 true
             }
             R.id.menu_item_delete_category -> {
@@ -177,7 +177,7 @@ class EditCategoryFragment : Fragment() {
         }
     }
 
-    private fun categorySaved(categoryID: Long) {
+    private fun categorySaved() {
         requireActivity().supportFragmentManager.popBackStack()
     }
 

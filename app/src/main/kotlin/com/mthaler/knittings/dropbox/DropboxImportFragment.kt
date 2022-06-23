@@ -140,39 +140,33 @@ class DropboxImportFragment : AbstractDropboxFragment() {
             credential?.let {
                 //the user successfully connected their Dropbox account!
                 storeCredentialLocally(it)
+                fetchAccountInfo()
             }
             credential
         } else localCredential
 
+
         if (credential == null) {
             with(binding) {
+                // user is logged out, show login button, hide other buttons
                 loginButton.visibility = View.VISIBLE
-                //logoutButton.visibility = View.GONE
+                account.visibility = View.GONE
+                emailText.visibility = View.GONE
+                nameText.visibility = View.GONE
+                typeText.visibility = View.GONE
+                importButton.isEnabled = false
             }
         } else {
             with(binding) {
                 //logoutButton.visibility = View.VISIBLE
-                loginButton.visibility = View.GONE
+                loginButton.visibility = android.view.View.GONE
+                account.visibility = android.view.View.VISIBLE
+                emailText.visibility = android.view.View.VISIBLE
+                nameText.visibility = android.view.View.VISIBLE
+                typeText.visibility = android.view.View.VISIBLE
+                importButton.isEnabled = true
+                fetchAccountInfo()
             }
-        }
-
-        if (credential != null) {
-            // user is logged in, hide login button, show other buttons
-            binding.loginButton.visibility = View.GONE
-            binding.account.visibility = View.VISIBLE
-            binding.emailText.visibility = View.VISIBLE
-            binding.nameText.visibility = View.VISIBLE
-            binding.typeText.visibility = View.VISIBLE
-            binding.importButton.isEnabled = true
-            fetchAccountInfo()
-        } else {
-            // user is logged out, show login button, hide other buttons
-            binding.loginButton.visibility = View.VISIBLE
-            binding.account.visibility = View.GONE
-            binding.emailText.visibility = View.GONE
-            binding.nameText.visibility = View.GONE
-            binding.typeText.visibility = View.GONE
-            binding.importButton.isEnabled = false
         }
     }
 
