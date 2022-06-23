@@ -109,7 +109,7 @@ class CategoryListFragment : Fragment() {
     }
 
     private fun createCategory() {
-        val f = EditCategoryFragment.newInstance(Category.EMPTY.id)
+        val f = EditCategoryFragment.newInstance(Category.EMPTY.id, -1)
         val ft = requireActivity().supportFragmentManager.beginTransaction()
         ft.replace(R.id.category_list_container, f)
         ft.addToBackStack(null)
