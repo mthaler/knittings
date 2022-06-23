@@ -26,7 +26,7 @@ class SelectCategoryActivity : BaseActivity() {
         ownerID = if (savedInstanceState != null) savedInstanceState.getLong(EXTRA_OWNER_ID) else intent.getLongExtra(EXTRA_OWNER_ID, -1L)
 
         if (savedInstanceState == null) {
-            val f = CategoryListFragment.newInstance()
+            val f = CategoryListFragment.newInstance(true)
             val fm = supportFragmentManager
             val ft = fm.beginTransaction()
             ft.add(R.id.select_category_container, f)

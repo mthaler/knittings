@@ -23,7 +23,7 @@ class CategoryListActivity : BaseActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         if (savedInstanceState == null) {
-            val f = CategoryListFragment.newInstance()
+            val f = CategoryListFragment.newInstance(false)
             val ft = supportFragmentManager.beginTransaction()
             ft.add(R.id.category_list_container, f)
             ft.commit()

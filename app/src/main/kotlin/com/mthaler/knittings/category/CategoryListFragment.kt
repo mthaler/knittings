@@ -1,5 +1,7 @@
 package com.mthaler.knittings.category
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
@@ -11,6 +13,7 @@ import com.mthaler.knittings.DatabaseApplication
 import com.mthaler.knittings.DeleteDialog
 import com.mthaler.knittings.R
 import com.mthaler.knittings.database.CategoryDataSource
+import com.mthaler.knittings.database.Extras.EXTRA_CATEGORY_ID
 import com.mthaler.knittings.database.KnittingsDataSource
 import com.mthaler.knittings.databinding.FragmentCategoryListBinding
 import com.mthaler.knittings.model.Category
@@ -19,6 +22,18 @@ class CategoryListFragment : Fragment() {
 
     private var _binding: FragmentCategoryListBinding? = null
     private val binding get() = _binding!!
+
+    private var select: Boolean = false
+
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        val a = arguments
+        if (a != null) {
+            select = a.getBoolean(EXTRA_SELECT)
+        }
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentCategoryListBinding.inflate(inflater, container, false)
@@ -117,16 +132,31 @@ class CategoryListFragment : Fragment() {
     }
 
     private fun categoryClicked(categoryID: Long) {
-        val f = EditCategoryFragment.newInstance(categoryID)
-        val ft = requireActivity().supportFragmentManager.beginTransaction()
-        ft.replace(R.id.category_list_container, f)
-        ft.addToBackStack(null)
-        ft.commit()
+        if (select) {
+            val i = Intent()
+            i.putExtra(EXTRA_CATEGORY_ID, categoryID)
+            requireActivity().setResult(Activity.RESULT_OK, i)
+            requireActivity().finish()
+        } else {
+            val f = EditCategoryFragment.newInstance(Category.EMPTY.id)
+            val ft =  requireActivity().supportFragmentManager.beginTransaction()
+            ft.replace(R.id.category_list_container, f)
+            ft.addToBackStack(null)
+            ft.commit()
+        }
     }
 
     companion object {
 
+        private const val EXTRA_SELECT = "com.mthaler.knittings.select"
+
         @JvmStatic
-        fun newInstance() = CategoryListFragment()
+        fun newInstance(select: Boolean) = {
+            CategoryListFragment().apply {
+                arguments = Bundle().apply {
+                    putBoolean(EXTRA_SELECT, select)
+                }
+            }
+        }
     }
 }
