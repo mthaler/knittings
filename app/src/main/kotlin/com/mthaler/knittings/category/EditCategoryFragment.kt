@@ -20,19 +20,12 @@ class EditCategoryFragment : Fragment() {
     private var color: Int? = null
     private lateinit var ds: CategoryDataSource
 
-    fun getCategoryID(): Long = categoryID
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         ds = KnittingsDataSource
         arguments?.let {
             categoryID = it.getLong(EXTRA_CATEGORY_ID)
-        }
-        savedInstanceState?.let {
-            if (it.containsKey(EXTRA_CATEGORY_ID)) {
-                categoryID = it.getLong(EXTRA_CATEGORY_ID)
-                color = it.getInt(EXTRA_COLOR)
-            }
+            color = it.getInt(EXTRA_COLOR)
         }
     }
 
