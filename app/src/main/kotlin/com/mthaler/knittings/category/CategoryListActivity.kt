@@ -9,7 +9,7 @@ import com.mthaler.knittings.BaseActivity
 import com.mthaler.knittings.R
 import com.mthaler.knittings.databinding.ActivityCategoryListBinding
 
-class CategoryListActivity : BaseActivity(), EditCategoryFragment.OnFragmentInteractionListener {
+class CategoryListActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,10 +56,6 @@ class CategoryListActivity : BaseActivity(), EditCategoryFragment.OnFragmentInte
         } else {
             super.onBackPressed()
         }
-    }
-
-    override fun categorySaved(categoryID: Long) {
-        supportFragmentManager.popBackStack()
     }
 
     companion object {

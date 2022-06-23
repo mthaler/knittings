@@ -18,7 +18,6 @@ class EditCategoryFragment : Fragment() {
     private var _binding: FragmentEditCategoryBinding? = null
     private val binding get() = _binding!!
     private var color: Int? = null
-    private var listener: OnFragmentInteractionListener? = null
     private lateinit var ds: CategoryDataSource
 
     fun getCategoryID(): Long = categoryID
@@ -158,23 +157,8 @@ class EditCategoryFragment : Fragment() {
         }
     }
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        if (context is OnFragmentInteractionListener) {
-            listener = context
-        } else {
-            throw RuntimeException("$context must implement OnFragmentInteractionListener")
-        }
-    }
-
-    override fun onDetach() {
-        super.onDetach()
-        listener = null
-    }
-
-    interface OnFragmentInteractionListener {
-
-        fun categorySaved(categoryID: Long)
+    private fun categorySaved(categoryID: Long) {
+        requireActivity().supportFragmentManager.popBackStack()
     }
 
     companion object {
