@@ -1,6 +1,7 @@
 package com.mthaler.knittings.dropbox
 
 import android.content.Context
+import androidx.core.net.toUri
 import androidx.work.CoroutineWorker
 import androidx.work.Data
 import androidx.work.WorkerParameters
@@ -71,7 +72,7 @@ class DropboxImportWorker(val context: Context, parameters: WorkerParameters) : 
                 dbxClient.files().download(filename).download(it)
             }
             // generate preview
-            val orientation = PictureUtils.getOrientation(photo.filename.absolutePath)
+            val orientation = PictureUtils.getOrientation(photo.filename.toUri(), context)
             val preview = PictureUtils.decodeSampledBitmapFromPath(photo.filename.absolutePath, 200, 200)
             val rotatedPreview = PictureUtils.rotateBitmap(preview, orientation)
             val photoWithPreview = photo.copy(preview = rotatedPreview)
