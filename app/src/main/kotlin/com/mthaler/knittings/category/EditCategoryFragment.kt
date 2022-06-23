@@ -181,7 +181,7 @@ class EditCategoryFragment : Fragment() {
         requireActivity().supportFragmentManager.popBackStack()
     }
 
-    private fun createCategory(): Category = Category(categoryID, "test", Color.RED)
+    private fun createCategory(): Category = Category(categoryID,  binding.categoryName.text.toString(), Color.RED)
     
     private fun deleteCategory() {
         val category = ds.getCategory(categoryID)
