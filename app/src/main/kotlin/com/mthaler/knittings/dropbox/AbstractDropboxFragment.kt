@@ -26,6 +26,7 @@ abstract class AbstractDropboxFragment : Fragment() {
     abstract protected val APP_KEY: String
     abstract protected fun exception(ex: String)
 
+
     /**
      * Starts the Dropbox OAuth process by launching the Dropbox official app or web
      * browser if dropbox official app is not available. In browser flow, normally user needs to
@@ -34,9 +35,10 @@ abstract class AbstractDropboxFragment : Fragment() {
      * Because mobile apps need to keep Dropbox secrets in their binaries we need to use PKCE.
      * Read more about this here: https://dropbox.tech/developers/pkce--what-and-why-
      **/
-    protected fun startDropboxAuthorization() {
+     protected fun startDropboxAuthorization() {
         // The client identifier is usually of the form "SoftwareName/SoftwareVersion".
-        val requestConfig = DbxRequestConfig(CLIENT_IDENTIFIER)
+        val clientIdentifier = "DropboxSampleAndroid/1.0.0"
+        val requestConfig = DbxRequestConfig(clientIdentifier)
 
         // The scope's your app will need from Dropbox
         // Read more about Scopes here: https://developers.dropbox.com/oauth-guide#dropbox-api-permissions
