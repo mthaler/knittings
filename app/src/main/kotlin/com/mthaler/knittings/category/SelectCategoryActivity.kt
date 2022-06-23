@@ -1,16 +1,12 @@
 package com.mthaler.knittings.category
 
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.view.MenuItem
 import com.mthaler.knittings.BaseActivity
 import com.mthaler.knittings.R
-import com.mthaler.knittings.database.Extras
 import com.mthaler.knittings.database.Extras.EXTRA_OWNER_ID
 import com.mthaler.knittings.databinding.ActivitySelectCategoryBinding
-import com.mthaler.knittings.model.Category
 
 class SelectCategoryActivity : BaseActivity() {
 
