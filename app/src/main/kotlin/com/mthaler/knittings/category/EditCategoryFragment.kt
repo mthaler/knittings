@@ -31,8 +31,6 @@ class EditCategoryFragment : Fragment() {
         savedInstanceState?.let {
             if (it.containsKey(EXTRA_CATEGORY_ID)) {
                 categoryID = it.getLong(EXTRA_CATEGORY_ID)
-            }
-            if (it.containsKey(EXTRA_COLOR)) {
                 color = it.getInt(EXTRA_COLOR)
             }
         }

@@ -8,7 +8,6 @@ import androidx.core.app.NavUtils
 import com.mthaler.knittings.BaseActivity
 import com.mthaler.knittings.R
 import com.mthaler.knittings.databinding.ActivityCategoryListBinding
-import com.mthaler.knittings.needle.EditNeedleFragment
 
 class CategoryListActivity : BaseActivity() {
 
