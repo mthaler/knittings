@@ -172,6 +172,22 @@ class EditCategoryFragment : Fragment() {
 //        }
 //    }
 
+
+
+    fun onBackPressed() {
+        val oldNeedle = if (categoryID != Category.EMPTY.id) KnittingsDataSource.getCategory(categoryID) else Category.EMPTY
+        val newNeedle = createCategory()
+        if (newNeedle != oldNeedle) {
+            SaveChangesDialog.create(requireContext(), {
+                saveCategory(newNeedle)
+                parentFragmentManager.popBackStack()
+            }, {
+                parentFragmentManager.popBackStack()
+            }).show()
+        } else {
+            parentFragmentManager.popBackStack()
+        }
+    }
     companion object {
 
         private const val EXTRA_COLOR = "com.mthaler.knittings.category.COLOR"
