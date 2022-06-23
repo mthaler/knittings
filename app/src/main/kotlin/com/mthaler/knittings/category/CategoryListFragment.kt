@@ -151,12 +151,11 @@ class CategoryListFragment : Fragment() {
         private const val EXTRA_SELECT = "com.mthaler.knittings.select"
 
         @JvmStatic
-        fun newInstance(select: Boolean) = {
+        fun newInstance(select: Boolean) =
             CategoryListFragment().apply {
                 arguments = Bundle().apply {
                     putBoolean(EXTRA_SELECT, select)
                 }
             }
-        }
     }
 }
