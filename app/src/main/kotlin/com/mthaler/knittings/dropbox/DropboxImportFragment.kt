@@ -3,6 +3,7 @@ package com.mthaler.knittings.dropbox
 import android.Manifest
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.os.PowerManager
 import android.view.LayoutInflater
@@ -13,7 +14,9 @@ import android.webkit.MimeTypeMap
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
+import androidx.core.app.ActivityCompat
 import androidx.core.app.NavUtils
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.lifecycle.lifecycleScope
 import com.dropbox.core.DbxRequestConfig
@@ -103,9 +106,18 @@ class DropboxImportFragment : AbstractDropboxFragment() {
 
         binding.importButton.setOnClickListener {
             lifecycleScope.launch(Dispatchers.IO) {
-                requestPermissionLauncher.launch(Manifest.permission.ACCESS_NETWORK_STATE)
+                 when {
+                    ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.WAKE_LOCK) == PackageManager.PERMISSION_GRANTED -> {
+                    }
+                    ActivityCompat.shouldShowRequestPermissionRationale(requireActivity(), Manifest.permission.WAKE_LOCK) -> {
+                        requestPermissionLauncher.launch(Manifest.permission.ACCESS_NETWORK_STATE)
+                    }
+                    else -> {
+                        requestPermissionLauncher.launch(Manifest.permission.ACCESS_NETWORK_STATE)
+                        }
+                    }
+                }
             }
-        }
 
         return binding.root
     }
