@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.webkit.MimeTypeMap
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
@@ -57,6 +58,27 @@ class DropboxImportFragment : AbstractDropboxFragment() {
         }
     }
 
+     private val openFileContract = object : ActivityResultContracts.GetContent() {
+        override fun createIntent(context: Context, input: String): Intent {
+            val intent = super.createIntent(context, input)
+            val mimeTypes = arrayOf("image/*")
+            intent.putExtra(Intent.EXTRA_MIME_TYPES, mimeTypes)
+            return intent
+        }
+    }
+
+    private val contract = registerForActivityResult(openFileContract) { uri ->
+        if (uri != null) {
+            if (uri.scheme == "content") {
+                val name = uri.lastPathSegment
+                val type = MimeTypeMap.getSingleton().getExtensionFromMimeType(requireContext().contentResolver?.getType(uri))
+                val inputStream = requireContext().contentResolver?.openInputStream(uri)
+                //uploadFile("$name.$type", inputStream!!)
+            }
+        } else {
+            Toast.makeText(requireContext(), "Error selecting file", Toast.LENGTH_SHORT).show()
+        }
+    }
 
     override val APP_KEY = BuildConfig.DROPBOX_KEY
     override fun exception(ex: String) {
