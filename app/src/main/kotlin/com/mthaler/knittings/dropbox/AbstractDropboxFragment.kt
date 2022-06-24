@@ -2,9 +2,8 @@ package com.mthaler.knittings.dropbox
 
 import android.app.Activity
 import android.app.AlertDialog
-import android.content.Context
+import android.content.Context.MODE_PRIVATE
 import android.util.Log
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.dropbox.core.DbxRequestConfig
@@ -53,11 +52,11 @@ abstract class AbstractDropboxFragment : Fragment() {
         val requestConfig = DbxRequestConfig(clientIdentifier)
         val credential = getLocalCredential()
         val dropboxClient = DbxClientV2(requestConfig, credential)
-        val dropboxApi = DropboxApi(dropboxClient, requireContext(),  viewLifecycleOwner)
+        val dropboxApi = DropboxApi(dropboxClient, requireContext(), viewLifecycleOwner)
         lifecycleScope.launch {
             dropboxApi.revokeDropboxAuthorization()
         }
-        val sharedPreferences = requireActivity().getSharedPreferences("dropbox-sample", Context.MODE_PRIVATE)
+        val sharedPreferences = requireContext().getSharedPreferences("dropbox-sample", MODE_PRIVATE)
         sharedPreferences.edit().remove("credential").apply()
         clearData()
     }
