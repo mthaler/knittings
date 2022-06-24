@@ -18,9 +18,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.app.NavUtils
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
-import androidx.work.ExistingWorkPolicy
-import androidx.work.OneTimeWorkRequestBuilder
-import androidx.work.WorkManager
+import androidx.work.*
 import com.dropbox.core.DbxRequestConfig
 import com.dropbox.core.android.Auth
 import com.dropbox.core.oauth.DbxCredential
@@ -193,7 +191,6 @@ class DropboxImportFragment : AbstractDropboxFragment() {
     }
 
     private suspend fun import(result: ListFolderResult) {
-        val requestConfig = DbxRequestConfig(CLIENT_IDENTIFIER)
         val credential = getLocalCredential()
         credential?.let {
             val isWiFi = NetworkUtils.isWifiConnected(requireContext())
@@ -207,8 +204,8 @@ class DropboxImportFragment : AbstractDropboxFragment() {
                         try {
                             lifecycleScope.launchWhenStarted {
                                 val directory = files[item]
-                                val database = readDatabase(directory)
-                                val request = OneTimeWorkRequestBuilder<DropboxImportWorker>().build()
+                                val data: Data = DropboxImportWorker.data(directory, database)
+                                val request = OneTimeWorkRequestBuilder<DropboxImportWorker>().setInputData(data).build()
                                 val workManager = WorkManager.getInstance(requireContext())
                                 workManager.enqueueUniqueWork(TAG,  ExistingWorkPolicy.REPLACE, request)
                             }
