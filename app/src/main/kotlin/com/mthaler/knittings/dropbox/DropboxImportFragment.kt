@@ -38,6 +38,7 @@ import com.mthaler.knittings.utils.FileUtils
 import com.mthaler.knittings.utils.NetworkUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.json.JSONObject
 import java.io.ByteArrayOutputStream
 
@@ -116,6 +117,36 @@ class DropboxImportFragment : AbstractDropboxFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        binding.loginButton.setOnClickListener { Auth.startOAuth2Authentication(context, AppKey) }
+
+        binding.importButton.setOnClickListener {
+            val isWiFi = NetworkUtils.isWifiConnected(requireContext())
+            if (!isWiFi) {
+                val builder = AlertDialog.Builder(requireContext())
+                with(builder) {
+                    setTitle(resources.getString(R.string.dropbox_import))
+                    setMessage(resources.getString(R.string.dropbox_export_no_wifi_question))
+                    setPositiveButton(resources.getString(R.string.dropbox_export_dialog_export_button)) { dialog, which ->
+                        lifecycleScope.launch {
+                            val result = withContext(Dispatchers.IO) {
+                                DropboxClientFactory.getClient().files().listFolder("")
+                            }
+                            onListFolder(result)
+                        }
+                    }
+                    setNegativeButton(resources.getString(R.string.dialog_button_cancel)) { dialog, which -> }
+                    show()
+                }
+            } else {
+                lifecycleScope.launch {
+                    val result = withContext(Dispatchers.IO) {
+                        DropboxClientFactory.getClient().files().listFolder("")
+                    }
+                    onListFolder(result)
+                }
+            }
+        }
 
         val sm = DropboxImportServiceManager.getInstance()
 
@@ -286,6 +317,7 @@ class DropboxImportFragment : AbstractDropboxFragment() {
     }
 
     private suspend fun importDatabase(directory: String, dropboxClient: DbxClientV2): Pair<Database, HashSet<Long>> {
+        withContext()
         val os = ByteArrayOutputStream()
         dropboxClient.files().download("/$directory/db.json").download(os)
         val bytes = os.toByteArray()
