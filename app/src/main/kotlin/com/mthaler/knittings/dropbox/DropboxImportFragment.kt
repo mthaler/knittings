@@ -30,6 +30,7 @@ import com.dropbox.core.v2.files.ListFolderResult
 import com.mthaler.knittings.BuildConfig
 import com.mthaler.knittings.R
 import com.mthaler.knittings.databinding.FragmentDropboxImportBinding
+import com.mthaler.knittings.model.toDatabase
 import com.mthaler.knittings.service.JobStatus
 import com.mthaler.knittings.service.ServiceStatus
 import com.mthaler.knittings.utils.FileUtils
