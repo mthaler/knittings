@@ -227,8 +227,8 @@ class DropboxImportFragment : AbstractDropboxFragment() {
     }
 
     private fun readDatabase(directory: String) {
-        viewLifecycleOwner.lifecycleScope.launch {
-            val (database, idsFromPhotoFiles) = withContext(Dispatchers.IO) {
+        viewLifecycleOwner.lifecycleScope.launch(Dispatchers.IO) {
+            val (database, idsFromPhotoFiles) =  {
                 val dbxClient = DropboxClientFactory.getClient()
                 val os = ByteArrayOutputStream()
                 dbxClient.files().download("/$directory/db.json").download(os)
