@@ -285,7 +285,7 @@ class DropboxImportFragment : AbstractDropboxFragment() {
         }
     }
 
-    private suspend fun importDatabase(directory: String, dropboxClient: DbxClientV2): (Database, HashSet<Long>) {
+    private suspend fun importDatabase(directory: String, dropboxClient: DbxClientV2): Pair<Database, HashSet<Long>> {
         val os = ByteArrayOutputStream()
         dropboxClient.files().download("/$directory/db.json").download(os)
         val bytes = os.toByteArray()
