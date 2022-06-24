@@ -83,9 +83,9 @@ class DropboxImportFragment : AbstractDropboxFragment() {
         _binding = FragmentDropboxImportBinding.inflate(inflater, container, false)
 
         // this opens a web browser where the user can log in
-        _binding.loginButton.setOnClickListener { startDropboxAuthorization() }
+        binding.loginButton.setOnClickListener { startDropboxAuthorization() }
 
-        _binding.importButton.setOnClickListener {
+        binding.importButton.setOnClickListener {
              when {
                 ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.WAKE_LOCK) == PackageManager.PERMISSION_GRANTED -> {
                     val wakeLock: PowerManager.WakeLock =
