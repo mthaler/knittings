@@ -201,12 +201,19 @@ class DropboxImportFragment : AbstractDropboxFragment() {
                     setTitle(resources.getString(R.string.dropbox_import))
                     setMessage(resources.getString(R.string.dropbox_export_no_wifi_question))
                     setPositiveButton(resources.getString(R.string.dropbox_export_dialog_export_button)) { _, _ ->
-                        importDatabase()
-                        val request = OneTimeWorkRequestBuilder<DropboxImportWorker>().build()
-                        val workManager = WorkManager.getInstance(requireContext())
-                        workManager.enqueueUniqueWork(TAG,  ExistingWorkPolicy.REPLACE, request)
-                        Toast.makeText(requireContext(), "No WLAN", Toast.LENGTH_SHORT)
+                        try {
+                            lifecycleScope.launchWhenStarted {
+                                val result = dropboxApi.listFolders()
+                                importDatabase(result)
+                                val request = OneTimeWorkRequestBuilder<DropboxImportWorker>().build()
+                                val workManager = WorkManager.getInstance(requireContext())
+                                workManager.enqueueUniqueWork(TAG,  ExistingWorkPolicy.REPLACE, request)
+                            }
+                        } catch (ex: java.lang.Exception) {
+                            throw ex
+                        }
                     }
+                    setNegativeButton(resources.getString(R.string.dialog_button_cancel)) { _, _ -> }
                     show()
                 }
             } else {
