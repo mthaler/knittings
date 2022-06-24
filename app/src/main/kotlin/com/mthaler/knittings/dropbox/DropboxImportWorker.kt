@@ -1,15 +1,10 @@
 package com.mthaler.knittings.dropbox
 
 import android.content.Context
-import androidx.appcompat.app.AlertDialog
 import androidx.core.net.toUri
-import androidx.lifecycle.lifecycleScope
-import androidx.work.CoroutineWorker
 import androidx.work.Data
 import androidx.work.WorkerParameters
-import androidx.work.workDataOf
 import com.dropbox.core.DbxRequestConfig
-import com.dropbox.core.oauth.DbxCredential
 import com.dropbox.core.v2.DbxClientV2
 import com.mthaler.knittings.DatabaseApplication
 import com.mthaler.knittings.R
@@ -23,7 +18,7 @@ import org.json.JSONObject
 import java.io.File
 import java.io.FileOutputStream
 
-class DropboxImportWorker(val context: Context, parameters: WorkerParameters) : CoroutineWorker(context, parameters) {
+class DropboxImportWorker(context: Context, parameters: WorkerParameters) : AbstractDropboxWorker(context, parameters) {
 
     override suspend  fun doWork(): Result {
         DropboxImportServiceManager.getInstance().updateServiceStatus(ServiceStatus.Started)
@@ -90,14 +85,6 @@ class DropboxImportWorker(val context: Context, parameters: WorkerParameters) : 
         }
         DropboxImportServiceManager.getInstance().updateJobStatus(JobStatus.Success(context.resources. getString(R.string.dropbox_import_completed)))
     }
-
-    //deserialize the credential from SharedPreferences if it exists
-    private fun getLocalCredential(): DbxCredential? {
-        val sharedPreferences = context.getSharedPreferences(KNITTINGS, Context.MODE_PRIVATE)
-        val serializedCredential = sharedPreferences.getString("credential", null) ?: return null
-        return DbxCredential.Reader.readFully(serializedCredential)
-    }
-
 
     companion object {
         val TAG = "com.mthaler.knittings.compressphotos.DropboxImportWorkerr"
