@@ -23,8 +23,6 @@ import kotlinx.coroutines.withContext
 abstract class AbstractDropboxFragment : Fragment() {
 
     abstract protected val APP_KEY: String
-    abstract protected fun exception(ex: String)
-
 
     /**
      * Starts the Dropbox OAuth process by launching the Dropbox official app or web

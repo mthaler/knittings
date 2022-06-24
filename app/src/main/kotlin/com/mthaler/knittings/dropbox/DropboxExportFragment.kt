@@ -63,7 +63,7 @@ class DropboxExportFragment : AbstractDropboxFragment() {
         }
     }
 
-    override fun exception(ex: String) {
+    fun exception(ex: String) {
         binding.exceptionText.text = ex
     }
 
