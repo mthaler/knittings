@@ -119,7 +119,7 @@ class DropboxImportFragment : AbstractDropboxFragment() {
         val sm = DropboxImportServiceManager.getInstance()
 
         sm.jobStatus.observe(viewLifecycleOwner, { jobStatus ->
-            when (jobStatus) {
+            when(jobStatus) {
                 is JobStatus.Initialized -> {
                     binding.importButton.isEnabled = true
                     binding.importTitle.visibility = View.GONE
@@ -140,15 +140,13 @@ class DropboxImportFragment : AbstractDropboxFragment() {
                     binding.result.visibility = View.VISIBLE
                     binding.result.text = jobStatus.msg
                 }
-                else -> throw IllegalArgumentException("Unknown jobStatus: " + jobStatus)
             }
         })
 
         sm.serviceStatus.observe(viewLifecycleOwner, { serviceStatus ->
-            when (serviceStatus) {
+            when(serviceStatus) {
                 ServiceStatus.Stopped -> binding.importButton.isEnabled = true
                 ServiceStatus.Started -> binding.importButton.isEnabled = false
-                else -> throw IllegalArgumentException("Unknown serviceStatus: " + serviceStatus)
             }
         })
     }
