@@ -65,9 +65,6 @@ class DropboxImportFragment : AbstractDropboxFragment() {
     }
 
     override val APP_KEY = BuildConfig.DROPBOX_KEY
-    override fun exception(ex: String) {
-        binding.exceptionText.text = ex
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
