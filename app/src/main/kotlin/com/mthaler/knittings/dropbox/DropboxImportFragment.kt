@@ -118,7 +118,7 @@ class DropboxImportFragment : AbstractDropboxFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.loginButton.setOnClickListener { Auth.startOAuth2Authentication(context, AppKey) }
+        binding.loginButton.setOnClickListener { startDropboxAuthorization() }
 
         binding.importButton.setOnClickListener {
             val isWiFi = NetworkUtils.isWifiConnected(requireContext())
