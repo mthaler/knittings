@@ -230,18 +230,23 @@ class DropboxImportFragment : AbstractDropboxFragment() {
     private fun readDatabase(directory: String) {
         viewLifecycleOwner.lifecycleScope.launch(Dispatchers.IO) {
             val (database, idsFromPhotoFiles) =  {
-                val dbxClient = DropboxClientFactory.getClient()
-                val os = ByteArrayOutputStream()
-                dbxClient.files().download("/$directory/db.json").download(os)
-                val bytes = os.toByteArray()
-                val jsonStr = String(bytes)
-                val json = JSONObject(jsonStr)
-                val externalFilesDir = requireContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES)!!
-                val database = json.toDatabase(requireContext(), externalFilesDir)
-                database.checkValidity()
-                val entries = dbxClient.files().listFolder("/$directory").entries
-                val ids = entries.filter { it.name != "db.json" }.map { FileUtils.getFilenameWithoutExtension(it.name).toLong() }.toHashSet()
-                Pair(database, ids)
+                val clientIdentifier = "Knittings"
+                val requestConfig = DbxRequestConfig(clientIdentifier)
+                val credential = getLocalCredential()
+                credential?.let {
+                    val dropboxClient = DbxClientV2(requestConfig, credential)
+                    val os = ByteArrayOutputStream()
+                    dropboxClient.files().download("/$directory/db.json").download(os)
+                    val bytes = os.toByteArray()
+                    val jsonStr = String(bytes)
+                    val json = JSONObject(jsonStr)
+                    val externalFilesDir = requireContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES)!!
+                    val database = json.toDatabase(requireContext(), externalFilesDir)
+                    database.checkValidity()
+                    val entries = dropboxClient.files().listFolder("/$directory").entries
+                    val ids = entries.filter { it.name != "db.json" }.map { FileUtils.getFilenameWithoutExtension(it.name).toLong() }.toHashSet()
+                    Pair(database, ids)
+                }
             }
             val ids = database.photos.map { it.id}.toHashSet()
             val missingPhotos = ids - idsFromPhotoFiles
