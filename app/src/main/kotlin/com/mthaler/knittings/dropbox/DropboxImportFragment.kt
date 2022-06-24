@@ -105,16 +105,15 @@ class DropboxImportFragment : AbstractDropboxFragment() {
         binding.loginButton.setOnClickListener { startDropboxAuthorization() }
 
         binding.importButton.setOnClickListener {
-            lifecycleScope.launch(Dispatchers.IO) {
-                 when {
-                    ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.WAKE_LOCK) == PackageManager.PERMISSION_GRANTED -> {
-                    }
-                    ActivityCompat.shouldShowRequestPermissionRationale(requireActivity(), Manifest.permission.WAKE_LOCK) -> {
-                        requestPermissionLauncher.launch(Manifest.permission.ACCESS_NETWORK_STATE)
-                    }
-                    else -> {
-                        requestPermissionLauncher.launch(Manifest.permission.ACCESS_NETWORK_STATE)
-                        }
+             when {
+                ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.WAKE_LOCK) == PackageManager.PERMISSION_GRANTED -> {
+                }
+                ActivityCompat.shouldShowRequestPermissionRationale(requireActivity(), Manifest.permission.WAKE_LOCK) -> {
+                    Toast.makeText(requireContext(), "Wake_Lock permission required", Toast.LENGTH_SHORT)
+                    requestPermissionLauncher.launch(Manifest.permission.WAKE_LOCK)
+                }
+                else -> {
+                    requestPermissionLauncher.launch(Manifest.permission.WAKE_LOCK)
                     }
                 }
             }
