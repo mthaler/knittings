@@ -10,7 +10,6 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.webkit.MimeTypeMap
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
@@ -27,9 +26,6 @@ import com.dropbox.core.android.Auth
 import com.dropbox.core.oauth.DbxCredential
 import com.dropbox.core.v2.DbxClientV2
 import com.dropbox.core.v2.files.ListFolderResult
-import com.github.michaelbull.result.Err
-import com.github.michaelbull.result.Ok
-import com.github.michaelbull.result.runCatching
 import com.mthaler.knittings.BuildConfig
 import com.mthaler.knittings.R
 import com.mthaler.knittings.databinding.FragmentDropboxImportBinding
