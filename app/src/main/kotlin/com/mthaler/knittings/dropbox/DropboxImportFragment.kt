@@ -57,7 +57,7 @@ class DropboxImportFragment : AbstractDropboxFragment() {
                 }
             try {
                 lifecycleScope.launchWhenStarted {
-                    import(lifecycleScope)
+                    import()
                 }
             } finally {
                 wakeLock.release()
@@ -83,9 +83,9 @@ class DropboxImportFragment : AbstractDropboxFragment() {
         _binding = FragmentDropboxImportBinding.inflate(inflater, container, false)
 
         // this opens a web browser where the user can log in
-        binding.loginButton.setOnClickListener { startDropboxAuthorization() }
+        _binding.loginButton.setOnClickListener { startDropboxAuthorization() }
 
-        binding.importButton.setOnClickListener {
+        _binding.importButton.setOnClickListener {
              when {
                 ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.WAKE_LOCK) == PackageManager.PERMISSION_GRANTED -> {
                     val wakeLock: PowerManager.WakeLock =
@@ -96,7 +96,7 @@ class DropboxImportFragment : AbstractDropboxFragment() {
                     }
                     try {
                         lifecycleScope.launchWhenStarted {
-                            import(lifecycleScope)
+                            import()
                         }
                     } finally {
                         wakeLock.release()
@@ -117,28 +117,6 @@ class DropboxImportFragment : AbstractDropboxFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        binding.loginButton.setOnClickListener { startDropboxAuthorization() }
-
-        binding.importButton.setOnClickListener {
-            val isWiFi = NetworkUtils.isWifiConnected(requireContext())
-            if (!isWiFi) {
-                val builder = AlertDialog.Builder(requireContext())
-                with(builder) {
-                    setTitle(resources.getString(R.string.dropbox_import))
-                    setMessage(resources.getString(R.string.dropbox_export_no_wifi_question))
-                    setPositiveButton(resources.getString(R.string.dropbox_export_dialog_export_button)) { dialog, which ->
-                        lifecycleScope.launch {
-                            val result = withContext(Dispatchers.IO) { import() }
-                        }
-                    }
-                    setNegativeButton(resources.getString(R.string.dialog_button_cancel)) { dialog, which -> }
-                    show()
-                }
-            } else {
-                Toast.makeText(requireContext(), "no WLAN", Toast.LENGTH_LONG)
-            }
-        }
 
         val sm = DropboxImportServiceManager.getInstance()
 
