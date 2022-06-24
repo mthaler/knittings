@@ -1,10 +1,13 @@
 package com.mthaler.knittings.dropbox
 
 import android.content.Context
+import androidx.appcompat.app.AlertDialog
 import androidx.core.net.toUri
+import androidx.lifecycle.lifecycleScope
 import androidx.work.CoroutineWorker
 import androidx.work.Data
 import androidx.work.WorkerParameters
+import androidx.work.workDataOf
 import com.dropbox.core.DbxRequestConfig
 import com.dropbox.core.oauth.DbxCredential
 import com.dropbox.core.v2.DbxClientV2
@@ -85,6 +88,7 @@ class DropboxImportWorker(val context: Context, parameters: WorkerParameters) : 
             val progress = (index / count.toFloat() * 100).toInt()
             sm.updateJobStatus(JobStatus.Progress(progress))
         }
+        DropboxImportServiceManager.getInstance().updateJobStatus(JobStatus.Success(context.resources. getString(R.string.dropbox_import_completed)))
     }
 
     //deserialize the credential from SharedPreferences if it exists
