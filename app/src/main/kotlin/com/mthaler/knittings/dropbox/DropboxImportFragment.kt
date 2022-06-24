@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.os.Environment
 import android.os.PowerManager
 import android.view.LayoutInflater
 import android.view.MenuItem
@@ -31,9 +32,12 @@ import com.mthaler.knittings.R
 import com.mthaler.knittings.databinding.FragmentDropboxImportBinding
 import com.mthaler.knittings.service.JobStatus
 import com.mthaler.knittings.service.ServiceStatus
+import com.mthaler.knittings.utils.FileUtils
 import com.mthaler.knittings.utils.NetworkUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import org.json.JSONObject
+import java.io.ByteArrayOutputStream
 
 class DropboxImportFragment : AbstractDropboxFragment() {
 
@@ -218,6 +222,56 @@ class DropboxImportFragment : AbstractDropboxFragment() {
                 }
             } else {
                 Toast.makeText(requireContext(), "No WLAN", Toast.LENGTH_SHORT)
+            }
+        }
+    }
+
+    private fun readDatabase(directory: String) {
+        viewLifecycleOwner.lifecycleScope.launch {
+            val (database, idsFromPhotoFiles) = withContext(Dispatchers.IO) {
+                val dbxClient = DropboxClientFactory.getClient()
+                val os = ByteArrayOutputStream()
+                dbxClient.files().download("/$directory/db.json").download(os)
+                val bytes = os.toByteArray()
+                val jsonStr = String(bytes)
+                val json = JSONObject(jsonStr)
+                val externalFilesDir = requireContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES)!!
+                val database = json.toDatabase(requireContext(), externalFilesDir)
+                database.checkValidity()
+                val entries = dbxClient.files().listFolder("/$directory").entries
+                val ids = entries.filter { it.name != "db.json" }.map { FileUtils.getFilenameWithoutExtension(it.name).toLong() }.toHashSet()
+                Pair(database, ids)
+            }
+            val ids = database.photos.map { it.id}.toHashSet()
+            val missingPhotos = ids - idsFromPhotoFiles
+            if (missingPhotos.isNotEmpty()) {
+                val builder = AlertDialog.Builder(requireContext())
+                with(builder) {
+                    setTitle(R.string.dropbox_import_dialog_title)
+                    setMessage(getString(R.string.dropbox_import_dialog_incomplete_msg, missingPhotos.size as Any))
+                    setPositiveButton(R.string.dropbox_import_dialog_button_import) { dialog, which ->
+                        val filteredPhotos = database.photos.filterNot { missingPhotos.contains(it.id) }
+                        val updatedKnittings = database.knittings.map { if (missingPhotos.contains(it.defaultPhoto?.id)) it.copy(defaultPhoto = null) else it }
+                        val filteredDatabase = database.copy(knittings = updatedKnittings, photos = filteredPhotos)
+                        filteredDatabase.checkValidity()
+                        DropboxImportService.startService(requireContext(), directory, filteredDatabase)
+                        DropboxImportServiceManager.getInstance().updateJobStatus(JobStatus.Progress(0))
+                    }
+                    setNegativeButton(resources.getString(R.string.dialog_button_cancel)) { dialog, which ->}
+                    show()
+                }
+            } else {
+                val builder = AlertDialog.Builder(requireContext())
+                with(builder) {
+                    setTitle(getString(R.string.dropbox_import_dialog_title))
+                    setMessage(getString(R.string.dropbox_import_dialog_msg))
+                    setPositiveButton(getString(R.string.dropbox_import_dialog_button_import)) { dialog, which ->
+                        DropboxImportService.startService(requireContext(), directory, database)
+                        DropboxImportServiceManager.getInstance().updateJobStatus(JobStatus.Progress(0))
+                    }
+                    setNegativeButton(resources.getString(R.string.dialog_button_cancel)) { dialog, which -> }
+                    show()
+                }
             }
         }
     }
