@@ -250,7 +250,7 @@ class DropboxImportFragment : AbstractDropboxFragment() {
                             "Error getting account info!",
                             Toast.LENGTH_SHORT
                         ).show()
-                        binding.eaccount.text =
+                        binding.account.text =
                             "type: ${response.exception.javaClass} + ${response.exception.localizedMessage}"
                     }
                     is DropboxAccountInfoResponse.Success -> {
