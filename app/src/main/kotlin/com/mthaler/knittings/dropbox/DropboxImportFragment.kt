@@ -236,11 +236,12 @@ class DropboxImportFragment : AbstractDropboxFragment() {
     }
 
     private fun fetchAccountInfo() {
-        val requestConfig = DbxRequestConfig(CLIENT_IDENTIFIER)
+        val clientIdentifier = "DropboxSampleAndroid/1.0.0"
+        val requestConfig = DbxRequestConfig(clientIdentifier)
         val credential = getLocalCredential()
         credential?.let {
             val dropboxClient = DbxClientV2(requestConfig, credential)
-            val dropboxApi = DropboxApi(dropboxClient, requireContext(), viewLifecycleOwner)
+            val dropboxApi = DropboxApi(dropboxClient)
             lifecycleScope.launch {
                 when (val response = dropboxApi.getAccountInfo()) {
                     is DropboxAccountInfoResponse.Failure -> {
@@ -249,19 +250,17 @@ class DropboxImportFragment : AbstractDropboxFragment() {
                             "Error getting account info!",
                             Toast.LENGTH_SHORT
                         ).show()
-                        binding.exceptionText.text =
+                        binding.eaccount.text =
                             "type: ${response.exception.javaClass} + ${response.exception.localizedMessage}"
                     }
                     is DropboxAccountInfoResponse.Success -> {
-                        val account = response.accountInfo
-                        binding.emailText.text = account.email
-                        binding.nameText.text = account.name.displayName
-                        binding.typeText.text = account.accountType.name
+                        binding.account.text = response.accountInfo.toString()
                     }
                 }
             }
         }
     }
+
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean = when (item.itemId) {
         R.id.menu_item_dropbox_logout -> {
