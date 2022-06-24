@@ -69,7 +69,7 @@ abstract class AbstractDropboxFragment : Fragment() {
     }
 
     //serialize the credential and store in SharedPreferences
-    private fun storeCredentialLocally(dbxCredential: DbxCredential) {
+    protected fun storeCredentialLocally(dbxCredential: DbxCredential) {
         val sharedPreferences = requireContext().getSharedPreferences("dropbox-sample", MODE_PRIVATE)
         sharedPreferences.edit().putString("credential", dbxCredential.toString()).apply()
     }
