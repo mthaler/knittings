@@ -129,22 +129,14 @@ class DropboxImportFragment : AbstractDropboxFragment() {
                     setMessage(resources.getString(R.string.dropbox_export_no_wifi_question))
                     setPositiveButton(resources.getString(R.string.dropbox_export_dialog_export_button)) { dialog, which ->
                         lifecycleScope.launch {
-                            val result = withContext(Dispatchers.IO) {
-                                DropboxClientFactory.getClient().files().listFolder("")
-                            }
-                            onListFolder(result)
+                            val result = withContext(Dispatchers.IO) { import() }
                         }
                     }
                     setNegativeButton(resources.getString(R.string.dialog_button_cancel)) { dialog, which -> }
                     show()
                 }
             } else {
-                lifecycleScope.launch {
-                    val result = withContext(Dispatchers.IO) {
-                        DropboxClientFactory.getClient().files().listFolder("")
-                    }
-                    onListFolder(result)
-                }
+                Toast.makeText(requireContext(), "no WLAN", Toast.LENGTH_LONG)
             }
         }
 
@@ -223,7 +215,7 @@ class DropboxImportFragment : AbstractDropboxFragment() {
         }
     }
 
-    private suspend fun import(lifecycleScope: LifecycleCoroutineScope) {
+    private suspend fun import() {
         val requestConfig = DbxRequestConfig(CLIENT_IDENTIFIER)
         val credential = getLocalCredential()
         credential?.let {
