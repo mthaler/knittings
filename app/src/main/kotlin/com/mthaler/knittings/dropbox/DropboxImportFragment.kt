@@ -30,6 +30,7 @@ import com.dropbox.core.v2.files.ListFolderResult
 import com.mthaler.knittings.BuildConfig
 import com.mthaler.knittings.R
 import com.mthaler.knittings.databinding.FragmentDropboxImportBinding
+import com.mthaler.knittings.model.Database
 import com.mthaler.knittings.model.toDatabase
 import com.mthaler.knittings.service.JobStatus
 import com.mthaler.knittings.service.ServiceStatus
@@ -225,7 +226,7 @@ class DropboxImportFragment : AbstractDropboxFragment() {
         }
     }
 
-    private fun readDatabase(directory: String) {
+    private suspend fun readDatabase(directory: String) {
         viewLifecycleOwner.lifecycleScope.launch(Dispatchers.IO) {
             val (database, idsFromPhotoFiles) =  {
                 val clientIdentifier = "Knittings"
@@ -284,27 +285,18 @@ class DropboxImportFragment : AbstractDropboxFragment() {
         }
     }
 
-    private suspend fun importDatabase(result: ListFolderResult) {
-        val requestConfig = DbxRequestConfig(CLIENT_IDENTIFIER)
-        val credential = getLocalCredential()
-        credential?.let {
-            val files = result.entries.map { it.name }.sortedDescending().toTypedArray()
-            val dropboxClient = DbxClientV2(requestConfig, credential)
-            val dropboxApi = DropboxApi(dropboxClient, requireContext(), viewLifecycleOwner)
-            val dialogBuilder = AlertDialog.Builder(requireContext())
-            dialogBuilder.setTitle("Backups")
-            dialogBuilder.setItems(files) { _, item ->
-                val directory = files[item]
-                lifecycleScope.launch(Dispatchers.IO) {
-                    dropboxApi.readDatabase(directory)
-                }
-            }
-            dialogBuilder.setNegativeButton("Cancel") { _, _ -> }
-            // Create alert dialog object via builder
-            val alertDialogObject = dialogBuilder.create()
-            // Show the dialog
-            alertDialogObject.show()
-        }
+    private suspend fun importDatabase(directory: String, dropboxClient: DbxClientV2): (Database, HashSet<Long>) {
+        val os = ByteArrayOutputStream()
+        dropboxClient.files().download("/$directory/db.json").download(os)
+        val bytes = os.toByteArray()
+        val jsonStr = String(bytes)
+        val json = JSONObject(jsonStr)
+        val externalFilesDir = requireContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES)!!
+        val database = json.toDatabase(requireContext(), externalFilesDir)
+        database.checkValidity()
+        val entries = dropboxClient.files().listFolder("/$directory").entries
+        val ids = entries.filter { it.name != "db.json" }.map { FileUtils.getFilenameWithoutExtension(it.name).toLong() }.toHashSet()
+        return Pair(database, ids)
     }
 
     private fun fetchAccountInfo() {
