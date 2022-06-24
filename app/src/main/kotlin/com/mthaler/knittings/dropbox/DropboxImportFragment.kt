@@ -195,8 +195,6 @@ class DropboxImportFragment : AbstractDropboxFragment() {
         val requestConfig = DbxRequestConfig(CLIENT_IDENTIFIER)
         val credential = getLocalCredential()
         credential?.let {
-            val dropboxClient = DbxClientV2(requestConfig, credential)
-            val dropboxApi = DropboxApi(dropboxClient, requireContext(), viewLifecycleOwner)
             val isWiFi = NetworkUtils.isWifiConnected(requireContext())
             if (isWiFi) {
                 val builder = AlertDialog.Builder(requireContext())
@@ -206,8 +204,7 @@ class DropboxImportFragment : AbstractDropboxFragment() {
                     setPositiveButton(resources.getString(R.string.dropbox_export_dialog_export_button)) { _, _ ->
                         try {
                             lifecycleScope.launchWhenStarted {
-                                val result = dropboxApi.listFolders()
-                                importDatabase(result)
+                                val database = readDatabase()
                                 val request = OneTimeWorkRequestBuilder<DropboxImportWorker>().build()
                                 val workManager = WorkManager.getInstance(requireContext())
                                 workManager.enqueueUniqueWork(TAG,  ExistingWorkPolicy.REPLACE, request)
