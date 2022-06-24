@@ -25,6 +25,7 @@ import com.dropbox.core.DbxRequestConfig
 import com.dropbox.core.android.Auth
 import com.dropbox.core.oauth.DbxCredential
 import com.dropbox.core.v2.DbxClientV2
+import com.dropbox.core.v2.files.ListFolderResult
 import com.mthaler.knittings.BuildConfig
 import com.mthaler.knittings.R
 import com.mthaler.knittings.databinding.FragmentDropboxImportBinding
@@ -191,20 +192,22 @@ class DropboxImportFragment : AbstractDropboxFragment() {
         }
     }
 
-    private suspend fun import() {
+    private suspend fun import(result: ListFolderResult) {
         val requestConfig = DbxRequestConfig(CLIENT_IDENTIFIER)
         val credential = getLocalCredential()
         credential?.let {
             val isWiFi = NetworkUtils.isWifiConnected(requireContext())
             if (isWiFi) {
+                val files = result.entries.map { it.name }.sortedDescending().toTypedArray()
                 val builder = AlertDialog.Builder(requireContext())
                 with(builder) {
                     setTitle(resources.getString(R.string.dropbox_import))
                     setMessage(resources.getString(R.string.dropbox_export_no_wifi_question))
-                    setPositiveButton(resources.getString(R.string.dropbox_export_dialog_export_button)) { _, _ ->
+                    setItems(files) { _, item ->
                         try {
                             lifecycleScope.launchWhenStarted {
-                                val database = readDatabase()
+                                val directory = files[item]
+                                val database = readDatabase(directory)
                                 val request = OneTimeWorkRequestBuilder<DropboxImportWorker>().build()
                                 val workManager = WorkManager.getInstance(requireContext())
                                 workManager.enqueueUniqueWork(TAG,  ExistingWorkPolicy.REPLACE, request)
