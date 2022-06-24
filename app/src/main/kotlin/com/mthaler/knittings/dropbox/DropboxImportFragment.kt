@@ -17,7 +17,6 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NavUtils
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.lifecycle.lifecycleScope
 import androidx.work.ExistingWorkPolicy
 import androidx.work.OneTimeWorkRequestBuilder
@@ -26,7 +25,6 @@ import com.dropbox.core.DbxRequestConfig
 import com.dropbox.core.android.Auth
 import com.dropbox.core.oauth.DbxCredential
 import com.dropbox.core.v2.DbxClientV2
-import com.dropbox.core.v2.files.ListFolderResult
 import com.mthaler.knittings.BuildConfig
 import com.mthaler.knittings.R
 import com.mthaler.knittings.databinding.FragmentDropboxImportBinding
@@ -228,77 +226,29 @@ class DropboxImportFragment : AbstractDropboxFragment() {
     }
 
     private suspend fun readDatabase(directory: String) {
-        viewLifecycleOwner.lifecycleScope.launch(Dispatchers.IO) {
-            val (database, idsFromPhotoFiles) =  {
-                val clientIdentifier = "Knittings"
-                val requestConfig = DbxRequestConfig(clientIdentifier)
-                val credential = getLocalCredential()
-                credential?.let {
-                    val dropboxClient = DbxClientV2(requestConfig, credential)
-                    val os = ByteArrayOutputStream()
-                    dropboxClient.files().download("/$directory/db.json").download(os)
-                    val bytes = os.toByteArray()
-                    val jsonStr = String(bytes)
-                    val json = JSONObject(jsonStr)
-                    val externalFilesDir = requireContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES)!!
-                    val database = json.toDatabase(requireContext(), externalFilesDir)
-                    database.checkValidity()
-                    val entries = dropboxClient.files().listFolder("/$directory").entries
-                    val ids = entries.filter { it.name != "db.json" }.map { FileUtils.getFilenameWithoutExtension(it.name).toLong() }.toHashSet()
-                    Pair(database, ids)
-                }
-            }
-            val ids = database.photos.map { it.id}.toHashSet()
-            val missingPhotos = ids - idsFromPhotoFiles
-            if (missingPhotos.isNotEmpty()) {
-                val builder = AlertDialog.Builder(requireContext())
-                with(builder) {
-                    setTitle(R.string.dropbox_import_dialog_title)
-                    setMessage(getString(R.string.dropbox_import_dialog_incomplete_msg, missingPhotos.size as Any))
-                    setPositiveButton(R.string.dropbox_import_dialog_button_import) { dialog, which ->
-                        val filteredPhotos = database.photos.filterNot { missingPhotos.contains(it.id) }
-                        val updatedKnittings = database.knittings.map { if (missingPhotos.contains(it.defaultPhoto?.id)) it.copy(defaultPhoto = null) else it }
-                        val filteredDatabase = database.copy(knittings = updatedKnittings, photos = filteredPhotos)
-                        filteredDatabase.checkValidity()
-                        val request = OneTimeWorkRequestBuilder<DropboxImportWorker>().build()
-                        val workManager = WorkManager.getInstance(requireContext())
-                        workManager.enqueueUniqueWork(TAG,  ExistingWorkPolicy.REPLACE, request)
-                        DropboxImportServiceManager.getInstance().updateJobStatus(JobStatus.Progress(0))
-                    }
-                    setNegativeButton(resources.getString(R.string.dialog_button_cancel)) { dialog, which ->}
-                    show()
-                }
-            } else {
-                val builder = AlertDialog.Builder(requireContext())
-                with(builder) {
-                    setTitle(getString(R.string.dropbox_import_dialog_title))
-                    setMessage(getString(R.string.dropbox_import_dialog_msg))
-                    setPositiveButton(getString(R.string.dropbox_import_dialog_button_import)) { dialog, which ->
-                        val request = OneTimeWorkRequestBuilder<DropboxImportWorker>().build()
-                        val workManager = WorkManager.getInstance(requireContext())
-                        workManager.enqueueUniqueWork(TAG,  ExistingWorkPolicy.REPLACE, request)
-                        DropboxImportServiceManager.getInstance().updateJobStatus(JobStatus.Progress(0))
-                    }
-                    setNegativeButton(resources.getString(R.string.dialog_button_cancel)) { dialog, which -> }
-                    show()
-                }
-            }
+        val clientIdentifier = "Knittings"
+        val requestConfig = DbxRequestConfig(clientIdentifier)
+        val credential = getLocalCredential()
+        credential?.let {
+            val dropboxClient = DbxClientV2(requestConfig, credential)
+            val (database, idsFromPhotoFiles) = importDatabase(directory, dropboxClient)
         }
     }
 
     private suspend fun importDatabase(directory: String, dropboxClient: DbxClientV2): Pair<Database, HashSet<Long>> {
-        withContext()
-        val os = ByteArrayOutputStream()
-        dropboxClient.files().download("/$directory/db.json").download(os)
-        val bytes = os.toByteArray()
-        val jsonStr = String(bytes)
-        val json = JSONObject(jsonStr)
-        val externalFilesDir = requireContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES)!!
-        val database = json.toDatabase(requireContext(), externalFilesDir)
-        database.checkValidity()
-        val entries = dropboxClient.files().listFolder("/$directory").entries
-        val ids = entries.filter { it.name != "db.json" }.map { FileUtils.getFilenameWithoutExtension(it.name).toLong() }.toHashSet()
-        return Pair(database, ids)
+        return viewLifecycleOwner.lifecycleScope.launch(Dispatchers.IO) {
+            val os = ByteArrayOutputStream()
+            dropboxClient.files().download("/$directory/db.json").download(os)
+            val bytes = os.toByteArray()
+            val jsonStr = String(bytes)
+            val json = JSONObject(jsonStr)
+            val externalFilesDir = requireContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES)!!
+            val database = json.toDatabase(requireContext(), externalFilesDir)
+            database.checkValidity()
+            val entries = dropboxClient.files().listFolder("/$directory").entries
+            val ids = entries.filter { it.name != "db.json" }.map { FileUtils.getFilenameWithoutExtension(it.name).toLong() }.toHashSet()
+            Pair(database, ids)
+        }
     }
 
     private fun fetchAccountInfo() {
