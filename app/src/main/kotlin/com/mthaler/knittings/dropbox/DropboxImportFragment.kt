@@ -19,6 +19,9 @@ import androidx.core.app.NavUtils
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.lifecycle.lifecycleScope
+import androidx.work.ExistingWorkPolicy
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
 import com.dropbox.core.DbxRequestConfig
 import com.dropbox.core.android.Auth
 import com.dropbox.core.oauth.DbxCredential
@@ -61,28 +64,6 @@ class DropboxImportFragment : AbstractDropboxFragment() {
         }
     }
 
-     private val openFileContract = object : ActivityResultContracts.GetContent() {
-        override fun createIntent(context: Context, input: String): Intent {
-            val intent = super.createIntent(context, input)
-            val mimeTypes = arrayOf("image/*")
-            intent.putExtra(Intent.EXTRA_MIME_TYPES, mimeTypes)
-            return intent
-        }
-    }
-
-    private val contract = registerForActivityResult(openFileContract) { uri ->
-        if (uri != null) {
-            if (uri.scheme == "content") {
-                val name = uri.lastPathSegment
-                val type = MimeTypeMap.getSingleton().getExtensionFromMimeType(requireContext().contentResolver?.getType(uri))
-                val inputStream = requireContext().contentResolver?.openInputStream(uri)
-                //uploadFile("$name.$type", inputStream!!)
-            }
-        } else {
-            Toast.makeText(requireContext(), "Error selecting file", Toast.LENGTH_SHORT).show()
-        }
-    }
-
     override val APP_KEY = BuildConfig.DROPBOX_KEY
     override fun exception(ex: String) {
         binding.exceptionText.text = ex
@@ -107,6 +88,19 @@ class DropboxImportFragment : AbstractDropboxFragment() {
         binding.importButton.setOnClickListener {
              when {
                 ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.WAKE_LOCK) == PackageManager.PERMISSION_GRANTED -> {
+                    val wakeLock: PowerManager.WakeLock =
+                    (requireContext().getSystemService(Context.POWER_SERVICE) as PowerManager).run {
+                        newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "Knittings::DropboxImport").apply {
+                            acquire()
+                        }
+                    }
+                    try {
+                        lifecycleScope.launchWhenStarted {
+                            import(lifecycleScope)
+                        }
+                    } finally {
+                        wakeLock.release()
+                    }
                 }
                 ActivityCompat.shouldShowRequestPermissionRationale(requireActivity(), Manifest.permission.WAKE_LOCK) -> {
                     Toast.makeText(requireContext(), "Wake_Lock permission required", Toast.LENGTH_SHORT)
@@ -208,39 +202,22 @@ class DropboxImportFragment : AbstractDropboxFragment() {
             val dropboxClient = DbxClientV2(requestConfig, credential)
             val dropboxApi = DropboxApi(dropboxClient, requireContext(), viewLifecycleOwner)
             val isWiFi = NetworkUtils.isWifiConnected(requireContext())
-            if (!isWiFi) {
+            if (isWiFi) {
                 val builder = AlertDialog.Builder(requireContext())
                 with(builder) {
                     setTitle(resources.getString(R.string.dropbox_import))
                     setMessage(resources.getString(R.string.dropbox_export_no_wifi_question))
                     setPositiveButton(resources.getString(R.string.dropbox_export_dialog_export_button)) { _, _ ->
-                        try {
-                            lifecycleScope.launchWhenStarted {
-                                val result = dropboxApi.listFolders()
-                                importDatabase(result)
-                            }
-                        } catch (ex: java.lang.Exception) {
-                            throw ex
-                        }
+                        importDatabase()
+                        val request = OneTimeWorkRequestBuilder<DropboxImportWorker>().build()
+                        val workManager = WorkManager.getInstance(requireContext())
+                        workManager.enqueueUniqueWork(TAG,  ExistingWorkPolicy.REPLACE, request)
+                        Toast.makeText(requireContext(), "No WLAN", Toast.LENGTH_SHORT)
                     }
-                    setNegativeButton(resources.getString(R.string.dialog_button_cancel)) { _, _ -> }
                     show()
                 }
             } else {
-                val result = runCatching { lifecycleScope.launch(Dispatchers.IO){ dropboxApi.listFolders() } }
-                when (result) {
-                    is Ok ->
-                        try {
-                            lifecycleScope.launchWhenStarted() {
-                                val r = dropboxApi.listFolders()
-                                importDatabase(r)
-                            }
-                        } catch (ex: java.lang.Exception) {
-                            throw ex
-                        }
-                    is Err ->
-                        throw result.error
-                }
+                Toast.makeText(requireContext(), "No WLAN", Toast.LENGTH_SHORT)
             }
         }
     }
@@ -287,7 +264,9 @@ class DropboxImportFragment : AbstractDropboxFragment() {
                             "type: ${response.exception.javaClass} + ${response.exception.localizedMessage}"
                     }
                     is DropboxAccountInfoResponse.Success -> {
-                        binding.account.text = response.accountInfo.toString()
+                        binding.emailText.text = response.accountInfo.email
+                        binding.nameText.text = response.accountInfo.name.displayName
+                        binding.typeText.text = response.accountInfo.accountType.name
                     }
                 }
             }
