@@ -89,7 +89,7 @@ class DropboxImportWorker(context: Context, parameters: WorkerParameters) : Abst
             return data.build()
         }
 
-        fun readDatabase(application: DatabaseApplication, directory: String, database: String): ExportDatabase {
+        private fun readDatabase(application: DatabaseApplication, directory: String, database: String): ExportDatabase {
             val json = JSONObject(database)
             val file = File(directory)
             val db = application.createExportDatabaseFromJSON(json, file)
