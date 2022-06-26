@@ -300,7 +300,7 @@ class DropboxImportFragment : AbstractDropboxFragment() {
                     with(builder) {
                         setTitle(R.string.dropbox_import_dialog_title)
                         setMessage(getString(R.string.dropbox_import_dialog_incomplete_msg, missingPhotos.size as Any))
-                        setPositiveButton(R.string.dropbox_import_dialog_button_import) { dialog, which ->
+                        setPositiveButton(R.string.dropbox_import_dialog_button_import) { _, _ ->
                             val filteredPhotos = database.photos.filterNot { missingPhotos.contains(it.id) }
                             val updatedKnittings = database.projects.map { if (missingPhotos.contains(it.defaultPhoto?.id)) it.copy(defaultPhoto = null) else it }
                             val filteredDatabase = database.copy(projects = updatedKnittings, photos = filteredPhotos)
@@ -319,7 +319,7 @@ class DropboxImportFragment : AbstractDropboxFragment() {
                     with(builder) {
                         setTitle(getString(R.string.dropbox_import_dialog_title))
                         setMessage(getString(R.string.dropbox_import_dialog_msg))
-                        setPositiveButton(getString(R.string.dropbox_import_dialog_button_import)) { dialog, which ->
+                        setPositiveButton(getString(R.string.dropbox_import_dialog_button_import)) { _, _ ->
                             val data = DropboxImportWorker.data(directory, database)
                             val request = OneTimeWorkRequestBuilder<DropboxImportWorker>().setInputData(data).build()
                             val workManager = WorkManager.getInstance(requireContext())
