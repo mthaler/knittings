@@ -258,7 +258,7 @@ class DropboxImportFragment : AbstractDropboxFragment() {
                 val directory = files[item]
                 readDatabase(directory, credential)
             }
-            dialogBuilder.setNegativeButton("Cancel") { dialog, which -> }
+            dialogBuilder.setNegativeButton("Cancel") { _, _ -> }
             // Create alert dialog object via builder
             val alertDialogObject = dialogBuilder.create()
             // Show the dialog

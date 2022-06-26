@@ -2,6 +2,8 @@
 <resources>
     <string name="whats_new_title">Whats New</string>
     <string name="whats_new"><![CDATA[
+        <h3>Version 0.9.47</h3>
+        - Fixed dropbox import<br>
         <h3>Version 0.9.46</h3>
         - Fixed settings<br>
         <h3>Version 0.9.45</h3>
