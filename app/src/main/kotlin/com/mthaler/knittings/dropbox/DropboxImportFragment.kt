@@ -24,6 +24,7 @@ import com.dropbox.core.DbxRequestConfig
 import com.dropbox.core.android.Auth
 import com.dropbox.core.oauth.DbxCredential
 import com.dropbox.core.v2.DbxClientV2
+import com.dropbox.core.v2.files.ListFolderResult
 import com.mthaler.knittings.BuildConfig
 import com.mthaler.knittings.R
 import com.mthaler.knittings.databinding.FragmentDropboxImportBinding
@@ -239,7 +240,32 @@ class DropboxImportFragment : AbstractDropboxFragment() {
         }
     }
 
-    private suspend  fun readDatabase(directory: String, credential: DbxCredential) { {
+    private fun onListFolder(result: ListFolderResult?) {
+        if (result != null) {
+            val files = result.entries.map { it.name }.sortedDescending().toTypedArray()
+            val dialogBuilder = AlertDialog.Builder(requireContext())
+            dialogBuilder.setTitle("Backups")
+            dialogBuilder.setItems(files) { dialog, item ->
+                val directory = files[item]
+                readDatabase(directory)
+            }
+            dialogBuilder.setNegativeButton("Cancel") { dialog, which -> }
+            // Create alert dialog object via builder
+            val alertDialogObject = dialogBuilder.create()
+            // Show the dialog
+            alertDialogObject.show()
+        } else {
+            val builder = AlertDialog.Builder(requireContext())
+            with(builder) {
+                setTitle("List folders")
+                setMessage("Error when listing folders: null")
+                setPositiveButton("OK") { dialog, which -> }
+                show()
+            }
+        }
+    }
+
+    private fun readDatabase(directory: String, credential: DbxCredential) { {
             viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Main) {
                 val clientIdentifier = "DropboxSampleAndroid/1.0.0"
                 val requestConfig = DbxRequestConfig(clientIdentifier)
