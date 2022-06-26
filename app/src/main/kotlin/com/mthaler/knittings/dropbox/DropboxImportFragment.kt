@@ -23,19 +23,15 @@ import com.dropbox.core.DbxRequestConfig
 import com.dropbox.core.android.Auth
 import com.dropbox.core.oauth.DbxCredential
 import com.dropbox.core.v2.DbxClientV2
-import com.dropbox.core.v2.files.ListFolderResult
 import com.mthaler.knittings.BuildConfig
 import com.mthaler.knittings.R
 import com.mthaler.knittings.databinding.FragmentDropboxImportBinding
-import com.mthaler.knittings.model.Database
 import com.mthaler.knittings.model.toDatabase
 import com.mthaler.knittings.service.JobStatus
 import com.mthaler.knittings.service.ServiceStatus
 import com.mthaler.knittings.utils.FileUtils
-import com.mthaler.knittings.utils.NetworkUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import org.json.JSONObject
 import java.io.ByteArrayOutputStream
 
@@ -190,38 +186,6 @@ class DropboxImportFragment : AbstractDropboxFragment() {
         }
     }
 
-    private suspend fun import(result: ListFolderResult) {
-        val credential = getLocalCredential()
-        credential?.let {
-            val isWiFi = NetworkUtils.isWifiConnected(requireContext())
-            if (isWiFi) {
-                val files = result.entries.map { it.name }.sortedDescending().toTypedArray()
-                val builder = AlertDialog.Builder(requireContext())
-                with(builder) {
-                    setTitle(resources.getString(R.string.dropbox_import))
-                    setMessage(resources.getString(R.string.dropbox_export_no_wifi_question))
-                    setItems(files) { _, item ->
-                        try {
-                            lifecycleScope.launchWhenStarted {
-                                val directory = files[item]
-                                val data: Data = DropboxImportWorker.data(directory, database)
-                                val request = OneTimeWorkRequestBuilder<DropboxImportWorker>().setInputData(data).build()
-                                val workManager = WorkManager.getInstance(requireContext())
-                                workManager.enqueueUniqueWork(TAG,  ExistingWorkPolicy.REPLACE, request)
-                            }
-                        } catch (ex: java.lang.Exception) {
-                            throw ex
-                        }
-                    }
-                    setNegativeButton(resources.getString(R.string.dialog_button_cancel)) { _, _ -> }
-                    show()
-                }
-            } else {
-                Toast.makeText(requireContext(), "No WLAN", Toast.LENGTH_SHORT)
-            }
-        }
-    }
-
     override fun onOptionsItemSelected(item: MenuItem): Boolean = when (item.itemId) {
         R.id.menu_item_dropbox_logout -> {
             logout()
@@ -273,22 +237,25 @@ class DropboxImportFragment : AbstractDropboxFragment() {
         }
     }
 
-    private fun readDatabase(directory: String) {
-        viewLifecycleOwner.lifecycleScope.launch {
-            val (database, idsFromPhotoFiles) = withContext(Dispatchers.IO) {
-                val dbxClient = DropboxClientFactory.getClient()
+    private fun readDatabase(directory: String, credential: DbxCredential) {
+        viewLifecycleOwner.lifecycleScope.launch(Dispatchers.IO) {
+            val clientIdentifier = "DropboxSampleAndroid/1.0.0"
+            val requestConfig = DbxRequestConfig(clientIdentifier)
+            val dropboxClient = DbxClientV2(requestConfig, credential)
+            val deferred = viewLifecycleOwner.lifecycleScope.launch(Dispatchers.IO) {
                 val os = ByteArrayOutputStream()
-                dbxClient.files().download("/$directory/db.json").download(os)
+                dropboxClient.files().download("/$directory/db.json").download(os)
                 val bytes = os.toByteArray()
                 val jsonStr = String(bytes)
                 val json = JSONObject(jsonStr)
                 val externalFilesDir = requireContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES)!!
                 val database = json.toDatabase(requireContext(), externalFilesDir)
                 database.checkValidity()
-                val entries = dbxClient.files().listFolder("/$directory").entries
+                val entries = dropboxClient.files().listFolder("/$directory").entries
                 val ids = entries.filter { it.name != "db.json" }.map { FileUtils.getFilenameWithoutExtension(it.name).toLong() }.toHashSet()
                 Pair(database, ids)
             }
+            val (database, idsFromPhotoFiles) = deferred.await()
             val ids = database.photos.map { it.id}.toHashSet()
             val missingPhotos = ids - idsFromPhotoFiles
             if (missingPhotos.isNotEmpty()) {
