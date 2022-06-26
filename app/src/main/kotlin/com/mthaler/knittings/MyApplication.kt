@@ -29,8 +29,4 @@ class MyApplication : Application(), DatabaseApplication {
 
         override fun categoryListBackground(): Int = R.drawable.categories2
     }
-
-    override fun createExportDatabase(): ExportDatabase = Database.createDatabase()
-
-    override fun createExportDatabaseFromJSON(json: JSONObject, externalFilesDir: File): ExportDatabase = json.toDatabase(this, externalFilesDir)
 }
