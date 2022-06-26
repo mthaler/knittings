@@ -319,7 +319,8 @@ class DropboxImportFragment : AbstractDropboxFragment() {
                         setTitle(getString(R.string.dropbox_import_dialog_title))
                         setMessage(getString(R.string.dropbox_import_dialog_msg))
                         setPositiveButton(getString(R.string.dropbox_import_dialog_button_import)) { dialog, which ->
-                            val request = OneTimeWorkRequestBuilder<DropboxImportWorker>().build()
+                            val data = DropboxImportWorker.data(directory, database)
+                            val request = OneTimeWorkRequestBuilder<DropboxImportWorker>().setInputData(data).build()
                             val workManager = WorkManager.getInstance(requireContext())
                             workManager.enqueueUniqueWork(TAG,  ExistingWorkPolicy.REPLACE, request)
                             DropboxImportServiceManager.getInstance().updateJobStatus(JobStatus.Progress(0))
