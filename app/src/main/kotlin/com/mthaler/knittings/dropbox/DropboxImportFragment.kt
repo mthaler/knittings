@@ -305,12 +305,13 @@ class DropboxImportFragment : AbstractDropboxFragment() {
                             val updatedKnittings = database.projects.map { if (missingPhotos.contains(it.defaultPhoto?.id)) it.copy(defaultPhoto = null) else it }
                             val filteredDatabase = database.copy(projects = updatedKnittings, photos = filteredPhotos)
                             filteredDatabase.checkValidity()
-                            val request = OneTimeWorkRequestBuilder<DropboxImportWorker>().build()
+                            val data = DropboxImportWorker.data(directory, database)
+                            val request = OneTimeWorkRequestBuilder<DropboxImportWorker>().setInputData(data).build()
                             val workManager = WorkManager.getInstance(requireContext())
                             workManager.enqueueUniqueWork(TAG,  ExistingWorkPolicy.REPLACE, request)
                             DropboxImportServiceManager.getInstance().updateJobStatus(JobStatus.Progress(0))
                         }
-                        setNegativeButton(resources.getString(R.string.dialog_button_cancel)) { dialog, which ->}
+                        setNegativeButton(resources.getString(R.string.dialog_button_cancel)) { _, _ ->}
                         show()
                     }
                 } else {
@@ -325,7 +326,7 @@ class DropboxImportFragment : AbstractDropboxFragment() {
                             workManager.enqueueUniqueWork(TAG,  ExistingWorkPolicy.REPLACE, request)
                             DropboxImportServiceManager.getInstance().updateJobStatus(JobStatus.Progress(0))
                         }
-                        setNegativeButton(resources.getString(R.string.dialog_button_cancel)) { dialog, which -> }
+                        setNegativeButton(resources.getString(R.string.dialog_button_cancel)) { _, _ -> }
                         show()
                     }
                 }
