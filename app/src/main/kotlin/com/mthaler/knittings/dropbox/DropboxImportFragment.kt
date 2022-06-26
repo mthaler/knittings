@@ -25,8 +25,6 @@ import com.dropbox.core.oauth.DbxCredential
 import com.dropbox.core.v2.DbxClientV2
 import com.mthaler.knittings.BuildConfig
 import com.mthaler.knittings.R
-import com.mthaler.knittings.compressphotos.CompressPhotoWorker
-import com.mthaler.knittings.compressphotos.CompressPhotosFragment
 import com.mthaler.knittings.databinding.FragmentDropboxImportBinding
 import com.mthaler.knittings.model.toDatabase
 import com.mthaler.knittings.service.JobStatus
