@@ -222,31 +222,28 @@ class DropboxImportFragment : AbstractDropboxFragment() {
         }
     }
 
-    private suspend fun readDatabase(directory: String) {
-        val clientIdentifier = "Knittings"
-        val requestConfig = DbxRequestConfig(clientIdentifier)
-        val credential = getLocalCredential()
-        credential?.let {
-            val dropboxClient = DbxClientV2(requestConfig, credential)
-            val (database, idsFromPhotoFiles) = importDatabase(directory, dropboxClient)
+    override fun onOptionsItemSelected(item: MenuItem): Boolean = when (item.itemId) {
+        R.id.menu_item_dropbox_logout -> {
+            logout()
+            true
         }
+        android.R.id.home -> {
+            // Respond to the action bar's Up/Home button
+            val upIntent: Intent? = NavUtils.getParentActivityIntent(requireActivity())
+            if (upIntent == null) {
+                throw IllegalStateException("No Parent Activity Intent")
+            } else {
+                val sm = DropboxImportServiceManager.getInstance()
+                if (sm.jobStatus.value is JobStatus.Success) {
+                    sm.updateJobStatus(JobStatus.Initialized)
+                }
+                NavUtils.navigateUpTo(requireActivity(), upIntent)
+            }
+            true
+        }
+        else -> super.onOptionsItemSelected(item)
     }
 
-    private suspend fun importDatabase(directory: String, dropboxClient: DbxClientV2): Pair<Database, HashSet<Long>> {
-        return viewLifecycleOwner.lifecycleScope.launch(Dispatchers.IO) {
-            val os = ByteArrayOutputStream()
-            dropboxClient.files().download("/$directory/db.json").download(os)
-            val bytes = os.toByteArray()
-            val jsonStr = String(bytes)
-            val json = JSONObject(jsonStr)
-            val externalFilesDir = requireContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES)!!
-            val database = json.toDatabase(requireContext(), externalFilesDir)
-            database.checkValidity()
-            val entries = dropboxClient.files().listFolder("/$directory").entries
-            val ids = entries.filter { it.name != "db.json" }.map { FileUtils.getFilenameWithoutExtension(it.name).toLong() }.toHashSet()
-            Pair(database, ids)
-        }
-    }
 
     private fun fetchAccountInfo() {
         val clientIdentifier = "DropboxSampleAndroid/1.0.0"
@@ -276,28 +273,56 @@ class DropboxImportFragment : AbstractDropboxFragment() {
         }
     }
 
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean = when (item.itemId) {
-        R.id.menu_item_dropbox_logout -> {
-            logout()
-            true
-        }
-        android.R.id.home -> {
-            // Respond to the action bar's Up/Home button
-            val upIntent: Intent? = NavUtils.getParentActivityIntent(requireActivity())
-            if (upIntent == null) {
-                throw IllegalStateException("No Parent Activity Intent")
-            } else {
-                val sm = DropboxImportServiceManager.getInstance()
-                if (sm.jobStatus.value is JobStatus.Success) {
-                    sm.updateJobStatus(JobStatus.Initialized)
-                }
-                NavUtils.navigateUpTo(requireActivity(), upIntent)
+    private fun readDatabase(directory: String) {
+        viewLifecycleOwner.lifecycleScope.launch {
+            val (database, idsFromPhotoFiles) = withContext(Dispatchers.IO) {
+                val dbxClient = DropboxClientFactory.getClient()
+                val os = ByteArrayOutputStream()
+                dbxClient.files().download("/$directory/db.json").download(os)
+                val bytes = os.toByteArray()
+                val jsonStr = String(bytes)
+                val json = JSONObject(jsonStr)
+                val externalFilesDir = requireContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES)!!
+                val database = json.toDatabase(requireContext(), externalFilesDir)
+                database.checkValidity()
+                val entries = dbxClient.files().listFolder("/$directory").entries
+                val ids = entries.filter { it.name != "db.json" }.map { FileUtils.getFilenameWithoutExtension(it.name).toLong() }.toHashSet()
+                Pair(database, ids)
             }
-            true
+            val ids = database.photos.map { it.id}.toHashSet()
+            val missingPhotos = ids - idsFromPhotoFiles
+            if (missingPhotos.isNotEmpty()) {
+                val builder = AlertDialog.Builder(requireContext())
+                with(builder) {
+                    setTitle(R.string.dropbox_import_dialog_title)
+                    setMessage(getString(R.string.dropbox_import_dialog_incomplete_msg, missingPhotos.size as Any))
+                    setPositiveButton(R.string.dropbox_import_dialog_button_import) { dialog, which ->
+                        val filteredPhotos = database.photos.filterNot { missingPhotos.contains(it.id) }
+                        val updatedKnittings = database.knittings.map { if (missingPhotos.contains(it.defaultPhoto?.id)) it.copy(defaultPhoto = null) else it }
+                        val filteredDatabase = database.copy(knittings = updatedKnittings, photos = filteredPhotos)
+                        filteredDatabase.checkValidity()
+                        DropboxImportService.startService(requireContext(), directory, filteredDatabase)
+                        DropboxImportServiceManager.getInstance().updateJobStatus(JobStatus.Progress(0))
+                    }
+                    setNegativeButton(resources.getString(R.string.dialog_button_cancel)) { dialog, which ->}
+                    show()
+                }
+            } else {
+                val builder = AlertDialog.Builder(requireContext())
+                with(builder) {
+                    setTitle(getString(R.string.dropbox_import_dialog_title))
+                    setMessage(getString(R.string.dropbox_import_dialog_msg))
+                    setPositiveButton(getString(R.string.dropbox_import_dialog_button_import)) { dialog, which ->
+                        DropboxImportService.startService(requireContext(), directory, database)
+                        DropboxImportServiceManager.getInstance().updateJobStatus(JobStatus.Progress(0))
+                    }
+                    setNegativeButton(resources.getString(R.string.dialog_button_cancel)) { dialog, which -> }
+                    show()
+                }
+            }
         }
-        else -> super.onOptionsItemSelected(item)
     }
+
 
     override fun clearData() {
         binding.loginButton.visibility = View.VISIBLE
