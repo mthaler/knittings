@@ -4,6 +4,8 @@ import android.content.Context
 import androidx.core.net.toUri
 import androidx.work.Data
 import androidx.work.WorkerParameters
+import com.dropbox.core.DbxRequestConfig
+import com.dropbox.core.v2.DbxClientV2
 import com.mthaler.knittings.R
 import com.mthaler.knittings.database.KnittingsDataSource
 import com.mthaler.knittings.model.Database
@@ -29,46 +31,52 @@ class DropboxImportWorker(context: Context, parameters: WorkerParameters) : Abst
     }
 
     private fun downloadPhotos(database: Database, directory: String) {
+        val clientIdentifier = "Knittings"
+        val requestConfig = DbxRequestConfig(clientIdentifier)
+        val credential = getLocalCredential()
         val sm = DropboxImportServiceManager.getInstance()
         val count = database.photos.size
-        val dbxClient = DropboxClientFactory.getClient()
-        // remove all existing entries from the database
-        KnittingsDataSource.deleteAllProjects()
-        KnittingsDataSource.deleteAllPhotos()
-        KnittingsDataSource.deleteAllCategories()
-        KnittingsDataSource.deleteAllNeedles()
-        KnittingsDataSource.deleteAllRowCounters()
-        // add downloaded database
-        for (photo in database.photos) {
-            KnittingsDataSource.addPhoto(photo, manualID = true)
-        }
-        for (category in database.categories) {
-            KnittingsDataSource.addCategory(category, manualID = true)
-        }
-        for (needle in database.needles) {
-            KnittingsDataSource.addNeedle(needle, manualID = true)
-        }
-        for (r in database.rowCounters) {
-            KnittingsDataSource.addRowCounter(r, manualID = true)
-        }
-        for (knitting in database.projects) {
-            KnittingsDataSource.addProject(knitting, manualID = true)
-        }
-        for ((index, photo) in database.photos.withIndex()) {
-            // Download the file.
-            val filename = "/" + directory + "/" + photo.id + "." + FileUtils.getExtension(photo.filename.name)
-            FileOutputStream(photo.filename).use {
-                dbxClient.files().download(filename).download(it)
+        credential?.let {
+            val dropboxClient = DbxClientV2(requestConfig, credential)
+            // remove all existing entries from the database
+            KnittingsDataSource.deleteAllProjects()
+            KnittingsDataSource.deleteAllPhotos()
+            KnittingsDataSource.deleteAllCategories()
+            KnittingsDataSource.deleteAllNeedles()
+            KnittingsDataSource.deleteAllRowCounters()
+            // add downloaded database
+            for (photo in database.photos) {
+                KnittingsDataSource.addPhoto(photo, manualID = true)
             }
-            // generate preview
-            val orientation = PictureUtils.getOrientation(photo.filename.toUri(), context)
-            val preview = PictureUtils.decodeSampledBitmapFromPath(photo.filename.absolutePath, 200, 200)
-            val rotatedPreview = PictureUtils.rotateBitmap(preview, orientation)
-            val photoWithPreview = photo.copy(preview = rotatedPreview)
-            KnittingsDataSource.updatePhoto(photoWithPreview)
-            val progress = (index / count.toFloat() * 100).toInt()
-            sm.updateJobStatus(JobStatus.Progress(progress))
+            for (category in database.categories) {
+                KnittingsDataSource.addCategory(category, manualID = true)
+            }
+            for (needle in database.needles) {
+                KnittingsDataSource.addNeedle(needle, manualID = true)
+            }
+            for (r in database.rowCounters) {
+                KnittingsDataSource.addRowCounter(r, manualID = true)
+            }
+            for (knitting in database.projects) {
+                KnittingsDataSource.addProject(knitting, manualID = true)
+            }
+            for ((index, photo) in database.photos.withIndex()) {
+                // Download the file.
+                val filename = "/" + directory + "/" + photo.id + "." + FileUtils.getExtension(photo.filename.name)
+                FileOutputStream(photo.filename).use {
+                    dropboxClient.files().download(filename).download(it)
+                }
+                // generate preview
+                val orientation = PictureUtils.getOrientation(photo.filename.toUri(), context)
+                val preview = PictureUtils.decodeSampledBitmapFromPath(photo.filename.absolutePath, 200, 200)
+                val rotatedPreview = PictureUtils.rotateBitmap(preview, orientation)
+                val photoWithPreview = photo.copy(preview = rotatedPreview)
+                KnittingsDataSource.updatePhoto(photoWithPreview)
+                val progress = (index / count.toFloat() * 100).toInt()
+                sm.updateJobStatus(JobStatus.Progress(progress))
+            }
         }
+
     }
 
     companion object {
