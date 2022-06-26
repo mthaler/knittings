@@ -32,7 +32,7 @@ class DropboxImportWorker(context: Context, parameters: WorkerParameters) : Abst
         return Result.success()
     }
 
-    private fun downloadPhotos(database: Database, directory) {
+    private fun downloadPhotos(database: Database, directory: String) {
         val sm = DropboxImportServiceManager.getInstance()
         val count = database.photos.size
         val dbxClient = DropboxClientFactory.getClient()
