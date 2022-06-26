@@ -99,9 +99,14 @@ class DropboxImportFragment : AbstractDropboxFragment() {
                         val requestConfig = DbxRequestConfig(clientIdentifier)
                         val credential = getLocalCredential()
                         credential?.let {
-                            val dropboxClient = DbxClientV2(requestConfig, credential)
-                            val result = dropboxClient.files().listFolder("")
-                            onListFolder(result, credential)
+                            viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+                                val deferred = viewLifecycleOwner.lifecycleScope.async(Dispatchers.IO) {
+                                    val dropboxClient = DbxClientV2(requestConfig, credential)
+                                    dropboxClient.files().listFolder("")
+                                }
+                                val result = deferred.await()
+                                onListFolder(result, credential)
+                            }
                         }
                     } finally {
                         wakeLock.release()
