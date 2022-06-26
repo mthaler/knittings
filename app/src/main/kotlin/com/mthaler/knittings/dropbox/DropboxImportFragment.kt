@@ -52,8 +52,13 @@ class DropboxImportFragment : AbstractDropboxFragment() {
                     }
                 }
             try {
-                lifecycleScope.launchWhenStarted {
-                    import()
+                val clientIdentifier = "DropboxSampleAndroid/1.0.0"
+                val requestConfig = DbxRequestConfig(clientIdentifier)
+                val credential = getLocalCredential()
+                credential?.let {
+                    val dropboxClient = DbxClientV2(requestConfig, credential)
+                    val result = dropboxClient.files().listFolder("")
+                    onListFolder(result, credential)
                 }
             } finally {
                 wakeLock.release()
