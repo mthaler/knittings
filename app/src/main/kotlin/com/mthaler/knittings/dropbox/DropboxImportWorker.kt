@@ -20,13 +20,12 @@ import org.json.JSONObject
 import java.io.File
 import java.io.FileOutputStream
 
-class DropboxImportWorker(context: Context, parameters: WorkerParameters) : AbstractDropboxWorker(context, parameters) {
+class DropboxImportWorker(val context: Context, parameters: WorkerParameters) : AbstractDropboxWorker(context, parameters) {
 
     override suspend  fun doWork(): Result {
         DropboxImportServiceManager.getInstance().updateServiceStatus(ServiceStatus.Started)
         val directory = inputData.getString(Directory)!!
-        val app: DatabaseApplication = context.applicationContext as DatabaseApplication
-        val database = readDatabase(directory, inputData.getString(Database)!!)
+        val database = readDatabase(context, directory, inputData.getString(Database)!!)
         downloadPhotos(database, directory)
         DropboxImportServiceManager.getInstance().updateJobStatus(JobStatus.Success(context.resources.getString(R.string.dropbox_import_completed)))
         DropboxImportServiceManager.getInstance().updateServiceStatus(ServiceStatus.Stopped)
