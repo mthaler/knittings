@@ -43,21 +43,21 @@ class DropboxExportWorker(val context: Context, parameters: WorkerParameters) : 
         val requestConfig = DbxRequestConfig(clientIdentifier)
         val credential = getLocalCredential()
         credential?.let {
-            val dropboxClient = DbxClientV2(requestConfig, credential)
-            val sm = DropboxExportServiceManager.getInstance()
-            dropboxClient.files().createFolderV2("/$dir")
-            val database = (applicationContext as DatabaseApplication).createExportDatabase().checkDatabase()
-            uploadDatabase(dropboxClient, dir, database)
-            // upload photos to dropbox
-            val count = database.photos.size
-            for ((index, photo) in database.photos.withIndex()) {
-                if (sm.cancelled) {
-                    return true
-                }
-                uploadPhoto(dropboxClient, dir, photo)
-                val progress = (index / count.toFloat() * 100).toInt()
-                sm.updateJobStatus(JobStatus.Progress(progress))
-            }
+//            val dropboxClient = DbxClientV2(requestConfig, credential)
+//            val sm = DropboxExportServiceManager.getInstance()
+//            dropboxClient.files().createFolderV2("/$dir")
+//            val database = (applicationContext as DatabaseApplication).createExportDatabase().checkDatabase()
+//            uploadDatabase(dropboxClient, dir, database)
+//            // upload photos to dropbox
+//            val count = database.photos.size
+//            for ((index, photo) in database.photos.withIndex()) {
+//                if (sm.cancelled) {
+//                    return true
+//                }
+//                uploadPhoto(dropboxClient, dir, photo)
+//                val progress = (index / count.toFloat() * 100).toInt()
+//                sm.updateJobStatus(JobStatus.Progress(progress))
+//            }
         }
         return false
     }
