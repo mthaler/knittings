@@ -26,7 +26,7 @@ class DropboxImportWorker(context: Context, parameters: WorkerParameters) : Abst
         DropboxImportServiceManager.getInstance().updateServiceStatus(ServiceStatus.Started)
         val directory = inputData.getString(Directory)!!
         val app: DatabaseApplication = context.applicationContext as DatabaseApplication
-        val database = readDatabase(app, directory, inputData.getString(Database)!!)
+        val database = readDatabase(directory, inputData.getString(Database)!!)
         downloadPhotos(database, directory)
         DropboxImportServiceManager.getInstance().updateJobStatus(JobStatus.Success(context.resources.getString(R.string.dropbox_import_completed)))
         DropboxImportServiceManager.getInstance().updateServiceStatus(ServiceStatus.Stopped)
@@ -83,14 +83,14 @@ class DropboxImportWorker(context: Context, parameters: WorkerParameters) : Abst
         const val Database = "com.mthaler.knittings.dropbox.database"
         const val Directory = "com.mthaler.knittings.dropbox.directory"
 
-        fun data(directory: String, database: ExportDatabase): Data {
+        fun data(directory: String, database: Database): Data {
             val data = Data.Builder()
             data.putString(Directory, directory)
             data.putString(Database, database.toJSON().toString())
             return data.build()
         }
 
-        private fun readDatabase(context: Context, directory: String, database: String): ExportDatabase {
+        private fun readDatabase(context: Context, directory: String, database: String): Database {
             val json = JSONObject(database)
             val file = File(directory)
             val db = json.toDatabase(context, file)
