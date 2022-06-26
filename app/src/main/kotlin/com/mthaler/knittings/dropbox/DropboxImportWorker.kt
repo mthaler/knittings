@@ -20,7 +20,7 @@ import org.json.JSONObject
 import java.io.File
 import java.io.FileOutputStream
 
-class DropboxImportWorker(val context: Context, parameters: WorkerParameters) : AbstractDropboxWorker(context, parameters) {
+class DropboxImportWorker(context: Context, parameters: WorkerParameters) : AbstractDropboxWorker(context, parameters) {
 
     override suspend  fun doWork(): Result {
         DropboxImportServiceManager.getInstance().updateServiceStatus(ServiceStatus.Started)
