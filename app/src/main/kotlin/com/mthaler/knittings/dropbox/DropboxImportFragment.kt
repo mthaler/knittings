@@ -18,7 +18,6 @@ import androidx.core.app.ActivityCompat
 import androidx.core.app.NavUtils
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.whenStarted
 import androidx.work.*
 import com.dropbox.core.DbxRequestConfig
 import com.dropbox.core.android.Auth
@@ -96,8 +95,13 @@ class DropboxImportFragment : AbstractDropboxFragment() {
                         }
                     }
                     try {
-                        lifecycleScope.launchWhenStarted {
-                            import()
+                        val clientIdentifier = "DropboxSampleAndroid/1.0.0"
+                        val requestConfig = DbxRequestConfig(clientIdentifier)
+                        val credential = getLocalCredential()
+                        credential?.let {
+                            val dropboxClient = DbxClientV2(requestConfig, credential)
+                            val result = dropboxClient.files().listFolder("")
+                            onListFolder(result, credential)
                         }
                     } finally {
                         wakeLock.release()
