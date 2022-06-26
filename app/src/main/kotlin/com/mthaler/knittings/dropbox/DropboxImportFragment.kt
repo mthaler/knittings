@@ -107,6 +107,7 @@ class DropboxImportFragment : AbstractDropboxFragment() {
                                 val result = deferred.await()
                                 onListFolder(result, credential)
                             }
+
                         }
                     } finally {
                         wakeLock.release()
@@ -261,7 +262,7 @@ class DropboxImportFragment : AbstractDropboxFragment() {
             dialogBuilder.setTitle("Backups")
             dialogBuilder.setItems(files) { _, item ->
                 val directory = files[item]
-                readDatabase(directory, credential)
+                viewLifecycleOwner.lifecycleScope.launchWhenStarted { readDatabase(directory, credential) }
             }
             dialogBuilder.setNegativeButton("Cancel") { _, _ -> }
             // Create alert dialog object via builder
@@ -279,62 +280,62 @@ class DropboxImportFragment : AbstractDropboxFragment() {
         }
     }
 
-    private fun readDatabase(directory: String, credential: DbxCredential) { {
-            viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Main) {
-                val clientIdentifier = "DropboxSampleAndroid/1.0.0"
-                val requestConfig = DbxRequestConfig(clientIdentifier)
-                val dropboxClient = DbxClientV2(requestConfig, credential)
-                val deferred = viewLifecycleOwner.lifecycleScope.async(Dispatchers.IO) {
-                    val os = ByteArrayOutputStream()
-                    dropboxClient.files().download("/$directory/db.json").download(os)
-                    val bytes = os.toByteArray()
-                    val jsonStr = String(bytes)
-                    val json = JSONObject(jsonStr)
-                    val externalFilesDir = requireContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES)!!
-                    val database = json.toDatabase(requireContext(), externalFilesDir)
-                    database.checkValidity()
-                    val entries = dropboxClient.files().listFolder("/$directory").entries
-                    val ids = entries.filter { it.name != "db.json" }.map { FileUtils.getFilenameWithoutExtension(it.name).toLong() }.toHashSet()
-                    Pair(database, ids)
+    private suspend fun readDatabase(directory: String, credential: DbxCredential) {
+        val clientIdentifier = "DropboxSampleAndroid/1.0.0"
+        val requestConfig = DbxRequestConfig(clientIdentifier)
+        val dropboxClient = DbxClientV2(requestConfig, credential)
+        val deferred = viewLifecycleOwner.lifecycleScope.async(Dispatchers.IO) {
+            val os = ByteArrayOutputStream()
+            dropboxClient.files().download("/$directory/db.json").download(os)
+            val bytes = os.toByteArray()
+            val jsonStr = String(bytes)
+            val json = JSONObject(jsonStr)
+            val externalFilesDir = requireContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES)!!
+            val database = json.toDatabase(requireContext(), externalFilesDir)
+            database.checkValidity()
+            val entries = dropboxClient.files().listFolder("/$directory").entries
+            val ids = entries.filter { it.name != "db.json" }.map { FileUtils.getFilenameWithoutExtension(it.name).toLong() }.toHashSet()
+            Pair(database, ids)
+        }
+        val (database, idsFromPhotoFiles) = deferred.await()
+        val ids = database.photos.map { it.id}.toHashSet()
+        val missingPhotos = ids - idsFromPhotoFiles
+        if (missingPhotos.isNotEmpty()) {
+            val builder = AlertDialog.Builder(requireContext())
+            with(builder) {
+                setTitle(R.string.dropbox_import_dialog_title)
+                setMessage(getString(R.string.dropbox_import_dialog_incomplete_msg, missingPhotos.size as Any))
+                setPositiveButton(R.string.dropbox_import_dialog_button_import) { _, _ ->
+                    val filteredPhotos = database.photos.filterNot { missingPhotos.contains(it.id) }
+                    val updatedKnittings = database.projects.map { if (missingPhotos.contains(it.defaultPhoto?.id)) it.copy(defaultPhoto = null) else it }
+                    val filteredDatabase = database.copy(projects = updatedKnittings, photos = filteredPhotos)
+                    filteredDatabase.checkValidity()
+                    val data = DropboxImportWorker.data(directory, database)
+                    val request = OneTimeWorkRequestBuilder<DropboxImportWorker>().setInputData(data).build()
+                    val workManager = WorkManager.getInstance(requireContext())
+                    workManager.enqueueUniqueWork(TAG,  ExistingWorkPolicy.REPLACE, request)
+                    DropboxImportServiceManager.getInstance().updateJobStatus(JobStatus.Progress(0))
                 }
-                val (database, idsFromPhotoFiles) = deferred.await()
-                val ids = database.photos.map { it.id}.toHashSet()
-                val missingPhotos = ids - idsFromPhotoFiles
-                if (missingPhotos.isNotEmpty()) {
-                    val builder = AlertDialog.Builder(requireContext())
-                    with(builder) {
-                        setTitle(R.string.dropbox_import_dialog_title)
-                        setMessage(getString(R.string.dropbox_import_dialog_incomplete_msg, missingPhotos.size as Any))
-                        setPositiveButton(R.string.dropbox_import_dialog_button_import) { _, _ ->
-                            val filteredPhotos = database.photos.filterNot { missingPhotos.contains(it.id) }
-                            val updatedKnittings = database.projects.map { if (missingPhotos.contains(it.defaultPhoto?.id)) it.copy(defaultPhoto = null) else it }
-                            val filteredDatabase = database.copy(projects = updatedKnittings, photos = filteredPhotos)
-                            filteredDatabase.checkValidity()
-                            val data = DropboxImportWorker.data(directory, database)
-                            val request = OneTimeWorkRequestBuilder<DropboxImportWorker>().setInputData(data).build()
-                            val workManager = WorkManager.getInstance(requireContext())
-                            workManager.enqueueUniqueWork(TAG,  ExistingWorkPolicy.REPLACE, request)
-                            DropboxImportServiceManager.getInstance().updateJobStatus(JobStatus.Progress(0))
-                        }
-                        setNegativeButton(resources.getString(R.string.dialog_button_cancel)) { _, _ ->}
-                        show()
-                    }
-                } else {
-                    val builder = AlertDialog.Builder(requireContext())
-                    with(builder) {
-                        setTitle(getString(R.string.dropbox_import_dialog_title))
-                        setMessage(getString(R.string.dropbox_import_dialog_msg))
-                        setPositiveButton(getString(R.string.dropbox_import_dialog_button_import)) { _, _ ->
-                            val data = DropboxImportWorker.data(directory, database)
-                            val request = OneTimeWorkRequestBuilder<DropboxImportWorker>().setInputData(data).build()
-                            val workManager = WorkManager.getInstance(requireContext())
-                            workManager.enqueueUniqueWork(TAG,  ExistingWorkPolicy.REPLACE, request)
-                            DropboxImportServiceManager.getInstance().updateJobStatus(JobStatus.Progress(0))
-                        }
-                        setNegativeButton(resources.getString(R.string.dialog_button_cancel)) { _, _ -> }
-                        show()
-                    }
+                setNegativeButton(resources.getString(R.string.dialog_button_cancel)) { _, _ ->}
+                show()
+            }
+        } else {
+            val builder = AlertDialog.Builder(requireContext())
+            with(builder) {
+                setTitle(getString(R.string.dropbox_import_dialog_title))
+                setMessage(getString(R.string.dropbox_import_dialog_msg))
+                setPositiveButton(getString(R.string.dropbox_import_dialog_button_import)) { _, _ ->
+                    val data = DropboxImportWorker.data(directory, database)
+                    val request =
+                        OneTimeWorkRequestBuilder<DropboxImportWorker>().setInputData(data)
+                            .build()
+                    val workManager = WorkManager.getInstance(requireContext())
+                    workManager.enqueueUniqueWork(TAG, ExistingWorkPolicy.REPLACE, request)
+                    DropboxImportServiceManager.getInstance()
+                        .updateJobStatus(JobStatus.Progress(0))
                 }
+                setNegativeButton(resources.getString(R.string.dialog_button_cancel)) { _, _ -> }
+                show()
             }
         }
     }
