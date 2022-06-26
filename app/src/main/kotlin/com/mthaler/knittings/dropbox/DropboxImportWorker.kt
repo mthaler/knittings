@@ -71,8 +71,6 @@ class DropboxImportWorker(context: Context, parameters: WorkerParameters) : Abst
             val photoWithPreview = photo.copy(preview = rotatedPreview)
             KnittingsDataSource.updatePhoto(photoWithPreview)
             val progress = (index / count.toFloat() * 100).toInt()
-            builder.setProgress(100, progress, false)
-            notificationManager.notify(1, builder.build())
             sm.updateJobStatus(JobStatus.Progress(progress))
         }
     }
