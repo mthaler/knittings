@@ -31,6 +31,7 @@ import com.mthaler.knittings.service.JobStatus
 import com.mthaler.knittings.service.ServiceStatus
 import com.mthaler.knittings.utils.FileUtils
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import org.json.JSONObject
 import java.io.ByteArrayOutputStream
@@ -238,7 +239,7 @@ class DropboxImportFragment : AbstractDropboxFragment() {
     }
 
     private fun readDatabase(directory: String, credential: DbxCredential) {
-        viewLifecycleOwner.lifecycleScope.launch(Dispatchers.IO) {
+        val deferred = viewLifecycleOwner.lifecycleScope.async(Dispatchers.IO) {
             val clientIdentifier = "DropboxSampleAndroid/1.0.0"
             val requestConfig = DbxRequestConfig(clientIdentifier)
             val dropboxClient = DbxClientV2(requestConfig, credential)
@@ -255,7 +256,7 @@ class DropboxImportFragment : AbstractDropboxFragment() {
                 val ids = entries.filter { it.name != "db.json" }.map { FileUtils.getFilenameWithoutExtension(it.name).toLong() }.toHashSet()
                 Pair(database, ids)
             }
-            val (database, idsFromPhotoFiles) = deferred.await()
+            deferred.await()
             val ids = database.photos.map { it.id}.toHashSet()
             val missingPhotos = ids - idsFromPhotoFiles
             if (missingPhotos.isNotEmpty()) {
