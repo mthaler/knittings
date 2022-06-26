@@ -240,14 +240,14 @@ class DropboxImportFragment : AbstractDropboxFragment() {
         }
     }
 
-    private fun onListFolder(result: ListFolderResult?) {
+    private fun onListFolder(result: ListFolderResult?, credential: DbxCredential) {
         if (result != null) {
             val files = result.entries.map { it.name }.sortedDescending().toTypedArray()
             val dialogBuilder = AlertDialog.Builder(requireContext())
             dialogBuilder.setTitle("Backups")
             dialogBuilder.setItems(files) { dialog, item ->
                 val directory = files[item]
-                readDatabase(directory)
+                readDatabase(directory, credential)
             }
             dialogBuilder.setNegativeButton("Cancel") { dialog, which -> }
             // Create alert dialog object via builder
