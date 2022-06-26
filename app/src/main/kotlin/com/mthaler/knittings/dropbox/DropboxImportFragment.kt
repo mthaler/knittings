@@ -25,6 +25,8 @@ import com.dropbox.core.oauth.DbxCredential
 import com.dropbox.core.v2.DbxClientV2
 import com.mthaler.knittings.BuildConfig
 import com.mthaler.knittings.R
+import com.mthaler.knittings.compressphotos.CompressPhotoWorker
+import com.mthaler.knittings.compressphotos.CompressPhotosFragment
 import com.mthaler.knittings.databinding.FragmentDropboxImportBinding
 import com.mthaler.knittings.model.toDatabase
 import com.mthaler.knittings.service.JobStatus
@@ -268,7 +270,9 @@ class DropboxImportFragment : AbstractDropboxFragment() {
                         val updatedKnittings = database.knittings.map { if (missingPhotos.contains(it.defaultPhoto?.id)) it.copy(defaultPhoto = null) else it }
                         val filteredDatabase = database.copy(knittings = updatedKnittings, photos = filteredPhotos)
                         filteredDatabase.checkValidity()
-                        DropboxImportService.startService(requireContext(), directory, filteredDatabase)
+                        val request = OneTimeWorkRequestBuilder<DropboxImportWorker>().build()
+                        val workManager = WorkManager.getInstance(requireContext())
+                        workManager.enqueueUniqueWork(TAG,  ExistingWorkPolicy.REPLACE, request)
                         DropboxImportServiceManager.getInstance().updateJobStatus(JobStatus.Progress(0))
                     }
                     setNegativeButton(resources.getString(R.string.dialog_button_cancel)) { dialog, which ->}
@@ -280,7 +284,9 @@ class DropboxImportFragment : AbstractDropboxFragment() {
                     setTitle(getString(R.string.dropbox_import_dialog_title))
                     setMessage(getString(R.string.dropbox_import_dialog_msg))
                     setPositiveButton(getString(R.string.dropbox_import_dialog_button_import)) { dialog, which ->
-                        DropboxImportService.startService(requireContext(), directory, database)
+                        val request = OneTimeWorkRequestBuilder<DropboxImportWorker>().build()
+                        val workManager = WorkManager.getInstance(requireContext())
+                        workManager.enqueueUniqueWork(TAG,  ExistingWorkPolicy.REPLACE, request)
                         DropboxImportServiceManager.getInstance().updateJobStatus(JobStatus.Progress(0))
                     }
                     setNegativeButton(resources.getString(R.string.dialog_button_cancel)) { dialog, which -> }
