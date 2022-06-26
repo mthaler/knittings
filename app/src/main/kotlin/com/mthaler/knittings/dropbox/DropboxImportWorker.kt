@@ -55,7 +55,7 @@ class DropboxImportWorker(context: Context, parameters: WorkerParameters) : Abst
         for (r in database.rowCounters) {
             KnittingsDataSource.addRowCounter(r, manualID = true)
         }
-        for (knitting in database.knittings) {
+        for (knitting in database.projects) {
             KnittingsDataSource.addProject(knitting, manualID = true)
         }
         for ((index, photo) in database.photos.withIndex()) {
