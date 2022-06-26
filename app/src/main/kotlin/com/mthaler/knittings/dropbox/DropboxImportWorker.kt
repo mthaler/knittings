@@ -11,6 +11,7 @@ import com.mthaler.knittings.R
 import com.mthaler.knittings.database.KnittingsDataSource
 import com.mthaler.knittings.model.Database
 import com.mthaler.knittings.model.ExportDatabase
+import com.mthaler.knittings.model.toDatabase
 import com.mthaler.knittings.service.JobStatus
 import com.mthaler.knittings.service.ServiceStatus
 import com.mthaler.knittings.utils.FileUtils
@@ -89,10 +90,10 @@ class DropboxImportWorker(context: Context, parameters: WorkerParameters) : Abst
             return data.build()
         }
 
-        private fun readDatabase(application: DatabaseApplication, directory: String, database: String): ExportDatabase {
+        private fun readDatabase(context: Context, directory: String, database: String): ExportDatabase {
             val json = JSONObject(database)
             val file = File(directory)
-            val db = application.createExportDatabaseFromJSON(json, file)
+            val db = json.toDatabase(context, file)
             return db
         }
     }

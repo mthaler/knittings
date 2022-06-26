@@ -9,8 +9,4 @@ interface DatabaseApplication {
     val dropboxAppKey: String
 
     fun getApplicationSettings(): ApplicationSettings
-
-    fun createExportDatabase(): ExportDatabase
-
-    fun createExportDatabaseFromJSON(json: JSONObject, externalFilesDir: File): ExportDatabase
 }
