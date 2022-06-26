@@ -86,6 +86,53 @@ class DropboxImportWorker(context: Context, parameters: WorkerParameters) : Abst
         DropboxImportServiceManager.getInstance().updateJobStatus(JobStatus.Success(context.resources. getString(R.string.dropbox_import_completed)))
     }
 
+    private fun downloadPhotos(database: Database, directory: String, pendingIntent: PendingIntent) {
+        val builder = createNotificationBuilder(pendingIntent, getString(R.string.dropbox_import_notification_initial_msg))
+        val notificationManager = NotificationManagerCompat.from(this)
+        val sm = DropboxImportServiceManager.getInstance()
+        val count = database.photos.size
+        val dbxClient = DropboxClientFactory.getClient()
+        // remove all existing entries from the database
+        KnittingsDataSource.deleteAllProjects()
+        KnittingsDataSource.deleteAllPhotos()
+        KnittingsDataSource.deleteAllCategories()
+        KnittingsDataSource.deleteAllNeedles()
+        KnittingsDataSource.deleteAllRowCounters()
+        // add downloaded database
+        for (photo in database.photos) {
+            KnittingsDataSource.addPhoto(photo, manualID = true)
+        }
+        for (category in database.categories) {
+            KnittingsDataSource.addCategory(category, manualID = true)
+        }
+        for (needle in database.needles) {
+            KnittingsDataSource.addNeedle(needle, manualID = true)
+        }
+        for (r in database.rowCounters) {
+            KnittingsDataSource.addRowCounter(r, manualID = true)
+        }
+        for (knitting in database.knittings) {
+            KnittingsDataSource.addProject(knitting, manualID = true)
+        }
+        for ((index, photo) in database.photos.withIndex()) {
+            // Download the file.
+            val filename = "/" + directory + "/" + photo.id + "." + FileUtils.getExtension(photo.filename.name)
+            FileOutputStream(photo.filename).use {
+                dbxClient.files().download(filename).download(it)
+            }
+            // generate preview
+            val orientation = PictureUtils.getOrientation(photo.filename.absolutePath)
+            val preview = PictureUtils.decodeSampledBitmapFromPath(photo.filename.absolutePath, 200, 200)
+            val rotatedPreview = PictureUtils.rotateBitmap(preview, orientation)
+            val photoWithPreview = photo.copy(preview = rotatedPreview)
+            KnittingsDataSource.updatePhoto(photoWithPreview)
+            val progress = (index / count.toFloat() * 100).toInt()
+            builder.setProgress(100, progress, false)
+            notificationManager.notify(1, builder.build())
+            sm.updateJobStatus(JobStatus.Progress(progress))
+        }
+    }
+
     companion object {
         val TAG = "com.mthaler.knittings.compressphotos.DropboxImportWorkerr"
 
