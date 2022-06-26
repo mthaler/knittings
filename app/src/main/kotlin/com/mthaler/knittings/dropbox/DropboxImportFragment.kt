@@ -254,7 +254,7 @@ class DropboxImportFragment : AbstractDropboxFragment() {
             val files = result.entries.map { it.name }.sortedDescending().toTypedArray()
             val dialogBuilder = AlertDialog.Builder(requireContext())
             dialogBuilder.setTitle("Backups")
-            dialogBuilder.setItems(files) { dialog, item ->
+            dialogBuilder.setItems(files) { _, item ->
                 val directory = files[item]
                 readDatabase(directory, credential)
             }
@@ -268,7 +268,7 @@ class DropboxImportFragment : AbstractDropboxFragment() {
             with(builder) {
                 setTitle("List folders")
                 setMessage("Error when listing folders: null")
-                setPositiveButton("OK") { dialog, which -> }
+                setPositiveButton("OK") { _, _ -> }
                 show()
             }
         }
