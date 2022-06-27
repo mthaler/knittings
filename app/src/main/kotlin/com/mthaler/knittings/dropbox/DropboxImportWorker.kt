@@ -17,10 +17,8 @@ import com.mthaler.knittings.service.ServiceStatus
 import com.mthaler.knittings.utils.FileUtils
 import com.mthaler.knittings.utils.PictureUtils
 import org.json.JSONObject
-import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileNotFoundException
-import java.io.FileOutputStream
 import java.lang.NullPointerException
 
 class DropboxImportWorker(context: Context, parameters: WorkerParameters) : AbstractDropboxWorker(context, parameters) {
@@ -69,26 +67,31 @@ class DropboxImportWorker(context: Context, parameters: WorkerParameters) : Abst
             for (knitting in database.knittings) {
                 KnittingsDataSource.addProject(knitting, manualID = true)
             }
+            Log.e(TAG, "dir: " + directory)
             for ((index, photo) in database.photos.withIndex()) {
-               try {
-                Log.e(TAG, "dir: " + directory)
-                // Download the file.
-                val filename = "/" + directory + "/" + photo.id + "." + FileUtils.getExtension("" + photo.filename)
-                Log.e(TAG, filename)
-                val result = dropboxClient.files().download(filename)
-                Log.e(TAG, "" + result)
-                generatePrevie(photo)
-               } catch (ex: FileNotFoundException) {
-                   Log.e(TAG, "Could not download file", ex)
-               } finally {
-                   val progress = (index / count.toFloat() * 100).toInt()
-                   sm.updateJobStatus(JobStatus.Progress(progress))
-               }
+                downloadPhoto(directory, dropboxClient, photo, index, sm, count)
+                generatePreview(photo)
             }
         }
     }
 
-    private fun generatePrevie(photo: Photo) {
+    private fun downloadPhoto(directory: String, dropboxClient: DbxClientV2, photo: Photo, index: Int, sm: DropboxImportServiceManager, count: Int) {
+        try {
+            // Download the file.
+            val filename = "/" + directory + "/" + photo.id + "." + FileUtils.getExtension("" + photo.filename)
+            Log.e(TAG, filename)
+            val result = dropboxClient.files().download(filename)
+            Log.e(TAG, "" + result)
+        } catch (ex: FileNotFoundException) {
+            Log.e(TAG, "Could not download file", ex)
+        } finally {
+            val progress = (index / count.toFloat() * 100).toInt()
+            sm.updateJobStatus(JobStatus.Progress(progress))
+        }
+    }
+
+
+    private fun generatePreview(photo: Photo) {
         try {
             val orientation = PictureUtils.getOrientation(photo.filename.toUri(), context)
             val preview = PictureUtils.decodeSampledBitmapFromPath(photo.filename.absolutePath, 200, 200)
