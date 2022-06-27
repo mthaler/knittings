@@ -2,6 +2,7 @@ package com.mthaler.knittings.database
 
 import android.content.Context
 import android.database.Cursor
+import android.os.FileUriExposedException
 import android.util.Log
 import androidx.preference.PreferenceManager
 import java.io.File

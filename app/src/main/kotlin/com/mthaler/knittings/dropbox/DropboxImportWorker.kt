@@ -17,6 +17,7 @@ import com.mthaler.knittings.utils.FileUtils
 import com.mthaler.knittings.utils.PictureUtils
 import org.json.JSONObject
 import java.io.File
+import java.io.FileNotFoundException
 import java.io.FileOutputStream
 
 class DropboxImportWorker(context: Context, parameters: WorkerParameters) : AbstractDropboxWorker(context, parameters) {
@@ -32,7 +33,6 @@ class DropboxImportWorker(context: Context, parameters: WorkerParameters) : Abst
     }
 
     private fun downloadPhotos(database: Database, directory: String) {
-        Log.e(TAG, database.toString())
         val clientIdentifier = "Knittings"
         val requestConfig = DbxRequestConfig(clientIdentifier)
         val credential = getLocalCredential()
@@ -41,11 +41,15 @@ class DropboxImportWorker(context: Context, parameters: WorkerParameters) : Abst
         credential?.let {
             val dropboxClient = DbxClientV2(requestConfig, credential)
             // remove all existing entries from the database
-            KnittingsDataSource.deleteAllProjects()
-            KnittingsDataSource.deleteAllPhotos()
-            KnittingsDataSource.deleteAllCategories()
-            KnittingsDataSource.deleteAllNeedles()
-            KnittingsDataSource.deleteAllRowCounters()
+            try {
+                KnittingsDataSource.deleteAllProjects()
+                KnittingsDataSource.deleteAllPhotos()
+                KnittingsDataSource.deleteAllCategories()
+                KnittingsDataSource.deleteAllNeedles()
+                KnittingsDataSource.deleteAllRowCounters()
+            } catch (ex: FileNotFoundException) {
+                Log.e(TAG, "Could not delete file", ex)
+            }
             // add downloaded database
             for (photo in database.photos) {
                 KnittingsDataSource.addPhoto(photo, manualID = true)
