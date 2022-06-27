@@ -89,7 +89,7 @@ class DropboxImportWorker(context: Context, parameters: WorkerParameters) : Abst
             Log.e(TAG, filename)
             FileOutputStream(f).use {
                 dropboxClient.files().download(filename).download(it)
-                Log.d(TAG, "Downloaded file " + filename)
+                Log.d(TAG, "Downloaded file " + f)
             }
             return photo.copy(filename = File(f))
         } catch (ex: FileNotFoundException) {
