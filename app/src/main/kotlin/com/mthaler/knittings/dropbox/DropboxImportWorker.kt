@@ -1,6 +1,7 @@
 package com.mthaler.knittings.dropbox
 
 import android.content.Context
+import android.util.Log
 import androidx.core.net.toUri
 import androidx.work.Data
 import androidx.work.WorkerParameters
@@ -80,7 +81,7 @@ class DropboxImportWorker(context: Context, parameters: WorkerParameters) : Abst
     }
 
     companion object {
-        val TAG = "com.mthaler.knittings.compressphotos.DropboxImportWorkerr"
+        val TAG = "DropboxImportWorkerr"
 
         private const val KNITTINGS = "com.mthaler.knittings"
         const val Database = "com.mthaler.knittings.dropbox.database"
