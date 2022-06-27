@@ -232,7 +232,7 @@ fun JSONObject.toDatabase(context: Context, externalFilesDir: File): Database {
     fun updatePhotoFilename(photo: Photo): Photo {
         val oldFilename = photo.filename
         val newFilename = File(externalFilesDir, oldFilename.name)
-        return photo.copy(filename = newFilename)
+        return photo.copy(filename = File(newFilename.name))
     }
 
     fun addCategory(knitting: Knitting, categoryID: Long?, idToCategory: Map<Long, Category>): Knitting {
