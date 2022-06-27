@@ -19,6 +19,7 @@ import com.mthaler.knittings.utils.PictureUtils
 import org.json.JSONObject
 import java.io.File
 import java.io.FileNotFoundException
+import java.io.FileOutputStream
 import java.lang.NullPointerException
 
 class DropboxImportWorker(context: Context, parameters: WorkerParameters) : AbstractDropboxWorker(context, parameters) {
@@ -75,15 +76,23 @@ class DropboxImportWorker(context: Context, parameters: WorkerParameters) : Abst
         }
     }
 
-    private fun downloadPhoto(directory: String, dropboxClient: DbxClientV2, photo: Photo, index: Int, sm: DropboxImportServiceManager, count: Int) {
+    private fun downloadPhoto(directory: String, dropboxClient: DbxClientV2, photo: Photo, index: Int, sm: DropboxImportServiceManager, count: Int): Photo? {
         try {
+            var f = photo.filename.absolutePath
+            if (f.startsWith("/")) {
+                f.substring(1, f.length)
+            }
+            Log.e(TAG, f)
             // Download the file.
             val filename = "/" + directory + "/" + photo.id + "." + FileUtils.getExtension("" + photo.filename)
             Log.e(TAG, filename)
-            val result = dropboxClient.files().download(filename)
-            Log.e(TAG, "" + result)
+            FileOutputStream(photo.filename).use {
+                dropboxClient.files().download(filename).download(it)
+            }
+            return photo.copy(filename = File(f))
         } catch (ex: FileNotFoundException) {
             Log.e(TAG, "Could not download file", ex)
+            return null
         } finally {
             val progress = (index / count.toFloat() * 100).toInt()
             sm.updateJobStatus(JobStatus.Progress(progress))
