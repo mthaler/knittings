@@ -2,6 +2,7 @@ package com.mthaler.knittings.dropbox
 
 import android.content.Context
 import android.util.Log
+import android.widget.Toast
 import androidx.core.net.toUri
 import androidx.work.Data
 import androidx.work.WorkerParameters
@@ -92,7 +93,7 @@ class DropboxImportWorker(context: Context, parameters: WorkerParameters) : Abst
             }
             return photo.copy(filename = File(f))
         } catch (ex: FileNotFoundException) {
-            Log.e(TAG, "Could not download file", ex)
+            Toast.makeText(context, "Could not download file: " + ex, Toast.LENGTH_LONG).show()
             return null
         } finally {
             val progress = (index / count.toFloat() * 100).toInt()
