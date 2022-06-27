@@ -2,7 +2,6 @@ package com.mthaler.knittings.dropbox
 
 import com.mthaler.knittings.service.AbstractServiceManager
 
-
 class DropboxImportServiceManager : AbstractServiceManager() {
 
     companion object {

@@ -1,6 +1,7 @@
 package com.mthaler.knittings.dropbox
 
 import android.content.Context
+import android.util.Log
 import androidx.core.net.toUri
 import androidx.work.Data
 import androidx.work.WorkerParameters
@@ -31,6 +32,7 @@ class DropboxImportWorker(context: Context, parameters: WorkerParameters) : Abst
     }
 
     private fun downloadPhotos(database: Database, directory: String) {
+        Log.e(TAG, database.toString())
         val clientIdentifier = "Knittings"
         val requestConfig = DbxRequestConfig(clientIdentifier)
         val credential = getLocalCredential()
@@ -62,8 +64,9 @@ class DropboxImportWorker(context: Context, parameters: WorkerParameters) : Abst
             }
             for ((index, photo) in database.photos.withIndex()) {
                 // Download the file.
-                val filename = "/" + directory + "/" + photo.id + "." + FileUtils.getExtension(photo.filename.name)
-                FileOutputStream(photo.filename).use {
+                val filename = "/" + directory + "/" + photo.id + "." + FileUtils.getExtension("")
+                val filename2 = File(filename).name
+                FileOutputStream(filename2).use {
                     dropboxClient.files().download(filename).download(it)
                 }
                 // generate preview
