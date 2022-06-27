@@ -21,6 +21,7 @@ import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileNotFoundException
 import java.io.FileOutputStream
+import java.lang.NullPointerException
 
 class DropboxImportWorker(context: Context, parameters: WorkerParameters) : AbstractDropboxWorker(context, parameters) {
 
@@ -88,11 +89,15 @@ class DropboxImportWorker(context: Context, parameters: WorkerParameters) : Abst
     }
 
     private fun generatePrevie(photo: Photo) {
-        val orientation = PictureUtils.getOrientation(photo.filename.toUri(), context)
-        val preview = PictureUtils.decodeSampledBitmapFromPath(photo.filename.absolutePath, 200, 200)
-        val rotatedPreview = PictureUtils.rotateBitmap(preview, orientation)
-        val photoWithPreview = photo.copy(preview = rotatedPreview)
-        KnittingsDataSource.updatePhoto(photoWithPreview)
+        try {
+            val orientation = PictureUtils.getOrientation(photo.filename.toUri(), context)
+            val preview = PictureUtils.decodeSampledBitmapFromPath(photo.filename.absolutePath, 200, 200)
+            val rotatedPreview = PictureUtils.rotateBitmap(preview, orientation)
+            val photoWithPreview = photo.copy(preview = rotatedPreview)
+            KnittingsDataSource.updatePhoto(photoWithPreview)
+        } catch (ex: NullPointerException) {
+            Log.e(TAG, "Could not generate preview", ex)
+        }
     }
 
     companion object {
