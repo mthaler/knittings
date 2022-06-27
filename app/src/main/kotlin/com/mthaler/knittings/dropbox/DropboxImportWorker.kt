@@ -82,7 +82,7 @@ class DropboxImportWorker(context: Context, parameters: WorkerParameters) : Abst
         try {
             var f = photo.filename.absolutePath
             if (f.startsWith("/")) {
-                f.substring(2, f.length)
+                f = f.substring(1, f.length)
             }
             // Download the file.
             val filename = "/" + directory + "/" + photo.id + "." + FileUtils.getExtension("" + photo.filename)
@@ -109,6 +109,7 @@ class DropboxImportWorker(context: Context, parameters: WorkerParameters) : Abst
             val rotatedPreview = PictureUtils.rotateBitmap(preview, orientation)
             val photoWithPreview = photo.copy(preview = rotatedPreview)
             KnittingsDataSource.updatePhoto(photoWithPreview)
+            Log.d(TAG, "gemerated preview for: " + photo)
         } catch (ex: NullPointerException) {
             Log.e(TAG, "Could not generate preview", ex)
         }
