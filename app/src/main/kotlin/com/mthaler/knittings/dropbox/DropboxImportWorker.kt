@@ -72,8 +72,8 @@ class DropboxImportWorker(context: Context, parameters: WorkerParameters) : Abst
             }
             Log.e(TAG, "dir: " + directory)
             for ((index, photo) in database.photos.withIndex()) {
-                downloadPhoto(directory, dropboxClient, photo, index, sm, count)
-                generatePreview(photo)
+                val p = downloadPhoto(directory, dropboxClient, photo, index, sm, count)
+                p?.let { generatePreview(it) }
             }
         }
     }
@@ -93,7 +93,7 @@ class DropboxImportWorker(context: Context, parameters: WorkerParameters) : Abst
             }
             return photo.copy(filename = File(f))
         } catch (ex: FileNotFoundException) {
-            Toast.makeText(context, "Could not download file: " + ex, Toast.LENGTH_LONG).show()
+            Log.e(TAG, "Could not download file", ex,)
             return null
         } finally {
             val progress = (index / count.toFloat() * 100).toInt()
