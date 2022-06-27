@@ -16,6 +16,7 @@ import com.mthaler.knittings.service.ServiceStatus
 import com.mthaler.knittings.utils.FileUtils
 import com.mthaler.knittings.utils.PictureUtils
 import org.json.JSONObject
+import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileNotFoundException
 import java.io.FileOutputStream
@@ -68,11 +69,10 @@ class DropboxImportWorker(context: Context, parameters: WorkerParameters) : Abst
             }
             for ((index, photo) in database.photos.withIndex()) {
                 // Download the file.
-                val filename = "/" + directory + "/" + photo.id + "." + FileUtils.getExtension("")
-                val filename2 = File(filename).name
-                FileOutputStream(filename2).use {
-                    dropboxClient.files().download(filename).download(it)
-                }
+                val filename = "/" + directory + "/" + photo.id + "." + FileUtils.getExtension("" + photo.filename)
+                Log.e(TAG, filename)
+                val result = dropboxClient.files().download(filename)
+                Log.e(TAG, "" + result)
                 // generate preview
                 val orientation = PictureUtils.getOrientation(photo.filename.toUri(), context)
                 val preview = PictureUtils.decodeSampledBitmapFromPath(photo.filename.absolutePath, 200, 200)
