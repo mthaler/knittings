@@ -10,6 +10,7 @@ import com.dropbox.core.v2.DbxClientV2
 import com.mthaler.knittings.R
 import com.mthaler.knittings.database.KnittingsDataSource
 import com.mthaler.knittings.model.Database
+import com.mthaler.knittings.model.Photo
 import com.mthaler.knittings.model.toDatabase
 import com.mthaler.knittings.service.JobStatus
 import com.mthaler.knittings.service.ServiceStatus
@@ -68,22 +69,30 @@ class DropboxImportWorker(context: Context, parameters: WorkerParameters) : Abst
                 KnittingsDataSource.addProject(knitting, manualID = true)
             }
             for ((index, photo) in database.photos.withIndex()) {
+               try {
+                Log.e(TAG, "dir: " + directory)
                 // Download the file.
                 val filename = "/" + directory + "/" + photo.id + "." + FileUtils.getExtension("" + photo.filename)
                 Log.e(TAG, filename)
                 val result = dropboxClient.files().download(filename)
                 Log.e(TAG, "" + result)
-                // generate preview
-                val orientation = PictureUtils.getOrientation(photo.filename.toUri(), context)
-                val preview = PictureUtils.decodeSampledBitmapFromPath(photo.filename.absolutePath, 200, 200)
-                val rotatedPreview = PictureUtils.rotateBitmap(preview, orientation)
-                val photoWithPreview = photo.copy(preview = rotatedPreview)
-                KnittingsDataSource.updatePhoto(photoWithPreview)
-                val progress = (index / count.toFloat() * 100).toInt()
-                sm.updateJobStatus(JobStatus.Progress(progress))
+                generatePrevie(photo)
+               } catch (ex: FileNotFoundException) {
+                   Log.e(TAG, "Could not download file", ex)
+               } finally {
+                   val progress = (index / count.toFloat() * 100).toInt()
+                   sm.updateJobStatus(JobStatus.Progress(progress))
+               }
             }
         }
+    }
 
+    private fun generatePrevie(photo: Photo) {
+        val orientation = PictureUtils.getOrientation(photo.filename.toUri(), context)
+        val preview = PictureUtils.decodeSampledBitmapFromPath(photo.filename.absolutePath, 200, 200)
+        val rotatedPreview = PictureUtils.rotateBitmap(preview, orientation)
+        val photoWithPreview = photo.copy(preview = rotatedPreview)
+        KnittingsDataSource.updatePhoto(photoWithPreview)
     }
 
     companion object {
