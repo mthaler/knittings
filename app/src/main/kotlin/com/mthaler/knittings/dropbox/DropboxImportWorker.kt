@@ -1,7 +1,6 @@
 package com.mthaler.knittings.dropbox
 
 import android.content.Context
-import android.util.Log
 import androidx.core.net.toUri
 import androidx.work.Data
 import androidx.work.WorkerParameters
@@ -58,7 +57,7 @@ class DropboxImportWorker(context: Context, parameters: WorkerParameters) : Abst
             for (r in database.rowCounters) {
                 KnittingsDataSource.addRowCounter(r, manualID = true)
             }
-            for (knitting in database.projects) {
+            for (knitting in database.knittings) {
                 KnittingsDataSource.addProject(knitting, manualID = true)
             }
             for ((index, photo) in database.photos.withIndex()) {

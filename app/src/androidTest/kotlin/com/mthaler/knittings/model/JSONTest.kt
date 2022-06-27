@@ -226,9 +226,9 @@ class JSONTest {
             "photos":[{"knittingID":43,"filename":"/tmp/photo1.jpg","description":"socks","id":42},{"knittingID":44,"filename":"/tmp/photo2.jpg","description":"shirt","id":43}]}"""
         val json = JSONObject(s)
         val db = json.toDatabase(ApplicationProvider.getApplicationContext(), File("/tmp"))
-        assertEquals(2, db.projects.size)
+        assertEquals(2, db.knittings.size)
         assertEquals(2, db.photos.size)
-        val k = db.projects[0]
+        val k = db.knittings[0]
         assertEquals(42, k.id)
         assertEquals("knitting", k.title)
         assertEquals("my first knitting", k.description)
@@ -237,7 +237,7 @@ class JSONTest {
         assertEquals("3", k.needleDiameter)
         assertEquals("41", k.size)
         assertEquals(5.0, k.rating, 0.00001)
-        val k2 = db.projects[1]
+        val k2 = db.knittings[1]
         assertEquals(44, k2.id)
         assertEquals("knitting 2", k2.title)
         assertEquals("my second knitting", k2.description)

@@ -14,18 +14,18 @@ abstract class AbstractExportDatabase : ExportDatabase {
     }
 
     private fun checkPhotosValidity() {
-        val missing =  photos.map {it.ownerID}.toSet() - projects.map { it.id }.toSet()
+        val missing =  photos.map {it.ownerID}.toSet() - knittings.map { it.id }.toSet()
         if (missing.isNotEmpty()) {
             throw IllegalArgumentException("Photos reference non-existing knittings with ids $missing")
         }
     }
 
     private fun checkProjectsValidity() {
-        val missingCategories = projects.mapNotNull { it.category }.map { it.id }.toSet() - categories.map { it.id }.toSet()
+        val missingCategories = knittings.mapNotNull { it.category }.map { it.id }.toSet() - categories.map { it.id }.toSet()
         if (missingCategories.isNotEmpty()) {
             throw IllegalArgumentException("Knittings reference non-existing categories with ids $missingCategories")
         }
-        val missingPhotos = projects.mapNotNull { it.defaultPhoto }.map { it.id }.toSet() - photos.map { it.id }.toSet()
+        val missingPhotos = knittings.mapNotNull { it.defaultPhoto }.map { it.id }.toSet() - photos.map { it.id }.toSet()
         if (missingPhotos.isNotEmpty()) {
             throw IllegalArgumentException("Knittings reference non-existing photos with ids $missingPhotos")
         }

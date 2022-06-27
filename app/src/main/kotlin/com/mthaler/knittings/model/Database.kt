@@ -11,21 +11,21 @@ import org.json.JSONObject
 import java.io.File
 import java.io.FileOutputStream
 
-data class Database(override val projects: List<Knitting>, override val photos: List<Photo>, override val categories: List<Category>, override val needles: List<Needle>, override val rowCounters: List<RowCounter>) : AbstractExportDatabase() {
+data class Database(override val knittings: List<Knitting>, override val photos: List<Photo>, override val categories: List<Category>, override val needles: List<Needle>, override val rowCounters: List<RowCounter>) : AbstractExportDatabase() {
 
     override fun checkDatabase(): Database {
         val filteredPhotos = photos.filter { it.filename.exists() }
         val removedPhotos = photos.map { it.id }.toSet() - filteredPhotos.map { it.id}.toSet()
-        val updatedKnittings = projects.map { if (removedPhotos.contains(it.defaultPhoto?.id)) it.copy(defaultPhoto = null) else it }
-        val filteredDatabase = copy(projects = updatedKnittings, photos = filteredPhotos)
+        val updatedKnittings = knittings.map { if (removedPhotos.contains(it.defaultPhoto?.id)) it.copy(defaultPhoto = null) else it }
+        val filteredDatabase = copy(knittings = updatedKnittings, photos = filteredPhotos)
         filteredDatabase.checkValidity()
         return filteredDatabase
     }
 
     override fun removeMissingPhotos(missingPhotos: Set<Long>): ExportDatabase {
         val filteredPhotos = photos.filterNot { missingPhotos.contains(it.id) }
-        val updatedKnittings = projects.map { if (missingPhotos.contains(it.defaultPhoto?.id)) it.copy(defaultPhoto = null) else it }
-        val filteredDatabase = copy(projects = updatedKnittings, photos = filteredPhotos)
+        val updatedKnittings = knittings.map { if (missingPhotos.contains(it.defaultPhoto?.id)) it.copy(defaultPhoto = null) else it }
+        val filteredDatabase = copy(knittings = updatedKnittings, photos = filteredPhotos)
         filteredDatabase.checkValidity()
         return filteredDatabase
     }
@@ -51,7 +51,7 @@ data class Database(override val projects: List<Knitting>, override val photos: 
         for (r in rowCounters) {
             KnittingsDataSource.addRowCounter(r, manualID = true)
         }
-        for (knitting in projects) {
+        for (knitting in knittings) {
             KnittingsDataSource.addProject(knitting, manualID = true)
         }
 
@@ -74,7 +74,7 @@ data class Database(override val projects: List<Knitting>, override val photos: 
     override fun toJSON(): JSONObject {
         val result = JSONObject()
         result.put("version", KnittingDatabaseHelper.DB_VERSION)
-        result.put("knittings", knittingsToJSON(projects))
+        result.put("knittings", knittingsToJSON(knittings))
         result.put("photos", photosToJSON(photos))
         result.put("categories", categoriesToJSON(categories))
         result.put("needles", needlesToJSON(needles))

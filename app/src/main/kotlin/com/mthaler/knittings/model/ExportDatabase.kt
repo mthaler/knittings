@@ -7,7 +7,7 @@ import java.io.Serializable
 
 interface ExportDatabase  : Serializable {
 
-    val projects: List<Knitting>
+    val knittings: List<Knitting>
 
     val photos: List<Photo>
 
