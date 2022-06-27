@@ -16,6 +16,7 @@ import com.mthaler.knittings.service.JobStatus
 import com.mthaler.knittings.service.ServiceStatus
 import com.mthaler.knittings.utils.FileUtils
 import com.mthaler.knittings.utils.PictureUtils
+import com.squareup.wire.internal.boxedOneOfKeysFieldName
 import org.json.JSONObject
 import java.io.File
 import java.io.FileNotFoundException
@@ -80,14 +81,14 @@ class DropboxImportWorker(context: Context, parameters: WorkerParameters) : Abst
         try {
             var f = photo.filename.absolutePath
             if (f.startsWith("/")) {
-                f.substring(1, f.length)
+                f.substring(2, f.length)
             }
-            Log.e(TAG, f)
             // Download the file.
             val filename = "/" + directory + "/" + photo.id + "." + FileUtils.getExtension("" + photo.filename)
             Log.e(TAG, filename)
-            FileOutputStream(photo.filename).use {
+            FileOutputStream(f).use {
                 dropboxClient.files().download(filename).download(it)
+                Log.d(TAG, "Downloaded file " + filename)
             }
             return photo.copy(filename = File(f))
         } catch (ex: FileNotFoundException) {
