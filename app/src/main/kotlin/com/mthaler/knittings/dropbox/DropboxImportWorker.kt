@@ -121,15 +121,16 @@ class DropboxImportWorker(context: Context, parameters: WorkerParameters) : Abst
 
     private fun generatePreview(photo: Photo, storageDir: File) {
         try {
-            val filename = storageDir.toPath().resolve(photo.filename.toPath())
-            val orientation = PictureUtils.getOrientation(filename.toFile().toUri(), context)
-            val preview = PictureUtils.decodeSampledBitmapFromPath(photo.filename.absolutePath, 200, 200)
+            val filename = storageDir.toPath().resolve(photo.filename.toPath()).toFile()
+            Log.d(TAG, "generating preview for $filename")
+            val orientation = PictureUtils.getOrientation(filename.toUri(), context)
+            val preview = PictureUtils.decodeSampledBitmapFromPath(filename.absolutePath, 200, 200)
             val rotatedPreview = PictureUtils.rotateBitmap(preview, orientation)
             val photoWithPreview = photo.copy(preview = rotatedPreview)
             KnittingsDataSource.updatePhoto(photoWithPreview)
-            Log.d(TAG, "gemerated preview for: " + photo)
+            Log.d(TAG, "gemerated preview for $filename")
         } catch (ex: NullPointerException) {
-            Log.e(TAG, "Could not generate preview", ex)
+            Log.e(TAG, "Could not generate preview for $photo", ex)
         }
     }
 
