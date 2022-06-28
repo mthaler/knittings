@@ -162,6 +162,7 @@ class DropboxImportFragment : AbstractDropboxFragment() {
             when(serviceStatus) {
                 ServiceStatus.Stopped -> binding.importButton.isEnabled = true
                 ServiceStatus.Started -> binding.importButton.isEnabled = false
+                else -> throw IllegalArgumentException("Unknown serviceStatus: " + serviceStatus)
             }
         })
     }
