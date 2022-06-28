@@ -36,6 +36,7 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import org.json.JSONObject
 import java.io.ByteArrayOutputStream
+import java.lang.IllegalArgumentException
 
 class DropboxImportFragment : AbstractDropboxFragment() {
 
@@ -153,6 +154,7 @@ class DropboxImportFragment : AbstractDropboxFragment() {
                     binding.result.visibility = View.VISIBLE
                     binding.result.text = jobStatus.msg
                 }
+                else -> throw IllegalArgumentException("Unknown jobStatus: " + jobStatus)
             }
         })
 
