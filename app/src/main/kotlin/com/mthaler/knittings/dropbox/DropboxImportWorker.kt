@@ -1,8 +1,8 @@
 package com.mthaler.knittings.dropbox
 
 import android.content.Context
+import android.os.Environment
 import android.util.Log
-import android.widget.Toast
 import androidx.core.net.toUri
 import androidx.work.Data
 import androidx.work.WorkerParameters
@@ -17,7 +17,6 @@ import com.mthaler.knittings.service.JobStatus
 import com.mthaler.knittings.service.ServiceStatus
 import com.mthaler.knittings.utils.FileUtils
 import com.mthaler.knittings.utils.PictureUtils
-import com.squareup.wire.internal.boxedOneOfKeysFieldName
 import org.json.JSONObject
 import java.io.File
 import java.io.FileNotFoundException
@@ -70,30 +69,43 @@ class DropboxImportWorker(context: Context, parameters: WorkerParameters) : Abst
             for (knitting in database.knittings) {
                 KnittingsDataSource.addProject(knitting, manualID = true)
             }
-            Log.e(TAG, "dir: " + directory)
+            val storageDir = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+            Log.d(TAG, "storage dir: " + storageDir)
             for ((index, photo) in database.photos.withIndex()) {
-                val p = downloadPhoto(directory, dropboxClient, photo, index, sm, count)
+                val p = downloadPhoto(directory, dropboxClient, photo, index, sm, count, storageDir)
                 p?.let { generatePreview(it) }
             }
         }
     }
 
-    private fun downloadPhoto(directory: String, dropboxClient: DbxClientV2, photo: Photo, index: Int, sm: DropboxImportServiceManager, count: Int): Photo? {
+    private fun downloadPhoto(directory: String, dropboxClient: DbxClientV2, photo: Photo, index: Int, sm: DropboxImportServiceManager, count: Int, storageDir: File?): Photo? {
         try {
-            var f = photo.filename.absolutePath
-            if (f.startsWith("/")) {
-                f = f.substring(1, f.length)
+            if (storageDir != null) {
+                var f = photo.filename.absolutePath
+                if (f.startsWith("/")) {
+                    f = f.substring(1, f.length)
+                }
+                // Download the file.
+                val filename = "/" + directory + "/" + photo.id + "." + FileUtils.getExtension("" + photo.filename)
+                // Save file
+                val filename2 = storageDir.toPath().resolve(File(f).name)
+                if (filename2 != null) {
+                    Log.d(TAG,"Saving file to " + filename2)
+                    FileOutputStream(filename2.toFile()).use {
+                        dropboxClient.files().download(filename).download(it)
+                        Log.d(TAG, "Downloaded file " + f)
+                    }
+                    return photo.copy(filename = File(f))
+                } else {
+                    Log.e(TAG,"Cannot save file to null path<>")
+                    return null
+                }
+            } else {
+                return null
             }
-            // Download the file.
-            val filename = "/" + directory + "/" + photo.id + "." + FileUtils.getExtension("" + photo.filename)
-            Log.e(TAG, filename)
-            FileOutputStream(f).use {
-                dropboxClient.files().download(filename).download(it)
-                Log.d(TAG, "Downloaded file " + f)
-            }
-            return photo.copy(filename = File(f))
+
         } catch (ex: FileNotFoundException) {
-            Log.e(TAG, "Could not download file", ex,)
+            Log.e(TAG, "Could not download file", ex)
             return null
         } finally {
             val progress = (index / count.toFloat() * 100).toInt()
@@ -116,7 +128,7 @@ class DropboxImportWorker(context: Context, parameters: WorkerParameters) : Abst
     }
 
     companion object {
-        val TAG = "DropboxImportWorkerr"
+        val TAG = "DropboxImportWorker"
 
         private const val KNITTINGS = "com.mthaler.knittings"
         const val Database = "com.mthaler.knittings.dropbox.database"
