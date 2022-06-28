@@ -75,10 +75,10 @@ class DropboxImportWorker(context: Context, parameters: WorkerParameters) : Abst
                 val p = downloadPhoto(directory, dropboxClient, photo, index, sm, count, storageDir)
                 if (p!= null && storageDir != null) {
                     Log.d(TAG, "Photo: " + p)
+                    generatePreview(p, storageDir)
                 } else {
                     Log.e(TAG, "Couldnot generate preview, photo or storage dir null" + storageDir)
                 }
-                p?.let { generatePreview(it) }
             }
         }
     }
@@ -122,7 +122,7 @@ class DropboxImportWorker(context: Context, parameters: WorkerParameters) : Abst
     private fun generatePreview(photo: Photo, storageDir: File) {
         try {
             val filename = storageDir.toPath().resolve(photo.filename.toPath())
-            val orientation = PictureUtils.getOrientation(filename.toUri(), context)
+            val orientation = PictureUtils.getOrientation(filename.toFile().toUri(), context)
             val preview = PictureUtils.decodeSampledBitmapFromPath(photo.filename.absolutePath, 200, 200)
             val rotatedPreview = PictureUtils.rotateBitmap(preview, orientation)
             val photoWithPreview = photo.copy(preview = rotatedPreview)
