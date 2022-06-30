@@ -21,6 +21,7 @@ import org.json.JSONObject
 import java.io.File
 import java.io.FileNotFoundException
 import java.io.FileOutputStream
+import java.lang.IllegalArgumentException
 import java.lang.NullPointerException
 
 class DropboxImportWorker(context: Context, parameters: WorkerParameters) : AbstractDropboxWorker(context, parameters) {
@@ -102,16 +103,12 @@ class DropboxImportWorker(context: Context, parameters: WorkerParameters) : Abst
                     }
                     return photo.copy(filename = File(f))
                 } else {
-                    Log.e(TAG,"Cannot save file to null path<>")
+                    throw IllegalArgumentException("Storage dir null")
                     return null
                 }
             } else {
                 return null
             }
-
-        } catch (ex: FileNotFoundException) {
-            Log.e(TAG, "Could not download file", ex)
-            return null
         } finally {
             val progress = (index / count.toFloat() * 100).toInt()
             sm.updateJobStatus(JobStatus.Progress(progress))
