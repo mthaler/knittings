@@ -73,40 +73,44 @@ class DropboxImportWorker(context: Context, parameters: WorkerParameters) : Abst
             val storageDir = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
             Log.d(TAG, "storage dir: " + storageDir)
             for ((index, photo) in database.photos.withIndex()) {
-                val p = downloadPhoto(directory, dropboxClient, photo, index, sm, count, storageDir)
-                if (p!= null && storageDir != null) {
-                    Log.d(TAG, "Photo: " + p)
-                    generatePreview(p, storageDir)
+                if (storageDir != null) {
+                    val p =
+                        downloadPhoto(directory, dropboxClient, photo, index, sm, count, storageDir)
+                    if (p != null) {
+                        Log.d(TAG, "Photo: " + p)
+                        generatePreview(p, storageDir)
+                    } else {
+                        Log.e(
+                            TAG,
+                            "Couldnot generate preview, photo or storage dir null" + storageDir
+                        )
+                    }
                 } else {
-                    Log.e(TAG, "Couldnot generate preview, photo or storage dir null" + storageDir)
+                    throw IllegalArgumentException("Storage dir null")
                 }
             }
         }
     }
 
-    private fun downloadPhoto(directory: String, dropboxClient: DbxClientV2, photo: Photo, index: Int, sm: DropboxImportServiceManager, count: Int, storageDir: File?): Photo? {
+    private fun downloadPhoto(directory: String, dropboxClient: DbxClientV2, photo: Photo, index: Int, sm: DropboxImportServiceManager, count: Int, storageDir: File): Photo? {
         try {
-            if (storageDir != null) {
-                var f = photo.filename.absolutePath
-                if (f.startsWith("/")) {
-                    f = f.substring(1, f.length)
+            var f = photo.filename.absolutePath
+            if (f.startsWith("/")) {
+                f = f.substring(1, f.length)
+            }
+            // Download the file.
+            val filename = "/" + directory + "/" + photo.id + "." + FileUtils.getExtension("" + photo.filename)
+            // Save file
+            val filename2 = storageDir.toPath().resolve(File(f).name)
+            if (filename2 != null) {
+                Log.d(TAG,"Saving file to " + filename2)
+                FileOutputStream(filename2.toFile()).use {
+                    dropboxClient.files().download(filename).download(it)
+                    Log.d(TAG, "Downloaded file " + f)
                 }
-                // Download the file.
-                val filename = "/" + directory + "/" + photo.id + "." + FileUtils.getExtension("" + photo.filename)
-                // Save file
-                val filename2 = storageDir.toPath().resolve(File(f).name)
-                if (filename2 != null) {
-                    Log.d(TAG,"Saving file to " + filename2)
-                    FileOutputStream(filename2.toFile()).use {
-                        dropboxClient.files().download(filename).download(it)
-                        Log.d(TAG, "Downloaded file " + f)
-                    }
-                    return photo.copy(filename = File(f))
-                } else {
-                    throw IllegalArgumentException("Storage dir null")
-                    return null
-                }
+                return photo.copy(filename = File(f))
             } else {
+                throw IllegalArgumentException("Storage dir null")
                 return null
             }
         } finally {
