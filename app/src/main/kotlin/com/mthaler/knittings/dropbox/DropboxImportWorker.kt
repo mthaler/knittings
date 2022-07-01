@@ -22,7 +22,6 @@ import java.io.File
 import java.io.FileNotFoundException
 import java.io.FileOutputStream
 import java.lang.IllegalArgumentException
-import java.lang.NullPointerException
 
 class DropboxImportWorker(context: Context, parameters: WorkerParameters) : AbstractDropboxWorker(context, parameters) {
 
@@ -99,13 +98,13 @@ class DropboxImportWorker(context: Context, parameters: WorkerParameters) : Abst
                 f = f.substring(1, f.length)
             }
             // Download the file.
-            val filename = "/" + directory + "/" + photo.id + "." + FileUtils.getExtension("" + photo.filename)
+            val dropboxFilename = "/" + directory + "/" + photo.id + "." + FileUtils.getExtension("" + photo.filename)
             // Save file
-            val filename2 = storageDir.toPath().resolve(File(f).name)
-            if (filename2 != null) {
-                Log.d(TAG,"Saving file to " + filename2)
-                FileOutputStream(filename2.toFile()).use {
-                    dropboxClient.files().download(filename).download(it)
+            val localFilename = storageDir.toPath().resolve(File(f).name)
+            if (localFilename != null) {
+                Log.d(TAG,"Saving file to " + localFilename)
+                FileOutputStream(localFilename.toFile()).use {
+                    dropboxClient.files().download(dropboxFilename).download(it)
                     Log.d(TAG, "Downloaded file " + f)
                 }
                 return photo.copy(filename = File(f))
@@ -121,7 +120,6 @@ class DropboxImportWorker(context: Context, parameters: WorkerParameters) : Abst
 
 
     private fun generatePreview(photo: Photo, storageDir: File) {
-        try {
             val filename = storageDir.toPath().resolve(photo.filename.toPath()).toFile()
             Log.d(TAG, "generating preview for $filename")
             val orientation = PictureUtils.getOrientation(filename.toUri(), context)
@@ -130,9 +128,6 @@ class DropboxImportWorker(context: Context, parameters: WorkerParameters) : Abst
             val photoWithPreview = photo.copy(preview = rotatedPreview)
             KnittingsDataSource.updatePhoto(photoWithPreview)
             Log.d(TAG, "gemerated preview for $filename")
-        } catch (ex: NullPointerException) {
-            Log.e(TAG, "Could not generate preview for $photo", ex)
-        }
     }
 
     companion object {
