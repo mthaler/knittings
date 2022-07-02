@@ -55,7 +55,7 @@ class DropboxImportWorker(context: Context, parameters: WorkerParameters) : Abst
             }
             // add downloaded database
             for (photo in database.photos) {
-                val filename = if (photo.filename.absolutePath.startsWith("/")) File(photo.filename.absolutePath.substring(1,photo.filename.absolutePath.length)) else photo.filename
+                val filename = if (photo.filename.absolutePath.startsWith("/")) File(photo.filename.absolutePath.substring(1, photo.filename.absolutePath.length)) else photo.filename
                 val p = photo.copy(filename = filename)
                 KnittingsDataSource.addPhoto(p, manualID = true)
             }
@@ -72,31 +72,20 @@ class DropboxImportWorker(context: Context, parameters: WorkerParameters) : Abst
                 KnittingsDataSource.addProject(knitting, manualID = true)
             }
             for ((index, photo) in database.photos.withIndex()) {
-                val p = downloadPhoto(directory, dropboxClient, photo, index, sm, count)
-                generatePreview(p)
+                downloadPhoto(directory, dropboxClient, photo, index, sm, count)
+                generatePreview(photo)
             }
         }
     }
 
-    private fun downloadPhoto(directory: String, dropboxClient: DbxClientV2, photo: Photo, index: Int, sm: DropboxImportServiceManager, count: Int): Photo {
+    private fun downloadPhoto(directory: String, dropboxClient: DbxClientV2, photo: Photo, index: Int, sm: DropboxImportServiceManager, count: Int) {
         try {
-            var f = photo.filename.absolutePath
-            if (f.startsWith("/")) {
-                f = f.substring(1, f.length)
-            }
             // Download the file.
             val dropboxFilename = "/" + directory + "/" + photo.id + "." + FileUtils.getExtension("" + photo.filename)
-            // Save file
-            val localFilename = Photo.photoFilename
-            if (localFilename != null) {
-                Log.d(TAG,"Saving file to " + localFilename)
-                FileOutputStream(localFilename).use {
-                    dropboxClient.files().download(dropboxFilename).download(it)
-                    Log.d(TAG, "Downloaded file " + f)
-                }
-                return photo.copy(filename = File(f))
-            } else {
-                throw IllegalArgumentException("Storage dir null")
+            Log.d(TAG,"Saving file to $photo")
+            FileOutputStream(Photo.photoFilename).use {
+                dropboxClient.files().download(dropboxFilename).download(it)
+                Log.d(TAG, "Downloaded file  $photo")
             }
         } finally {
             val progress = (index / count.toFloat() * 100).toInt()
