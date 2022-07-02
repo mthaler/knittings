@@ -83,7 +83,7 @@ class DropboxImportWorker(context: Context, parameters: WorkerParameters) : Abst
             // Download the file.
             val dropboxFilename = "/" + directory + "/" + photo.id + "." + FileUtils.getExtension("" + photo.filename)
             Log.d(TAG,"Saving file to $photo")
-            FileOutputStream(Photo.photoFilename).use {
+            FileOutputStream(Photo.getPhotoFilename(context)).use {
                 dropboxClient.files().download(dropboxFilename).download(it)
                 Log.d(TAG, "Downloaded file  $photo")
             }
