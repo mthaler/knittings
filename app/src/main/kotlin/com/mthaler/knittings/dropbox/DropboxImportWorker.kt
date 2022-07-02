@@ -96,8 +96,8 @@ class DropboxImportWorker(context: Context, parameters: WorkerParameters) : Abst
 
     private fun generatePreview(photo: Photo) {
             Log.d(TAG, "generating preview for $photo")
-            val orientation = PictureUtils.getOrientation(Photo.photoFilename.toUri(), context)
-            val preview = PictureUtils.decodeSampledBitmapFromPath(Photo.photoFilename, 200, 200)
+            val orientation = PictureUtils.getOrientation(Photo.getPhotoFilename(context).toUri(), context)
+            val preview = PictureUtils.decodeSampledBitmapFromPath(Photo.getPhotoFilename(context), 200, 200)
             val rotatedPreview = PictureUtils.rotateBitmap(preview, orientation)
             val photoWithPreview = photo.copy(preview = rotatedPreview)
             KnittingsDataSource.updatePhoto(photoWithPreview)
