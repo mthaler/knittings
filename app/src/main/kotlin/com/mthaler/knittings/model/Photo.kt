@@ -1,12 +1,9 @@
 package com.mthaler.knittings.model
 
-import android.content.Context
 import android.graphics.Bitmap
-import android.os.Environment
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.Serializable
-import java.lang.IllegalArgumentException
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -32,14 +29,10 @@ data class Photo(
             }
         }
 
-        fun getPhotoFilename(context: Context): String {
-             val timeStamp = SimpleDateFormat("yyyy_MM_dd_HH_mm_ss").format(Date())
-             val storageDir = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
-             if (storageDir != null) {
-                 return "IMG_$timeStamp.jpg"
-             } else {
-                 throw IllegalArgumentException("Storage dir null")
-             }
-        }
+        val photoFilename: String
+            get() {
+                val timeStamp = SimpleDateFormat("yyyy_MM_dd_HH_mm_ss").format(Date())
+                return "IMG_$timeStamp.jpg"
+            }
     }
 }
