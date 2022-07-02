@@ -54,13 +54,13 @@ object TakePhotoDialog {
         buttonTakePhoto.setOnClickListener {
             d.dismiss()
             // create a photo file for the photo
-            val f = Photo.getPhotoFilename(context)
+            val f = File(Photo.getPhotoFilename(context))
             val packageManager = context.packageManager
             val takePictureIntent = dispatchTakePictureIntent(context, packageManager, authority, f)
             val canTakePhoto = takePictureIntent.resolveActivity(packageManager) != null
             if (canTakePhoto) {
                 Log.d(TAG, "Created take picture intent")
-                takePhoto(File(f), takePictureIntent)
+                takePhoto(f, takePictureIntent)
             }
         }
         buttonImportPhoto.setOnClickListener {
