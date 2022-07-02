@@ -54,23 +54,21 @@ object TakePhotoDialog {
         buttonTakePhoto.setOnClickListener {
             d.dismiss()
             // create a photo file for the photo
-            getPhotoFile(context)?.let {
-                val packageManager = context.packageManager
-                val takePictureIntent = dispatchTakePictureIntent(context, packageManager, authority, it)
-                val canTakePhoto = takePictureIntent.resolveActivity(packageManager) != null
-                if (canTakePhoto) {
-                    Log.d(TAG, "Created take picture intent")
-                    takePhoto(it, takePictureIntent)
-                }
+            val f = Photo.getPhotoFilename(context)
+            val packageManager = context.packageManager
+            val takePictureIntent = dispatchTakePictureIntent(context, packageManager, authority, f)
+            val canTakePhoto = takePictureIntent.resolveActivity(packageManager) != null
+            if (canTakePhoto) {
+                Log.d(TAG, "Created take picture intent")
+                takePhoto(File(f), takePictureIntent)
             }
         }
         buttonImportPhoto.setOnClickListener {
             d.dismiss()
-            getPhotoFile(context)?.let {
-                val photoPickerIntent = Intent(Intent.ACTION_PICK)
-                photoPickerIntent.type = "image/*"
-                importPhoto(it, photoPickerIntent)
-            }
+            val f = Photo.getPhotoFilename(context)
+            val photoPickerIntent = Intent(Intent.ACTION_PICK)
+            photoPickerIntent.type = "image/*"
+            importPhoto(File(f), photoPickerIntent)
         }
         return d
     }
@@ -142,11 +140,6 @@ object TakePhotoDialog {
         Log.d(TAG, "Created new photo from $file, owner id $ownerID")
         // add first photo as default photo
         ds.setDefaultPhoto(ownerID, photo)
-    }
-
-    private fun getPhotoFile(context: Context): File? {
-        val externalFilesDir = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
-        return if (externalFilesDir != null) File(externalFilesDir, Photo.photoFilename) else null
     }
 
     private fun dispatchTakePictureIntent(context: Context, packageManager: PackageManager, authority: String, f: File): Intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
