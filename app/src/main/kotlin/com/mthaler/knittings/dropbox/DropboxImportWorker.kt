@@ -55,7 +55,9 @@ class DropboxImportWorker(context: Context, parameters: WorkerParameters) : Abst
             }
             // add downloaded database
             for (photo in database.photos) {
-                KnittingsDataSource.addPhoto(photo, manualID = true)
+                val filename = if (photo.filename.absolutePath.startsWith("/")) File(photo.filename.absolutePath.substring(1,photo.filename.absolutePath.length)) else photo.filename
+                val p = photo.copy(filename = filename)
+                KnittingsDataSource.addPhoto(p, manualID = true)
             }
             for (category in database.categories) {
                 KnittingsDataSource.addCategory(category, manualID = true)
@@ -69,29 +71,14 @@ class DropboxImportWorker(context: Context, parameters: WorkerParameters) : Abst
             for (knitting in database.knittings) {
                 KnittingsDataSource.addProject(knitting, manualID = true)
             }
-            val storageDir = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
-            Log.d(TAG, "storage dir: " + storageDir)
             for ((index, photo) in database.photos.withIndex()) {
-                if (storageDir != null) {
-                    val p =
-                        downloadPhoto(directory, dropboxClient, photo, index, sm, count, storageDir)
-                    if (p != null) {
-                        Log.d(TAG, "Photo: " + p)
-                        generatePreview(p, storageDir)
-                    } else {
-                        Log.e(
-                            TAG,
-                            "Couldnot generate preview, photo or storage dir null" + storageDir
-                        )
-                    }
-                } else {
-                    throw IllegalArgumentException("Storage dir null")
-                }
+                val p = downloadPhoto(directory, dropboxClient, photo, index, sm, count)
+                generatePreview(p)
             }
         }
     }
 
-    private fun downloadPhoto(directory: String, dropboxClient: DbxClientV2, photo: Photo, index: Int, sm: DropboxImportServiceManager, count: Int, storageDir: File): Photo? {
+    private fun downloadPhoto(directory: String, dropboxClient: DbxClientV2, photo: Photo, index: Int, sm: DropboxImportServiceManager, count: Int): Photo {
         try {
             var f = photo.filename.absolutePath
             if (f.startsWith("/")) {
@@ -100,17 +87,16 @@ class DropboxImportWorker(context: Context, parameters: WorkerParameters) : Abst
             // Download the file.
             val dropboxFilename = "/" + directory + "/" + photo.id + "." + FileUtils.getExtension("" + photo.filename)
             // Save file
-            val localFilename = storageDir.toPath().resolve(File(f).name)
+            val localFilename = Photo.photoFilename
             if (localFilename != null) {
                 Log.d(TAG,"Saving file to " + localFilename)
-                FileOutputStream(localFilename.toFile()).use {
+                FileOutputStream(localFilename).use {
                     dropboxClient.files().download(dropboxFilename).download(it)
                     Log.d(TAG, "Downloaded file " + f)
                 }
                 return photo.copy(filename = File(f))
             } else {
                 throw IllegalArgumentException("Storage dir null")
-                return null
             }
         } finally {
             val progress = (index / count.toFloat() * 100).toInt()
@@ -119,15 +105,14 @@ class DropboxImportWorker(context: Context, parameters: WorkerParameters) : Abst
     }
 
 
-    private fun generatePreview(photo: Photo, storageDir: File) {
-            val filename = storageDir.toPath().resolve(photo.filename.toPath()).toFile()
-            Log.d(TAG, "generating preview for $filename")
-            val orientation = PictureUtils.getOrientation(filename.toUri(), context)
-            val preview = PictureUtils.decodeSampledBitmapFromPath(filename.absolutePath, 200, 200)
+    private fun generatePreview(photo: Photo) {
+            Log.d(TAG, "generating preview for $photo")
+            val orientation = PictureUtils.getOrientation(Photo.photoFilename.toUri(), context)
+            val preview = PictureUtils.decodeSampledBitmapFromPath(Photo.photoFilename, 200, 200)
             val rotatedPreview = PictureUtils.rotateBitmap(preview, orientation)
             val photoWithPreview = photo.copy(preview = rotatedPreview)
             KnittingsDataSource.updatePhoto(photoWithPreview)
-            Log.d(TAG, "gemerated preview for $filename")
+            Log.d(TAG, "gemerated preview for $photo")
     }
 
     companion object {
