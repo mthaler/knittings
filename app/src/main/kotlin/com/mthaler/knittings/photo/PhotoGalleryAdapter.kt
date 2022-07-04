@@ -1,7 +1,7 @@
 package com.mthaler.knittings.photo
 
 import android.content.Context
-import android.net.Uri
+import android.os.Environment
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import android.view.ViewTreeObserver
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.net.toUri
 import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.RecyclerView
@@ -20,9 +21,8 @@ import com.mthaler.knittings.utils.PictureUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.io.File
 
-class PhotoGalleryAdapter(context: Context, private val lifecycleScope: LifecycleCoroutineScope, private val onItemClick: (Photo) -> Unit) : RecyclerView.Adapter<PhotoGalleryAdapter.ViewHolder>() {
+class PhotoGalleryAdapter(private val context: Context, private val lifecycleScope: LifecycleCoroutineScope, private val onItemClick: (Photo) -> Unit) : RecyclerView.Adapter<PhotoGalleryAdapter.ViewHolder>() {
 
     private val photos = ArrayList<Photo>()
     private val sharedPref = PreferenceManager.getDefaultSharedPreferences(context)
@@ -69,39 +69,40 @@ class PhotoGalleryAdapter(context: Context, private val lifecycleScope: Lifecycl
                         val width = imageView.measuredWidth
                         val height = imageView.measuredHeight
                         if (width > 0 && height > 0) {
-                            val filename = photo.filename.absolutePath
                             lifecycleScope.launch {
                                 val result = withContext(Dispatchers.Default) {
-                                    val file = File(filename)
-                                    if (file.exists()) {
-                                        val imageSize = if (displayPhotoSize) File(filename).length() else 0L
-                                        val orientation = PictureUtils.getOrientation(Uri.parse(filename), imageView.context)
-                                        val p = PictureUtils.decodeSampledBitmapFromPath(filename, width, height)
-                                        val rotatedPhoto = PictureUtils.rotateBitmap(p, orientation)
-                                        Pair(imageSize, rotatedPhoto)
-                                    } else {
-                                        null
-                                    }
-                                }
-                                if (result != null) {
-                                    val (imageSize, rotatedPhoto) = result
-                                    imageView.setImageBitmap(rotatedPhoto)
-                                    if (displayPhotoSize) {
-                                        if (photo.description.isNotEmpty()) {
-                                            titleView.visibility = View.VISIBLE
-                                            titleView.text = photo.description + " (" + imageSize / 1024 + " KB)"
+                                    val storageDir = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+                                    if (storageDir != null) {
+                                        val f = storageDir.toPath().resolve(photo.filename.absolutePath).toFile()
+                                        if (f.exists()) {
+                                            val imageSize = if (displayPhotoSize) f.length() else 0L
+                                            val orientation = PictureUtils.getOrientation(f.toUri(), imageView.context)
+                                            val p = PictureUtils.decodeSampledBitmapFromPath(f.absolutePath, width, height)
+                                            val rotatedPhoto = PictureUtils.rotateBitmap(p, orientation)
+                                            Pair(imageSize, rotatedPhoto)
                                         } else {
-                                            titleView.visibility = View.VISIBLE
-                                            titleView.text = "" + imageSize / 1024 + " KB"
+                                            throw IllegalArgumentException("Photo $photo does not exist")
                                         }
                                     } else {
-                                        if (photo.description.isNotEmpty()) {
-                                            titleView.visibility = View.VISIBLE
-                                            titleView.text = photo.description
-                                        }
+                                        throw IllegalArgumentException("Storage dir null")
+                                    }
+
+                                }
+                                val (imageSize, rotatedPhoto) = result
+                                imageView.setImageBitmap(rotatedPhoto)
+                                if (displayPhotoSize) {
+                                    if (photo.description.isNotEmpty()) {
+                                        titleView.visibility = View.VISIBLE
+                                        titleView.text = photo.description + " (" + imageSize / 1024 + " KB)"
+                                    } else {
+                                        titleView.visibility = View.VISIBLE
+                                        titleView.text = "" + imageSize / 1024 + " KB"
                                     }
                                 } else {
-                                    imageView.setImageResource(R.drawable.ic_insert_photo_black_48dp)
+                                    if (photo.description.isNotEmpty()) {
+                                        titleView.visibility = View.VISIBLE
+                                        titleView.text = photo.description
+                                    }
                                 }
                             }
                         } else {
