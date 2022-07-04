@@ -265,7 +265,7 @@ class KnittingDetailsFragment : Fragment() {
                                 val result = withContext(Dispatchers.Default) {
                                     val storageDir = requireContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES)
                                     if (storageDir != null) {
-                                        val f = storageDir.resolve(knitting.defaultPhoto.filename)
+                                        val f = File(storageDir, knitting.defaultPhoto.filename.name)
                                         if (f.exists()) {
                                             val orientation = PictureUtils.getOrientation(f.absolutePath.toUri(), requireContext())
                                             val photo = PictureUtils.decodeSampledBitmapFromPath(f.absolutePath, width, height)
