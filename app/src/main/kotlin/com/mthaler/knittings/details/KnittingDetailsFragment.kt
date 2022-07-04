@@ -275,7 +275,7 @@ class KnittingDetailsFragment : Fragment() {
                                             throw IllegalArgumentException("Could not set photo ${knitting.defaultPhoto}")
                                         }
                                     } else {
-
+                                        throw IllegalArgumentException("Storage dir null")
                                     }
                                 }
                                 if (result != null) {
