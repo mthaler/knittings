@@ -5,6 +5,7 @@ import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.os.Environment
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
@@ -262,14 +263,19 @@ class KnittingDetailsFragment : Fragment() {
                         if (knitting.defaultPhoto != null) {
                             viewLifecycleOwner.lifecycleScope.launch {
                                 val result = withContext(Dispatchers.Default) {
-                                    val file = knitting.defaultPhoto.filename
-                                    if (file.exists()) {
-                                        val orientation = PictureUtils.getOrientation(file.absolutePath.toUri(), requireContext())
-                                        val photo = PictureUtils.decodeSampledBitmapFromPath(file.absolutePath, width, height)
-                                        val rotatedPhoto = PictureUtils.rotateBitmap(photo, orientation)
-                                        rotatedPhoto
+                                    val storageDir = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+                                    if (storageDir != null) {
+                                        val f = storageDir.toPath().resolve( knitting.defaultPhoto.filename.name).toFile()
+                                        if (f.exists()) {
+                                            val orientation = PictureUtils.getOrientation(f.absolutePath.toUri(), requireContext())
+                                            val photo = PictureUtils.decodeSampledBitmapFromPath(f.absolutePath, width, height)
+                                            val rotatedPhoto = PictureUtils.rotateBitmap(photo, orientation)
+                                            rotatedPhoto
+                                        } else {
+                                            throw IllegalArgumentException("Could not set photo ${knitting.defaultPhoto}")
+                                        }
                                     } else {
-                                        throw IllegalArgumentException("Could not set photo ${knitting.defaultPhoto}")
+
                                     }
                                 }
                                 if (result != null) {
