@@ -269,7 +269,7 @@ class KnittingDetailsFragment : Fragment() {
                                         val rotatedPhoto = PictureUtils.rotateBitmap(photo, orientation)
                                         rotatedPhoto
                                     } else {
-                                        null
+                                        throw IllegalArgumentException("Could not set photo ${knitting.defaultPhoto}")
                                     }
                                 }
                                 if (result != null) {
