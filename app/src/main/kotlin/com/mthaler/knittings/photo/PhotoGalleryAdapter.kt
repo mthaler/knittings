@@ -21,6 +21,7 @@ import com.mthaler.knittings.utils.PictureUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.io.File
 
 class PhotoGalleryAdapter(private val context: Context, private val lifecycleScope: LifecycleCoroutineScope, private val onItemClick: (Photo) -> Unit) : RecyclerView.Adapter<PhotoGalleryAdapter.ViewHolder>() {
 
@@ -73,7 +74,7 @@ class PhotoGalleryAdapter(private val context: Context, private val lifecycleSco
                                 val result = withContext(Dispatchers.Default) {
                                     val storageDir = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
                                     if (storageDir != null) {
-                                        val f = storageDir.resolve(photo.filename)
+                                        val f = File(storageDir, photo.filename.name)
                                         if (f.exists()) {
                                             val imageSize = if (displayPhotoSize) f.length() else 0L
                                             val orientation = PictureUtils.getOrientation(f.toUri(), imageView.context)
