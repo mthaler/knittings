@@ -263,7 +263,7 @@ class KnittingDetailsFragment : Fragment() {
                         if (knitting.defaultPhoto != null) {
                             viewLifecycleOwner.lifecycleScope.launch {
                                 val result = withContext(Dispatchers.Default) {
-                                    val storageDir = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+                                    val storageDir = requireContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES)
                                     if (storageDir != null) {
                                         val f = storageDir.toPath().resolve( knitting.defaultPhoto.filename.name).toFile()
                                         if (f.exists()) {
