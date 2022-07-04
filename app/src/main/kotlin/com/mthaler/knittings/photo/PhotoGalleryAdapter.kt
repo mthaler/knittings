@@ -73,7 +73,7 @@ class PhotoGalleryAdapter(private val context: Context, private val lifecycleSco
                                 val result = withContext(Dispatchers.Default) {
                                     val storageDir = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
                                     if (storageDir != null) {
-                                        val f = storageDir.toPath().resolve(photo.filename.absolutePath).toFile()
+                                        val f = storageDir.resolve(photo.filename)
                                         if (f.exists()) {
                                             val imageSize = if (displayPhotoSize) f.length() else 0L
                                             val orientation = PictureUtils.getOrientation(f.toUri(), imageView.context)
