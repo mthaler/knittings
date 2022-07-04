@@ -102,7 +102,7 @@ class DropboxImportWorker(context: Context, parameters: WorkerParameters) : Abst
 
 
     private fun generatePreview(photo: Photo, storageDir: File) {
-            val f = storageDir.toPath().resolve(photo.filename.toPath()).toFile()
+            val f = storageDir.resolve(photo.filename)
             Log.d(TAG, "generating preview for $f")
             val orientation = PictureUtils.getOrientation(f.toUri(), context)
             val preview = PictureUtils.decodeSampledBitmapFromPath(f.absolutePath, 200, 200)
