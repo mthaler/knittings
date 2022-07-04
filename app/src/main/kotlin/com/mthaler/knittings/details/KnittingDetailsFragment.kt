@@ -278,9 +278,7 @@ class KnittingDetailsFragment : Fragment() {
                                         throw IllegalArgumentException("Storage dir null")
                                     }
                                 }
-                                if (result != null) {
-                                    imageView.setImageBitmap(result)
-                                }
+                                imageView.setImageBitmap(result)
                             }
                         } else {
                             imageView.setImageResource(R.drawable.categories)
