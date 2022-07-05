@@ -230,8 +230,7 @@ class DropboxImportFragment : AbstractDropboxFragment() {
 
 
     private fun fetchAccountInfo() {
-        val clientIdentifier = "DropboxSampleAndroid/1.0.0"
-        val requestConfig = DbxRequestConfig(clientIdentifier)
+        val requestConfig = DbxRequestConfig(CLIENT_IDENTIFIER)
         val credential = getLocalCredential()
         credential?.let {
             val dropboxClient = DbxClientV2(requestConfig, credential)
@@ -283,8 +282,7 @@ class DropboxImportFragment : AbstractDropboxFragment() {
     }
 
     private suspend fun readDatabase(directory: String, credential: DbxCredential) {
-        val clientIdentifier = "DropboxSampleAndroid/1.0.0"
-        val requestConfig = DbxRequestConfig(clientIdentifier)
+        val requestConfig = DbxRequestConfig(CLIENT_IDENTIFIER)
         val dropboxClient = DbxClientV2(requestConfig, credential)
         val deferred = viewLifecycleOwner.lifecycleScope.async(Dispatchers.IO) {
             val os = ByteArrayOutputStream()
