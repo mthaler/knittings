@@ -337,7 +337,6 @@ class DropboxExportFragment : AbstractDropboxFragment() {
     }
 
     private fun export() {
-        requestPermissionLauncher.launch(Manifest.permission.ACCESS_NETWORK_STATE)
         val request = OneTimeWorkRequestBuilder<DropboxExportWorker>().build()
         val workManager = WorkManager.getInstance(requireContext())
         workManager.enqueueUniqueWork(DropboxExportWorker.TAG,  ExistingWorkPolicy.REPLACE, request)
