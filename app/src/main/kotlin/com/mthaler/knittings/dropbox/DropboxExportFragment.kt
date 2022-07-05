@@ -104,8 +104,7 @@ class DropboxExportFragment : AbstractDropboxFragment() {
                             }
                         }
                     try {
-                        val clientIdentifier = "DropboxSampleAndroid/1.0.0"
-                        val requestConfig = DbxRequestConfig(clientIdentifier)
+                        val requestConfig = DbxRequestConfig(CLIENT_IDENTIFIER)
                         val credential = getLocalCredential()
                         credential?.let {
                             viewLifecycleOwner.lifecycleScope.launchWhenStarted {
