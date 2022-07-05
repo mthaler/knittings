@@ -236,7 +236,7 @@ class DropboxImportFragment : AbstractDropboxFragment() {
         val credential = getLocalCredential()
         credential?.let {
             val dropboxClient = DbxClientV2(requestConfig, credential)
-            val dropboxApi = DropboxApi(dropboxClient, requireContext(), viewLifecycleOwner)
+            val dropboxApi = DropboxApi(dropboxClient)
             lifecycleScope.launch {
                 when (val response = dropboxApi.getAccountInfo()) {
                     is DropboxAccountInfoResponse.Failure -> {

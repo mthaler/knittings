@@ -50,7 +50,7 @@ abstract class AbstractDropboxFragment : Fragment() {
         val requestConfig = DbxRequestConfig(clientIdentifier)
         val credential = getLocalCredential()
         val dropboxClient = DbxClientV2(requestConfig, credential)
-        val dropboxApi = DropboxApi(dropboxClient, requireContext(), viewLifecycleOwner)
+        val dropboxApi = DropboxApi(dropboxClient)
         lifecycleScope.launch {
             dropboxApi.revokeDropboxAuthorization()
         }

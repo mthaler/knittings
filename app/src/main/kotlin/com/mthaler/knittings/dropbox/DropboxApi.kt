@@ -1,7 +1,5 @@
 package com.mthaler.knittings.dropbox
 
-import android.content.Context
-import androidx.lifecycle.LifecycleOwner
 import com.dropbox.core.DbxException
 import com.dropbox.core.v2.DbxClientV2
 import com.dropbox.core.v2.files.FileMetadata
@@ -11,7 +9,7 @@ import com.dropbox.core.v2.users.FullAccount
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-class DropboxApi(private val dropboxClient: DbxClientV2, val ctx: Context, val lifecycleOwner: LifecycleOwner) {
+class DropboxApi(private val dropboxClient: DbxClientV2) {
 
     suspend fun getAccountInfo(): DropboxAccountInfoResponse = withContext(Dispatchers.IO) {
         try {
