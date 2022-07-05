@@ -34,8 +34,7 @@ abstract class AbstractDropboxFragment : Fragment() {
      **/
      protected fun startDropboxAuthorization() {
         // The client identifier is usually of the form "SoftwareName/SoftwareVersion".
-        val clientIdentifier = "DropboxSampleAndroid/1.0.0"
-        val requestConfig = DbxRequestConfig(clientIdentifier)
+        val requestConfig = DbxRequestConfig(CLIENT_IDENTIFIER)
 
         // The scope's your app will need from Dropbox
         // Read more about Scopes here: https://developers.dropbox.com/oauth-guide#dropbox-api-permissions
@@ -46,15 +45,14 @@ abstract class AbstractDropboxFragment : Fragment() {
     protected abstract fun clearData()
 
     private fun revokeDropboxAuthorization() {
-        val clientIdentifier = "DropboxSampleAndroid/1.0.0"
-        val requestConfig = DbxRequestConfig(clientIdentifier)
+        val requestConfig = DbxRequestConfig(CLIENT_IDENTIFIER)
         val credential = getLocalCredential()
         val dropboxClient = DbxClientV2(requestConfig, credential)
         val dropboxApi = DropboxApi(dropboxClient)
         lifecycleScope.launch {
             dropboxApi.revokeDropboxAuthorization()
         }
-        val sharedPreferences = requireContext().getSharedPreferences("dropbox-sample", MODE_PRIVATE)
+        val sharedPreferences = requireContext().getSharedPreferences(KNITTINGS, MODE_PRIVATE)
         sharedPreferences.edit().remove("credential").apply()
         clearData()
     }
