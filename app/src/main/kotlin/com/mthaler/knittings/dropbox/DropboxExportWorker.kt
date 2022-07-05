@@ -23,7 +23,7 @@ import kotlinx.coroutines.withContext
 import java.lang.Exception
 import java.util.*
 
-class DropboxExportWorker(val context: Context, parameters: WorkerParameters) : CoroutineWorker(context, parameters) {
+class DropboxExportWorker(context: Context, parameters: WorkerParameters) : AbstractDropboxWorker(context, parameters) {
 
     override  suspend fun doWork(): Result {
         val dir = createDateTimeDirectoryName(Date())
@@ -81,14 +81,6 @@ class DropboxExportWorker(val context: Context, parameters: WorkerParameters) : 
 
     private fun onUploadCompleted() {
         DropboxExportServiceManager.getInstance().updateJobStatus(JobStatus.Success())
-    }
-
-
-    //deserialize the credential from SharedPreferences if it exists
-    private fun getLocalCredential(): DbxCredential? {
-        val sharedPreferences = context.getSharedPreferences(KNITTINGS, Activity.MODE_PRIVATE)
-        val serializedCredential = sharedPreferences.getString("credential", null) ?: return null
-        return DbxCredential.Reader.readFully(serializedCredential)
     }
 
     companion object {

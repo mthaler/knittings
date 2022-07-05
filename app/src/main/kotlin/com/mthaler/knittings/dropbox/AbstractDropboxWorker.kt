@@ -7,7 +7,7 @@ import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.dropbox.core.oauth.DbxCredential
 
-abstract class AbstractDropboxWorker(val context: Context, parameters: WorkerParameters) : CoroutineWorker(context, parameters) {
+abstract class AbstractDropboxWorker(protected  val context: Context, parameters: WorkerParameters) : CoroutineWorker(context, parameters) {
 
     //deserialize the credential from SharedPreferences if it exists
     protected fun getLocalCredential(): DbxCredential? {

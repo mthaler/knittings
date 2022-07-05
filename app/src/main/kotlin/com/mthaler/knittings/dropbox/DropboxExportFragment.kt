@@ -340,60 +340,6 @@ class DropboxExportFragment : AbstractDropboxFragment() {
         val request = OneTimeWorkRequestBuilder<DropboxExportWorker>().build()
         val workManager = WorkManager.getInstance(requireContext())
         workManager.enqueueUniqueWork(DropboxExportWorker.TAG,  ExistingWorkPolicy.REPLACE, request)
-        workManager.getWorkInfoByIdLiveData(request.id).observe(viewLifecycleOwner) { workInfo ->
-            if (workInfo != null) {
-                when (workInfo.state) {
-                    WorkInfo.State.ENQUEUED -> {
-                        val sm = DropboxExportServiceManager.getInstance()
-                        sm.updateJobStatus(JobStatus.Progress(0))
-                        sm.updateServiceStatus(ServiceStatus.Started)
-                    }
-                    WorkInfo.State.RUNNING -> {
-                        val sm = DropboxExportServiceManager.getInstance()
-                        sm.updateJobStatus(
-                            JobStatus.Progress(
-                                workInfo.progress.getInt(
-                                    WorkerUtils.Progress,
-                                    0
-                                )
-                            )
-                        )
-                        sm.updateServiceStatus(ServiceStatus.Started)
-                    }
-                    WorkInfo.State.SUCCEEDED -> {
-                        val sm = DropboxExportServiceManager.getInstance()
-                        sm.updateJobStatus(JobStatus.Success(requireContext().resources.getString(R.string.compress_photos_completed)))
-                        sm.updateServiceStatus(ServiceStatus.Stopped)
-                    }
-                    WorkInfo.State.FAILED -> {
-                        val sm = DropboxExportServiceManager.getInstance()
-                        sm.updateJobStatus(JobStatus.Error(Exception("Could not compress photos")))
-                        sm.updateServiceStatus(ServiceStatus.Stopped)
-                    }
-                    WorkInfo.State.BLOCKED -> {
-                        val sm = DropboxExportServiceManager.getInstance()
-                        sm.updateJobStatus(JobStatus.Error(Exception("Could not compress photos")))
-                        sm.updateServiceStatus(ServiceStatus.Stopped)
-                    }
-                    WorkInfo.State.CANCELLED -> {
-                        val sm = DropboxExportServiceManager.getInstance()
-                        sm.updateJobStatus(
-                            JobStatus.Cancelled(
-                                requireContext().resources.getString(
-                                    R.string.compress_photos_cancelled
-                                )
-                            )
-                        )
-                        sm.updateServiceStatus(ServiceStatus.Started)
-                    }
-                    else -> {
-                        val sm = DropboxExportServiceManager.getInstance()
-                        sm.updateJobStatus(JobStatus.Progress(0))
-                        sm.updateServiceStatus(ServiceStatus.Stopped)
-                    }
-                }
-            }
-        }
     }
 
     override fun clearData() {
