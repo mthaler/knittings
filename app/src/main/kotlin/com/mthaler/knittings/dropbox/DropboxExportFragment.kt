@@ -4,6 +4,7 @@ import android.Manifest
 import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.os.PowerManager
 import android.view.LayoutInflater
@@ -12,7 +13,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.app.ActivityCompat
 import androidx.core.app.NavUtils
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.work.ExistingWorkPolicy
@@ -33,6 +36,7 @@ import com.mthaler.knittings.utils.Format
 import com.mthaler.knittings.utils.NetworkUtils
 import com.mthaler.knittings.utils.WorkerUtils
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.lang.Exception
@@ -85,6 +89,46 @@ class DropboxExportFragment : AbstractDropboxFragment() {
         binding.loginButton.setOnClickListener { Auth.startOAuth2Authentication(context, (requireContext().applicationContext as DatabaseApplication).dropboxAppKey) }
 
         binding.exportButton.setOnClickListener {
+            when {
+                ContextCompat.checkSelfPermission(
+                    requireContext(),
+                    Manifest.permission.WAKE_LOCK
+                ) == PackageManager.PERMISSION_GRANTED -> {
+                    val wakeLock: PowerManager.WakeLock =
+                        (requireContext().getSystemService(Context.POWER_SERVICE) as PowerManager).run {
+                            newWakeLock(
+                                PowerManager.PARTIAL_WAKE_LOCK,
+                                "Knittings::DropboxImport"
+                            ).apply {
+                                acquire()
+                            }
+                        }
+                    try {
+                        val clientIdentifier = "DropboxSampleAndroid/1.0.0"
+                        val requestConfig = DbxRequestConfig(clientIdentifier)
+                        val credential = getLocalCredential()
+                        credential?.let {
+                            viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+                                val deferred = viewLifecycleOwner.lifecycleScope.async(Dispatchers.IO) {
+                                    val dropboxClient = DbxClientV2(requestConfig, credential)
+                                    dropboxClient.files().listFolder("")
+                                }
+                                val result = deferred.await()
+                            }
+                        }
+                    } finally {
+                        wakeLock.release()
+                    }
+                }
+                ActivityCompat.shouldShowRequestPermissionRationale(requireActivity(), Manifest.permission.WAKE_LOCK) -> {
+                    Toast.makeText(requireContext(), "Wake_Lock permission required", Toast.LENGTH_SHORT)
+                    requestPermissionLauncher.launch(Manifest.permission.WAKE_LOCK)
+                }
+                else -> {
+                    requestPermissionLauncher.launch(Manifest.permission.WAKE_LOCK)
+                }
+            }
+
             val isWiFi = NetworkUtils.isWifiConnected(requireContext())
             if (!isWiFi) {
                 val builder = AlertDialog.Builder(requireContext())
@@ -354,7 +398,7 @@ class DropboxExportFragment : AbstractDropboxFragment() {
         }
     }
 
-    protected override fun clearData() {
+    override fun clearData() {
         binding.loginButton.visibility = View.VISIBLE
     }
 }
