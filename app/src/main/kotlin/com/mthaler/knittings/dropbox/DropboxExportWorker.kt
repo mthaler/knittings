@@ -3,6 +3,7 @@ package com.mthaler.knittings.dropbox
 import android.content.Context
 import android.util.Log
 import androidx.work.WorkerParameters
+import com.dropbox.core.DbxRequestConfig
 import com.dropbox.core.v2.DbxClientV2
 import com.dropbox.core.v2.files.WriteMode
 import com.mthaler.knittings.database.KnittingsDataSource
@@ -34,21 +35,25 @@ class DropboxExportWorker(context: Context, parameters: WorkerParameters) : Abst
     }
 
     private fun upload(dir: String): Boolean {
-        val dbxClient = DropboxClientFactory.getClient()
+        val requestConfig = DbxRequestConfig(CLIENT_IDENTIFIER)
+        val credential = getLocalCredential()
         val sm = DropboxExportServiceManager.getInstance()
         // create directory containing current date & time
-        dbxClient.files().createFolderV2("/$dir")
-        val database = checkDatabase(createDatabase())
-        uploadDatabase(dbxClient, dir, database)
-        // upload photos to dropbox
-        val count = database.photos.size
-        for ((index, photo) in database.photos.withIndex()) {
-            if (sm.cancelled) {
-                return true
+        credential?.let {
+            val dropboxClient = DbxClientV2(requestConfig, credential)
+            dropboxClient.files().createFolderV2("/$dir")
+            val database = checkDatabase(createDatabase())
+            uploadDatabase(dropboxClient, dir, database)
+            // upload photos to dropbox
+            val count = database.photos.size
+            for ((index, photo) in database.photos.withIndex()) {
+                if (sm.cancelled) {
+                    return true
+                }
+                uploadPhoto(dropboxClient, dir, photo)
+                val progress = (index / count.toFloat() * 100).toInt()
+                sm.updateJobStatus(JobStatus.Progress(progress))
             }
-            uploadPhoto(dbxClient, dir, photo)
-            val progress = (index / count.toFloat() * 100).toInt()
-            sm.updateJobStatus(JobStatus.Progress(progress))
         }
         return false
     }
