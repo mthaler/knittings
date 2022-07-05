@@ -33,7 +33,7 @@ class DropboxExportWorker(context: Context, parameters: WorkerParameters) : Abst
         return Result.success()
     }
 
-      private fun upload(dir: String): Boolean {
+    private fun upload(dir: String): Boolean {
         val dbxClient = DropboxClientFactory.getClient()
         val sm = DropboxExportServiceManager.getInstance()
         // create directory containing current date & time

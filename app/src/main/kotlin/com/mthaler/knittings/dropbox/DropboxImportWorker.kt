@@ -36,8 +36,7 @@ class DropboxImportWorker(context: Context, parameters: WorkerParameters) : Abst
     }
 
     private fun downloadPhotos(database: Database, directory: String) {
-        val clientIdentifier = "Knittings"
-        val requestConfig = DbxRequestConfig(clientIdentifier)
+        val requestConfig = DbxRequestConfig(CLIENT_IDENTIFIER)
         val credential = getLocalCredential()
         val sm = DropboxImportServiceManager.getInstance()
         val count = database.photos.size
@@ -115,7 +114,6 @@ class DropboxImportWorker(context: Context, parameters: WorkerParameters) : Abst
     companion object {
         val TAG = "DropboxImportWorker"
 
-        private const val KNITTINGS = "com.mthaler.knittings"
         const val Database = "com.mthaler.knittings.dropbox.database"
         const val Directory = "com.mthaler.knittings.dropbox.directory"
 
