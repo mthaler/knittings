@@ -2,11 +2,13 @@ package com.mthaler.knittings.model
 
 import android.content.Context
 import android.net.Uri
+import androidx.core.net.toUri
 import com.dropbox.core.v2.DbxClientV2
 import com.mthaler.knittings.utils.FileUtils
 import com.mthaler.knittings.database.KnittingDatabaseHelper
 import com.mthaler.knittings.database.KnittingsDataSource
 import com.mthaler.knittings.utils.PictureUtils
+import com.mthaler.knittings.utils.getOrientation
 import org.json.JSONObject
 import java.io.File
 import java.io.FileOutputStream
@@ -61,7 +63,7 @@ data class Database(override val knittings: List<Knitting>, override val photos:
                 dbxClient.files().download(filename).download(it)
             }
             // generate preview
-            val orientation = PictureUtils.getOrientation(Uri.fromFile(File(photo.filename.absolutePath)), context)
+            val orientation = photo.filename.absolutePath.toUri().getOrientation(context)
             val preview = PictureUtils.decodeSampledBitmapFromPath(photo.filename.absolutePath, 200, 200)
             val rotatedPreview = PictureUtils.rotateBitmap(preview, orientation)
             val photoWithPreview = photo.copy(preview = rotatedPreview)

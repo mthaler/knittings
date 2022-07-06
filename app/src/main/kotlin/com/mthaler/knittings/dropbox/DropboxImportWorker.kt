@@ -17,6 +17,7 @@ import com.mthaler.knittings.service.JobStatus
 import com.mthaler.knittings.service.ServiceStatus
 import com.mthaler.knittings.utils.FileUtils
 import com.mthaler.knittings.utils.PictureUtils
+import com.mthaler.knittings.utils.getOrientation
 import org.json.JSONObject
 import java.io.File
 import java.io.FileNotFoundException
@@ -103,7 +104,7 @@ class DropboxImportWorker(context: Context, parameters: WorkerParameters) : Abst
     private fun generatePreview(photo: Photo, storageDir: File) {
         val f = File(storageDir, photo.filename.name)
         Log.d(TAG, "generating preview for $f")
-        val orientation = PictureUtils.getOrientation(f.toUri(), context)
+        val orientation = f.toUri().getOrientation(context)
         val preview = PictureUtils.decodeSampledBitmapFromPath(f.absolutePath, 200, 200)
         val rotatedPreview = PictureUtils.rotateBitmap(preview, orientation)
         val photoWithPreview = photo.copy(preview = rotatedPreview)

@@ -12,12 +12,14 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.widget.Button
 import androidx.core.content.FileProvider
+import androidx.core.net.toUri
 import com.mthaler.knittings.R
 import com.mthaler.knittings.database.KnittingsDataSource
 import com.mthaler.knittings.database.PhotoDataSource
 import com.mthaler.knittings.model.Photo
 import com.mthaler.knittings.utils.PictureUtils
 import com.mthaler.knittings.utils.copy
+import com.mthaler.knittings.utils.getOrientation
 import java.io.File
 
 object TakePhotoDialog {
@@ -95,7 +97,7 @@ object TakePhotoDialog {
                 error("Could not delete $compressed")
             }
         }
-        val orientation = PictureUtils.getOrientation(Uri.fromFile(file), context)
+        val orientation = file.toUri().getOrientation(context)
         val preview = PictureUtils.decodeSampledBitmapFromPath(file.absolutePath, 200, 200)
         val rotatedPreview = PictureUtils.rotateBitmap(preview, orientation)
         val ds = KnittingsDataSource as PhotoDataSource
@@ -131,7 +133,7 @@ object TakePhotoDialog {
                 error("Could not delete $compressed")
             }
         }
-        val orientation = PictureUtils.getOrientation(Uri.fromFile(file), context)
+        val orientation = file.toUri().getOrientation(context)
         val preview = PictureUtils.decodeSampledBitmapFromPath(file.absolutePath, 200, 200)
         val rotatedPreview = PictureUtils.rotateBitmap(preview, orientation)
         val ds = KnittingsDataSource as PhotoDataSource

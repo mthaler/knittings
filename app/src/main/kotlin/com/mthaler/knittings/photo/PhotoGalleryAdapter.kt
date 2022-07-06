@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.mthaler.knittings.R
 import com.mthaler.knittings.model.Photo
 import com.mthaler.knittings.utils.PictureUtils
+import com.mthaler.knittings.utils.getOrientation
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -77,7 +78,7 @@ class PhotoGalleryAdapter(private val context: Context, private val lifecycleSco
                                         val f = File(storageDir, photo.filename.name)
                                         if (f.exists()) {
                                             val imageSize = if (displayPhotoSize) f.length() else 0L
-                                            val orientation = PictureUtils.getOrientation(f.toUri(), imageView.context)
+                                            val orientation = f.toUri().getOrientation(imageView.context)
                                             val p = PictureUtils.decodeSampledBitmapFromPath(f.absolutePath, width, height)
                                             val rotatedPhoto = PictureUtils.rotateBitmap(p, orientation)
                                             Pair(imageSize, rotatedPhoto)

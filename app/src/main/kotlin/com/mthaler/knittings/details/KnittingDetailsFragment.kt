@@ -34,6 +34,7 @@ import com.mthaler.knittings.rowcounter.RowCounterActivity
 import com.mthaler.knittings.stopwatch.StopwatchActivity
 import com.mthaler.knittings.utils.PictureUtils
 import com.mthaler.knittings.utils.TimeUtils
+import com.mthaler.knittings.utils.getOrientation
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -267,7 +268,7 @@ class KnittingDetailsFragment : Fragment() {
                                     if (storageDir != null) {
                                         val f = File(storageDir, knitting.defaultPhoto.filename.name)
                                         if (f.exists()) {
-                                            val orientation = PictureUtils.getOrientation(f.absolutePath.toUri(), requireContext())
+                                            val orientation = f.absolutePath.toUri().getOrientation(requireContext())
                                             val photo = PictureUtils.decodeSampledBitmapFromPath(f.absolutePath, width, height)
                                             val rotatedPhoto = PictureUtils.rotateBitmap(photo, orientation)
                                             rotatedPhoto

@@ -15,6 +15,20 @@ import id.zelory.compressor.constraint.size
 import java.io.*
 import java.util.Arrays
 
+fun Uri.getOrientation(context: Context): Int {
+    var inputStream: InputStream? = null
+    try {
+        inputStream = context.contentResolver.openInputStream(this)
+        val exif = ExifInterface(inputStream!!)
+        return exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_UNDEFINED)
+    } catch (ex: IOException) {
+        ex.printStackTrace()
+        return ExifInterface.ORIENTATION_UNDEFINED
+    } finally {
+        inputStream?.close()
+    }
+}
+
 object PictureUtils {
 
     private const val TAG = "PictureUtils"
@@ -56,35 +70,6 @@ object PictureUtils {
     }
 
     /**
-     * Returns the orientation of a photo
-     *
-     * @param uri uri of the photo
-     * @return orientation
-     */
-    fun getOrientation(uri: Uri, context: Context): Int {
-        var inputStream: InputStream? = null
-        try {
-            inputStream = context.contentResolver.openInputStream(uri)
-            val exif = ExifInterface(inputStream!!)
-            return exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_UNDEFINED)
-        } catch (ex: IOException) {
-            ex.printStackTrace()
-            return ExifInterface.ORIENTATION_UNDEFINED
-        } finally {
-            inputStream?.close()
-        }
-    }
-
-    fun setOrientation(path: String, orientation: Int) {
-        try {
-            val exif = ExifInterface(path)
-            exif.setAttribute(ExifInterface.TAG_ORIENTATION, orientation.toString())
-        } catch (ex: IOException) {
-            ex.printStackTrace()
-        }
-    }
-
-    /**
      * Returns a new rotated copy of the bitmap and recycles the old one
      * @param bitmap bitmap to be rotated
      * @param orientation orientation
@@ -120,26 +105,6 @@ object PictureUtils {
         } catch (ex: OutOfMemoryError) {
             ex.printStackTrace()
             bitmap
-        }
-    }
-
-    fun resize(image: Bitmap, maxWidth: Int, maxHeight: Int): Bitmap {
-        if (maxHeight > 0 && maxWidth > 0) {
-            val width = image.width
-            val height = image.height
-            val ratioBitmap = width.toFloat() / height.toFloat()
-            val ratioMax = maxWidth.toFloat() / maxHeight.toFloat()
-
-            var finalWidth = maxWidth
-            var finalHeight = maxHeight
-            if (ratioMax > 1) {
-                finalWidth = (maxHeight.toFloat() * ratioBitmap).toInt()
-            } else {
-                finalHeight = (maxWidth.toFloat() / ratioBitmap).toInt()
-            }
-            return Bitmap.createScaledBitmap(image, finalWidth, finalHeight, true)
-        } else {
-            return image
         }
     }
 

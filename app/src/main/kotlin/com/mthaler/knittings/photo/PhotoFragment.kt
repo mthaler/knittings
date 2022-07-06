@@ -18,6 +18,7 @@ import com.mthaler.knittings.database.PhotoDataSource
 import com.mthaler.knittings.databinding.FragmentPhotoBinding
 import com.mthaler.knittings.model.Photo
 import com.mthaler.knittings.utils.PictureUtils
+import com.mthaler.knittings.utils.getOrientation
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -84,7 +85,7 @@ class PhotoFragment : Fragment() {
                         val path = photo.filename.absolutePath
                         viewLifecycleOwner.lifecycleScope.launch {
                             val rotated = withContext(Dispatchers.Default) {
-                                val orientation = PictureUtils.getOrientation(Uri.parse(path), requireContext())
+                                val orientation =  Uri.parse(path).getOrientation(requireContext())
                                 val scaled = PictureUtils.decodeSampledBitmapFromPath(path, width, height)
                                 PictureUtils.rotateBitmap(scaled, orientation)
                             }
