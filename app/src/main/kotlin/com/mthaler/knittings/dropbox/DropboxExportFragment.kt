@@ -128,27 +128,7 @@ class DropboxExportFragment : AbstractDropboxFragment() {
                 }
             }
 
-            val isWiFi = NetworkUtils.isWifiConnected(requireContext())
-            if (!isWiFi) {
-                val builder = AlertDialog.Builder(requireContext())
-                with(builder) {
-                    setTitle(resources.getString(R.string.dropbox_export))
-                    setMessage(resources.getString(R.string.dropbox_export_no_wifi_question))
-                    setPositiveButton(resources.getString(R.string.dropbox_export_dialog_export_button)) { _, _ ->
-                        val request = OneTimeWorkRequestBuilder<DropboxImportWorker>().build()
-                        val workManager = WorkManager.getInstance(requireContext())
-                        workManager.enqueueUniqueWork(TAG,  ExistingWorkPolicy.REPLACE, request)
-                        DropboxExportServiceManager.getInstance().updateJobStatus(JobStatus.Progress(0))
-                    }
-                    setNegativeButton(resources.getString(R.string.dialog_button_cancel)) { _, _ -> }
-                    show()
-                }
-            } else {
-                val request = OneTimeWorkRequestBuilder<DropboxImportWorker>().build()
-                val workManager = WorkManager.getInstance(requireContext())
-                workManager.enqueueUniqueWork(TAG,  ExistingWorkPolicy.REPLACE, request)
-                DropboxExportServiceManager.getInstance().updateJobStatus(JobStatus.Progress(0))
-            }
+            export()
         }
 
         binding.cancelButton.setOnClickListener {
@@ -337,6 +317,30 @@ class DropboxExportFragment : AbstractDropboxFragment() {
                 true
             }
             else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    private fun export() {
+        val isWiFi = NetworkUtils.isWifiConnected(requireContext())
+        if (!isWiFi) {
+            val builder = AlertDialog.Builder(requireContext())
+            with(builder) {
+                setTitle(resources.getString(R.string.dropbox_export))
+                setMessage(resources.getString(R.string.dropbox_export_no_wifi_question))
+                setPositiveButton(resources.getString(R.string.dropbox_export_dialog_export_button)) { _, _ ->
+                    val request = OneTimeWorkRequestBuilder<DropboxImportWorker>().build()
+                    val workManager = WorkManager.getInstance(requireContext())
+                    workManager.enqueueUniqueWork(TAG,  ExistingWorkPolicy.REPLACE, request)
+                    DropboxExportServiceManager.getInstance().updateJobStatus(JobStatus.Progress(0))
+                }
+                setNegativeButton(resources.getString(R.string.dialog_button_cancel)) { _, _ -> }
+                show()
+            }
+        } else {
+            val request = OneTimeWorkRequestBuilder<DropboxImportWorker>().build()
+            val workManager = WorkManager.getInstance(requireContext())
+            workManager.enqueueUniqueWork(TAG,  ExistingWorkPolicy.REPLACE, request)
+            DropboxExportServiceManager.getInstance().updateJobStatus(JobStatus.Progress(0))
         }
     }
 
