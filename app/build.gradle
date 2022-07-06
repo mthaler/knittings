@@ -10,8 +10,8 @@ android {
         applicationId "com.mthaler.knittings"
         minSdkVersion 21
         targetSdkVersion 32
-        versionCode 69
-        versionName "0.9.47"
+        versionCode 70
+        versionName "0.9.48"
 
         Properties localProperties = getLocalProperties()
         String dropboxKey = localProperties['DROPBOX_KEY']
