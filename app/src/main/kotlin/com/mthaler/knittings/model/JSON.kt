@@ -2,6 +2,7 @@ package com.mthaler.knittings.model
 
 import android.content.Context
 import android.graphics.Color
+import com.mthaler.knittings.utils.colorToHex
 import org.json.JSONObject
 import java.text.SimpleDateFormat
 import org.json.JSONArray
@@ -271,7 +272,7 @@ fun Category.toJSON(): JSONObject {
     result.put("name", name)
     val c = color
     if (c != null) {
-        result.put("color", com.mthaler.knittings.utils.ColorUtils.colorToHex(c))
+        result.put("color", c.colorToHex())
     }
     return result
 }
