@@ -1,6 +1,7 @@
 package com.mthaler.knittings.dropbox
 
 import android.content.Context
+import android.os.Environment
 import android.os.PowerManager
 import android.util.Log
 import androidx.work.CoroutineWorker
@@ -18,7 +19,9 @@ import java.io.FileInputStream
 import com.mthaler.knittings.utils.FileUtils.getExtension
 import com.mthaler.knittings.utils.FileUtils.createDateTimeDirectoryName
 import kotlinx.coroutines.*
+import java.io.File
 import java.lang.Exception
+import java.lang.IllegalArgumentException
 import java.util.*
 
 class DropboxExportWorker(context: Context, parameters: WorkerParameters) : AbstractDropboxWorker(context, parameters) {
@@ -78,12 +81,18 @@ class DropboxExportWorker(context: Context, parameters: WorkerParameters) : Abst
     }
 
     private fun checkDatabase(database: Database): Database {
-        val filteredPhotos = database.photos.filter { it.filename.exists() }
-        val removedPhotos = database.photos.map { it.id }.toSet() - filteredPhotos.map { it.id}.toSet()
-        val updatedKnittings = database.knittings.map { if (removedPhotos.contains(it.defaultPhoto?.id)) it.copy(defaultPhoto = null) else it }
-        val filteredDatabase = database.copy(knittings = updatedKnittings, photos = filteredPhotos)
-        filteredDatabase.checkValidity()
-        return filteredDatabase
+        val storageDir = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+        Log.d(DropboxImportWorker.TAG, "storage dir: " + storageDir)
+        if (storageDir != null) {
+            val filteredPhotos = database.photos.filter { File(storageDir, it.filename.name).exists() }
+            val removedPhotos = database.photos.map { it.id }.toSet() - filteredPhotos.map { it.id}.toSet()
+            val updatedKnittings = database.knittings.map { if (removedPhotos.contains(it.defaultPhoto?.id)) it.copy(defaultPhoto = null) else it }
+            val filteredDatabase = database.copy(knittings = updatedKnittings, photos = filteredPhotos)
+            filteredDatabase.checkValidity()
+            return filteredDatabase
+        } else {
+            throw IllegalArgumentException("Storage dir null")
+        }
     }
 
     private fun uploadDatabase(dbxClient: DbxClientV2, dir: String, database: Database) {
