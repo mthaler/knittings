@@ -144,8 +144,10 @@ class DropboxExportFragment : AbstractDropboxFragment() {
                     show()
                 }
             } else {
+                val request = OneTimeWorkRequestBuilder<DropboxImportWorker>().build()
+                val workManager = WorkManager.getInstance(requireContext())
+                workManager.enqueueUniqueWork(TAG,  ExistingWorkPolicy.REPLACE, request)
                 DropboxExportServiceManager.getInstance().updateJobStatus(JobStatus.Progress(0))
-                export()
             }
         }
 
