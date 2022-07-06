@@ -2,6 +2,8 @@
 <resources>
     <string name="whats_new_title">Whats New</string>
     <string name="whats_new"><![CDATA[
+        <h3>Version 0.9.48</h3>
+        - Dropbox export repariert<br>
         <h3>Version 0.9.47</h3>
         - Dropbox import repariert<br>
         <h3>Version 0.9.46</h3>

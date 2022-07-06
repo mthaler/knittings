@@ -18,7 +18,8 @@ abstract class AbstractDropboxWorker(protected  val context: Context, parameters
 
     //serialize the credential and store in SharedPreferences
     protected fun storeCredentialLocally(dbxCredential: DbxCredential) {
-        val sharedPreferences = context.getSharedPreferences("dropbox-sample", MODE_PRIVATE)
+        val sharedPreferences = context.getSharedPreferences(AbstractDropboxFragment.KNITTINGS, MODE_PRIVATE)
         sharedPreferences.edit().putString("credential", dbxCredential.toString()).apply()
     }
+
 }
