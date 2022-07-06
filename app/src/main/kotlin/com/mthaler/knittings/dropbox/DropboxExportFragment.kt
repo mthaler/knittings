@@ -35,6 +35,7 @@ import com.mthaler.knittings.service.ServiceStatus
 import com.mthaler.knittings.utils.Format
 import com.mthaler.knittings.utils.NetworkUtils
 import com.mthaler.knittings.utils.WorkerUtils
+import com.mthaler.knittings.utils.isWifiConnected
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
@@ -321,7 +322,7 @@ class DropboxExportFragment : AbstractDropboxFragment() {
     }
 
     private fun export() {
-        val isWiFi = NetworkUtils.isWifiConnected(requireContext())
+        val isWiFi = requireContext().isWifiConnected()
         if (!isWiFi) {
             val builder = AlertDialog.Builder(requireContext())
             with(builder) {
