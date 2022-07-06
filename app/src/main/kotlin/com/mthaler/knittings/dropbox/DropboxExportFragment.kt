@@ -328,7 +328,7 @@ class DropboxExportFragment : AbstractDropboxFragment() {
                 setTitle(resources.getString(R.string.dropbox_export))
                 setMessage(resources.getString(R.string.dropbox_export_no_wifi_question))
                 setPositiveButton(resources.getString(R.string.dropbox_export_dialog_export_button)) { _, _ ->
-                    val request = OneTimeWorkRequestBuilder<DropboxImportWorker>().build()
+                    val request = OneTimeWorkRequestBuilder<DropboxExportWorker>().build()
                     val workManager = WorkManager.getInstance(requireContext())
                     workManager.enqueueUniqueWork(TAG,  ExistingWorkPolicy.REPLACE, request)
                     DropboxExportServiceManager.getInstance().updateJobStatus(JobStatus.Progress(0))
@@ -337,7 +337,7 @@ class DropboxExportFragment : AbstractDropboxFragment() {
                 show()
             }
         } else {
-            val request = OneTimeWorkRequestBuilder<DropboxImportWorker>().build()
+            val request = OneTimeWorkRequestBuilder<DropboxExportWorker>().build()
             val workManager = WorkManager.getInstance(requireContext())
             workManager.enqueueUniqueWork(TAG,  ExistingWorkPolicy.REPLACE, request)
             DropboxExportServiceManager.getInstance().updateJobStatus(JobStatus.Progress(0))
