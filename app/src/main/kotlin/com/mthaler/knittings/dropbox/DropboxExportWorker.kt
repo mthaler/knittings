@@ -17,10 +17,7 @@ import java.io.ByteArrayInputStream
 import java.io.FileInputStream
 import com.mthaler.knittings.utils.FileUtils.getExtension
 import com.mthaler.knittings.utils.FileUtils.createDateTimeDirectoryName
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 import java.lang.Exception
 import java.util.*
 
@@ -28,23 +25,21 @@ class DropboxExportWorker(context: Context, parameters: WorkerParameters) : Abst
 
     override suspend fun doWork(): Result {
         val dir = createDateTimeDirectoryName(Date())
-        GlobalScope.launch {
-            val dir = createDateTimeDirectoryName(Date())
-            val cancelled = withContext(Dispatchers.IO) {
-                val wakeLock: PowerManager.WakeLock =
-                    (context.getSystemService(Context.POWER_SERVICE) as PowerManager).run {
-                        newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "Knittings::DropboxExport").apply {
-                            acquire()
-                        }
+        val deferred = GlobalScope.async {
+            val wakeLock: PowerManager.WakeLock =
+                (context.getSystemService(Context.POWER_SERVICE) as PowerManager).run {
+                    newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "Knittings::DropboxExport").apply {
+                        acquire()
                     }
-                try {
-                    upload(dir)
-                } finally {
-                    wakeLock.release()
                 }
+            try {
+                upload(dir)
+            } finally {
+                wakeLock.release()
             }
-            onUploadCompleted(dir, cancelled)
         }
+
+        val cancelled = deferred.await()
         onUploadCompleted(dir, cancelled)
         return Result.success()
     }
