@@ -54,8 +54,8 @@ class DropboxImportWorker(context: Context, parameters: WorkerParameters) : Abst
             }
             // add downloaded database
             for (photo in database.photos) {
-                val filename = if (photo.filename.absolutePath.startsWith("/")) File(photo.filename.absolutePath.substring(1, photo.filename.absolutePath.length)) else photo.filename
-                val p = photo.copy(filename = filename)
+                val filename = if (photo.filename.absolutePath.startsWith("/")) File(photo.filename.absolutePath.substring(1, photo.filename.absolutePath.length)).name else photo.filename.name
+                val p = photo.copy(filename = File(filename))
                 KnittingsDataSource.addPhoto(p, manualID = true)
             }
             for (category in database.categories) {
