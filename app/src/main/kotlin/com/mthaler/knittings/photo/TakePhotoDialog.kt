@@ -17,6 +17,7 @@ import com.mthaler.knittings.database.KnittingsDataSource
 import com.mthaler.knittings.database.PhotoDataSource
 import com.mthaler.knittings.model.Photo
 import com.mthaler.knittings.utils.PictureUtils
+import com.mthaler.knittings.utils.copy
 import java.io.File
 
 object TakePhotoDialog {
@@ -85,7 +86,7 @@ object TakePhotoDialog {
             if (!file.delete()) {
                 error("Could not delete $file")
             }
-            com.mthaler.knittings.utils.FileUtils.copy(compressed, file)
+            compressed.copy(file)
             if (!compressed.delete()) {
                 error("Could not delete $compressed")
             }
@@ -121,7 +122,7 @@ object TakePhotoDialog {
             if (!file.delete()) {
                 error("Could not delete $file")
             }
-            com.mthaler.knittings.utils.FileUtils.copy(compressed, file)
+            compressed.copy(file)
             if (!compressed.delete()) {
                 error("Could not delete $compressed")
             }
