@@ -10,6 +10,7 @@ import com.mthaler.knittings.service.JobStatus
 import com.mthaler.knittings.utils.FileUtils
 import com.mthaler.knittings.utils.PictureUtils
 import com.mthaler.knittings.utils.WorkerUtils
+import com.mthaler.knittings.utils.copy
 import java.lang.Exception
 
 class CompressPhotoWorker(val context: Context, parameters: WorkerParameters) : CoroutineWorker(context, parameters) {
@@ -48,7 +49,7 @@ class CompressPhotoWorker(val context: Context, parameters: WorkerParameters) : 
                 if (!file.delete()) {
                     error("Could not delete $file")
                 }
-                FileUtils.copy(compressed, file)
+                compressed.copy(file)
                 if (!compressed.delete()) {
                     error("Could not delete $compressed")
                 }
