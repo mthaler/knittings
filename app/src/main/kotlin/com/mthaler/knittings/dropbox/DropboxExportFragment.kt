@@ -336,12 +336,6 @@ class DropboxExportFragment : AbstractDropboxFragment() {
         }
     }
 
-    private fun export() {
-        val request = OneTimeWorkRequestBuilder<DropboxExportWorker>().build()
-        val workManager = WorkManager.getInstance(requireContext())
-        workManager.enqueueUniqueWork(DropboxExportWorker.TAG,  ExistingWorkPolicy.REPLACE, request)
-    }
-
     override fun clearData() {
         binding.loginButton.visibility = View.VISIBLE
     }
