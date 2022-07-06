@@ -6,6 +6,7 @@ import androidx.work.WorkerParameters
 import com.dropbox.core.DbxRequestConfig
 import com.dropbox.core.v2.DbxClientV2
 import com.dropbox.core.v2.files.WriteMode
+import com.mthaler.knittings.R
 import com.mthaler.knittings.database.KnittingsDataSource
 import com.mthaler.knittings.model.Database
 import com.mthaler.knittings.model.Photo
@@ -94,9 +95,14 @@ class DropboxExportWorker(context: Context, parameters: WorkerParameters) : Abst
     }
 
 
-    private fun onUploadCompleted() {
-        DropboxExportServiceManager.getInstance().updateJobStatus(JobStatus.Success())
+    private fun onUploadCompleted(dir: String, cancelled: Boolean) {
+        if (cancelled) {
+            DropboxExportServiceManager.getInstance().updateJobStatus(JobStatus.Cancelled(context.getString(R.string.dropbox_export_notification_cancelled_msg), dir))
+        } else {
+            DropboxExportServiceManager.getInstance().updateJobStatus(JobStatus.Success())
+        }
     }
+
 
     companion object {
         val TAG = "DropboxExportWorker"
