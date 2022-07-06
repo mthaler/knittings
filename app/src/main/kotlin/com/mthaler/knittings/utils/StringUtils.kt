@@ -20,3 +20,7 @@ fun String.containsIgnoreCase(what: String): Boolean {
 
     return false
 }
+
+object StringUtils {
+    fun removeLeadingChar(s: String, c: Char): String = s.replace("""^""" + c.toString() + """+""", "")
+}
