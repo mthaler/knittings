@@ -21,4 +21,4 @@ fun String.containsIgnoreCase(what: String): Boolean {
     return false
 }
 
-fun String.removeLeadingChar(s: String, c: Char): String = s.replace("""^""" + c.toString() + """+""", "")
+fun String.removeLeadingChar(c: Char): String = this.replace("""^""" + c.toString() + """+""", "")

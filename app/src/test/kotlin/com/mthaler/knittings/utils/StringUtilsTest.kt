@@ -7,6 +7,6 @@ class StringUtilsTest {
 
     @Test
     fun testRemoveLeadingChar() {
-        assertEquals("test", StringUtils.removeLeadingChar("test", '/'))
+        assertEquals("test", "test".removeLeadingChar('/'))
     }
 }
