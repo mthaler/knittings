@@ -6,8 +6,8 @@ import org.junit.Test
 class StringUtilsTest {
 
     @Test
-    fun testRemoveLeadingChar() {
-        assertEquals("test", "test".removeLeadingChar('/'))
-        assertEquals("test", "/test".removeLeadingChar('/'))
+    fun testRemoveLeadingChars() {
+        assertEquals("test", "test".removeLeadingChars('/'))
+        assertEquals("test", "/test".removeLeadingChars('/'))
     }
 }

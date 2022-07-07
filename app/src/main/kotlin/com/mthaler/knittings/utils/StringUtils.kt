@@ -21,4 +21,16 @@ fun String.containsIgnoreCase(what: String): Boolean {
     return false
 }
 
-fun String.removeLeadingChar(c: Char): String = this.replace("""^""" + c.toString() + """+""", "")
+fun String.removeLeadingChars(c: Char): String {
+    if (this.startsWith(c)) {
+        val result = this.substring(1)
+        val result2 = result.removeLeadingChars(c)
+        if (result == result2) {
+            return result
+        } else {
+            return result2.removeLeadingChars(c)
+        }
+    } else {
+        return this
+    }
+}
