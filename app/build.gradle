@@ -101,8 +101,7 @@ dependencies {
 
     def nav_version = "2.5.0"
     implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
-  implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
-
+    implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
 
     implementation 'androidx.profileinstaller:profileinstaller:1.2.0-rc01'
 
