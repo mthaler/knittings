@@ -99,6 +99,11 @@ dependencies {
     def work_version = "2.7.1"
     implementation "androidx.work:work-runtime-ktx:$work_version"
 
+    def nav_version = "2.5.0"
+    implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
+  implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
+
+
     implementation 'androidx.profileinstaller:profileinstaller:1.2.0-rc01'
 
     testImplementation 'junit:junit:4.13.2'
@@ -119,6 +124,8 @@ dependencies {
     androidTestImplementation "androidx.work:work-testing:$work_version"
 
     androidTestImplementation 'androidx.benchmark:benchmark-junit4:1.0.0'
+
+    androidTestImplementation "androidx.navigation:navigation-testing:$nav_version"
 }
 
 def getLocalProperties() {
