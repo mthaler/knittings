@@ -4,7 +4,6 @@ import android.content.Context
 import android.os.Environment
 import android.os.PowerManager
 import android.util.Log
-import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.dropbox.core.DbxRequestConfig
 import com.dropbox.core.v2.DbxClientV2
@@ -21,8 +20,6 @@ import com.mthaler.knittings.utils.FileUtils.createDateTimeDirectoryName
 import com.mthaler.knittings.utils.removeLeadingChars
 import kotlinx.coroutines.*
 import java.io.File
-import java.io.FileOutputStream
-import java.lang.Exception
 import java.lang.IllegalArgumentException
 import java.util.*
 
