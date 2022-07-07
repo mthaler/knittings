@@ -20,7 +20,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.work.ExistingWorkPolicy
 import androidx.work.OneTimeWorkRequestBuilder
-import androidx.work.WorkInfo
 import androidx.work.WorkManager
 import com.dropbox.core.DbxRequestConfig
 import com.dropbox.core.android.Auth
@@ -33,14 +32,10 @@ import com.mthaler.knittings.databinding.FragmentDropboxExportBinding
 import com.mthaler.knittings.service.JobStatus
 import com.mthaler.knittings.service.ServiceStatus
 import com.mthaler.knittings.utils.Format
-import com.mthaler.knittings.utils.NetworkUtils
-import com.mthaler.knittings.utils.WorkerUtils
 import com.mthaler.knittings.utils.isWifiConnected
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.lang.Exception
 import java.lang.IllegalArgumentException
 
 class DropboxExportFragment : AbstractDropboxFragment() {
@@ -105,15 +100,10 @@ class DropboxExportFragment : AbstractDropboxFragment() {
                             }
                         }
                     try {
-                        val requestConfig = DbxRequestConfig(CLIENT_IDENTIFIER)
                         val credential = getLocalCredential()
                         credential?.let {
                             viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-                                val deferred = viewLifecycleOwner.lifecycleScope.async(Dispatchers.IO) {
-                                    val dropboxClient = DbxClientV2(requestConfig, credential)
-                                    dropboxClient.files().listFolder("")
-                                }
-                                val result = deferred.await()
+                                export()
                             }
                         }
                     } finally {
@@ -128,8 +118,6 @@ class DropboxExportFragment : AbstractDropboxFragment() {
                     requestPermissionLauncher.launch(Manifest.permission.WAKE_LOCK)
                 }
             }
-
-            export()
         }
 
         binding.cancelButton.setOnClickListener {
