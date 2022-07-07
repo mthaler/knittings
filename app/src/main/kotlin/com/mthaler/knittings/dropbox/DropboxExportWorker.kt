@@ -18,6 +18,7 @@ import java.io.ByteArrayInputStream
 import java.io.FileInputStream
 import com.mthaler.knittings.utils.FileUtils.getExtension
 import com.mthaler.knittings.utils.FileUtils.createDateTimeDirectoryName
+import com.mthaler.knittings.utils.removeLeadingChars
 import kotlinx.coroutines.*
 import java.io.File
 import java.io.FileOutputStream
@@ -113,7 +114,7 @@ class DropboxExportWorker(context: Context, parameters: WorkerParameters) : Abst
     }
 
     private fun uploadPhoto(dbxClient: DbxClientV2, dir: String, photo: Photo, storageDir: File) {
-        val localPath = File(storageDir, photo.filename.name)
+        val localPath = File(storageDir, photo.filename.name.removeLeadingChars('/'))
         FileInputStream(localPath).use {
             dbxClient.files().uploadBuilder("/" + dir + "/" + photo.id + "." + getExtension(photo.filename.name)) // Path in the user's Dropbox to save the file.
                 .withMode(WriteMode.OVERWRITE) // always overwrite existing file
