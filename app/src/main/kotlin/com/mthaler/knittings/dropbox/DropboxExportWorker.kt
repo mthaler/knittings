@@ -117,7 +117,7 @@ class DropboxExportWorker(context: Context, parameters: WorkerParameters) : Abst
                 .withMode(WriteMode.OVERWRITE) // always overwrite existing file
                 .uploadAndFinish(it)
         }
-        Log.d(DropboxImportWorker.TAG, "Uploaded photo $photo")
+        Log.d(TAG, "Uploaded photo $photo")
     }
 
 
