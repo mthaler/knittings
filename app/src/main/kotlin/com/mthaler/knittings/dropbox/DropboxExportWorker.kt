@@ -20,6 +20,7 @@ import com.mthaler.knittings.utils.FileUtils.getExtension
 import com.mthaler.knittings.utils.FileUtils.createDateTimeDirectoryName
 import kotlinx.coroutines.*
 import java.io.File
+import java.io.FileOutputStream
 import java.lang.Exception
 import java.lang.IllegalArgumentException
 import java.util.*
@@ -59,13 +60,19 @@ class DropboxExportWorker(context: Context, parameters: WorkerParameters) : Abst
             uploadDatabase(dropboxClient, dir, database)
             // upload photos to dropbox
             val count = database.photos.size
-            for ((index, photo) in database.photos.withIndex()) {
-                if (sm.cancelled) {
-                    return true
+            val storageDir = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+            Log.d(DropboxImportWorker.TAG, "storage dir: " + storageDir)
+            if (storageDir != null) {
+                for ((index, photo) in database.photos.withIndex()) {
+                    if (sm.cancelled) {
+                        return true
+                    }
+                    uploadPhoto(dropboxClient, dir, photo, storageDir)
+                    val progress = (index / count.toFloat() * 100).toInt()
+                    sm.updateJobStatus(JobStatus.Progress(progress))
                 }
-                uploadPhoto(dropboxClient, dir, photo)
-                val progress = (index / count.toFloat() * 100).toInt()
-                sm.updateJobStatus(JobStatus.Progress(progress))
+            } else {
+                throw IllegalArgumentException("Storage dir null")
             }
         }
         return false
@@ -105,11 +112,14 @@ class DropboxExportWorker(context: Context, parameters: WorkerParameters) : Abst
                 .uploadAndFinish(dbInputStream)
     }
 
-    private fun uploadPhoto(dbxClient: DbxClientV2, dir: String, photo: Photo) {
-        val inputStream = FileInputStream(photo.filename)
-        dbxClient.files().uploadBuilder("/" + dir + "/" + photo.id + "." + getExtension(photo.filename.name)) // Path in the user's Dropbox to save the file.
+    private fun uploadPhoto(dbxClient: DbxClientV2, dir: String, photo: Photo, storageDir: File) {
+        val localPath = File(storageDir, photo.filename.name)
+        FileInputStream(localPath).use {
+            dbxClient.files().uploadBuilder("/" + dir + "/" + photo.id + "." + getExtension(photo.filename.name)) // Path in the user's Dropbox to save the file.
                 .withMode(WriteMode.OVERWRITE) // always overwrite existing file
-                .uploadAndFinish(inputStream)
+                .uploadAndFinish(it)
+        }
+        Log.d(DropboxImportWorker.TAG, "Uploaded photo $photo")
     }
 
 

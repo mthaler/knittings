@@ -92,7 +92,7 @@ class DropboxImportWorker(context: Context, parameters: WorkerParameters) : Abst
             val localPath = File(storageDir, photo.filename.name)
             FileOutputStream(localPath).use {
                 dropboxClient.files().download(dropboxFilename).download(it)
-                Log.d(TAG, "Downloaded file  $photo")
+                Log.d(TAG, "Downloaded photo $photo")
             }
         } finally {
             val progress = (index / count.toFloat() * 100).toInt()
