@@ -2,6 +2,7 @@ package com.mthaler.knittings.database
 
 import android.content.Context
 import android.database.Cursor
+import android.os.Environment
 import android.os.FileUriExposedException
 import android.util.Log
 import androidx.preference.PreferenceManager
@@ -11,8 +12,11 @@ import java.util.Date
 import com.mthaler.knittings.database.table.CategoryTable
 import com.mthaler.knittings.database.table.*
 import com.mthaler.knittings.R
+import com.mthaler.knittings.dropbox.DropboxImportWorker
 import com.mthaler.knittings.model.*
+import com.mthaler.knittings.utils.removeLeadingChars
 import java.lang.Exception
+import java.lang.IllegalArgumentException
 
 object KnittingsDataSource : AbstractObservableDatabase(), PhotoDataSource, CategoryDataSource,
     ProjectsDataSource {
@@ -214,7 +218,13 @@ object KnittingsDataSource : AbstractObservableDatabase(), PhotoDataSource, Cate
                 updateKnittingImpl(knitting.copy(defaultPhoto = null))
             }
         }
-        deletePhotoImpl(photo)
+        val storageDir = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+        Log.d(DropboxImportWorker.TAG, "storage dir: " + storageDir)
+        if (storageDir != null) {
+            deletePhotoImpl(photo, storageDir)
+        } else {
+            throw IllegalArgumentException("Storage dir null")
+        }
         notifyObservers()
     }
 
@@ -235,13 +245,20 @@ object KnittingsDataSource : AbstractObservableDatabase(), PhotoDataSource, Cate
     @Synchronized
     override fun deleteAllPhotos() {
         for (photo in allPhotos) {
-            deletePhotoImpl(photo)
+            val storageDir = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+            Log.d(DropboxImportWorker.TAG, "storage dir: " + storageDir)
+            if (storageDir != null) {
+                deletePhotoImpl(photo, storageDir)
+            } else {
+                throw IllegalArgumentException("Storage dir null")
+            }
         }
         notifyObservers()
     }
 
-    private fun deletePhotoImpl(photo: Photo) {
-        deletePhotoFile(photo.filename)
+    private fun deletePhotoImpl(photo: Photo, storageDir: File) {
+        val localPath = File(storageDir, photo.filename.name.removeLeadingChars('/'))
+        deletePhotoFile(localPath)
         val id = photo.id
         context.database.writableDatabase.use { database ->
             database.delete(PhotoTable.PHOTOS, PhotoTable.Cols.ID + "=" + id, null)
