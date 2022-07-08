@@ -33,6 +33,13 @@
             android:layout_height="match_parent"
             android:layout_marginTop="?attr/actionBarSize">
 
+            <androidx.fragment.app.FragmentContainerView
+                android:id="@+id/nav_host_fragment"
+                android:name="androidx.navigation.fragment.NavHostFragment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:defaultNavHost="true" />
+
             <!-- image that is shown if the category list is empty -->
             <ImageView
                 android:id="@+id/knitting_list_empty_recycler_view"
@@ -64,13 +71,6 @@
             </LinearLayout>
         </FrameLayout>
 
-        <androidx.fragment.app.FragmentContainerView
-            android:id="@+id/nav_host_fragment"
-            android:name="androidx.navigation.fragment.NavHostFragment"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            app:defaultNavHost="true" />
-
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fab_create_add_knitting"
             android:layout_width="wrap_content"
@@ -80,7 +80,6 @@
             android:src="@drawable/ic_add_white_36dp"
             app:tint="@android:color/white"
             app:backgroundTint="@color/colorAccent"/>
-
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
