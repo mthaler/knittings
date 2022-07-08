@@ -203,11 +203,7 @@ class NeedleListFragment : Fragment() {
     }
 
     private fun createNeedle(navController: NavController) {
-        val f = EditNeedleFragment.newInstance(Needle.EMPTY.id)
-        val ft = requireActivity().supportFragmentManager.beginTransaction()
-        ft.replace(R.id.needle_list_container, f)
-        ft.addToBackStack(null)
-        ft.commit()
+        navController.navigate(R.id.action_needleListFragment_to_editNeedleFragment)
     }
 
     private fun needleClicked(needleID: Long) {
