@@ -16,6 +16,9 @@ import com.mthaler.knittings.needle.filter.InUseFilter
 import com.mthaler.knittings.needle.filter.SingleTypeFilter
 import androidx.lifecycle.ViewModelProvider
 import android.view.*
+import androidx.navigation.NavController
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import com.mthaler.knittings.model.Needle
 
 class NeedleListFragment : Fragment() {
@@ -32,7 +35,10 @@ class NeedleListFragment : Fragment() {
         _binding = FragmentNeedleListBinding.inflate(inflater, container, false)
         val view = binding.root
         setHasOptionsMenu(true)
-        binding.fabCreateNeedle.setOnClickListener { createNeedle() }
+        binding.fabCreateNeedle.setOnClickListener {
+            val navController = findNavController()
+            createNeedle(navController)
+        }
         return view
     }
 
@@ -196,7 +202,7 @@ class NeedleListFragment : Fragment() {
         }
     }
 
-    private fun createNeedle() {
+    private fun createNeedle(navController: NavController) {
         val f = EditNeedleFragment.newInstance(Needle.EMPTY.id)
         val ft = requireActivity().supportFragmentManager.beginTransaction()
         ft.replace(R.id.needle_list_container, f)

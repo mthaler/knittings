@@ -12,7 +12,6 @@ import androidx.appcompat.view.ActionMode
 import androidx.appcompat.widget.SearchView
 import androidx.core.view.GravityCompat
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.findNavController
 import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -363,14 +362,13 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
-        val navController = findNavController(R.id.nav_view)
         // Handle navigation view item clicks here.
         when (item.itemId) {
             R.id.nav_edit_categories -> {
                 startActivity(CategoryListActivity.newIntent(this))
             }
             R.id.nav_edit_needles -> {
-                navController.navigate(R.id.activity_needle_list)
+                startActivity(NeedleListActivity.newIntent(this))
             }
             R.id.nav_compress_photos -> {
                 startActivity(CompressPhotosActivity.newIntent(this))
