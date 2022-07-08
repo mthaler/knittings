@@ -364,7 +364,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         val drawerLayout = binding.drawer_layout
-        val navController = findNavController()
+        val navController = findNavController(binding.nav_view)
         // Handle navigation view item clicks here.
         when (item.itemId) {
             R.id.nav_edit_categories -> {
