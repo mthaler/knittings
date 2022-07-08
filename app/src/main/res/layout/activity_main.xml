@@ -33,13 +33,6 @@
             android:layout_height="match_parent"
             android:layout_marginTop="?attr/actionBarSize">
 
-            <androidx.fragment.app.FragmentContainerView
-                android:id="@+id/nav_host_fragment"
-                android:name="androidx.navigation.fragment.NavHostFragment"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:defaultNavHost="true" />
-
             <!-- image that is shown if the category list is empty -->
             <ImageView
                 android:id="@+id/knitting_list_empty_recycler_view"
