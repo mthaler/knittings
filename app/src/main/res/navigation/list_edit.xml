@@ -18,7 +18,7 @@
         <argument
             android:name=" needleID"
             app:argType="long"
-            android:defaultValue="-1" />
+            android:defaultValue="-1L" />
     </fragment>
     <action
         android:id="@+id/action_needleListFragment_to_editNeedleFragment"
