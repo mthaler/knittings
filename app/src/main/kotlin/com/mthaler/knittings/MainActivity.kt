@@ -370,7 +370,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
                 startActivity(CategoryListActivity.newIntent(this))
             }
             R.id.nav_edit_needles -> {
-                startActivity(NeedleListActivity.newIntent(this))
+                navController.navigate(R.id.activity_needle_list)
             }
             R.id.nav_compress_photos -> {
                 startActivity(CompressPhotosActivity.newIntent(this))
