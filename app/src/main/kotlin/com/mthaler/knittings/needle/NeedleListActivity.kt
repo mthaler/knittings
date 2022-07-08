@@ -31,33 +31,33 @@ class NeedleListActivity : BaseActivity() {
         }
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean = when (item.itemId) {
-        android.R.id.home -> {
-            // Respond to the action bar's Up/Home button
-            val upIntent: Intent? = NavUtils.getParentActivityIntent(this)
-            if (upIntent == null) {
-                throw IllegalStateException("No Parent Activity Intent")
-            } else {
-                val f = supportFragmentManager.findFragmentById(R.id.needle_list_container)
-                if (f is EditNeedleFragment) {
-                    f.onBackPressed()
-                } else {
-                    NavUtils.navigateUpTo(this, upIntent)
-                }
-            }
-            true
-        }
-        else -> super.onOptionsItemSelected(item)
-    }
+//    override fun onOptionsItemSelected(item: MenuItem): Boolean = when (item.itemId) {
+//        android.R.id.home -> {
+//            // Respond to the action bar's Up/Home button
+//            val upIntent: Intent? = NavUtils.getParentActivityIntent(this)
+//            if (upIntent == null) {
+//                throw IllegalStateException("No Parent Activity Intent")
+//            } else {
+//                val f = supportFragmentManager.findFragmentById(R.id.needle_list_container)
+//                if (f is EditNeedleFragment) {
+//                    f.onBackPressed()
+//                } else {
+//                    NavUtils.navigateUpTo(this, upIntent)
+//                }
+//            }
+//            true
+//        }
+//        else -> super.onOptionsItemSelected(item)
+//    }
 
-    override fun onBackPressed() {
-        val f = supportFragmentManager.findFragmentById(R.id.needle_list_container)
-        if (f is EditNeedleFragment) {
-            f.onBackPressed()
-        } else {
-            super.onBackPressed()
-        }
-    }
+//    override fun onBackPressed() {
+//        val f = supportFragmentManager.findFragmentById(R.id.needle_list_container)
+//        if (f is EditNeedleFragment) {
+//            f.onBackPressed()
+//        } else {
+//            super.onBackPressed()
+//        }
+//    }
 
     companion object {
 

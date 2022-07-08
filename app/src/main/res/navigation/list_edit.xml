@@ -5,8 +5,17 @@
     android:id="@+id/list_edit"
     app:startDestination="@id/editNeedleFragment">
     <fragment
+        android:id="@+id/needleListFragment"
+        android:name="com.mthaler.knittings.needle.NeedleListFragment"
+        android:label="fragment_needle_list"
+        tools:layout="@layout/fragment_needle_list" >
+    </fragment>
+    <fragment
         android:id="@+id/editNeedleFragment"
         android:name="com.mthaler.knittings.needle.EditNeedleFragment"
         android:label="fragment_edit_needle"
         tools:layout="@layout/fragment_edit_needle" />
+        <action
+            android:id="@+id/action_needleListFragment_to_editNeedleFragment"
+            app:destination="@id/editNeedleFragment" />
 </navigation>
