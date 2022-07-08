@@ -12,24 +12,24 @@ import com.mthaler.knittings.model.Needle
 
 class NeedleListActivity : BaseActivity() {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        val binding = ActivityNeedleListBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-
-        setSupportActionBar(binding.toolbar)
-
-        // enable up navigation
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-
-        if (savedInstanceState == null) {
-            val f = NeedleListFragment()
-            val fm = supportFragmentManager
-            val ft = fm.beginTransaction()
-            ft.add(R.id.needle_list_container, f)
-            ft.commit()
-        }
-    }
+//    override fun onCreate(savedInstanceState: Bundle?) {
+//        super.onCreate(savedInstanceState)
+//        val binding = ActivityNeedleListBinding.inflate(layoutInflater)
+//        setContentView(binding.root)
+//
+//        setSupportActionBar(binding.toolbar)
+//
+//        // enable up navigation
+//        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+//
+//        if (savedInstanceState == null) {
+//            val f = NeedleListFragment()
+//            val fm = supportFragmentManager
+//            val ft = fm.beginTransaction()
+//            ft.add(R.id.needle_list_container, f)
+//            ft.commit()
+//        }
+//    }
 
 //    override fun onOptionsItemSelected(item: MenuItem): Boolean = when (item.itemId) {
 //        android.R.id.home -> {
