@@ -363,7 +363,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
-        val drawerLayout = binding.drawer_layout()
+        val drawerLayout = binding.drawer_layout
         val navController = findNavController()
         // Handle navigation view item clicks here.
         when (item.itemId) {
