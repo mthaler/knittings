@@ -14,7 +14,12 @@
         android:id="@+id/editNeedleFragment"
         android:name="com.mthaler.knittings.needle.EditNeedleFragment"
         android:label="fragment_edit_needle"
-        tools:layout="@layout/fragment_edit_needle" />
+        tools:layout="@layout/fragment_edit_needle" >
+        <argument
+            android:name=" needleID"
+            app:argType="long"
+            android:defaultValue="-1" />
+    </fragment>
     <action
         android:id="@+id/action_needleListFragment_to_editNeedleFragment"
         app:destination="@id/editNeedleFragment" />

@@ -20,18 +20,6 @@ class EditNeedleFragment : Fragment() {
     private var _binding: FragmentEditNeedleBinding? = null
     private val binding get() = _binding!!
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            needleID = it.getLong(EXTRA_NEEDLE_ID)
-        }
-        savedInstanceState?.let {
-            if (it.containsKey(EXTRA_NEEDLE_ID)) {
-                needleID = it.getLong(EXTRA_NEEDLE_ID)
-            }
-        }
-    }
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentEditNeedleBinding.inflate(inflater, container, false)
         val view = binding.root
