@@ -1,6 +1,6 @@
 package com.mthaler.knittings.category
 
-import android.graphics.Color
+import android.content.Context
 import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
@@ -18,14 +18,24 @@ class EditCategoryFragment : Fragment() {
     private var _binding: FragmentEditCategoryBinding? = null
     private val binding get() = _binding!!
     private var color: Int? = null
+    private var listener: OnFragmentInteractionListener? = null
     private lateinit var ds: CategoryDataSource
+
+    fun getCategoryID(): Long = categoryID
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         ds = KnittingsDataSource
         arguments?.let {
             categoryID = it.getLong(EXTRA_CATEGORY_ID)
-            color = it.getInt(EXTRA_COLOR)
+        }
+        savedInstanceState?.let {
+            if (it.containsKey(EXTRA_CATEGORY_ID)) {
+                categoryID = it.getLong(EXTRA_CATEGORY_ID)
+            }
+            if (it.containsKey(EXTRA_COLOR)) {
+                color = it.getInt(EXTRA_COLOR)
+            }
         }
     }
 
@@ -78,7 +88,7 @@ class EditCategoryFragment : Fragment() {
                 if (newCategory != oldCategory) {
                     saveCategory(newCategory)
                 }
-                categorySaved()
+                listener?.categorySaved(categoryID)
                 true
             }
             R.id.menu_item_delete_category -> {
@@ -98,7 +108,7 @@ class EditCategoryFragment : Fragment() {
         }
     }
 
-    /*fun onBackPressed(action: (Long) -> Unit) {
+    fun onBackPressed(action: (Long) -> Unit) {
         val oldCategory = if (categoryID != Category.EMPTY.id) ds.getCategory(categoryID) else Category.EMPTY
         val newCategory = Category(categoryID, binding.categoryName.text.toString(), color)
         if (newCategory != oldCategory) {
@@ -111,7 +121,7 @@ class EditCategoryFragment : Fragment() {
         } else {
             action(categoryID)
         }
-    }*/
+    }
 
     private fun showColorPicker() {
         val colorPicker = ColorPicker(activity)
@@ -132,30 +142,10 @@ class EditCategoryFragment : Fragment() {
         colorPicker.show()
     }
 
-//    private fun categorySaved(categoryID: Long) {
-//        if (categoryID == Category.EMPTY.id) {
-//            requireActivity().finish()
-//        } else {
-//            val i = Intent()
-//            i.putExtra(Extras.EXTRA_OWNER_ID, ownerID)
-//            i.putExtra(Extras.EXTRA_CATEGORY_ID, categoryID)
-//            setResult(Activity.RESULT_OK, i)
-//            finish()
-//        }
-//    }
-
-    fun onBackPressed() {
-        val oldCategory = if (categoryID != Category.EMPTY.id) KnittingsDataSource.getCategory(categoryID) else Category.EMPTY
-        val newCategory = createCategory()
-        if (newCategory != oldCategory) {
-            SaveChangesDialog.create(requireContext(), {
-                saveCategory(newCategory)
-                parentFragmentManager.popBackStack()
-            }, {
-                parentFragmentManager.popBackStack()
-            }).show()
-        } else {
-            parentFragmentManager.popBackStack()
+    private fun deleteCategory() {
+        val category = ds.getCategory(categoryID)
+        if (category != null) {
+            ds.deleteCategory(category)
         }
     }
 
@@ -168,19 +158,24 @@ class EditCategoryFragment : Fragment() {
         }
     }
 
-    private fun categorySaved() {
-        requireActivity().supportFragmentManager.popBackStack()
-    }
-
-    private fun createCategory(): Category = Category(categoryID,  binding.categoryName.text.toString(), Color.RED)
-    
-    private fun deleteCategory() {
-        val category = ds.getCategory(categoryID)
-        if (category != null) {
-            ds.deleteCategory(category)
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        if (context is OnFragmentInteractionListener) {
+            listener = context
+        } else {
+            throw RuntimeException("$context must implement OnFragmentInteractionListener")
         }
     }
 
+    override fun onDetach() {
+        super.onDetach()
+        listener = null
+    }
+
+    interface OnFragmentInteractionListener {
+
+        fun categorySaved(categoryID: Long)
+    }
 
     companion object {
 
