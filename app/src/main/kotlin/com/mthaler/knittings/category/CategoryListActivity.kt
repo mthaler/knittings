@@ -51,7 +51,7 @@ class CategoryListActivity : BaseActivity() {
     override fun onBackPressed() {
         val f = supportFragmentManager.findFragmentById(R.id.category_list_container)
         if (f is EditCategoryFragment) {
-            f.onBackPressed(n)
+            f.onBackPressed()
         } else {
             super.onBackPressed()
         }
