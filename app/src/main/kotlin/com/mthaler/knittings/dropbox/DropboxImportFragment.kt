@@ -97,7 +97,6 @@ class DropboxImportFragment : AbstractDropboxFragment() {
                         }
                     }
                     try {
-                    try {
                         val requestConfig = DbxRequestConfig(CLIENT_IDENTIFIER)
                         val credential = getLocalCredential()
                         credential?.let {
@@ -141,6 +140,7 @@ class DropboxImportFragment : AbstractDropboxFragment() {
                     binding.progressBar.visibility = View.GONE
                     binding.result.visibility = View.GONE
                 }
+                is JobStatus.Progress -> {
                 is JobStatus.Progress -> {
                     binding.importButton.isEnabled = false
                     binding.importTitle.visibility = View.VISIBLE
