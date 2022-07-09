@@ -45,7 +45,7 @@ class DropboxExportFragment : AbstractDropboxFragment() {
 
     override protected val APP_KEY = BuildConfig.DROPBOX_KEY
 
-    private val workManager = WorkManager.getInstance(requireContext())
+    private lateinit var workManager: WorkManager
 
     private val requestPermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
         if (isGranted) {
@@ -120,6 +120,8 @@ class DropboxExportFragment : AbstractDropboxFragment() {
                     requestPermissionLauncher.launch(Manifest.permission.WAKE_LOCK)
                 }
             }
+
+            workManager = WorkManager.getInstance(requireContext())
         }
 
         binding.cancelButton.setOnClickListener {

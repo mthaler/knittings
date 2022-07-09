@@ -43,6 +43,8 @@ class DropboxImportFragment : AbstractDropboxFragment() {
     private var _binding: FragmentDropboxImportBinding? = null
     private val binding get() = _binding!!
 
+    private lateinit var workManager: WorkManager
+
     private val requestPermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
         if (isGranted) {
             val wakeLock: PowerManager.WakeLock =
@@ -94,6 +96,7 @@ class DropboxImportFragment : AbstractDropboxFragment() {
                             acquire()
                         }
                     }
+                    try {
                     try {
                         val requestConfig = DbxRequestConfig(CLIENT_IDENTIFIER)
                         val credential = getLocalCredential()
@@ -163,6 +166,8 @@ class DropboxImportFragment : AbstractDropboxFragment() {
                 else -> throw IllegalArgumentException("Unknown serviceStatus: " + serviceStatus)
             }
         })
+
+        workManager = WorkManager.getInstance(requireContext())
     }
 
     override fun onResume() {
@@ -311,7 +316,6 @@ class DropboxImportFragment : AbstractDropboxFragment() {
                     filteredDatabase.checkValidity()
                     val data = DropboxImportWorker.data(directory, database)
                     val request = OneTimeWorkRequestBuilder<DropboxImportWorker>().setInputData(data).build()
-                    val workManager = WorkManager.getInstance(requireContext())
                     workManager.enqueueUniqueWork(TAG,  ExistingWorkPolicy.REPLACE, request)
                     DropboxImportServiceManager.getInstance().updateJobStatus(JobStatus.Progress(0))
                 }
