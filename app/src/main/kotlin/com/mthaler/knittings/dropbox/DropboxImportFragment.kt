@@ -127,6 +127,18 @@ class DropboxImportFragment : AbstractDropboxFragment() {
         return binding.root
     }
 
+    binding.cancelButton.setOnClickListener {
+        val builder = android.app.AlertDialog.Builder(requireContext())
+        with(builder) {
+            setTitle(resources.getString(R.string.dropbox_import_cancel_dialog_title))
+            setMessage(resources.getString(R.string.dropbox_import_cancel_dialog_message))
+            setPositiveButton(resources.getString(R.string.dropbox_import_cancel_dialog_ok_button)) { _, _ ->
+                DropboxImportServiceManager.getInstance().cancelled = true
+            }
+            show()
+        }
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -141,12 +153,20 @@ class DropboxImportFragment : AbstractDropboxFragment() {
                     binding.result.visibility = View.GONE
                 }
                 is JobStatus.Progress -> {
-                is JobStatus.Progress -> {
                     binding.importButton.isEnabled = false
                     binding.importTitle.visibility = View.VISIBLE
                     binding.progressBar.visibility = View.VISIBLE
                     binding.result.visibility = View.GONE
                     binding.progressBar.progress = jobStatus.value
+                }
+                is JobStatus.Cancelled -> {
+                    binding.importButton.isEnabled = true
+                    binding.importTitle.visibility = View.VISIBLE
+                    binding.progressBar.visibility = View.GONE
+                    binding.cancelButton.visibility = View.GONE
+                    binding.result.visibility = View.VISIBLE
+                    binding.result.text = jobStatus.msg
+                    workManager.cancelUniqueWork(DropboxImportWorker.TAG)
                 }
                 is JobStatus.Success -> {
                     binding.importButton.isEnabled = true
@@ -199,6 +219,7 @@ class DropboxImportFragment : AbstractDropboxFragment() {
         } else {
             with(binding) {
                 //logoutButton.visibility = View.VISIBLE
+                //logoutButton.visibility = View.VISIBLE
                 loginButton.visibility = android.view.View.GONE
                 account.visibility = android.view.View.VISIBLE
                 emailText.visibility = android.view.View.VISIBLE
@@ -244,11 +265,12 @@ class DropboxImportFragment : AbstractDropboxFragment() {
                     is DropboxAccountInfoResponse.Failure -> {
                         Toast.makeText(
                             requireContext(),
-                            "Error getting account info!",
-                            Toast.LENGTH_SHORT
+                            "Please log out of dropbox and log in again!!",
+                            Toast.LENGTH_LONG
                         ).show()
                         binding.account.text =
                             "type: ${response.exception.javaClass} + ${response.exception.localizedMessage}"
+                        throw response.exception
                     }
                     is DropboxAccountInfoResponse.Success -> {
                         binding.emailText.text = response.accountInfo.email
@@ -269,7 +291,9 @@ class DropboxImportFragment : AbstractDropboxFragment() {
                 val directory = files[item]
                 viewLifecycleOwner.lifecycleScope.launchWhenStarted { readDatabase(directory, credential) }
             }
-            dialogBuilder.setNegativeButton("Cancel") { _, _ -> }
+            dialogBuilder.setNegativeButton("Cancel") { _, _ ->#
+                DropboxImportServiceManager.getInstance().cancelled = true
+            }
             // Create alert dialog object via builder
             val alertDialogObject = dialogBuilder.create()
             // Show the dialog
@@ -319,7 +343,9 @@ class DropboxImportFragment : AbstractDropboxFragment() {
                     workManager.enqueueUniqueWork(TAG,  ExistingWorkPolicy.REPLACE, request)
                     DropboxImportServiceManager.getInstance().updateJobStatus(JobStatus.Progress(0))
                 }
-                setNegativeButton(resources.getString(R.string.dialog_button_cancel)) { _, _ ->}
+                setNegativeButton(resources.getString(R.string.dialog_button_cancel)) { _, _ ->
+                    DropboxImportServiceManager.getInstance().cancelled = true
+                }
                 show()
             }
         } else {
@@ -337,7 +363,9 @@ class DropboxImportFragment : AbstractDropboxFragment() {
                     DropboxImportServiceManager.getInstance()
                         .updateJobStatus(JobStatus.Progress(0))
                 }
-                setNegativeButton(resources.getString(R.string.dialog_button_cancel)) { _, _ -> }
+                setNegativeButton(resources.getString(R.string.dialog_button_cancel)) { _, _ ->
+                    DropboxImportServiceManager.getInstance().cancelled = true
+                }
                 show()
             }
         }

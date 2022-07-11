@@ -131,7 +131,6 @@ class DropboxExportFragment : AbstractDropboxFragment() {
                 setMessage(resources.getString(R.string.dropbox_export_cancel_dialog_message))
                 setPositiveButton(resources.getString(R.string.dropbox_export_cancel_dialog_ok_button)) { _, _ ->
                     DropboxExportServiceManager.getInstance().cancelled = true
-                    workManager.cancelUniqueWork(DropboxExportWorker.TAG)
                 }
                 show()
             }
@@ -164,24 +163,6 @@ class DropboxExportFragment : AbstractDropboxFragment() {
                     binding.cancelButton.visibility = View.GONE
                     binding.result.visibility = View.VISIBLE
                     binding.result.text = jobStatus.msg
-                    when (jobStatus.data) {
-                        is String -> {
-                            val builder = AlertDialog.Builder(requireContext())
-                            with(builder) {
-                                setTitle(R.string.dropbox_export_cancelled_dialog_title)
-                                setMessage(R.string.dropbox_export_cancelled_dialog_msg)
-                                setPositiveButton(R.string.dropbox_export_cancelled_dialog_ok_button) { _, _ ->
-                                    viewLifecycleOwner.lifecycleScope.launch {
-                                        withContext(Dispatchers.IO) {
-                                            //DropboxClientFactory.getClient().files().deleteV2("/${jobStatus.data}")
-                                        }
-                                    }
-                                }
-                                show()
-                            }
-                        }
-                    }
-                }
                 is JobStatus.Success -> {
                     binding.exportButton.isEnabled = true
                     binding.exportTitle.visibility = View.VISIBLE
@@ -272,11 +253,10 @@ class DropboxExportFragment : AbstractDropboxFragment() {
                     is DropboxAccountInfoResponse.Failure -> {
                         Toast.makeText(
                             requireContext(),
-                            "Error getting account info!",
-                            Toast.LENGTH_SHORT
+                            "Please log out of dropbox and log in again!!",
+                            Toast.LENGTH_LONG
                         ).show()
-                        binding.exceptionText.text =
-                            "type: ${response.exception.javaClass} + ${response.exception.localizedMessage}"
+                        throw response.exception
                     }
                     is DropboxAccountInfoResponse.Success -> {
                         val account= response.accountInfo
