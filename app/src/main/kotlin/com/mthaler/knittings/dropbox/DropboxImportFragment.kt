@@ -88,23 +88,30 @@ class DropboxImportFragment : AbstractDropboxFragment() {
         binding.loginButton.setOnClickListener { startDropboxAuthorization() }
 
         binding.importButton.setOnClickListener {
-             when {
-                ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.WAKE_LOCK) == PackageManager.PERMISSION_GRANTED -> {
+            when {
+                ContextCompat.checkSelfPermission(
+                    requireContext(),
+                    Manifest.permission.WAKE_LOCK
+                ) == PackageManager.PERMISSION_GRANTED -> {
                     val wakeLock: PowerManager.WakeLock =
-                    (requireContext().getSystemService(Context.POWER_SERVICE) as PowerManager).run {
-                        newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "Knittings::DropboxImport").apply {
-                            acquire()
+                        (requireContext().getSystemService(Context.POWER_SERVICE) as PowerManager).run {
+                            newWakeLock(
+                                PowerManager.PARTIAL_WAKE_LOCK,
+                                "Knittings::DropboxImport"
+                            ).apply {
+                                acquire()
+                            }
                         }
-                    }
                     try {
                         val requestConfig = DbxRequestConfig(CLIENT_IDENTIFIER)
                         val credential = getLocalCredential()
                         credential?.let {
                             viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-                                val deferred = viewLifecycleOwner.lifecycleScope.async(Dispatchers.IO) {
-                                    val dropboxClient = DbxClientV2(requestConfig, credential)
-                                    dropboxClient.files().listFolder("")
-                                }
+                                val deferred =
+                                    viewLifecycleOwner.lifecycleScope.async(Dispatchers.IO) {
+                                        val dropboxClient = DbxClientV2(requestConfig, credential)
+                                        dropboxClient.files().listFolder("")
+                                    }
                                 val result = deferred.await()
                                 onListFolder(result, credential)
                             }
@@ -114,15 +121,22 @@ class DropboxImportFragment : AbstractDropboxFragment() {
                         wakeLock.release()
                     }
                 }
-                ActivityCompat.shouldShowRequestPermissionRationale(requireActivity(), Manifest.permission.WAKE_LOCK) -> {
-                    Toast.makeText(requireContext(), "Wake_Lock permission required", Toast.LENGTH_SHORT)
+                ActivityCompat.shouldShowRequestPermissionRationale(
+                    requireActivity(),
+                    Manifest.permission.WAKE_LOCK
+                ) -> {
+                    Toast.makeText(
+                        requireContext(),
+                        "Wake_Lock permission required",
+                        Toast.LENGTH_SHORT
+                    )
                     requestPermissionLauncher.launch(Manifest.permission.WAKE_LOCK)
                 }
                 else -> {
                     requestPermissionLauncher.launch(Manifest.permission.WAKE_LOCK)
-                    }
                 }
             }
+        }
 
         return binding.root
     }
