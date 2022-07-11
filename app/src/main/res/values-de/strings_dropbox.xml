@@ -41,15 +41,5 @@
     <string name="dropbox_import_dialog_incomplete_msg">Unvollständiger Dropbox export, %1$s Fotos nicht gefunden. Daten wirklich aus Dropbox importieren? Alle existierenden Daten werden gelöscht!</string>
     <string name="dropbox_import_dialog_button_import">Importieren</string>
 
-    <string name="dropbox_export_notification_channel_name">Dropbox Export Service</string>
-    <string name="dropbox_import_notification_channel_name">Dropbox Import Service</string>
-
-    <string name="dropbox_export_notification_title">Dropbox Export</string>
-    <string name="dropbox_export_notification_initial_msg">Nach Dropbox exportieren</string>
-    <string name="dropbox_export_notification_done_msg">Dropbox Export abgeschlossen</string>
     <string name="dropbox_export_notification_cancelled_msg">Dropbox Export abgebrochen</string>
-
-    <string name="dropbox_import_notification_title">Dropbox Import</string>
-    <string name="dropbox_import_notification_initial_msg">Aus Dropbox importieren</string>
-    <string name="dropbox_import_notification_done_msg">Dropbox Import abgeschlossen</string>
 </resources>
