@@ -164,6 +164,7 @@ class DropboxExportFragment : AbstractDropboxFragment() {
                     binding.cancelButton.visibility = View.GONE
                     binding.result.visibility = View.VISIBLE
                     binding.result.text = jobStatus.msg
+                }
                 is JobStatus.Success -> {
                     binding.exportButton.isEnabled = true
                     binding.exportTitle.visibility = View.VISIBLE
