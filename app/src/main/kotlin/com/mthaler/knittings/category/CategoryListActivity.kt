@@ -49,11 +49,10 @@ class CategoryListActivity : BaseActivity() {
     }
 
     override fun onBackPressed() {
-        val f = supportFragmentManager.findFragmentById(R.id.category_list_container)
+        val fm = supportFragmentManager
+        val f = fm.findFragmentById(R.id.category_list_container)
         if (f is EditCategoryFragment) {
-            f.onBackPressed(
-
-            )
+            f.onBackPressed { fm.popBackStack() }
         } else {
             super.onBackPressed()
         }
