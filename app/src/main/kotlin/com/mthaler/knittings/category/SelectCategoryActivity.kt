@@ -1,10 +1,12 @@
 package com.mthaler.knittings.category
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import com.mthaler.knittings.BaseActivity
 import com.mthaler.knittings.R
+import com.mthaler.knittings.database.Extras.EXTRA_CATEGORY_ID
 import com.mthaler.knittings.database.Extras.EXTRA_OWNER_ID
 import com.mthaler.knittings.databinding.ActivitySelectCategoryBinding
 
@@ -42,7 +44,12 @@ class SelectCategoryActivity : BaseActivity() {
     override fun onBackPressed() {
         val f =  supportFragmentManager.findFragmentById(R.id.select_category_container)
         if (f is EditCategoryFragment) {
-            f.onBackPressed()
+            f.onBackPressed { categoryID ->
+                val i = Intent()
+                i.putExtra(EXTRA_CATEGORY_ID, f.getCategoryID())
+                setResult(Activity.RESULT_OK, i)
+                super.onBackPressed()
+            }
         } else {
             super.onBackPressed()
         }

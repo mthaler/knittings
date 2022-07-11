@@ -136,13 +136,12 @@ class DropboxImportFragment : AbstractDropboxFragment() {
                     requestPermissionLauncher.launch(Manifest.permission.WAKE_LOCK)
                 }
             }
-        }
 
         return binding.root
     }
 
     binding.cancelButton.setOnClickListener {
-        val builder = android.app.AlertDialog.Builder(requireContext())
+        val builder = AlertDialog.Builder(requireContext())
         with(builder) {
             setTitle(resources.getString(R.string.dropbox_import_cancel_dialog_title))
             setMessage(resources.getString(R.string.dropbox_import_cancel_dialog_message))
