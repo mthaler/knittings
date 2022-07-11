@@ -42,4 +42,9 @@
     <string name="dropbox_import_dialog_button_import">Importieren</string>
 
     <string name="dropbox_export_notification_cancelled_msg">Dropbox Export abgebrochen</string>
+
+    <string name="dropbox_import_cancel_dialog_title">Dropbox Import Abbrechen</string>
+    <string name="dropbox_import_cancel_dialog_message">Dropbox Import wirklich abbrechen?</string>
+    <string name="dropbox_import_cancel_dialog_ok_button">Import abbrechen</string>
+
 </resources>

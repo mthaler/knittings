@@ -42,4 +42,8 @@
     <string name="dropbox_import_dialog_button_import">Import</string>
 
     <string name="dropbox_export_notification_cancelled_msg">Dropbox export cancelled</string>
+
+    <string name="dropbox_import_cancel_dialog_title">Cancel Dropbox Import</string>
+    <string name="dropbox_import_cancel_dialog_message">Do you really want to cancel the dropbox import?</string>
+    <string name="dropbox_import_cancel_dialog_ok_button">Cancel import</string>
 </resources>
