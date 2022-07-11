@@ -136,21 +136,21 @@ class DropboxImportFragment : AbstractDropboxFragment() {
                     requestPermissionLauncher.launch(Manifest.permission.WAKE_LOCK)
                 }
             }
-    }
-
-    binding.cancelButton.setOnClickListener {
-        val builder = AlertDialog.Builder(requireContext())
-            with(builder) {
-                setTitle(resources.getString(R.string.dropbox_import_cancel_dialog_title))
-                setMessage(resources.getString(R.string.dropbox_import_cancel_dialog_message))
-                setPositiveButton(resources.getString(R.string.dropbox_import_cancel_dialog_ok_button)) { _, _ ->
-                    DropboxImportServiceManager.getInstance().cancelled = true
-            }
-            show()
         }
-    }
 
-    return binding.root
+        binding.cancelButton.setOnClickListener {
+            val builder = AlertDialog.Builder(requireContext())
+                with(builder) {
+                    setTitle(resources.getString(R.string.dropbox_import_cancel_dialog_title))
+                    setMessage(resources.getString(R.string.dropbox_import_cancel_dialog_message))
+                    setPositiveButton(resources.getString(R.string.dropbox_import_cancel_dialog_ok_button)) { _, _ ->
+                        DropboxImportServiceManager.getInstance().cancelled = true
+                }
+                show()
+            }
+        }
+
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -305,7 +305,7 @@ class DropboxImportFragment : AbstractDropboxFragment() {
                 val directory = files[item]
                 viewLifecycleOwner.lifecycleScope.launchWhenStarted { readDatabase(directory, credential) }
             }
-            dialogBuilder.setNegativeButton("Cancel") { _, _ ->#
+            dialogBuilder.setNegativeButton("Cancel") { _, _ ->
                 DropboxImportServiceManager.getInstance().cancelled = true
             }
             // Create alert dialog object via builder
