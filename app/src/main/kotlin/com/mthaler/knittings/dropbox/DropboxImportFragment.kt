@@ -207,47 +207,6 @@ class DropboxImportFragment : AbstractDropboxFragment() {
         workManager = WorkManager.getInstance(requireContext())
     }
 
-    override fun onResume() {
-        super.onResume()
-
-        //Check if we have an existing token stored, this will be used by DbxClient to make requests
-        val localCredential: DbxCredential? = getLocalCredential()
-        val credential: DbxCredential? = if (localCredential == null) {
-            val credential = Auth.getDbxCredential() //fetch the result from the AuthActivity
-            credential?.let {
-                //the user successfully connected their Dropbox account!
-                storeCredentialLocally(it)
-                fetchAccountInfo()
-            }
-            credential
-        } else localCredential
-
-
-        if (credential == null) {
-            with(binding) {
-                // user is logged out, show login button, hide other buttons
-                loginButton.visibility = View.VISIBLE
-                account.visibility = View.GONE
-                emailText.visibility = View.GONE
-                nameText.visibility = View.GONE
-                typeText.visibility = View.GONE
-                importButton.isEnabled = false
-            }
-        } else {
-            with(binding) {
-                //logoutButton.visibility = View.VISIBLE
-                //logoutButton.visibility = View.VISIBLE
-                loginButton.visibility = android.view.View.GONE
-                account.visibility = android.view.View.VISIBLE
-                emailText.visibility = android.view.View.VISIBLE
-                nameText.visibility = android.view.View.VISIBLE
-                typeText.visibility = android.view.View.VISIBLE
-                importButton.isEnabled = true
-                fetchAccountInfo()
-            }
-        }
-    }
-
     override fun onOptionsItemSelected(item: MenuItem): Boolean = when (item.itemId) {
         R.id.menu_item_dropbox_logout -> {
             logout()
