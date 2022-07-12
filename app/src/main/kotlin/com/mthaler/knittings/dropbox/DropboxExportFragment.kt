@@ -253,11 +253,6 @@ class DropboxExportFragment : AbstractDropboxFragment() {
             lifecycleScope.launch {
                 when (val response = dropboxApi.getAccountInfo()) {
                     is DropboxAccountInfoResponse.Failure -> {
-                        Toast.makeText(
-                            requireContext(),
-                            "Please log out of dropbox and log in again!!",
-                            Toast.LENGTH_LONG
-                        ).show()
                         val sb = Snackbar.make(binding.loginButton, "Please log out of dropbox and log in again!", Snackbar.LENGTH_LONG)
                         sb.setAction(R.string.dropbox_export, object : View.OnClickListener {
                             override fun onClick(v: View?) {

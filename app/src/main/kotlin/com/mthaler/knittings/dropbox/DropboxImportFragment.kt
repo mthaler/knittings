@@ -24,6 +24,7 @@ import com.dropbox.core.android.Auth
 import com.dropbox.core.oauth.DbxCredential
 import com.dropbox.core.v2.DbxClientV2
 import com.dropbox.core.v2.files.ListFolderResult
+import com.google.android.material.snackbar.Snackbar
 import com.mthaler.knittings.BuildConfig
 import com.mthaler.knittings.R
 import com.mthaler.knittings.databinding.FragmentDropboxImportBinding
@@ -277,14 +278,13 @@ class DropboxImportFragment : AbstractDropboxFragment() {
             lifecycleScope.launch {
                 when (val response = dropboxApi.getAccountInfo()) {
                     is DropboxAccountInfoResponse.Failure -> {
-                        Toast.makeText(
-                            requireContext(),
-                            "Please log out of dropbox and log in again!!",
-                            Toast.LENGTH_LONG
-                        ).show()
-                        binding.account.text =
-                            "type: ${response.exception.javaClass} + ${response.exception.localizedMessage}"
-                        throw response.exception
+                        val sb = Snackbar.make(binding.loginButton, "Please log out of dropbox and log in again!", Snackbar.LENGTH_LONG)
+                        sb.setAction(R.string.dropbox_export, object : View.OnClickListener {
+                            override fun onClick(v: View?) {
+                                throw response.exception
+                            }
+                        })
+                        sb.show()
                     }
                     is DropboxAccountInfoResponse.Success -> {
                         binding.emailText.text = response.accountInfo.email

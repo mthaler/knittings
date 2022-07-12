@@ -1,6 +1,7 @@
 package com.mthaler.knittings.dropbox
 
 import android.app.Application
+import android.os.Environment
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.mthaler.knittings.DatabaseApplication
@@ -34,6 +35,7 @@ class DropboxExportViewModel : DataSourceViewModel()  {
                 for (p in photos) {
                     try {
                         if (p.filename.exists()) {
+
                             val size = p.filename.length()
                             totalSize += size
                         }
