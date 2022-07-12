@@ -44,7 +44,7 @@ class SelectCategoryActivity : BaseActivity() {
     override fun onBackPressed() {
         val f =  supportFragmentManager.findFragmentById(R.id.select_category_container)
         if (f is EditCategoryFragment) {
-            f.onBackPressed { categoryID ->
+            f.onBackPressed {
                 val i = Intent()
                 i.putExtra(EXTRA_CATEGORY_ID, f.getCategoryID())
                 setResult(Activity.RESULT_OK, i)
