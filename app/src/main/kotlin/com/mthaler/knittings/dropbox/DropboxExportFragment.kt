@@ -309,7 +309,9 @@ class DropboxExportFragment : AbstractDropboxFragment() {
                     workManager.enqueueUniqueWork(DropboxExportWorker.TAG,  ExistingWorkPolicy.REPLACE, request)
                     DropboxExportServiceManager.getInstance().updateJobStatus(JobStatus.Progress(0))
                 }
-                setNegativeButton(resources.getString(R.string.dialog_button_cancel)) { _, _ -> }
+                setNegativeButton(resources.getString(R.string.dialog_button_cancel)) { _, _ ->
+                    DropboxExportServiceManager.getInstance().updateJobStatus(JobStatus.Cancelled())
+                }
                 show()
             }
         } else {
