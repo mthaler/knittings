@@ -2,6 +2,7 @@ package com.mthaler.knittings.dropbox
 
 import android.Manifest
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
@@ -145,8 +146,10 @@ class DropboxImportFragment : AbstractDropboxFragment() {
                     setTitle(resources.getString(R.string.dropbox_import_cancel_dialog_title))
                     setMessage(resources.getString(R.string.dropbox_import_cancel_dialog_message))
                     setPositiveButton(resources.getString(R.string.dropbox_import_cancel_dialog_ok_button)) { _, _ ->
-                        DropboxImportServiceManager.getInstance().cancelled = true
-                }
+                        val sm = DropboxImportServiceManager.getInstance()
+                        sm.cancelled = true
+                        sm.updateJobStatus(JobStatus.Cancelled())
+                    }
                 show()
             }
         }

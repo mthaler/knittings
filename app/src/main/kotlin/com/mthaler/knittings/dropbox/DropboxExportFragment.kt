@@ -66,10 +66,6 @@ class DropboxExportFragment : AbstractDropboxFragment() {
         }
     }
 
-    fun exception(ex: String) {
-        binding.exceptionText.text = ex
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -310,7 +306,9 @@ class DropboxExportFragment : AbstractDropboxFragment() {
                     DropboxExportServiceManager.getInstance().updateJobStatus(JobStatus.Progress(0))
                 }
                 setNegativeButton(resources.getString(R.string.dialog_button_cancel)) { _, _ ->
-                    DropboxExportServiceManager.getInstance().updateJobStatus(JobStatus.Cancelled())
+                    val sm = DropboxExportServiceManager.getInstance()
+                    sm.cancelled = true
+                    sm.updateJobStatus(JobStatus.Cancelled())
                 }
                 show()
             }
