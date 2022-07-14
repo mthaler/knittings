@@ -193,7 +193,12 @@ class DropboxImportFragment : AbstractDropboxFragment() {
                     binding.progressBar.progress = jobStatus.value
                 }
                 is JobStatus.Cancelled -> {
-                    binding.loginButton.isEnabled = true
+                    if (credential != null) {
+                        binding.loginButton.isEnabled = false
+                        fetchAccountInfo()
+                    } else {
+                        binding.loginButton.isEnabled = true
+                    }
                     binding.importButton.isEnabled = true
                     binding.importTitle.visibility = View.VISIBLE
                     binding.progressBar.visibility = View.GONE
@@ -203,7 +208,12 @@ class DropboxImportFragment : AbstractDropboxFragment() {
                     workManager.cancelUniqueWork(DropboxImportWorker.TAG)
                 }
                 is JobStatus.Success -> {
-                    binding.loginButton.isEnabled = true
+                    if (credential != null) {
+                        binding.loginButton.isEnabled = false
+                        fetchAccountInfo()
+                    } else {
+                        binding.loginButton.isEnabled = true
+                    }
                     binding.importButton.isEnabled = true
                     binding.importTitle.visibility = View.VISIBLE
                     binding.progressBar.visibility = View.GONE
@@ -228,6 +238,13 @@ class DropboxImportFragment : AbstractDropboxFragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean = when (item.itemId) {
         R.id.menu_item_dropbox_logout -> {
             logout()
+            val sm = DropboxImportServiceManager.getInstance()
+            val jobStatus = sm.jobStatus.value
+            if (jobStatus != null) {
+                sm.updateJobStatus(jobStatus)
+            } else {
+                throw IllegalArgumentException("JobStatus null")
+            }
             true
         }
         android.R.id.home -> {
@@ -237,7 +254,7 @@ class DropboxImportFragment : AbstractDropboxFragment() {
                 throw IllegalStateException("No Parent Activity Intent")
             } else {
                 val sm = DropboxImportServiceManager.getInstance()
-                if (sm.jobStatus.value is JobStatus.Success) {
+                if (sm.jobStatus.value is JobStatus.Success || sm.jobStatus.value is JobStatus.Cancelled) {
                     sm.updateJobStatus(JobStatus.Initialized)
                 }
                 NavUtils.navigateUpTo(requireActivity(), upIntent)
