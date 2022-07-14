@@ -230,7 +230,7 @@ object KnittingsDataSource : AbstractObservableDatabase(), PhotoDataSource, Cate
     @Synchronized
     private fun deleteAllPhotos(knitting: Knitting) {
         for (photo in getAllPhotos(knitting.id)) {
-            deletePhotoFile(photo.filename)
+            deletePhotoFile(File(photo.filename.name.removeLeadingChars('/')))
         }
         val id = knitting.id
         context.database.writableDatabase.use { database ->

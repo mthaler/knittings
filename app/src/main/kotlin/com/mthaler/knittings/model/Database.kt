@@ -83,16 +83,4 @@ data class Database(override val knittings: List<Knitting>, override val photos:
         result.put("rowCounters", rowCountersToJSON(rowCounters))
         return result
     }
-
-    companion object {
-
-        fun createDatabase(): Database {
-            val projects = KnittingsDataSource.allProjects
-            val photos = KnittingsDataSource.allPhotos
-            val categories = KnittingsDataSource.allCategories
-            val needles = KnittingsDataSource.allNeedles
-            val rowCounters = KnittingsDataSource.allRowCounters
-            return Database(projects, photos, categories, needles, rowCounters)
-        }
-    }
 }
