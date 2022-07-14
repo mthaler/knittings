@@ -157,7 +157,6 @@ class DropboxExportFragment : AbstractDropboxFragment() {
                     binding.progressBar.progress = jobStatus.value
                 }
                 is JobStatus.Cancelled -> {
-                    DropboxExportServiceManager.getInstance().cancelled = false
                     binding.loginButton.isEnabled = true
                     binding.exportButton.isEnabled = true
                     binding.exportTitle.visibility = View.VISIBLE

@@ -164,12 +164,14 @@ class DropboxImportFragment : AbstractDropboxFragment() {
         sm.jobStatus.observe(viewLifecycleOwner, { jobStatus ->
             when(jobStatus) {
                 is JobStatus.Initialized -> {
+                    binding.loginButton.isEnabled = true
                     binding.importButton.isEnabled = true
                     binding.importTitle.visibility = View.GONE
                     binding.progressBar.visibility = View.GONE
                     binding.result.visibility = View.GONE
                 }
                 is JobStatus.Progress -> {
+                    binding.loginButton.isEnabled = false
                     binding.importButton.isEnabled = false
                     binding.importTitle.visibility = View.VISIBLE
                     binding.progressBar.visibility = View.VISIBLE
@@ -177,6 +179,7 @@ class DropboxImportFragment : AbstractDropboxFragment() {
                     binding.progressBar.progress = jobStatus.value
                 }
                 is JobStatus.Cancelled -> {
+                    binding.loginButton.isEnabled = true
                     binding.importButton.isEnabled = true
                     binding.importTitle.visibility = View.VISIBLE
                     binding.progressBar.visibility = View.GONE
@@ -186,6 +189,7 @@ class DropboxImportFragment : AbstractDropboxFragment() {
                     workManager.cancelUniqueWork(DropboxImportWorker.TAG)
                 }
                 is JobStatus.Success -> {
+                    binding.loginButton.isEnabled = true
                     binding.importButton.isEnabled = true
                     binding.importTitle.visibility = View.VISIBLE
                     binding.progressBar.visibility = View.GONE
