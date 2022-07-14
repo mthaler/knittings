@@ -78,12 +78,26 @@ class DropboxImportFragment : AbstractDropboxFragment() {
         setHasOptionsMenu(true)
     }
 
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        _binding = FragmentDropboxImportBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentDropboxImportBinding.inflate(inflater, container, false)
+        //Check if we have an existing token stored, this will be used by DbxClient to make requests
+        val localCredential: DbxCredential? = getLocalCredential()
+        val credential: DbxCredential? = if (localCredential == null) {
+            val credential = Auth.getDbxCredential() //fetch the result from the AuthActivity
+            credential?.let {
+                //the user successfully connected their Dropbox account!
+                storeCredentialLocally(it)
+            }
+            credential
+        } else localCredential
 
         // this opens a web browser where the user can log in
         binding.loginButton.setOnClickListener { startDropboxAuthorization() }

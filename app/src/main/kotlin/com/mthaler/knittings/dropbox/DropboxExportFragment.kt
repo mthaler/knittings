@@ -34,9 +34,7 @@ import com.mthaler.knittings.service.JobStatus
 import com.mthaler.knittings.service.ServiceStatus
 import com.mthaler.knittings.utils.Format
 import com.mthaler.knittings.utils.isWifiConnected
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import java.lang.IllegalArgumentException
 
 class DropboxExportFragment : AbstractDropboxFragment() {
@@ -79,6 +77,17 @@ class DropboxExportFragment : AbstractDropboxFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        //Check if we have an existing token stored, this will be used by DbxClient to make requests
+        val localCredential: DbxCredential? = getLocalCredential()
+        val credential: DbxCredential? = if (localCredential == null) {
+            val credential = Auth.getDbxCredential() //fetch the result from the AuthActivity
+            credential?.let {
+                //the user successfully connected their Dropbox account!
+                storeCredentialLocally(it)
+            }
+            credential
+        } else localCredential
 
         // this opens a web browser where the user can log in
         binding.loginButton.setOnClickListener { Auth.startOAuth2Authentication(context, (requireContext().applicationContext as DatabaseApplication).dropboxAppKey) }
@@ -140,7 +149,12 @@ class DropboxExportFragment : AbstractDropboxFragment() {
         sm.jobStatus.observe(viewLifecycleOwner, { jobStatus ->
             when(jobStatus) {
                 is JobStatus.Initialized -> {
-                    binding.loginButton.isEnabled = true
+                    if (credential != null) {
+                        binding.loginButton.isEnabled = false
+                        fetchAccountInfo()
+                    } else {
+                        binding.loginButton.isEnabled = true
+                    }
                     binding.exportButton.isEnabled = true
                     binding.exportTitle.visibility = View.GONE
                     binding.progressBar.visibility = View.GONE
@@ -157,7 +171,12 @@ class DropboxExportFragment : AbstractDropboxFragment() {
                     binding.progressBar.progress = jobStatus.value
                 }
                 is JobStatus.Cancelled -> {
-                    binding.loginButton.isEnabled = true
+                    if (credential != null) {
+                        binding.loginButton.isEnabled = false
+                        fetchAccountInfo()
+                    } else {
+                        binding.loginButton.isEnabled = true
+                    }
                     binding.exportButton.isEnabled = true
                     binding.exportTitle.visibility = View.VISIBLE
                     binding.progressBar.visibility = View.GONE
@@ -166,7 +185,12 @@ class DropboxExportFragment : AbstractDropboxFragment() {
                     binding.result.text = jobStatus.msg
                 }
                 is JobStatus.Success -> {
-                    binding.loginButton.isEnabled = true
+                    if (credential != null) {
+                        binding.loginButton.isEnabled = false
+                        fetchAccountInfo()
+                    } else {
+                        binding.loginButton.isEnabled = true
+                    }
                     binding.exportButton.isEnabled = true
                     binding.exportTitle.visibility = View.VISIBLE
                     binding.progressBar.visibility = View.GONE
@@ -197,26 +221,6 @@ class DropboxExportFragment : AbstractDropboxFragment() {
         super.onDestroyView()
         _binding = null
     }
-
-    override fun onResume() {
-        super.onResume()
-
-        //Check if we have an existing token stored, this will be used by DbxClient to make requests
-        val localCredential: DbxCredential? = getLocalCredential()
-        val credential: DbxCredential? = if (localCredential == null) {
-            val credential = Auth.getDbxCredential() //fetch the result from the AuthActivity
-            credential?.let {
-                //the user successfully connected their Dropbox account!
-                storeCredentialLocally(it)
-            }
-            credential
-        } else localCredential
-
-        if (credential != null) {
-            fetchAccountInfo()
-        }
-    }
-
 
     private fun fetchAccountInfo() {
         val requestConfig = DbxRequestConfig(CLIENT_IDENTIFIER)

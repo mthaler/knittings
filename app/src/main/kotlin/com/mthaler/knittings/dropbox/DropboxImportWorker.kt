@@ -24,6 +24,7 @@ import java.io.File
 import java.io.FileNotFoundException
 import java.io.FileOutputStream
 import java.lang.IllegalArgumentException
+import java.util.concurrent.ExecutionException
 
 class DropboxImportWorker(context: Context, parameters: WorkerParameters) : AbstractDropboxWorker(context, parameters) {
 
@@ -92,8 +93,12 @@ class DropboxImportWorker(context: Context, parameters: WorkerParameters) : Abst
             Log.d(TAG,"Downloading file to $photo")
             val localPath = File(storageDir, photo.filename.name.removeLeadingChars('/'))
             FileOutputStream(localPath).use {
-                dropboxClient.files().download(dropboxFilename).download(it)
-                Log.d(TAG, "Downloaded photo $photo")
+                try {
+                    dropboxClient.files().download(dropboxFilename).download(it)
+                    Log.d(TAG, "Downloaded photo $photo")
+                } catch (ex: ExecutionException) {
+                    Log.e(TAG, "Could not download photo $photo", ex)
+                }
             }
         } finally {
             val progress = (index / count.toFloat() * 100).toInt()
