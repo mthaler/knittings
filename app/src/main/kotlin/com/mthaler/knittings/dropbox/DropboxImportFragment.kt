@@ -83,6 +83,8 @@ class DropboxImportFragment : AbstractDropboxFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        _binding = FragmentDropboxImportBinding.inflate(inflater, container, false)
+
         // this opens a web browser where the user can log in
         binding.loginButton.setOnClickListener { startDropboxAuthorization() }
 
@@ -156,7 +158,6 @@ class DropboxImportFragment : AbstractDropboxFragment() {
     
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
 
         val sm = DropboxImportServiceManager.getInstance()
 
