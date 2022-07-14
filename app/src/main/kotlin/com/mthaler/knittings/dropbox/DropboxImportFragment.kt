@@ -207,6 +207,25 @@ class DropboxImportFragment : AbstractDropboxFragment() {
         workManager = WorkManager.getInstance(requireContext())
     }
 
+    override fun onResume() {
+        super.onResume()
+
+        //Check if we have an existing token stored, this will be used by DbxClient to make requests
+        val localCredential: DbxCredential? = getLocalCredential()
+        val credential: DbxCredential? = if (localCredential == null) {
+            val credential = Auth.getDbxCredential() //fetch the result from the AuthActivity
+            credential?.let {
+                //the user successfully connected their Dropbox account!
+                storeCredentialLocally(it)
+            }
+            credential
+        } else localCredential
+
+        if (credential != null) {
+            fetchAccountInfo()
+        }
+    }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean = when (item.itemId) {
         R.id.menu_item_dropbox_logout -> {
             logout()
