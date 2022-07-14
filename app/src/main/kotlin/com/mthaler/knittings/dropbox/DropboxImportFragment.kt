@@ -78,11 +78,6 @@ class DropboxImportFragment : AbstractDropboxFragment() {
         setHasOptionsMenu(true)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        _binding = FragmentDropboxImportBinding.inflate(inflater, container, false)
-        return binding.root
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -155,21 +150,21 @@ class DropboxImportFragment : AbstractDropboxFragment() {
 
         binding.cancelButton.setOnClickListener {
             val builder = AlertDialog.Builder(requireContext())
-                with(builder) {
-                    setTitle(resources.getString(R.string.dropbox_import_cancel_dialog_title))
-                    setMessage(resources.getString(R.string.dropbox_import_cancel_dialog_message))
-                    setPositiveButton(resources.getString(R.string.dropbox_import_cancel_dialog_ok_button)) { _, _ ->
-                        val sm = DropboxImportServiceManager.getInstance()
-                        sm.cancelled = true
-                        sm.updateJobStatus(JobStatus.Cancelled())
-                    }
+            with(builder) {
+                setTitle(resources.getString(R.string.dropbox_import_cancel_dialog_title))
+                setMessage(resources.getString(R.string.dropbox_import_cancel_dialog_message))
+                setPositiveButton(resources.getString(R.string.dropbox_import_cancel_dialog_ok_button)) { _, _ ->
+                    val sm = DropboxImportServiceManager.getInstance()
+                    sm.cancelled = true
+                    sm.updateJobStatus(JobStatus.Cancelled())
+                }
                 show()
             }
         }
 
         return binding.root
     }
-
+    
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -239,25 +234,6 @@ class DropboxImportFragment : AbstractDropboxFragment() {
         })
 
         workManager = WorkManager.getInstance(requireContext())
-    }
-
-    override fun onResume() {
-        super.onResume()
-
-        //Check if we have an existing token stored, this will be used by DbxClient to make requests
-        val localCredential: DbxCredential? = getLocalCredential()
-        val credential: DbxCredential? = if (localCredential == null) {
-            val credential = Auth.getDbxCredential() //fetch the result from the AuthActivity
-            credential?.let {
-                //the user successfully connected their Dropbox account!
-                storeCredentialLocally(it)
-            }
-            credential
-        } else localCredential
-
-        if (credential != null) {
-            fetchAccountInfo()
-        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean = when (item.itemId) {
