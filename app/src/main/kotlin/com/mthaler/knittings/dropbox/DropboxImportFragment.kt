@@ -83,17 +83,6 @@ class DropboxImportFragment : AbstractDropboxFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        //Check if we have an existing token stored, this will be used by DbxClient to make requests
-        val localCredential: DbxCredential? = getLocalCredential()
-        val credential: DbxCredential? = if (localCredential == null) {
-            val credential = Auth.getDbxCredential() //fetch the result from the AuthActivity
-            credential?.let {
-                //the user successfully connected their Dropbox account!
-                storeCredentialLocally(it)
-            }
-            credential
-        } else localCredential
-
         // this opens a web browser where the user can log in
         binding.loginButton.setOnClickListener { startDropboxAuthorization() }
 
