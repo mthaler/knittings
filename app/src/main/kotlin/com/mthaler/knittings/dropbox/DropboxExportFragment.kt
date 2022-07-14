@@ -35,7 +35,7 @@ import com.mthaler.knittings.service.ServiceStatus
 import com.mthaler.knittings.utils.Format
 import com.mthaler.knittings.utils.isWifiConnected
 import kotlinx.coroutines.launch
-import java.lang.IllegalArgumentException
+import kotlin.IllegalArgumentException
 
 class DropboxExportFragment : AbstractDropboxFragment() {
 
@@ -255,6 +255,13 @@ class DropboxExportFragment : AbstractDropboxFragment() {
         return when (item.itemId) {
             R.id.menu_item_dropbox_logout -> {
                 logout()
+                val sm = DropboxExportServiceManager.getInstance()
+                val jobStatus = sm.jobStatus.value
+                if (jobStatus != null) {
+                    sm.updateJobStatus(jobStatus)
+                } else {
+                    throw IllegalArgumentException("JobStatus null")
+                }
                 true
             }
             android.R.id.home -> {

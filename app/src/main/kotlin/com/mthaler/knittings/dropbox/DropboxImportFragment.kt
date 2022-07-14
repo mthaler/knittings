@@ -173,12 +173,28 @@ class DropboxImportFragment : AbstractDropboxFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        //Check if we have an existing token stored, this will be used by DbxClient to make requests
+        val localCredential: DbxCredential? = getLocalCredential()
+        val credential: DbxCredential? = if (localCredential == null) {
+            val credential = Auth.getDbxCredential() //fetch the result from the AuthActivity
+            credential?.let {
+                //the user successfully connected their Dropbox account!
+                storeCredentialLocally(it)
+            }
+            credential
+        } else localCredential
+
         val sm = DropboxImportServiceManager.getInstance()
 
         sm.jobStatus.observe(viewLifecycleOwner, { jobStatus ->
             when(jobStatus) {
                 is JobStatus.Initialized -> {
-                    binding.loginButton.isEnabled = true
+                    if (credential != null) {
+                        binding.loginButton.isEnabled = false
+                        fetchAccountInfo()
+                    } else {
+                        binding.loginButton.isEnabled = true
+                    }
                     binding.importButton.isEnabled = true
                     binding.importTitle.visibility = View.GONE
                     binding.progressBar.visibility = View.GONE
