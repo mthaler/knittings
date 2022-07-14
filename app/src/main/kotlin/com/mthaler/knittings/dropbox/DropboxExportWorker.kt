@@ -87,7 +87,7 @@ class DropboxExportWorker(context: Context, parameters: WorkerParameters) : Abst
 
     private fun checkDatabase(database: Database): Database {
         val storageDir = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
-        Log.d(DropboxImportWorker.TAG, "storage dir: " + storageDir)
+        Log.d(TAG, "storage dir: " + storageDir)
         if (storageDir != null) {
             val filteredPhotos = database.photos.filter { File(storageDir, it.filename.name).exists() }
             val removedPhotos = database.photos.map { it.id }.toSet() - filteredPhotos.map { it.id}.toSet()
