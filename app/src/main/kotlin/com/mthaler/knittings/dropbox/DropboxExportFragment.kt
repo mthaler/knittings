@@ -134,20 +134,21 @@ class DropboxExportFragment : AbstractDropboxFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        //Check if we have an existing token stored, this will be used by DbxClient to make requests
-        val localCredential: DbxCredential? = getLocalCredential()
-        val credential: DbxCredential? = if (localCredential == null) {
-            val credential = Auth.getDbxCredential() //fetch the result from the AuthActivity
-            credential?.let {
-                //the user successfully connected their Dropbox account!
-                storeCredentialLocally(it)
-            }
-            credential
-        } else localCredential
-
         val sm = DropboxExportServiceManager.getInstance()
 
         sm.jobStatus.observe(viewLifecycleOwner, { jobStatus ->
+
+            //Check if we have an existing token stored, this will be used by DbxClient to make requests
+            val localCredential: DbxCredential? = getLocalCredential()
+            val credential: DbxCredential? = if (localCredential == null) {
+                val credential = Auth.getDbxCredential() //fetch the result from the AuthActivity
+                credential?.let {
+                    //the user successfully connected their Dropbox account!
+                    storeCredentialLocally(it)
+                }
+                credential
+            } else localCredential
+
             when(jobStatus) {
                 is JobStatus.Initialized -> {
                     if (credential != null) {
