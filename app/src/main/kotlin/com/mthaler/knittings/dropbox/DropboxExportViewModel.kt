@@ -34,7 +34,7 @@ class DropboxExportViewModel : DataSourceViewModel()  {
         viewModelScope.launch {
             val s = withContext(Dispatchers.IO) {
                 val storageDir = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
-                Log.d(DropboxImportWorker.TAG, "storage dir: " + storageDir)
+                Log.d(TAG, "storage dir: " + storageDir)
                 val photos = ds.allPhotos
                 var totalSize = 0L
                 for (p in photos) {
@@ -52,5 +52,9 @@ class DropboxExportViewModel : DataSourceViewModel()  {
             }
             statistics.value = s
         }
+    }
+
+    companion object {
+        const val TAG = "DropboxExportViewModel"
     }
 }
