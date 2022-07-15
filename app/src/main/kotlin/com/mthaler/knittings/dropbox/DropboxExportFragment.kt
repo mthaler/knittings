@@ -50,7 +50,7 @@ class DropboxExportFragment : AbstractDropboxFragment() {
         if (isGranted) {
             val wakeLock: PowerManager.WakeLock =
                 (requireContext().getSystemService(Context.POWER_SERVICE) as PowerManager).run {
-                    newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "Knittings::DropboxImport").apply {
+                    newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "Knittings::DropboxExport").apply {
                         acquire()
                     }
                 }

@@ -59,7 +59,7 @@ class DropboxExportWorker(context: Context, parameters: WorkerParameters) : Abst
             // upload photos to dropbox
             val count = database.photos.size
             val storageDir = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
-            Log.d(DropboxImportWorker.TAG, "storage dir: " + storageDir)
+            Log.d(TAG, "storage dir: " + storageDir)
             if (storageDir != null) {
                 for ((index, photo) in database.photos.withIndex()) {
                     if (sm.cancelled) {
