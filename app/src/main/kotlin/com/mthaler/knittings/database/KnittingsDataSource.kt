@@ -5,6 +5,7 @@ import android.database.Cursor
 import android.os.Environment
 import android.util.Log
 import androidx.preference.PreferenceManager
+import com.mthaler.knittings.HasContext
 import java.io.File
 import java.util.ArrayList
 import java.util.Date
@@ -17,12 +18,12 @@ import com.mthaler.knittings.utils.removeLeadingChars
 import java.lang.Exception
 import java.lang.IllegalArgumentException
 
-object KnittingsDataSource : AbstractObservableDatabase(), PhotoDataSource, CategoryDataSource,
+object KnittingsDataSource : HasContext, AbstractObservableDatabase(), PhotoDataSource, CategoryDataSource,
     ProjectsDataSource {
 
     private const val TAG = "KnittingsDataSource"
 
-    private lateinit var context: Context
+    private lateinit var _context: Context
 
     override val allProjects: ArrayList<Knitting>
         @Synchronized
@@ -559,6 +560,9 @@ object KnittingsDataSource : AbstractObservableDatabase(), PhotoDataSource, Cate
     }
 
     fun init(context: Context) {
-        this.context = context
+        this._context = context
     }
+
+    override val context: Context
+        get() = _context
 }
