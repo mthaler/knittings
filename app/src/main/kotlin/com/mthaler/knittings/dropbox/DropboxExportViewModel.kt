@@ -8,9 +8,11 @@ import com.mthaler.knittings.HasContext
 import com.mthaler.knittings.database.DataSourceViewModel
 import com.mthaler.knittings.database.KnittingsDataSource
 import com.mthaler.knittings.database.PhotoDataSource
+import com.mthaler.knittings.utils.removeLeadingChars
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.io.File
 import java.lang.Exception
 
 class DropboxExportViewModel : DataSourceViewModel()  {
@@ -37,8 +39,9 @@ class DropboxExportViewModel : DataSourceViewModel()  {
                 var totalSize = 0L
                 for (p in photos) {
                     try {
-                        if (p.filename.exists()) {
-                            val size = p.filename.length()
+                        val localPath = File(storageDir, p.filename.name.removeLeadingChars('/'))
+                        if (localPath.exists()) {
+                            val size = localPath.length()
                             totalSize += size
                         }
                     } catch(ex: Exception) {
