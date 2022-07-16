@@ -47,31 +47,37 @@ class DropboxExportWorker(context: Context, parameters: WorkerParameters) : Abst
     }
 
     private fun upload(dir: String): Boolean {
-        val requestConfig = DbxRequestConfig(CLIENT_IDENTIFIER)
-        val credential = getLocalCredential()
-        val sm = DropboxExportServiceManager.getInstance()
-        // create directory containing current date & time
-        credential?.let {
-            val dropboxClient = DbxClientV2(requestConfig, credential)
-            dropboxClient.files().createFolderV2("/$dir")
-            val database = checkDatabase(createDatabase())
-            uploadDatabase(dropboxClient, dir, database)
-            // upload photos to dropbox
-            val count = database.photos.size
-            val storageDir = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
-            Log.d(TAG, "storage dir: " + storageDir)
-            if (storageDir != null) {
-                for ((index, photo) in database.photos.withIndex()) {
-                    if (sm.cancelled) {
-                        return true
+        try {
+            val requestConfig = DbxRequestConfig(CLIENT_IDENTIFIER)
+            val credential = getLocalCredential()
+            val sm = DropboxExportServiceManager.getInstance()
+            // create directory containing current date & time
+            credential?.let {
+                val dropboxClient = DbxClientV2(requestConfig, credential)
+                dropboxClient.files().createFolderV2("/$dir")
+                val database = checkDatabase(createDatabase())
+                uploadDatabase(dropboxClient, dir, database)
+                // upload photos to dropbox
+                val count = database.photos.size
+                val storageDir = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+                Log.d(TAG, "storage dir: " + storageDir)
+                if (storageDir != null) {
+                    for ((index, photo) in database.photos.withIndex()) {
+                        if (sm.cancelled) {
+                            return true
+                        }
+                        uploadPhoto(dropboxClient, dir, photo, storageDir)
+                        val progress = (index / count.toFloat() * 100).toInt()
+                        sm.updateJobStatus(JobStatus.Progress(progress))
                     }
-                    uploadPhoto(dropboxClient, dir, photo, storageDir)
-                    val progress = (index / count.toFloat() * 100).toInt()
-                    sm.updateJobStatus(JobStatus.Progress(progress))
+                } else {
+                    throw IllegalArgumentException("Storage dir null")
                 }
-            } else {
-                throw IllegalArgumentException("Storage dir null")
             }
+        } catch (ex: Exception) {
+            val sm = DropboxExportServiceManager.getInstance()
+            sm.cancelled = true
+            sm.updateJobStatus(JobStatus.Cancelled())
         }
         return false
     }
