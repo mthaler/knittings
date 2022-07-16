@@ -192,6 +192,7 @@ class DropboxExportFragment : AbstractDropboxFragment() {
                             binding.exceptionText.text = jobStatus.exception.toString()
                         }
                     }
+                    workManager.cancelUniqueWork(DropboxExportWorker.TAG)
                 }
                 is JobStatus.Success -> {
                     if (credential != null) {
