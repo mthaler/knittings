@@ -22,12 +22,12 @@ fun File.copy(dst: File) {
     }
 }
 
-object FileUtils {
-    fun createDateTimeDirectoryName(d: Date): String {
-        val format = SimpleDateFormat("yyyy_MM_dd_HH_mm_ss")
-        return format.format(d)
-    }
+fun Date.createDateTimeDirectoryName(): String {
+    val format = SimpleDateFormat("yyyy_MM_dd_HH_mm_ss")
+    return format.format(this)
+}
 
+object FileUtils {
     /**
      * Replaces all characters that are not in the range [a-zA-Z_0-9] with underscores
      *
