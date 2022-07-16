@@ -27,13 +27,8 @@ fun Date.createDateTimeDirectoryName(): String {
     return format.format(this)
 }
 
-fun String.replaceIllegalCharacters(): String = this.replace("""[^\w.-]""".toRegex(), "_")
-
 object FileUtils {
     
-    /**
-     *
-     */
     fun getExtension(filename: String): String {
         val index = filename.lastIndexOf(".")
         return if (index >= 0) filename.substring(index + 1) else ""
