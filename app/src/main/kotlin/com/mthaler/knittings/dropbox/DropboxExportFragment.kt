@@ -185,6 +185,13 @@ class DropboxExportFragment : AbstractDropboxFragment() {
                     binding.cancelButton.visibility = View.GONE
                     binding.result.visibility = View.VISIBLE
                     binding.result.text = jobStatus.msg
+                    if (jobStatus.msg != null && jobStatus.msg.isNotEmpty()) {
+                        binding.exceptionText.text = jobStatus.msg
+                    } else {
+                        if (jobStatus.exception != null) {
+                            binding.exceptionText.text = jobStatus.exception.toString()
+                        }
+                    }
                 }
                 is JobStatus.Success -> {
                     if (credential != null) {

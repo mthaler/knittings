@@ -129,7 +129,7 @@ class DropboxExportWorker(context: Context, parameters: WorkerParameters) : Abst
 
     private fun onUploadCompleted(dir: String, cancelled: Boolean) {
         if (cancelled) {
-            DropboxExportServiceManager.getInstance().updateJobStatus(JobStatus.Cancelled(context.getString(R.string.dropbox_export_notification_cancelled_msg), dir))
+            DropboxExportServiceManager.getInstance().updateJobStatus(JobStatus.Cancelled(msg = context.getString(R.string.dropbox_export_notification_cancelled_msg), data = dir))
         } else {
             DropboxExportServiceManager.getInstance().updateJobStatus(JobStatus.Success())
         }
