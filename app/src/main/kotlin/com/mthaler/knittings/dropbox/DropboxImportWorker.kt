@@ -36,50 +36,56 @@ class DropboxImportWorker(context: Context, parameters: WorkerParameters) : Abst
     }
 
     private fun downloadPhotos(database: Database, directory: String) {
-        val requestConfig = DbxRequestConfig(CLIENT_IDENTIFIER)
-        val credential = getLocalCredential()
-        val sm = DropboxImportServiceManager.getInstance()
-        val count = database.photos.size
-        credential?.let {
-            val dropboxClient = DbxClientV2(requestConfig, credential)
-            // remove all existing entries from the database
-            try {
+        val errors = ArrayList<Exception>()
+        try {
+            val requestConfig = DbxRequestConfig(CLIENT_IDENTIFIER)
+            val credential = getLocalCredential()
+            val sm = DropboxImportServiceManager.getInstance()
+            val count = database.photos.size
+            credential?.let {
+                val dropboxClient = DbxClientV2(requestConfig, credential)
+                // remove all existing entries from the database
                 KnittingsDataSource.deleteAllProjects()
                 KnittingsDataSource.deleteAllPhotos()
                 KnittingsDataSource.deleteAllCategories()
                 KnittingsDataSource.deleteAllNeedles()
                 KnittingsDataSource.deleteAllRowCounters()
-            } catch (ex: FileNotFoundException) {
-                Log.e(TAG, "Could not delete file", ex)
-            }
-            // add downloaded database
-            for (photo in database.photos) {
-                val filename = if (photo.filename.name.startsWith("/")) File(photo.filename.name.substring(1, photo.filename.name.length)).name else photo.filename.name
-                val p = photo.copy(filename = File(filename))
-                KnittingsDataSource.addPhoto(p, manualID = true)
-            }
-            for (category in database.categories) {
-                KnittingsDataSource.addCategory(category, manualID = true)
-            }
-            for (needle in database.needles) {
-                KnittingsDataSource.addNeedle(needle, manualID = true)
-            }
-            for (r in database.rowCounters) {
-                KnittingsDataSource.addRowCounter(r, manualID = true)
-            }
-            for (knitting in database.knittings) {
-                KnittingsDataSource.addProject(knitting, manualID = true)
-            }
-            val storageDir = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
-            Log.d(TAG, "storage dir: " + storageDir)
-            if (storageDir != null) {
-                for ((index, photo) in database.photos.withIndex()) {
-                    downloadPhoto(directory, dropboxClient, photo, index, sm, count, storageDir)
-                    generatePreview(photo, storageDir)
+                // add downloaded database
+                for (photo in database.photos) {
+                    val filename = if (photo.filename.name.startsWith("/")) File(photo.filename.name.substring(1, photo.filename.name.length)).name else photo.filename.name
+                    val p = photo.copy(filename = File(filename))
+                    KnittingsDataSource.addPhoto(p, manualID = true)
                 }
-            } else {
-                throw IllegalArgumentException("Storage dir null")
+                for (category in database.categories) {
+                    KnittingsDataSource.addCategory(category, manualID = true)
+                }
+                for (needle in database.needles) {
+                    KnittingsDataSource.addNeedle(needle, manualID = true)
+                }
+                for (r in database.rowCounters) {
+                    KnittingsDataSource.addRowCounter(r, manualID = true)
+                }
+                for (knitting in database.knittings) {
+                    KnittingsDataSource.addProject(knitting, manualID = true)
+                }
+                val storageDir = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+                Log.d(TAG, "storage dir: " + storageDir)
+                if (storageDir != null) {
+                    for ((index, photo) in database.photos.withIndex()) {
+                        downloadPhoto(directory, dropboxClient, photo, index, sm, count, storageDir)
+                        generatePreview(photo, storageDir)
+                    }
+                } else {
+                    throw IllegalArgumentException("Storage dir null")
+                }
             }
+        } catch (ex: Exception) {
+            errors.add(ex)
+        }
+        if (errors.isNotEmpty()) {
+            DropboxExportServiceManager.getInstance().updateJobStatus(JobStatus.Success(errors = errors))
+        } else {
+            DropboxExportServiceManager.getInstance().updateJobStatus(JobStatus.Success())
         }
     }
 
