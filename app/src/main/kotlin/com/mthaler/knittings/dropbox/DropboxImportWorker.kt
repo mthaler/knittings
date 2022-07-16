@@ -15,10 +15,7 @@ import com.mthaler.knittings.model.Photo
 import com.mthaler.knittings.model.toDatabase
 import com.mthaler.knittings.service.JobStatus
 import com.mthaler.knittings.service.ServiceStatus
-import com.mthaler.knittings.utils.FileUtils
-import com.mthaler.knittings.utils.PictureUtils
-import com.mthaler.knittings.utils.getOrientation
-import com.mthaler.knittings.utils.removeLeadingChars
+import com.mthaler.knittings.utils.*
 import org.json.JSONObject
 import java.io.File
 import java.io.FileNotFoundException
@@ -89,7 +86,7 @@ class DropboxImportWorker(context: Context, parameters: WorkerParameters) : Abst
     private fun downloadPhoto(directory: String, dropboxClient: DbxClientV2, photo: Photo, index: Int, sm: DropboxImportServiceManager, count: Int, storageDir: File) {
         try {
             // Download the file.
-            val dropboxFilename = "/" + directory + "/" + photo.id + "." + FileUtils.getExtension("" + photo.filename)
+            val dropboxFilename = "/" + directory + "/" + photo.id + "." +  photo.filename.name.getExtension()
             Log.d(TAG,"Downloading file to $photo")
             val localPath = File(storageDir, photo.filename.name.removeLeadingChars('/'))
             FileOutputStream(localPath).use {

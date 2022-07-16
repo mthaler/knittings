@@ -8,6 +8,7 @@ import com.mthaler.knittings.utils.FileUtils
 import com.mthaler.knittings.database.KnittingDatabaseHelper
 import com.mthaler.knittings.database.KnittingsDataSource
 import com.mthaler.knittings.utils.PictureUtils
+import com.mthaler.knittings.utils.getExtension
 import com.mthaler.knittings.utils.getOrientation
 import org.json.JSONObject
 import java.io.File
@@ -58,7 +59,7 @@ data class Database(override val knittings: List<Knitting>, override val photos:
         }
 
         for ((index, photo) in photos.withIndex()) {
-            val filename = "/" + directory + "/" + photo.id + "." + FileUtils.getExtension(photo.filename.name)
+            val filename = "/" + directory + "/" + photo.id + "." + photo.filename.name.getExtension()
             FileOutputStream(photo.filename).use {
                 dbxClient.files().download(filename).download(it)
             }

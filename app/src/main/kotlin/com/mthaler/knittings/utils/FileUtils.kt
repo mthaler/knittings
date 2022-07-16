@@ -27,12 +27,13 @@ fun Date.createDateTimeDirectoryName(): String {
     return format.format(this)
 }
 
+fun String.getExtension(): String {
+    val index = this.lastIndexOf(".")
+    return if (index >= 0) this.substring(index + 1) else ""
+}
+
 object FileUtils {
-    
-    fun getExtension(filename: String): String {
-        val index = filename.lastIndexOf(".")
-        return if (index >= 0) filename.substring(index + 1) else ""
-    }
+
 
     fun getFilenameWithoutExtension(filename: String): String {
         val index = filename.lastIndexOf(".")
