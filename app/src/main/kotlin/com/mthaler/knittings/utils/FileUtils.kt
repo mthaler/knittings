@@ -27,15 +27,10 @@ fun Date.createDateTimeDirectoryName(): String {
     return format.format(this)
 }
 
-object FileUtils {
-    /**
-     * Replaces all characters that are not in the range [a-zA-Z_0-9] with underscores
-     *
-     * @param filename filename
-     * @return filename with characters that are not in [a-zA-Z_0-9] replaced by underscores
-     */
-    fun replaceIllegalCharacters(filename: String): String = filename.replace("""[^\w.-]""".toRegex(), "_")
+fun String.replaceIllegalCharacters(): String = this.replace("""[^\w.-]""".toRegex(), "_")
 
+object FileUtils {
+    
     /**
      *
      */
