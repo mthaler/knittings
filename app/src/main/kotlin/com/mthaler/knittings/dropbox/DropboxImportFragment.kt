@@ -31,7 +31,7 @@ import com.mthaler.knittings.databinding.FragmentDropboxImportBinding
 import com.mthaler.knittings.model.toDatabase
 import com.mthaler.knittings.service.JobStatus
 import com.mthaler.knittings.service.ServiceStatus
-import com.mthaler.knittings.utils.FileUtils
+import com.mthaler.knittings.utils.getFilenameWithoutExtension
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
@@ -335,7 +335,7 @@ class DropboxImportFragment : AbstractDropboxFragment() {
             val database = json.toDatabase(requireContext(), externalFilesDir)
             database.checkValidity()
             val entries = dropboxClient.files().listFolder("/$directory").entries
-            val ids = entries.filter { it.name != "db.json" }.map { FileUtils.getFilenameWithoutExtension(it.name).toLong() }.toHashSet()
+            val ids = entries.filter { it.name != "db.json" }.map { it.name.getFilenameWithoutExtension().toLong() }.toHashSet()
             Pair(database, ids)
         }
         val (database, idsFromPhotoFiles) = deferred.await()

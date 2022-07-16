@@ -1,17 +1,14 @@
 package com.mthaler.knittings.model
 
 import android.content.Context
-import android.net.Uri
 import androidx.core.net.toUri
 import com.dropbox.core.v2.DbxClientV2
-import com.mthaler.knittings.utils.FileUtils
 import com.mthaler.knittings.database.KnittingDatabaseHelper
 import com.mthaler.knittings.database.KnittingsDataSource
 import com.mthaler.knittings.utils.PictureUtils
 import com.mthaler.knittings.utils.getExtension
 import com.mthaler.knittings.utils.getOrientation
 import org.json.JSONObject
-import java.io.File
 import java.io.FileOutputStream
 
 data class Database(override val knittings: List<Knitting>, override val photos: List<Photo>, override val categories: List<Category>, override val needles: List<Needle>, override val rowCounters: List<RowCounter>) : AbstractExportDatabase() {

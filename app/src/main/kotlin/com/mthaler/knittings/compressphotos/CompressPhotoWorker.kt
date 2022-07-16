@@ -7,7 +7,6 @@ import androidx.work.WorkerParameters
 import com.mthaler.knittings.R
 import com.mthaler.knittings.database.KnittingsDataSource
 import com.mthaler.knittings.service.JobStatus
-import com.mthaler.knittings.utils.FileUtils
 import com.mthaler.knittings.utils.PictureUtils
 import com.mthaler.knittings.utils.WorkerUtils
 import com.mthaler.knittings.utils.copy
