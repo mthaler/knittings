@@ -32,11 +32,7 @@ fun String.getExtension(): String {
     return if (index >= 0) this.substring(index + 1) else ""
 }
 
-object FileUtils {
-
-
-    fun getFilenameWithoutExtension(filename: String): String {
-        val index = filename.lastIndexOf(".")
-        return if (index >= 0) filename.substring(0, index) else filename
-    }
+fun String.getFilenameWithoutExtension(): String {
+    val index = this.lastIndexOf(".")
+    return if (index >= 0) this.substring(0, index) else this
 }
