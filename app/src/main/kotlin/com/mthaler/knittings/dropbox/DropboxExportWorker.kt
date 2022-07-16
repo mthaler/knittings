@@ -8,7 +8,6 @@ import androidx.work.WorkerParameters
 import com.dropbox.core.DbxRequestConfig
 import com.dropbox.core.v2.DbxClientV2
 import com.dropbox.core.v2.files.WriteMode
-import com.mthaler.knittings.R
 import com.mthaler.knittings.database.KnittingsDataSource
 import com.mthaler.knittings.model.Database
 import com.mthaler.knittings.model.Photo
@@ -44,7 +43,7 @@ class DropboxExportWorker(context: Context, parameters: WorkerParameters) : Abst
         return Result.success()
     }
 
-    private fun upload(dir: String): Boolean {
+    private fun upload(dir: String) {
         val errors = ArrayList<Exception>()
         try {
             val requestConfig = DbxRequestConfig(CLIENT_IDENTIFIER)
