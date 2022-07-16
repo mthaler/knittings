@@ -225,6 +225,9 @@ class DropboxImportFragment : AbstractDropboxFragment() {
                     binding.progressBar.visibility = View.GONE
                     binding.result.visibility = View.VISIBLE
                     binding.result.text = jobStatus.msg
+                    if (jobStatus.errors != null) {
+                        binding.exceptionText.text = jobStatus.errors.joinToString(", ")
+                    }
                 }
                 else -> throw IllegalArgumentException("Unknown jobStatus: " + jobStatus)
             }

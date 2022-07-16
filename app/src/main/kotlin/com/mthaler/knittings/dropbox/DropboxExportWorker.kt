@@ -62,7 +62,7 @@ class DropboxExportWorker(context: Context, parameters: WorkerParameters) : Abst
                 if (storageDir != null) {
                     for ((index, photo) in database.photos.withIndex()) {
                         if (sm.cancelled) {
-                            return true
+                            return
                         }
                         uploadPhoto(dropboxClient, dir, photo, storageDir)
                         val progress = (index / count.toFloat() * 100).toInt()
