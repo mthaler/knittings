@@ -22,12 +22,13 @@ import kotlinx.coroutines.*
 import java.io.File
 import java.lang.IllegalArgumentException
 import java.util.*
+import kotlin.collections.ArrayList
 
 class DropboxExportWorker(context: Context, parameters: WorkerParameters) : AbstractDropboxWorker(context, parameters) {
 
     override suspend fun doWork(): Result {
         val dir = Date().createDateTimeDirectoryName()
-        val deferred = GlobalScope.async {
+        GlobalScope.launch {
             val wakeLock: PowerManager.WakeLock =
                 (context.getSystemService(Context.POWER_SERVICE) as PowerManager).run {
                     newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "Knittings::DropboxExport").apply {
@@ -40,13 +41,11 @@ class DropboxExportWorker(context: Context, parameters: WorkerParameters) : Abst
                 wakeLock.release()
             }
         }
-
-        val cancelled = deferred.await()
-        onUploadCompleted(dir, cancelled)
         return Result.success()
     }
 
     private fun upload(dir: String): Boolean {
+        val errors = ArrayList<Exception>()
         try {
             val requestConfig = DbxRequestConfig(CLIENT_IDENTIFIER)
             val credential = getLocalCredential()
@@ -75,11 +74,13 @@ class DropboxExportWorker(context: Context, parameters: WorkerParameters) : Abst
                 }
             }
         } catch (ex: Exception) {
-            val sm = DropboxExportServiceManager.getInstance()
-            sm.cancelled = true
-            sm.updateJobStatus(JobStatus.Cancelled())
+            errors.add(ex)
         }
-        return false
+        if (errors.isNotEmpty()) {
+            DropboxExportServiceManager.getInstance().updateJobStatus(JobStatus.Success(errors = errors))
+        } else {
+            DropboxExportServiceManager.getInstance().updateJobStatus(JobStatus.Success())
+        }
     }
 
     private fun createDatabase(): Database {
@@ -125,16 +126,6 @@ class DropboxExportWorker(context: Context, parameters: WorkerParameters) : Abst
         }
         Log.d(TAG, "Uploaded photo $photo")
     }
-
-
-    private fun onUploadCompleted(dir: String, cancelled: Boolean) {
-        if (cancelled) {
-            DropboxExportServiceManager.getInstance().updateJobStatus(JobStatus.Cancelled(msg = context.getString(R.string.dropbox_export_notification_cancelled_msg), data = dir))
-        } else {
-            DropboxExportServiceManager.getInstance().updateJobStatus(JobStatus.Success())
-        }
-    }
-
 
     companion object {
         val TAG = "DropboxExportWorker"
