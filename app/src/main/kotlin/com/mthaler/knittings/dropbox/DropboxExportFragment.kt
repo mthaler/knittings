@@ -186,7 +186,7 @@ class DropboxExportFragment : AbstractDropboxFragment() {
                     binding.result.visibility = View.VISIBLE
                     binding.result.text = jobStatus.msg
                     if (jobStatus.msg != null && jobStatus.msg.isNotEmpty()) {
-                        binding.exceptionText.text = jobStatus.msg
+                        binding.result.text = jobStatus.msg
                     }
                     workManager.cancelUniqueWork(DropboxExportWorker.TAG)
                 }
@@ -203,8 +203,8 @@ class DropboxExportFragment : AbstractDropboxFragment() {
                     binding.cancelButton.visibility = View.GONE
                     binding.result.visibility = View.VISIBLE
                     binding.result.text = jobStatus.msg
-                    if (jobStatus.errors != null) {
-                        binding.exceptionText.text = jobStatus.errors.joinToString(", ")
+                    if (!jobStatus.errors.isNullOrEmpty()) {
+                        binding.result.text = jobStatus.errors.joinToString(", ")
                     }
                 }
                 else -> throw IllegalArgumentException("Unknown jobStatus: " + jobStatus)
