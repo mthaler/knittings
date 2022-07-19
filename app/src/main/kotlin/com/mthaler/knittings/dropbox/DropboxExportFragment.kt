@@ -193,18 +193,23 @@ class DropboxExportFragment : AbstractDropboxFragment() {
                 is JobStatus.Success -> {
                     if (credential != null) {
                         binding.loginButton.isEnabled = false
+                        binding.exportButton.isEnabled = true
                         fetchAccountInfo()
                     } else {
                         binding.loginButton.isEnabled = true
+                        binding.exportButton.isEnabled = false
                     }
-                    binding.exportButton.isEnabled = true
+
                     binding.exportTitle.visibility = View.VISIBLE
                     binding.progressBar.visibility = View.GONE
                     binding.cancelButton.visibility = View.GONE
                     binding.result.visibility = View.VISIBLE
-                    binding.result.text = jobStatus.msg
-                    if (!jobStatus.errors.isNullOrEmpty()) {
-                        binding.result.text = jobStatus.errors.joinToString(", ")
+                    if (!jobStatus.msg.isNullOrBlank()) {
+                        binding.result.text = jobStatus.msg
+                    } else {
+                        if (!jobStatus.errors.isNullOrEmpty()) {
+                            binding.result.text = jobStatus.errors.joinToString(", ")
+                        }
                     }
                 }
                 else -> throw IllegalArgumentException("Unknown jobStatus: " + jobStatus)
