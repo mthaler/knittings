@@ -185,7 +185,7 @@ class DropboxExportFragment : AbstractDropboxFragment() {
                     binding.cancelButton.visibility = View.GONE
                     binding.result.visibility = View.VISIBLE
                     binding.result.text = jobStatus.msg
-                    if (jobStatus.msg != null && jobStatus.msg.isNotEmpty()) {
+                    if (!jobStatus.msg.isNullOrBlank()) {
                         binding.result.text = jobStatus.msg
                     }
                     workManager.cancelUniqueWork(DropboxExportWorker.TAG)

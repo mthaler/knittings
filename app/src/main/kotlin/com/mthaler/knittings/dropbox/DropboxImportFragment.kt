@@ -185,6 +185,7 @@ class DropboxImportFragment : AbstractDropboxFragment() {
                     binding.importButton.isEnabled = true
                     binding.importTitle.visibility = View.GONE
                     binding.progressBar.visibility = View.GONE
+                    binding.cancelButton.visibility = View.GONE
                     binding.result.visibility = View.GONE
                 }
                 is JobStatus.Progress -> {
@@ -192,6 +193,7 @@ class DropboxImportFragment : AbstractDropboxFragment() {
                     binding.importButton.isEnabled = false
                     binding.importTitle.visibility = View.VISIBLE
                     binding.progressBar.visibility = View.VISIBLE
+                    binding.cancelButton.visibility = View.VISIBLE
                     binding.result.visibility = View.GONE
                     binding.progressBar.progress = jobStatus.value
                 }
@@ -208,7 +210,7 @@ class DropboxImportFragment : AbstractDropboxFragment() {
                     binding.cancelButton.visibility = View.GONE
                     binding.result.visibility = View.VISIBLE
                     binding.result.text = jobStatus.msg
-                    if (jobStatus.msg != null && jobStatus.msg.isNotEmpty()) {
+                    if (!jobStatus.msg.isNullOrBlank()) {
                         binding.result.text = jobStatus.msg
                     }
                     workManager.cancelUniqueWork(DropboxImportWorker.TAG)
