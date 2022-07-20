@@ -28,6 +28,7 @@ import com.mthaler.knittings.database.KnittingsDataSource
 import com.mthaler.knittings.databinding.FragmentKnittingDetailsBinding
 import com.mthaler.knittings.model.Knitting
 import com.mthaler.knittings.model.Status
+import com.mthaler.knittings.photo.PhotoGalleryActivity
 import com.mthaler.knittings.photo.PhotoGalleryFragment
 import com.mthaler.knittings.photo.TakePhotoDialog
 import com.mthaler.knittings.rowcounter.RowCounterActivity
@@ -150,11 +151,7 @@ class KnittingDetailsFragment : Fragment() {
 
         val imageView = binding.image
         imageView.setOnClickListener {
-            val f = PhotoGalleryFragment.newInstance(knittingID)
-            val ft = requireActivity().supportFragmentManager.beginTransaction()
-            ft.replace(R.id.knitting_details_container, f)
-            ft.addToBackStack(null)
-            ft.commit()
+            startActivity(PhotoGalleryActivity.newIntent(requireContext(), knittingID))
         }
 
         viewModel = ViewModelProvider(requireActivity()).get(KnittingDetailsViewModel::class.java)
