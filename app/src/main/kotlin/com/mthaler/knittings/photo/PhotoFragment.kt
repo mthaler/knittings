@@ -10,6 +10,7 @@ import com.google.android.material.snackbar.Snackbar
 import androidx.fragment.app.Fragment
 import android.view.*
 import android.widget.ImageView
+import androidx.core.net.toUri
 import com.mthaler.knittings.database.Extras.EXTRA_PHOTO_ID
 import androidx.lifecycle.lifecycleScope
 import com.mthaler.knittings.DeleteDialog
@@ -22,6 +23,7 @@ import com.mthaler.knittings.dropbox.DropboxExportViewModel
 import com.mthaler.knittings.model.Photo
 import com.mthaler.knittings.utils.PictureUtils
 import com.mthaler.knittings.utils.getOrientation
+import com.mthaler.knittings.utils.removeLeadingChars
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -86,20 +88,32 @@ class PhotoFragment : Fragment() {
                     val width = imageView.measuredWidth
                     val height = imageView.measuredHeight
                     if (width > 0 && height > 0) {
-                        val storageDir = requireContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES)
-                        Log.d(DropboxExportViewModel.TAG, "storage dir: " + storageDir)
-                        if (storageDir != null) {
-                            val path = photo.filename.absolutePath
+                        val path = photo.filename.absolutePath
+                        if (File(path).exists()) {
                             viewLifecycleOwner.lifecycleScope.launch {
                                 val rotated = withContext(Dispatchers.Default) {
-                                    val orientation =  Uri.parse(path).getOrientation(requireContext())
+                                    val orientation = photo.filename.toUri().getOrientation(requireContext())
                                     val scaled = PictureUtils.decodeSampledBitmapFromPath(path, width, height)
                                     PictureUtils.rotateBitmap(scaled, orientation)
                                 }
                                 imageView.setImageBitmap(rotated)
                             }
                         } else {
-                            throw IllegalArgumentException("Storage dir null")
+                            val storageDir = requireContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+                            Log.d(DropboxExportViewModel.TAG, "storage dir: " + storageDir)
+                            if (storageDir != null) {
+                                val localPath = File(storageDir, photo.filename.name.removeLeadingChars('/'))
+                                viewLifecycleOwner.lifecycleScope.launch {
+                                    val rotated = withContext(Dispatchers.Default) {
+                                        val orientation =  localPath.toUri().getOrientation(requireContext())
+                                        val scaled = PictureUtils.decodeSampledBitmapFromPath(path, width, height)
+                                        PictureUtils.rotateBitmap(scaled, orientation)
+                                    }
+                                    imageView.setImageBitmap(rotated)
+                                }
+                            } else {
+                                throw IllegalArgumentException("Storage dir null")
+                            }
                         }
                     } else {
                         val handler = Handler(Looper.myLooper()!!)
