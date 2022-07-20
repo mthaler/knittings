@@ -88,32 +88,20 @@ class PhotoFragment : Fragment() {
                     val width = imageView.measuredWidth
                     val height = imageView.measuredHeight
                     if (width > 0 && height > 0) {
-                        val path = photo.filename.absolutePath
-                        if (File(path).exists()) {
+                        val storageDir = requireContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+                        Log.d(DropboxExportViewModel.TAG, "storage dir: " + storageDir)
+                        if (storageDir != null) {
+                            val localPath = File(storageDir, photo.filename.name.removeLeadingChars('/'))
                             viewLifecycleOwner.lifecycleScope.launch {
                                 val rotated = withContext(Dispatchers.Default) {
-                                    val orientation = photo.filename.toUri().getOrientation(requireContext())
-                                    val scaled = PictureUtils.decodeSampledBitmapFromPath(path, width, height)
+                                    val orientation =  localPath.toUri().getOrientation(requireContext())
+                                    val scaled = PictureUtils.decodeSampledBitmapFromPath(localPath.absolutePath, width, height)
                                     PictureUtils.rotateBitmap(scaled, orientation)
                                 }
                                 imageView.setImageBitmap(rotated)
                             }
                         } else {
-                            val storageDir = requireContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES)
-                            Log.d(DropboxExportViewModel.TAG, "storage dir: " + storageDir)
-                            if (storageDir != null) {
-                                val localPath = File(storageDir, photo.filename.name.removeLeadingChars('/'))
-                                viewLifecycleOwner.lifecycleScope.launch {
-                                    val rotated = withContext(Dispatchers.Default) {
-                                        val orientation =  localPath.toUri().getOrientation(requireContext())
-                                        val scaled = PictureUtils.decodeSampledBitmapFromPath(path, width, height)
-                                        PictureUtils.rotateBitmap(scaled, orientation)
-                                    }
-                                    imageView.setImageBitmap(rotated)
-                                }
-                            } else {
-                                throw IllegalArgumentException("Storage dir null")
-                            }
+                            throw IllegalArgumentException("Storage dir null")
                         }
                     } else {
                         val handler = Handler(Looper.myLooper()!!)
