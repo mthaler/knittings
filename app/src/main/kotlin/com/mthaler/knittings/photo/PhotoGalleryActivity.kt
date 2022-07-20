@@ -8,6 +8,7 @@ import android.view.MenuItem
 import com.mthaler.knittings.BaseActivity
 import com.mthaler.knittings.R
 import com.mthaler.knittings.Extras.EXTRA_KNITTING_ID
+import com.mthaler.knittings.databinding.ActivityPhotoGalleryBinding
 
 class PhotoGalleryActivity : BaseActivity() {
 
@@ -16,8 +17,9 @@ class PhotoGalleryActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_photo_gallery)
+        val binding = ActivityPhotoGalleryBinding.inflate(layoutInflater)
 
-        setSupportActionBar(toolbar)
+        setSupportActionBar(binding.toolbar)
 
         // enable up navigation
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
