@@ -73,14 +73,6 @@ class PhotoGalleryActivity : BaseActivity() {
         }
     }
 
-    override fun photoClicked(photoID: Long) {
-        val f = PhotoFragment.newInstance(photoID)
-        val ft = supportFragmentManager.beginTransaction()
-        ft.replace(R.id.photo_gallery_container, f)
-        ft.addToBackStack(null)
-        ft.commit()
-    }
-
     companion object {
 
         fun newIntent(context: Context, knittingID: Long): Intent {
