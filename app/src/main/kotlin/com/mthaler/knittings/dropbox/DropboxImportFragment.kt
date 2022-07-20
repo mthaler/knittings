@@ -252,6 +252,20 @@ class DropboxImportFragment : AbstractDropboxFragment() {
         workManager = WorkManager.getInstance(requireContext())
     }
 
+    //    override fun onResume() {
+//        super.onResume()
+//        val sm = DropboxExportServiceManager.getInstance()
+//        val jobStatus = sm.jobStatus.value
+//        if (jobStatus != null) {
+//            sm.updateJobStatus(jobStatus)
+//        }
+//    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean = when (item.itemId) {
         R.id.menu_item_dropbox_logout -> {
             logout()

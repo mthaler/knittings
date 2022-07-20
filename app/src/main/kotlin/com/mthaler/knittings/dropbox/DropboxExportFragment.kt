@@ -231,6 +231,15 @@ class DropboxExportFragment : AbstractDropboxFragment() {
         })
     }
 
+//    override fun onResume() {
+//        super.onResume()
+//        val sm = DropboxExportServiceManager.getInstance()
+//        val jobStatus = sm.jobStatus.value
+//        if (jobStatus != null) {
+//            sm.updateJobStatus(jobStatus)
+//        }
+//    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
