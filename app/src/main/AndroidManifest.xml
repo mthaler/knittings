@@ -116,6 +116,13 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".photo.PhotoGalleryActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".details.KnittingDetailsActivity" />
+        </activity>
 
         <provider
             android:name="androidx.core.content.FileProvider"
