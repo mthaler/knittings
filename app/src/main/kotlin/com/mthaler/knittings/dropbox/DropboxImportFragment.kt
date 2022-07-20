@@ -178,13 +178,13 @@ class DropboxImportFragment : AbstractDropboxFragment() {
                 is JobStatus.Initialized -> {
                     if (credential != null) {
                         binding.loginButton.isEnabled = false
-                        binding.exportButton.isEnabled = true
-                        binding.exportTitle.visibility = View.VISIBLE
+                        binding.importButton.isEnabled = true
+                        binding.importTitle.visibility = View.VISIBLE
                         fetchAccountInfo()
                     } else {
                         binding.loginButton.isEnabled = true
-                        binding.exportButton.isEnabled = false
-                        binding.exportTitle.visibility = View.GONE
+                        binding.importButton.isEnabled = false
+                        binding.importTitle.visibility = View.GONE
                     }
                     binding.progressBar.visibility = View.GONE
                     binding.cancelButton.visibility = View.GONE
