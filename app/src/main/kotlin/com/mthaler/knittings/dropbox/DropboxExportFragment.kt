@@ -153,12 +153,14 @@ class DropboxExportFragment : AbstractDropboxFragment() {
                 is JobStatus.Initialized -> {
                     if (credential != null) {
                         binding.loginButton.isEnabled = false
+                        binding.exportButton.isEnabled = true
+                        binding.exportTitle.visibility = View.VISIBLE
                         fetchAccountInfo()
                     } else {
                         binding.loginButton.isEnabled = true
+                        binding.exportButton.isEnabled = false
+                        binding.exportTitle.visibility = View.GONE
                     }
-                    binding.exportButton.isEnabled = true
-                    binding.exportTitle.visibility = View.GONE
                     binding.progressBar.visibility = View.GONE
                     binding.cancelButton.visibility = View.GONE
                     binding.result.visibility = View.GONE
@@ -231,14 +233,14 @@ class DropboxExportFragment : AbstractDropboxFragment() {
         })
     }
 
-//    override fun onResume() {
-//        super.onResume()
-//        val sm = DropboxExportServiceManager.getInstance()
-//        val jobStatus = sm.jobStatus.value
-//        if (jobStatus != null) {
-//            sm.updateJobStatus(jobStatus)
-//        }
-//    }
+    override fun onResume() {
+        super.onResume()
+        val sm = DropboxExportServiceManager.getInstance()
+        val jobStatus = sm.jobStatus.value
+        if (jobStatus != null) {
+            sm.updateJobStatus(jobStatus)
+        }
+    }
 
     override fun onDestroyView() {
         super.onDestroyView()
