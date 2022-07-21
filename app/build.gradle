@@ -10,7 +10,7 @@ android {
         applicationId "com.mthaler.knittings"
         minSdkVersion 21
         targetSdkVersion 33
-        versionCode 72
+        versionCode 73
         versionName "0.9.51"
 
         Properties localProperties = getLocalProperties()
