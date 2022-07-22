@@ -111,7 +111,7 @@ class KnittingDetailsFragment : Fragment() {
     override fun onSaveInstanceState(savedInstanceState: Bundle) {
         savedInstanceState.putLong(EXTRA_KNITTING_ID, knittingID)
         savedInstanceState.putBoolean(EXTRA_EDIT_ONLY, editOnly)
-        currentPhotoPath?.let { savedInstanceState.putString(CURRENT_PHOTO_PATH, it.absolutePath) }
+        currentPhotoUri?.let { savedInstanceState.putString(CURRENT_PHOTO_PATH, it.absolutePath) }
         super.onSaveInstanceState(savedInstanceState)
     }
 
@@ -121,7 +121,7 @@ class KnittingDetailsFragment : Fragment() {
 
         if (savedInstanceState != null) {
             if (savedInstanceState.containsKey(CURRENT_PHOTO_PATH)) {
-                currentPhotoPath = File(savedInstanceState.getString(CURRENT_PHOTO_PATH)!!)
+                currentPhotoUri = File(savedInstanceState.getString(CURRENT_PHOTO_PATH)!!)
             }
         }
 
@@ -172,7 +172,7 @@ class KnittingDetailsFragment : Fragment() {
             R.id.menu_item_add_photo -> {
                 when {
                     ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED -> {
-                        val d = TakePhotoDialog.create(requireContext(), "com.mthaler.knittings.fileprovider", layoutInflater, this::takePhoto, this::importPhoto)
+                        val d = TakePhotoDialog.create(requireContext(), layoutInflater, this::takePhoto, this::importPhoto)
                         d.show()
                     }
                     ActivityCompat.shouldShowRequestPermissionRationale(requireActivity(), Manifest.permission.CAMERA) -> {
@@ -222,11 +222,11 @@ class KnittingDetailsFragment : Fragment() {
     }
 
     private fun takePhoto(uri: Uri, intent: Intent) {
-        currentPhotoPath = file
+        currentPhotoUri= uri
         launchImageCapture.launch(intent)
     }
 
-    private fun importPhoto(file: File, intent: Intent) {
+    private fun importPhoto(uri: Uri, intent: Intent) {
         currentPhotoPath = file
         launchImageImport.launch(intent)
     }
