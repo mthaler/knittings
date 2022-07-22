@@ -4,6 +4,7 @@ import android.Manifest
 import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
 import android.os.Handler
@@ -49,7 +50,7 @@ class KnittingDetailsFragment : Fragment() {
 
     private var knittingID: Long = Knitting.EMPTY.id
     private lateinit var viewModel: KnittingDetailsViewModel
-    private var currentPhotoPath: File? = null
+    private var currentPhotoUri: Uri? = null
     private var editOnly: Boolean = false
 
     private var _binding: FragmentKnittingDetailsBinding? = null
@@ -57,7 +58,7 @@ class KnittingDetailsFragment : Fragment() {
 
     private val requestMultiplePermissions = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
         if (permissions != null && permissions.size == 3) {
-            val d = TakePhotoDialog.create(requireContext(), "com.mthaler.knittings.fileprovider",  layoutInflater, this::takePhoto, this::importPhoto)
+            val d = TakePhotoDialog.create(requireContext(), layoutInflater, this::takePhoto, this::importPhoto)
             d.show()
         } else {
             Log.e(TAG, "Permissions denied")
@@ -65,7 +66,7 @@ class KnittingDetailsFragment : Fragment() {
     }
 
     private val launchImageCapture = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-        currentPhotoPath?.let {
+        currentPhotoUri?.let {
             lifecycleScope.launch {
                 withContext(Dispatchers.IO) {
                     TakePhotoDialog.handleTakePhotoResult(requireContext(), knittingID, it) }
@@ -76,11 +77,11 @@ class KnittingDetailsFragment : Fragment() {
     private val launchImageImport = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
         if (result.resultCode == Activity.RESULT_OK) {
             result.data?.let {
-                val f = currentPhotoPath
-                if (f != null) {
+                val uri = currentPhotoUri
+                if (uri != null) {
                     lifecycleScope.launch {
                         withContext(Dispatchers.IO) {
-                            TakePhotoDialog.handleImageImportResult(requireContext(), knittingID, f, it)
+                            TakePhotoDialog.handleImageImportResult(requireContext(), knittingID, uri, it)
                         }
                     }
                 }
@@ -220,7 +221,7 @@ class KnittingDetailsFragment : Fragment() {
         ft.commit()
     }
 
-    private fun takePhoto(file: File, intent: Intent) {
+    private fun takePhoto(uri: Uri, intent: Intent) {
         currentPhotoPath = file
         launchImageCapture.launch(intent)
     }

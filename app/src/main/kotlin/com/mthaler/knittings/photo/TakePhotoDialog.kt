@@ -37,7 +37,6 @@ object TakePhotoDialog {
      */
     fun create(
         context: Context,
-        authority: String,
         layoutInflater: LayoutInflater,
         takePhoto: (Uri, Intent) -> Unit,
         importPhoto: (File, Intent) -> Unit
@@ -91,7 +90,7 @@ object TakePhotoDialog {
      * @param ownerID id of the owner of the photo
      * @param file photo file
      */
-    suspend fun handleTakePhotoResult(context: Context, ownerID: Long, file: File) {
+    suspend fun handleTakePhotoResult(context: Context, ownerID: Long, uri: Uri) {
         // add photo to database
         val compressed = PictureUtils.compress(context, file)
         if (compressed.length() < file.length()) {
