@@ -2,6 +2,7 @@ package com.mthaler.knittings.photo
 
 import android.annotation.SuppressLint
 import android.app.AlertDialog
+import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -38,7 +39,7 @@ object TakePhotoDialog {
         context: Context,
         authority: String,
         layoutInflater: LayoutInflater,
-        takePhoto: (File, Intent) -> Unit,
+        takePhoto: (Uri, Intent) -> Unit,
         importPhoto: (File, Intent) -> Unit
     ): AlertDialog {
         // create the dialog
@@ -53,7 +54,16 @@ object TakePhotoDialog {
         buttonTakePhoto.setOnClickListener {
             d.dismiss()
             // create a photo file for the photo
-            getPhotoFile(context)?.let {
+            val uri =
+                if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED))
+                {
+                    context.applicationContext.contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, ContentValues());
+                }
+                else
+                {
+                    context.applicationContext.contentResolver.insert(MediaStore.Images.Media.INTERNAL_CONTENT_URI, ContentValues());
+                }
+            uri?.let {
                 val packageManager = context.packageManager
                 val takePictureIntent = dispatchTakePictureIntent(context, packageManager, authority, it)
                 val canTakePhoto = takePictureIntent.resolveActivity(packageManager) != null
