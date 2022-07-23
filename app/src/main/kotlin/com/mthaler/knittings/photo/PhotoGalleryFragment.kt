@@ -5,10 +5,10 @@ import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.Configuration
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.*
-import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
@@ -31,7 +31,7 @@ import java.io.File
 class PhotoGalleryFragment : Fragment() {
 
     private var ownerID: Long = -1
-    private var currentPhotoPath: File? = null
+    private var currentPhotoUri: Uri? = null
 
     private var _binding: FragmentPhotoGalleryBinding? = null
     private val binding get() = _binding!!
@@ -57,8 +57,8 @@ class PhotoGalleryFragment : Fragment() {
     private val launchImageImport = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
         if (result.resultCode == Activity.RESULT_OK) {
             result.data?.let {
-                val f = currentPhotoPath
-                if (f != null) {
+                val uri = currentPhotoUri
+                if (uri != null) {
                     lifecycleScope.launch {
                         withContext(Dispatchers.IO) {
                             TakePhotoDialog.handleImageImportResult(requireContext(), ownerID, f, it)
@@ -145,8 +145,8 @@ class PhotoGalleryFragment : Fragment() {
         }
     }
 
-    private fun takePhoto(file: File, intent: Intent) {
-        currentPhotoPath = file
+    private fun takePhoto(ui: Uri, intent: Intent) {
+        currentPhotoPath = uri
         launchImageCapture.launch(intent)
     }
 
