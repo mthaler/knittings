@@ -125,7 +125,7 @@ object TakePhotoDialog {
      * @param file photo file
      * @param data data returned from import image activity
      */
-    suspend fun handleImageImportResult(context: Context, ownerID: Long, file: File, data: Intent) {
+    suspend fun handleImageImportResult(context: Context, ownerID: Long, uri: Uri, data: Intent) {
         val imageUri = data.data
         PictureUtils.copy(imageUri!!, file, context)
         val compressed = PictureUtils.compress(context, file)
