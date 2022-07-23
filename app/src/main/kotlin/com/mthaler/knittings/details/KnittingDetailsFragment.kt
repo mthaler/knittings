@@ -227,7 +227,7 @@ class KnittingDetailsFragment : Fragment() {
     }
 
     private fun importPhoto(uri: Uri, intent: Intent) {
-        currentPhotoPath = file
+        currentPhotoUri = uri
         launchImageImport.launch(intent)
     }
 
