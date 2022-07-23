@@ -173,4 +173,14 @@ object TakePhotoDialog {
         }
     }
 
+    private fun getRealPathFromURI(context: Context, uri: Uri): String? {
+        val cursor = context.applicationContext.contentResolver.query(uri, null, null, null, null)
+        if (cursor != null) {
+            cursor.moveToFirst()
+            val idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA)
+            return cursor.getString(idx)
+        } else {
+            return null
+        }
+    }
 }
