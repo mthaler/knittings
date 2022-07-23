@@ -39,7 +39,7 @@ object TakePhotoDialog {
         context: Context,
         layoutInflater: LayoutInflater,
         takePhoto: (Uri, Intent) -> Unit,
-        importPhoto: (File, Intent) -> Unit
+        importPhoto: (Uri, Intent) -> Unit
     ): AlertDialog {
         // create the dialog
         val b = AlertDialog.Builder(context)
