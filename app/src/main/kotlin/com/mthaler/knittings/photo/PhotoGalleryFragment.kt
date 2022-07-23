@@ -5,10 +5,10 @@ import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.Configuration
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.*
-import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
@@ -31,14 +31,13 @@ import java.io.File
 class PhotoGalleryFragment : Fragment() {
 
     private var ownerID: Long = -1
-    private var currentPhotoPath: File? = null
+    private var currentPhotoUri: Uri? = null
 
     private var _binding: FragmentPhotoGalleryBinding? = null
     private val binding get() = _binding!!
 
     private val requestMultiplePermissions = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
-        if (permissions != null && permissions.size == 3) {
-            val d = TakePhotoDialog.create(requireContext(), "com.mthaler.knittings.fileprovider",  layoutInflater, this::takePhoto, this::importPhoto)
+        if (permissions != null && permissions.size == 3)val d = TakePhotoDialog.create(requireContext(), layoutInflater, this::takePhoto, this::importPhoto)
             d.show()
         } else {
             Log.e(TAG, "Permissions denied")
