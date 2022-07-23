@@ -145,13 +145,13 @@ class PhotoGalleryFragment : Fragment() {
         }
     }
 
-    private fun takePhoto(ui: Uri, intent: Intent) {
-        currentPhotoPath = uri
+    private fun takePhoto(uri: Uri, intent: Intent) {
+        currentPhotoUri = uri
         launchImageCapture.launch(intent)
     }
 
-    private fun importPhoto(file: File, intent: Intent) {
-        currentPhotoPath = file
+    private fun importPhoto(uri: Uri, intent: Intent) {
+        currentPhotoUri = uri
         launchImageImport.launch(intent)
     }
 
